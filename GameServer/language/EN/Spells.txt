@@ -22,6 +22,7 @@ DelveInfo.ValueNegative:				Value: -{0}
 # Spell ShortDescriptions
 SpellDescription.DirectDamage.MainDescription:		Does {0} {1} damage to the target.
 SpellDescription.DoT.MainDescription:				Target takes {0} {1} damage every {2} seconds.
+SpellDescription.BoltSpell.MainDescription:			A magical bolt shoots toward the target, exploding on impact for {0} {1} damage. Can be blocked.
 SpellDescription.LifeDrain.MainDescription:			The target takes {0} {1} damage and the attacker is healed for {2}% of the damage dealt.
 SpellDescription.Nearsight.MainDescription1:		Target's effective range is reduced by {0}% for ranged attacks.
 SpellDescription.Nearsight.MainDescription2:		Nearsight spells cast upon the caster's group are reduced in effectiveness by {0}%, or outright resisted.
@@ -32,6 +33,115 @@ SpellDescription.RegenEndu.MainDescription:			Target regenerates {0} extra fatig
 SpellDescription.SpeedDecrease.MainDescription:		The target is slowed by {0}%.
 SpellDescription.SpeedDecrease.Rooted:				Target is rooted in place.
 SpellDescription.Slow.MainDescription:				The target is slowed by {0}%. There's no immunity against this spell and it cannot be interrupted by hits.
+SpellDescription.Bladeturn.MainDescription:			Creates a 'bubble' that absorbs the damage of a single melee hit.
+SpellDescription.Demi.MainDescription:				{0} reduces enemy's life by half. It doesn't affect weak enemies or enemies having a level above {1}. This spell rarely affects ghosts, demons, necromancers, bainshees, and vampiirs.
+SpellDescription.Quarter.MainDescription:			{0} reduces enemy's life to a quarter. It doesn't affect weak enemies or enemies having a level above {1}. This spell rarely affects ghosts, demons, necromancers, bainshees, and vampiirs.
+SpellDescription.LifeTransfer.MainDescription:		Transfers {0} health from the caster to the target.
+SpellDescription.Heal.MainDescription:				The target regains {0} hit points.
+SpellDescription.Disease.MainDescription:			Inflicts a wasting disease that slows the target by {0}%, reduces its strength by {1}% and inhibits healing by {2}%.
+SpellDescription.Petrify.MainDescription:			Petrifies the target and turns it into a statue. The target is completely paralyzed and absorbs 50% of physical damage as well as 75% of magical damage it might suffer if attacked.
+SpellDescription.Unpetrify.MainDescription:			Cures the target from Petrification.
+SpellDescription.HealDebuff.MainDescription:		Reduces healing effectiveness by {0}%. Stacks with Disease effects.
+SpellDescription.DebuffImmunity.MainDescription:	Grants immunity to all debuffs, increasing resist chance by {0}% for {1} seconds.
+SpellDescription.MagicHealAbsorb.MainDescription:	The next magical attack done to you absorbs {0}% of damages dealt and heals you instead, {1}% will be converted into Power and Endurance.
+SpellDescription.Trigger.MainDescription:			Generates a magical proc as a buff on the target. {0} is triggered when the target is hit.
+SpellDescription.WaterBreathing.MainDescription:	Allows the target to breathe underwater and move at {0}% of normal land speed.
+SpellDescription.TensionDebuff.MainDescription:		Decreases the target's {0} by {1}%.
+SpellDescription.TensionBuff.MainDescription:		Increases the target's {0} by {1}%.
+SpellDescription.Teleport.MainDescription:			{0} teleports the target to {1}.
+SpellDescription.PlayerPortal.MainDescription:		Creates a two way, one use portal linked with bind point of the caster. The portal can be used by {0}.
+SpellDescription.Earthquake.MainDescription1:		Creates an earthquake with an intensity of {0} on the Richter scale, causing up to {1} damage near the epicenter and decreasing to {2} damage at the farthest edges.
+SpellDescription.Earthquake.MainDescription2:		Earthquakes do not affect flying mobs, swimming mobs, Bainshees, or floating Vampiirs.
+SpellDescription.HoT.MainDescription:				The target regenerates {0} health every {1} seconds.
+SpellDescription.DDWithDebuff.MainDescription:		Deals {0} {1} damage and reduces the target's {1} resistance by {2}%.
+SpellDescription.AfHitsBuff.MainDescription:		Increases the target's armor and health by {0}% while within range of this aura.
+SpellDescription.AllStatsBuff.MainDescription:		Increases all of {0}'s stats by {1}.
+SpellDescription.PowerDrain.MainDescription:		Deals {0} Spirit damage to the target, and the caster regains {1}% of the damage as power.
+SpellDescription.PowerLock.MainDescription1:		Locks you and your target in place, siphoning {0}% base power from them every {1}s for {2} seconds.
+SpellDescription.PowerLock.MainDescription2:		While grappled, neither you nor your target can be damaged by melee attacks.
+SpellDescription.PowerLock.MainDescription3:		Can only be used against players or player-controlled pets.
+SpellDescription.Damnation.MainDescription1:		The target is condemned, turned into a zombie and loses all its spell enhancements. The target will be more resilient against melee attacks by {0}% but will inevitably die after {1} seconds. No cure can reverse this effect.
+SpellDescription.Damnation.MainDescription2:		Healing is severely reduced to only {0}%.
+SpellDescription.Damnation.MainDescription3:		Healing will have no effect on the target.
+SpellDescription.Damnation.MainDescription4:		Healing will be converted by {0}% into damages.
+SpellDescription.Damnation.MainDescription5:		Undead monsters are not affected by this spell.
+SpellDescription.MonsterRez.MainDescription:		Brings the target back to life as an undead monster, restoring {0}% health and {1}% power and endurance, without experience or constitution loss.
+SpellDescription.MonsterRez.DamageMain:				Does {1} {0} damage to the target
+SpellDescription.MonsterRez.DamageRadius:			and its surroundings
+SpellDescription.MonsterRez.DamageFrequency:		every {0} seconds
+SpellDescription.MonsterRez.DamageDuration:			over a period of {0} seconds
+SpellDescription.SummonMonster.MainDescription:		Corpse resurrection.
+SpellDescription.DamageAdd.MainDescription:			{0}'s melee attacks do an additional {1} {2} damage.
+SpellDescription.DamageShield.MainDescription:		The target deals {0} {1} damage to enemies that hit them with a melee attack.
+SpellDescription.SpellReflection.MainDescription1:	{0} reflects spells back at the attacker with a {1}% chance and at {2}% of their original damage, while absorbing {3}% of damage dealt.
+SpellDescription.SpellReflection.MainDescription2:	Close combat or archery spells aren't reflected.
+SpellDescription.SpellReflectionDebuff.MainDescription:		Removes the target's magic deflection shield.
+SpellDescription.PowerShield.MainDescription:		When the user's health falls below {0}%, power is converted into health until it reaches {1}% of maximum health.
+SpellDescription.PowerTransfer.MainDescription:		Transfers {0} power from the caster to the target.
+SpellDescription.Resurrect.MainDescription:			Brings the target back to life, restoring {0}% health and {1}% power (and endurance), with no experience or constitution loss.
+SpellDescription.OffensiveProc.MainDescription:		{0} triggers a secondary spell with a {1}% chance on your melee attacks:
+SpellDescription.DefensiveProc.MainDescription:		{0} triggers a secondary spell with a {1}% chance when you are hit by melee attacks:
+SpellDescription.SpeedEnhancement.MainDescription:	The target's speed is increased to {0}% of normal.
+SpellDescription.SpellShield.MainDescription:		{0} absorbs 100% of spell damage and 65% of DoT effects when the player's health drops to 15% or lower.
+SpellDescription.StyleBleeding.MainDescription:		Target takes {0} {1} damage every {2} seconds.
+SpellDescription.StyleTaunt.Increase:				Taunts the target, increasing your threat against it by {0}.
+SpellDescription.StyleTaunt.Decrease:				Detaunts the target, decreasing your threat against it by -{0}.
+SpellDescription.Taunt.MainDescription:				Taunts the target, increasing your threat against it by {0}.
+SpellDescription.SummonSpell.MainDescription:		Summons a pet to serve the caster. It can affect monsters up to {0}% of your level, up to a maximum of level {1}.
+SpellDescription.MeleeAblativeArmor.MainDescription:		Target gains a temporary health buffer that absorbs {0}% of the physical damage dealt, up to a maximum of {1} damage.
+SpellDescription.MagicAblativeArmor.MainDescription:		Target gains a temporary health buffer that absorbs {0}% of the magical damage dealt, up to a maximum of {1} damage.
+SpellDescription.BothAblativeArmor.MainDescription:	Target gains a temporary health buffer that absorbs {0}% of all damage dealt, up to a maximum of {1} damage.
+SpellDescription.BattleFeverDurationBuff.MainDescription:	Increases Battle Fever duration by {0}%.
+SpellDescription.TankAdrenaline.MainDescription:	You are taken over by battle fever! Your styled attacks against evenly matched enemies cannot miss and your defense and your melee power are greatly enhanced!
+SpellDescription.MageAdrenaline.MainDescription:	You are taken over by battle fever! Your defense and chance to hit with spells and their casting speed are greatly enhanced, and you cannot be interrupted by attacks!
+SpellDescription.StealthAdrenaline.MainDescription:	You are taken over by battle fever! Your styled attacks against evenly matched enemies cannot miss and your defense, stealth, melee and ranged power are greatly enhanced!
+SpellDescription.Amnesia.MainDescription:			Clears the monster's mind, causing it to forget who it was attacking. Negates any spells currently being cast by enemy player targets, but does not interrupt them unless resisted.
+SpellDescription.Mesmerize.MainDescription:			The target is mesmerized and cannot take any actions.
+SpellDescription.Stun.MainDescription:				The target is stunned and cannot take any actions for {0} seconds.
+SpellDescription.Charm.MainDescription1:			Attempts to bring the target {0} monster under the caster's control.
+SpellDescription.Charm.MainDescription2:			Affects monsters up to {0}% of your level, to a maximum of level {1}.
+SpellDescription.CombatHeal.MainDescription:		Target is healed {0} damage every {1} seconds.
+SpellDescription.Confusion.MainDescriptionPositive:	Monster target has a {0}% chance to switch which target they are fighting.
+SpellDescription.Confusion.MainDescriptionNegative:	Monster target has a 100% chance to switch which target they are fighting and a 75% chance to attack an ally.
+SpellDescription.PetConversion.MainDescription:		Releases the target and all other turrets you have summoned from the area. {0}% of the power used in summoning the pet is returned to the caster.
+SpellDescription.CraftingSpeedBuff.MainDescription:	Increases the target's crafting speed by {0}%.
+SpellDescription.CureDisease.MainDescription:		All disease effects are removed from the target.
+SpellDescription.CureMezz.MainDescription:			All mesmerization effects are removed from the target.
+SpellDescription.CureNearsight.MainDescription:		All nearsight effects are removed from the target.
+SpellDescription.CurePoison.MainDescription:		All damage over time effects (such as poisons) are removed from the target.
+SpellDescription.DamageSpeedDecrease.MainDescription:		The target is slowed by {0}%. Deals {1} {2} damage to the target.
+SpellDescription.DamageToPower.MainDescription:		{0}% of any spell damage done to the target is converted into power.
+SpellDescription.DeathClaw.MainDescription:			{0} reduces the enemy's life by 90%. It does not affect ghosts, weak enemies, or enemies above level {1}, and has a reduced effect on undead and bosses.
+SpellDescription.EnduranceDrain.MainDescription:	{0}% endurance is stolen from the target and transferred to the caster.
+SpellDescription.EnduranceHeal.MainDescription:		Replenishes {0} endurance.
+SpellDescription.Disarm.MainDescription1:			Disarms your target for {0} seconds.
+SpellDescription.Disarm.MainDescription2:			This effect can be recast only after {0} seconds once used.
+SpellDescription.GroundArea.MainDescription1:		Creates a cloud that affects everyone in the area.
+SpellDescription.GroundArea.MainDescription2:		Cloud Effect:
+SpellDescription.CloudsongFall.MainDescription:		Target takes {0}% less damage when falling.
+SpellDescription.DoomHammer.MainDescription:		Does {0} {1} damage.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Deals {0} {1} damage to the target each pulse. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Deals {0} {1} damage to the target each pulse and slows movement by {5}%. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Deals {0} {1} damage in the area each pulse. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.RampingDamageFocus.AoESnare:				Deals {0} {1} damage in the area each pulse and slows movement by {5}%. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.HereticPiercingMagic.MainDescription:		Effectiveness of the target's spells is increased by {0}%. Against higher-level opponents than the target, this should reduce the chance of a full resist.
+SpellDescription.SummonNethersbane.MainDescription1:		Summon Nethersbane, the evil blade used by Arawn.
+SpellDescription.SummonNethersbane.MainDescription2:		The Damage type of Nethersbane is Cold.
+SpellDescription.SummonIcebrand.MainDescription1:			Summon Icebrand, the evil blade imbued by shadows.
+SpellDescription.SummonIcebrand.MainDescription2:			The Damage type of Icebrand is Cold.
+SpellDescription.GoldenSpearJavelin.MainDescription:		Summons 5 magical javelins.
+SpellDescription.OmniHeal.MainDescription:					The target regains {0}% of health, endurance, and power.
+SpellDescription.OmniLifeDrain.MainDescription:				Damages the target. {0}% of the damage is returned as health, {1}% as power, and {2}% as endurance to the caster.
+SpellDescription.PowerHeal.MainDescription:					Replenishes the target's power pool by {0}%.
+SpellDescription.Silence.MainDescription:					Enemy is silenced and can't cast spells for {0} seconds.
+SpellDescription.IllusionSpell.MainDescription1:			The caster creates {0} illusions {1} to surround themselves, confusing their opponents.
+SpellDescription.IllusionSpell.MainDescription2:			Illusions deal {0}% of the caster's damage, have {1}% of the caster's max health, and fade after {2} seconds.
+SpellDescription.IllusionSpell.SubDescription1:				The caster is shapechanged into a creature, and the {0} illusions share the same appearance.
+SpellDescription.IllusionSpell.SubDescription2a:			Illusions move with the caster, mimicking their movements, styles, and spells.
+SpellDescription.IllusionSpell.SubDescription2b:			Illusions vanish immediately and the spell ends if the caster moves.
+SpellDescription.Bump.MainDescriptionSingle:		Throws the targeted enemy {0} units high into the air and launches it forward between {1}% and {2}% of the maximum throw distance, stunning it mid-flight.
+SpellDescription.Bump.MainDescriptionArea:			All enemies within {3} units are hurled {0} units high and flung forward between {1}% and {2}% of the maximum throw distance, leaving them stunned while airborne.
+SpellDescription.Bump.MainDescriptionCone:			Enemies in a cone before the caster are tossed {0} units high and thrown forward between {1}% and {2}% of the maximum throw distance, leaving them stunned in mid-air.
 SpellDescription.Chamber.MainDescription:			Allows you to preload a chamber containing a primary spell and a secondary spell which can be instantly unloaded upon your target.
 SpellDescription.Chamber.CanContainBolts:			Can contain bolts.
 SpellDescription.Chamber.CannotContainBolts:		Cannot contain bolts.
@@ -47,6 +157,40 @@ SpellDescription.BuffShear.Acuity:					Strips the target of any beneficial Acuit
 SpellDescription.BuffShear.StrCon:					Strips the target of any beneficial Strength/Constitution dual spell effects.
 SpellDescription.BuffShear.DexQui:					Strips the target of any beneficial Dexterity/Quickness dual spell effects.
 SpellDescription.BuffShear.Random:					Randomly strips one beneficial spell effect from the target.
+SpellDescription.ResistBuff.MainDescription:				Increases the target's resistance to {0} damage by {1}%.
+SpellDescription.BodySpiritEnergyBuff.MainDescription:		Increases the target's resistance to body, spirit, and energy damage by {0}%.
+SpellDescription.HeatColdMatterBuff.MainDescription:		Increases the target's resistance to heat, cold, and matter damage by {0}%.
+SpellDescription.AllMagicResistsBuff.MainDescription:		Increases the target's resistance to all magic damage by {0}%.
+SpellDescription.SecondaryMagicResistsBuff.MainDescription:	Increases the target's secondary magic resistances by {0}%.
+SpellDescription.AllMeleeResistsBuff.MainDescription:		Increases the target's resistance to all melee damage by {0}%.
+SpellDescription.AllResistsBuff.MainDescription:			Increases the target's resistance to all damage by {0}%.
+SpellDescription.EssenceBuff.MainDescription:				Increases the target's resistance to 'essence' damage by {0}%.
+SpellDescription.ResistDebuff.MainDescription:				Decreases the target's resistance to {0} damage by {1}%.
+SpellDescription.CrushSlashThrustDebuff.MainDescription:	Decreases the target's resistances to melee damage by {0}%.
+SpellDescription.EssenceDebuff.MainDescription:				Decreases the target's resistances to 'essence' damage by {0}%.
+SpellDescription.DualStatDebuff.MainDescription:			Reduces the target's {0} and {1} by {2}.
+SpellDescription.DualStatBuff.MainDescription:				{0} {1} and {2} are increased by {3}.
+SpellDescription.SingleStatBuff.MainDescription:			Increases the target's {0} by {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Increases {0}'s attack speed by {1}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	{0}'s actions require {1}% less endurance.
+SpellDescription.DPSBuff.MainDescription:					Increases {0}'s DPS by {1}%.
+SpellDescription.MeleeDamageBuff.MainDescription:			You deal {0}% additional melee damage.
+SpellDescription.MesmerizeDurationBuff.MainDescription:		Reduces mesmerize effectiveness by {0}%.
+SpellDescription.EvadeChanceBuff.MainDescription:			Grants {0}% chance to evade attacks.
+SpellDescription.ParryChanceBuff.MainDescription:			Grants {0}% chance to parry attacks.
+SpellDescription.WeaponSkillBuff.MainDescription:			Increases {0}'s Weapon skill by {1}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Increases {0}'s Stealth skill by {1}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Increases {0}'s Flexible skill by {1}%.
+SpellDescription.ResiPierceBuff.MainDescription:			Grants you {0}% chance to penetrate magical resistances.
+SpellDescription.CriticalMagicalBuff.MainDescription:		Increases the target's chance for a critical spell hit by {0}%.
+SpellDescription.CriticalMeleeBuff.MainDescription:			Increases the target's chance for a critical melee hit by {0}%.
+SpellDescription.SingleStatDebuff.MainDescription:			Decreases the target's {0} by {1}.
+SpellDescription.CombatSpeedDebuff.MainDescription:			The target's attack speed is reduced by {0}%.
+SpellDescription.MeleeDamageDebuff.MainDescription:			The target deals {0}% less damage with melee attacks.
+SpellDescription.FatigueConsumptionDebuff.MainDescription:	Increases the endurance the target uses in combat by {0}%.
+SpellDescription.FumbleChanceDebuff.MainDescription:		Increases the target's chance to fumble by {0}%.
+SpellDescription.DPSDebuff.MainDescription:					Decreases {0}'s DPS by {1}%.
+SpellDescription.SkillsDebuff.MainDescription:				Decreases {0}'s skills by {1}%.
 SpellDescription.Warlock.SecondarySpell:			This is a secondary spell.
 
 # AblativeArmor
@@ -66,6 +210,19 @@ ResistDebuff.DelveInfo.Function:			Function: resistance decrease
 
 #CharmSpellHandler
 CharmSpellHandler.DelveInfo.Function:			Function: {0}
+CharmSpellHandler.Species.Humanoid:				humanoid
+CharmSpellHandler.Species.Animal:				animal
+CharmSpellHandler.Species.Insect:				insect
+CharmSpellHandler.Species.Reptile:				reptile
+CharmSpellHandler.Species.HumanoidAnimal:		humanoid and animal
+CharmSpellHandler.Species.HumanoidAnimalInsect:					humanoid, animal and insect
+CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			humanoid, animal, insect and magical
+CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	humanoid, animal, insect, magical and undead
+
+#IllusionSpell SpellHandler
+SpellDescription.IllusionSpell.Arrangement.Random:		aléatoirement
+SpellDescription.IllusionSpell.Arrangement.Circle:		en cercle
+SpellDescription.IllusionSpell.Arrangement.Line:		en ligne
 
 # DamageAddAndShield
 DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} does {1} extra damage(s) to you!

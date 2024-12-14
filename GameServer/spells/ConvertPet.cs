@@ -17,6 +17,7 @@
  *
  */
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -53,6 +54,12 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Releases the target and all other turrets you have summoned from the area. {Spell.Value}% of the power used in summoning the pet is returned to the caster.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.PetConversion.MainDescription", Spell.Value);
+            }
+        }
     }
 }

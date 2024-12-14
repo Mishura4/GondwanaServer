@@ -23,6 +23,7 @@ using DOL.GS.Effects;
 using DOL.Language;
 using System.Numerics;
 using DOL.GS.Styles;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -208,6 +209,13 @@ namespace DOL.GS.Spells
 
         public BladeturnSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => "Creates a 'bubble' that absorbs the damage of a single melee hit.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.Bladeturn.MainDescription");
+            }
+        }
     }
 }

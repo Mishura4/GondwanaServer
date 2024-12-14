@@ -148,7 +148,7 @@ namespace DOL.GS
         /// <param name="plvl">plvl of the commands to get</param>
         /// <param name="addDesc"></param>
         /// <returns></returns>
-        public static string[] GetCommandList(ePrivLevel plvl, bool addDesc, string language = "EN")
+        public static string[] GetCommandList(ePrivLevel plvl, bool addDesc, string language)
         {
             return m_gameCommands
                 .Where(kv => kv.Value != null && kv.Key != null && kv.Value.m_lvl == (uint)plvl)

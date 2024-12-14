@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.ServerProperties;
+using DOL.Language;
+
 namespace DOL.GS.Spells
 {
     [SpellHandler("CloudsongAura")]
@@ -61,6 +64,15 @@ namespace DOL.GS.Spells
         public override bool HasPositiveEffect
         {
             get { return true; }
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CloudsongFall.MainDescription", Spell.Damage);
+            }
         }
     }
 }

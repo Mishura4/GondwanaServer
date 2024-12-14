@@ -21,6 +21,7 @@ using System.Reflection;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using log4net;
 
@@ -106,7 +107,15 @@ namespace DOL.GS.Spells
 
         protected SingleStatBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's {ConvertPropertyToText(Property1).ToLower()} by {Spell.Value}.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string propName = ConvertPropertyToText(Property1).ToLower();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SingleStatBuff.MainDescription", propName, Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("StrengthBuff")]
@@ -212,7 +221,14 @@ namespace DOL.GS.Spells
 
         public CombatSpeedBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases {TargetPronoun.ToLower()} combat speed by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CombatSpeedBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("HasteBuff")]
@@ -226,7 +242,14 @@ namespace DOL.GS.Spells
     {
         public CelerityBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases {TargetPronoun.ToLower()} attack speed by {Math.Abs(Spell.Value)}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CombatSpeedBuff.MainDescription", TargetPronoun.ToLower(), Math.Abs(Spell.Value));
+            }
+        }
     }
 
     [SpellHandler("FatigueConsumptionBuff")]
@@ -238,7 +261,14 @@ namespace DOL.GS.Spells
 
         public FatigueConsumptionBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"{TargetPronoun} actions require {Math.Abs(Spell.Value)}% less endurance.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.FatigueConsumptionBuff.MainDescription", TargetPronoun.ToLower(), Math.Abs(Spell.Value));
+            }
+        }
     }
 
     [SpellHandler("MeleeDamageBuff")]
@@ -250,7 +280,14 @@ namespace DOL.GS.Spells
 
         public MeleeDamageBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"You do {Spell.Value} additional damage with melee attacks.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.MeleeDamageBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("MesmerizeDurationBuff")]
@@ -262,7 +299,14 @@ namespace DOL.GS.Spells
 
         public MesmerizeDurationBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"The effectiveness of mesmerize spells is reduced by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.MesmerizeDurationBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("DPSBuff")]
@@ -270,7 +314,17 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.DPS; } }
 
+        protected override void SendUpdates(GameLiving target) { }
+
         public DPSBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.FatigueConsumptionBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("EvadeBuff")]
@@ -278,9 +332,18 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.EvadeChance; } }
 
+        protected override void SendUpdates(GameLiving target) { }
+
         public EvadeChanceBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"You gain {Spell.Value}% chance to evade.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.EvadeChanceBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("ParryBuff")]
@@ -288,9 +351,18 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.ParryChance; } }
 
+        protected override void SendUpdates(GameLiving target) { }
+
         public ParryChanceBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"You gain {Spell.Value}% chance to parry.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.ParryChanceBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("WeaponSkillBuff")]
@@ -298,9 +370,18 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.WeaponSkill; } }
 
+        protected override void SendUpdates(GameLiving target) { }
+
         public WeaponSkillBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases {TargetPronoun.ToLower()} weapon skill by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.WeaponSkillBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("StealthSkillBuff")]
@@ -308,9 +389,18 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.Skill_Stealth; } }
 
+        protected override void SendUpdates(GameLiving target) { }
+
         public StealthSkillBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases {TargetPronoun.ToLower()} stealth skill by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.StealthSkillBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("ToHitBuff")]
@@ -374,7 +464,14 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.Skill_Flexible_Weapon; } }
         public FlexibleSkillBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases {TargetPronoun.ToLower()} Flexible by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.FlexibleSkillBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("ResiPierceBuff")]
@@ -383,7 +480,14 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.ResistPierce; } }
         public ResiPierceBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Grants you {Spell.Value}% chance to penetrate magical resistances.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.ResiPierceBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("CriticalMagicalBuff")]
@@ -398,7 +502,14 @@ namespace DOL.GS.Spells
 
         public CriticalMagicalBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's chance for a critical spell hit by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CriticalMagicalBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("CriticalMeleeBuff")]
@@ -413,6 +524,13 @@ namespace DOL.GS.Spells
 
         public CriticalMeleeBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's chance for a critical melee hit by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CriticalMeleeBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 }

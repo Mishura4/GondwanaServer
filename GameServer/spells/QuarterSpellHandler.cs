@@ -1,5 +1,7 @@
 ﻿using DOL.AI.Brain;
 using DOL.GS.PlayerClass;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -56,7 +58,13 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"{Spell.Name} reduces enemy's life to a quarter, it doesn't affect weak enemies or enemies having a level above {Spell.AmnesiaChance}. This spell rarely affect ghosts, demons, necromancers, bainshee and vampiirs.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.Quarter.MainDescription", Spell.Name, Spell.AmnesiaChance);
+            }
+        }
 
     }
 }

@@ -26,6 +26,7 @@ using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using log4net;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -120,7 +121,15 @@ namespace DOL.GS.Spells
 
         public DamageAddSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"{TargetPronoun} melee attacks do additional {Spell.Damage} {Spell.DamageType} damage.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string dmgTypeName = Spell.DamageType.ToString().ToLower();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DamageAdd.MainDescription", TargetPronoun.ToLower(), Spell.Damage, dmgTypeName);
+            }
+        }
     }
 
     [SpellHandler("DamageShield")]
@@ -197,7 +206,15 @@ namespace DOL.GS.Spells
 
         public DamageShieldSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"The target deals {Spell.Damage} {Spell.DamageType} damage to enemies that hit them with a melee attack.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string dmgTypeName = Spell.DamageType.ToString().ToLower();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DamageShield.MainDescription", Spell.Damage, dmgTypeName);
+            }
+        }
     }
 
     public abstract class AbstractDamageAddSpellHandler : SpellHandler

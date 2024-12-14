@@ -93,7 +93,7 @@ namespace DOL.GS.Spells
     [SpellHandler("SummonHealingElemental")]
     public class SummonHealingElemental : MasterlevelHandling
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         GameNPC summoned = null;
         GameSpellEffect beffect = null;

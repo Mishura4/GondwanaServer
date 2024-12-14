@@ -13,6 +13,8 @@ using System.Collections;
 using System.Linq;
 using log4net;
 using DOL.Language;
+using DOL.GS.ServerProperties;
+using System.Text;
 
 namespace DOL.GS.Spells
 {
@@ -500,6 +502,54 @@ namespace DOL.GS.Spells
         public override int CalculateToHitChance(GameLiving target)
         {
             return 100; // Always hit
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                StringBuilder sb = new StringBuilder();
+
+                int height = (int)Spell.Value;
+                int minDistancePercent = (int)Spell.LifeDrainReturn;
+                int maxDistancePercent = (int)Spell.AmnesiaChance;
+                int radius = (int)Spell.Radius;
+
+                string mainDesc;
+
+                if (Spell.Target == "enemy" && radius == 0)
+                {
+                    // Single target version
+                    mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Bump.MainDescriptionSingle", height, minDistancePercent, maxDistancePercent);
+                }
+                else if (Spell.Target == "enemy" && radius > 0)
+                {
+                    // Multiple enemies around caster
+                    mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Bump.MainDescriptionArea", height, minDistancePercent, maxDistancePercent, radius);
+                }
+                else if (Spell.Target == "cone" && radius > 0)
+                {
+                    // Enemies in a cone before the caster
+                    mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Bump.MainDescriptionCone", height, minDistancePercent, maxDistancePercent);
+                }
+                else
+                {
+                    mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Bump.MainDescriptionSingle", height, minDistancePercent, maxDistancePercent);
+                }
+
+                sb.Append(mainDesc);
+
+                if (Spell.RecastDelay > 0)
+                {
+                    int recastSeconds = Spell.RecastDelay / 1000;
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    sb.Append("\n\n");
+                    sb.Append(secondDesc);
+                }
+
+                return sb.ToString().TrimEnd();
+            }
         }
     }
 }

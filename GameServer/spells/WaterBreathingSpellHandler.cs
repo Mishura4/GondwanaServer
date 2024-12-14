@@ -24,6 +24,7 @@ using DOL.GS.Effects;
 using DOL.Events;
 using log4net;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 
 namespace DOL.GS.Spells
@@ -124,6 +125,12 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"The target can breathe underwater and move at {Spell.Value}% of normal land speed.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.WaterBreathing.MainDescription", Spell.Value);
+            }
+        }
     }
 }

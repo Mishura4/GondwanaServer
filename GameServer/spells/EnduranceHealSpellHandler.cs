@@ -19,6 +19,7 @@
 using System;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -132,6 +133,13 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Replenishes {(Spell.Value < 0 ? Spell.Value + "%" : Spell.Value.ToString())} endurance.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string amountStr = (Spell.Value < 0 ? Spell.Value + "%" : Spell.Value.ToString());
+                return LanguageMgr.GetTranslation(language, "SpellDescription.EnduranceHeal.MainDescription", amountStr);
+            }
+        }
     }
 }

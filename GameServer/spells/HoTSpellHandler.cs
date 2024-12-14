@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.AI.Brain;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -176,6 +177,13 @@ namespace DOL.GS.Spells
         public HoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => $"The target regenerates {Spell.Value} health every {Spell.Frequency / 1000.0} sec.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double freqSeconds = Spell.Frequency / 1000.0;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.HoT.MainDescription", Spell.Value, freqSeconds.ToString("0.##"));
+            }
+        }
     }
 }

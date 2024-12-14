@@ -21,7 +21,7 @@ namespace DOL.spells
     [SpellHandler("CombineItem")]
     public class CombineItemSpellHandler : SpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private static readonly int[] modelForge = { 478, 1495 };
         private static readonly int[] modelTannery = { 479 };
@@ -222,7 +222,7 @@ namespace DOL.spells
             {
                 StartCastTimer(m_spellTarget);
 
-                if ((Caster is GamePlayer && (Caster as GamePlayer).IsStrafing) || Caster.IsMoving)
+                if ((Caster is GamePlayer && (Caster as GamePlayer)!.IsStrafing) || Caster.IsMoving)
                     CasterMoves();
             }
             else
@@ -473,7 +473,7 @@ namespace DOL.spells
             GamePlayer player = Caster as GamePlayer;
             GameEventMgr.RemoveHandler(Caster, GameLivingEvent.Moving, new DOLEventHandler(EventManager));
             GameEventMgr.RemoveHandler(Caster, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventManager));
-            player.Out.SendCloseTimerWindow();
+            player!.Out.SendCloseTimerWindow();
 
             if (!string.IsNullOrEmpty(match.CombinationId))
             {

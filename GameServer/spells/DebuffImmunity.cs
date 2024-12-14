@@ -2,6 +2,7 @@
 using System.Numerics;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -137,7 +138,15 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Provides a brief description of the Debuff Immunity spell.
         /// </summary>
-        public override string ShortDescription => "Grants immunity to all debuffs, increasing resist chance by {Spell.Value}% for {Spell.Duration / 1000} seconds.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                int durationSeconds = Spell.Duration / 1000;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DebuffImmunity.MainDescription", Spell.Value, durationSeconds);
+            }
+        }
     }
 
     /// <summary>

@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -139,6 +140,24 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerHeal.FullPowerOther", target.GetName(0, true)), eChatType.CT_Spell);
             }
             return true;
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.PowerHeal.MainDescription", Spell.Value);
+
+                if (Spell.RecastDelay > 0)
+                {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    return mainDesc + "\n\n" + secondDesc;
+                }
+
+                return mainDesc;
+            }
         }
     }
 }

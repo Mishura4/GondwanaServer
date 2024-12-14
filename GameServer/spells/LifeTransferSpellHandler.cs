@@ -23,6 +23,7 @@ using DOL.AI.Brain;
 using DOL.GS.Scripts;
 using DOL.Language;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -314,6 +315,13 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription => $"Transfers {Spell.Value} health from the caster to the target.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.LifeTransfer.MainDescription", Spell.Value);
+            }
+        }
     }
 }

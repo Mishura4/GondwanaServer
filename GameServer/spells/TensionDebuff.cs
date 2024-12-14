@@ -3,6 +3,8 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 using System;
 
 namespace DOL.GS.Spells
@@ -27,6 +29,14 @@ namespace DOL.GS.Spells
             get => eBuffBonusCategory.Debuff;
         }
 
-        public override string ShortDescription => $"Decreases the target's {ConvertPropertyToText(Property1).ToLower()} by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string propName = ConvertPropertyToText(Property1).ToLower();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.TensionDebuff.MainDescription", propName, Spell.Value);
+            }
+        }
     }
 }

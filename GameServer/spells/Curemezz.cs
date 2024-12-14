@@ -23,6 +23,8 @@ using System.Collections;
 using System.Collections.Generic;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -36,6 +38,13 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove.Add("Mesmerize");
         }
 
-        public override string ShortDescription => "All mesmerization effects are removed from the target.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CureMezz.MainDescription");
+            }
+        }
     }
 }

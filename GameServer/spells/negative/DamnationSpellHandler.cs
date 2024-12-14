@@ -3,6 +3,7 @@ using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 using System.Collections.Generic;
@@ -158,7 +159,7 @@ namespace DOL.GS.Spells
                     return true;
             }
             
-            if (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)
+            if (spellHandler!.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)
                 return true;
             
             return base.PreventsApplication(self, other);
@@ -357,24 +358,29 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will be more resilient against melee attacks by {Spell.AmnesiaChance}% but will inevitably die after {Spell.Duration / 1000} seconds. No cure can reverse this effect.";
+                string language = Properties.SERV_LANGUAGE;
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription1", Spell.AmnesiaChance, Spell.Duration / 1000);
 
+                string healingPart = string.Empty;
                 if (Spell.Value < 0)
                 {
-                    description += $" Healing is severely reduced to only {Math.Abs(Spell.Value)}%.";
+                    // Severely reduced healing
+                    healingPart = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription2", Math.Abs(Spell.Value));
                 }
                 else if (Spell.Value == 0)
                 {
-                    description += " Healing will have no effect on the target.";
+                    // No healing effect
+                    healingPart = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription3");
                 }
                 else if (Spell.Value > 0)
                 {
-                    description += $" Healing will be converted by {Spell.Value}% into damages.";
+                    // Healing converted to damage
+                    healingPart = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription4", Spell.Value);
                 }
 
-                description += " Undead monsters are not affected by this spell.";
+                string undeadNote = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription5");
 
-                return description;
+                return mainDesc + "\n\n" + healingPart + "\n\n" + undeadNote;
             }
         }
     }

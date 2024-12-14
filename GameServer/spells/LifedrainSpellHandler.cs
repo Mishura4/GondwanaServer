@@ -18,6 +18,7 @@
  */
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 
@@ -248,11 +249,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.LifeDrain.MainDescription", Spell.Damage, Spell.DamageType, Spell.LifeDrainReturn);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.LifeDrain.MainDescription", Spell.Damage, Spell.DamageType, Spell.LifeDrainReturn);
 
                 if (Spell.IsSecondary)
                 {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                     description += "\n\n" + secondaryMessage;
                 }
 

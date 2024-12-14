@@ -17,6 +17,8 @@
  *
  */
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -36,6 +38,14 @@ namespace DOL.GS.Spells
 
         public CombatHealSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"Target is healed {Spell.Value} of damage every {Spell.Frequency / 10.0} seconds.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double freqSec = Spell.Frequency / 10.0;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CombatHeal.MainDescription", Spell.Value, freqSec.ToString("0.#"));
+            }
+        }
     }
 }

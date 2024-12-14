@@ -22,6 +22,7 @@ DelveInfo.ValueNegative:        Valeur : -{0}
 # Spell ShortDescriptions
 SpellDescription.DirectDamage.MainDescription:		Inflige {0} dégâts de type {1} à la cible.
 SpellDescription.DoT.MainDescription:				La cible subit {0} dégâts de {1} toutes les {2} secondes.
+SpellDescription.BoltSpell.MainDescription:			Un projectile magique se dirige vers la cible, provoquant une explosion et infligeant {0} dégâts de {1}. Peut être bloqué.
 SpellDescription.LifeDrain.MainDescription:			Le sort inflige {0} dégâts de {1} à la cible, soignant l'attaquant de {2}% des dégâts causés.
 SpellDescription.Nearsight.MainDescription1:		La portée effective des attaques à distance de la cible est réduite de {0}%.
 SpellDescription.Nearsight.MainDescription2:		Les sorts de vision réduite affectant le groupe du lanceur voient leur efficacité réduite de {0}%, ou sont totalement résistés.
@@ -32,14 +33,123 @@ SpellDescription.RegenEndu.MainDescription:			La cible récupère {0} points d'e
 SpellDescription.SpeedDecrease.MainDescription:		La cible est ralentie de {0}%.
 SpellDescription.SpeedDecrease.Rooted:				La cible est immobilisée sur place.
 SpellDescription.Slow.MainDescription:				La cible est ralentie de {0}%. Il n'y a aucune immunité contre ce sort et il ne peut pas être interrompu par des coups.
+SpellDescription.Bladeturn.MainDescription:			Crée une « bulle » qui absorbe les dégâts d'un seul coup de mêlée.
+SpellDescription.Demi.MainDescription:				{0} réduit la vie de l'ennemi de moitié. Il n'affecte pas les ennemis faibles ni ceux dont le niveau est supérieur à {1}. Ce sort affecte rarement les fantômes, démons, nécromanciens, banshees et vampiirs.
+SpellDescription.Quarter.MainDescription:			{0} réduit la vie de l'ennemi à un quart. Il n'affecte pas les ennemis faibles ni ceux dont le niveau est supérieur à {1}. Ce sort affecte rarement les fantômes, démons, nécromanciens, banshees et vampiirs.
+SpellDescription.LifeTransfer.MainDescription:		Transfère {0} points de vie de l'incantateur vers sa cible.
+SpellDescription.Heal.MainDescription:				La cible est soignée de {0} points de vie.
+SpellDescription.Disease.MainDescription:			Inflige une maladie invalidante qui ralentit la cible de {0}%, réduisant sa force de {1}% et inhibant les effets de soins de {2}%.
+SpellDescription.Petrify.MainDescription:			Pétrifie la cible et la transforme en statue. La cible est complètement paralysée et absorbe 50% des dégâts physiques ainsi que 75% des dégâts magiques qu'elle pourrait subir si elle est attaquée.
+SpellDescription.Unpetrify.MainDescription:			Guérit la cible de l'état « pétrifié ».
+SpellDescription.HealDebuff.MainDescription:		Réduit l'efficacité des soins de {0}%. L'effet de ce sort peut s'accumuler avec celui de « Maladie ».
+SpellDescription.DebuffImmunity.MainDescription:	Accorde une immunité contre tous les sorts d'affaiblissement, augmentant les chances de résistance de {0}% pendant {1} secondes.
+SpellDescription.MagicHealAbsorb.MainDescription:	La prochaine attaque magique contre vous absorbera et convertira {0}% des dégâts en soins, tandis que {1}% seront convertis en mana et en endurance.
+SpellDescription.Trigger.MainDescription:			Génère un effet magique (proc) sous forme de buff sur la cible. {0} est déclenché lorsque la cible est frappée.
+SpellDescription.WaterBreathing.MainDescription:	Permet à la cible de respirer sous l'eau et de se déplacer à {0}% de sa vitesse terrestre normale.
+SpellDescription.TensionDebuff.MainDescription:		Réduit les gains en tension de la cible de {1}%.
+SpellDescription.TensionBuff.MainDescription:		Augmente les gains en tension de la cible de {1}%.
+SpellDescription.Teleport.MainDescription:			{0} téléporte la cible à {1}.
+SpellDescription.PlayerPortal.MainDescription:		Ouvre un portail aller-retour à usage unique lié au point de rappel de son invocateur. Utilisable par {0}.
+SpellDescription.Earthquake.MainDescription1:		Crée un séisme d'une intensité de {0} sur l'échelle de Richter, infligeant jusqu'à {1} dégâts près de l'épicentre et diminuant jusqu'à {2} dégâts aux points les plus éloignés.
+SpellDescription.Earthquake.MainDescription2:		Les séismes n'affectent pas les monstres volants, nageurs, les Banshees ni les Vampiirs flottants.
+SpellDescription.HoT.MainDescription:				La cible régénère {0} points de vie toutes les {1} secondes.
+SpellDescription.DDWithDebuff.MainDescription:		Inflige {0} dégâts de {1} et réduit la résistance {1} de la cible de {2}%.
+SpellDescription.AfHitsBuff.MainDescription:		Augmente le facteur d'armure et la santé de la cible de {0}% tant qu'elle reste dans la portée de cette aura.
+SpellDescription.AllStatsBuff.MainDescription:		Augmente toutes les caractéristiques de la cible de {1}.
+SpellDescription.PowerDrain.MainDescription:		Inflige {0} dégâts d'Esprit à la cible, et l'invocateur du sort récupère {1}% de ces dégâts en puissance.
+SpellDescription.PowerLock.MainDescription1:		Verrouille sur place votre cible et vous-même, aspirant {0}% de sa Mana de base toutes les {1}s pour {2} secondes.
+SpellDescription.PowerLock.MainDescription2:		Pendant la durée de cet effet, ni vous ni votre cible ne pouvez subir de dégâts de mêlée.
+SpellDescription.PowerLock.MainDescription3:		Utilisable uniquement contre des joueurs ou des familiers contrôlés par des joueurs.
+SpellDescription.Damnation.MainDescription1:		La cible est condamnée, transformée en zombie et perd tous ses effets bénéfiques. Elle devient plus résistante aux attaques de mêlée de {0}% mais mourra inévitablement après {1} secondes. Aucune guérison ne peut inverser cet effet.
+SpellDescription.Damnation.MainDescription2:		Les soins sont fortement réduits à seulement {0}%.
+SpellDescription.Damnation.MainDescription3:		Les soins n'ont aucun effet sur la cible damnée.
+SpellDescription.Damnation.MainDescription4:		Les soins sont convertis à {0}% en dégâts.
+SpellDescription.Damnation.MainDescription5:		Les monstres de type morts-vivants ne sont pas affectés par ce sort.
+SpellDescription.MonsterRez.MainDescription:		Ressuscite la cible sous la forme d'un mort-vivant, restaurant {0}% de sa santé et {1}% de sa puissance et endurance, sans causer de perte d'expérience ni de constitution.
+SpellDescription.MonsterRez.DamageMain:				Inflige {1} dégâts de type {0} à la cible
+SpellDescription.MonsterRez.DamageRadius:			et à son entourage
+SpellDescription.MonsterRez.DamageFrequency:		toutes les {0} secondes
+SpellDescription.MonsterRez.DamageDuration:			pendant une durée de {0} secondes
+SpellDescription.SummonMonster.MainDescription:		Résurrection cadavérique.
+SpellDescription.DamageAdd.MainDescription:			Les attaques de mêlée de {0} infligent {1} dégâts supplémentaires de type {2}.
+SpellDescription.DamageShield.MainDescription:		La cible inflige {0} dégâts de type {1} aux ennemis qui la frappent au corps à corps.
+SpellDescription.SpellReflection.MainDescription1:	{0} renvoie les sorts à l'attaquant avec {1}% de chances et à {2}% de leurs dégâts initiaux, tout en absorbant {3}% des dégâts infligés.
+SpellDescription.SpellReflection.MainDescription2:	Les sorts de combat rapprochés et les sorts d'archerie ne sont pas renvoyés.
+SpellDescription.SpellReflectionDebuff.MainDescription:		Supprime le bouclier de déflexion magique de la cible.
+SpellDescription.PowerShield.MainDescription:		Lorsque la santé de l'utilisateur tombe en dessous de {0}%, sa puissance est convertie en points de vie jusqu'à atteindre {1}% de sa santé maximale.
+SpellDescription.PowerTransfer.MainDescription:		Transfère {0} points de mana du lanceur vers la cible.
+SpellDescription.Resurrect.MainDescription:			Ressuscite la cible, lui rendant {0}% de sa santé et {1}% de sa mana (et endurance), sans perte d'expérience ni de constitution.
+SpellDescription.OffensiveProc.MainDescription:		{0} déclenche un sort secondaire avec {1}% de chance sur vos attaques de mêlée :
+SpellDescription.DefensiveProc.MainDescription:		{0} déclenche un sort secondaire avec {1}% de chance lorsque vous êtes frappé par des attaques de mêlée :
+SpellDescription.SpeedEnhancement.MainDescription:	La vitesse de la cible est augmentée à {0}% de sa vitesse normale.
+SpellDescription.SpellShield.MainDescription:		{0} absorbe 100% des dégâts magiques et 65% des effets de dégâts répétés sur la durée (DoT) lorsque la santé du joueur descend à 15% ou moins.
+SpellDescription.StyleBleeding.MainDescription:		La cible subit {0} dégâts de type {1} toutes les {2} secondes.
+SpellDescription.StyleTaunt.Increase:				Provoque la cible, augmentant votre niveau de menace contre elle de {0}.
+SpellDescription.StyleTaunt.Decrease:				Réduit la provocation sur la cible, diminuant votre niveau de menace contre elle de -{0}.
+SpellDescription.Taunt.MainDescription:				Provoque la cible, augmentant votre niveau de menace contre elle de {0}.
+SpellDescription.SummonSpell.MainDescription:		Appelle un familier pour servir l'invocateur. Il peut affecter des créatures jusqu'à {0}% de votre niveau, avec un niveau maximal de {1}.
+SpellDescription.MeleeAblativeArmor.MainDescription:		La cible obtient une réserve de vie temporaire qui absorbe {0}% des dégâts physiques infligés, jusqu'à un maximum de {1} dégâts.
+SpellDescription.MagicAblativeArmor.MainDescription:		La cible obtient une réserve de vie temporaire qui absorbe {0}% des dégâts magiques infligés, jusqu'à un maximum de {1} dégâts.
+SpellDescription.BothAblativeArmor.MainDescription:	La cible obtient une réserve de vie temporaire qui absorbe {0}% de tous les types de dégâts infligés, jusqu'à un maximum de {1} dégâts.
+SpellDescription.BattleFeverDurationBuff.MainDescription:	Augmente la durée de la Fièvre de Bataille de {0}%.
+SpellDescription.TankAdrenaline.MainDescription:	Vous êtes submergé par la fièvre de la bataille ! Vos attaques au corps à corps contre des ennemis de même niveau ne peuvent rater, et votre défense ainsi que votre puissance de mêlée sont grandement renforcées !
+SpellDescription.MageAdrenaline.MainDescription:	Vous êtes submergé par la fièvre de la bataille ! Votre défense, vos chances de toucher avec vos sorts et leur vitesse d'incantation sont grandement améliorées, et vous ne pouvez plus être interrompu par les attaques !
+SpellDescription.StealthAdrenaline.MainDescription:	Vous êtes submergé par la fièvre de la bataille ! Vos attaques au corps à corps contre des ennemis de même niveau ne peuvent rater, et votre défense, votre furtivité, ainsi que votre puissance en mêlée et à distance sont grandement renforcées !
+SpellDescription.Amnesia.MainDescription:			Efface l'esprit du monstre, le faisant oublier qui il attaquait. Annule tous les sorts en cours d'incantation par des cibles ennemies, sans toutefois les interrompre, sauf en cas de résistance.
+SpellDescription.Mesmerize.MainDescription:			La cible est hypnotisée et ne peut plus effectuer d'actions.
+SpellDescription.Stun.MainDescription:				La cible est étourdie et ne peut plus effectuer d'actions pendant {0} secondes.
+SpellDescription.Charm.MainDescription1:			Tente de prendre le contrôle d'une créature {0} ciblée pour le compte du charmeur.
+SpellDescription.Charm.MainDescription2:			Affecte les monstres jusqu'à {0}% de votre niveau, avec un niveau maximum de {1}.
+SpellDescription.CombatHeal.MainDescription:		La cible est soignée de {0} dégâts toutes les {1} secondes.
+SpellDescription.Confusion.MainDescriptionPositive:	La créature ciblée a {0}% de chances de changer de cible.
+SpellDescription.Confusion.MainDescriptionNegative:	La créature ciblée a 100% de chances de changer de cible et 75% de chances d'attaquer un allié.
+SpellDescription.PetConversion.MainDescription:		Libère la cible et toutes les tourelles que vous avez invoquées dans la zone. {0}% de la mana utilisée pour invoquer le familier est restituée à l'invocateur.
+SpellDescription.CraftingSpeedBuff.MainDescription:	Augmente la vitesse de fabrication d'objets de la cible de {0}%.
+SpellDescription.CureDisease.MainDescription:		Tous les effets de maladie sont supprimés de la cible.
+SpellDescription.CureMezz.MainDescription:			Tous les effets d'hypnose sont supprimés de la cible.
+SpellDescription.CureNearsight.MainDescription:		Tous les effets de vision réduite sont supprimés de la cible.
+SpellDescription.CurePoison.MainDescription:		Tous les effets de dégâts sur la durée (tels que les poisons) sont supprimés de la cible.
+SpellDescription.DamageSpeedDecrease.MainDescription:		La cible est ralentie de {0}%. Inflige {1} dégâts de {2} à la cible.
+SpellDescription.DamageToPower.MainDescription:		{0}% de tous les dégâts de sorts infligés à la cible sont convertis en puissance.
+SpellDescription.DeathClaw.MainDescription:			{0} réduit la vie de l'ennemi de 90%. Cela n'affecte pas les fantômes, les ennemis faibles, ou les ennemis de niveau supérieur à {1}, et a un effet réduit sur les morts-vivants et les boss.
+SpellDescription.EnduranceDrain.MainDescription:	{0}% d'endurance est volée à la cible et transférée au lanceur.
+SpellDescription.EnduranceHeal.MainDescription:		Restaure {0} d'endurance.
+SpellDescription.Disarm.MainDescription1:			Désarme votre cible pendant {0} secondes.
+SpellDescription.Disarm.MainDescription2:			Cet effet ne peut être relancé qu'après {0} secondes une fois utilisé.
+SpellDescription.GroundArea.MainDescription1:		Crée un « nuage » qui affecte toutes les personnes dans la zone.
+SpellDescription.GroundArea.MainDescription2:		Effet de zone :
+SpellDescription.CloudsongFall.MainDescription:		La cible subit {0}% de dégâts en moins lors d'une chute.
+SpellDescription.DoomHammer.MainDescription:		Inflige {0} dégâts de type {1}.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Inflige {0} dégâts de type {1} à la cible à chaque pulsation. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Inflige {0} dégâts de type {1} à la cible à chaque pulsation et réduit sa vitesse de déplacement de {5}%. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Inflige {0} dégâts de type {1} dans la zone à chaque pulsation. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.RampingDamageFocus.AoESnare:				Inflige {0} dégâts de type {1} dans la zone à chaque pulsation et réduit la vitesse de déplacement de {5}%. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.HereticPiercingMagic.MainDescription:		L'efficacité des sorts de la cible est augmentée de {0}%. Cela devrait permettre de réduire les risques d'une résistance complète contre des adversaires de plus haut niveau que la cible.
+SpellDescription.SummonNethersbane.MainDescription1:		Invoque Nethersbane, la lame maléfique utilisée par Arawn.
+SpellDescription.SummonNethersbane.MainDescription2:		Le type de dégâts de Nethersbane est Froid.
+SpellDescription.SummonIcebrand.MainDescription1:			Invoque Icebrand, la lame maléfique imprégnée par l'Ombre.
+SpellDescription.SummonIcebrand.MainDescription2:			Le type de dégâts d'Icebrand est Froid.
+SpellDescription.GoldenSpearJavelin.MainDescription:		Invoque 5 javelots magiques.
+SpellDescription.OmniHeal.MainDescription:					La cible récupère {0}% de points de vie, d'endurance et de mana.
+SpellDescription.OmniLifeDrain.MainDescription:				Inflige des dégâts à la cible. {0}% des dégâts sont rendus sous forme de vie, {1}% sous forme de mana et {2}% sous forme d'endurance au lanceur du sort.
+SpellDescription.PowerHeal.MainDescription:					Restaure {0}% de la réserve de mana de la cible.
+SpellDescription.Silence.MainDescription:					L'ennemi est réduit au silence et ne peut pas lancer de sorts pendant {0} secondes.
+SpellDescription.IllusionSpell.MainDescription1:			L'invocateur crée {0} illusions {1} pour l'entourer, déstabilisant ainsi ses adversaires.
+SpellDescription.IllusionSpell.MainDescription2:			Les illusions infligent {0}% des dégâts de l'invocateur, possèdent {1}% des points de vie max de l'invocateur, et disparaissent après {2} secondes.
+SpellDescription.IllusionSpell.SubDescription1:				L'invocateur est métamorphosé en une créature, et les {0} illusions partagent la même apparence.
+SpellDescription.IllusionSpell.SubDescription2a:			Les illusions se déplacent suivant l'invocateur, imitant ses mouvements, styles et sorts.
+SpellDescription.IllusionSpell.SubDescription2b:			Les illusions disparaissent immédiatement et le sort prend fin si le lanceur se déplace.
+SpellDescription.Bump.MainDescriptionSingle:		Projette l'ennemi ciblé à {0} unités de hauteur dans les airs et le lance en avant entre {1}% et {2}% de la distance de lancer maximale, l'étourdissant en plein vol.
+SpellDescription.Bump.MainDescriptionArea:			Tous les ennemis situés dans un rayon de {3} unités sont projetés à {0} unités de hauteur puis lancés en avant entre {1}% et {2}% de la distance de lancer maximale, les laissant étourdis en plein vol.
+SpellDescription.Bump.MainDescriptionCone:			Les ennemis situés dans un cône face au lanceur du sort sont propulsés à {0} unités de hauteur et envoyés en avant entre {1}% et {2}% de la distance de lancer maximale, les laissant étourdis en plein vol.
 SpellDescription.Chamber.MainDescription:			Vous permet de précharger une chambre contenant un sort principal et un sort secondaire qui peuvent être déchargés instantanément sur votre cible.
 SpellDescription.Chamber.CanContainBolts:			Peut contenir des projectiles.
 SpellDescription.Chamber.CannotContainBolts:		Ne peut pas contenir de projectiles.
 SpellDescription.FocusShell.MainDescription:		Tous les dégâts de mêlée et de sorts infligés à la cible sont réduits de {0}%.
 SpellDescription.FocusShell.OnlyInPvPORvR:			Ce sort ne peut être utilisé que dans les zones RvR ou PvP.
-SpellDescription.Powerless.MainDescription:			Vous permet de lancer un sort secondaire sans dépenser de mana.
-SpellDescription.Range.MainDescription:				Vous permet de lancer un sort secondaire à {0}% de portée.
-SpellDescription.Uninterruptable.MainDescription:	Vous permet de lancer un sort secondaire sans être interrompu mais réduit son efficacité de {0}%.
+SpellDescription.Powerless.MainDescription:			Vous permet d'incanter un sort secondaire sans dépenser de mana.
+SpellDescription.Range.MainDescription:				Vous permet d'incanter un sort secondaire à {0}% de portée.
+SpellDescription.Uninterruptable.MainDescription:	Vous permet d'incanter un sort secondaire sans être interrompu mais réduit son efficacité de {0}%.
 SpellDescription.BuffShear.Str:						Supprime les effets de sort bénéfiques augmentant la Force de la cible.
 SpellDescription.BuffShear.Dex:						Supprime les effets de sort bénéfiques augmentant la Dextérité de la cible.
 SpellDescription.BuffShear.Con:						Supprime les effets de sort bénéfiques augmentant la Constitution de la cible.
@@ -47,6 +157,40 @@ SpellDescription.BuffShear.Acuity:					Supprime les effets de sort bénéfiques 
 SpellDescription.BuffShear.StrCon:					Supprime les effets de sort bénéfiques augmentant la Force/Constitution de la cible.
 SpellDescription.BuffShear.DexQui:					Supprime les effets de sort bénéfiques augmentant la Dextérité/Vivacité de la cible.
 SpellDescription.BuffShear.Random:					Supprime aléatoirement un effet de sort bénéfique de la cible.
+SpellDescription.ResistBuff.MainDescription:				Augmente la résistance de la cible aux dégâts de type {0} de {1}%.
+SpellDescription.BodySpiritEnergyBuff.MainDescription:		Augmente la résistance de la cible aux dégâts de corps, d'esprit et d'énergie de {0}%.
+SpellDescription.HeatColdMatterBuff.MainDescription:		Augmente la résistance de la cible aux dégâts de chaleur, de froid et de matière de {0}%.
+SpellDescription.AllMagicResistsBuff.MainDescription:		Augmente la résistance de la cible à tous les dégâts magiques de {0}%.
+SpellDescription.SecondaryMagicResistsBuff.MainDescription:	Augmente les résistances magiques secondaires de la cible de {0}%.
+SpellDescription.AllMeleeResistsBuff.MainDescription:		Augmente la résistance de la cible à tous les dégâts de mêlée de {0}%.
+SpellDescription.AllResistsBuff.MainDescription:			Augmente la résistance de la cible à tous les types de dégâts de {0}%.
+SpellDescription.EssenceBuff.MainDescription:				Augmente la résistance de la cible aux dégâts de type « essence » de {0}%.
+SpellDescription.ResistDebuff.MainDescription:				Réduit la résistance de la cible aux dégâts de type {0} de {1}%.
+SpellDescription.CrushSlashThrustDebuff.MainDescription:	Réduit les résistances de la cible aux dégâts de mêlée de {0}%.
+SpellDescription.EssenceDebuff.MainDescription:				Réduit les résistances de la cible aux dégâts de type « essence » de {0}%.
+SpellDescription.DualStatDebuff.MainDescription:			Réduit la {0} et la {1} de la cible de {2}.
+SpellDescription.DualStatBuff.MainDescription:				La {1} et la {2} de {0} sont augmentées de {3}.
+SpellDescription.SingleStatBuff.MainDescription:			Augmente la {0} de la cible de {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Augmente la vitesse d'attaque de {0} de {1}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	Les actions de {0} nécessitent {1}% d'endurance en moins.
+SpellDescription.DPSBuff.MainDescription:					Augmente le DPS de {0} de {1}%.
+SpellDescription.MeleeDamageBuff.MainDescription:			Vous infligez {0}% de dégâts de mêlée supplémentaires.
+SpellDescription.MesmerizeDurationBuff.MainDescription:		Réduit l'efficacité des sorts d'hypnose de {0}%.
+SpellDescription.EvadeChanceBuff.MainDescription:			Octroie {0}% de chance d'esquiver les attaques.
+SpellDescription.ParryChanceBuff.MainDescription:			Octroie {0}% de chance de parer les attaques.
+SpellDescription.WeaponSkillBuff.MainDescription:			Augmente la compétence en Armes de {0} de {1}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Augmente la compétence de Furtivité de {0} de {1}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Augmente la compétence Flexible de {0} de {1}%.
+SpellDescription.ResiPierceBuff.MainDescription:			Vous accorde {0}% de chance de pénétrer les résistances magiques.
+SpellDescription.CriticalMagicalBuff.MainDescription:		Augmente les chances de critique des sorts de la cible de {0}%.
+SpellDescription.CriticalMeleeBuff.MainDescription:			Augmente la chance de coup critique en mêlée de la cible de {0}%.
+SpellDescription.SingleStatDebuff.MainDescription:			Réduit la {0} de la cible de {1}.
+SpellDescription.CombatSpeedDebuff.MainDescription:			La vitesse d'attaque de la cible est réduite de {0}%.
+SpellDescription.MeleeDamageDebuff.MainDescription:			La cible inflige {0}% de dégâts de mêlée en moins.
+SpellDescription.FatigueConsumptionDebuff.MainDescription:	Augmente de {0}% l'endurance consommée par la cible en combat.
+SpellDescription.FumbleChanceDebuff.MainDescription:		Augmente la probabilité que la cible échoue lamentablement de {0}%.
+SpellDescription.DPSDebuff.MainDescription:					Réduit le DPS de {0} de {1}%.
+SpellDescription.SkillsDebuff.MainDescription:				Réduit les compétences de {0} de {1}%.
 SpellDescription.Warlock.SecondarySpell:			Ceci est un sort secondaire.
 
 # AblativeArmor
@@ -66,6 +210,19 @@ ResistDebuff.DelveInfo.Function:			Fonction : Diminution de la résistance
 
 #CharmSpellHandler
 CharmSpellHandler.DelveInfo.Function:			Fonction: {0}
+CharmSpellHandler.Species.Humanoid:				humanoïde
+CharmSpellHandler.Species.Animal:				animale
+CharmSpellHandler.Species.Insect:				insectoïde
+CharmSpellHandler.Species.Reptile:				reptilienne
+CharmSpellHandler.Species.HumanoidAnimal:		humanoïde ou animale
+CharmSpellHandler.Species.HumanoidAnimalInsect:					humanoïde, animale et insectoïde
+CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			humanoïde, animale, insectoïde et magique
+CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	humanoïde, animale, insectoïde, magique et mort-vivante
+
+#IllusionSpell SpellHandler
+SpellDescription.IllusionSpell.Arrangement.Random:		randomly
+SpellDescription.IllusionSpell.Arrangement.Circle:		in a circle
+SpellDescription.IllusionSpell.Arrangement.Line:		in a line
 
 # DamageAddAndShield
 DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} vous touche pour {1} points de dommage additionels !

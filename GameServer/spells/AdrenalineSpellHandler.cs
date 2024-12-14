@@ -3,6 +3,8 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 using System;
 
 namespace DOL.GS.Spells
@@ -54,7 +56,14 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override string ShortDescription => $"Increases Battle Fever duration by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.BattleFeverDurationBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
 
@@ -115,7 +124,14 @@ namespace DOL.GS.Spells
         public readonly int MELEESPEED_BONUS = 40;
 
         /// <inheritdoc />
-        public override string ShortDescription => "You are taken over by battle fever! Your styled attacks against evenly matched enemies cannot miss and your defense and your melee power are greatly enhanced!";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.TankAdrenaline.MainDescription");
+            }
+        }
 
         /// <inheritdoc />
         public TankAdrenalineSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
@@ -205,7 +221,14 @@ namespace DOL.GS.Spells
         public static readonly int CASTSPEED_BONUS = 30;
 
         /// <inheritdoc />
-        public override string ShortDescription => "You are taken over by battle fever! Your defense and chance to hit with spells and their casting speed are greatly enhanced, and you cannot be interrupted by attacks!";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.MageAdrenaline.MainDescription");
+            }
+        }
 
         /// <inheritdoc />
         public MageAdrenalineSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
@@ -291,7 +314,14 @@ namespace DOL.GS.Spells
         public readonly int STEALTHDETECTION_BONUS = 30;
 
         /// <inheritdoc />
-        public override string ShortDescription => "You are taken over by battle fever! Your styled attacks against evenly matched enemies cannot miss and your defense, stealth, melee and ranged power are greatly enhanced!";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.StealthAdrenaline.MainDescription");
+            }
+        }
 
         /// <inheritdoc />
         public StealthAdrenalineSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)

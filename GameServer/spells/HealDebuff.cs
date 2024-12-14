@@ -21,6 +21,7 @@ using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.Language;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -109,6 +110,13 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Inhibits healing effectiveness by {Spell.Value}%";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.HealDebuff.MainDescription", Spell.Value);
+                return description;
+            }
+        }
     }
 }

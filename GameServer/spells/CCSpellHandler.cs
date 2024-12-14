@@ -24,6 +24,7 @@ using DOL.Events;
 using DOL.GS.RealmAbilities;
 using DOL.Territories;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -444,7 +445,14 @@ namespace DOL.GS.Spells
 
         public MesmerizeSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => "The target is mesmerized and cannot take any actions.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.Mesmerize.MainDescription");
+            }
+        }
     }
 
     [SpellHandler("Stun")]
@@ -541,6 +549,13 @@ namespace DOL.GS.Spells
         public StunSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => $"The target is stunned and cannot take any actions for {Spell.Duration / 1000} seconds.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                int durationSec = Spell.Duration / 1000;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.Stun.MainDescription", durationSec);
+            }
+        }
     }
 }

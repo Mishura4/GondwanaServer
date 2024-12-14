@@ -2,6 +2,8 @@
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 using System;
 
 namespace DOL.GS.Spells
@@ -25,7 +27,14 @@ namespace DOL.GS.Spells
             get => eBuffBonusCategory.Other;
         }
 
-        public override string ShortDescription => $"Increases the target's crafting speed by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CraftingSpeedBuff.MainDescription", Spell.Value);
+            }
+        }
 
         public override void OnEffectStart(GameSpellEffect effect)
         {

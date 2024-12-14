@@ -23,6 +23,7 @@ using DOL.Database;
 using DOL.GS.Effects;
 using DOL.Events;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -171,7 +172,7 @@ namespace DOL.GS.Spells
             {
                 return;
             }
-            else if (sp == null && (ad.AttackResult != GameLiving.eAttackResult.HitStyle && ad.AttackResult != GameLiving.eAttackResult.HitUnstyled))
+            else if (sp == null && (ad!.AttackResult != GameLiving.eAttackResult.HitStyle && ad.AttackResult != GameLiving.eAttackResult.HitUnstyled))
             {
                 return;
             }
@@ -223,6 +224,13 @@ namespace DOL.GS.Spells
 
         public SpeedEnhancementSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"The target's speed is increased to {Spell.Value}% of normal.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SpeedEnhancement.MainDescription", Spell.Value);
+            }
+        }
     }
 }

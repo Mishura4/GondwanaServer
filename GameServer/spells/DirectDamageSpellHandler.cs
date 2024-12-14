@@ -25,6 +25,7 @@ using DOL.Events;
 using System.Collections.Generic;
 using DOL.GS.PlayerClass;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -202,6 +203,22 @@ namespace DOL.GS.Spells
 
         public DirectDamageSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Does {Spell.Damage} {Spell.DamageType} damage to the target.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string damageTypeName = Spell.DamageType.ToString();
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamage.MainDescription", Spell.Damage, damageTypeName);
+
+                if (Spell.IsSecondary)
+                {
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondaryMessage;
+                }
+
+                return description;
+            }
+        }
     }
 }

@@ -21,6 +21,8 @@ using System;
 using System.Linq;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 using log4net;
 
 namespace DOL.GS.Spells
@@ -121,6 +123,15 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
             player.TempProperties.removeProperty("GoldenSpearJavelinHandler");
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.GoldenSpearJavelin.MainDescription");
+            }
         }
     }
 }

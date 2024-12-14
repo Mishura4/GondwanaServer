@@ -18,6 +18,7 @@
  */
 using System.Collections.Generic;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -107,6 +108,13 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription => $"{Spell.Damage}% endurance is stolen from the target and given to the caster.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.EnduranceDrain.MainDescription", Spell.Damage);
+            }
+        }
     }
 }

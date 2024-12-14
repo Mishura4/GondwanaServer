@@ -27,6 +27,8 @@ using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Numerics;
+using log4net;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -40,23 +42,51 @@ namespace DOL.GS.Spells
         // Constructor
         public MonsterRez(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
-            m_shortDescription = $"Brings the target monster back to life, restores {Spell.ResurrectHealth}% health and {Spell.ResurrectMana}% power and endurance and suffers no experience or constitution loss.\n";
+            string language = Properties.SERV_LANGUAGE;
+            m_shortDescription = LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.MainDescription",Spell.ResurrectHealth, Spell.ResurrectMana);
 
-            while (spell.SubSpellID != 0)
+            Spell currentSpell = spell;
+            bool firstSubspell = true;
+            while (currentSpell.SubSpellID != 0)
             {
-                spell = SkillBase.GetSpellByID((int)spell.SubSpellID);
-                m_shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).ShortDescription + "\n";
+                currentSpell = SkillBase.GetSpellByID((int)currentSpell.SubSpellID);
+                SpellLine subSpellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
+                ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(m_caster, currentSpell, subSpellLine);
+                if (subHandler != null)
+                {
+                    if (firstSubspell)
+                    {
+                        m_shortDescription += "\n\n";
+                        firstSubspell = false;
+                    }
+                    m_shortDescription += subHandler.ShortDescription + "\n";
+                }
             }
+
             if (spell.Radius > 0 || spell.Frequency > 0 || spell.Duration > 0)
             {
-                m_shortDescription += $"Does {spell.DamageType} {spell.Damage} damages to the target";
+                string damageTypeName = Spell.DamageType.ToString();
+                double spellDamage = Spell.Damage;
+                m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageMain", damageTypeName, spellDamage);
+
                 if (spell.Radius > 0)
-                    m_shortDescription += " and its surroundings";
+                {
+                    m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageRadius");
+                }
+
                 if (spell.Frequency > 0)
-                    m_shortDescription += $" every {spell.Frequency / 1000} seconds";
+                {
+                    int freqSeconds = spell.Frequency / 1000;
+                    m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageFrequency", freqSeconds);
+                }
+
                 if (spell.Duration > 0)
-                    m_shortDescription += $" over a period of {spell.Duration / 1000} seconds";
-                m_shortDescription += ".\n";
+                {
+                    int durSeconds = spell.Duration / 1000;
+                    m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageDuration", durSeconds);
+                }
+
+                m_shortDescription += ".";
             }
         }
 
@@ -136,7 +166,7 @@ namespace DOL.GS.Spells
             GamePlayer player = effect.Owner as GamePlayer;
             m_owner = player;
 
-            player.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] += (int)Spell.LifeDrainReturn;
+            player!.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] += (int)Spell.LifeDrainReturn;
             player.BaseBuffBonusCategory[(int)eProperty.ArmorAbsorption] += (int)Spell.LifeDrainReturn;
             player.Out.SendCharStatsUpdate();
             player.Health = player.MaxHealth;
@@ -154,7 +184,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.CastSpell(this.MonsterSpellDoT, this.MonsterSpellLine);
+                player!.CastSpell(this.MonsterSpellDoT, this.MonsterSpellLine);
                 player.CastSpell(this.MonsterSpellDisease, this.MonsterSpellLine);
             }
 
@@ -168,7 +198,7 @@ namespace DOL.GS.Spells
 
             GamePlayer player = effect.Owner as GamePlayer;
 
-            player.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] -= (int)Spell.LifeDrainReturn;
+            player!.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] -= (int)Spell.LifeDrainReturn;
             player.BaseBuffBonusCategory[(int)eProperty.ArmorAbsorption] -= (int)Spell.LifeDrainReturn;
             player.Out.SendCharStatsUpdate();
 
@@ -207,7 +237,13 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Summons a monster.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SummonMonster.MainDescription");
+            }
+        }
 
     }
 
@@ -225,7 +261,7 @@ namespace DOL.GS.Spells
             //if (target == null || Spell.Range == 0)
             //	target = Caster;
 
-            foreach (GamePlayer player in target.GetPlayersInRadius(false, (ushort)Spell.Radius))
+            foreach (GamePlayer player in target!.GetPlayersInRadius(false, (ushort)Spell.Radius))
             {
                 if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
                 {

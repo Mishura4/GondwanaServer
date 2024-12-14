@@ -23,6 +23,7 @@ using System.Numerics;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -212,7 +213,15 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription => $"The target is slowed by {Spell.Value}%. Does {Spell.Damage} Cold damage to the target.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string damageTypeName = Spell.DamageType.ToString();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DamageSpeedDecrease.MainDescription", Spell.Value, Spell.Damage, damageTypeName);
+            }
+        }
 
         public DamageSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }

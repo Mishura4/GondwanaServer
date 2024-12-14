@@ -19,6 +19,7 @@
 using System;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -66,5 +67,24 @@ namespace DOL.GS.Spells
 
         // constructor
         public SilenceSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                int durationSeconds = Spell.Duration / 1000;
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Silence.MainDescription", durationSeconds);
+
+                if (Spell.RecastDelay > 0)
+                {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    return mainDesc + "\n\n" + secondDesc;
+                }
+
+                return mainDesc;
+            }
+        }
     }
 }

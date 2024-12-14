@@ -6,6 +6,7 @@ using DOL.AI.Brain;
 using DOL.Language;
 using System;
 using System.Numerics;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -279,6 +280,8 @@ namespace DOL.GS.Spells
         {
             get
             {
+                string language = Properties.SERV_LANGUAGE;
+
                 int healthThresholdPercent = (int)Spell.Damage;
                 if (healthThresholdPercent == 0)
                     healthThresholdPercent = 50;
@@ -287,7 +290,7 @@ namespace DOL.GS.Spells
                 if (desiredHealthPercent == 0)
                     desiredHealthPercent = 80;
 
-                return $"When the user's health is below {healthThresholdPercent}%, power will be funneled into health up to {desiredHealthPercent}% of Max Health.";
+                return LanguageMgr.GetTranslation(language, "SpellDescription.PowerShield.MainDescription", healthThresholdPercent, desiredHealthPercent);
             }
         }
     }

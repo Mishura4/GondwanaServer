@@ -111,8 +111,13 @@ namespace DOL.GS.Spells
             }
         }
 
+        public override string ShortDescription
+        {
+            get
+            {
+                return $" ";
+            }
+        }
     }
-
-
 }
 

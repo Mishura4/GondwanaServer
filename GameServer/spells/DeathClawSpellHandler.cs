@@ -1,5 +1,7 @@
 ﻿using DOL.AI.Brain;
 using DOL.GS.PlayerClass;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -88,6 +90,12 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"{Spell.Name} reduces enemy's life by 90%, it doesn't affect ghosts, weak enemies or enemies having a level above {Spell.AmnesiaChance} and has a reduced effect on undead and bosses.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DeathClaw.MainDescription", Spell.Name, Spell.AmnesiaChance);
+            }
+        }
     }
 }

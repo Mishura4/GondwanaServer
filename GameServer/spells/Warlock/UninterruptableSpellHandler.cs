@@ -29,6 +29,7 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
 using log4net;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -138,7 +139,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Uninterruptable.MainDescription", Spell.Value);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Uninterruptable.MainDescription", Spell.Value);
                 return description;
             }
         }

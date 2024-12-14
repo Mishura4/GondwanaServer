@@ -22,6 +22,7 @@ using System.Linq;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
 using DOL.Language;
 using log4net;
@@ -155,6 +156,17 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
             player.TempProperties.removeProperty("SummonNethersbaneHandler");
         }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string desc1 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonNethersbane.MainDescription1");
+                string desc2 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonNethersbane.MainDescription2");
+                return desc1 + "\n\n" + desc2;
+            }
+        }
     }
 
     /// <summary>
@@ -281,6 +293,18 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
             player.TempProperties.removeProperty("SummonIcebrandHandler");
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                // Combine the two lines with line breaks
+                string desc1 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonIcebrand.MainDescription1");
+                string desc2 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonIcebrand.MainDescription2");
+                return desc1 + "\n\n" + desc2;
+            }
         }
     }
 }

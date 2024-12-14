@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -46,7 +47,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Str");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Str");
                 return description;
             }
         }
@@ -67,7 +69,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Dex");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Dex");
                 return description;
             }
         }
@@ -88,7 +91,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Con");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Con");
                 return description;
             }
         }
@@ -109,7 +113,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Acuity");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Acuity");
                 return description;
             }
         }
@@ -130,7 +135,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.StrCon");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.StrCon");
                 return description;
             }
         }
@@ -151,7 +157,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.DexQui");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.DexQui");
                 return description;
             }
         }
@@ -376,7 +383,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Random");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Random");
                 return description;
             }
         }

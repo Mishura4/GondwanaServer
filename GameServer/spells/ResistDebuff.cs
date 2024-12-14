@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Collections.Generic;
 using System.Numerics;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -205,7 +206,15 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription => $"Decreases the target's resistances to {ConvertPropertyToText(Property1).ToLower()} damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string propName = ConvertPropertyToText(Property1).ToLower();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.ResistDebuff.MainDescription", propName, Spell.Value);
+            }
+        }
 
         public AbstractResistDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }
@@ -306,7 +315,14 @@ namespace DOL.GS.Spells
 
         public CrushSlashThrustDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Decreases the target's resistances to melee damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CrushSlashThrustDebuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("EssenceSear")]
@@ -316,6 +332,15 @@ namespace DOL.GS.Spells
         public override string DebuffTypeName { get { return "Essence"; } }
 
         public EssenceResistDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.EssenceDebuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
 }

@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -87,6 +88,13 @@ namespace DOL.GS.Spells
         public PowerTransfer(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Transfers {Spell.Value} power from the caster to the target.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.PowerTransfer.MainDescription", Spell.Value);
+            }
+        }
     }
 }

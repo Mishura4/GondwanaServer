@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.ServerProperties;
+using DOL.Language;
+
 namespace DOL.GS.Spells
 {
     public abstract class AbstractResistBuff : PropertyChangingSpell
@@ -37,7 +40,15 @@ namespace DOL.GS.Spells
 
         public AbstractResistBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's resistance to {ConvertPropertyToText(Property1).ToLower()} damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string propName = ConvertPropertyToText(Property1).ToLower();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.ResistBuff.MainDescription", propName, Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("BodyResistBuff")]
@@ -107,7 +118,14 @@ namespace DOL.GS.Spells
 
         public BodySpiritEnergyBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's resistance to body, spirit and energy damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.BodySpiritEnergyBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("HeatColdMatterBuff")]
@@ -123,7 +141,14 @@ namespace DOL.GS.Spells
 
         public HeatColdMatterBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's resistance to heat, cold and matter damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.HeatColdMatterBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("AllMagicResistsBuff")]
@@ -145,7 +170,14 @@ namespace DOL.GS.Spells
 
         public AllMagicResistsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's resistance to all magic damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.AllMagicResistsBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("SecondaryMagicResistsBuff")]
@@ -167,7 +199,14 @@ namespace DOL.GS.Spells
 
         public SecondaryMagicResistsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's secondary magic resistances by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SecondaryMagicResistsBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("CrushSlashThrustBuff")]
@@ -184,7 +223,14 @@ namespace DOL.GS.Spells
 
         public CrushSlashThrustBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's resistance to all melee damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.AllMeleeResistsBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("CrushResistBuff")]
@@ -239,7 +285,31 @@ namespace DOL.GS.Spells
 
         public AllResistsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases the target's resistance to all damage by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.AllResistsBuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
+    [SpellHandler("EssenceResistBuff")]
+    public class EssenceResistBuff : AbstractResistBuff
+    {
+        public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.BaseBuff; } }
+        public override eProperty Property1 { get { return eProperty.Resist_Natural; } }
+
+        public EssenceResistBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.EssenceBuff.MainDescription", Spell.Value);
+            }
+        }
+    }
 }

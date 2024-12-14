@@ -3,6 +3,7 @@ using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using Google.Protobuf.WellKnownTypes;
 using System;
@@ -25,7 +26,7 @@ namespace DOL.GS.Spells
         public override bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
         {
             var spellHandler = other.SpellHandler as SpellHandler;
-            if (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)
+            if (spellHandler!.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)
                 return true;
             
             return base.PreventsApplication(self, other);
@@ -274,6 +275,13 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Petrifies the target and turns it into a statue. The target is completely paralysed and absorbs 50% of physical damages as well as 75% of magical damages it might suffer if attacked.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Petrify.MainDescription");
+                return description;
+            }
+        }
     }
 }

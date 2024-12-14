@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.GS.SkillHandler;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -51,7 +52,7 @@ namespace DOL.GS.Spells
                 if (targ is GamePlayer && Spell.Target.ToLower() == "cone" && CheckLOS(Caster))
                 {
                     GamePlayer player = targ as GamePlayer;
-                    player.Out.SendCheckLOS(Caster, player, new CheckLOSResponse(DealDamageCheckLOS));
+                    player!.Out.SendCheckLOS(Caster, player, new CheckLOSResponse(DealDamageCheckLOS));
                 }
                 else
                 {
@@ -209,7 +210,7 @@ namespace DOL.GS.Spells
                                     if (engage.EngageTarget.LastAttackedByEnemyTick > engage.EngageTarget.CurrentRegion.Time - EngageAbilityHandler.ENGAGE_ATTACK_DELAY_TICK)
                                     {
                                         if (engage.Owner is GamePlayer)
-                                            (engage.Owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client, "SpellHandler.EngageCannotBeUsed", engage.EngageTarget.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                            (engage.Owner as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client, "SpellHandler.EngageCannotBeUsed", engage.EngageTarget.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     }  // Check if player has enough endurance left to engage
                                     else if (engage.Owner.Endurance < EngageAbilityHandler.ENGAGE_DURATION_LOST)
                                     {
@@ -219,7 +220,7 @@ namespace DOL.GS.Spells
                                     {
                                         engage.Owner.Endurance -= EngageAbilityHandler.ENGAGE_DURATION_LOST;
                                         if (engage.Owner is GamePlayer)
-                                            (engage.Owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client, "SpellHandler.NotEnoughEndurance"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                                            (engage.Owner as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client, "SpellHandler.NotEnoughEndurance"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
 
                                         if (blockchance < 85)
                                             blockchance = 85;
@@ -292,6 +293,20 @@ namespace DOL.GS.Spells
         public BoltSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => $"A magical bolt shoots toward the target, exploding on impact for {Spell.Damage} {Spell.DamageType} damage. Can be blocked.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BoltSpell.MainDescription", Spell.Damage, Spell.DamageType);
+
+                if (Spell.IsSecondary)
+                {
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondaryMessage;
+                }
+
+                return description;
+            }
+        }
     }
 }

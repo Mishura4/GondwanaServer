@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.AI.Brain;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -356,6 +357,24 @@ namespace DOL.GS.Spells
                 if (Spell.DamageType != eDamageType.Natural)
                     list.Add("Damage: " + GlobalConstants.DamageTypeToName(Spell.DamageType));
                 return list;
+            }
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.OmniLifeDrain.MainDescription", Spell.LifeDrainReturn, Spell.ResurrectMana, Spell.ResurrectHealth);
+
+                if (Spell.RecastDelay > 0)
+                {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    return mainDesc + "\n\n" + secondDesc;
+                }
+
+                return mainDesc;
             }
         }
     }

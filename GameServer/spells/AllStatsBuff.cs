@@ -19,6 +19,8 @@
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -103,6 +105,13 @@ namespace DOL.GS.Spells
         }
         public AllStatsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases {TargetPronoun.ToLower()} all stats by {Spell.Value}.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.AllStatsBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 }

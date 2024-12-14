@@ -22,6 +22,8 @@ using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -135,7 +137,15 @@ namespace DOL.GS.Spells
 
         public SingleStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Decreases the target's {ConvertPropertyToText(Property1)} by {Spell.Value}.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string propName = ConvertPropertyToText(Property1).ToLower();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SingleStatDebuff.MainDescription", propName, Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("StrengthDebuff")]
@@ -189,7 +199,14 @@ namespace DOL.GS.Spells
 
         public CombatSpeedDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Target's attack speed reduced by {Math.Abs(Spell.Value)}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CombatSpeedDebuff.MainDescription", Math.Abs(Spell.Value));
+            }
+        }
     }
 
     [SpellHandler("MeleeDamageDebuff")]
@@ -201,7 +218,14 @@ namespace DOL.GS.Spells
 
         public MeleeDamageDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"The target does {Spell.Value}% less damage with melee attacks.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.MeleeDamageDebuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("FatigueConsumptionDebuff")]
@@ -213,7 +237,14 @@ namespace DOL.GS.Spells
 
         public FatigueConsumptionDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increases endurance the target uses in combat by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.FatigueConsumptionDebuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("FumbleChanceDebuff")]
@@ -225,7 +256,14 @@ namespace DOL.GS.Spells
 
         public FumbleChanceDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Increase target's fumble chance by {Spell.Value}%.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.FumbleChanceDebuff.MainDescription", Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("DPSDebuff")]
@@ -233,7 +271,18 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.DPS; } }
 
+        protected override void SendUpdates(GameLiving target) { }
+
         public DPSDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DPSDebuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("SkillsDebuff")]
@@ -241,7 +290,18 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.AllSkills; } }
 
+        protected override void SendUpdates(GameLiving target) { }
+
         public SkillsDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SkillsDebuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("AcuityDebuff")]

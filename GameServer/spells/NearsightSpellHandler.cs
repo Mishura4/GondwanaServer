@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -206,11 +207,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Nearsight.MainDescription2", Spell.Value);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Nearsight.MainDescription2", Spell.Value);
 
                 if (Spell.IsSecondary)
                 {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                     description += "\n\n" + secondaryMessage;
                 }
 

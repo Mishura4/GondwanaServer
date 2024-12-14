@@ -10,6 +10,9 @@ using System.Collections;
 using DOL.Database;
 using DOL.GS.Effects;
 using DOL.GS.Spells;
+using DOL.GS.ServerProperties;
+using DOL.Language;
+using System.Text;
 
 namespace DOL.GS.Spells
 {
@@ -54,5 +57,43 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
         public DoomHammerSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string damageTypeName = Spell.DamageType.ToString();
+                int recastSeconds = Spell.RecastDelay / 1000;
+
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.DoomHammer.MainDescription", Spell.Damage, damageTypeName);
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(mainDesc);
+
+                if (Spell.SubSpellID > 0)
+                {
+                    Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
+                    if (subSpell != null)
+                    {
+                        ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(Caster, subSpell, SpellLine);
+                        if (subHandler != null)
+                        {
+                            sb.Append("\n\n");
+                            sb.Append(subHandler.ShortDescription);
+                        }
+                    }
+                }
+
+                if (Spell.RecastDelay > 0)
+                {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    sb.Append("\n\n");
+                    sb.Append(secondDesc);
+                }
+
+                return sb.ToString().TrimEnd();
+            }
+        }
     }
 }

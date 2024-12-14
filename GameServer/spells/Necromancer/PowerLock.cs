@@ -139,7 +139,7 @@ namespace DOL.GS.Spells
                 if (overflow > 0)
                 {
                     casterPlayer.SendTranslatedMessage(
-                        "SpellHandler.PowerDrain.StealOverflow", eChatType.CT_Spell, eChatLoc.CL_SystemWindow,
+                        "SpellHandler.PowerLock.StealOverflow", eChatType.CT_Spell, eChatLoc.CL_SystemWindow,
                         casterPlayer.GetPersonalizedName(effect.Owner),
                         restored,
                         overflow
@@ -148,7 +148,7 @@ namespace DOL.GS.Spells
                 else
                 {
                     casterPlayer.SendTranslatedMessage(
-                        "SpellHandler.PowerDrain.StealSuccess", eChatType.CT_Spell, eChatLoc.CL_SystemWindow,
+                        "SpellHandler.PowerLock.StealSuccess", eChatType.CT_Spell, eChatLoc.CL_SystemWindow,
                         casterPlayer.GetPersonalizedName(effect.Owner),
                         actuallyDrained
                     );
@@ -157,7 +157,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer victimPlayer)
             {
                 victimPlayer.SendTranslatedMessage(
-                    "SpellHandler.PowerDrain.SpellHit", eChatType.CT_Spell, eChatLoc.CL_SystemWindow,
+                    "SpellHandler.PowerLock.SpellHit", eChatType.CT_Spell, eChatLoc.CL_SystemWindow,
                     victimPlayer.GetPersonalizedName(effect.Owner),
                     actuallyDrained
                 );
@@ -229,13 +229,18 @@ namespace DOL.GS.Spells
             get
             {
                 string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellHandler.PowerDrain.Description", Spell.LifeDrainReturn, Spell.Frequency / 1000.0, Spell.Duration / 1000);
+                string description1 = LanguageMgr.GetTranslation(language, "SpellDescription.PowerLock.MainDescription1", Spell.LifeDrainReturn, Spell.Frequency / 1000.0, Spell.Duration / 1000);
+                string description2 = LanguageMgr.GetTranslation(language, "SpellDescription.PowerLock.MainDescription2");
 
                 if (!Spell.AllowBolt)
                 {
-                    description += " " + LanguageMgr.GetTranslation(language, "SpellHandler.PvPOnly");
+                    string description3 = LanguageMgr.GetTranslation(language, "SpellDescription.PowerLock.MainDescription3");
+                    return description1 + "\n\n" + description2 + "\n\n" + description3;
                 }
-                return description;
+                else
+                {
+                    return description1 + "\n\n" + description2;
+                }
             }
         }
     }

@@ -1,4 +1,6 @@
 ﻿using DOL.gameobjects.CustomNPC;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 
 namespace DOL.GS.Spells
@@ -44,9 +46,15 @@ namespace DOL.GS.Spells
             target.MoveTo(tPPoint.Position.With(target.Orientation));
             return true;
         }
-        
+
         public override string ShortDescription
-            => $"{Spell.Name} Teleports the target to {zoneName}.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.Teleport.MainDescription", Spell.Name, zoneName);
+            }
+        }
 
     }
 }

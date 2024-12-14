@@ -2,6 +2,7 @@
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 
@@ -123,8 +124,18 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
             return base.OnEffectExpires(effect, noMessages);
         }
-        public override string ShortDescription
-            => $"{Spell.Name} deflect a spell back to the enemy caster with {Spell.Value}% of chance and {Spell.AmnesiaChance}% of its original damages. At the same time, this spell acts as a shield absorbing {Spell.LifeDrainReturn}% of the damages dealt. This magic shield neither absorbs nor reflects close combat as well as archery spells.";
 
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double intensityValue = Spell.Value / 50.0;
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SpellReflection.MainDescription1", Spell.Name, intensityValue, Spell.AmnesiaChance, Spell.LifeDrainReturn);
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SpellReflection.MainDescription2");
+
+                return mainDesc + "\n\n" + secondDesc;
+            }
+        }
     }
 }

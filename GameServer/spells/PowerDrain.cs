@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -80,6 +81,12 @@ namespace DOL.GS.Spells
             : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => $"Damage the target for {Spell.Damage} Spirit damage and the attacker gains {Spell.LifeDrainReturn}% of that damage as power.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.PowerDrain.MainDescription", Spell.Damage, Spell.LifeDrainReturn);
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.GS.SkillHandler;
 using DOL.Language;
 using log4net;
@@ -56,7 +57,8 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Powerless.MainDescription");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Powerless.MainDescription");
                 return description;
             }
         }

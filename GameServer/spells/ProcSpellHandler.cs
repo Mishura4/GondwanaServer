@@ -28,6 +28,7 @@ using DOL.GS.Spells;
 using DOL.Language;
 
 using log4net;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -303,7 +304,7 @@ namespace DOL.GS.Spells
 
                 GameNPC pet = ad.Attacker as GameNPC;
                 var procSpells = new List<Spell>();
-                foreach (Spell spell in pet.Spells)
+                foreach (Spell spell in pet!.Spells)
                 {
                     if (pet.GetSkillDisabledDuration(spell) == 0)
                     {
@@ -315,7 +316,7 @@ namespace DOL.GS.Spells
                 {
                     baseSpell = procSpells[Util.Random((procSpells.Count - 1))];
                 }
-                m_procSpell = SkillBase.GetSpellByID((int)baseSpell.Value);
+                m_procSpell = SkillBase.GetSpellByID((int)baseSpell!.Value);
             }
             if (Util.Chance(baseChance))
             {
@@ -341,9 +342,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                var subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
-                return $"Triggers the following spell with a {Spell.Frequency / 100}% chance on own melee attacks.: \n\n"
-                + (subSpell != null ? subSpell.ShortDescription : $"Spell with ID {Spell.Value} not found");
+                string language = Properties.SERV_LANGUAGE;
+                ISpellHandler subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
+                string subDesc = subSpell != null ? subSpell.ShortDescription : $"Spell with ID {Spell.Value} not found";
+                string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.OffensiveProc.MainDescription", Spell.Name, (Spell.Frequency / 100));
+
+                return baseDesc + "\n\n" + subDesc;
             }
         }
     }
@@ -395,9 +399,14 @@ namespace DOL.GS.Spells
         {
             get
             {
-                var subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
-                return $"Triggers the following spell with a {Spell.Frequency / 100}% chance when being hit by melee attacks.: \n\n"
-                + (subSpell != null ? subSpell.ShortDescription : $"Spell with ID {Spell.Value} not found");
+                string language = Properties.SERV_LANGUAGE;
+                ISpellHandler subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
+                string subDesc = subSpell != null ? subSpell.ShortDescription : $"Spell with ID {Spell.Value} not found";
+
+                // Translate the main part similar to TriggerSpellHandler
+                string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.DefensiveProc.MainDescription", Spell.Name, (Spell.Frequency / 100));
+
+                return baseDesc + "\n\n" + subDesc;
             }
         }
     }

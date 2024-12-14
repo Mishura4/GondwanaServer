@@ -24,6 +24,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using log4net;
 
@@ -290,7 +291,14 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of the physical damage dealt, up to a maximum of {Spell.Value} damage.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.MeleeAblativeArmor.MainDescription", absorbPercent, Spell.Value);
+            }
+        }
 
         protected virtual string GetAblativeType()
         {
@@ -321,7 +329,14 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of the magical damage dealt, up to a maximum of {Spell.Value} damage.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.MagicAblativeArmor.MainDescription", absorbPercent, Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("BothAblativeArmor")]
@@ -340,6 +355,13 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of all damage dealt, up to a maximum of {Spell.Value} damage.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.BothAblativeArmor.MainDescription", absorbPercent, Spell.Value);
+            }
+        }
     }
 }

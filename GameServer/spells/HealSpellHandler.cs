@@ -521,6 +521,12 @@ namespace DOL.GS.Spells
             return;
         }
 
-        public override string ShortDescription => $"The target regains {Spell.Value} hit points.";
+        public override string ShortDescription
+        {
+            get
+            {
+                return LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Heal.MainDescription", Spell.Value);
+            }
+        }
     }
 }

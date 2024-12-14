@@ -29,7 +29,7 @@ namespace DOL.GS.Spells
     [SpellHandler("IllusionBladeSummon")]
     public class IllusionBladeSummon : SummonSpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
@@ -56,7 +56,7 @@ namespace DOL.GS.Spells
             m_pet.AddToWorld();
             //Check for buffs
             if (brain is ControlledNpcBrain)
-                (brain as ControlledNpcBrain).CheckSpells(StandardMobBrain.eCheckSpellType.Defensive);
+                (brain as ControlledNpcBrain)!.CheckSpells(StandardMobBrain.eCheckSpellType.Defensive);
 
             AddHandlers();
             SetBrainToOwner(brain);

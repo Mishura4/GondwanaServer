@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.GS.SkillHandler;
 using DOL.Language;
 
@@ -366,16 +367,17 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Chamber.MainDescription");
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Chamber.MainDescription");
 
                 if (!Spell.AllowBolt)
                 {
-                    string cannotContainBolts = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Chamber.CannotContainBolts");
+                    string cannotContainBolts = LanguageMgr.GetTranslation(language, "SpellDescription.Chamber.CannotContainBolts");
                     description += "\n\n" + cannotContainBolts;
                 }
                 else
                 {
-                    string canContainBolts = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Chamber.CanContainBolts");
+                    string canContainBolts = LanguageMgr.GetTranslation(language, "SpellDescription.Chamber.CanContainBolts");
                     description += "\n\n" + canContainBolts;
                 }
 

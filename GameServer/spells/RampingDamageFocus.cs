@@ -24,6 +24,7 @@ using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.RealmAbilities;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -31,7 +32,7 @@ namespace DOL.GS.Spells
     [SpellHandler("RampingDamageFocus")]
     public class RampingDamageFocus : SpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         private GameLiving Target;
         private int pulseCount = 0;
         private ISpellHandler snareSubSpell;
@@ -88,7 +89,7 @@ namespace DOL.GS.Spells
             if (Caster.IsStunned || Caster.IsMezzed)
                 return;
 
-            (Caster as GamePlayer).Out.SendCheckLOS(Caster, m_spellTarget, CheckLOSPlayerToTarget);
+            (Caster as GamePlayer)!.Out.SendCheckLOS(Caster, m_spellTarget, CheckLOSPlayerToTarget);
 
             if (Caster.Mana >= Spell.PulsePower)
             {
@@ -263,6 +264,58 @@ namespace DOL.GS.Spells
             Spell subSpell = new Spell(dbSpell, Spell.Level);
             ISpellHandler subSpellHandler = new SnareWithoutImmunity(Caster, subSpell, SpellLine);
             return subSpellHandler;
+        }
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string dmgTypeName = Spell.DamageType.ToString();
+                int baseDamage = (int)Spell.Damage;
+                int incrementPercent = Spell.LifeDrainReturn;
+                int maxPercent = Spell.AmnesiaChance;
+                int pulsePower = Spell.PulsePower;
+                int snareValue = (int)Spell.Value;
+
+                string translationKey;
+                if (Spell.Radius > 0 && Spell.Value > 0)
+                {
+                    // AoE Damage + Snare
+                    translationKey = "SpellDescription.RampingDamageFocus.AoESnare";
+                }
+                else if (Spell.Radius > 0 && Spell.Value == 0)
+                {
+                    // AoE Damage only
+                    translationKey = "SpellDescription.RampingDamageFocus.AoENoSnare";
+                }
+                else if (Spell.Radius == 0 && Spell.Value > 0)
+                {
+                    // Single target Damage + Snare
+                    translationKey = "SpellDescription.RampingDamageFocus.SingleTargetSnare";
+                }
+                else
+                {
+                    // Single target Damage only
+                    translationKey = "SpellDescription.RampingDamageFocus.SingleTargetNoSnare";
+                }
+
+                if (snareValue > 0)
+                {
+                    return LanguageMgr.GetTranslation(
+                        language,
+                        translationKey,
+                        baseDamage, dmgTypeName, incrementPercent, maxPercent, pulsePower, snareValue
+                    );
+                }
+                else
+                {
+                    return LanguageMgr.GetTranslation(
+                        language,
+                        translationKey,
+                        baseDamage, dmgTypeName, incrementPercent, maxPercent, pulsePower
+                    );
+                }
+            }
         }
     }
 

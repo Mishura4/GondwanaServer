@@ -18,6 +18,7 @@
  */
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -151,6 +152,15 @@ namespace DOL.GS.Spells
 
         public StyleBleeding(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Target takes {Spell.Damage} {Spell.DamageType} damage every {Spell.Frequency / 1000.0} seconds.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string damageTypeName = Spell.DamageType.ToString();
+                double freqSeconds = Spell.Frequency / 1000.0;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.StyleBleeding.MainDescription", Spell.Damage, damageTypeName, freqSeconds.ToString("0.##"));
+            }
+        }
     }
 }

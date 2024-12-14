@@ -26,6 +26,7 @@ using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -43,7 +44,7 @@ namespace DOL.GS.Spells
     /// </summary>
     public abstract class SummonSpellHandler : SpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         protected GamePet m_pet = null;
 
@@ -145,7 +146,7 @@ namespace DOL.GS.Spells
             if (template.ClassType != null && template.ClassType.Length > 0)
             {
                 Assembly asm = Assembly.GetExecutingAssembly();
-                brain = ((AmteMob)asm.CreateInstance(template.ClassType, true)).Brain as IControlledBrain;
+                brain = ((AmteMob)asm.CreateInstance(template.ClassType, true))!.Brain as IControlledBrain;
 
                 if (brain == null && log.IsWarnEnabled)
                     log.Warn($"ApplyEffectOnTarget(): ClassType {template.ClassType} on NPCTemplateID {template.TemplateId} not found, using default ControlledBrain");
@@ -174,7 +175,7 @@ namespace DOL.GS.Spells
 
             //Check for buffs
             if (brain is ControlledNpcBrain)
-                (brain as ControlledNpcBrain).CheckSpells(StandardMobBrain.eCheckSpellType.Defensive);
+                (brain as ControlledNpcBrain)!.CheckSpells(StandardMobBrain.eCheckSpellType.Defensive);
 
             AddHandlers();
 
@@ -228,12 +229,12 @@ namespace DOL.GS.Spells
         /// <param name="arguments"></param>
         protected virtual void OnNpcReleaseCommand(DOLEvent e, object sender, EventArgs arguments)
         {
-            if (!(sender is GameNPC) || !((sender as GameNPC).Brain is IControlledBrain))
+            if (!(sender is GameNPC) || !((sender as GameNPC)!.Brain is IControlledBrain))
                 return;
 
             GameNPC pet = sender as GameNPC;
-            IControlledBrain brain = pet.Brain as IControlledBrain;
-            GameLiving living = brain.Owner;
+            IControlledBrain brain = pet!.Brain as IControlledBrain;
+            GameLiving living = brain!.Owner;
             living.SetControlledBrain(null);
 
             GameEventMgr.RemoveHandler(pet, GameLivingEvent.PetReleased, new DOLEventHandler(OnNpcReleaseCommand));
@@ -287,6 +288,13 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription => $"Summon a pet to serve the caster. Affects monsters up to {Math.Abs(Spell.Damage)}% of your level, to a maximun of level {Spell.Value}.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SummonSpell.MainDescription", Math.Abs(Spell.Damage), Spell.Value);
+            }
+        }
     }
 }

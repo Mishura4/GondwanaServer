@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.ServerProperties;
+using DOL.Language;
 using System.Collections.Generic;
 
 namespace DOL.GS.Spells
@@ -31,6 +33,13 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove.Add("StyleBleeding");
         }
 
-        public override string ShortDescription => "All damage over time effects (such as poisons) are removed from the target.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.CurePoison.MainDescription");
+            }
+        }
     }
 }

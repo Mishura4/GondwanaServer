@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.ServerProperties;
+using DOL.Language;
+
 namespace DOL.GS.Spells
 {
     public abstract class DualStatDebuff : SingleStatDebuff
@@ -25,7 +28,16 @@ namespace DOL.GS.Spells
 
         public DualStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Target's {ConvertPropertyToText(Property1)} and {ConvertPropertyToText(Property2)} are reduced by {Spell.Value}.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string propName1 = ConvertPropertyToText(Property1);
+                string propName2 = ConvertPropertyToText(Property2);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DualStatDebuff.MainDescription", propName1.ToLower(), propName2.ToLower(), Spell.Value);
+            }
+        }
     }
 
     [SpellHandler("StrengthConstitutionDebuff")]

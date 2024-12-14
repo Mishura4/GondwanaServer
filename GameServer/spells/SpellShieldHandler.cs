@@ -2,6 +2,7 @@
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 
@@ -85,6 +86,12 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"{Spell.Name} absorbs 100% of spell damage and 65% of DoT effects when the player's health drops to 15% or lower.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SpellShield.MainDescription", Spell.Name);
+            }
+        }
     }
 }

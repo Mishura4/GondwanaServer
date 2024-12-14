@@ -22,6 +22,7 @@ using DOL.GS.Effects;
 using DOL.GS.PropertyCalc;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -37,11 +38,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.RegenHeal.MainDescription", Spell.Value);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.RegenHeal.MainDescription", Spell.Value);
 
                 if (Spell.IsSecondary)
                 {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                     description += "\n\n" + secondaryMessage;
                 }
 
@@ -71,11 +73,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.RegenPower.MainDescription", Spell.Value);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.RegenPower.MainDescription", Spell.Value);
 
                 if (Spell.IsSecondary)
                 {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                     description += "\n\n" + secondaryMessage;
                 }
 
@@ -225,11 +228,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.RegenEndu.MainDescription", Spell.Value);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.RegenEndu.MainDescription", Spell.Value);
 
                 if (Spell.IsSecondary)
                 {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                     description += "\n\n" + secondaryMessage;
                 }
 

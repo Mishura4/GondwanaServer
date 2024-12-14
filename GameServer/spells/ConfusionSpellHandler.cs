@@ -21,13 +21,15 @@ using System.Collections;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
     [SpellHandler("Confusion")]
     public class ConfusionSpellHandler : SpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public ConfusionSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
@@ -67,7 +69,7 @@ namespace DOL.GS.Spells
                     //Spell value below 0 means it's 100% chance to confuse.
                     GamePlayer player = effect.Owner as GamePlayer;
 
-                    player.StartInterruptTimer(player.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+                    player!.StartInterruptTimer(player.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
                 }
 
                 effect.Cancel(false);
@@ -85,7 +87,7 @@ namespace DOL.GS.Spells
 
                 GameNPC npc = effect.Owner as GameNPC;
 
-                npc.IsConfused = true;
+                npc!.IsConfused = true;
 
                 if (log.IsDebugEnabled)
                     log.Debug("CONFUSION: " + npc.Name + " was confused(true," + doAttackFriend.ToString() + ")");
@@ -149,7 +151,7 @@ namespace DOL.GS.Spells
             if (targetList.Count > 0)
             {
                 GameNPC npc = effect.Owner as GameNPC;
-                npc.StopAttack();
+                npc!.StopAttack();
                 npc.StopCurrentSpellcast();
 
                 GameLiving target = targetList[Util.Random(targetList.Count - 1)] as GameLiving;
@@ -177,7 +179,7 @@ namespace DOL.GS.Spells
             if (effect != null && effect.Owner != null && effect.Owner is GameNPC)
             {
                 GameNPC npc = effect.Owner as GameNPC;
-                npc.IsConfused = false;
+                npc!.IsConfused = false;
             }
             return base.OnEffectExpires(effect, noMessages);
         }
@@ -186,8 +188,11 @@ namespace DOL.GS.Spells
         {
             get
             {
-                if (Spell.Value >= 0) return $"Monster target has a {Math.Abs(Spell.Value)}% chance to switch which target they are fighting.";
-                else return $"Monster target has a 100% chance to switch which target they are fighting and a 75% chance to attack an ally.";
+                string language = Properties.SERV_LANGUAGE;
+                if (Spell.Value >= 0)
+                    return LanguageMgr.GetTranslation(language, "SpellDescription.Confusion.MainDescriptionPositive", Math.Abs(Spell.Value));
+                else
+                    return LanguageMgr.GetTranslation(language, "SpellDescription.Confusion.MainDescriptionNegative");
             }
         }
     }

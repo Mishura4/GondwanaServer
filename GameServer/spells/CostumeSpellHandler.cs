@@ -74,7 +74,7 @@ namespace DOL.GS.Spells
         {
             if (sender is GamePlayer)
             {
-                switch ((sender as GamePlayer).CurrentRegionID)
+                switch ((sender as GamePlayer)!.CurrentRegionID)
                 {
                     case 10: // Camelot City 
                     case 101: //Jordheim

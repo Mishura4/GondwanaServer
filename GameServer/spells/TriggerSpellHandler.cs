@@ -1,6 +1,8 @@
 ﻿using DOL.GS;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
+using DOL.Language;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +60,13 @@ namespace DOL.spells
         }
 
         public override string ShortDescription
-            => $"Generates a magic Proc as a buff on the target. {Spell.Name} gets triggered when the target is hit.\n{subSpellDescription}";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Trigger.MainDescription", Spell.Name);
+                return baseDesc + "\n\n" + subSpellDescription;
+            }
+        }
     }
 }

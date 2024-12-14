@@ -54,8 +54,8 @@ namespace DOL.GS.Spells
                 return false;
 
             m_pet.TempProperties.setProperty("target", target);
-            (m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
-            (m_pet.Brain as ProcPetBrain).Think();
+            (m_pet.Brain as IOldAggressiveBrain)!.AddToAggroList(target, 1);
+            (m_pet.Brain as ProcPetBrain)!.Think();
             return true;
         }
 
@@ -65,10 +65,10 @@ namespace DOL.GS.Spells
 
         protected override void OnNpcReleaseCommand(DOLEvent e, object sender, EventArgs arguments)
         {
-            if (!(sender is GameNPC) || !((sender as GameNPC).Brain is IControlledBrain))
+            if (!(sender is GameNPC) || !((sender as GameNPC)!.Brain is IControlledBrain))
                 return;
             GameNPC pet = sender as GameNPC;
-            IControlledBrain brain = pet.Brain as IControlledBrain;
+            IControlledBrain brain = pet!.Brain as IControlledBrain;
 
             GameEventMgr.RemoveHandler(pet, GameLivingEvent.PetReleased, new DOLEventHandler(OnNpcReleaseCommand));
 

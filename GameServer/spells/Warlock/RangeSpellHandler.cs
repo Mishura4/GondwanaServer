@@ -25,6 +25,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.GS.SkillHandler;
 using DOL.Language;
 using log4net;
@@ -85,9 +86,10 @@ namespace DOL.GS.Spells
         {
             get
             {
+                string language = Properties.SERV_LANGUAGE;
                 double percentageIncrease = ((Spell.Range - 1500) / 1500.0) * 100;
                 double totalPercentage = 100 + Math.Round(percentageIncrease, MidpointRounding.AwayFromZero);
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Range.MainDescription", totalPercentage);
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Range.MainDescription", totalPercentage);
 
                 return description;
             }

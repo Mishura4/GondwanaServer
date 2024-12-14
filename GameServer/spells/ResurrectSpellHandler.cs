@@ -23,6 +23,7 @@ using System.Collections.Specialized;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -338,6 +339,12 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Brings the target back to life, restores {Spell.ResurrectHealth}% health and {Spell.ResurrectMana}% power and endurance and suffers no experience or constitution loss.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.Resurrect.MainDescription", Spell.ResurrectHealth, Spell.ResurrectMana);
+            }
+        }
     }
 }

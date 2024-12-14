@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using log4net;
 
@@ -146,11 +147,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.SpreadHeal.MainDescription", Spell.Value);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.SpreadHeal.MainDescription", Spell.Value);
 
                 if (Spell.IsSecondary)
                 {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                     description += "\n\n" + secondaryMessage;
                 }
 

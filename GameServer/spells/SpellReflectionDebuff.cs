@@ -1,6 +1,7 @@
 ﻿using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,12 @@ namespace DOL.GS.Spells
         public override bool HasPositiveEffect => false;
 
         public override string ShortDescription
-            => $"{Spell.Name} removes the magic deflection shield of the target.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.SpellReflectionDebuff.MainDescription");
+            }
+        }
     }
 }

@@ -52,7 +52,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
@@ -75,7 +75,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
@@ -137,7 +137,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharResistsUpdate();
+                player!.Out.SendCharResistsUpdate();
                 player.UpdatePlayerStatus();
             }
         }
@@ -153,7 +153,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharResistsUpdate();
+                player!.Out.SendCharResistsUpdate();
                 player.UpdatePlayerStatus();
             }
 
@@ -209,7 +209,7 @@ namespace DOL.GS.Spells
             if (Caster is GamePlayer)
             {
                 GamePlayer player = Caster as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
             }
@@ -223,7 +223,7 @@ namespace DOL.GS.Spells
             if (Caster is GamePlayer)
             {
                 GamePlayer player = Caster as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
             }

@@ -25,6 +25,8 @@ using DOL.GS.Effects;
 using DOL.Events;
 using log4net;
 using System.Numerics;
+using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -92,7 +94,7 @@ namespace DOL.GS.Spells
             secondPortalNPC = CreatePortalNPC(secondPortalNPC, player);
 
             // set to player bind location
-            secondPortal.Position = player.BindPosition;
+            secondPortal.Position = player!.BindPosition;
             secondPortalNPC.Position = player.BindPosition;
 
             if (player == null)
@@ -206,6 +208,13 @@ namespace DOL.GS.Spells
             }
         }
         public override string ShortDescription
-            => $"Creates a two way, one use portal linked with bind point of the caster. The portal can be used by {m_spell.Target}.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string spellTarget = m_spell.Target.ToString();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.PlayerPortal.MainDescription", spellTarget);
+            }
+        }
     }
 }

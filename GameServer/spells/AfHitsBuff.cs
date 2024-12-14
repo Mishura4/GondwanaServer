@@ -19,6 +19,8 @@
 using DOL.Database;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 using System;
 
 namespace DOL.GS.Spells
@@ -105,6 +107,12 @@ namespace DOL.GS.Spells
         public AfHitsBuffSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
         public override string ShortDescription
-            => $"The target's armor and health are improved by {Math.Abs(Spell.Value)}% while within range of this aura.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.AfHitsBuff.MainDescription", Math.Abs(Spell.Value));
+            }
+        }
     }
 }

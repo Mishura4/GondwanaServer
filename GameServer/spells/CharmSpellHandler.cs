@@ -26,13 +26,14 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.GS.PropertyCalc;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
     [SpellHandler("Charm")]
     public class CharmSpellHandler : SpellHandler
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         protected GameNPC m_charmedNpc;
 
@@ -484,36 +485,36 @@ namespace DOL.GS.Spells
             {
                 var list = new List<string>();
 
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "CharmSpellHandler.DelveInfo.Function", (Spell.SpellType == "" ? "(not implemented)" : Spell.SpellType)));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "CharmSpellHandler.DelveInfo.Function", (Spell.SpellType == "" ? "(not implemented)" : Spell.SpellType)));
                 list.Add(" "); //empty line
                 list.Add(Spell.Description);
                 list.Add(" "); //empty line
                 if (Spell.InstrumentRequirement != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.InstrumentRequire", GlobalConstants.InstrumentTypeToName(Spell.InstrumentRequirement)));
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Target", Spell.Target));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.InstrumentRequire", GlobalConstants.InstrumentTypeToName(Spell.InstrumentRequirement)));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Target", Spell.Target));
                 if (Spell.Range != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Range", Spell.Range));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Range", Spell.Range));
                 if (Spell.Duration >= ushort.MaxValue * 1000)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + " Permanent.");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + " Permanent.");
                 else if (Spell.Duration > 60000)
-                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
+                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
                 else if (Spell.Duration != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
                 if (Spell.Frequency != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Frequency", (Spell.Frequency * 0.001).ToString("0.0")));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Frequency", (Spell.Frequency * 0.001).ToString("0.0")));
                 if (Spell.Power != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.PowerCost", Spell.Power.ToString("0;0'%'")));
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.PowerCost", Spell.Power.ToString("0;0'%'")));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
                 if (Spell.RecastDelay > 60000)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.RecastTime") + Spell.RecastDelay / 60000 + ":" + (Spell.RecastDelay % 60000 / 1000).ToString("00") + " min");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + Spell.RecastDelay / 60000 + ":" + (Spell.RecastDelay % 60000 / 1000).ToString("00") + " min");
                 else if (Spell.RecastDelay > 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 1000).ToString() + " sec");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 1000).ToString() + " sec");
                 if (Spell.Concentration != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.ConcentrationCost", Spell.Concentration));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.ConcentrationCost", Spell.Concentration));
                 if (Spell.Radius != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Radius", Spell.Radius));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Radius", Spell.Radius));
                 if (Spell.DamageType != eDamageType.Natural)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Damage", GlobalConstants.DamageTypeToName(Spell.DamageType)));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Damage", GlobalConstants.DamageTypeToName(Spell.DamageType)));
 
                 return list;
             }
@@ -523,24 +524,34 @@ namespace DOL.GS.Spells
         {
             get
             {
-                charmTypeToTextLookup.TryGetValue((eCharmType)Spell.AmnesiaChance, out string charmableSpecies);
-                var description = $"Attempt to bring the target {charmableSpecies}monster under the caster's control.";
-                if (Spell.Pulse == 0) description += $" Affects monsters up to {(Spell.Damage == 100 ? "" : Spell.Damage + "% of")} of your level, to a maximum of level 15.";
-                return description;
+                string language = Properties.SERV_LANGUAGE;
+
+                if (!charmSpeciesKeys.TryGetValue(Spell.AmnesiaChance, out string speciesKey))
+                {
+                    speciesKey = "SpellDescription.Charm.Species.All";
+                }
+
+                string charmableSpecies = LanguageMgr.GetTranslation(language, speciesKey);
+                string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription1", charmableSpecies);
+                string secondDesc = "";
+                if (Spell.Pulse == 0)
+                    secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription2", Spell.Damage, Spell.Value);
+
+                return baseDesc + "\n\n" + secondDesc;
             }
         }
 
-        private static Dictionary<eCharmType, string> charmTypeToTextLookup = new Dictionary<eCharmType, string>()
+        private static readonly Dictionary<int, string> charmSpeciesKeys = new Dictionary<int, string>()
         {
-            {eCharmType.Humanoid, "humanoid "},
-            {eCharmType.Animal, "animal "},
-            {eCharmType.Insect, "insect "},
-            {eCharmType.Reptile, "reptile "},
-            {eCharmType.HumanoidAnimal, "humanoid and animal "},
-            {eCharmType.HumanoidAnimalInsect, "humanoid, animal and insect "},
-            {eCharmType.HumanoidAnimalInsectMagical, "humanoid, animal, insect and magical "},
-            {eCharmType.HumanoidAnimalInsectMagicalUndead, "humanoid, animal, insect, magical and undead "},
-            {eCharmType.All, ""},
+            {(int)eCharmType.Humanoid, "SpellDescription.Charm.Species.Humanoid"},
+            {(int)eCharmType.Animal, "SpellDescription.Charm.Species.Animal"},
+            {(int)eCharmType.Insect, "SpellDescription.Charm.Species.Insect"},
+            {(int)eCharmType.Reptile, "SpellDescription.Charm.Species.Reptile"},
+            {(int)eCharmType.HumanoidAnimal, "SpellDescription.Charm.Species.HumanoidAnimal"},
+            {(int)eCharmType.HumanoidAnimalInsect, "SpellDescription.Charm.Species.HumanoidAnimalInsect"},
+            {(int)eCharmType.HumanoidAnimalInsectMagical, "SpellDescription.Charm.Species.HumanoidAnimalInsectMagical"},
+            {(int)eCharmType.HumanoidAnimalInsectMagicalUndead, "SpellDescription.Charm.Species.HumanoidAnimalInsectMagicalUndead"},
+            {(int)eCharmType.All, ""},
         };
 
         public CharmSpellHandler(GameLiving caster, Spell spell, SpellLine line)

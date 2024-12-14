@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Linq;
 using System.Numerics;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -197,6 +198,16 @@ namespace DOL.GS.Spells
         public DiseaseSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
         public override string ShortDescription
-            => $"Inflicts a wasting disease on the target that slows target by {(Spell.Value != 0 ? Spell.Value : 15)}%, reduces its strength by {(Spell.Damage != 0 ? Spell.Damage : 7.5)}% and inhibits healing by {(Spell.AmnesiaChance != 0 ? Spell.AmnesiaChance : 50)}%";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double slowPercent = Spell.Value != 0 ? Spell.Value : 15;
+                double strengthPercent = Spell.Damage != 0 ? Spell.Damage : 7.5;
+                int healInhibit = Spell.AmnesiaChance != 0 ? Spell.AmnesiaChance : 50;
+
+                return LanguageMgr.GetTranslation(language, "SpellDescription.Disease.MainDescription", slowPercent, strengthPercent.ToString("0.#"), healInhibit);
+            }
+        }
     }
 }

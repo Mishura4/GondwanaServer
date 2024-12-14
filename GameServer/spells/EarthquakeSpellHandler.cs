@@ -3,6 +3,7 @@ using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 using System.Linq;
@@ -370,6 +371,16 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Creates an earthquake having an intensity of {Spell.Value / 50} on the Richter scale, causing from {Spell.Damage} damages near the epicenter to {Spell.AmnesiaChance} damages at the farthest points. Earthquakes have no effect on flying mobs, swimming mobs, bainshees or floating vampiirs.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                double intensityValue = Spell.Value / 50.0;
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Earthquake.MainDescription1", intensityValue.ToString("0.##"), Spell.Damage, Spell.AmnesiaChance);
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Earthquake.MainDescription2");
+
+                return mainDesc + "\n\n" + secondDesc;
+            }
+        }
     }
 }

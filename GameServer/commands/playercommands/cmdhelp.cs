@@ -71,7 +71,7 @@ namespace DOL.GS.Commands
 
         private void DisplayCategory(GameClient client, ePrivLevel categoryLevel, string categoryTitle, ePrivLevel plvl)
         {
-            string[] commandList = GetCommandList(plvl);
+            string[] commandList = GetCommandList(client, plvl);
             if (commandList.Length == 0) return;
 
             DisplayMessage(client, categoryTitle);
@@ -107,13 +107,13 @@ namespace DOL.GS.Commands
         private static IDictionary<ePrivLevel, String[]> m_commandLists = new Dictionary<ePrivLevel, String[]>();
         private static object m_syncObject = new object();
 
-        private String[] GetCommandList(ePrivLevel privilegeLevel)
+        private String[] GetCommandList(GameClient client, ePrivLevel privilegeLevel)
         {
             lock (m_syncObject)
             {
                 if (!m_commandLists.ContainsKey(privilegeLevel))
                 {
-                    String[] commandList = ScriptMgr.GetCommandList(privilegeLevel, true);
+                    String[] commandList = ScriptMgr.GetCommandList(privilegeLevel, true, client.Account.Language);
                     Array.Sort(commandList);
                     m_commandLists[privilegeLevel] = commandList;
                 }

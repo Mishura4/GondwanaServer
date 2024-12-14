@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -221,6 +222,39 @@ namespace DOL.GS.Spells
         public override bool CastSubSpells(GameLiving target)
         {
             return false;
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+
+                string subSpellDescription = "";
+                var subSpellList = new List<int>();
+                if (Spell.SubSpellID > 0)
+                    subSpellList.Add(Spell.SubSpellID);
+
+                foreach (int spellID in subSpellList.Union(Spell.MultipleSubSpells))
+                {
+                    Spell subSpell = SkillBase.GetSpellByID(spellID);
+                    if (subSpell != null)
+                    {
+                        ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(Caster, subSpell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+                        if (subHandler != null)
+                        {
+                            if (!string.IsNullOrEmpty(subSpellDescription))
+                                subSpellDescription += "\n";
+                            subSpellDescription += subHandler.ShortDescription;
+                        }
+                    }
+                }
+
+                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription1");
+                string cloudEffect = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription2");
+
+                return mainDesc + "\n\n" + cloudEffect + "\n" + subSpellDescription;
+            }
         }
     }
 }

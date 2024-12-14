@@ -23,6 +23,7 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOL.Events;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -265,7 +266,14 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"Does {Spell.Damage} {ConvertPropertyToText(Property1)} damage and decreases the target's resistances to {ConvertPropertyToText(Property1)} by {Spell.Value}%.";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string propName = ConvertPropertyToText(Property1);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamageWithDebuff.MainDescription", Spell.Damage, propName, Spell.Value);
+            }
+        }
 
         public DirectDamageDebuffSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }

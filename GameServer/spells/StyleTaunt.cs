@@ -20,6 +20,8 @@ using System;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -56,8 +58,15 @@ namespace DOL.GS.Spells
         public StyleTaunt(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => Spell.Value > 0
-            ? $"Taunts target, increasing your threat against it by {Spell.Value}."
-            : $"Detaunts target, decreases your threat against it by {-Spell.Value}";
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                if (Spell.Value > 0)
+                    return LanguageMgr.GetTranslation(language, "SpellDescription.StyleTaunt.Increase", Spell.Value);
+                else
+                    return LanguageMgr.GetTranslation(language, "SpellDescription.StyleTaunt.Decrease", Math.Abs(Spell.Value));
+            }
+        }
     }
 }

@@ -248,11 +248,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.FocusShell.MainDescription", Spell.Value);
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellDescription.FocusShell.MainDescription", Spell.Value);
 
                 if (!Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
                 {
-                    string onlyInPvPORvR = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.FocusShell.OnlyInPvPORvR");
+                    string onlyInPvPORvR = LanguageMgr.GetTranslation(language, "SpellDescription.FocusShell.OnlyInPvPORvR");
                     description += "\n\n" + onlyInPvPORvR;
                 }
 

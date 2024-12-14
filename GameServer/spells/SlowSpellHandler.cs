@@ -22,6 +22,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -186,20 +187,21 @@ namespace DOL.GS.Spells
         {
             get
             {
+                string language = Properties.SERV_LANGUAGE;
                 string description;
 
                 if (Spell.Value >= 99)
                 {
-                    description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.SpeedDecrease.Rooted");
+                    description = LanguageMgr.GetTranslation(language, "SpellDescription.SpeedDecrease.Rooted");
                 }
                 else
                 {
-                    description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Slow.MainDescription", Spell.Value);
+                    description = LanguageMgr.GetTranslation(language, "SpellDescription.Slow.MainDescription", Spell.Value);
                 }
 
                 if (Spell.IsSecondary)
                 {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                     description += "\n\n" + secondaryMessage;
                 }
 

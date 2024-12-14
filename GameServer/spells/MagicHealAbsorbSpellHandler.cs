@@ -5,6 +5,7 @@ using DOL.Events;
 using DOL.AI.Brain;
 using DOL.Language;
 using System;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -266,7 +267,10 @@ namespace DOL.GS.Spells
         {
             get
             {
-                return $"The next magical attack done to you absorbs {Spell.Value}% of damages dealt and heals you instead, {Spell.Damage}% will be converted into Power and Endurance.";
+                string language = Properties.SERV_LANGUAGE;
+                string spellValue = Spell.Value.ToString();
+                string spellDamage = Spell.Damage.ToString();
+                return LanguageMgr.GetTranslation(language, "SpellDescription.MagicHealAbsorb.MainDescription", spellValue, spellDamage);
             }
         }
     }

@@ -92,16 +92,16 @@ namespace DOL.GS.Spells
                         GamePlayer caster = m_caster as GamePlayer;
                         if (caster != null)
                         {
-                            caster.Out.SendMessage("Your buff has no effect on the Vampiir!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "PropertyChangingSpell.BuffNoEffectOnVampiir"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
-                        player.Out.SendMessage("This buff has no effect on you!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "PropertyChangingSpell.BuffNoEffectOnYou"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return true;
                     }
                     if (this is ArmorFactorBuff)
                     {
                         if (SpellHandler.FindEffectOnTarget(target, "ArmorFactorBuff") != null && m_spellLine.IsBaseLine != true)
                         {
-                            MessageToLiving(target, "You already have this effect!", eChatType.CT_SpellResisted);
+                            MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "PropertyChangingSpell.AlreadyHasEffect"), eChatType.CT_SpellResisted);
                             return false;
                         }
                     }
@@ -116,7 +116,7 @@ namespace DOL.GS.Spells
                         GameSpellEffect Heat = FindEffectOnTarget(player, "HeatResistBuff");
                         if (Matter != null || Cold != null || Heat != null)
                         {
-                            MessageToCaster(player.GetPersonalizedName(target) + " already has this effect", eChatType.CT_SpellResisted);
+                            MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "PropertyChangingSpell.AlreadyHasThisEffect", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                             return false;
                         }
                     }
@@ -131,7 +131,7 @@ namespace DOL.GS.Spells
                         GameSpellEffect Energy = FindEffectOnTarget(player, "EnergyResistBuff");
                         if (Body != null || Spirit != null || Energy != null)
                         {
-                            MessageToCaster(player.GetPersonalizedName(target) + " already has this effect", eChatType.CT_SpellResisted);
+                            MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "PropertyChangingSpell.AlreadyHasThisEffect", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                             return false;
                         }
                     }

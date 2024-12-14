@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -60,7 +61,14 @@ namespace DOL.GS.Spells
 
         public DamageToPowerSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"{Spell.Value}% of any spell damage done to the target is converted to power instead.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                return LanguageMgr.GetTranslation(language, "SpellDescription.DamageToPower.MainDescription", Spell.Value);
+            }
+        }
     }
 }
 
