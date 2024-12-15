@@ -277,3 +277,283 @@ SkillBase.RegisterPropertyNames.Wraithsight:			Clairvoyance Spectrale
 SkillBase.RegisterPropertyNames.WraithsightFocus:		Focus : Clairvoyance Spectrale
 SkillBase.RegisterPropertyNames.VoidAcolyte:			Acolyte du Néant
 SkillBase.RegisterPropertyNames.VoidAcolyteFocus:		Focus : Acolyte du Néant
+
+SkillBase.Property.Acuity:               l'Acuité
+SkillBase.Property.AcuityBonusCap:         le Bonus au cap d'Acuité
+SkillBase.Property.AllArcherySkills:      toutes les compétences d'Archerie
+SkillBase.Property.AllDualWieldingSkills:   toutes les compétences Deux armes
+SkillBase.Property.AllMagicSkills:         toutes les compétences Magiques
+SkillBase.Property.AllMeleeWeaponSkills:   toutes les compétences d'Armes de mêlée
+SkillBase.Property.AllSkills:            toutes les compétences
+SkillBase.Property.ALLSpellLines:         toutes les Lignes de Sorts
+SkillBase.Property.Arboreal:             la compétence de Voie Arboréale
+SkillBase.Property.ArborealFocus:         la compétence de Focus : Voie Arboréale
+SkillBase.Property.ArcheryRange:         la Portée d'Archerie
+SkillBase.Property.ArcherySpeed:         la Vitesse de tir
+SkillBase.Property.ArrowRecovery:         la Récupération de flèches
+SkillBase.Property.Augmentation:         l'Amélioration
+SkillBase.Property.AuraManipulation:      la Manipulation d'Aura
+SkillBase.Property.Axe:               la compétence de Hache
+SkillBase.Property.Battlesongs:         la compétence de  Chants de guerre
+SkillBase.Property.BeastCraft:            la compétence de  Lien Animal
+SkillBase.Property.Blades:               la compétence de Lames
+SkillBase.Property.BladeturnReinforcement:   le Renforcement de la bulle protectrice (PvE Uniquement)
+SkillBase.Property.BlockChance:         la Chance de Blocage boucliers
+SkillBase.Property.Blunt:               la compétence de Masse
+SkillBase.Property.Body:               la Résistance au Corps
+SkillBase.Property.BodyMagic:            la compétence d'Altération
+SkillBase.Property.BodyMagicFocus:         la compétence de Focus : Altération
+SkillBase.Property.BoneArmy:            la compétence d'Armée Squelettique
+SkillBase.Property.BoneArmyFocus:        la compétence de Focus : Armée Squelettique
+SkillBase.Property.BonusToArmorAbsorption:   le Bonus d'Absorption (Abs)
+SkillBase.Property.BonusToArmorFactor:      le Bonus au Facteur d'Armure (AF)
+SkillBase.Property.CastingSpeed:         le Bonus à la vitesse d'Incantation
+SkillBase.Property.CaveMagic:            la compétence de Magie Abyssale
+SkillBase.Property.CelticDual:            la compétence d'Art de Combat
+SkillBase.Property.CelticSpear:         la compétence de Lance Celtique
+SkillBase.Property.Chants:               la compétence de Cantiques
+SkillBase.Property.Charisma:            le Charisme
+SkillBase.Property.CharismaBonusCap:      le Bonus au cap de Charisme
+SkillBase.Property.Cold:               la Résistance au Froid
+SkillBase.Property.ColdMagic:            la compétence de Voie de la Glace
+SkillBase.Property.ColdMagicFocus:         la compétence de Focus : Voie de la Glace
+SkillBase.Property.Composite:            la compétence de Composite
+SkillBase.Property.Concentration:         la Concentration
+SkillBase.Property.Constitution:         la Constitution
+SkillBase.Property.ConstitutionBonusCap:   le Bonus au cap de Constitution
+SkillBase.Property.Creeping:            la compétence de Voie Sylvestre
+SkillBase.Property.CreepingPathFocus:      la compétence de Focus : Voie Sylvestre
+SkillBase.Property.CriticalArcheryHit:      le Bonus aux chances de Critique Archerie
+SkillBase.Property.CriticalMeleeHit:      le Bonus aux chances de Critique en Mêlée
+SkillBase.Property.CriticalSpellHit:		le Bonus aux chances de Dégâts Critiques
+SkillBase.Property.CriticalHealHit:		le Bonus aux chances de Soins Critiques
+SkillBase.Property.CriticalStrike:         la compétence d'Attaques Sournoises
+SkillBase.Property.Crossbows:            la compétence d'Arbalètes
+SkillBase.Property.Crush:               la Résistance Contondant
+SkillBase.Property.Crushing:            les dégâts de Contondant
+SkillBase.Property.Cursing:            la compétence de Sortilèges
+SkillBase.Property.CursingFocus:         la compétence de Focus : Sortilèges
+SkillBase.Property.Darkness:            la compétence de Ténèbres
+SkillBase.Property.DarknessFocus:         la compétence de Focus : Ténèbres
+SkillBase.Property.DeathServant:         la compétence de Servitor Mortis
+SkillBase.Property.DeathservantFocus:      la compétence de Focus : Servitor Mortis
+SkillBase.Property.Deathsight:            la compétence de Visio Mortis
+SkillBase.Property.DeathsightFocus:     la compétence de Focus : Visio Mortis
+SkillBase.Property.DebuffEffectivness:      la Réduction des Sorts d'Affaiblissement
+SkillBase.Property.DefensiveBonus:         le Bonus de Défense (PvE Uniquement)
+SkillBase.Property.Dementia:            la Démence
+SkillBase.Property.Dexterity:            la Dexterité
+SkillBase.Property.DexterityBonusCap:      le Bonus au cap de Dexterité
+SkillBase.Property.DualWield:            la compétence de Deux Armes
+SkillBase.Property.EarthMagic:            la compétence de Voie de la Terre
+SkillBase.Property.EarthMagicFocus:      la compétence de Focus : Voie de la Terre
+SkillBase.Property.EffectiveLevel:         le Niveau Effectif
+SkillBase.Property.Empathy:            l'Empathie
+SkillBase.Property.EmpathyBonusCap:      le Bonus au cap d'Empathie
+SkillBase.Property.Enchantment:         la compétence d'Enchantements
+SkillBase.Property.EnchantmentFocus:      la compétence d'Focus : Enchantements
+SkillBase.Property.EnduranceRegeneration:   la Régénération d'Endurance
+SkillBase.Property.Energy:               la Résistance à l'Energie
+SkillBase.Property.Enhancement:         les Bénédictions
+SkillBase.Property.Envenom:            l'Empoisonnement
+SkillBase.Property.EtherealShriek:         la compétence de Cri Ethéré
+SkillBase.Property.EtherealShriekFocus:   la compétence de Focus : Cri Ethéré
+SkillBase.Property.EvadeChance:         la Chance d'Esquive
+SkillBase.Property.ExperienceLoss:         la Réduction de perte d'Experience
+SkillBase.Property.Fatigue:            l'Endurance
+SkillBase.Property.FireMagic:            la compétence de Voie du Feu
+SkillBase.Property.FireMagicFocus:         la compétence de Focus : Voie du Feu
+SkillBase.Property.FistWraps:            la compétence de Bandages
+SkillBase.Property.FlexibleWeapon:         la compétence d'Armes Flexibles
+SkillBase.Property.FumbleChance:         les Chances de Rater Lamentablement
+SkillBase.Property.Hammer:              la compétence de Marteau
+SkillBase.Property.HandToHand:            la compétence de Contact
+SkillBase.Property.HealingEffectiveness:   le Bonus à l'Efficacité des Soins
+SkillBase.Property.HealthRegeneration:      la Régéneration des Points de Vie
+SkillBase.Property.Heat:              la Résistance à la Chaleur
+SkillBase.Property.Hexing:               la compétence de Maléfices
+SkillBase.Property.HexingFocus:         la compétence de Focus : Maléfices
+SkillBase.Property.HitPointsBonusCap:      le Bonus au cap des Points de Vie
+SkillBase.Property.Hits:               les Points de vie
+SkillBase.Property.Instruments:         la compétence d'Instruments
+SkillBase.Property.Intelligence:         l'Intelligence
+SkillBase.Property.IntelligenceBonusCap:   le Bonus au cap d'Intelligence
+SkillBase.Property.LargeWeapon:         la compétence de Grandes Armes
+SkillBase.Property.LeftAxe:           la compétence de Hache Sénestre
+SkillBase.Property.LightMagic:            la compétence de Voie du Soleil
+SkillBase.Property.LightMagicFocus:      la compétence de Focus : Voie du Soleil
+SkillBase.Property.Longbows:            la compétence d'Arc Long
+SkillBase.Property.MagicDamageBonus:      le Bonus aux Dégâts Magiques
+SkillBase.Property.Magnetism:            la Force Tellurique
+SkillBase.Property.ManaMagic:            la compétence de Voie de la Lune
+SkillBase.Property.ManaMagicFocus:        la compétence de Focus : Voie de la Lune
+SkillBase.Property.Matter:               la Résistance à la Matière
+SkillBase.Property.MatterMagic:         les dégâts de Manipulation
+SkillBase.Property.MatterMagicFocus:      la compétence de Focus : Manipulation
+SkillBase.Property.MaulerStaff:         la compétence de Bâton de Kan-Laresh
+SkillBase.Property.MaximumSpeed:         la Vitesse maximum
+SkillBase.Property.MeleeDamage:         le Bonus aux dégâts de mêlée
+SkillBase.Property.MeleeSpeed:            le Bonus à la vitesse de mêlée
+SkillBase.Property.Mending:            la Reconstitution
+SkillBase.Property.Mentalism:            l'Empathie
+SkillBase.Property.MentalismFocus:         la compétence de Focus : Empathie
+SkillBase.Property.MesmerizeDuration:      la Durée des Hypnotismes
+SkillBase.Property.MindMagic:            la compétence d'Âme
+SkillBase.Property.MindMagicFocus:         la compétence de Focus : Âme
+SkillBase.Property.Music:               la compétence de Musique
+SkillBase.Property.Nature:               les dégâts de Croissance
+SkillBase.Property.SpellFumbleChance:		la Chance d'échapper aux sorts
+SkillBase.Property.NegativeReduction:    la Réduction de la durée des effets négatifs (PvE Uniquement)
+SkillBase.Property.NightshadeMagic:      la Magie de l'Ombre
+SkillBase.Property.Nurture:            la Symbiose
+SkillBase.Property.OdinsWill:            la Volonté d'Odin
+SkillBase.Property.Pacification:         l'Apaisement
+SkillBase.Property.Painworking:         la compétence de Dolor Inflictus
+SkillBase.Property.PainworkingFocus:      la compétence de Focus : Dolor Inflictus
+SkillBase.Property.Parry:               la Parade
+SkillBase.Property.ParryChance:         la Chance de Parade
+SkillBase.Property.Pathfinding:         la compétence d'Art des Forêts
+SkillBase.Property.PhantasmalWail:         la compétence de Lamentation Sépulcrale
+SkillBase.Property.PhantasmalWailFocus:   la compétence de Focus : Lamentation Sépulcrale
+SkillBase.Property.PieceAblative:         l'Ablatif (PvE Uniquement)
+SkillBase.Property.Piercing:            les dégâts Perforants
+SkillBase.Property.Piety:               la Piété
+SkillBase.Property.PietyBonusCap:         le Bonus au cap de Piété
+SkillBase.Property.Polearms:            la compétence d'Armes d'Hast
+SkillBase.Property.Power:               le Mana
+SkillBase.Property.PowerBonusCap:         le Bonus au cap des Points de Mana
+SkillBase.Property.PowerPool:            la Réserve de Mana
+SkillBase.Property.PowerRegeneration:      la Régénération des Points de Mana
+SkillBase.Property.PowerStrikes:         la compétence de Coups Puissants
+SkillBase.Property.Quickness:            la Vivacité
+SkillBase.Property.QuicknessBonusCap:      le Bonus au cap de Vivacité
+SkillBase.Property.RangedDamage:         tous les dégâts à distance
+SkillBase.Property.ReactionaryStyleDamage:   le Bonus aux styles réactionnels (PvE Uniquement)
+SkillBase.Property.RecurvedBow:         la compétence d'Arc Recourbé
+SkillBase.Property.Regrowth:           la Régénération
+SkillBase.Property.Rejuvenation:         la Guérison
+SkillBase.Property.ResistPierce:         la pénétration de Défenses Magiques
+SkillBase.Property.Runecarving:         la compétence de Runes d'Odin
+SkillBase.Property.RunecarvingFocus:      la compétence de Focus : Runes d'Odin
+SkillBase.Property.Savagery:           la Sauvagerie
+SkillBase.Property.Scythe:              la compétence de Faux
+SkillBase.Property.ShadowMastery:         la Maîtrise des Ombres
+SkillBase.Property.Shields:            la compétence de Boucliers
+SkillBase.Property.ShortBow:            la compétence de Arc Court
+SkillBase.Property.Slash:               la Résistance Tranchant
+SkillBase.Property.Slashing:            la compétence de Tranchant
+SkillBase.Property.Smiting:            la compétence de Colère Divine
+SkillBase.Property.Soulrending:         la compétence de Tourment d'Âme
+SkillBase.Property.Spear:               la compétence de Lance
+SkillBase.Property.SpectralForce:         la compétence de Force Spectrale
+SkillBase.Property.SpectralForceFocus:      la compétence de Focus : Force Spectrale
+SkillBase.Property.SpectralGuard:         la compétence de Défense Spectrale
+SkillBase.Property.SpeedDecreaseDuration:   la Durée de Ralentissement de Déplacement
+SkillBase.Property.SpellDuration:         la Durée des Sorts
+SkillBase.Property.SpellPowerCost:         la Réduction des Coûts en Mana des Sorts (PvE Uniquement)
+SkillBase.Property.SpellRange:            la Portée de Sort
+SkillBase.Property.Spirit:               la Résistance à l'Esprit
+SkillBase.Property.SpiritMagic:         la compétence de Voie du Simulacre
+SkillBase.Property.SpiritMagicFocus:      la compétence de Focus : Voie du Simulacre
+SkillBase.Property.Staff:               la compétence de Bâton
+SkillBase.Property.StatBuffSpells:         les Sorts d'Augmentation
+SkillBase.Property.Stealth:            la compétence de Furtivité
+SkillBase.Property.Stormcalling:         la compétence d'Ire de Thor
+SkillBase.Property.Strength:            la Force
+SkillBase.Property.StrengthBonusCap:      le Bonus au cap de Force
+SkillBase.Property.StunDuration:         la Durée des Stun
+SkillBase.Property.StyleCostReduction:      la Réduction des Coûts d'Endurance des Styles de Combat (PvE Uniquement)
+SkillBase.Property.StyleDamage:         la Bonus aux Dégâts des Styles de Combat
+SkillBase.Property.Summoning:            la compétence de Servants de Hel
+SkillBase.Property.SummoningFocus:         la compétence de Focus : Servants de Hel
+SkillBase.Property.Suppression:         la compétence d'Affaiblissement
+SkillBase.Property.SuppressionFocus:      la compétence de Focus : Affaiblissement
+SkillBase.Property.Sword:               la compétence d'Epée
+SkillBase.Property.ThrownWeapons:         la compétence d'Armes de Jet
+SkillBase.Property.Thrust:               la Résistance à l'Estoc
+SkillBase.Property.Thrusting:            la compétence d'Estoc
+SkillBase.Property.ToHitBonus:            les Chances de toucher (PvE Uniquement)
+SkillBase.Property.TwoHanded:            la compétence de Deux Mains
+SkillBase.Property.Valor:               la Vaillance
+SkillBase.Property.VampiiricEmbrace:      la compétence d'Etreinte
+SkillBase.Property.Verdant:            la compétence de Voie de la Verdure
+SkillBase.Property.VerdantFocus:         la compétence de Focus : Voie de la Verdure
+SkillBase.Property.VoidMagic:            la compétence de Voie du Vide
+SkillBase.Property.VoidMagicFocus:         la compétence de Focus : Voie du Vide
+SkillBase.Property.WeaponSkill:         la Bonus à l'attaque (Weaponskill)
+SkillBase.Property.WindMagic:            la compétence de Voie de l'Air
+SkillBase.Property.WindMagicFocus:         la compétence de Focus : Voie de l'Air
+SkillBase.Property.Witchcraft:            la compétence d'Artifices
+SkillBase.Property.WitchcraftFocus:      la compétence de Focus : Artifices
+
+SkillBase.Property.KeepDamage:				le Bonus de dégâts contre les Forts
+SkillBase.Property.DPS:					le Bonus Mythique DPS
+SkillBase.Property.MagicAbsorption:		l'Absorption Magique
+SkillBase.Property.MaxHealth:				les Points de Vie Max
+SkillBase.Property.MaxMana:				les Points de Mana Max
+SkillBase.Property.MissHit:				le Bonus de Coup Manqué
+SkillBase.Property.WaterSpeed:				le Bonus de Vitesse de Nage
+
+SkillBase.Property.Essence:				la Résistance à l'Essence
+SkillBase.Property.CraftingSkillGain:		le Bonus de Gain en Artisanat
+SkillBase.Property.CraftingSpeed:			la Vitesse de l'Artisanat
+SkillBase.Property.CounterAttack:			la Chance de Contre-Attaque
+SkillBase.Property.RobberyResist:			la Chance d'éviter les Vols
+SkillBase.Property.MythicalStrCap:			le Bonus Mythique Cap de Force
+SkillBase.Property.MythicalDexCap:			le Bonus Mythique Cap de Dexterité
+SkillBase.Property.MythicalConCap:			le Bonus Mythique Cap de Constitution
+SkillBase.Property.MythicalQuiCap:			le Bonus Mythique Cap de Vivacité
+SkillBase.Property.MythicalIntCap:			le Bonus Mythique Cap d'Intelligence
+SkillBase.Property.MythicalPieCap:			le Bonus Mythique Cap de Piété
+SkillBase.Property.MythicalEmpCap:			le Bonus Mythique Cap d'Empathie
+SkillBase.Property.MythicalChaCap:			le Bonus Mythique Cap de Charisme
+SkillBase.Property.MythicalAcuCap:			le Bonus Mythique Cap d'Acuité
+SkillBase.Property.BodyCap:				le Bonus au Cap Résistance au Corps
+SkillBase.Property.ColdCap:				le Bonus au Cap Résistance au Froid
+SkillBase.Property.CrushCap:				le Bonus au Cap Résistance Contondant
+SkillBase.Property.EnergyCap:				le Bonus au Cap Résistance à l'Energie
+SkillBase.Property.HeatCap:				le Bonus au Cap Résistance à la Chaleur
+SkillBase.Property.MatterCap:				le Bonus au Cap Résistance à la Matière
+SkillBase.Property.SlashCap:				le Bonus au Cap Résistance Tranchant
+SkillBase.Property.SpiritCap:				le Bonus au Cap Résistance à l'Esprit
+SkillBase.Property.ThrustCap:				le Bonus au Cap Résistance à l'Estoc
+SkillBase.Property.MythicalCrowdDuration:	la Réduction Durée des Sorts de Contrôle
+SkillBase.Property.LootChance:				la Chance de Loot
+SkillBase.Property.MythicalOmniRegen: 		le Bonus Mythique de Régénération
+SkillBase.Property.MythicalTension: 		le Bonus Mythique de Tension
+SkillBase.Property.SpellShieldChance:		la Chance de Blindage Contre les Sorts
+SkillBase.Property.MythicalSpellReflect: 	le Bonus Mythique de Renvoi de Sort
+SkillBase.Property.MythicalSafeFall: 		le Bonus Mythique de Résistance aux Chutes
+SkillBase.Property.MythicalDiscumbering:	le Bonus Mythique Encombrement
+SkillBase.Property.MythicalCoin:			le Bonus Mythique de Butin
+SkillBase.Property.SpellLevel:				le Bonus de niveau des Sorts
+SkillBase.Property.Conversion:				la Conversion
+SkillBase.Property.ExtraHp:				le Bonus Mythique de Points de Vie
+SkillBase.Property.StyleAbsorb:			le Bonus Mythique Absorption Dégâts Physiques
+SkillBase.Property.ArcaneSyphon:			l'Arcane Syphon
+SkillBase.Property.RealmPoints:			le Bonus Mythique Points de Royaume
+SkillBase.Property.BountyPoints:			le Bonus Mythique Gains en Bounty Points
+SkillBase.Property.ExperiencePoints:		le Bonus Mythique Experience
+
+SkillBase.Property.RobberyChanceBonus:         le Bonus Chance de Vol
+SkillBase.Property.RobberyDelayReduction:      la Réduction de temps de recharge de Vol
+SkillBase.Property.StealthEffectivenessBonus:  le Bonus Furtivité
+SkillBase.Property.StealthDetectionBonus:      le Bonus détection de Furtivité
+SkillBase.Property.TensionConservationBonus:   la Reduction de Perte de Tension à la Mort
+SkillBase.Property.CriticalDotHitChance:		le Bonus de Dommage Critique des DoT
+SkillBase.Property.OffhandDamageAndChanceBonus:	le Bonus Dommage et Chance Main Gauche
+SkillBase.Property.OffhandDamageBonus:			le Bonus Dommage Main Gauche
+SkillBase.Property.OffhandChanceBonus:			le Bonus de Chance Main Gauche
+SkillBase.Property.DotDamageBonus:				le Bonus de Dommage des DoT
+SkillBase.Property.DotDurationDecrease:		la Réduction Durée des DoT
+SkillBase.Property.MythicalDebuffResistChance:	le Bonus Mythique Résistance aux Affaiblissements
+SkillBase.Property.DamnationEffectEnhancement:	le Renforcement des Effets de Damnation
+
+SkillBase.Property.Skill_Learning:			l'Apprentissage
+SkillBase.Property.Tormentshaper:			le Maître des Tourments
+SkillBase.Property.TormentshaperFocus:		le Focus : Maître des Tourments
+SkillBase.Property.Wraithsight:			la Clairvoyance Spectrale
+SkillBase.Property.WraithsightFocus:		le Focus : Clairvoyance Spectrale
+SkillBase.Property.VoidAcolyte:			l'Acolyte du Néant
+SkillBase.Property.VoidAcolyteFocus:		le Focus : Acolyte du Néant
+

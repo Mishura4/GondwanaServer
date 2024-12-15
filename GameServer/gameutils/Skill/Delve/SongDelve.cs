@@ -27,8 +27,9 @@ namespace DOL.GS.Delve
     {
         private ISpellHandler spellHandler;
         private Spell Spell => spellHandler.Spell;
+        private GameClient m_client;
 
-        public SongDelve(int id)
+        private SongDelve(int id)
         {
             Spell spell = SkillBase.GetSpellByTooltipID((ushort)id);
             spellHandler = ScriptMgr.CreateSpellHandler(null, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
@@ -36,22 +37,25 @@ namespace DOL.GS.Delve
             Index = unchecked((short)spellHandler.Spell.InternalID);
         }
 
-        public SongDelve(int id, GameClient client) : this(id)
+        public SongDelve(int id, GameClient client, bool normalizeLevel) : this(id)
         {
             int level = Spell.Level;
             int spellID = Spell.ID;
 
-            foreach (SpellLine line in client.Player.GetSpellLines())
+            if (normalizeLevel)
             {
-                Spell s = SkillBase.GetSpellList(line.KeyName).Where(o => o.ID == spellID).FirstOrDefault();
-                if (s != null)
+                foreach (SpellLine line in client.Player.GetSpellLines())
                 {
-                    level = s.Level;
-                    break;
+                    Spell s = SkillBase.GetSpellList(line.KeyName).Where(o => o.ID == spellID).FirstOrDefault();
+                    if (s != null)
+                    {
+                        level = s.Level;
+                        break;
+                    }
                 }
+                Spell.Level = level;
             }
-            Spell.Level = level;
-
+            m_client = client;
         }
 
         public override ClientDelve GetClientDelve()
@@ -68,7 +72,7 @@ namespace DOL.GS.Delve
         public override IEnumerable<ClientDelve> GetClientDelves()
         {
             var result = new List<ClientDelve>() { GetClientDelve() };
-            result.Add(new SpellDelve(Spell).GetClientDelve());
+            result.Add(new SpellDelve(Spell, m_client, false).GetClientDelve());
             return result;
         }
     }

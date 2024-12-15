@@ -42,8 +42,11 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
-            => "Summon boards of wood usable for repairing keep doors.";
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Convoker.SummonWood.MainDescription");
+        }
     }
     #endregion
 
@@ -92,9 +95,13 @@ namespace DOL.GS.Spells
             heal = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
 
-        public override string ShortDescription
-            => "Ground targeted ward that can make enemy stealthers visible, without removing their stealth.";
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Convoker.PrescienceNode.MainDescription");
+        }
     }
+    
     [SpellHandlerAttribute("Prescience")]
     public class PrescienceSpellHandler : SpellHandler
     {
@@ -120,7 +127,11 @@ namespace DOL.GS.Spells
 
         public PrescienceSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => "You have been detected by a Prescience Node!";
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Convoker.Prescience.MainDescription");
+        }
     }
     #endregion
 

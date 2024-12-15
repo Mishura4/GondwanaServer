@@ -14,10 +14,11 @@ namespace DOL.spells
     [SpellHandler("TriggerBuff")]
     public class TriggerSpellHandler : SpellHandler
     {
-        string subSpellDescription;
+        ISpellHandler _subSpell;
+        
         public TriggerSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
-            subSpellDescription = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)m_spell.SubSpellID), null).ShortDescription;
+            _subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)m_spell.SubSpellID), null);
         }
 
         public override int CalculateToHitChance(GameLiving target)
@@ -59,14 +60,10 @@ namespace DOL.spells
             effect.Owner.TempProperties.setProperty("TriggerSpellLevel", effect.SpellHandler.Caster.Level);
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Trigger.MainDescription", Spell.Name);
-                return baseDesc + "\n\n" + subSpellDescription;
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Trigger.MainDescription", Spell.Name) + "\n\n" + _subSpell.GetDelveDescription(delveClient);
         }
     }
 }

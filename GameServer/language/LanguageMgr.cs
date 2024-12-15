@@ -33,6 +33,7 @@ using System.Numerics;
 using System.Linq;
 using DOL.GS.Finance;
 using DOL.GS.Geometry;
+using DOL.GS.ServerProperties;
 
 namespace DOL.Language
 {
@@ -576,6 +577,56 @@ namespace DOL.Language
                 return "(unknown)";
             }
             return translation;
+        }
+
+        public static string GetDamageOfType(string language, eDamageType resist)
+        {
+            string translationKey = resist switch
+            {
+                eDamageType.Natural => "Language.DamageType.Natural.Damage",
+                eDamageType.Crush => "Language.DamageType.Crush.Damage",
+                eDamageType.Slash => "Language.DamageType.Slash.Damage",
+                eDamageType.Thrust => "Language.DamageType.Thrust.Damage",
+                eDamageType.Body => "Language.DamageType.Body.Damage",
+                eDamageType.Cold => "Language.DamageType.Cold.Damage",
+                eDamageType.Energy => "Language.DamageType.Energy.Damage",
+                eDamageType.Heat => "Language.DamageType.Heat.Damage",
+                eDamageType.Matter => "Language.DamageType.Matter.Damage",
+                eDamageType.Spirit => "Language.DamageType.Spirit.Damage",
+                eDamageType.Falling => "Language.DamageType.Falling.Damage",
+                eDamageType.GM => "Language.DamageType.GM.Damage",
+                _ => "Language.DamageType.GM.Damage"
+            };
+            if (!TryGetTranslation(out string translation, language, translationKey))
+            {
+                return "(unknown)";
+            }
+            return translation;
+        }
+
+        public static string GetDamageOfType(GameClient client, eDamageType type)
+        {
+            return GetDamageOfType(client?.Account?.Language ?? Properties.SERV_LANGUAGE, type);
+        }
+
+        public static string GetDamageOfType(GamePlayer player, eDamageType type)
+        {
+            return GetDamageOfType(player?.Client, type);
+        }
+
+        public static string GetProperty(string language, eProperty prop)
+        {
+            return GetTranslation(language, "SkillBase.Property." + SkillBase.GetPropertyTranslationName(prop));
+        }
+
+        public static string GetProperty(GameClient client, eProperty prop)
+        {
+            return GetProperty(client?.Account?.Language ?? Properties.SERV_LANGUAGE, prop);
+        }
+
+        public static string GetProperty(GamePlayer player, eProperty prop)
+        {
+            return GetProperty(player?.Client, prop);
         }
         
         public static string GetCardinalDirection(string languageID, Angle direction)

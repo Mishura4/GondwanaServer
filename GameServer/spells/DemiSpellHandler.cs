@@ -1,6 +1,5 @@
 ﻿using DOL.AI.Brain;
 using DOL.GS.PlayerClass;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -57,13 +56,10 @@ namespace DOL.GS.Spells
             return base.CalculateSpellResistChance(target);
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Demi.MainDescription", Spell.Name, Spell.AmnesiaChance);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Demi.MainDescription", Spell.Name, Spell.AmnesiaChance);
         }
     }
 }

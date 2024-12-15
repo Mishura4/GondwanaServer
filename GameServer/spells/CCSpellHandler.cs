@@ -445,13 +445,10 @@ namespace DOL.GS.Spells
 
         public MesmerizeSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Mesmerize.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Mesmerize.MainDescription");
         }
     }
 
@@ -548,14 +545,10 @@ namespace DOL.GS.Spells
 
         public StunSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                int durationSec = Spell.Duration / 1000;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Stun.MainDescription", durationSec);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Stun.MainDescription", Spell.Duration / 1000.0f);
         }
     }
 }

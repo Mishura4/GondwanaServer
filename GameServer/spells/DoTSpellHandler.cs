@@ -21,8 +21,6 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Language;
 using DOL.AI.Brain;
-using DOL.Database;
-using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -305,22 +303,18 @@ namespace DOL.GS.Spells
 
         public DoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DoT.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType), Spell.Frequency / 1000.0);
+
+            if (Spell.IsSecondary)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string damageTypeName = Spell.DamageType.ToString();
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.DoT.MainDescription", Spell.Damage, damageTypeName, Spell.Frequency / 1000.0);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                if (!string.IsNullOrEmpty(secondaryMessage))
                     description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
             }
+
+            return description;
         }
     }
 }

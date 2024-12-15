@@ -280,3 +280,284 @@ SkillBase.RegisterPropertyNames.Wraithsight:			Wraithsight
 SkillBase.RegisterPropertyNames.WraithsightFocus:		Wraithsight Focus
 SkillBase.RegisterPropertyNames.VoidAcolyte:			Void Acolyte
 SkillBase.RegisterPropertyNames.VoidAcolyteFocus:		Void Acolyte Focus
+
+
+SkillBase.Property.Acuity:					Acuity
+SkillBase.Property.AcuityBonusCap:			Bonus cap to Acuity
+SkillBase.Property.AllArcherySkills:		ALL archery skills
+SkillBase.Property.AllDualWieldingSkills:	ALL dual wielding skills
+SkillBase.Property.AllMagicSkills:			ALL magic skills
+SkillBase.Property.AllMeleeWeaponSkills:	ALL melee weapon skills
+SkillBase.Property.AllSkills:				All Skills
+SkillBase.Property.ALLSpellLines:			ALL spell lines
+SkillBase.Property.Arboreal:				Arboreal
+SkillBase.Property.ArborealFocus:			Arboreal Focus
+SkillBase.Property.Archery:				Archery
+SkillBase.Property.ArcheryRange:			Archery Range
+SkillBase.Property.ArcherySpeed:			Archery Speed
+SkillBase.Property.ArrowRecovery:			Arrow Recovery
+SkillBase.Property.Augmentation:			Augmentation
+SkillBase.Property.AuraManipulation:		Aura Manipulation
+SkillBase.Property.Axe:					Axe
+SkillBase.Property.Battlesongs:			Battlesongs
+SkillBase.Property.BeastCraft:				Beastcraft
+SkillBase.Property.Blades:					Blades
+SkillBase.Property.BladeturnReinforcement:	Bladeturn reinforcement (PvE Only)
+SkillBase.Property.BlockChance:			Block chance
+SkillBase.Property.Blunt:					Blunt
+SkillBase.Property.Body:					Body Resist
+SkillBase.Property.BodyMagic:				Body Magic
+SkillBase.Property.BodyMagicFocus:			Body Magic Focus
+SkillBase.Property.BoneArmy:				Bone Army
+SkillBase.Property.BoneArmyFocus:			Bone Army Focus
+SkillBase.Property.BonusToArmorAbsorption:	Bonus to armor absorption (ABS)
+SkillBase.Property.BonusToArmorFactor:		Bonus to armor factor (AF)
+SkillBase.Property.CastingSpeed:			Bonus to casting speed
+SkillBase.Property.CaveMagic:				Cave Magic
+SkillBase.Property.CelticDual:				Celtic Dual
+SkillBase.Property.CelticSpear:			Celtic Spear
+SkillBase.Property.Chants:					Chants
+SkillBase.Property.Charisma:				Charisma
+SkillBase.Property.CharismaBonusCap:		Bonus cap to Charisma
+SkillBase.Property.Cold:					Cold Resist
+SkillBase.Property.ColdMagic:				Cold Magic
+SkillBase.Property.ColdMagicFocus:			Cold Magic Focus
+SkillBase.Property.Composite:				Composite
+SkillBase.Property.Concentration:			Concentration
+SkillBase.Property.Constitution:			Constitution
+SkillBase.Property.ConstitutionBonusCap:	Bonus cap to Constitution
+SkillBase.Property.Creeping:				Creeping
+SkillBase.Property.CreepingPathFocus:		Creeping Path Focus
+SkillBase.Property.CriticalArcheryHit:		Bonus to critical archery hit chance
+SkillBase.Property.CriticalMeleeHit:		Bonus to critical melee hit chance
+SkillBase.Property.CriticalSpellHit:		Bonus to critical spell hit chance
+SkillBase.Property.CriticalHealHit:		Bonus to critical heal hit chance
+SkillBase.Property.CriticalStrike:			Critical Strike
+SkillBase.Property.Crossbows:				Crossbows
+SkillBase.Property.Crush:					Crush Resist
+SkillBase.Property.Crushing:				Crushing
+SkillBase.Property.Cursing:				Cursing
+SkillBase.Property.CursingFocus:			Cursing Focus
+SkillBase.Property.Darkness:				Darkness
+SkillBase.Property.DarknessFocus:			Darkness Focus
+SkillBase.Property.DeathServant:			Death Servant
+SkillBase.Property.DeathservantFocus:		Deathservant Focus
+SkillBase.Property.Deathsight:				Deathsight
+SkillBase.Property.DeathsightFocus:		Deathsight Focus
+SkillBase.Property.DebuffEffectivness:		Debuff Effectiveness
+SkillBase.Property.DefensiveBonus:			Defensive Bonus (PvE Only)
+SkillBase.Property.Dementia:				Dementia
+SkillBase.Property.Dexterity:				Dexterity
+SkillBase.Property.DexterityBonusCap:		Bonus cap to Dexterity
+SkillBase.Property.DualWield:				Dual Wield
+SkillBase.Property.EarthMagic:				Earth Magic
+SkillBase.Property.EarthMagicFocus:		Earth Magic Focus
+SkillBase.Property.EffectiveLevel:			Effective level
+SkillBase.Property.Empathy:				Empathy
+SkillBase.Property.EmpathyBonusCap:		Bonus cap to Empathy
+SkillBase.Property.Enchantment:			Enchantment
+SkillBase.Property.EnchantmentFocus:		Enchantment Focus
+SkillBase.Property.EnduranceRegeneration:	Endurance Regeneration
+SkillBase.Property.Energy:					Energy Resist
+SkillBase.Property.Enhancement:			Enhancement
+SkillBase.Property.Envenom:				Envenom
+SkillBase.Property.EtherealShriek:			Ethereal Shriek
+SkillBase.Property.EtherealShriekFocus:	Ethereal Shriek Focus
+SkillBase.Property.EvadeChance:			Evade chance
+SkillBase.Property.ExperienceLoss:			Death Experience Loss Reduction
+SkillBase.Property.Fatigue:				Fatigue
+SkillBase.Property.FireMagic:				Fire Magic
+SkillBase.Property.FireMagicFocus:			Fire Magic Focus
+SkillBase.Property.FistWraps:				Fist Wraps
+SkillBase.Property.FlexibleWeapon:			Flexible Weapon
+SkillBase.Property.FumbleChance:			Fumble Chance
+SkillBase.Property.Hammer:					Hammer
+SkillBase.Property.HandToHand:				Hand To Hand
+SkillBase.Property.HealingEffectiveness:	Bonus to healing effectiveness
+SkillBase.Property.HealthRegeneration:		Health Regeneration
+SkillBase.Property.Heat:					Heat Resist
+SkillBase.Property.Hexing:					Hexing
+SkillBase.Property.HexingFocus:			Hexing Focus
+SkillBase.Property.HitPointsBonusCap:		Bonus cap to hit points
+SkillBase.Property.Hits:					Hits
+SkillBase.Property.Instruments:			Instruments
+SkillBase.Property.Intelligence:			Intelligence
+SkillBase.Property.IntelligenceBonusCap:	Bonus cap to Intelligence
+SkillBase.Property.LargeWeapon:			Large Weapon
+SkillBase.Property.LeftAxe:				Left Axe
+SkillBase.Property.LightMagic:				Light Magic
+SkillBase.Property.LightMagicFocus:		Light Magic Focus
+SkillBase.Property.Longbows:				Longbows
+SkillBase.Property.MagicDamageBonus:		Bonus to magic damage
+SkillBase.Property.Magnetism:				Magnetism
+SkillBase.Property.ManaMagic:				Mana Magic
+SkillBase.Property.ManaMagicFocus:			Mana Magic Focus
+SkillBase.Property.Matter:					Matter Resist
+SkillBase.Property.MatterMagic:			Matter Magic
+SkillBase.Property.MatterMagicFocus:		Matter Magic Focus
+SkillBase.Property.MaulerStaff:			Mauler Staff
+SkillBase.Property.MaximumSpeed:			Maximum Speed
+SkillBase.Property.MeleeDamage:			Bonus to melee damage
+SkillBase.Property.MeleeSpeed:				Bonus to melee combat speed
+SkillBase.Property.Mending:				Mending
+SkillBase.Property.Mentalism:				Mentalism
+SkillBase.Property.MentalismFocus:			Mentalism Focus
+SkillBase.Property.MesmerizeDuration:		Mesmerize Duration
+SkillBase.Property.MindMagic:				Mind Magic
+SkillBase.Property.MindMagicFocus:			Mind Magic Focus
+SkillBase.Property.Music:					Music
+SkillBase.Property.Nature:					Nature
+SkillBase.Property.SpellFumbleChance:		Spell Fumble Chance
+SkillBase.Property.NegativeReduction:		Negative effect duration reduction (PvE Only)
+SkillBase.Property.NightshadeMagic:		Nightshade Magic
+SkillBase.Property.Nurture:				Nurture
+SkillBase.Property.OdinsWill:				Odin's Will
+SkillBase.Property.Pacification:			Pacification
+SkillBase.Property.Painworking:			Painworking
+SkillBase.Property.PainworkingFocus:		Painworking Focus
+SkillBase.Property.Parry:					Parry
+SkillBase.Property.ParryChance:			Parry chance
+SkillBase.Property.Pathfinding:			Pathfinding
+SkillBase.Property.PhantasmalWail:			Phantasmal Wail
+SkillBase.Property.PhantasmalWailFocus:	Phantasmal Wail Focus
+SkillBase.Property.PieceAblative:			Piece Ablative (PvE Only)
+SkillBase.Property.Piercing:				Piercing
+SkillBase.Property.Piety:					Piety
+SkillBase.Property.PietyBonusCap:			Bonus cap to Piety
+SkillBase.Property.Polearms:				Polearms
+SkillBase.Property.Power:					Power
+SkillBase.Property.PowerBonusCap:			Bonus cap to power
+SkillBase.Property.PowerPool:				Power Pool
+SkillBase.Property.PowerRegeneration:		Power Regeneration
+SkillBase.Property.PowerStrikes:			Power Strikes
+SkillBase.Property.Quickness:				Quickness
+SkillBase.Property.QuicknessBonusCap:		Bonus cap to Quickness
+SkillBase.Property.RangedDamage:			All Ranged Damage
+SkillBase.Property.ReactionaryStyleDamage:	Reactionary Style Damage Bonus (PvE Only)
+SkillBase.Property.RecurvedBow:			Recurved Bow
+SkillBase.Property.Regrowth:				Regrowth
+SkillBase.Property.Rejuvenation:			Rejuvenation
+SkillBase.Property.ResistPierce:			Resist Pierce
+SkillBase.Property.Runecarving:			Runecarving
+SkillBase.Property.RunecarvingFocus:		Runecarving Focus
+SkillBase.Property.Savagery:				Savagery
+SkillBase.Property.Scythe:					Scythe
+SkillBase.Property.ShadowMastery:			Shadow Mastery
+SkillBase.Property.Shields:				Shields
+SkillBase.Property.ShortBow:				Short Bow
+SkillBase.Property.Slash:					Slash Resist
+SkillBase.Property.Slashing:				Slashing
+SkillBase.Property.Smiting:				Smiting
+SkillBase.Property.Soulrending:			Soulrending
+SkillBase.Property.Spear:					Spear
+SkillBase.Property.SpectralForce:			Spectral Force
+SkillBase.Property.SpectralForceFocus:		Spectral Force Focus
+SkillBase.Property.SpectralGuard:			Spectral Guard
+SkillBase.Property.SpeedDecreaseDuration:	Speed Decrease Duration
+SkillBase.Property.SpellDuration:			Spell Duration
+SkillBase.Property.SpellPowerCost:			Spell Power Cost Reduction (PvE Only)
+SkillBase.Property.SpellRange:				Spell Range
+SkillBase.Property.Spirit:					Spirit Resist
+SkillBase.Property.SpiritMagic:			Spirit Magic
+SkillBase.Property.SpiritMagicFocus:		Spirit Magic Focus
+SkillBase.Property.Staff:					Staff
+SkillBase.Property.StatBuffSpells:			All Buff Spells Improvement
+SkillBase.Property.Stealth:				Stealth
+SkillBase.Property.Stormcalling:			Stormcalling
+SkillBase.Property.Strength:				Strength
+SkillBase.Property.StrengthBonusCap:		Bonus cap to Strength
+SkillBase.Property.StunDuration:			Stun Duration
+SkillBase.Property.StyleCostReduction:		Style Cost Reduction (PvE Only)
+SkillBase.Property.StyleDamage:			Bonus to style damage
+SkillBase.Property.Summoning:				Summoning
+SkillBase.Property.SummoningFocus:			Summoning Focus
+SkillBase.Property.Suppression:			Suppression
+SkillBase.Property.SuppressionFocus:		Suppression Focus
+SkillBase.Property.Sword:					Sword
+SkillBase.Property.ThrownWeapons:			Thrown Weapons
+SkillBase.Property.Thrust:					Thrust Resist
+SkillBase.Property.Thrusting:				Thrusting
+SkillBase.Property.ToHitBonus:				To-hit bonus (PvE Only)
+SkillBase.Property.TwoHanded:				Two Handed
+SkillBase.Property.Valor:					Valor
+SkillBase.Property.VampiiricEmbrace:		Vampiiric Embrace
+SkillBase.Property.Verdant:				Verdant	Path
+SkillBase.Property.VerdantFocus:			Verdant Focus
+SkillBase.Property.VoidMagic:				Void Magic
+SkillBase.Property.VoidMagicFocus:			Void Magic Focus
+SkillBase.Property.WeaponSkill:			Bonus to Weaponskill
+SkillBase.Property.WindMagic:				Wind Magic
+SkillBase.Property.WindMagicFocus:			Wind Magic Focus
+SkillBase.Property.Witchcraft:				Witchcraft
+SkillBase.Property.WitchcraftFocus:		Witchcraft Focus
+
+SkillBase.Property.KeepDamage:				Keep Damage
+SkillBase.Property.DPS:					Mythical DPS
+SkillBase.Property.MagicAbsorption:		Magic Absorption
+SkillBase.Property.MaxHealth:      		Max Health
+SkillBase.Property.MaxMana:      			Max Mana
+SkillBase.Property.MissHit:				Miss Hit bonus
+SkillBase.Property.WaterSpeed:				Bonus to Swimming Speed
+
+SkillBase.Property.Essence:				Essence Resist
+SkillBase.Property.CraftingSkillGain:		Crafting Skill Gain Bonus
+SkillBase.Property.CraftingSpeed:			Crafting Speed
+SkillBase.Property.CounterAttack:			Counter Attack Chance
+SkillBase.Property.RobberyResist:			Robbery Resist Chance
+SkillBase.Property.MythicalStrCap:			Mythical cap to Strength
+SkillBase.Property.MythicalDexCap:			Mythical cap to Dexterity
+SkillBase.Property.MythicalConCap:			Mythical cap to Constitution
+SkillBase.Property.MythicalQuiCap:			Mythical cap to Quickness
+SkillBase.Property.MythicalIntCap:			Mythical cap to Intelligence
+SkillBase.Property.MythicalPieCap:			Mythical cap to Piety
+SkillBase.Property.MythicalEmpCap:			Mythical cap to Empathy
+SkillBase.Property.MythicalChaCap:			Mythical cap to Charisma
+SkillBase.Property.MythicalAcuCap:			Mythical cap to Acuity
+SkillBase.Property.BodyCap:				Bonus to Body Resist cap
+SkillBase.Property.ColdCap:				Bonus to Cold Resist cap
+SkillBase.Property.CrushCap:				Bonus to Crush Resist cap
+SkillBase.Property.EnergyCap:				Bonus to Energy Resist cap
+SkillBase.Property.HeatCap:				Bonus to Heat Resist cap
+SkillBase.Property.MatterCap:				Bonus to Matter Resist cap
+SkillBase.Property.SlashCap:				Bonus to Slash Resist cap
+SkillBase.Property.SpiritCap:				Bonus to Spirit Resist cap
+SkillBase.Property.ThrustCap:				Bonus to Thrust Resist cap
+SkillBase.Property.MythicalCrowdDuration:	Mythical Crowd Control Duration Decrease
+SkillBase.Property.LootChance:				Loot Chance
+SkillBase.Property.MythicalOmniRegen: 		Mythical Regeneration Bonus
+SkillBase.Property.MythicalTension: 		Mythical Tension Bonus
+SkillBase.Property.SpellShieldChance:		Spell Shield Chance
+SkillBase.Property.MythicalSpellReflect: 	Mythical Spell Reflection Chance
+SkillBase.Property.MythicalSafeFall: 		Mythical Safe Fall
+SkillBase.Property.MythicalDiscumbering:	Mythical Discumbering
+SkillBase.Property.MythicalCoin:			Mythical Coin
+SkillBase.Property.SpellLevel:				Bonus to Spell Level
+SkillBase.Property.Conversion:				Conversion
+SkillBase.Property.ExtraHp:				Bonus to Extra HP
+SkillBase.Property.StyleAbsorb:			Style Absorb Bonus
+SkillBase.Property.ArcaneSyphon:			Arcane Syphon
+SkillBase.Property.RealmPoints:			Bonus to Realm Points
+SkillBase.Property.BountyPoints:			Bonus to Bounty Points
+SkillBase.Property.ExperiencePoints:		Bonus to Experience Points
+
+SkillBase.Property.RobberyChanceBonus:         Bonus Robbery Chance
+SkillBase.Property.RobberyDelayReduction:      Robbery Cooldown Reduction
+SkillBase.Property.StealthEffectivenessBonus:  Bonus Stealth
+SkillBase.Property.StealthDetectionBonus:      Bonus Stealth Detection
+SkillBase.Property.TensionConservationBonus:   Tension Conservation Bonus at Death
+SkillBase.Property.CriticalDotHitChance:		Critical Dot Hit Chance Bonus
+SkillBase.Property.OffhandDamageAndChanceBonus:	Offhand Damage And Chance Bonus
+SkillBase.Property.OffhandDamageBonus:			Offhand Damage Bonus
+SkillBase.Property.OffhandChanceBonus:			Offhand Chance Bonus
+SkillBase.Property.DotDamageBonus:				Dot Damage Bonus
+SkillBase.Property.DotDurationDecrease:		Dot Duration Decrease
+SkillBase.Property.MythicalDebuffResistChance:	Mythical Debuff Immunity Bonus
+SkillBase.Property.DamnationEffectEnhancement:	Damnation Effect Enhancements
+
+SkillBase.Property.Skill_Learning:			Magic Learning
+SkillBase.Property.Tormentshaper:			Tormentshaper
+SkillBase.Property.TormentshaperFocus:		Tormentshaper Focus
+SkillBase.Property.Wraithsight:			Wraithsight
+SkillBase.Property.WraithsightFocus:		Wraithsight Focus
+SkillBase.Property.VoidAcolyte:			Void Acolyte
+SkillBase.Property.VoidAcolyteFocus:		Void Acolyte Focus

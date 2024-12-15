@@ -265,14 +265,9 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string propName = ConvertPropertyToText(Property1);
-                return LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamageWithDebuff.MainDescription", Spell.Damage, propName, Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.DirectDamageWithDebuff.MainDescription", Spell.Damage, LanguageMgr.GetProperty(client, Property1), Spell.Value);
         }
 
         public DirectDamageDebuffSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

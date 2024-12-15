@@ -270,7 +270,7 @@ namespace DOL.GS.Spells
         /// <returns>Modified Spell Range</returns>
         int CalculateSpellRange();
 
-        string ShortDescription { get; }
+        string GetDelveDescription(GameClient delveClient);
     }
 
     /// <summary>

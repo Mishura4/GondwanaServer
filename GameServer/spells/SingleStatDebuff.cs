@@ -137,14 +137,9 @@ namespace DOL.GS.Spells
 
         public SingleStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string propName = ConvertPropertyToText(Property1).ToLower();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.SingleStatDebuff.MainDescription", propName, Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.SingleStatDebuff.MainDescription", LanguageMgr.GetProperty(client, Property1), Spell.Value);
         }
     }
 
@@ -275,13 +270,9 @@ namespace DOL.GS.Spells
 
         public DPSDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.DPSDebuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.DPSDebuff.MainDescription", Spell.Value);
         }
     }
 
@@ -294,13 +285,9 @@ namespace DOL.GS.Spells
 
         public SkillsDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.SkillsDebuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.SkillsDebuff.MainDescription", Spell.Value);
         }
     }
 

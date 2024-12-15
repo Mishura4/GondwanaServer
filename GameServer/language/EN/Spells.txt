@@ -20,9 +20,9 @@ DelveInfo.Value:					Value: {0}
 DelveInfo.ValueNegative:				Value: -{0}
 
 # Spell ShortDescriptions
-SpellDescription.DirectDamage.MainDescription:		Does {0} {1} damage to the target.
-SpellDescription.DoT.MainDescription:				Target takes {0} {1} damage every {2} seconds.
-SpellDescription.BoltSpell.MainDescription:			A magical bolt shoots toward the target, exploding on impact for {0} {1} damage. Can be blocked.
+SpellDescription.DirectDamage.MainDescription:		Deals {0} {1} to the target.
+SpellDescription.DoT.MainDescription:				Target takes {0} {1} every {2} seconds.
+SpellDescription.BoltSpell.MainDescription:			A magical bolt shoots toward the target, exploding on impact for {0} {1}. Can be blocked.
 SpellDescription.LifeDrain.MainDescription:			The target takes {0} {1} damage and the attacker is healed for {2}% of the damage dealt.
 SpellDescription.Nearsight.MainDescription1:		Target's effective range is reduced by {0}% for ranged attacks.
 SpellDescription.Nearsight.MainDescription2:		Nearsight spells cast upon the caster's group are reduced in effectiveness by {0}%, or outright resisted.
@@ -71,8 +71,8 @@ SpellDescription.MonsterRez.DamageRadius:			and its surroundings
 SpellDescription.MonsterRez.DamageFrequency:		every {0} seconds
 SpellDescription.MonsterRez.DamageDuration:			over a period of {0} seconds
 SpellDescription.SummonMonster.MainDescription:		Corpse resurrection.
-SpellDescription.DamageAdd.MainDescription:			{0}'s melee attacks do an additional {1} {2} damage.
-SpellDescription.DamageShield.MainDescription:		The target deals {0} {1} damage to enemies that hit them with a melee attack.
+SpellDescription.DamageAdd.MainDescription:			{0}'s melee attacks do an additional {1} {2}.
+SpellDescription.DamageShield.MainDescription:		The target deals {0} {1} to enemies that hit them with a melee attack.
 SpellDescription.SpellReflection.MainDescription1:	{0} reflects spells back at the attacker with a {1}% chance and at {2}% of their original damage, while absorbing {3}% of damage dealt.
 SpellDescription.SpellReflection.MainDescription2:	Close combat or archery spells aren't reflected.
 SpellDescription.SpellReflectionDebuff.MainDescription:		Removes the target's magic deflection shield.
@@ -170,17 +170,17 @@ SpellDescription.CrushSlashThrustDebuff.MainDescription:	Decreases the target's 
 SpellDescription.EssenceDebuff.MainDescription:				Decreases the target's resistances to 'essence' damage by {0}%.
 SpellDescription.DualStatDebuff.MainDescription:			Reduces the target's {0} and {1} by {2}.
 SpellDescription.DualStatBuff.MainDescription:				{0} {1} and {2} are increased by {3}.
-SpellDescription.SingleStatBuff.MainDescription:			Increases the target's {0} by {1}.
-SpellDescription.CombatSpeedBuff.MainDescription:			Increases {0}'s attack speed by {1}%.
-SpellDescription.FatigueConsumptionBuff.MainDescription:	{0}'s actions require {1}% less endurance.
-SpellDescription.DPSBuff.MainDescription:					Increases {0}'s DPS by {1}%.
+SpellDescription.SingleStatBuff.MainDescription:			Increases {0} by {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Increases attack speed by {0}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	Actions require {0}% less endurance.
+SpellDescription.DPSBuff.MainDescription:					Increases DPS by {0}%.
 SpellDescription.MeleeDamageBuff.MainDescription:			You deal {0}% additional melee damage.
 SpellDescription.MesmerizeDurationBuff.MainDescription:		Reduces mesmerize effectiveness by {0}%.
 SpellDescription.EvadeChanceBuff.MainDescription:			Grants {0}% chance to evade attacks.
 SpellDescription.ParryChanceBuff.MainDescription:			Grants {0}% chance to parry attacks.
-SpellDescription.WeaponSkillBuff.MainDescription:			Increases {0}'s Weapon skill by {1}%.
-SpellDescription.StealthSkillBuff.MainDescription:			Increases {0}'s Stealth skill by {1}%.
-SpellDescription.FlexibleSkillBuff.MainDescription:			Increases {0}'s Flexible skill by {1}%.
+SpellDescription.WeaponSkillBuff.MainDescription:			Increases Weapon skill by {0}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Increases Stealth skill by {0}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Increases Flexible skill by {0}%.
 SpellDescription.ResiPierceBuff.MainDescription:			Grants you {0}% chance to penetrate magical resistances.
 SpellDescription.CriticalMagicalBuff.MainDescription:		Increases the target's chance for a critical spell hit by {0}%.
 SpellDescription.CriticalMeleeBuff.MainDescription:			Increases the target's chance for a critical melee hit by {0}%.
@@ -189,9 +189,20 @@ SpellDescription.CombatSpeedDebuff.MainDescription:			The target's attack speed 
 SpellDescription.MeleeDamageDebuff.MainDescription:			The target deals {0}% less damage with melee attacks.
 SpellDescription.FatigueConsumptionDebuff.MainDescription:	Increases the endurance the target uses in combat by {0}%.
 SpellDescription.FumbleChanceDebuff.MainDescription:		Increases the target's chance to fumble by {0}%.
-SpellDescription.DPSDebuff.MainDescription:					Decreases {0}'s DPS by {1}%.
-SpellDescription.SkillsDebuff.MainDescription:				Decreases {0}'s skills by {1}%.
+SpellDescription.DPSDebuff.MainDescription:					Decreases DPS by {0}%.
+SpellDescription.SkillsDebuff.MainDescription:				Decreases skills by {0}%.
 SpellDescription.Warlock.SecondarySpell:			This is a secondary spell.
+SpellDescription.Trigger.MainDescription:           Generates a magic Proc as a buff on the target. {0} gets triggered when the target is hit.
+
+SpellDescription.AllStatsDebuff.MainDescription:             Decreases all stats of the target by {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:      Decreases all stats of the target by {0}%.
+SpellDescription.Morph.MainDescription:                      Target has been shapechanged to {0}.
+SpellDescription.PowerRend.MainDescription:                  Target loses {0}% power.
+SpellDescription.DirectDamage.MainDescription:               Deals {0} {1} to the target.
+SpellDescription.Convoker.SummonWood.MainDescription:        Summon boards of wood usable for repairing keep doors.
+SpellDescription.Convoker.PrescienceNode.MainDescription:    Ground targeted ward that can make enemy stealthers visible, without removing their stealth.
+SpellDescription.Convoker.Prescience.MainDescription:        You have been detected by a Prescience Node!
+SpellDescription.SingleStatBuff.MainDescription:			 Augmente {0} de {1}.
 
 # AblativeArmor
 AblativeArmor.DelveInfo.Function:			Function: melee hitpoint buffer (?)

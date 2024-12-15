@@ -135,7 +135,11 @@ namespace DOL.GS.Spells
 
         public AbstractSavageResistBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"Increases the target's resistance to {ConvertPropertyToText(Property1).ToLower()} damage by {Spell.Value}%.";
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.ResistBuff.MainDescription", LanguageMgr.GetProperty(delveClient, Property1), Spell.Value);
+        }
     }
 
     [SpellHandler("SavageParryBuff")]

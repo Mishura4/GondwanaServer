@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using DOL.GS.ServerProperties;
 using DOL.Language;
 using System.Collections.Generic;
 
@@ -33,13 +32,10 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove.Add("Silence");
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.CureNearsight.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.CureNearsight.MainDescription");
         }
     }
 }

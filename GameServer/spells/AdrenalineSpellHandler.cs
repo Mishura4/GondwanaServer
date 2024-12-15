@@ -3,7 +3,6 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 
@@ -56,13 +55,10 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.BattleFeverDurationBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.BattleFeverDurationBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -124,13 +120,9 @@ namespace DOL.GS.Spells
         public readonly int MELEESPEED_BONUS = 40;
 
         /// <inheritdoc />
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.TankAdrenaline.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.TankAdrenaline.MainDescription");
         }
 
         /// <inheritdoc />
@@ -221,13 +213,9 @@ namespace DOL.GS.Spells
         public static readonly int CASTSPEED_BONUS = 30;
 
         /// <inheritdoc />
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.MageAdrenaline.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MageAdrenaline.MainDescription");
         }
 
         /// <inheritdoc />
@@ -313,19 +301,14 @@ namespace DOL.GS.Spells
         public readonly int STEALTHEFFECTIVENESS_BONUS = 30;
         public readonly int STEALTHDETECTION_BONUS = 30;
 
-        /// <inheritdoc />
-        public override string ShortDescription
+        public StealthAdrenalineSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.StealthAdrenaline.MainDescription");
-            }
         }
 
         /// <inheritdoc />
-        public StealthAdrenalineSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
+        public override string GetDelveDescription(GameClient delveClient)
         {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.StealthAdrenaline.MainDescription");
         }
 
         /// <inheritdoc />

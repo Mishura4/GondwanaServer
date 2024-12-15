@@ -1507,6 +1507,598 @@ namespace DOL.GS
             }
         }
 
+        public static string GetPropertyTranslationName(eProperty prop)
+        {
+            //for every property from RegisterPropertyNames() 
+            switch (prop)
+            {
+                case eProperty.Strength:
+                    return "Strength";
+                case eProperty.Dexterity:
+                    return "Dexterity";
+                case eProperty.Constitution:
+                    return "Constitution";
+                case eProperty.Quickness:
+                    return "Quickness";
+                case eProperty.Intelligence:
+                    return "Intelligence";
+                case eProperty.Piety:
+                    return "Piety";
+                case eProperty.Charisma:
+                    return "Charisma";
+                case eProperty.Empathy:
+                    return "Empathy";
+                case eProperty.MaxHealth:
+                    return "MaxHealth";
+                case eProperty.MaxMana:
+                    return "MaxMana";
+                // resists (does not say "resist" on live server)
+                case eProperty.Resist_Body:
+                    return "Body";
+                case eProperty.Resist_Natural:
+                    return "Essence";
+                case eProperty.Resist_Cold:
+                    return "Cold";
+                case eProperty.Resist_Crush:
+                    return "Crush";
+                case eProperty.Resist_Energy:
+                    return "Energy";
+                case eProperty.Resist_Heat:
+                    return "Heat";
+                case eProperty.Resist_Matter:
+                    return "Matter";
+                case eProperty.Resist_Slash:
+                    return "Slash";
+                case eProperty.Resist_Spirit:
+                    return "Spirit";
+                case eProperty.Resist_Thrust:
+                    return "Thrust";
+
+                // Eden - Mythirian bonus
+                case eProperty.CraftingSkillGain:
+                    return "CraftingSkillGain";
+                case eProperty.CraftingSpeed:
+                    return "CraftingSpeed";
+                case eProperty.CounterAttack:
+                    return "CounterAttack";
+                case eProperty.RobberyResist:
+                    return "RobberyResist";
+                case eProperty.MythicalStrCapBonus:
+                    return "MythicalStrCap";
+                case eProperty.MythicalDexCapBonus:
+                    return "MythicalDexCap";
+                case eProperty.MythicalConCapBonus:
+                    return "MythicalConCap";
+                case eProperty.MythicalQuiCapBonus:
+                    return "MythicalQuiCap";
+                case eProperty.MythicalIntCapBonus:
+                    return "MythicalIntCap";
+                case eProperty.MythicalPieCapBonus:
+                    return "MythicalPieCap";
+                case eProperty.MythicalEmpCapBonus:
+                    return "MythicalEmpCap";
+                case eProperty.MythicalChaCapBonus:
+                    return "MythicalChaCap";
+                case eProperty.MythicalAcuCapBonus:
+                    return "MythicalAcuCap";
+                case eProperty.MythicalCrowdDuration:
+                    return "MythicalCrowdDuration";
+                case eProperty.LootChance:
+                    return "LootChance";
+                case eProperty.MythicalOmniRegen:
+                    return "MythicalOmniRegen";
+                case eProperty.MythicalTension:
+                    return "MythicalTension";
+                case eProperty.SpellShieldChance:
+                    return "SpellShieldChance";
+                case eProperty.MythicalSpellReflect:
+                    return "MythicalSpellReflect";
+                case eProperty.BodyResCapBonus:
+                    return "BodyCap";
+                case eProperty.ColdResCapBonus:
+                    return "ColdCap";
+                case eProperty.CrushResCapBonus:
+                    return "CrushCap";
+                case eProperty.EnergyResCapBonus:
+                    return "EnergyCap";
+                case eProperty.HeatResCapBonus:
+                    return "HeatCap";
+                case eProperty.MatterResCapBonus:
+                    return "MatterCap";
+                case eProperty.SlashResCapBonus:
+                    return "SlashCap";
+                case eProperty.SpiritResCapBonus:
+                    return "SpiritCap";
+                case eProperty.ThrustResCapBonus:
+                    return "ThrustCap";
+                case eProperty.MythicalSafeFall:
+                    return "MythicalSafeFall";
+                case eProperty.MythicalDiscumbering:
+                    return "MythicalDiscumbering";
+                case eProperty.MythicalCoin:
+                    return "MythicalCoin";
+                case eProperty.SpellLevel:
+                    return "SpellLevel";
+                case eProperty.MissHit:
+                    return "MissHit";
+                case eProperty.WaterSpeed:
+                    return "WaterSpeed";
+                //Eden - special actifacts bonus
+                case eProperty.Conversion:
+                    return "Conversion";
+                case eProperty.ExtraHP:
+                    return "ExtraHp";
+                case eProperty.StyleAbsorb:
+                    return "StyleAbsorb";
+                case eProperty.ArcaneSyphon:
+                    return "ArcaneSyphon";
+                case eProperty.RealmPoints:
+                    return "RealmPoints";
+                //[Freya] Nidel
+                case eProperty.BountyPoints:
+                    return "BountyPoints";
+                case eProperty.XpPoints:
+                    return "ExperiencePoints";
+
+
+                // skills
+                case eProperty.Skill_Two_Handed:
+                    return "TwoHanded";
+                case eProperty.Skill_Body:
+                    return "BodyMagic";
+                case eProperty.Skill_Chants:
+                    return "Chants";
+                case eProperty.Skill_Critical_Strike:
+                    return "CriticalStrike";
+                case eProperty.Skill_Cross_Bows:
+                    return "Crossbows";
+                case eProperty.Skill_Crushing:
+                    return "Crushing";
+                case eProperty.Skill_Death_Servant:
+                    return "DeathServant";
+                case eProperty.Skill_DeathSight:
+                    return "Deathsight";
+                case eProperty.Skill_Dual_Wield:
+                    return "DualWield";
+                case eProperty.Skill_Earth:
+                    return "EarthMagic";
+                case eProperty.Skill_Enhancement:
+                    return "Enhancement";
+                case eProperty.Skill_Envenom:
+                    return "Envenom";
+                case eProperty.Skill_Fire:
+                    return "FireMagic";
+                case eProperty.Skill_Flexible_Weapon:
+                    return "FlexibleWeapon";
+                case eProperty.Skill_Cold:
+                    return "ColdMagic";
+                case eProperty.Skill_Instruments:
+                    return "Instruments";
+                case eProperty.Skill_Long_bows:
+                    return "Longbows";
+                case eProperty.Skill_Matter:
+                    return "MatterMagic";
+                case eProperty.Skill_Mind:
+                    return "MindMagic";
+                case eProperty.Skill_Pain_working:
+                    return "Painworking";
+                case eProperty.Skill_Parry:
+                    return "Parry";
+                case eProperty.Skill_Polearms:
+                    return "Polearms";
+                case eProperty.Skill_Rejuvenation:
+                    return "Rejuvenation";
+                case eProperty.Skill_Shields:
+                    return "Shields";
+                case eProperty.Skill_Slashing:
+                    return "Slashing";
+                case eProperty.Skill_Smiting:
+                    return "Smiting";
+                case eProperty.Skill_SoulRending:
+                    return "Soulrending";
+                case eProperty.Skill_Spirit:
+                    return "SpiritMagic";
+                case eProperty.Skill_Staff:
+                    return "Staff";
+                case eProperty.Skill_Stealth:
+                    return "Stealth";
+                case eProperty.Skill_Thrusting:
+                    return "Thrusting";
+                case eProperty.Skill_Wind:
+                    return "WindMagic";
+                case eProperty.Skill_Sword:
+                    return "Sword";
+                case eProperty.Skill_Hammer:
+                    return "Hammer";
+                case eProperty.Skill_Axe:
+                    return "Axe";
+                case eProperty.Skill_Left_Axe:
+                    return "LeftAxe";
+                case eProperty.Skill_Spear:
+                    return "Spear";
+                case eProperty.Skill_Mending:
+                    return "Mending";
+                case eProperty.Skill_Augmentation:
+                    return "Augmentation";
+                case eProperty.Skill_Darkness:
+                    return "Darkness";
+                case eProperty.Skill_Suppression:
+                    return "Suppression";
+                case eProperty.Skill_Runecarving:
+                    return "Runecarving";
+                case eProperty.Skill_Stormcalling:
+                    return "Stormcalling";
+                case eProperty.Skill_BeastCraft:
+                    return "BeastCraft";
+                case eProperty.Skill_Light:
+                    return "LightMagic";
+                case eProperty.Skill_Void:
+                    return "VoidMagic";
+                case eProperty.Skill_Mana:
+                    return "ManaMagic";
+                case eProperty.Skill_Composite:
+                    return "Composite";
+                case eProperty.Skill_Battlesongs:
+                    return "Battlesongs";
+                case eProperty.Skill_Enchantments:
+                    return "Enchantment";
+
+                case eProperty.Skill_Blades:
+                    return "Blades";
+                case eProperty.Skill_Blunt:
+                    return "Blunt";
+                case eProperty.Skill_Piercing:
+                    return "Piercing";
+                case eProperty.Skill_Large_Weapon:
+                    return "LargeWeapon";
+                case eProperty.Skill_Mentalism:
+                    return "Mentalism";
+                case eProperty.Skill_Regrowth:
+                    return "Regrowth";
+                case eProperty.Skill_Nurture:
+                    return "Nurture";
+                case eProperty.Skill_Nature:
+                    return "Nature";
+                case eProperty.Skill_Music:
+                    return "Music";
+                case eProperty.Skill_Celtic_Dual:
+                    return "CelticDual";
+                case eProperty.Skill_Celtic_Spear:
+                    return "CelticSpear";
+                case eProperty.Skill_RecurvedBow:
+                    return "RecurvedBow";
+                case eProperty.Skill_Valor:
+                    return "Valor";
+                case eProperty.Skill_Subterranean:
+                    return "CaveMagic";
+                case eProperty.Skill_BoneArmy:
+                    return "BoneArmy";
+                case eProperty.Skill_Verdant:
+                    return "Verdant";
+                case eProperty.Skill_Creeping:
+                    return "Creeping";
+                case eProperty.Skill_Arboreal:
+                    return "Arboreal";
+                case eProperty.Skill_Scythe:
+                    return "Scythe";
+                case eProperty.Skill_Thrown_Weapons:
+                    return "ThrownWeapons";
+                case eProperty.Skill_HandToHand:
+                    return "HandToHand";
+                case eProperty.Skill_ShortBow:
+                    return "ShortBow";
+                case eProperty.Skill_Pacification:
+                    return "Pacification";
+                case eProperty.Skill_Savagery:
+                    return "Savagery";
+                case eProperty.Skill_Nightshade:
+                    return "NightshadeMagic";
+                case eProperty.Skill_Pathfinding:
+                    return "Pathfinding";
+                case eProperty.Skill_Summoning:
+                    return "Summoning";
+                case eProperty.Skill_Archery:
+                    return  "Archery";
+
+                // Mauler
+                case eProperty.Skill_FistWraps:
+                    return "FistWraps";
+                case eProperty.Skill_MaulerStaff:
+                    return "MaulerStaff";
+                case eProperty.Skill_Power_Strikes:
+                    return "PowerStrikes";
+                case eProperty.Skill_Magnetism:
+                    return "Magnetism";
+                case eProperty.Skill_Aura_Manipulation:
+                    return "AuraManipulation";
+
+
+                //Catacombs skills
+                case eProperty.Skill_Dementia:
+                    return "Dementia";
+                case eProperty.Skill_ShadowMastery:
+                    return "ShadowMastery";
+                case eProperty.Skill_VampiiricEmbrace:
+                    return "VampiiricEmbrace";
+                case eProperty.Skill_EtherealShriek:
+                    return "EtherealShriek";
+                case eProperty.Skill_PhantasmalWail:
+                    return "PhantasmalWail";
+                case eProperty.Skill_SpectralForce:
+                    return "SpectralForce";
+                case eProperty.Skill_SpectralGuard:
+                    return "SpectralGuard";
+                case eProperty.Skill_OdinsWill:
+                    return "OdinsWill";
+                case eProperty.Skill_Cursing:
+                    return "Cursing";
+                case eProperty.Skill_Hexing:
+                    return "Hexing";
+                case eProperty.Skill_Witchcraft:
+                    return "Witchcraft";
+
+                //New skills
+                case eProperty.Skill_Learning:
+                    return "Learning";
+                case eProperty.Skill_Tormentshaper:
+                    return "Tormentshaper";
+                case eProperty.Skill_Wraithsight:
+                    return "Wraithsight";
+                case eProperty.Skill_Void_Acolyte:
+                    return "VoidAcolyte";
+
+                // Classic Focus
+                case eProperty.Focus_Darkness:
+                    return "DarknessFocus";
+                case eProperty.Focus_Suppression:
+                    return "SuppressionFocus";
+                case eProperty.Focus_Runecarving:
+                    return "RunecarvingFocus";
+                case eProperty.Focus_Spirit:
+                    return "SpiritMagicFocus";
+                case eProperty.Focus_Fire:
+                    return "FireMagicFocus";
+                case eProperty.Focus_Air:
+                    return "WindMagicFocus";
+                case eProperty.Focus_Cold:
+                    return "ColdMagicFocus";
+                case eProperty.Focus_Earth:
+                    return "EarthMagicFocus";
+                case eProperty.Focus_Light:
+                    return "LightMagicFocus";
+                case eProperty.Focus_Body:
+                    return "BodyMagicFocus";
+                case eProperty.Focus_Matter:
+                    return "MatterMagicFocus";
+                case eProperty.Focus_Mind:
+                    return "MindMagicFocus";
+                case eProperty.Focus_Void:
+                    return "VoidMagicFocus";
+                case eProperty.Focus_Mana:
+                    return "ManaMagicFocus";
+                case eProperty.Focus_Enchantments:
+                    return "EnchantmentFocus";
+                case eProperty.Focus_Mentalism:
+                    return "MentalismFocus";
+                case eProperty.Focus_Summoning:
+                    return "SummoningFocus";
+                // SI Focus
+                // Mid
+                case eProperty.Focus_BoneArmy:
+                    return "BoneArmyFocus";
+                // Alb
+                case eProperty.Focus_PainWorking:
+                    return "PainworkingFocus";
+                case eProperty.Focus_DeathSight:
+                    return "DeathsightFocus";
+                case eProperty.Focus_DeathServant:
+                    return "DeathservantFocus";
+                // Hib
+                case eProperty.Focus_Verdant:
+                    return "VerdantFocus";
+                case eProperty.Focus_CreepingPath:
+                    return "CreepingPathFocus";
+                case eProperty.Focus_Arboreal:
+                    return "ArborealFocus";
+                // Catacombs Focus
+                case eProperty.Focus_EtherealShriek:
+                    return "EtherealShriekFocus";
+                case eProperty.Focus_PhantasmalWail:
+                    return "PhantasmalWailFocus";
+                case eProperty.Focus_SpectralForce:
+                    return "SpectralForceFocus";
+                case eProperty.Focus_Cursing:
+                    return "CursingFocus";
+                case eProperty.Focus_Hexing:
+                    return "HexingFocus";
+                case eProperty.Focus_Witchcraft:
+                    return "WitchcraftFocus";
+                // New Focus
+                case eProperty.Focus_Tormentshaper:
+                    return "TormentshaperFocus";
+                case eProperty.Focus_Wraithsight:
+                    return "WraithsightFocus";
+                case eProperty.Focus_Void_Acolyte:
+                    return "VoidAcolyteFocus";
+
+                case eProperty.MaxSpeed:
+                    return "MaximumSpeed";
+                case eProperty.MaxConcentration:
+                    return "Concentration";
+
+                case eProperty.ArmorFactor:
+                    return "BonusToArmorFactor";
+                case eProperty.ArmorAbsorption:
+                    return "BonusToArmorAbsorption";
+
+                case eProperty.HealthRegenerationRate:
+                    return "HealthRegeneration";
+                case eProperty.PowerRegenerationRate:
+                    return "PowerRegeneration";
+                case eProperty.EnduranceRegenerationRate:
+                    return "EnduranceRegeneration";
+                case eProperty.SpellRange:
+                    return "SpellRange";
+                case eProperty.ArcheryRange:
+                    return "ArcheryRange";
+                case eProperty.Acuity:
+                    return "Acuity";
+
+                case eProperty.AllMagicSkills:
+                    return "AllMagicSkills";
+                case eProperty.AllMeleeWeaponSkills:
+                    return "AllMeleeWeaponSkills";
+                case eProperty.AllFocusLevels:
+                    return "ALLSpellLines";
+                case eProperty.AllDualWieldingSkills:
+                    return "AllDualWieldingSkills";
+                case eProperty.AllArcherySkills:
+                    return "AllArcherySkills";
+
+                case eProperty.LivingEffectiveLevel:
+                    return "EffectiveLevel";
+
+
+                //Added by Fooljam : Missing TOA/Catacomb bonusses names in item properties.
+                //Date : 20-Jan-2005
+                //Missing bonusses begin
+                case eProperty.EvadeChance:
+                    return "EvadeChance";
+                case eProperty.BlockChance:
+                    return "BlockChance";
+                case eProperty.ParryChance:
+                    return "ParryChance";
+                case eProperty.FumbleChance:
+                    return "FumbleChance";
+                case eProperty.MeleeDamage:
+                    return "MeleeDamage";
+                case eProperty.RangedDamage:
+                    return "RangedDamage";
+                case eProperty.MesmerizeDuration:
+                    return "MesmerizeDuration";
+                case eProperty.StunDuration:
+                    return "StunDuration";
+                case eProperty.SpeedDecreaseDuration:
+                    return "SpeedDecreaseDuration";
+                case eProperty.BladeturnReinforcement:
+                    return "BladeturnReinforcement";
+                case eProperty.DefensiveBonus:
+                    return "DefensiveBonus";
+                case eProperty.PieceAblative:
+                    return "PieceAblative";
+                case eProperty.SpellFumbleChance:
+                    return "SpellFumbleChance";
+                case eProperty.NegativeReduction:
+                    return "NegativeReduction";
+                case eProperty.ReactionaryStyleDamage:
+                    return "ReactionaryStyleDamage";
+                case eProperty.SpellPowerCost:
+                    return "SpellPowerCost";
+                case eProperty.StyleCostReduction:
+                    return "StyleCostReduction";
+                case eProperty.ToHitBonus:
+                    return "ToHitBonus";
+                case eProperty.ArcherySpeed:
+                    return "ArcherySpeed";
+                case eProperty.ArrowRecovery:
+                    return "ArrowRecovery";
+                case eProperty.BuffEffectiveness:
+                    return "StatBuffSpells";
+                case eProperty.CastingSpeed:
+                    return "CastingSpeed";
+                case eProperty.DeathExpLoss:
+                    return "ExperienceLoss";
+                case eProperty.DebuffEffectivness:
+                    return "DebuffEffectivness";
+                case eProperty.Fatigue:
+                    return "Fatigue";
+                case eProperty.HealingEffectiveness:
+                    return "HealingEffectiveness";
+                case eProperty.PowerPool:
+                    return "PowerPool";
+                //Magiekraftvorrat
+                case eProperty.ResistPierce:
+                    return "ResistPierce";
+                case eProperty.SpellDamage:
+                    return "MagicDamageBonus";
+                case eProperty.SpellDuration:
+                    return "SpellDuration";
+                case eProperty.StyleDamage:
+                    return "StyleDamage";
+                case eProperty.MeleeSpeed:
+                    return "MeleeSpeed";
+                //Missing bonusses end
+
+                case eProperty.StrCapBonus:
+                    return "StrengthBonusCap";
+                case eProperty.DexCapBonus:
+                    return "DexterityBonusCap";
+                case eProperty.ConCapBonus:
+                    return "ConstitutionBonusCap";
+                case eProperty.QuiCapBonus:
+                    return "QuicknessBonusCap";
+                case eProperty.IntCapBonus:
+                    return "IntelligenceBonusCap";
+                case eProperty.PieCapBonus:
+                    return "PietyBonusCap";
+                case eProperty.ChaCapBonus:
+                    return "CharismaBonusCap";
+                case eProperty.EmpCapBonus:
+                    return "EmpathyBonusCap";
+                case eProperty.AcuCapBonus:
+                    return "AcuityBonusCap";
+                case eProperty.MaxHealthCapBonus:
+                    return "HitPointsBonusCap";
+                case eProperty.PowerPoolCapBonus:
+                    return "PowerBonusCap";
+                case eProperty.WeaponSkill:
+                    return "WeaponSkill";
+                case eProperty.AllSkills:
+                    return "AllSkills";
+                case eProperty.CriticalArcheryHitChance:
+                    return "CriticalArcheryHit";
+                case eProperty.CriticalMeleeHitChance:
+                    return "CriticalMeleeHit";
+                case eProperty.CriticalSpellHitChance:
+                    return "CriticalSpellHit";
+                case eProperty.CriticalHealHitChance:
+                    return "CriticalHealHit";
+                case eProperty.KeepDamage:
+                    return "KeepDamage";
+
+                case eProperty.DPS:
+                    return "DPS";
+                case eProperty.MagicAbsorption:
+                    return "MagicAbsorption";
+                case eProperty.RobberyChanceBonus:
+                    return "RobberyChanceBonus";
+                case eProperty.RobberyDelayReduction:
+                    return "RobberyDelayReduction";
+                case eProperty.StealthEffectivenessBonus:
+                    return "StealthEffectivenessBonus";
+                case eProperty.StealthDetectionBonus:
+                    return "StealthDetectionBonus";
+                case eProperty.TensionConservationBonus:
+                    return "TensionConservationBonus";
+                case eProperty.CriticalDotHitChance:
+                    return "CriticalDotHitChance";
+                case eProperty.OffhandDamageAndChanceBonus:
+                    return "OffhandDamageAndChanceBonus";
+                case eProperty.OffhandDamageBonus:
+                    return "OffhandDamageBonus";
+                case eProperty.OffhandChanceBonus:
+                    return "OffhandChanceBonus";
+                case eProperty.DotDamageBonus:
+                    return "DotDamageBonus";
+                case eProperty.DotDurationDecrease:
+                    return "DotDurationDecrease";
+                case eProperty.MythicalDebuffResistChance:
+                    return "MythicalDebuffResistChance";
+                case eProperty.DamnationEffectEnhancement:
+                    return "DamnationEffectEnhancement";
+            }
+            throw new ArgumentOutOfRangeException(nameof(prop), prop, null);
+        }
 
         /// <summary>
         /// Get display name of property
@@ -1515,597 +2107,7 @@ namespace DOL.GS
         /// <returns></returns>
         public static string GetPropertyName(GameClient client, eProperty prop)
         {
-            //for every property from RegisterPropertyNames() 
-            switch (prop)
-            {
-                case eProperty.Strength:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Strength");
-                case eProperty.Dexterity:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Dexterity");
-                case eProperty.Constitution:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Constitution");
-                case eProperty.Quickness:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Quickness");
-                case eProperty.Intelligence:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Intelligence");
-                case eProperty.Piety:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Piety");
-                case eProperty.Charisma:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Charisma");
-                case eProperty.Empathy:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Empathy");
-                case eProperty.MaxHealth:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MaxHealth");
-                case eProperty.MaxMana:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MaxMana");
-                // resists (does not say "resist" on live server)
-                case eProperty.Resist_Body:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Body");
-                case eProperty.Resist_Natural:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Essence");
-                case eProperty.Resist_Cold:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Cold");
-                case eProperty.Resist_Crush:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Crush");
-                case eProperty.Resist_Energy:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Energy");
-                case eProperty.Resist_Heat:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Heat");
-                case eProperty.Resist_Matter:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Matter");
-                case eProperty.Resist_Slash:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Slash");
-                case eProperty.Resist_Spirit:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Spirit");
-                case eProperty.Resist_Thrust:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Thrust");
-
-                // Eden - Mythirian bonus
-                case eProperty.CraftingSkillGain:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CraftingSkillGain");
-                case eProperty.CraftingSpeed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CraftingSpeed");
-                case eProperty.CounterAttack:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CounterAttack");
-                case eProperty.RobberyResist:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RobberyResist");
-                case eProperty.MythicalStrCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalStrCap");
-                case eProperty.MythicalDexCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalDexCap");
-                case eProperty.MythicalConCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalConCap");
-                case eProperty.MythicalQuiCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalQuiCap");
-                case eProperty.MythicalIntCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalIntCap");
-                case eProperty.MythicalPieCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalPieCap");
-                case eProperty.MythicalEmpCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalEmpCap");
-                case eProperty.MythicalChaCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalChaCap");
-                case eProperty.MythicalAcuCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalAcuCap");
-                case eProperty.MythicalCrowdDuration:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalCrowdDuration");
-                case eProperty.LootChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.LootChance");
-                case eProperty.MythicalOmniRegen:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalOmniRegen");
-                case eProperty.MythicalTension:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalTension");
-                case eProperty.SpellShieldChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellShieldChance");
-                case eProperty.MythicalSpellReflect:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalSpellReflect");
-                case eProperty.BodyResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BodyCap");
-                case eProperty.ColdResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ColdCap");
-                case eProperty.CrushResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CrushCap");
-                case eProperty.EnergyResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EnergyCap");
-                case eProperty.HeatResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HeatCap");
-                case eProperty.MatterResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MatterCap");
-                case eProperty.SlashResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SlashCap");
-                case eProperty.SpiritResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpiritCap");
-                case eProperty.ThrustResCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ThrustCap");
-                case eProperty.MythicalSafeFall:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalSafeFall");
-                case eProperty.MythicalDiscumbering:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalDiscumbering");
-                case eProperty.MythicalCoin:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalCoin");
-                case eProperty.SpellLevel:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellLevel");
-                case eProperty.MissHit:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MissHit");
-                case eProperty.WaterSpeed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WaterSpeed");
-                //Eden - special actifacts bonus
-                case eProperty.Conversion:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Conversion");
-                case eProperty.ExtraHP:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ExtraHp");
-                case eProperty.StyleAbsorb:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StyleAbsorb");
-                case eProperty.ArcaneSyphon:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ArcaneSyphon");
-                case eProperty.RealmPoints:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RealmPoints");
-                //[Freya] Nidel
-                case eProperty.BountyPoints:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BountyPoints");
-                case eProperty.XpPoints:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ExperiencePoints");
-
-
-                // skills
-                case eProperty.Skill_Two_Handed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.TwoHanded");
-                case eProperty.Skill_Body:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BodyMagic");
-                case eProperty.Skill_Chants:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Chants");
-                case eProperty.Skill_Critical_Strike:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CriticalStrike");
-                case eProperty.Skill_Cross_Bows:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Crossbows");
-                case eProperty.Skill_Crushing:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Crushing");
-                case eProperty.Skill_Death_Servant:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DeathServant");
-                case eProperty.Skill_DeathSight:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Deathsight");
-                case eProperty.Skill_Dual_Wield:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DualWield");
-                case eProperty.Skill_Earth:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EarthMagic");
-                case eProperty.Skill_Enhancement:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Enhancement");
-                case eProperty.Skill_Envenom:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Envenom");
-                case eProperty.Skill_Fire:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.FireMagic");
-                case eProperty.Skill_Flexible_Weapon:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.FlexibleWeapon");
-                case eProperty.Skill_Cold:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ColdMagic");
-                case eProperty.Skill_Instruments:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Instruments");
-                case eProperty.Skill_Long_bows:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Longbows");
-                case eProperty.Skill_Matter:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MatterMagic");
-                case eProperty.Skill_Mind:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MindMagic");
-                case eProperty.Skill_Pain_working:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Painworking");
-                case eProperty.Skill_Parry:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Parry");
-                case eProperty.Skill_Polearms:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Polearms");
-                case eProperty.Skill_Rejuvenation:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Rejuvenation");
-                case eProperty.Skill_Shields:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Shields");
-                case eProperty.Skill_Slashing:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Slashing");
-                case eProperty.Skill_Smiting:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Smiting");
-                case eProperty.Skill_SoulRending:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Soulrending");
-                case eProperty.Skill_Spirit:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpiritMagic");
-                case eProperty.Skill_Staff:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Staff");
-                case eProperty.Skill_Stealth:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Stealth");
-                case eProperty.Skill_Thrusting:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Thrusting");
-                case eProperty.Skill_Wind:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WindMagic");
-                case eProperty.Skill_Sword:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Sword");
-                case eProperty.Skill_Hammer:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Hammer");
-                case eProperty.Skill_Axe:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Axe");
-                case eProperty.Skill_Left_Axe:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.LeftAxe");
-                case eProperty.Skill_Spear:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Spear");
-                case eProperty.Skill_Mending:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Mending");
-                case eProperty.Skill_Augmentation:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Augmentation");
-                case eProperty.Skill_Darkness:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Darkness");
-                case eProperty.Skill_Suppression:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Suppression");
-                case eProperty.Skill_Runecarving:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Runecarving");
-                case eProperty.Skill_Stormcalling:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Stormcalling");
-                case eProperty.Skill_BeastCraft:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BeastCraft");
-                case eProperty.Skill_Light:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.LightMagic");
-                case eProperty.Skill_Void:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VoidMagic");
-                case eProperty.Skill_Mana:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ManaMagic");
-                case eProperty.Skill_Composite:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Composite");
-                case eProperty.Skill_Battlesongs:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Battlesongs");
-                case eProperty.Skill_Enchantments:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Enchantment");
-
-                case eProperty.Skill_Blades:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Blades");
-                case eProperty.Skill_Blunt:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Blunt");
-                case eProperty.Skill_Piercing:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Piercing");
-                case eProperty.Skill_Large_Weapon:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.LargeWeapon");
-                case eProperty.Skill_Mentalism:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Mentalism");
-                case eProperty.Skill_Regrowth:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Regrowth");
-                case eProperty.Skill_Nurture:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Nurture");
-                case eProperty.Skill_Nature:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Nature");
-                case eProperty.Skill_Music:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Music");
-                case eProperty.Skill_Celtic_Dual:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CelticDual");
-                case eProperty.Skill_Celtic_Spear:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CelticSpear");
-                case eProperty.Skill_RecurvedBow:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RecurvedBow");
-                case eProperty.Skill_Valor:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Valor");
-                case eProperty.Skill_Subterranean:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CaveMagic");
-                case eProperty.Skill_BoneArmy:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BoneArmy");
-                case eProperty.Skill_Verdant:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Verdant");
-                case eProperty.Skill_Creeping:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Creeping");
-                case eProperty.Skill_Arboreal:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Arboreal");
-                case eProperty.Skill_Scythe:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Scythe");
-                case eProperty.Skill_Thrown_Weapons:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ThrownWeapons");
-                case eProperty.Skill_HandToHand:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HandToHand");
-                case eProperty.Skill_ShortBow:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ShortBow");
-                case eProperty.Skill_Pacification:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Pacification");
-                case eProperty.Skill_Savagery:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Savagery");
-                case eProperty.Skill_Nightshade:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.NightshadeMagic");
-                case eProperty.Skill_Pathfinding:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Pathfinding");
-                case eProperty.Skill_Summoning:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Summoning");
-                case eProperty.Skill_Archery:
-                    return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.Archery");
-
-                // Mauler
-                case eProperty.Skill_FistWraps:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.FistWraps");
-                case eProperty.Skill_MaulerStaff:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MaulerStaff");
-                case eProperty.Skill_Power_Strikes:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PowerStrikes");
-                case eProperty.Skill_Magnetism:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Magnetism");
-                case eProperty.Skill_Aura_Manipulation:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.AuraManipulation");
-
-
-                //Catacombs skills
-                case eProperty.Skill_Dementia:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Dementia");
-                case eProperty.Skill_ShadowMastery:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ShadowMastery");
-                case eProperty.Skill_VampiiricEmbrace:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VampiiricEmbrace");
-                case eProperty.Skill_EtherealShriek:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EtherealShriek");
-                case eProperty.Skill_PhantasmalWail:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PhantasmalWail");
-                case eProperty.Skill_SpectralForce:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpectralForce");
-                case eProperty.Skill_SpectralGuard:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpectralGuard");
-                case eProperty.Skill_OdinsWill:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.OdinsWill");
-                case eProperty.Skill_Cursing:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Cursing");
-                case eProperty.Skill_Hexing:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Hexing");
-                case eProperty.Skill_Witchcraft:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Witchcraft");
-
-                //New skills
-                case eProperty.Skill_Learning:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
-                case eProperty.Skill_Tormentshaper:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Tormentshaper");
-                case eProperty.Skill_Wraithsight:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Wraithsight");
-                case eProperty.Skill_Void_Acolyte:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VoidAcolyte");
-
-                // Classic Focus
-                case eProperty.Focus_Darkness:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DarknessFocus");
-                case eProperty.Focus_Suppression:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SuppressionFocus");
-                case eProperty.Focus_Runecarving:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RunecarvingFocus");
-                case eProperty.Focus_Spirit:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpiritMagicFocus");
-                case eProperty.Focus_Fire:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.FireMagicFocus");
-                case eProperty.Focus_Air:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WindMagicFocus");
-                case eProperty.Focus_Cold:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ColdMagicFocus");
-                case eProperty.Focus_Earth:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EarthMagicFocus");
-                case eProperty.Focus_Light:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.LightMagicFocus");
-                case eProperty.Focus_Body:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BodyMagicFocus");
-                case eProperty.Focus_Matter:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MatterMagicFocus");
-                case eProperty.Focus_Mind:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MindMagicFocus");
-                case eProperty.Focus_Void:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VoidMagicFocus");
-                case eProperty.Focus_Mana:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ManaMagicFocus");
-                case eProperty.Focus_Enchantments:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EnchantmentFocus");
-                case eProperty.Focus_Mentalism:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MentalismFocus");
-                case eProperty.Focus_Summoning:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SummoningFocus");
-                // SI Focus
-                // Mid
-                case eProperty.Focus_BoneArmy:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BoneArmyFocus");
-                // Alb
-                case eProperty.Focus_PainWorking:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PainworkingFocus");
-                case eProperty.Focus_DeathSight:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DeathsightFocus");
-                case eProperty.Focus_DeathServant:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DeathservantFocus");
-                // Hib
-                case eProperty.Focus_Verdant:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VerdantFocus");
-                case eProperty.Focus_CreepingPath:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CreepingPathFocus");
-                case eProperty.Focus_Arboreal:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ArborealFocus");
-                // Catacombs Focus
-                case eProperty.Focus_EtherealShriek:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EtherealShriekFocus");
-                case eProperty.Focus_PhantasmalWail:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PhantasmalWailFocus");
-                case eProperty.Focus_SpectralForce:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpectralForceFocus");
-                case eProperty.Focus_Cursing:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CursingFocus");
-                case eProperty.Focus_Hexing:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HexingFocus");
-                case eProperty.Focus_Witchcraft:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WitchcraftFocus");
-                // New Focus
-                case eProperty.Focus_Tormentshaper:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.TormentshaperFocus");
-                case eProperty.Focus_Wraithsight:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WraithsightFocus");
-                case eProperty.Focus_Void_Acolyte:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VoidAcolyteFocus");
-
-                case eProperty.MaxSpeed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MaximumSpeed");
-                case eProperty.MaxConcentration:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Concentration");
-
-                case eProperty.ArmorFactor:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BonusToArmorFactor");
-                case eProperty.ArmorAbsorption:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BonusToArmorAbsorption");
-
-                case eProperty.HealthRegenerationRate:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HealthRegeneration");
-                case eProperty.PowerRegenerationRate:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PowerRegeneration");
-                case eProperty.EnduranceRegenerationRate:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EnduranceRegeneration");
-                case eProperty.SpellRange:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellRange");
-                case eProperty.ArcheryRange:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ArcheryRange");
-                case eProperty.Acuity:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Acuity");
-
-                case eProperty.AllMagicSkills:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.AllMagicSkills");
-                case eProperty.AllMeleeWeaponSkills:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.AllMeleeWeaponSkills");
-                case eProperty.AllFocusLevels:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ALLSpellLines");
-                case eProperty.AllDualWieldingSkills:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.AllDualWieldingSkills");
-                case eProperty.AllArcherySkills:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.AllArcherySkills");
-
-                case eProperty.LivingEffectiveLevel:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EffectiveLevel");
-
-
-                //Added by Fooljam : Missing TOA/Catacomb bonusses names in item properties.
-                //Date : 20-Jan-2005
-                //Missing bonusses begin
-                case eProperty.EvadeChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EvadeChance");
-                case eProperty.BlockChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BlockChance");
-                case eProperty.ParryChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ParryChance");
-                case eProperty.FumbleChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.FumbleChance");
-                case eProperty.MeleeDamage:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MeleeDamage");
-                case eProperty.RangedDamage:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RangedDamage");
-                case eProperty.MesmerizeDuration:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MesmerizeDuration");
-                case eProperty.StunDuration:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StunDuration");
-                case eProperty.SpeedDecreaseDuration:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpeedDecreaseDuration");
-                case eProperty.BladeturnReinforcement:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BladeturnReinforcement");
-                case eProperty.DefensiveBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DefensiveBonus");
-                case eProperty.PieceAblative:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PieceAblative");
-                case eProperty.SpellFumbleChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellFumbleChance");
-                case eProperty.NegativeReduction:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.NegativeReduction");
-                case eProperty.ReactionaryStyleDamage:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ReactionaryStyleDamage");
-                case eProperty.SpellPowerCost:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellPowerCost");
-                case eProperty.StyleCostReduction:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StyleCostReduction");
-                case eProperty.ToHitBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ToHitBonus");
-                case eProperty.ArcherySpeed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ArcherySpeed");
-                case eProperty.ArrowRecovery:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ArrowRecovery");
-                case eProperty.BuffEffectiveness:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StatBuffSpells");
-                case eProperty.CastingSpeed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CastingSpeed");
-                case eProperty.DeathExpLoss:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ExperienceLoss");
-                case eProperty.DebuffEffectivness:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DebuffEffectivness");
-                case eProperty.Fatigue:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Fatigue");
-                case eProperty.HealingEffectiveness:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HealingEffectiveness");
-                case eProperty.PowerPool:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PowerPool");
-                //Magiekraftvorrat
-                case eProperty.ResistPierce:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ResistPierce");
-                case eProperty.SpellDamage:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MagicDamageBonus");
-                case eProperty.SpellDuration:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellDuration");
-                case eProperty.StyleDamage:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StyleDamage");
-                case eProperty.MeleeSpeed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MeleeSpeed");
-                //Missing bonusses end
-
-                case eProperty.StrCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StrengthBonusCap");
-                case eProperty.DexCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DexterityBonusCap");
-                case eProperty.ConCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ConstitutionBonusCap");
-                case eProperty.QuiCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.QuicknessBonusCap");
-                case eProperty.IntCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.IntelligenceBonusCap");
-                case eProperty.PieCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PietyBonusCap");
-                case eProperty.ChaCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CharismaBonusCap");
-                case eProperty.EmpCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EmpathyBonusCap");
-                case eProperty.AcuCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.AcuityBonusCap");
-                case eProperty.MaxHealthCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HitPointsBonusCap");
-                case eProperty.PowerPoolCapBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.PowerBonusCap");
-                case eProperty.WeaponSkill:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WeaponSkill");
-                case eProperty.AllSkills:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.AllSkills");
-                case eProperty.CriticalArcheryHitChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CriticalArcheryHit");
-                case eProperty.CriticalMeleeHitChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CriticalMeleeHit");
-                case eProperty.CriticalSpellHitChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CriticalSpellHit");
-                case eProperty.CriticalHealHitChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CriticalHealHit");
-                case eProperty.KeepDamage:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.KeepDamage");
-
-                case eProperty.DPS:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DPS");
-                case eProperty.MagicAbsorption:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MagicAbsorption");
-                case eProperty.RobberyChanceBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RobberyChanceBonus");
-                case eProperty.RobberyDelayReduction:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RobberyDelayReduction");
-                case eProperty.StealthEffectivenessBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthEffectivenessBonus");
-                case eProperty.StealthDetectionBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthDetectionBonus");
-                case eProperty.TensionConservationBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.TensionConservationBonus");
-                case eProperty.CriticalDotHitChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CriticalDotHitChance");
-                case eProperty.OffhandDamageAndChanceBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.OffhandDamageAndChanceBonus");
-                case eProperty.OffhandDamageBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.OffhandDamageBonus");
-                case eProperty.OffhandChanceBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.OffhandChanceBonus");
-                case eProperty.DotDamageBonus:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DotDamageBonus");
-                case eProperty.DotDurationDecrease:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DotDurationDecrease");
-                case eProperty.MythicalDebuffResistChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalDebuffResistChance");
-                case eProperty.DamnationEffectEnhancement:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DamnationEffectEnhancement");
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(prop), prop, null);
-            }
-            return "";
+            return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames." + GetPropertyTranslationName(prop));
         }
 
         #endregion

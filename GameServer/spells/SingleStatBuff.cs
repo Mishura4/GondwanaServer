@@ -107,14 +107,10 @@ namespace DOL.GS.Spells
 
         protected SingleStatBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string propName = ConvertPropertyToText(Property1).ToLower();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.SingleStatBuff.MainDescription", propName, Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.SingleStatBuff.MainDescription", LanguageMgr.GetProperty(delveClient, Property1), Spell.Value);
         }
     }
 
@@ -221,13 +217,9 @@ namespace DOL.GS.Spells
 
         public CombatSpeedBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.CombatSpeedBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.CombatSpeedBuff.MainDescription", Math.Abs(Spell.Value));
         }
     }
 
@@ -242,13 +234,9 @@ namespace DOL.GS.Spells
     {
         public CelerityBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.CombatSpeedBuff.MainDescription", TargetPronoun.ToLower(), Math.Abs(Spell.Value));
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.CombatSpeedBuff.MainDescription", Math.Abs(Spell.Value));
         }
     }
 
@@ -261,13 +249,9 @@ namespace DOL.GS.Spells
 
         public FatigueConsumptionBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.FatigueConsumptionBuff.MainDescription", TargetPronoun.ToLower(), Math.Abs(Spell.Value));
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.FatigueConsumptionBuff.MainDescription", Math.Abs(Spell.Value));
         }
     }
 
@@ -299,14 +283,8 @@ namespace DOL.GS.Spells
 
         public MesmerizeDurationBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.MesmerizeDurationBuff.MainDescription", Spell.Value);
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.MesmerizeDurationBuff.MainDescription", Spell.Value);
     }
 
     [SpellHandler("DPSBuff")]
@@ -317,13 +295,9 @@ namespace DOL.GS.Spells
         protected override void SendUpdates(GameLiving target) { }
 
         public DPSBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.FatigueConsumptionBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.FatigueConsumptionBuff.MainDescription", Math.Abs(Spell.Value));
         }
     }
 
@@ -335,14 +309,10 @@ namespace DOL.GS.Spells
         protected override void SendUpdates(GameLiving target) { }
 
         public EvadeChanceBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-
-        public override string ShortDescription
+        
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.EvadeChanceBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.EvadeChanceBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -354,14 +324,10 @@ namespace DOL.GS.Spells
         protected override void SendUpdates(GameLiving target) { }
 
         public ParryChanceBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-
-        public override string ShortDescription
+        
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.ParryChanceBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.ParryChanceBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -379,7 +345,7 @@ namespace DOL.GS.Spells
             get
             {
                 string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.WeaponSkillBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.WeaponSkillBuff.MainDescription", Spell.Value);
             }
         }
     }
@@ -398,7 +364,7 @@ namespace DOL.GS.Spells
             get
             {
                 string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.StealthSkillBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.StealthSkillBuff.MainDescription", Spell.Value);
             }
         }
     }
@@ -469,7 +435,7 @@ namespace DOL.GS.Spells
             get
             {
                 string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.FlexibleSkillBuff.MainDescription", TargetPronoun.ToLower(), Spell.Value);
+                return LanguageMgr.GetTranslation(language, "SpellDescription.FlexibleSkillBuff.MainDescription", Spell.Value);
             }
         }
     }

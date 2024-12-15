@@ -25,6 +25,7 @@ using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.Database;
 using System.Numerics;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -1099,9 +1100,11 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override string ShortDescription => $"Creates a cloud that affects everyone in the area.\n\n Cloud spell:\n{CloudDescription}";
-
-        private string CloudDescription => heal.ShortDescription;
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return $"Creates a cloud that affects everyone in the area.\n\n Cloud spell:\n{heal.GetDelveDescription(delveClient)}";
+        }
     }
     #endregion
 
@@ -1230,11 +1233,12 @@ namespace DOL.GS.Spells
 
         // constructor
         public StormSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-
-        public override string ShortDescription
-            => $"Creates a cloud that affects everyone in the area.\n\n Cloud spell:\n{CloudDescription}";
-
-        private string CloudDescription => tempest.ShortDescription;
+        
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return $"Creates a cloud that affects everyone in the area.\n\n Cloud spell:\n{tempest.GetDelveDescription(delveClient)}";
+        }
     }
     #endregion
 

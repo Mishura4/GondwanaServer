@@ -209,13 +209,7 @@ namespace DOL.GS.Spells
 
         public BladeturnSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Bladeturn.MainDescription");
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.Bladeturn.MainDescription");
     }
 }

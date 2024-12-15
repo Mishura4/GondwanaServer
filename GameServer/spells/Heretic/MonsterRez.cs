@@ -38,56 +38,9 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("ReanimateCorpse")]
     public class MonsterRez : ResurrectSpellHandler
     {
-        string m_shortDescription;
         // Constructor
         public MonsterRez(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
-            string language = Properties.SERV_LANGUAGE;
-            m_shortDescription = LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.MainDescription",Spell.ResurrectHealth, Spell.ResurrectMana);
-
-            Spell currentSpell = spell;
-            bool firstSubspell = true;
-            while (currentSpell.SubSpellID != 0)
-            {
-                currentSpell = SkillBase.GetSpellByID((int)currentSpell.SubSpellID);
-                SpellLine subSpellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
-                ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(m_caster, currentSpell, subSpellLine);
-                if (subHandler != null)
-                {
-                    if (firstSubspell)
-                    {
-                        m_shortDescription += "\n\n";
-                        firstSubspell = false;
-                    }
-                    m_shortDescription += subHandler.ShortDescription + "\n";
-                }
-            }
-
-            if (spell.Radius > 0 || spell.Frequency > 0 || spell.Duration > 0)
-            {
-                string damageTypeName = Spell.DamageType.ToString();
-                double spellDamage = Spell.Damage;
-                m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageMain", damageTypeName, spellDamage);
-
-                if (spell.Radius > 0)
-                {
-                    m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageRadius");
-                }
-
-                if (spell.Frequency > 0)
-                {
-                    int freqSeconds = spell.Frequency / 1000;
-                    m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageFrequency", freqSeconds);
-                }
-
-                if (spell.Duration > 0)
-                {
-                    int durSeconds = spell.Duration / 1000;
-                    m_shortDescription += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageDuration", durSeconds);
-                }
-
-                m_shortDescription += ".";
-            }
         }
 
         protected override void ResurrectResponceHandler(GamePlayer player, byte response)
@@ -107,8 +60,58 @@ namespace DOL.GS.Spells
             ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(m_caster, castSpell, line);
             spellhandler.StartSpell(living);
         }
-        public override string ShortDescription
-            => m_shortDescription;
+
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = Properties.SERV_LANGUAGE;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.MainDescription", Spell.ResurrectHealth, Spell.ResurrectMana);
+
+            Spell currentSpell = Spell;
+            bool firstSubspell = true;
+            while (currentSpell.SubSpellID != 0)
+            {
+                currentSpell = SkillBase.GetSpellByID((int)currentSpell.SubSpellID);
+                SpellLine subSpellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
+                ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(m_caster, currentSpell, subSpellLine);
+                if (subHandler != null)
+                {
+                    if (firstSubspell)
+                    {
+                        description += "\n\n";
+                        firstSubspell = false;
+                    }
+                    description += subHandler.GetDelveDescription(delveClient) + "\n";
+                }
+            }
+
+            if (Spell.Radius > 0 || Spell.Frequency > 0 || Spell.Duration > 0)
+            {
+                string damageTypeName = Spell.DamageType.ToString();
+                double SpellDamage = Spell.Damage;
+                description += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageMain", damageTypeName, SpellDamage);
+
+                if (Spell.Radius > 0)
+                {
+                    description += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageRadius");
+                }
+
+                if (Spell.Frequency > 0)
+                {
+                    int freqSeconds = Spell.Frequency / 1000;
+                    description += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageFrequency", freqSeconds);
+                }
+
+                if (Spell.Duration > 0)
+                {
+                    int durSeconds = Spell.Duration / 1000;
+                    description += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageDuration", durSeconds);
+                }
+
+                description += ".";
+            }
+            return description;
+        }
     }
 
     /// <summary>
@@ -235,14 +238,11 @@ namespace DOL.GS.Spells
                 player.SendTranslatedMessage("SummonMonster.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
             attempt.SendSpellResistAnimation(target);
         }
-
-        public override string ShortDescription
+        
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.SummonMonster.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MonsterRez.MainDescription");
         }
 
     }

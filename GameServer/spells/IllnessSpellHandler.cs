@@ -96,7 +96,7 @@ namespace DOL.GS.Spells
 
         public PveResurrectionIllness(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => "";
+        public override string GetDelveDescription(GameClient delveClient) => string.Empty;
     }
 
     public class AbstractIllnessSpellHandler : SpellHandler

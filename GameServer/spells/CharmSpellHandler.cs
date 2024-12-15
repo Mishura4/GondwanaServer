@@ -520,25 +520,19 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            if (!charmSpeciesKeys.TryGetValue(Spell.AmnesiaChance, out string speciesKey))
             {
-                string language = Properties.SERV_LANGUAGE;
-
-                if (!charmSpeciesKeys.TryGetValue(Spell.AmnesiaChance, out string speciesKey))
-                {
-                    speciesKey = "SpellDescription.Charm.Species.All";
-                }
-
-                string charmableSpecies = LanguageMgr.GetTranslation(language, speciesKey);
-                string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription1", charmableSpecies);
-                string secondDesc = "";
-                if (Spell.Pulse == 0)
-                    secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription2", Spell.Damage, Spell.Value);
-
-                return baseDesc + "\n\n" + secondDesc;
+                speciesKey = "SpellDescription.Charm.Species.All";
             }
+            string language = delveClient?.Account?.Language ?? ServerProperties.Properties.SERV_LANGUAGE;
+            string charmableSpecies = LanguageMgr.GetTranslation(language, speciesKey);
+            string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription1", charmableSpecies);
+            string secondDesc = "";
+            if (Spell.Pulse == 0)
+                secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription2", Spell.Damage, Spell.Value);
+            return baseDesc + "\n\n" + secondDesc;
         }
 
         private static readonly Dictionary<int, string> charmSpeciesKeys = new Dictionary<int, string>()

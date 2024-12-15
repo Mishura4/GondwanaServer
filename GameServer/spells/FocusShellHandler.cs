@@ -244,21 +244,17 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.FocusShell.MainDescription", Spell.Value);
+
+            if (!Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.FocusShell.MainDescription", Spell.Value);
-
-                if (!Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
-                {
-                    string onlyInPvPORvR = LanguageMgr.GetTranslation(language, "SpellDescription.FocusShell.OnlyInPvPORvR");
-                    description += "\n\n" + onlyInPvPORvR;
-                }
-
-                return description;
+                string onlyInPvPORvR = LanguageMgr.GetTranslation(delveClient, "SpellDescription.FocusShell.OnlyInPvPORvR");
+                description += "\n\n" + onlyInPvPORvR;
             }
+
+            return description;
         }
     }
 }

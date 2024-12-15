@@ -176,14 +176,10 @@ namespace DOL.GS.Spells
 
         public HoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                double freqSeconds = Spell.Frequency / 1000.0;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.HoT.MainDescription", Spell.Value, freqSeconds.ToString("0.##"));
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.HoT.MainDescription", Spell.Value, Spell.Frequency / 1000.0);
         }
     }
 }

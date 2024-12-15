@@ -4377,17 +4377,29 @@ namespace DOL.GS.Spells
         #endregion
 
         #region tooltip handling
-        protected string TargetPronoun
+
+        public virtual string GetDelveDescription(GameClient delveClient)
         {
-            get
+            SpellHandlerAttribute attr = (SpellHandlerAttribute)Attribute.GetCustomAttribute(GetType(), typeof(SpellHandlerAttribute));
+            if (attr != null)
             {
-                if (Spell.Target == "Self") return LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetPronoun.Your");
-                return LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetPronoun.Targets");
+                if (LanguageMgr.TryGetTranslation(out string translation, delveClient, "SpellDescription." + attr.SpellType + ".MainDescription"))
+                {
+                    return translation;
+                }
             }
+            if (ShortDescription != null)
+            {
+                return ShortDescription;
+            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellHandler.DefaultDescription", GetType().ToString().Split('.').Last(), Spell.Value, Spell.Damage);
         }
 
+        [Obsolete("Use & override GetDelveDescription instead")]
         public virtual string ShortDescription
-            => $"{GetType().ToString().Split('.').Last()} has a value of {Spell.Value} and damage value of {Spell.Damage}.";
+        {
+            get => null;
+        }
         #endregion
     }
 }

@@ -121,14 +121,10 @@ namespace DOL.GS.Spells
 
         public DamageAddSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string dmgTypeName = Spell.DamageType.ToString().ToLower();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.DamageAdd.MainDescription", TargetPronoun.ToLower(), Spell.Damage, dmgTypeName);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.DamageAdd.MainDescription", Spell.Value, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
         }
     }
 
@@ -206,14 +202,10 @@ namespace DOL.GS.Spells
 
         public DamageShieldSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string dmgTypeName = Spell.DamageType.ToString().ToLower();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.DamageShield.MainDescription", Spell.Damage, dmgTypeName);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.DamageShield.MainDescription", Spell.Value, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
         }
     }
 

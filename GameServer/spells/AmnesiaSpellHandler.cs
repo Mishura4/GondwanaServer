@@ -95,13 +95,10 @@ namespace DOL.GS.Spells
 
         public AmnesiaSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Amnesia.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Amnesia.MainDescription");
         }
     }
 }

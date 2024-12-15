@@ -223,38 +223,35 @@ namespace DOL.GS.Spells
         {
             return false;
         }
-
-        public override string ShortDescription
+        
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string subSpellDescription = "";
+            var subSpellList = new List<int>();
+            if (Spell.SubSpellID > 0)
+                subSpellList.Add(Spell.SubSpellID);
+
+            foreach (int spellID in subSpellList.Union(Spell.MultipleSubSpells))
             {
-                string language = Properties.SERV_LANGUAGE;
-
-                string subSpellDescription = "";
-                var subSpellList = new List<int>();
-                if (Spell.SubSpellID > 0)
-                    subSpellList.Add(Spell.SubSpellID);
-
-                foreach (int spellID in subSpellList.Union(Spell.MultipleSubSpells))
+                Spell subSpell = SkillBase.GetSpellByID(spellID);
+                if (subSpell != null)
                 {
-                    Spell subSpell = SkillBase.GetSpellByID(spellID);
-                    if (subSpell != null)
+                    ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(Caster, subSpell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+                    if (subHandler != null)
                     {
-                        ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(Caster, subSpell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
-                        if (subHandler != null)
-                        {
-                            if (!string.IsNullOrEmpty(subSpellDescription))
-                                subSpellDescription += "\n";
-                            subSpellDescription += subHandler.ShortDescription;
-                        }
+                        if (!string.IsNullOrEmpty(subSpellDescription))
+                            subSpellDescription += "\n";
+                        subSpellDescription += subHandler.GetDelveDescription(delveClient);
                     }
                 }
-
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription1");
-                string cloudEffect = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription2");
-
-                return mainDesc + "\n\n" + cloudEffect + "\n" + subSpellDescription;
             }
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription1");
+            string cloudEffect = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription2");
+
+            return mainDesc + "\n\n" + cloudEffect + "\n" + subSpellDescription;
         }
     }
 }

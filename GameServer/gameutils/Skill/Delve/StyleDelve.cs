@@ -106,7 +106,7 @@ namespace DOL.GS.Delve
             {
                 if (proc.Item2 == 0 || proc.Item2 == style.ClassID)
                 {
-                    var procDelve = new SpellDelve(proc.Item1).GetClientDelve();
+                    var procDelve = new SpellDelve(proc.Item1, clt, false).GetClientDelve();
                     result.Add(procDelve);
                 }
             }

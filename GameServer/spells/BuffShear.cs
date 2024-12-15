@@ -65,15 +65,8 @@ namespace DOL.GS.Spells
         // constructor
         public DexterityShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Dex");
-                return description;
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.BuffShear.Dex");
     }
 
     /// <summary>
@@ -87,15 +80,8 @@ namespace DOL.GS.Spells
         // constructor
         public ConstitutionShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Con");
-                return description;
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.BuffShear.Con");
     }
 
     /// <summary>
@@ -109,15 +95,8 @@ namespace DOL.GS.Spells
         // constructor
         public AcuityShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Acuity");
-                return description;
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.BuffShear.Acuity");
     }
 
     /// <summary>
@@ -131,15 +110,8 @@ namespace DOL.GS.Spells
         // constructor
         public StrengthConstitutionShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.StrCon");
-                return description;
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.BuffShear.StrCon");
     }
 
     /// <summary>
@@ -153,15 +125,8 @@ namespace DOL.GS.Spells
         // constructor
         public DexterityQuicknessShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.DexQui");
-                return description;
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.BuffShear.DexQui");
     }
 
     /// <summary>
@@ -379,14 +344,7 @@ namespace DOL.GS.Spells
         // constructor
         public RandomBuffShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Random");
-                return description;
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.BuffShear.Random");
     }
 }

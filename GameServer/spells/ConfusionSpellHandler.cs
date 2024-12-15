@@ -21,7 +21,6 @@ using System.Collections;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -184,16 +183,13 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                if (Spell.Value >= 0)
-                    return LanguageMgr.GetTranslation(language, "SpellDescription.Confusion.MainDescriptionPositive", Math.Abs(Spell.Value));
-                else
-                    return LanguageMgr.GetTranslation(language, "SpellDescription.Confusion.MainDescriptionNegative");
-            }
+            if (Spell.Value >= 0)
+                return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Confusion.MainDescriptionPositive", Math.Abs(Spell.Value));
+            else
+                return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Confusion.MainDescriptionNegative");
         }
     }
 }

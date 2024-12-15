@@ -19,6 +19,7 @@
 using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells.Atlantis
 {
@@ -113,6 +114,10 @@ namespace DOL.GS.Spells.Atlantis
         }
         public AllStatsDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Decreases all stats of the target by {Spell.Value}.";
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.AllStatsDebuff.MainDescription", Spell.Value);
+        }
     }
 }

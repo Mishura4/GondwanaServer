@@ -29,14 +29,10 @@ namespace DOL.GS.Spells
             get => eBuffBonusCategory.Other;
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string propName = ConvertPropertyToText(Property1).ToLower();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.TensionBuff.MainDescription", propName, Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.TensionBuff.MainDescription", LanguageMgr.GetProperty(delveClient, Property1), Spell.Value);
         }
     }
 }

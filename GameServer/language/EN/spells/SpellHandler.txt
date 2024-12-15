@@ -64,6 +64,7 @@ SpellHandler.BuffNoEffectOnVampiir:		Your buff has no effect on the Vampiir!
 SpellHandler.BuffNoEffectOnYou:			This buff has no effect on you!
 SpellHandler.AlreadyHasEffect:			You already have this effect!
 SpellHandler.AlreadyHasThisEffect:		{0} already has this effect
+SpellHandler.DefaultDescription:		{0} has a value of {1} and a damage value of {2}.
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Your pet is not in view.
 SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	LoS Interrupt in CheckLOSPlayerToTarget

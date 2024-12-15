@@ -203,22 +203,19 @@ namespace DOL.GS.Spells
 
         public DirectDamageSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamage.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+
+            if (Spell.IsSecondary)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string damageTypeName = Spell.DamageType.ToString();
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamage.MainDescription", Spell.Damage, damageTypeName);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
             }
+
+            return description;
         }
     }
 }

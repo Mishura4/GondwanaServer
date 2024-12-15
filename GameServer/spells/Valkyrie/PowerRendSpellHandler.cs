@@ -21,6 +21,7 @@ using System;
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
+using DOL.Language;
 
 namespace DOL.GS.spells
 {
@@ -122,7 +123,10 @@ namespace DOL.GS.spells
             return factor;
         }
 
-        public override string ShortDescription
-            => $"Target loses {Spell.Value}% power.";
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerRend.MainDescription", Spell.Value);
+        }
     }
 }

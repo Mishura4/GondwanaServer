@@ -19,6 +19,7 @@
 using DOL.Database;
 using DOL.GS;
 using DOL.GS.Delve;
+using DOL.UnitTests.Gameserver;
 using NUnit.Framework;
 using System.Linq;
 
@@ -42,7 +43,7 @@ namespace DOL.Integration.Gameserver
             dbSpell.Value = 5;
             dbSpell.TooltipId = 3838;
 
-            var actual = new SpellDelve(new Spell(dbSpell, 0)).GetClientDelves().ElementAt(0).ClientMessage;
+            var actual = new SpellDelve(new Spell(dbSpell, 0), new FakeGameClient(GameServer.Instance), false).GetClientDelves().ElementAt(0).ClientMessage;
 
             Assert.That(actual, Does.StartWith("(Spell "));
             Assert.That(actual, Does.Contain("(Index \"3838\")"));
@@ -72,7 +73,7 @@ namespace DOL.Integration.Gameserver
             dbSpell.DamageType = 15;
             dbSpell.TooltipId = 1422;
 
-            var actual = new SpellDelve(new Spell(dbSpell, 0)).GetClientDelves().ElementAt(0).ClientMessage;
+            var actual = new SpellDelve(new Spell(dbSpell, 0), new FakeGameClient(GameServer.Instance), false).GetClientDelves().ElementAt(0).ClientMessage;
 
             Assert.That(actual, Does.StartWith("(Spell "));
             Assert.That(actual, Does.Contain("(Index \"1422\")"));
@@ -91,7 +92,7 @@ namespace DOL.Integration.Gameserver
             dbSpell.Type = "Heal";
             dbSpell.CastTime = 2.0;
 
-            var actual = new SpellDelve(new Spell(dbSpell, 0)).GetClientDelves().ElementAt(0).ClientMessage;
+            var actual = new SpellDelve(new Spell(dbSpell, 0), new FakeGameClient(GameServer.Instance), false).GetClientDelves().ElementAt(0).ClientMessage;
 
             Assert.That(actual, Does.Not.Contain("instant"));
         }

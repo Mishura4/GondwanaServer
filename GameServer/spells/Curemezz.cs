@@ -23,7 +23,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -38,13 +37,10 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove.Add("Mesmerize");
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.CureMezz.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.CureMezz.MainDescription");
         }
     }
 }

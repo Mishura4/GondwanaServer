@@ -106,13 +106,10 @@ namespace DOL.GS.Spells
 
         public AfHitsBuffSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.AfHitsBuff.MainDescription", Math.Abs(Spell.Value));
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.AfHitsBuff.MainDescription", Math.Abs(Spell.Value));
         }
     }
 }

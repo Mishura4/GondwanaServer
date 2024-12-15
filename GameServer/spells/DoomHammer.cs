@@ -58,42 +58,40 @@ namespace DOL.GS.Spells
         }
         public DoomHammerSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string damageTypeName = Spell.DamageType.ToString();
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.DoomHammer.MainDescription", Spell.Damage, damageTypeName);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(mainDesc);
+
+            if (Spell.SubSpellID > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string damageTypeName = Spell.DamageType.ToString();
-                int recastSeconds = Spell.RecastDelay / 1000;
-
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.DoomHammer.MainDescription", Spell.Damage, damageTypeName);
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append(mainDesc);
-
-                if (Spell.SubSpellID > 0)
+                Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
+                if (subSpell != null)
                 {
-                    Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
-                    if (subSpell != null)
+                    ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(Caster, subSpell, SpellLine);
+                    if (subHandler != null)
                     {
-                        ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(Caster, subSpell, SpellLine);
-                        if (subHandler != null)
-                        {
-                            sb.Append("\n\n");
-                            sb.Append(subHandler.ShortDescription);
-                        }
+                        sb.Append("\n\n");
+                        sb.Append(subHandler.GetDelveDescription(delveClient));
                     }
                 }
-
-                if (Spell.RecastDelay > 0)
-                {
-                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                    sb.Append("\n\n");
-                    sb.Append(secondDesc);
-                }
-
-                return sb.ToString().TrimEnd();
             }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                sb.Append("\n\n");
+                sb.Append(secondDesc);
+            }
+
+            return sb.ToString().TrimEnd();
         }
     }
 }

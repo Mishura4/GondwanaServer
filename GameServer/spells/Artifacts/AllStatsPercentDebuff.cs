@@ -19,6 +19,7 @@
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -132,6 +133,10 @@ namespace DOL.GS.Spells
         
         public AllStatsPercentDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => $"Decreases all stats of the target by {Spell.Value}%.";
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.AllStatsPercentDebuff.MainDescription", Spell.Value);
+        }
     }
 }

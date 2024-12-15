@@ -40,14 +40,11 @@ namespace DOL.GS.Spells
 
         public AbstractResistBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string propName = ConvertPropertyToText(Property1).ToLower();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.ResistBuff.MainDescription", propName, Spell.Value);
-            }
+            // Here we could also just use SingleStatBuff translation and GetProperty, since the property's name should be "[damage] resistance"
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.ResistBuff.MainDescription", LanguageMgr.GetDamageOfType(delveClient, (eDamageType)Property1), Spell.Value);
         }
     }
 

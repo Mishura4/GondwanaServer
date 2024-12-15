@@ -31,16 +31,18 @@ namespace DOL.GS.Delve
         private int CastTime => Spell.CastTime;
         private eDamageType MagicType => Spell.DamageType;
 
-        public SpellDelve(Spell spell)
+        private GameClient m_client;
+
+        private SpellDelve(Spell spell)
         {
             DelveType = "Spell";
             Index = unchecked((short)spell.InternalID);
             spellHandler = ScriptMgr.CreateSpellHandler(GamePlayer.CreateDummy(), spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
         }
 
-        public SpellDelve(Spell spell, GameClient client) : this(spell)
+        public SpellDelve(Spell spell, GameClient client, bool normalizeLevel) : this(spell)
         {
-            if (spellHandler != null)
+            if (spellHandler != null && normalizeLevel)
             {
                 int level = Spell.Level;
                 foreach (SpellLine line in client.Player.GetSpellLines())
@@ -54,7 +56,7 @@ namespace DOL.GS.Delve
                 }
                 Spell.Level = level;
             }
-
+            m_client = client;
         }
 
         public override ClientDelve GetClientDelve()
@@ -82,7 +84,7 @@ namespace DOL.GS.Delve
             clientDelve.AddElement("concentration_points", Spell.Concentration);
             clientDelve.AddElement("frequency", Spell.Frequency);
 
-            clientDelve.AddElement("delve_string", spellHandler.ShortDescription);
+            clientDelve.AddElement("delve_string", spellHandler.GetDelveDescription(m_client));
             return clientDelve;
         }
 

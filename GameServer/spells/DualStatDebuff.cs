@@ -28,15 +28,9 @@ namespace DOL.GS.Spells
 
         public DualStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string propName1 = ConvertPropertyToText(Property1);
-                string propName2 = ConvertPropertyToText(Property2);
-                return LanguageMgr.GetTranslation(language, "SpellDescription.DualStatDebuff.MainDescription", propName1.ToLower(), propName2.ToLower(), Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(client, "SpellDescription.DualStatDebuff.MainDescription", LanguageMgr.GetProperty(client, Property1), LanguageMgr.GetProperty(client, Property2), Spell.Value);
         }
     }
 

@@ -419,44 +419,6 @@ namespace DOL.GS.Spells
         public PropertyChangingSpell(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
         }
-
-        private static Dictionary<eProperty, string> propertyToTextLookup = new Dictionary<eProperty, string>()
-        {
-            {eProperty.Strength, "Strength" },
-            {eProperty.Constitution, "Constitution" },
-            {eProperty.Dexterity, "Dexterity" },
-            {eProperty.Quickness, "Quickness" },
-            {eProperty.Acuity, "Acuity" },
-            {eProperty.ArmorFactor, "Armor Factor (AF)" },
-            {eProperty.ArmorAbsorption, "melee absorption" },
-            {eProperty.WeaponSkill, "Weaponskill" },
-            {eProperty.MissHit, "Chance to Miss" },
-            {eProperty.FatigueConsumption, "fatigue effectiveness" },
-            {eProperty.CastingSpeed, "casting speed" },
-            {eProperty.ToHitBonus, "chance to hit" },
-
-            {eProperty.Resist_Slash, "Slash" },
-            {eProperty.Resist_Crush, "Crush" },
-            {eProperty.Resist_Thrust, "Thrust" },
-            {eProperty.Resist_Heat, "Heat" },
-            {eProperty.Resist_Cold, "Cold" },
-            {eProperty.Resist_Matter, "Matter" },
-            {eProperty.Resist_Body, "Body" },
-            {eProperty.Resist_Spirit, "Spirit" },
-            {eProperty.Resist_Energy, "Energy" },
-            {eProperty.Resist_Natural, "Essence" },
-
-            {eProperty.MythicalTension, "Tension gains" },
-        };
-
-        protected string ConvertPropertyToText(eProperty propertyID)
-        {
-            if (propertyToTextLookup.TryGetValue(propertyID, out string resistText))
-            {
-                return resistText;
-            }
-            return $"<{propertyID}>";
-        }
     }
 
     public class BuffCheckAction : RegionAction

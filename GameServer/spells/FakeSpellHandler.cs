@@ -1,4 +1,5 @@
-﻿using DOL.GS;
+﻿using DOL.Database;
+using DOL.GS;
 using DOL.GS.Spells;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,8 @@ namespace DOL.GS.Spells
     [SpellHandler("AvaloniaFake")]
     public class FakeSpellHandler : SpellHandler
     {
-        string m_shortDescription;
         public FakeSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
-            m_shortDescription = "";
-            while (spell.SubSpellID != 0)
-            {
-                spell = SkillBase.GetSpellByID((int)spell.SubSpellID);
-                m_shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).ShortDescription + "\n";
-            }
         }
 
         protected override bool ExecuteSpell(GameLiving target, bool force = false)
@@ -30,8 +24,18 @@ namespace DOL.GS.Spells
             return CastSubSpells(target);;
         }
 
-        public override string ShortDescription
-            => m_shortDescription;
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string shortDescription = "";
+            var spell = Spell;
+            while (spell.SubSpellID != 0)
+            {
+                spell = SkillBase.GetSpellByID((int)spell.SubSpellID);
+                shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).GetDelveDescription(delveClient) + "\n";
+            }
+            return base.GetDelveDescription(delveClient);
+        }
     }
 
     [SpellHandler("AllStatsBuffItem")]

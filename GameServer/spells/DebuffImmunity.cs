@@ -138,15 +138,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Provides a brief description of the Debuff Immunity spell.
         /// </summary>
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                int durationSeconds = Spell.Duration / 1000;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.DebuffImmunity.MainDescription", Spell.Value, durationSeconds);
-            }
-        }
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.DebuffImmunity.MainDescription", Spell.Value, Spell.Duration / 1000.0f);
     }
 
     /// <summary>

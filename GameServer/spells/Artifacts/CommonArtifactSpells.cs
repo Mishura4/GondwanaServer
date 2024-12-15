@@ -21,6 +21,7 @@ using DOL.AI.Brain;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -262,16 +263,19 @@ namespace DOL.GS.Spells
     public class Morph : AbstractMorphSpellHandler
     {
         public Morph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-        public override string ShortDescription
+
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string output = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Morph.MainDescription", Spell.Description);
+            var subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
+            if (subSpell != null)
             {
-                string output = $"Target has been shapechanged into {Spell.Description}.";
-                var subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
-                if (subSpell != null)
-                    output += "\n" + subSpell.ShortDescription;
-                return output;
+                string subDesc = subSpell.GetDelveDescription(delveClient);
+                if (!string.IsNullOrEmpty(subDesc))
+                    output += '\n' + subDesc;
             }
+            return output;
         }
     }
 

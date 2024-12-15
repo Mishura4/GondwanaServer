@@ -289,15 +289,12 @@ namespace DOL.GS.Spells
             }
             #endregion
         }
-
-        public override string ShortDescription
+        
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
-                return LanguageMgr.GetTranslation(language, "SpellDescription.MeleeAblativeArmor.MainDescription", absorbPercent, Spell.Value);
-            }
+            double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MeleeAblativeArmor.MainDescription", absorbPercent, Spell.Value);
         }
 
         protected virtual string GetAblativeType()
@@ -327,15 +324,12 @@ namespace DOL.GS.Spells
         {
             return "Type: Magic Absorption";
         }
-
-        public override string ShortDescription
+        
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
-                return LanguageMgr.GetTranslation(language, "SpellDescription.MagicAblativeArmor.MainDescription", absorbPercent, Spell.Value);
-            }
+            double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MagicAblativeArmor.MainDescription", absorbPercent, Spell.Value);
         }
     }
 
@@ -354,14 +348,11 @@ namespace DOL.GS.Spells
             return "Type: Melee/Magic Absorption";
         }
 
-        public override string ShortDescription
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
-                return LanguageMgr.GetTranslation(language, "SpellDescription.BothAblativeArmor.MainDescription", absorbPercent, Spell.Value);
-            }
+            double absorbPercent = (Spell.Damage > 0 ? Spell.Damage : 25);
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.BothAblativeArmor.MainDescription", absorbPercent, Spell.Value);
         }
     }
 }

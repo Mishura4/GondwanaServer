@@ -32,8 +32,8 @@ namespace DOL.GS.Delve
         public static SkillDelve Create(GameClient client, Skill skill)
         {
             if (skill is Style) return new StyleDelve(client, skill.InternalID);
-            if (skill is Song) return new SongDelve(skill.InternalID);
-            if (skill is Spell spell) return new SpellDelve(spell);
+            if (skill is Song) return new SongDelve(skill.InternalID, client, false);
+            if (skill is Spell spell) return new SpellDelve(spell, client, false);
             if (skill is RealmAbility) return new RealmAbilityDelve(client, skill.InternalID);
             if (skill is Ability) return new AbilityDelve(client, skill.InternalID);
             throw new ArgumentException($"{skill.GetType()} has no Delve class.");
