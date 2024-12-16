@@ -152,15 +152,12 @@ namespace DOL.GS.Spells
 
         public StyleBleeding(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient client)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string damageTypeName = Spell.DamageType.ToString();
-                double freqSeconds = Spell.Frequency / 1000.0;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.StyleBleeding.MainDescription", Spell.Damage, damageTypeName, freqSeconds.ToString("0.##"));
-            }
+            string language = client?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string damageTypeName = LanguageMgr.GetDamageOfType(language, Spell.DamageType);
+            double freqSeconds = Spell.Frequency / 1000.0;
+            return LanguageMgr.GetTranslation(language, "SpellDescription.StyleBleeding.MainDescription", Spell.Damage, damageTypeName, freqSeconds.ToString("0.##"));
         }
     }
 }

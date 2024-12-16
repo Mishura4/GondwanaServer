@@ -62,7 +62,7 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
-            string damageTypeName = Spell.DamageType.ToString();
+            string damageTypeName = LanguageMgr.GetDamageOfType(language, Spell.DamageType);
             int recastSeconds = Spell.RecastDelay / 1000;
 
             string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.DoomHammer.MainDescription", Spell.Damage, damageTypeName);

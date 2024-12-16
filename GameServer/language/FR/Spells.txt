@@ -65,12 +65,12 @@ SpellDescription.Damnation.MainDescription3:		Les soins n'ont aucun effet sur la
 SpellDescription.Damnation.MainDescription4:		Les soins sont convertis à {0}% en dégâts.
 SpellDescription.Damnation.MainDescription5:		Les monstres de type morts-vivants ne sont pas affectés par ce sort.
 SpellDescription.MonsterRez.MainDescription:		Ressuscite la cible sous la forme d'un mort-vivant, restaurant {0}% de sa santé et {1}% de sa puissance et endurance, sans causer de perte d'expérience ni de constitution.
-SpellDescription.MonsterRez.DamageMain:				Inflige {1} dégâts de type {0} à la cible
+SpellDescription.MonsterRez.DamageMain:				Inflige {1} {0} à la cible
 SpellDescription.MonsterRez.DamageRadius:			et à son entourage
 SpellDescription.MonsterRez.DamageFrequency:		toutes les {0} secondes
 SpellDescription.MonsterRez.DamageDuration:			pendant une durée de {0} secondes
 SpellDescription.SummonMonster.MainDescription:		Résurrection cadavérique.
-SpellDescription.DamageAdd.MainDescription:			Les attaques de mêlée de {0} infligent {1} supplémentaires de type {2}.
+SpellDescription.DamageAdd.MainDescription:			Les attaques de mêlée de {0} infligent {1} {2} supplémentaires.
 SpellDescription.DamageShield.MainDescription:		La cible inflige {0} {1} aux ennemis qui la frappent au corps à corps.
 SpellDescription.SpellReflection.MainDescription1:	{0} renvoie les sorts à l'attaquant avec {1}% de chances et à {2}% de leurs dégâts initiaux, tout en absorbant {3}% des dégâts infligés.
 SpellDescription.SpellReflection.MainDescription2:	Les sorts de combat rapprochés et les sorts d'archerie ne sont pas renvoyés.
@@ -82,7 +82,7 @@ SpellDescription.OffensiveProc.MainDescription:		{0} déclenche un sort secondai
 SpellDescription.DefensiveProc.MainDescription:		{0} déclenche un sort secondaire avec {1}% de chance lorsque vous êtes frappé par des attaques de mêlée :
 SpellDescription.SpeedEnhancement.MainDescription:	La vitesse de la cible est augmentée à {0}% de sa vitesse normale.
 SpellDescription.SpellShield.MainDescription:		{0} absorbe 100% des dégâts magiques et 65% des effets de dégâts répétés sur la durée (DoT) lorsque la santé du joueur descend à 15% ou moins.
-SpellDescription.StyleBleeding.MainDescription:		La cible subit {0} dégâts de type {1} toutes les {2} secondes.
+SpellDescription.StyleBleeding.MainDescription:		La cible subit {0} {1} toutes les {2} secondes.
 SpellDescription.StyleTaunt.Increase:				Provoque la cible, augmentant votre niveau de menace contre elle de {0}.
 SpellDescription.StyleTaunt.Decrease:				Réduit la provocation sur la cible, diminuant votre niveau de menace contre elle de -{0}.
 SpellDescription.Taunt.MainDescription:				Provoque la cible, augmentant votre niveau de menace contre elle de {0}.
@@ -118,11 +118,11 @@ SpellDescription.Disarm.MainDescription2:			Cet effet ne peut être relancé qu'
 SpellDescription.GroundArea.MainDescription1:		Crée un « nuage » qui affecte toutes les personnes dans la zone.
 SpellDescription.GroundArea.MainDescription2:		Effet de zone :
 SpellDescription.CloudsongFall.MainDescription:		La cible subit {0}% de dégâts en moins lors d'une chute.
-SpellDescription.DoomHammer.MainDescription:		Inflige {0} dégâts de type {1}.
-SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Inflige {0} dégâts de type {1} à la cible à chaque pulsation. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
-SpellDescription.RampingDamageFocus.SingleTargetSnare:		Inflige {0} dégâts de type {1} à la cible à chaque pulsation et réduit sa vitesse de déplacement de {5}%. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
-SpellDescription.RampingDamageFocus.AoENoSnare:				Inflige {0} dégâts de type {1} dans la zone à chaque pulsation. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
-SpellDescription.RampingDamageFocus.AoESnare:				Inflige {0} dégâts de type {1} dans la zone à chaque pulsation et réduit la vitesse de déplacement de {5}%. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.DoomHammer.MainDescription:		Inflige {0} {1}.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Inflige {0} {1} à la cible à chaque pulsation. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Inflige {0} {1} à la cible à chaque pulsation et réduit sa vitesse de déplacement de {5}%. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Inflige {0} {1} dans la zone à chaque pulsation. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
+SpellDescription.RampingDamageFocus.AoESnare:				Inflige {0} {1} dans la zone à chaque pulsation et réduit la vitesse de déplacement de {5}%. Les dégâts augmentent de {2}% à chaque pulsation, jusqu'à un maximum de {3}%. Coûte {4}% de mana par pulsation.
 SpellDescription.HereticPiercingMagic.MainDescription:		L'efficacité des sorts de la cible est augmentée de {0}%. Cela devrait permettre de réduire les risques d'une résistance complète contre des adversaires de plus haut niveau que la cible.
 SpellDescription.SummonNethersbane.MainDescription1:		Invoque Nethersbane, la lame maléfique utilisée par Arawn.
 SpellDescription.SummonNethersbane.MainDescription2:		Le type de dégâts de Nethersbane est Froid.

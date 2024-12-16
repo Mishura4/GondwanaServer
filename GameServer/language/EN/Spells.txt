@@ -66,7 +66,7 @@ SpellDescription.Damnation.MainDescription3:		Healing will have no effect on the
 SpellDescription.Damnation.MainDescription4:		Healing will be converted by {0}% into damages.
 SpellDescription.Damnation.MainDescription5:		Undead monsters are not affected by this spell.
 SpellDescription.MonsterRez.MainDescription:		Brings the target back to life as an undead monster, restoring {0}% health and {1}% power and endurance, without experience or constitution loss.
-SpellDescription.MonsterRez.DamageMain:				Does {1} {0} damage to the target
+SpellDescription.MonsterRez.DamageMain:				Deals {1} {0} to the target
 SpellDescription.MonsterRez.DamageRadius:			and its surroundings
 SpellDescription.MonsterRez.DamageFrequency:		every {0} seconds
 SpellDescription.MonsterRez.DamageDuration:			over a period of {0} seconds
@@ -83,7 +83,7 @@ SpellDescription.OffensiveProc.MainDescription:		{0} triggers a secondary spell 
 SpellDescription.DefensiveProc.MainDescription:		{0} triggers a secondary spell with a {1}% chance when you are hit by melee attacks:
 SpellDescription.SpeedEnhancement.MainDescription:	The target's speed is increased to {0}% of normal.
 SpellDescription.SpellShield.MainDescription:		{0} absorbs 100% of spell damage and 65% of DoT effects when the player's health drops to 15% or lower.
-SpellDescription.StyleBleeding.MainDescription:		Target takes {0} {1} damage every {2} seconds.
+SpellDescription.StyleBleeding.MainDescription:		Target takes {0} {1} every {2} seconds.
 SpellDescription.StyleTaunt.Increase:				Taunts the target, increasing your threat against it by {0}.
 SpellDescription.StyleTaunt.Decrease:				Detaunts the target, decreasing your threat against it by -{0}.
 SpellDescription.Taunt.MainDescription:				Taunts the target, increasing your threat against it by {0}.
@@ -119,11 +119,11 @@ SpellDescription.Disarm.MainDescription2:			This effect can be recast only after
 SpellDescription.GroundArea.MainDescription1:		Creates a cloud that affects everyone in the area.
 SpellDescription.GroundArea.MainDescription2:		Cloud Effect:
 SpellDescription.CloudsongFall.MainDescription:		Target takes {0}% less damage when falling.
-SpellDescription.DoomHammer.MainDescription:		Does {0} {1} damage.
-SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Deals {0} {1} damage to the target each pulse. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
-SpellDescription.RampingDamageFocus.SingleTargetSnare:		Deals {0} {1} damage to the target each pulse and slows movement by {5}%. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
-SpellDescription.RampingDamageFocus.AoENoSnare:				Deals {0} {1} damage in the area each pulse. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
-SpellDescription.RampingDamageFocus.AoESnare:				Deals {0} {1} damage in the area each pulse and slows movement by {5}%. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.DoomHammer.MainDescription:		Deals {0} {1}.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Deals {0} {1} to the target each pulse. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Deals {0} {1} to the target each pulse and slows movement by {5}%. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Deals {0} {1} in the area each pulse. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
+SpellDescription.RampingDamageFocus.AoESnare:				Deals {0} {1} in the area each pulse and slows movement by {5}%. Damage increases by {2}% each pulse, up to {3}% maximum. Costs {4}% power per pulse.
 SpellDescription.HereticPiercingMagic.MainDescription:		Effectiveness of the target's spells is increased by {0}%. Against higher-level opponents than the target, this should reduce the chance of a full resist.
 SpellDescription.SummonNethersbane.MainDescription1:		Summon Nethersbane, the evil blade used by Arawn.
 SpellDescription.SummonNethersbane.MainDescription2:		The Damage type of Nethersbane is Cold.

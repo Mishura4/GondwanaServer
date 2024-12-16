@@ -87,7 +87,7 @@ namespace DOL.GS.Spells
 
             if (Spell.Radius > 0 || Spell.Frequency > 0 || Spell.Duration > 0)
             {
-                string damageTypeName = Spell.DamageType.ToString();
+                string damageTypeName = LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType);
                 double SpellDamage = Spell.Damage;
                 description += LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.DamageMain", damageTypeName, SpellDamage);
 

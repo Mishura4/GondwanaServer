@@ -270,7 +270,7 @@ namespace DOL.GS.Spells
             get
             {
                 string language = Properties.SERV_LANGUAGE;
-                string dmgTypeName = Spell.DamageType.ToString();
+                string dmgTypeName = LanguageMgr.GetDamageOfType(language, Spell.DamageType);
                 int baseDamage = (int)Spell.Damage;
                 int incrementPercent = Spell.LifeDrainReturn;
                 int maxPercent = Spell.AmnesiaChance;
