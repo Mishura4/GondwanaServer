@@ -88,13 +88,9 @@ namespace DOL.GS.Spells
         public PowerTransfer(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.PowerTransfer.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerTransfer.MainDescription", Spell.Value);
         }
     }
 }

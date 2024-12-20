@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -142,22 +141,18 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerHeal.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                int recastSeconds = Spell.RecastDelay / 1000;
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.PowerHeal.MainDescription", Spell.Value);
-
-                if (Spell.RecastDelay > 0)
-                {
-                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                    return mainDesc + "\n\n" + secondDesc;
-                }
-
-                return mainDesc;
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
             }
+
+            return mainDesc;
         }
     }
 }

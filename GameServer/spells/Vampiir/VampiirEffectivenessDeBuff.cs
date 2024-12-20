@@ -23,6 +23,8 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -161,7 +163,22 @@ namespace DOL.GS.Spells
             }
         }
 
-
         public VampiirEffectivenessDeBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.VampiirEffectivenessDeBuff.MainDescription", Spell.Value) + "\n\n" + LanguageMgr.GetTranslation(language, "SpellDescription.VampiirEffectivenessDeBuff.CombatCastable");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

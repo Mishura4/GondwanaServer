@@ -20,9 +20,11 @@ DelveInfo.Value:                Valeur : {0}
 DelveInfo.ValueNegative:        Valeur : -{0}
 
 # Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Inflige {0} {1} à la cible.
 SpellDescription.DoT.MainDescription:				La cible subit {0} {1} toutes les {2} secondes.
 SpellDescription.BoltSpell.MainDescription:			Un projectile magique se dirige vers la cible, provoquant une explosion et infligeant {0} {1}. Peut être bloqué.
-SpellDescription.LifeDrain.MainDescription:			Le sort inflige {0} dégâts de {1} à la cible, soignant l'attaquant de {2}% des dégâts causés.
+SpellDescription.LifeDrain.MainDescription:			Le sort inflige {0} {1} à la cible, soignant l'attaquant de {2}% des dégâts causés.
+SpellDescription.DirectDamageWithDebuff.MainDescription:	Inflige {0} {1} et réduit {2} de la cible de {3}%.
 SpellDescription.Nearsight.MainDescription1:		La portée effective des attaques à distance de la cible est réduite de {0}%.
 SpellDescription.Nearsight.MainDescription2:		Les sorts de vision réduite affectant le groupe du lanceur voient leur efficacité réduite de {0}%, ou sont totalement résistés.
 SpellDescription.SpreadHeal.MainDescription:		Soin de zone pour {0}.
@@ -48,14 +50,15 @@ SpellDescription.WaterBreathing.MainDescription:	Permet à la cible de respirer 
 SpellDescription.TensionDebuff.MainDescription:		Réduit les gains en tension de la cible de {1}%.
 SpellDescription.TensionBuff.MainDescription:		Augmente les gains en tension de la cible de {1}%.
 SpellDescription.Teleport.MainDescription:			{0} téléporte la cible à {1}.
-SpellDescription.PlayerPortal.MainDescription:		Ouvre un portail aller-retour à usage unique lié au point de rappel de son invocateur. Utilisable par {0}.
+SpellDescription.PlayerPortal.MainDescription:		Ouvre un portail aller-retour à usage unique lié au point de rappel de son invocateur. Fonctionne en {0}.
 SpellDescription.Earthquake.MainDescription1:		Crée un séisme d'une intensité de {0} sur l'échelle de Richter, infligeant jusqu'à {1} dégâts près de l'épicentre et diminuant jusqu'à {2} dégâts aux points les plus éloignés.
 SpellDescription.Earthquake.MainDescription2:		Les séismes n'affectent pas les monstres volants, nageurs, les Banshees ni les Vampiirs flottants.
 SpellDescription.HoT.MainDescription:				La cible régénère {0} points de vie toutes les {1} secondes.
 SpellDescription.DDWithDebuff.MainDescription:		Inflige {0} dégâts de {1} et réduit la résistance {1} de la cible de {2}%.
 SpellDescription.AfHitsBuff.MainDescription:		Augmente le facteur d'armure et la santé de la cible de {0}% tant qu'elle reste dans la portée de cette aura.
 SpellDescription.AllStatsBuff.MainDescription:		Augmente toutes les caractéristiques de la cible de {0}.
-SpellDescription.PowerDrain.MainDescription:		Inflige {0} dégâts d'Esprit à la cible, et l'invocateur du sort récupère {1}% de ces dégâts en puissance.
+SpellDescription.PowerDrain.MainDescription:		Inflige {0} {1} à la cible, et l'invocateur du sort récupère {2}% de ces dégâts en puissance.
+SpellDescription.RealPowerDrain.MainDescription:	Inflige {0} {1} à la cible, l'invocateur récupère {2}% de ces dégâts en puissance, et la cible perd {3}% de son mana total.
 SpellDescription.PowerLock.MainDescription1:		Verrouille sur place votre cible et vous-même, aspirant {0}% de sa Mana de base toutes les {1}s pour {2} secondes.
 SpellDescription.PowerLock.MainDescription2:		Pendant la durée de cet effet, ni vous ni votre cible ne pouvez subir de dégâts de mêlée.
 SpellDescription.PowerLock.MainDescription3:		Utilisable uniquement contre des joueurs ou des familiers contrôlés par des joueurs.
@@ -70,7 +73,7 @@ SpellDescription.MonsterRez.DamageRadius:			et à son entourage
 SpellDescription.MonsterRez.DamageFrequency:		toutes les {0} secondes
 SpellDescription.MonsterRez.DamageDuration:			pendant une durée de {0} secondes
 SpellDescription.SummonMonster.MainDescription:		Résurrection cadavérique.
-SpellDescription.DamageAdd.MainDescription:			Les attaques de mêlée de {0} infligent {1} {2} supplémentaires.
+SpellDescription.DamageAdd.MainDescription:			Les attaques de mêlée de la cible infligent {0} {1} supplémentaires.
 SpellDescription.DamageShield.MainDescription:		La cible inflige {0} {1} aux ennemis qui la frappent au corps à corps.
 SpellDescription.SpellReflection.MainDescription1:	{0} renvoie les sorts à l'attaquant avec {1}% de chances et à {2}% de leurs dégâts initiaux, tout en absorbant {3}% des dégâts infligés.
 SpellDescription.SpellReflection.MainDescription2:	Les sorts de combat rapprochés et les sorts d'archerie ne sont pas renvoyés.
@@ -135,12 +138,16 @@ SpellDescription.PowerHeal.MainDescription:					Restaure {0}% de la réserve de 
 SpellDescription.Silence.MainDescription:					L'ennemi est réduit au silence et ne peut pas lancer de sorts pendant {0} secondes.
 SpellDescription.IllusionSpell.MainDescription1:			L'invocateur crée {0} illusions {1} pour l'entourer, déstabilisant ainsi ses adversaires.
 SpellDescription.IllusionSpell.MainDescription2:			Les illusions infligent {0}% des dégâts de l'invocateur, possèdent {1}% des points de vie max de l'invocateur, et disparaissent après {2} secondes.
-SpellDescription.IllusionSpell.SubDescription1:				L'invocateur est métamorphosé en une créature, et les {0} illusions partagent la même apparence.
+SpellDescription.IllusionSpell.SubDescription1:				L'invocateur est métamorphosé en une créature, et les {0} illusions invoquées partagent la même apparence.
 SpellDescription.IllusionSpell.SubDescription2a:			Les illusions se déplacent suivant l'invocateur, imitant ses mouvements, styles et sorts.
 SpellDescription.IllusionSpell.SubDescription2b:			Les illusions disparaissent immédiatement et le sort prend fin si le lanceur se déplace.
 SpellDescription.Bump.MainDescriptionSingle:		Projette l'ennemi ciblé à {0} unités de hauteur dans les airs et le lance en avant entre {1}% et {2}% de la distance de lancer maximale, l'étourdissant en plein vol.
 SpellDescription.Bump.MainDescriptionArea:			Tous les ennemis situés dans un rayon de {3} unités sont projetés à {0} unités de hauteur puis lancés en avant entre {1}% et {2}% de la distance de lancer maximale, les laissant étourdis en plein vol.
 SpellDescription.Bump.MainDescriptionCone:			Les ennemis situés dans un cône face au lanceur du sort sont propulsés à {0} unités de hauteur et envoyés en avant entre {1}% et {2}% de la distance de lancer maximale, les laissant étourdis en plein vol.
+SpellDescription.Conversion.MainDescription:		{0}% de tous les types de dégâts subis sont convertis en santé, endurance et mana.
+SpellDescription.MagicConversion.MainDescription:	{0}% de tous les dégâts magiques subis sont convertis en santé, endurance et mana.
+SpellDescription.Fury.MainDescription:				Confère une chance de {0}% de dévier les sorts de contrôle, et augmente toutes les résistances magiques de {0}%.
+SpellDescription.HealthToFatigue.MainDescription:	La cible récupère {0}% d'endurance perdue.
 SpellDescription.Chamber.MainDescription:			Vous permet de précharger une chambre contenant un sort principal et un sort secondaire qui peuvent être déchargés instantanément sur votre cible.
 SpellDescription.Chamber.CanContainBolts:			Peut contenir des projectiles.
 SpellDescription.Chamber.CannotContainBolts:		Ne peut pas contenir de projectiles.
@@ -169,6 +176,7 @@ SpellDescription.CrushSlashThrustDebuff.MainDescription:	Réduit les résistance
 SpellDescription.EssenceDebuff.MainDescription:				Réduit les résistances de la cible aux dégâts de type « essence » de {0}%.
 SpellDescription.DualStatDebuff.MainDescription:			Réduit {0} et {1} de la cible de {2}.
 SpellDescription.DualStatBuff.MainDescription:				Augmente {0} et {1} de {2}.
+SpellDescription.SingleStatBuff.MainDescription:			Augmente {0} de {1}.
 SpellDescription.CombatSpeedBuff.MainDescription:			Augmente la vitesse d'attaque de {0}%.
 SpellDescription.FatigueConsumptionBuff.MainDescription:	Les actions nécessitent {0}% d'endurance en moins.
 SpellDescription.DPSBuff.MainDescription:					Augmente le DPS de {0}%.
@@ -189,17 +197,139 @@ SpellDescription.FatigueConsumptionDebuff.MainDescription:	Augmente de {0}% l'en
 SpellDescription.FumbleChanceDebuff.MainDescription:		Augmente la probabilité que la cible échoue lamentablement de {0}%.
 SpellDescription.DPSDebuff.MainDescription:					Réduit le DPS de {0}%.
 SpellDescription.SkillsDebuff.MainDescription:				Réduit les compétences de {0}%.
-SpellDescription.Warlock.SecondarySpell:			Ceci est un sort secondaire.
+SpellDescription.Warlock.SecondarySpell:					Ceci est un sort secondaire.
+SpellDescription.AllStatsDebuff.MainDescription:			Réduit toutes les stats de la cible de {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:		Réduit toutes les stats de la cible de {0}%.
+SpellDescription.Morph.MainDescription:						La cible a été changée en {0}.
+SpellDescription.PowerRend.MainDescription:					La cible perd {0}% de mana.
+SpellDescription.SummonAnimistFnF.MainDescription:		Invoque une tourelle fixe à l'emplacement de votre cible au sol, qui attaque tous les ennemis à portée.
+SpellDescription.Bomber.MainDescription:				Invoque un esprit élémentaire qui se dirige vers la cible et explose, lançant son sort à l'arrivée.
+SpellDescription.SavageParryBuff.MainDescription:		Augmente vos chances de parer de {0}%.
+SpellDescription.SavageEvadeBuff.MainDescription:		Augmente vos chances d'esquiver de {0}%.
+SpellDescription.SavageCombatSpeedBuff.MainDescription:	Augmente votre vitesse d'attaque de {0}%.
+SpellDescription.SavageDPSBuff.MainDescription:			Augmente vos dégâts de mêlée de {0}.
+SpellDescription.SavageEnduranceHeal.MainDescription:	Vous regagnez {0} d'endurance au prix d'une partie de votre santé.
+SpellDescription.Archery.SingleTarget:					Inflige {0} {1} à la cible.
+SpellDescription.Archery.AreaTarget:					Inflige {0} {1} à la cible et à son entourage.
+SpellDescription.Archery.SecondaryEffectiveness:		L'efficacité du tir est augmentée de {0}%.
+SpellDescription.Fear.SingleTarget:						Effraie l'ennemi ciblé. N'affecte pas les ennemis de niveau supérieur à {0}.
+SpellDescription.Fear.AreaTarget:						Un sort de terreur de zone centré sur le lanceur, effrayant les ennemis dans un rayon de {1} unités. N'affecte pas les ennemis de niveau supérieur à {0}.
+SpellDescription.BainsheePulseDmg.MainDescription:		La cible subit {0} {1}.
+SpellDescription.BainsheePulseDmg.AreaDescription:		Le sort affecte tous les ennemis dans le rayon immédiat du lanceur du sort.
+SpellDescription.BainsheePulseDmg.SecondaryDescription:	Lancer à nouveau l'incantation pendant son effet l'annule. Elle se dissipe si le lanceur du sort se déplace.
+SpellDescription.BeFriend.MainDescriptionArea:			Charme temporairement les monstres présents dans le rayon du lanceur, tant qu'ils sont de niveau inférieur ou égal à {0}, les rendant amicaux et agissant comme des alliés.
+SpellDescription.BeFriend.MainDescriptionSingle:		Charme temporairement le monstre ciblé, tant qu'il est de niveau inférieur ou égal à {0}, le rendant amical et agissant comme un allié.
+SpellDescription.VampiirStealthDetection.MainDescription:	Augmente la capacité de la cible à détecter les ennemis camouflés de {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Affaiblit temporairement les bonus de compétence de la cible de {0}%.
+SpellDescription.VampiirMeleeResistance.MainDescription:	Augmente les résistances de mêlée de la cible de {0}%.
+SpellDescription.VampiirMagicResistance.MainDescription:	Augmente les chances de résistance aux dommages magiques de la cible de {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Réduit temporairement l'efficacité de la cible de {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Peut être lancé en combat.
+SpellDescription.VampiirArmorDebuff.MainDescription:		Réduit temporairement l'absorption et le facteur d'armure d'une pièce d'armure aléatoire de la cible de {0}%.
+SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Cela n'affectera que le heaume, le torse ou les jambes de la cible.
+SpellDescription.RangeShield.MainDescription:			Protège le groupe de l'incantateur contre les attaques physiques d'archerie.
 
-SpellDescription.AllStatsDebuff.MainDescription:             Réduit toutes les stats de la cible de {0}.
-SpellDescription.AllStatsPercentDebuff.MainDescription:      Réduit toutes les stats de la cible de {0}%.
-SpellDescription.Morph.MainDescription:                      La cible a été changée en {0}.
-SpellDescription.PowerRend.MainDescription:                  La cible perd {0}% de mana.
-SpellDescription.DirectDamage.MainDescription:               Inflige {0} {1} à la cible.
-SpellDescription.Convoker.SummonWood.MainDescription:        Invoque des planches de bois utilisable pour réparer des portes de château.
-SpellDescription.Convoker.PrescienceNode.MainDescription:    Sentinelle de sol qui peut révéler les ennemis furtifs, sans enlever leur camouflage.
-SpellDescription.Convoker.Prescience.MainDescription:        Vous avez été détécté(e) par Prescience!
-SpellDescription.SingleStatBuff.MainDescription:			 Augmente {0} de {1}.
+# ML Spells ShortDescriptions
+SpellDescription.Convoker.SummonWood.MainDescription:			Invoque et génère 100 planches de bois au hasard utilisables pour améliorer et réparer les portes et les murs des forteresses.
+SpellDescription.Convoker.PrescienceNode.MainDescription1:		Rune déployée au sol (rayon de 1000) exposant les ennemis furtifs sans annuler leur invisibilité.
+SpellDescription.Convoker.PrescienceNode.MainDescription2:		La rune de Préscience peut être attaqué et possède {0} points de vie.
+SpellDescription.Convoker.Prescience.MainDescription1:			Vous avez été détecté(e) par une rune de Prescience !
+SpellDescription.Convoker.Prescience.MainDescription2:			Vous confère des capacités précognitives, permettant une meilleure anticipation des mouvements ennemis.
+SpellDescription.Convoker.PowerTrap.MainDescription:			Déploie une rune qui draine 20% de la mana des ennemis lors de sa détonation (fonctionne uniquement sur les ennemis disposant d'une réserve de mana).
+SpellDescription.Convoker.SpeedWrap.MainDescription:			Rune déployée au sol qui annule les effets des sorts d'augmentation de vitesse pour les ennemis qui la traversent. Ceux affectés ne peuvent plus bénéficier de sorts de vitesse pendant 6 secondes après avoir quitté le rayon d'influence de la balise.
+SpellDescription.Convoker.SummonWarcrystal.MainDescription:		Invoque et génère dans l'inventaire une munition de siège puissante (mitraille, balles, glace ou pierres de catapulte).
+SpellDescription.Convoker.Battlewarder.MainDescription1:		Un Gardien de Bataille est invoqué pour intercepter les attaques ennemies. Reste immobile et consomme de la mana pendant qu'il est actif.
+SpellDescription.Convoker.Battlewarder.MainDescription2:		Incantation ciblée au sol. Plusieurs Gardiens de Bataille peuvent être invoqués simultanément avec d'autres familiers, et plusieurs Gardes de Bataille peuvent être invoqués à la fois.
+SpellDescription.Convoker.DissonanceTrap.MainDescription:		Déploie une rune de dissonance qui cause {0} {1} aux ennemis lors de sa détonation.
+SpellDescription.Convoker.BrittleGuard.MainDescription1:		Fait apparaître un  « Gardien Fragile » capable de bloquer une attaque de mêlée pour vous protéger.
+SpellDescription.Convoker.BrittleGuard.MainDescription2:		Le Gardien Fragile n'a qu'un point de vie et meurt après avoir intercepté un coup. Un seul peut être actif à la fois.
+SpellDescription.Convoker.SummonMastery.MainDescription:		Augmente le niveau effectif de vos familiers, améliorant leurs dégâts de mêlée et leur absorption d'armure.
+SpellDescription.Convoker.SummonTitan.MainDescription1:			Invoque un Titan qui grandit en taille et en puissance, frappant les ennemis avec une force colossale.
+SpellDescription.Convoker.SummonTitan.MainDescription2:			Le Titan reste immobile et attaque uniquement les ennemis à portée de mêlée.
+SpellDescription.Spymaster.Decoy.MainDescription:				Invoque un allié portant une tenue épique avec un seul point de vie et aucune capacité offensive pour distraire les ennemis.
+SpellDescription.Spymaster.Sabotage.MainDescription:			Sabote une cible, qu'il s'agisse d'une rune ou d'un équipement de siège, la rendant inutilisable.
+SpellDescription.Spymaster.TangleSnare.MainDescription:			Déploie une rune qui ralentit les ennemis de {0}% dans son rayon lors de la détonation. Annule la furtivité en cas d'utilisation.
+SpellDescription.Spymaster.PoisonSpike.MainDescription:			Déploie une rune empoisonnée qui inflige {0} {1} aux ennemis proches lors de la détonation. Annule la furtivité.
+SpellDescription.Spymaster.Loockout.MainDescription1:			Un guetteur fixe expose les ennemis furtifs dans un rayon de {0}. Lui-même reste caché tant qu'il ne bouge pas.
+SpellDescription.Spymaster.Loockout.MainDescription2:			La cible du guetteur doit être assise et immobile. Si elle bouge, l'effet se dissipe, et la détection furtive normale s'applique.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Rune qui inflige des dégâts majeurs aux engins de siège lors de sa détonation.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		La rune inflige {0} dégâts à son activation.
+SpellDescription.Spymaster.EssenceFlare.MainDescription:		Applique un poison qui plonge les ennemis dans un état de somnolence pendant 15 secondes.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Cache votre groupe sous un camouflage. Se déplacer, incanter ou chanter rompt l’effet pour les membres non furtifs.
+SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Draine {0} endurance aux ennemis environnants.
+SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Accorde un bonus de dégâts de {0}% contre les équipements de siège et les structures de fort.
+SpellDescription.Battlemaster.MLManadrain.MainDescription:		Draine {0} mana des ennemis environnants.
+SpellDescription.Battlemaster.Grapple.MainDescription1:			Effet à courte portée ciblant un ennemi, le restreignant pendant {0} secondes et annulant tous les effets.
+SpellDescription.Battlemaster.Grapple.MainDescription2:			Immobilise la cible, l'empêchant de bouger ou d'utiliser des attaques de mêlée, mais elle peut encore lancer des sorts et des chants pendant 10 secondes.
+SpellDescription.Battlemaster.Grapple.MainDescription3:			La cible immobilisée ne peut pas être attaquée en mêlée.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	Accorde {0}% de chance de déclencher des dégâts d’essence bonus lors des attaques au corps-à-corps.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		Une attaque à distance utilisant les formules de dégâts de mêlée.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Les attaques de mêlée sont désactivées pendant 10 secondes après ce sort.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Réduit la résistance des ennemis proches aux dégâts d'essence de {0}%.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription2:	Réduit la résistance aux dégâts d'essence de la cible de {0}%.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Protège un allié proche contre les attaques de mêlée. L'allié ne peut pas être ciblé tant que le protecteur reste en vie ou à portée.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	La protection reste active uniquement si la cible protégée reste immobile.
+SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Réduit l'agilité de la cible de {0}%.
+SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:		Réduit la vitesse d'incantation des ennemis de {0}%.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Réduit la mana, la santé et la fatigue des ennemis dans la zone d’effet de {0}%.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Réduit la mana, la santé et la fatigue des ennemis dans la zone d’effet de {0}%, mais vous coûte {1}% de votre propre santé.
+SpellDescription.Banelord.Oppression.MainDescription:			Réduit l'encombrement maximum des ennemis proches de {0}%.
+SpellDescription.Banelord.FatDebuff.MainDescription:			Augmente la dépense d'endurance des attaques ennemies de {0}%.
+SpellDescription.Banelord.MissHit.MainDescription:				Réduit de {0}% les chances des ennemis proches d'atteindre leurs cibles.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Snare de zone affectant la vitesse des ennemis de {0}% tout en étourdissant l’utilisateur.
+SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:		La cible est étourdie pendant {0} secondes et ne peut effectuer aucune action.
+SpellDescription.Banelord.ToHitBuff.MainDescription:			Effet de zone augmentant de {0}% la chance pour les alliés de toucher leurs ennemis.
+SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Effet de zone réduisant l'efficacité des ennemis pour déterminer la variance des dégâts de sorts et de mêlée de {0}%.
+SpellDescription.Banelord.Banespike.MainDescription:			Booste de {0}% les dégâts des alliés proches.
+SpellDescription.Banelord.NbTargetAffected.MainDescription:		{0} ennemis maximum peuvent être touchés.
+SpellDescription.Perfector.FOH.MainDescription1:				Crée une sphère aux pieds du lanceur qui restaure la santé des alliés de {0} au fil du temps. Jusqu'à 40 alliés proches peuvent être soignés simultanément.
+SpellDescription.Perfector.FOH.MainDescription2:				En PvE, la sphère de soins attire l'attention des ennemis sur le lanceur.
+SpellDescription.Perfector.FOP.MainDescription1:				Crée une sphère aux pieds du lanceur qui restaure la mana des alliés de {0} au fil du temps. Jusqu'à 40 alliés proches peuvent être régénérés simultanément.
+SpellDescription.Perfector.FOP.MainDescription2:				Les alliés ayant combattu en PvE au cours des 10 dernières secondes ne sont pas affectés par la sphère.
+SpellDescription.Perfector.FOR.MainDescription:					Rune qui réduit de {0}% l'impact des sorts de contrôle sur les alliés à proximité.
+SpellDescription.Perfector.SickHeal.MainDescription:			Permet à la cible de récupérer des effets liés à la résurrection.
+SpellDescription.Perfector.FOD.MainDescription:					Rune protectrice qui draine {0}% de mana des ennemis se trouvant dans son rayon d’action.
+SpellDescription.Perfector.PoT.MainDescription:					Effet de régénération continue augmentant de {0}% la mana offerte à chaque tic.
+SpellDescription.Perfector.CCResist.MainDescription:			Augmente votre résistance aux effets de contrôle de {0} secondes.
+SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Effet de zone régénérant {0}% de leur maximum la santé, la mana et l'endurance des alliés proches. 
+SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Soigne la cible de 1000 points de vie au prix de {0}% de la santé du lanceur.
+SpellDescription.Warlord.CoweringBellow.MainDescription:		Effraye tous les familiers ennemis contrôlés dans un rayon de {0}, réduisant leur efficacité au combat.
+SpellDescription.Warlord.Critical.MainDescription1:				Augmente la chance de coup critique des alliés de votre {0} de {1}% pour leur prochaine attaque.
+SpellDescription.Warlord.Critical.MainDescription2:				Augmente la chance de coup critique de la cible de {0}% pour sa prochaine attaque.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Réduit de {1}% l'efficacité des DoTs sur les alliés dans un rayon de {0}. Si les dégâts tombent à zéro, l'effet est supprimé.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Réduit de {0}% l'efficacité des DoTs sur la cible. Si les dégâts tombent à zéro, l'effet est supprimé.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Augmente de {1}% l'efficacité des alliés à portée de {0} pour les dégâts des sorts et attaques de mêlée.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Augmente de {1}% l'efficacité de la cible pour les dégâts des sorts et attaques de mêlée.
+SpellDescription.Warlord.MLABSBuff.MainDescription1:			Augmente de {1}% l'absorption d'armure des alliés dans un rayon de {0}.
+SpellDescription.Warlord.MLABSBuff.MainDescription2:			Augmente de {1}% l'absorption d'armure de la cible.
+SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription:	Détruit la rune ciblée et celles aux alentours dans un rayon de {0}.
+SpellDescription.Sojourner.AncientTransmuter.MainDescription:	Invoque un marchand permettant d'acheter et vendre des fournitures de base.
+SpellDescription.Sojourner.Port.MainDescription1:				Téléporte à votre pierre d'âmes. Ne fonctionne pas en combat ou en zone RvR.
+SpellDescription.Sojourner.Port.MainDescription2:				Téléporte {0} joueurs dans un rayon de {1} à leur pierre d'âmes. Ne fonctionne pas en combat ou en RvR.
+SpellDescription.Sojourner.EssenceResist.MainDescription:		Augmente de {0}% la résistance de la cible aux dégâts naturels (essence).
+SpellDescription.Sojourner.Zephyr.MainDescription1:				Invoque un souffle qui emporte un ennemi choisi dans une direction aléatoire, le rendant invulnérable durant ce déplacement.
+SpellDescription.Sojourner.Zephyr.MainDescription2:				Un joueur emporté par le Zephyr est immunisé contre cet effet pour les {0} minutes suivantes.
+SpellDescription.Sojourner.Phaseshift.MainDescription:			Amélioration personnelle offrant une quasi-invulnérabilité aux sorts et attaques de mêlée pour {0} secondes.
+SpellDescription.Sojourner.Groupport.MainDescription:			Ramène tout votre groupe à votre pierre d'âmes. Si un membre du groupe est en combat, ce sort échouera.
+SpellDescription.Stormlord.DazzlingArray.MainDescription1:		Applique un effet réduisant de {0}% les chances des ennemis de toucher les alliés dans la zone.
+SpellDescription.Stormlord.DazzlingArray.MainDescription2:		Ne s'applique qu'aux sorts d'étourdissement, excluant les capacités de royaume et les styles de mêlée.
+SpellDescription.Stormlord.StormMissHit.MainDescription:		Réduit de {0}% la précision de la cible.
+SpellDescription.Stormlord.VacuumVortex.MainDescription:		Effet ciblé au sol repoussant les orages proches vers un point aléatoire en bordure du vortex.
+SpellDescription.Stormlord.EnervatingGas.MainDescription:		Émet un gaz qui réduit de {0}% l'endurance des ennemis dans son rayon d'action.
+SpellDescription.Stormlord.StormEndudrain.MainDescription:		Tempête qui draine {0} endurance des ennemis qui restent à l'intérieur.
+SpellDescription.Stormlord.InebriatingFumes.MainDescription:	Diminue progressivement la Dextérité et la Vivacité des ennemis de {0}% présents dans le nuage de fumée.
+SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription:	Réduit de {0}% la dextérité et la vivacité de la cible.
+SpellDescription.Stormlord.MentalSiphon.MainDescription:		Tempête qui siphonne {0} mana des ennemis qui se tiennent à l'intérieur.
+SpellDescription.Stormlord.PowerDrainStorm.MainDescription:		Draine {0} de mana de la cible.
+SpellDescription.Stormlord.FocusingWinds.MainDescription:		Lance et verrouille une tempête alliée. L'effet cesse si vous vous déplacez.
+SpellDescription.Stormlord.ChokingVapors.MainDescription:		Diminue progressivement la Force et la Constitution des ennemis de {0}% présents dans le nuage de fumée.
+SpellDescription.Stormlord.StormStrConstDebuff.MainDescription:	Réduit de {0}% la Force et la Constitution de la cible.
+SpellDescription.Stormlord.SenseDullingCloud.MainDescription:	Tempête qui libère des vapeurs réduisant l'Acuité de {0}% chez les ennemis à l'intérieur.
+SpellDescription.Stormlord.StormAcuityDebuff.MainDescription:	Réduit de {0}% l'Acuité de la cible.
+SpellDescription.Stormlord.EnergyTempest.MainDescription:		Tempête qui inflige des dégâts d'essence aux ennemis à l'intérieur.
+SpellDescription.Stormlord.StormEnergyTempest.MainDescription:	Provoque une tempête infligeant {0} {1} sur {2} secondes aux ennemis.
+SpellDescription.MLBase.TargetModifier.MainDescription:			Amélioration personnelle qui permet de modifier ou étendre le rayon de votre prochain sort direct ou de zone.
+SpellDescription.MLBase.BanelordSnare.MainDescription:			Effet de ralentissement en zone à courte portée qui ralentit les ennemis proches de {0}%, mais étourdit également l'utilisateur.
 
 # AblativeArmor
 AblativeArmor.DelveInfo.Function:			Fonction: tampon de points de mélée
@@ -228,9 +358,9 @@ CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			humanoïde, animale, in
 CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	humanoïde, animale, insectoïde, magique et mort-vivante
 
 #IllusionSpell SpellHandler
-SpellDescription.IllusionSpell.Arrangement.Random:		randomly
-SpellDescription.IllusionSpell.Arrangement.Circle:		in a circle
-SpellDescription.IllusionSpell.Arrangement.Line:		in a line
+IllusionSpell.Arrangement.Random:		aléatoirement
+IllusionSpell.Arrangement.Circle:		en cercle
+IllusionSpell.Arrangement.Line:			en ligne
 
 # DamageAddAndShield
 DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} vous touche pour {1} points de dommage additionels !
@@ -354,3 +484,19 @@ Spells.NecroSumonWeap.Icebrand.You:				Vous invoquez l'épée Icebrand.
 Spells.NecroSumonWeap.Icebrand.Target:			{0} invoque l'épée Icebrand.
 Spells.NecroSumonWeap.Nethersbane.You:			Vous invoquez l'épée Nethersbane.
 Spells.NecroSumonWeap.Nethersbane.Target:		{0} invoque l'épée Nethersbane.
+
+# StyleHandler
+StyleHandler.StyleNotFound:						Style de combat introuvable.
+StyleHandler.UseStyle:							Utilisez le style {0} pour vos attaques de mêlée.
+StyleHandler.NeedsRequirement:					Nécessite {0} pour exécuter ce style.
+StyleHandler.NeedsWeapon:						Il vous faut un(e) {0} pour effectuer ce style.
+StyleHandler.AllWeaponTypes:					Tous les types d'armes sont compatibles avec ce style de combat.
+StyleHandler.UnknownWeaponType:					Type d'arme requis inconnu.
+StyleHandler.StyleNotImplemented:				Ce style n'est pas encore implémenté !
+StyleHandler.Opening.DefensiveActionUsing:		une action défensive utilisant {0}
+StyleHandler.Opening.DefensiveAction:			une action défensive
+StyleHandler.Opening.Positional.Back:			que vous soyez en position arrière par rapport à l'adversaire
+StyleHandler.Opening.Positional.Side:			que vous soyez en position latérale par rapport à l'adversaire
+StyleHandler.Opening.Positional.Front:			que vous soyez en position frontale par rapport à l'adversaire
+StyleHandler.Opening.Positional.Specific:		une position spécifique par rapport à l'ennemi
+StyleHandler.Opening.Default:					un prérequis d'ouverture de combat spécifique

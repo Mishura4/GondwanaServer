@@ -72,5 +72,19 @@ namespace DOL.GS.Spells
 
         // constructor
         public HealthToEndurance(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.HealthToFatigue.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

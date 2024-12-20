@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("ZoSummon")]
     public class BracerOfZo : SpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public override bool IsUnPurgeAble { get { return true; } }
 
@@ -64,8 +64,8 @@ namespace DOL.GS.Spells
                 deamons[i].Level = 36;
                 deamons[i].Flags |= GameNPC.eFlags.FLYING;
                 deamons[i].AddToWorld();
-                (deamons[i].Brain as IOldAggressiveBrain).AddToAggroList(Caster.TargetObject as GameLiving, 1);
-                (deamons[i].Brain as ProcPetBrain).Think();
+                (deamons[i].Brain as IOldAggressiveBrain)!.AddToAggroList(Caster.TargetObject as GameLiving, 1);
+                (deamons[i].Brain as ProcPetBrain)!.Think();
             }
         }
 

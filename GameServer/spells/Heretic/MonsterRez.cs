@@ -64,7 +64,7 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            string language = Properties.SERV_LANGUAGE;
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
             string description = LanguageMgr.GetTranslation(language, "SpellDescription.MonsterRez.MainDescription", Spell.ResurrectHealth, Spell.ResurrectMana);
 
             Spell currentSpell = Spell;
@@ -235,14 +235,14 @@ namespace DOL.GS.Spells
         {
             SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
             if (attempt.Caster.GetController() is GamePlayer player)
-                player.SendTranslatedMessage("SummonMonster.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+                player.SendTranslatedMessage("SpellHandler.SummonMonster.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
             attempt.SendSpellResistAnimation(target);
         }
         
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MonsterRez.MainDescription");
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.SummonMonster.MainDescription");
         }
 
     }

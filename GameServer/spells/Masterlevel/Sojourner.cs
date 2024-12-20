@@ -11,6 +11,7 @@ using DOL.GS.Geometry;
 using System.Collections.Specialized;
 using DOL.GS.Profession;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -56,7 +57,7 @@ namespace DOL.GS.Spells
             {
                 if (item != null && item is GameMine)
                 {
-                    (item as GameMine).Delete();
+                    (item as GameMine)!.Delete();
                 }
             }
             return true;
@@ -64,8 +65,21 @@ namespace DOL.GS.Spells
 
         public UnmakeCrystalseedSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Destroys the targeted rune, and any runes immediately nearby.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription", Spell.Radius);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -105,7 +119,7 @@ namespace DOL.GS.Spells
                 GamePlayer casterPlayer = caster as GamePlayer;
                 merchant = new GameMerchant();
                 //Fill the object variables
-                merchant.Position = casterPlayer.Position.TurnedAround() 
+                merchant.Position = casterPlayer!.Position.TurnedAround() 
                     + Vector.Create(Util.Random(-20, 20), Util.Random(-20, 20));
                 merchant.Level = 1;
                 merchant.Realm = casterPlayer.Realm;
@@ -119,8 +133,21 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
-            => "Summon a vendor to sell to and buy basic supplies.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.AncientTransmuter.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -150,8 +177,30 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription
-            => "Teleport to your world bindpoint. This spell will fail if you are in combat or in an RvR zone.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string spellTarget = LanguageMgr.GetTargetOfType(language, m_spell.Target.ToString());
+
+            string mainDesc;
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.Port.MainDescription1", spellTarget, Spell.Radius);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.Port.MainDescription2");
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -163,6 +212,22 @@ namespace DOL.GS.Spells
         public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.BaseBuff; } }
         public override eProperty Property1 { get { return eProperty.Resist_Natural; } }
         public EssenceResistHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.EssenceResist.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion Sojourner-7
 
@@ -287,7 +352,7 @@ namespace DOL.GS.Spells
                 ad = attackedByEnemy.AttackData;
 
             double absorbPercent = 100;
-            int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.Damage + ad.CriticalDamage));
+            int damageAbsorbed = (int)(0.01 * absorbPercent * (ad!.Damage + ad.CriticalDamage));
             int spellAbsorbed = (int)(0.01 * absorbPercent * Spell.Damage);
 
             ad.Damage -= damageAbsorbed;
@@ -333,7 +398,7 @@ namespace DOL.GS.Spells
             {
                 //Calculate random target
                 m_loc = m_npc.Coordinate + Vector.Create(x: Util.Random(-1500, 1500), y: Util.Random(-1500, 1500));;
-                (Caster as GamePlayer).Out.SendCheckLOS((Caster as GamePlayer), m_npc, new CheckLOSResponse(ZephyrCheckLOS));
+                (Caster as GamePlayer)!.Out.SendCheckLOS((Caster as GamePlayer), m_npc, new CheckLOSResponse(ZephyrCheckLOS));
             }
         }
         public void ZephyrCheckLOS(GamePlayer player, ushort response, ushort targetOID)
@@ -353,9 +418,21 @@ namespace DOL.GS.Spells
 
         public FZSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Targeted summon that picks up the selected enemy player and carries them in a random direction. " +
-            "The zephyred player is immune to damage for the duration. Once zephyred, a player cannot be zephyred again for 1 minute.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            double recastSeconds = Spell.RecastDelay / 60000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.Zephyr.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.Zephyr.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -395,12 +472,12 @@ namespace DOL.GS.Spells
             if (attackedByEnemy != null)
                 ad = attackedByEnemy.AttackData;
 
-            if (ad.Attacker is GamePlayer)
+            if (ad!.Attacker is GamePlayer)
             {
                 ad.Damage = 0;
                 ad.CriticalDamage = 0;
                 GamePlayer player = ad.Attacker as GamePlayer;
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Skill.Ability.TargetIsPhaseshifted", player.GetPersonalizedName(living)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Skill.Ability.TargetIsPhaseshifted", player.GetPersonalizedName(living)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
             }
         }
 
@@ -426,8 +503,21 @@ namespace DOL.GS.Spells
         // constructor
         public PhaseshiftHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Self buff that provides nigh-invulnerability to spells and melee for a short duration.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.Phaseshift.MainDescription", Spell.Duration);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -440,7 +530,7 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            if (Caster is GamePlayer && Caster.CurrentRegionID == 51 && ((GamePlayer)Caster).BindRegion == 51)
+            if (Caster is GamePlayer && Caster.CurrentRegionID == 51 && ((GamePlayer)Caster).BindPosition.RegionID == 51)
             {
                 if (Caster.CurrentRegionID == 51)
                 {
@@ -486,8 +576,21 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription
-            => "Teleport your group to your world bindpoint. If any group member is in combat, this spell will fail.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Sojourner.Groupport.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 }

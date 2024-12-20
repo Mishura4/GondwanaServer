@@ -58,7 +58,7 @@ namespace DOL.GS.Spells
         {
             SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
             if (attempt.Caster.GetController() is GamePlayer player)
-                player.SendTranslatedMessage("Morphed.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+                player.SendTranslatedMessage("SpellHandler.Morphed.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
             attempt.SendSpellResistAnimation(target);
         }
 

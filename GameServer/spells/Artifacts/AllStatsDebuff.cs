@@ -51,7 +51,7 @@ namespace DOL.GS.Spells.Atlantis
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
@@ -74,7 +74,7 @@ namespace DOL.GS.Spells.Atlantis
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
@@ -117,7 +117,16 @@ namespace DOL.GS.Spells.Atlantis
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.AllStatsDebuff.MainDescription", Spell.Value);
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.AllStatsDebuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return description + "\n\n" + secondDesc;
+            }
+
+            return description;
         }
     }
 }

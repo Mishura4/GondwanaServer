@@ -24,6 +24,8 @@ using System;
 using DOL.AI.Brain;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -132,7 +134,20 @@ namespace DOL.GS.Spells
 
         public int ReduceSubSpellDamage { get; set; }
 
-        public override string ShortDescription
-            => "Summons an elemental spirit to attack the target.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Bomber.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

@@ -295,11 +295,28 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.BoltSpell.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.BoltSpell.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+
+            if (Spell.RecastDelay > 0)
+            {
+                if (Spell.IsSecondary)
+                {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondDesc + "\n\n" + secondaryMessage;
+                }
+                else
+                {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    return description + "\n\n" + secondDesc;
+                }
+            }
 
             if (Spell.IsSecondary)
             {
-                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
                 description += "\n\n" + secondaryMessage;
             }
 

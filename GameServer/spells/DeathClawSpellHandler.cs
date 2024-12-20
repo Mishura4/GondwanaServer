@@ -92,7 +92,16 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.DeathClaw.MainDescription", Spell.Name, Spell.AmnesiaChance);
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DeathClaw.MainDescription", Spell.Name, Spell.AmnesiaChance);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
         }
     }
 }

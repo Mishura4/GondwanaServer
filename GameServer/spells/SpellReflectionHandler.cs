@@ -2,7 +2,6 @@
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 
@@ -125,17 +124,19 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                double intensityValue = Spell.Value / 50.0;
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SpellReflection.MainDescription1", Spell.Name, intensityValue, Spell.AmnesiaChance, Spell.LifeDrainReturn);
-                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SpellReflection.MainDescription2");
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpellReflection.MainDescription1", Spell.Name, Spell.Value, Spell.AmnesiaChance, Spell.LifeDrainReturn);
+            string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpellReflection.MainDescription2");
 
-                return mainDesc + "\n\n" + secondDesc;
+            if (Spell.RecastDelay > 0)
+            {
+                string thirdDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc + "\n\n" + thirdDesc;
             }
+
+            return mainDesc + "\n\n" + secondDesc;
         }
     }
 }

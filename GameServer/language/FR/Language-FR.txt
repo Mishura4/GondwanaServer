@@ -84,4 +84,14 @@ Language.DamageType.Melee.Damage:				dégâts de mélée
 Language.DamageType.Spell.Damage:				dégâts des sorts
 Language.DamageType.DoT.Damage:					dégâts sur la durée
 
+# Target
+Language.SpellTarget.Realm:						royaume
+Language.SpellTarget.Self:						solo
+Language.SpellTarget.Enemy:						ennemi
+Language.SpellTarget.Pet:						familier
+Language.SpellTarget.Group:						groupe
+Language.SpellTarget.Area:						zone
+Language.SpellTarget.Corpse:					cadavre
+Language.SpellTarget.Unknown:					cible inconnue
+
 Language.InternalError:							Une erreur serveur est survenue lors de l'éxécution de cette action ; veuillez contacter le staff du serveur.

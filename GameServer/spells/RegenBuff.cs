@@ -34,21 +34,17 @@ namespace DOL.GS.Spells
 
         public HealthRegenSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.RegenHeal.MainDescription", Spell.Value);
+
+            if (Spell.IsSecondary)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.RegenHeal.MainDescription", Spell.Value);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
             }
+
+            return description;
         }
     }
 
@@ -69,21 +65,17 @@ namespace DOL.GS.Spells
 
         public PowerRegenSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.RegenPower.MainDescription", Spell.Value);
+
+            if (Spell.IsSecondary)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.RegenPower.MainDescription", Spell.Value);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
             }
+
+            return description;
         }
 
     }
@@ -224,21 +216,17 @@ namespace DOL.GS.Spells
 
         public EnduranceRegenSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.RegenEndu.MainDescription", Spell.Value);
+
+            if (Spell.IsSecondary)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.RegenEndu.MainDescription", Spell.Value);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
             }
+
+            return description;
         }
     }
 }

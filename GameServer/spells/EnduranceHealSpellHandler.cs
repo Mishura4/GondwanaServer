@@ -132,14 +132,10 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string amountStr = (Spell.Value < 0 ? Spell.Value + "%" : Spell.Value.ToString());
-                return LanguageMgr.GetTranslation(language, "SpellDescription.EnduranceHeal.MainDescription", amountStr);
-            }
+            string amountStr = (Spell.Value < 0 ? Spell.Value + "%" : Spell.Value.ToString());
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.EnduranceHeal.MainDescription", amountStr);
         }
     }
 }

@@ -34,6 +34,9 @@ using System.Linq;
 using DOL.GS.Finance;
 using DOL.GS.Geometry;
 using DOL.GS.ServerProperties;
+using DOL.GS.Spells;
+using DOL.GS.Styles;
+using static DOL.GS.Spells.IllusionSpell;
 
 namespace DOL.Language
 {
@@ -602,6 +605,107 @@ namespace DOL.Language
                 return "(unknown)";
             }
             return translation;
+        }
+
+        public static string GetCharmSpeciesOfType(string language, CharmSpellHandler.eCharmType charmType)
+        {
+            string translationKey = charmType switch
+            {
+                CharmSpellHandler.eCharmType.Humanoid => "CharmSpellHandler.Species.Humanoid",
+                CharmSpellHandler.eCharmType.Animal => "CharmSpellHandler.Species.Animal",
+                CharmSpellHandler.eCharmType.Insect => "CharmSpellHandler.Species.Insect",
+                CharmSpellHandler.eCharmType.Reptile => "CharmSpellHandler.Species.Reptile",
+                CharmSpellHandler.eCharmType.HumanoidAnimal => "CharmSpellHandler.Species.HumanoidAnimal",
+                CharmSpellHandler.eCharmType.HumanoidAnimalInsect => "CharmSpellHandler.Species.HumanoidAnimalInsect",
+                CharmSpellHandler.eCharmType.HumanoidAnimalInsectMagical => "CharmSpellHandler.Species.HumanoidAnimalInsectMagical",
+                CharmSpellHandler.eCharmType.HumanoidAnimalInsectMagicalUndead => "CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead",
+                CharmSpellHandler.eCharmType.All => "CharmSpellHandler.Species.All",
+                _ => ""
+            };
+
+            if (string.IsNullOrEmpty(translationKey))
+                return "";
+
+            if (!TryGetTranslation(out string translation, language, translationKey))
+            {
+                return "";
+            }
+
+            return translation;
+        }
+
+        public static string GetIllusionArrangementOfType(string language, eSpawnType spawnType)
+        {
+            string translationKey = spawnType switch
+            {
+                eSpawnType.Circle => "IllusionSpell.Arrangement.Circle",
+                eSpawnType.Line => "IllusionSpell.Arrangement.Line",
+                _ => "IllusionSpell.Arrangement.Random"
+            };
+
+            if (!TryGetTranslation(out string translation, language, translationKey))
+            {
+                return "";
+            }
+            return translation;
+        }
+
+        public static string GetTargetOfType(string language, string targetName)
+        {
+            string normalizedTarget = targetName.Trim().ToLower();
+
+            string translationKey = normalizedTarget switch
+            {
+                "realm" => "Language.SpellTarget.Realm",
+                "self" => "Language.SpellTarget.Self",
+                "enemy" => "Language.SpellTarget.Enemy",
+                "pet" => "Language.SpellTarget.Pet",
+                "group" => "Language.SpellTarget.Group",
+                "area" => "Language.SpellTarget.Area",
+                "corpse" => "Language.SpellTarget.Corpse",
+                _ => "Language.SpellTarget.Unknown"
+            };
+
+            // If not found, returns unknown or falls back to targetName
+            if (!TryGetTranslation(out string translation, language, translationKey))
+            {
+                // Fallback to targetName if no translation found
+                translation = targetName;
+            }
+
+            return translation;
+        }
+
+        public static string GetOpeningRequirementDescription(string language, int openingType, int openingValue)
+        {
+            switch (openingType)
+            {
+                case 1:
+                    if (openingValue > 0)
+                    {
+                        Style requiredStyle = SkillBase.GetStyleByID(openingValue, 0);
+                        string styleName = requiredStyle != null ? requiredStyle.Name : "a specific style";
+
+                        return GetTranslation(language, "StyleHandler.Opening.DefensiveActionUsing", styleName);
+                    }
+                    return GetTranslation(language, "StyleHandler.Opening.DefensiveAction");
+
+                case 2:
+                    switch (openingValue)
+                    {
+                        case 0:
+                            return GetTranslation(language, "StyleHandler.Opening.Positional.Back");
+                        case 1:
+                            return GetTranslation(language, "StyleHandler.Opening.Positional.Side");
+                        case 2:
+                            return GetTranslation(language, "StyleHandler.Opening.Positional.Front");
+                        default:
+                            return GetTranslation(language, "StyleHandler.Opening.Positional.Specific");
+                    }
+
+                default:
+                    return GetTranslation(language, "StyleHandler.Opening.Default");
+            }
         }
 
         public static string GetDamageOfType(GameClient client, eDamageType type)

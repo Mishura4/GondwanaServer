@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Database;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -80,6 +82,23 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             heal = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.FOH.MainDescription1", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.FOH.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -132,6 +151,23 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             heal = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.FOP.MainDescription1", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.FOP.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -179,6 +215,22 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             heal = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.FOR.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -199,8 +251,21 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove.Add("RvrResurrectionIllness");
         }
 
-        public override string ShortDescription
-            => "Cure resurrection illness.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.SickHeal.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -246,6 +311,22 @@ namespace DOL.GS.Spells
             s = new Spell(dbs, 1);
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             heal = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
+        }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.FOD.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
         }
     }
     #endregion
@@ -360,12 +441,24 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-
         // constructor
         public PoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => $"Targets in range are regain {-Spell.Value}% additional power every tick.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.PoT.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -383,7 +476,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.UpdatePlayerStatus();
+                player!.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
             }
         }
@@ -397,7 +490,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.UpdatePlayerStatus();
+                player!.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
             }
             return base.OnEffectExpires(effect, noMessages);
@@ -405,6 +498,22 @@ namespace DOL.GS.Spells
 
         // constructor
         public CCResistSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Perfector.CCResist.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 }

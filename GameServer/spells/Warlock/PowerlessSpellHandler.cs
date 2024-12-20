@@ -25,7 +25,6 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.GS.SkillHandler;
 using DOL.Language;
 using log4net;
@@ -53,14 +52,10 @@ namespace DOL.GS.Spells
         // constructor
         public PowerlessSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Powerless.MainDescription");
-                return description;
-            }
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Powerless.MainDescription");
+            return description;
         }
     }
 }

@@ -57,19 +57,19 @@ namespace DOL.GS.Spells
             if ((player.CurrentRegion.IsRvR || player.CurrentRegion.IsInstance) && GameServer.Instance.Configuration.ServerType != eGameServerType.GST_PvE)
             {
                 // Actual live message is: You can't use that item!
-                player.Out.SendMessage("You can't use that here!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.GatewayPersonalBind.CantUseHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             if (player.IsMoving)
             {
-                player.Out.SendMessage("You must be standing still to use this item!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.GatewayPersonalBind.MustStandStill"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player))
             {
-                player.Out.SendMessage("You have been in combat recently and cannot use this item!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.GatewayPersonalBind.RecentlyInCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -111,7 +111,7 @@ namespace DOL.GS.Spells
         {
             InterruptCasting();
             if (Caster is GamePlayer)
-                (Caster as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SpellHandler.CasterMove"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                (Caster as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SpellHandler.CasterMove"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
         }
 
 

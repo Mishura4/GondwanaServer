@@ -265,9 +265,25 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string GetDelveDescription(GameClient client)
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(client, "SpellDescription.DirectDamageWithDebuff.MainDescription", Spell.Damage, LanguageMgr.GetProperty(client, Property1), Spell.Value);
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamageWithDebuff.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType), LanguageMgr.GetProperty(delveClient, Property1), Spell.Value);
+
+            if (Spell.IsSecondary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string thirdDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return description + "\n\n" + thirdDesc;
+            }
+
+            return description;
         }
 
         public DirectDamageDebuffSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

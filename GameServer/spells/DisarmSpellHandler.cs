@@ -163,24 +163,20 @@ namespace DOL.GS.Spells
         // constructor
         public DisarmSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int durationSeconds = Spell.Duration / 1000;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription1", durationSeconds);
+
+            if (Spell.RecastDelay > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                int durationSeconds = Spell.Duration / 1000;
-                int recastSeconds = Spell.RecastDelay / 1000;
-
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription1", durationSeconds);
-
-                if (Spell.RecastDelay > 0)
-                {
-                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                    return mainDesc + "\n\n" + secondDesc;
-                }
-
-                return mainDesc;
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
             }
+
+            return mainDesc;
         }
     }
 }

@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -48,12 +49,26 @@ namespace DOL.GS.Spells
             int cost = PowerCost(Caster);
             if (Caster.Health < cost)
             {
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth"), eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth"), eChatType.CT_SpellResisted);
                 return false;
             }
             return base.CheckBeginCast(Caster);
         }
 
-        public override string ShortDescription => $"You regain {Spell.Value} endurance.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SavageEnduranceHeal.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

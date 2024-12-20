@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -28,9 +27,9 @@ namespace DOL.GS.Spells
 
         public DualStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string GetDelveDescription(GameClient client)
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(client, "SpellDescription.DualStatDebuff.MainDescription", LanguageMgr.GetProperty(client, Property1), LanguageMgr.GetProperty(client, Property2), Spell.Value);
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.DualStatDebuff.MainDescription", LanguageMgr.GetProperty(delveClient, Property1), LanguageMgr.GetProperty(delveClient, Property2), Spell.Value);
         }
     }
 

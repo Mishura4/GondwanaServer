@@ -19,7 +19,6 @@
 using System;
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -85,13 +84,9 @@ namespace DOL.GS.Spells
 
         public TauntSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Taunt.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Taunt.MainDescription", Spell.Value);
         }
     }
 }

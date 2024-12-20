@@ -210,6 +210,18 @@ namespace DOL.GS.Spells
         public BladeturnSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         /// <inheritdoc />
-        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.Bladeturn.MainDescription");
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Bladeturn.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return description + "\n\n" + secondDesc;
+            }
+
+            return description;
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace DOL.GS.Spells
     [SpellHandler("BeltOfSun")]
     public class BeltOfSun : SummonItemSpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private ItemTemplate m_SunSlash;
         private ItemTemplate m_SunThrust;
@@ -58,7 +58,7 @@ namespace DOL.GS.Spells
             GamePlayer player = caster as GamePlayer;
 
             #region Alb
-            if (player.CharacterClass.ID == (int)eCharacterClass.Armsman)
+            if (player!.CharacterClass.ID == (int)eCharacterClass.Armsman)
             {
                 m_SunCrush = GameServer.Database.FindObjectByKey<ItemTemplate>("Sun_Crush") ?? Crush;
                 items.Add(GameInventoryItem.Create(m_SunCrush));
@@ -1769,7 +1769,7 @@ namespace DOL.GS.Spells
 
             GamePlayer player = sender as GamePlayer;
 
-            lock (player.Inventory)
+            lock (player!.Inventory)
             {
                 var items = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack);
                 foreach (InventoryItem invItem in items)
@@ -1844,7 +1844,7 @@ namespace DOL.GS.Spells
                 return;
 
             GamePlayer player = sender as GamePlayer;
-            lock (player.Inventory)
+            lock (player!.Inventory)
             {
                 var items = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack);
                 foreach (InventoryItem invItem in items)

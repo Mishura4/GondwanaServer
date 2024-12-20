@@ -22,6 +22,8 @@ using System.Linq;
 
 using DOL.AI.Brain;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -82,7 +84,7 @@ namespace DOL.GS.Spells
             var fearBrain = new FearBrain();
             m_NPCFearBrains.AddOrReplace(npcTarget, fearBrain);
 
-            npcTarget.AddBrain(fearBrain);
+            npcTarget!.AddBrain(fearBrain);
             fearBrain.Think();
 
             base.OnEffectStart(effect);
@@ -102,10 +104,10 @@ namespace DOL.GS.Spells
             if (m_NPCFearBrains.TryRemove(npcTarget, out fearBrain))
             {
                 fearBrain.RemoveEffect();
-                npcTarget.RemoveBrain(fearBrain);
+                npcTarget!.RemoveBrain(fearBrain);
             }
 
-            if (npcTarget.Brain == null)
+            if (npcTarget!.Brain == null)
                 npcTarget.AddBrain(new StandardMobBrain());
 
             return base.OnEffectExpires(effect, noMessages);
@@ -129,5 +131,29 @@ namespace DOL.GS.Spells
         /// <param name="spell"></param>
         /// <param name="line"></param>
         public FearSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc;
+
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Fear.AreaTarget", Spell.Value, Spell.Radius);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Fear.SingleTarget", Spell.Value);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

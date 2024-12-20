@@ -137,9 +137,9 @@ namespace DOL.GS.Spells
 
         public SingleStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string GetDelveDescription(GameClient client)
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(client, "SpellDescription.SingleStatDebuff.MainDescription", LanguageMgr.GetProperty(client, Property1), Spell.Value);
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.SingleStatDebuff.MainDescription", LanguageMgr.GetProperty(delveClient, Property1), Spell.Value);
         }
     }
 
@@ -194,13 +194,9 @@ namespace DOL.GS.Spells
 
         public CombatSpeedDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.CombatSpeedDebuff.MainDescription", Math.Abs(Spell.Value));
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.CombatSpeedDebuff.MainDescription", Math.Abs(Spell.Value));
         }
     }
 
@@ -213,13 +209,9 @@ namespace DOL.GS.Spells
 
         public MeleeDamageDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.MeleeDamageDebuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MeleeDamageDebuff.MainDescription", Spell.Value);
         }
     }
 
@@ -232,13 +224,9 @@ namespace DOL.GS.Spells
 
         public FatigueConsumptionDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.FatigueConsumptionDebuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.FatigueConsumptionDebuff.MainDescription", Spell.Value);
         }
     }
 
@@ -251,13 +239,9 @@ namespace DOL.GS.Spells
 
         public FumbleChanceDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.FumbleChanceDebuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.FumbleChanceDebuff.MainDescription", Spell.Value);
         }
     }
 
@@ -270,9 +254,9 @@ namespace DOL.GS.Spells
 
         public DPSDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string GetDelveDescription(GameClient client)
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(client, "SpellDescription.DPSDebuff.MainDescription", Spell.Value);
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.DPSDebuff.MainDescription", Spell.Value);
         }
     }
 
@@ -285,9 +269,9 @@ namespace DOL.GS.Spells
 
         public SkillsDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string GetDelveDescription(GameClient client)
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(client, "SpellDescription.SkillsDebuff.MainDescription", Spell.Value);
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.SkillsDebuff.MainDescription", Spell.Value);
         }
     }
 

@@ -4388,10 +4388,10 @@ namespace DOL.GS.Spells
                     return translation;
                 }
             }
-            if (ShortDescription != null)
+            /*if (ShortDescription != null)
             {
                 return ShortDescription;
-            }
+            }*/
             return LanguageMgr.GetTranslation(delveClient, "SpellHandler.DefaultDescription", GetType().ToString().Split('.').Last(), Spell.Value, Spell.Damage);
         }
 

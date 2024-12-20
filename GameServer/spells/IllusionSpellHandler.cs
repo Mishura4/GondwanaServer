@@ -81,7 +81,7 @@ namespace DOL.GS.Spells
         {
             SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
             if (attempt.Caster.GetController() is GamePlayer player)
-                player.SendTranslatedMessage("IllusionSpell.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+                player.SendTranslatedMessage("SpellHandler.IllusionSpell.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
             attempt.SendSpellResistAnimation(target);
         }
 
@@ -288,57 +288,38 @@ namespace DOL.GS.Spells
             return base.ApplyEffectOnTarget(target, 1.0);
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            eSpawnType spawnType = (eSpawnType)Spell.DamageType;
+            string arrangement = LanguageMgr.GetIllusionArrangementOfType(language, spawnType);
+
+            // Main descriptions
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.IllusionSpell.MainDescription1", Spell.Value, arrangement);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.IllusionSpell.MainDescription2", Spell.Damage, Spell.AmnesiaChance, (Spell.Duration / 1000));
+            string description = mainDesc1 + "\n" + mainDesc2;
+
+            if (Spell.LifeDrainReturn > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-
-                // Determine arrangement based on DamageType
-                string arrangementKey;
-                int arrangementIndex = (int)Spell.DamageType;
-                switch (arrangementIndex)
-                {
-                    case 1:
-                        arrangementKey = "SpellDescription.IllusionSpell.Arrangement.Circle";
-                        break;
-                    case 2:
-                        arrangementKey = "SpellDescription.IllusionSpell.Arrangement.Line";
-                        break;
-                    default:
-                        arrangementKey = "SpellDescription.IllusionSpell.Arrangement.Random";
-                        break;
-                }
-
-                string arrangement = LanguageMgr.GetTranslation(language, arrangementKey);
-
-                // Main descriptions
-                string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.IllusionSpell.MainDescription1", Spell.Value, arrangement);
-                string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.IllusionSpell.MainDescription2", Spell.Damage, Spell.AmnesiaChance, (Spell.Duration / 1000));
-                string description = mainDesc1 + "\n" + mainDesc2;
-
-                if (Spell.LifeDrainReturn > 0)
-                {
-                    string subDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.IllusionSpell.SubDescription1", Spell.Value);
-                    description += "\n\n" + subDesc1;
-                }
-
-                string subDesc2Key = Spell.IsFocus
-                    ? "SpellDescription.IllusionSpell.SubDescription2a"
-                    : "SpellDescription.IllusionSpell.SubDescription2b";
-
-                string subDesc2 = LanguageMgr.GetTranslation(language, subDesc2Key);
-                description += "\n\n" + subDesc2;
-
-                if (Spell.RecastDelay > 0)
-                {
-                    int recastSeconds = Spell.RecastDelay / 1000;
-                    string subDesc3 = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                    description += "\n\n" + subDesc3;
-                }
-
-                return description.TrimEnd();
+                string subDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.IllusionSpell.SubDescription1", Spell.Value);
+                description += "\n\n" + subDesc1;
             }
+
+            string subDesc2Key = Spell.IsFocus
+                ? "SpellDescription.IllusionSpell.SubDescription2a"
+                : "SpellDescription.IllusionSpell.SubDescription2b";
+
+            string subDesc2 = LanguageMgr.GetTranslation(language, subDesc2Key);
+            description += "\n\n" + subDesc2;
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string subDesc3 = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                description += "\n\n" + subDesc3;
+            }
+
+            return description.TrimEnd();
         }
     }
 }

@@ -27,6 +27,7 @@ using log4net;
 using System.Numerics;
 using DOL.Language;
 using DOL.GS.ServerProperties;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Spells
 {
@@ -152,7 +153,8 @@ namespace DOL.GS.Spells
 
                 PlayersUsedFirstPortal.Add(player);
                 ApplyTeleportEffect(player);
-                player.MoveTo(secondPortal.CurrentRegionID, secondPortal.Position.X, secondPortal.Position.Y, secondPortal.Position.Z, secondPortal.Heading);
+                Position secondPortalPos = Position.Create(secondPortal.CurrentRegionID, secondPortal.Position.X, secondPortal.Position.Y, secondPortal.Position.Z, secondPortal.Heading);
+                player.MoveTo(secondPortalPos);
             }
             else if (portalUsed == secondPortalNPC)
             {
@@ -161,7 +163,8 @@ namespace DOL.GS.Spells
 
                 PlayersUsedSecondPortal.Add(player);
                 ApplyTeleportEffect(player);
-                player.MoveTo(firstPortal.CurrentRegionID, firstPortal.Position.X, firstPortal.Position.Y, firstPortal.Position.Z, firstPortal.Heading);
+                Position firstPortalPos = Position.Create(firstPortal.CurrentRegionID, firstPortal.Position.X, firstPortal.Position.Y, firstPortal.Position.Z, firstPortal.Heading);
+                player.MoveTo(firstPortalPos);
             }
 
             CheckFinished();
@@ -207,14 +210,11 @@ namespace DOL.GS.Spells
                 secondPortalNPC.Delete();
             }
         }
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string spellTarget = m_spell.Target.ToString();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.PlayerPortal.MainDescription", spellTarget);
-            }
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string spellTarget = LanguageMgr.GetTargetOfType(language, m_spell.Target.ToString());
+            return LanguageMgr.GetTranslation(language, "SpellDescription.PlayerPortal.MainDescription", spellTarget);
         }
     }
 }

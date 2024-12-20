@@ -26,7 +26,6 @@ using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -288,13 +287,18 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SummonSpell.MainDescription", Math.Abs(Spell.Damage), Spell.Value);
+
+            if (Spell.RecastDelay > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.SummonSpell.MainDescription", Math.Abs(Spell.Damage), Spell.Value);
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
             }
+
+            return mainDesc;
         }
     }
 }

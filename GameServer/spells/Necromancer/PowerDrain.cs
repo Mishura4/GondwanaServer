@@ -37,7 +37,7 @@ namespace DOL.GS.Spells
         /// The power channelled through this spell goes to the owner, not the pet
         protected override GameLiving Owner()
         {
-            return ((Caster as NecromancerPet).Brain as IControlledBrain).Owner;
+            return ((Caster as NecromancerPet)!.Brain as IControlledBrain)!.Owner;
         }
 
         /// <summary>

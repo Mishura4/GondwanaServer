@@ -23,6 +23,8 @@ using System.Linq;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -88,7 +90,7 @@ namespace DOL.GS.Spells
         {
             var npcTarget = effect.Owner as GameNPC;
 
-            var currentBrain = npcTarget.Brain as IOldAggressiveBrain;
+            var currentBrain = npcTarget!.Brain as IOldAggressiveBrain;
             var friendBrain = new FriendBrain(this);
             m_NPCFriendBrain.AddOrReplace(npcTarget, friendBrain);
 
@@ -115,10 +117,10 @@ namespace DOL.GS.Spells
             FriendBrain fearBrain;
             if (m_NPCFriendBrain.TryRemove(npcTarget, out fearBrain))
             {
-                npcTarget.RemoveBrain(fearBrain);
+                npcTarget!.RemoveBrain(fearBrain);
             }
 
-            if (npcTarget.Brain == null)
+            if (npcTarget!.Brain == null)
                 npcTarget.AddBrain(new StandardMobBrain());
 
             return base.OnEffectExpires(effect, noMessages);
@@ -142,5 +144,32 @@ namespace DOL.GS.Spells
         /// <param name="spell"></param>
         /// <param name="line"></param>
         public BeFriendSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            bool isAreaEffect = (Spell.Radius > 0);
+            string baseDesc;
+
+            if (isAreaEffect)
+            {
+                baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.BeFriend.MainDescriptionArea", Spell.Value);
+            }
+            else
+            {
+                baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.BeFriend.MainDescriptionSingle", Spell.Value);
+            }
+
+            string finalDesc = baseDesc;
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                finalDesc += "\n\n" + secondDesc;
+            }
+
+            return finalDesc;
+        }
     }
 }

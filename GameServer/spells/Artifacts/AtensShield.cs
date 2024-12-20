@@ -25,7 +25,7 @@ namespace DOL.GS.Spells
     [SpellHandler("AtensShield")]
     public class AtensShield : SummonItemSpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private ItemTemplate m_goldenTridentofFlame;
 
@@ -214,7 +214,7 @@ namespace DOL.GS.Spells
                 return;
 
             GamePlayer player = sender as GamePlayer;
-            lock (player.Inventory)
+            lock (player!.Inventory)
             {
                 var items = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack);
                 foreach (InventoryItem invItem in items)

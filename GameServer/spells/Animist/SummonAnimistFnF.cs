@@ -127,6 +127,10 @@ namespace DOL.GS.Spells
             return false;
         }
 
-        public override string ShortDescription => "Summons an elemental spirit to attack the target.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SummonAnimistFnF.MainDescription");
+            return mainDesc;
+        }
     }
 }

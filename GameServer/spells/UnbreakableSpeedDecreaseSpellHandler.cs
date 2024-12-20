@@ -20,7 +20,6 @@ using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Language;
-using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -192,30 +191,26 @@ namespace DOL.GS.Spells
         public UnbreakableSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description;
+
+            if (Spell.Value >= 99)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description;
-
-                if (Spell.Value >= 99)
-                {
-                    description = LanguageMgr.GetTranslation(language, "SpellDescription.SpeedDecrease.Rooted");
-                }
-                else
-                {
-                    description = LanguageMgr.GetTranslation(language, "SpellDescription.SpeedDecrease.MainDescription", Spell.Value);
-                }
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.Rooted");
             }
+            else
+            {
+                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.MainDescription", Spell.Value);
+            }
+
+            if (Spell.IsSecondary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            return description;
         }
     }
 }

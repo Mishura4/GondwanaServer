@@ -27,6 +27,8 @@ using DOL.AI.Brain;
 using DOL.GS;
 using DOL.Events;
 using System.Collections.Specialized;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -118,11 +120,29 @@ namespace DOL.GS.Spells
         // constructor
         public PBAEHealHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => Spell.DamageType == 0 ? ML2Description : ML8Description;
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
 
-        private string ML2Description => "Point blank area effect shout that heals allies' health, power and fatigue.";
-        private string ML8Description => "The target regains 1000 hit points.";
+            string mainDesc;
+            if (Spell.DamageType == 0) // ML2
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.PBAEHeal.ML2.MainDescription", Spell.Value);
+            }
+            else // ML8
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.PBAEHeal.ML8.MainDescription", Spell.Value, Spell.Damage);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -149,8 +169,21 @@ namespace DOL.GS.Spells
 
         public CoweringBellowSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Point blank area effect shout that sends enemy pets running. This spell works only against enemy realm monsters.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.CoweringBellow.MainDescription", Spell.Radius);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -169,8 +202,30 @@ namespace DOL.GS.Spells
 
         public CriticalDamageBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => $"Point blank area effect shout that increases allies' chance of getting a critical hit on their next attack by {Spell.Value}%.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string spellTarget = LanguageMgr.GetTargetOfType(language, m_spell.Target.ToString());
+
+            string mainDesc;
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.Critical.MainDescription1", spellTarget, Spell.Value);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.Critical.MainDescription2", Spell.Value);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -188,8 +243,29 @@ namespace DOL.GS.Spells
 
         public CleansingAurauraSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Point blank area effect shout which reduces the effect of damage-over-time spells significantly. If this reduces the damage below zero, the DOT is dispelled.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc;
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.CleansingAura.MainDescription1", Spell.Radius, Spell.Value);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.CleansingAura.MainDescription2", Spell.Value);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -249,8 +325,29 @@ namespace DOL.GS.Spells
 
         public EffectivenessBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Point blank area effect shout that boosts effective level of allies for determining damage variance for spell and melee damage.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc;
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.EffectivenessBuff.MainDescription1", Spell.Radius, Spell.Value);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.EffectivenessBuff.MainDescription2", Spell.Value);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -262,6 +359,30 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.ArmorAbsorption; } }
 
         public MLABSBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc;
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.MLABSBuff.MainDescription1", Spell.Radius, Spell.Value);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.MLABSBuff.MainDescription2", Spell.Value);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 }

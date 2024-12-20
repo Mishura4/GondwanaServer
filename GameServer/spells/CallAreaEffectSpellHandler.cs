@@ -132,5 +132,7 @@ namespace DOL.GS.Spells
                 }
             }
         }
+
+        public override string GetDelveDescription(GameClient delveClient) => $"{Spell.Name}: {Spell.Description}.";
     }
 }

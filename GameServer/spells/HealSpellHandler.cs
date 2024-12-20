@@ -521,12 +521,9 @@ namespace DOL.GS.Spells
             return;
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                return LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Heal.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Heal.MainDescription", Spell.Value);
         }
     }
 }

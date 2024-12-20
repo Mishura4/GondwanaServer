@@ -22,7 +22,6 @@ using System.Collections;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 using System.Numerics;
 using Google.Protobuf.WellKnownTypes;
@@ -224,23 +223,19 @@ namespace DOL.GS.Spells
             : base(caster, spell, line) { }
 
         /// <inheritdoc />
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description1 = LanguageMgr.GetTranslation(language, "SpellDescription.PowerLock.MainDescription1", Spell.LifeDrainReturn, Spell.Frequency / 1000.0, Spell.Duration / 1000);
-                string description2 = LanguageMgr.GetTranslation(language, "SpellDescription.PowerLock.MainDescription2");
+            string description1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerLock.MainDescription1", Spell.LifeDrainReturn, Spell.Frequency / 1000.0, Spell.Duration / 1000);
+            string description2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerLock.MainDescription2");
 
-                if (!Spell.AllowBolt)
-                {
-                    string description3 = LanguageMgr.GetTranslation(language, "SpellDescription.PowerLock.MainDescription3");
-                    return description1 + "\n\n" + description2 + "\n\n" + description3;
-                }
-                else
-                {
-                    return description1 + "\n\n" + description2;
-                }
+            if (!Spell.AllowBolt)
+            {
+                string description3 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerLock.MainDescription3");
+                return description1 + "\n\n" + description2 + "\n\n" + description3;
+            }
+            else
+            {
+                return description1 + "\n\n" + description2;
             }
         }
     }

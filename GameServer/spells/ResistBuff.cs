@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -43,7 +42,6 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            // Here we could also just use SingleStatBuff translation and GetProperty, since the property's name should be "[damage] resistance"
             return LanguageMgr.GetTranslation(delveClient, "SpellDescription.ResistBuff.MainDescription", LanguageMgr.GetDamageOfType(delveClient, (eDamageType)Property1), Spell.Value);
         }
     }
@@ -115,13 +113,9 @@ namespace DOL.GS.Spells
 
         public BodySpiritEnergyBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.BodySpiritEnergyBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.BodySpiritEnergyBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -138,13 +132,9 @@ namespace DOL.GS.Spells
 
         public HeatColdMatterBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.HeatColdMatterBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.HeatColdMatterBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -167,13 +157,9 @@ namespace DOL.GS.Spells
 
         public AllMagicResistsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.AllMagicResistsBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.AllMagicResistsBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -196,13 +182,9 @@ namespace DOL.GS.Spells
 
         public SecondaryMagicResistsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.SecondaryMagicResistsBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.SecondaryMagicResistsBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -220,13 +202,9 @@ namespace DOL.GS.Spells
 
         public CrushSlashThrustBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.AllMeleeResistsBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.AllMeleeResistsBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -282,13 +260,9 @@ namespace DOL.GS.Spells
 
         public AllResistsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.AllResistsBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.AllResistsBuff.MainDescription", Spell.Value);
         }
     }
 
@@ -300,13 +274,9 @@ namespace DOL.GS.Spells
 
         public EssenceResistBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.EssenceBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.EssenceBuff.MainDescription", Spell.Value);
         }
     }
 }

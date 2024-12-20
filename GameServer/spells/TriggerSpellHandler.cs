@@ -1,6 +1,5 @@
 ﻿using DOL.GS;
 using DOL.GS.Effects;
-using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
 using DOL.Language;
 using System;

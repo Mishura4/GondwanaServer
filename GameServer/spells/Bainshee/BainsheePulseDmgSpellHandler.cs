@@ -24,6 +24,7 @@ using DOL.GS.Keeps;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 namespace DOL.GS.Spells
 {
     /// <summary>
@@ -32,7 +33,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("BainsheePulseDmg")]
     public class BainsheePulseDmgSpellHandler : SpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public const string FOCUS_WEAK = "FocusSpellHandler.Online";
         /// <summary>
@@ -170,7 +171,7 @@ namespace DOL.GS.Spells
             if (target is GamePlayer && Caster.TempProperties.getProperty("player_in_keep_property", false))
             {
                 GamePlayer player = target as GamePlayer;
-                player.Out.SendCheckLOS(Caster, player, new CheckLOSResponse(ResistSpellCheckLOS));
+                player!.Out.SendCheckLOS(Caster, player, new CheckLOSResponse(ResistSpellCheckLOS));
             }
             else SpellResisted(target);
         }
@@ -201,5 +202,30 @@ namespace DOL.GS.Spells
 
         // constructor
         public BainsheePulseDmgSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string damageTypeName = LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType);
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.BainsheePulseDmg.MainDescription", Spell.Damage, damageTypeName);
+
+            if (Spell.Radius > 0)
+            {
+                string areaDesc = LanguageMgr.GetTranslation(language, "SpellDescription.BainsheePulseDmg.AreaDescription");
+                mainDesc += "\n\n" + areaDesc;
+            }
+
+            string secondaryDesc = LanguageMgr.GetTranslation(language, "SpellDescription.BainsheePulseDmg.SecondaryDescription");
+            mainDesc += "\n\n" + secondaryDesc;
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

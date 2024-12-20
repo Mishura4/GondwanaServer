@@ -175,20 +175,17 @@ namespace DOL.GS.Spells
 
         public NearsightSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Nearsight.MainDescription1", Spell.Value);
+
+            if (Spell.IsSecondary)
             {
-                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client.Account.Language, "SpellDescription.Nearsight.MainDescription1", Spell.Value);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client.Account.Language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
             }
+
+            return description;
         }
     }
 
@@ -203,21 +200,17 @@ namespace DOL.GS.Spells
 
         public NearsightReductionSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Nearsight.MainDescription2", Spell.Value);
+
+            if (Spell.IsSecondary)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Nearsight.MainDescription2", Spell.Value);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
             }
+
+            return description;
         }
     }
 }

@@ -7,6 +7,7 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOL.Events;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -46,8 +47,22 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription
-            => $"The target loses {Spell.Damage} endurance.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.MLEndudrain.MainDescription", Spell.Damage);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -59,8 +74,21 @@ namespace DOL.GS.Spells
 
         public KeepDamageBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Increases damage against keep components.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.KeepDamageBuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -89,8 +117,22 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription
-            => $"Target loses {Spell.Damage} power.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.MLManadrain.MainDescription", Spell.Damage);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -114,7 +156,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                if (player.EffectList.GetOfType<ChargeEffect>() == null && player != null)
+                if (player!.EffectList.GetOfType<ChargeEffect>() == null && player != null)
                 {
                     effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, effect, 0);
                     player.Client.Out.SendUpdateMaxSpeed();
@@ -185,7 +227,23 @@ namespace DOL.GS.Spells
 
         public Grapple(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription => "You are stunned and cannot take any actions.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.Grapple.MainDescription1", Spell.Duration);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.Grapple.MainDescription2");
+            string mainDesc3 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.Grapple.MainDescription3");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + mainDesc3 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + mainDesc3;
+        }
     }
     #endregion
 
@@ -194,7 +252,7 @@ namespace DOL.GS.Spells
     [SpellHandler("EssenceFlamesProc")]
     public class EssenceFlamesProcSpellHandler : OffensiveProcSpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Handler fired whenever effect target is attacked
@@ -247,7 +305,7 @@ namespace DOL.GS.Spells
                         GamePlayer player = Caster as GamePlayer;
                         if (Caster is GamePlayer)
                         {
-                            if (player.Group != null)
+                            if (player!.Group != null)
                             {
                                 foreach (GameLiving groupPlayer in player.Group.GetMembersInTheGroup())
                                 {
@@ -272,8 +330,21 @@ namespace DOL.GS.Spells
         // constructor
         public EssenceFlamesProcSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Buff that gives the subject a chance to gain bonus essence damage when attacking in melee combat.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription", Spell.Frequency);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -411,7 +482,7 @@ namespace DOL.GS.Spells
                         break;
                 }
 
-                foreach (GamePlayer player in ad.Target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                foreach (GamePlayer player in ad.Target!.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {
                     if (player == null) continue;
                     int animationId;
@@ -436,7 +507,7 @@ namespace DOL.GS.Spells
             }
 
             // send animation before dealing damage else dead livings show no animation
-            ad.Target.OnAttackedByEnemy(ad);
+            ad.Target!.OnAttackedByEnemy(ad);
             ad.Attacker.DealDamage(ad);
             if (ad.Damage == 0 && ad.Target is GameNPC)
             {
@@ -455,16 +526,16 @@ namespace DOL.GS.Spells
 
             switch (ad.AttackResult)
             {
-                case GameLiving.eAttackResult.TargetNotVisible: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.NotInView", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.OutOfRange: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.TooFarAway", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.TargetDead: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.AlreadyDead", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.Blocked: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Blocked", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.Parried: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Parried", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.Evaded: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Evaded", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.NoTarget: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.NeedTarget"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.NoValidTarget: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.CantBeAttacked"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.Missed: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Miss"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
-                case GameLiving.eAttackResult.Fumbled: player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Fumble"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.TargetNotVisible: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.NotInView", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.OutOfRange: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.TooFarAway", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.TargetDead: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.AlreadyDead", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.Blocked: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Blocked", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.Parried: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Parried", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.Evaded: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Evaded", ad.Target.GetName(0, true)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.NoTarget: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.NeedTarget"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.NoValidTarget: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.CantBeAttacked"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.Missed: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Miss"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
+                case GameLiving.eAttackResult.Fumbled: player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.Fumble"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow); break;
                 case GameLiving.eAttackResult.HitStyle:
                 case GameLiving.eAttackResult.HitUnstyled:
                     string modmessage = "";
@@ -496,9 +567,9 @@ namespace DOL.GS.Spells
                     }
 
                     if (hitWeapon.Length > 0)
-                        hitWeapon = " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.WithYour") + " " + hitWeapon;
+                        hitWeapon = " " + LanguageMgr.GetTranslation(player!.Client.Account.Language, "GamePlayer.Attack.WithYour") + " " + hitWeapon;
 
-                    string attackTypeMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.YouAttack");
+                    string attackTypeMsg = LanguageMgr.GetTranslation(player!.Client.Account.Language, "GamePlayer.Attack.YouAttack");
 
                     // intercept messages
                     if (target != null && target != ad.Target)
@@ -656,8 +727,22 @@ namespace DOL.GS.Spells
         }
         public ThrowWeaponSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "A ranged attack using melee damage formulas; cannot attack with normal melee for 10 seconds afterwards.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.ThrowWeapon.MainDescription1");
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.ThrowWeapon.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -678,7 +763,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
@@ -692,7 +777,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
             }
@@ -725,8 +810,29 @@ namespace DOL.GS.Spells
         
         public EssenceSearHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => $"Decreases the target's resistances to Essence damage by {Spell.Value}%.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc;
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.EssenceSearHandler.MainDescription1", Spell.Value);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Warlord.EssenceSearHandler.MainDescription2", Spell.Value);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -755,8 +861,22 @@ namespace DOL.GS.Spells
         }
         public BodyguardHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "You protect one group member from all melee attacks, however you cannot move.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.BodyguardHandler.MainDescription1");
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.BodyguardHandler.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -782,7 +902,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
             }
@@ -796,7 +916,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Out.SendCharStatsUpdate();
+                player!.Out.SendCharStatsUpdate();
                 player.UpdatePlayerStatus();
                 player.Out.SendUpdatePlayer();
             }
@@ -830,8 +950,21 @@ namespace DOL.GS.Spells
         }
         public EssenceDampenHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "PBAE effect that reduces the dexterity of enemy targets.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 

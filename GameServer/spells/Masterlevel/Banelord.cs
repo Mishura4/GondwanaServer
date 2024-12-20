@@ -7,6 +7,7 @@ using System.Reflection;
 using DOL.AI.Brain;
 using DOL.Events;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -29,6 +30,22 @@ namespace DOL.GS.Spells
 
         // constructor
         public CastingSpeedDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.CastingSpeedDebuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -69,7 +86,7 @@ namespace DOL.GS.Spells
                 int end;
 
                 int value = (int)Spell.Value;
-                mana = (player.Mana * value) / 100;
+                mana = (player!.Mana * value) / 100;
                 end = (player.Endurance * value) / 100;
                 health = (player.Health * value) / 100;
 
@@ -106,11 +123,32 @@ namespace DOL.GS.Spells
             return 25;
         }
 
-        public override string ShortDescription
-            => $"Point blank area effect shout that reduces the power/health/fatigue of enemies by {Spell.Value}% of their current value{AgonyTransmissionAddition}.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
 
-        private string AgonyTransmissionAddition
-            => Spell.Damage != 0 ? $", but costs the user {Spell.Damage}% of their own health" : "";
+            string mainDesc1;
+            string mainDesc2;
+            if (Spell.DamageType == 0) // ML2
+            {
+                mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.PBAEDamage.ML2.MainDescription", Spell.Value);
+                mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+            }
+            else // ML8
+            {
+                mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.PBAEDamage.ML8.MainDescription", Spell.Value, Spell.Damage);
+                mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -156,8 +194,22 @@ namespace DOL.GS.Spells
         }
         public OppressionSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Point blank area effect shout that decreases enemies' max encumbrance.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.Oppression.MainDescription", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -192,6 +244,23 @@ namespace DOL.GS.Spells
 
         // constructor
         public MLFatDebuffHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.FatDebuff.MainDescription", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -204,6 +273,23 @@ namespace DOL.GS.Spells
 
         // constructor
         public MissHit(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.MissHit.MainDescription", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -231,6 +317,23 @@ namespace DOL.GS.Spells
         public MLUnbreakableSnare(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
+        }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.MLUnbreakableSnare.MainDescription", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
         }
     }
     #endregion
@@ -349,8 +452,21 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override string ShortDescription
-            => "Point blank area effect shout that snares nearby enemies, but stuns the user.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription", Spell.Duration);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
     #endregion
@@ -365,8 +481,22 @@ namespace DOL.GS.Spells
         // constructor
         public BLToHit(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Point blank area effect shout that makes it easier for nearby allies to hit enemies.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.ToHitBuff.MainDescription", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.NbTargetAffected.MainDescription", Spell.TargetHardCap);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -406,8 +536,21 @@ namespace DOL.GS.Spells
 
         public EffectivenessDeBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => $"Point blank area effect shout that reduces effective spec of enemies by {Spell.Value}% for determining variance for spell and melee damage.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.EffectivenessDebuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -420,8 +563,21 @@ namespace DOL.GS.Spells
 
         public BanespikeHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Point blank area effect shout that boosts damage of attacks from nearby allies.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Banelord.Banespike.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 }

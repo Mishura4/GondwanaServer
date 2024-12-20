@@ -276,22 +276,17 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
+            int healthThresholdPercent = (int)Spell.Damage;
+            if (healthThresholdPercent == 0)
+                healthThresholdPercent = 50;
 
-                int healthThresholdPercent = (int)Spell.Damage;
-                if (healthThresholdPercent == 0)
-                    healthThresholdPercent = 50;
+            int desiredHealthPercent = (int)Spell.Value;
+            if (desiredHealthPercent == 0)
+                desiredHealthPercent = 80;
 
-                int desiredHealthPercent = (int)Spell.Value;
-                if (desiredHealthPercent == 0)
-                    desiredHealthPercent = 80;
-
-                return LanguageMgr.GetTranslation(language, "SpellDescription.PowerShield.MainDescription", healthThresholdPercent, desiredHealthPercent);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerShield.MainDescription", healthThresholdPercent, desiredHealthPercent);
         }
     }
 }

@@ -126,7 +126,16 @@ namespace DOL.GS.spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerRend.MainDescription", Spell.Value);
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PowerRend.MainDescription", 100 * Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
         }
     }
 }

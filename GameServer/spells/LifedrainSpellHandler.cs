@@ -245,21 +245,34 @@ namespace DOL.GS.Spells
 
         public LifedrainSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.LifeDrain.MainDescription", Spell.Damage, Spell.DamageType, Spell.LifeDrainReturn);
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.LifeDrain.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType), Spell.LifeDrainReturn);
 
+            if (Spell.RecastDelay > 0)
+            {
                 if (Spell.IsSecondary)
                 {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
                     string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
+                    description += "\n\n" + secondDesc + "\n\n" + secondaryMessage;
                 }
-
-                return description;
+                else
+                {
+                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                    return description + "\n\n" + secondDesc;
+                }
             }
+
+            if (Spell.IsSecondary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            return description;
         }
     }
 }

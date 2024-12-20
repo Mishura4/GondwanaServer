@@ -124,7 +124,10 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.DamageAdd.MainDescription", Spell.Value, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.DamageAdd.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+
+            return description;
         }
     }
 
@@ -205,7 +208,10 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.DamageShield.MainDescription", Spell.Value, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.DamageShield.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+
+            return description;
         }
     }
 

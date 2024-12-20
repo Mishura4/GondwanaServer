@@ -88,118 +88,97 @@ namespace DOL.GS.Spells
                         return 1316;
                     else
                         return 1315;
-                    break;
                 case 2:
                     if (living.Gender == eGender.Female)
                         return 1322;
                     else
                         return 1321;
-                    break;
                 case 3:
                     if (living.Gender == eGender.Female)
                         return 1318;
                     else
                         return 1317;
-                    break;
                 case 4:
                     if (living.Gender == eGender.Female)
                         return 1320;
                     else
                         return 1319;
-                    break;
                 case 5:
                     if (living.Gender == eGender.Female)
                         return 1328;
                     else
                         return 1327;
-                    break;
                 case 6:
                     if (living.Gender == eGender.Female)
                         return 1326;
                     else
                         return 1325;
-                    break;
                 case 7:
                     if (living.Gender == eGender.Female)
                         return 1332;
                     else
                         return 1331;
-                    break;
                 case 8:
                     if (living.Gender == eGender.Female)
                         return 1330;
                     else
                         return 1329;
-                    break;
                 case 9:
                     if (living.Gender == eGender.Female)
                         return 1340;
                     else
                         return 1339;
-                    break;
                 case 10:
                     if (living.Gender == eGender.Female)
                         return 1338;
                     else
                         return 1337;
-                    break;
                 case 11:
                     if (living.Gender == eGender.Female)
                         return 1344;
                     else
                         return 1343;
-                    break;
                 case 12:
                     if (living.Gender == eGender.Female)
                         return 1342;
                     else
                         return 1341;
-                    break;
                 case 13:
                     if (living.Gender == eGender.Female)
                         return 1314;
                     else
                         return 1313;
-                    break;
                 case 14:
                     if (living.Gender == eGender.Female)
                         return 1334;
                     else
                         return 1333;
-                    break;
                 case 15:
                     if (living.Gender == eGender.Female)
                         return 1346;
                     else
                         return 1345;
-                    break;
                 case 16:
                     if (living.Gender == eGender.Female)
                         return 1324;
                     else
                         return 1323;
-                    break;
                 case 17:
                     if (living.Gender == eGender.Female)
                         return 1336;
                     else
                         return 1335;
-                    break;
                 case 18:
                     if (living.Gender == eGender.Female)
                         return 1348;
                     else
                         return 1347;
-                    break;
                 case 19:
                     return 1574;
-                    break;
                 case 20:
                     return 1577;
-                    break;
                 case 21:
                     return 1580;
-                    break;
                 default:
                     break;
             }
@@ -274,14 +253,10 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.Petrify.MainDescription");
-                return description;
-            }
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Petrify.MainDescription");
+            return description;
         }
     }
 }

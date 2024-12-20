@@ -18,6 +18,8 @@
  */
 using System;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -47,7 +49,27 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
 
+            double detectPercent;
+            if (Spell.Value <= 125) detectPercent = 19;
+            else if (Spell.Value >= 225) detectPercent = 50;
+            else detectPercent = 19 + (Spell.Value - 125) * 0.31;
+
+            int roundedDetect = (int)Math.Round(detectPercent);
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.VampiirStealthDetection.MainDescription", roundedDetect);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }
 

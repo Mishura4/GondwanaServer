@@ -1,7 +1,6 @@
 ﻿using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 using System.Collections.Generic;
@@ -19,13 +18,9 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove = new List<string> { "Petrify" };
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Unpetrify.MainDescription");
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Unpetrify.MainDescription");
         }
     }
 }

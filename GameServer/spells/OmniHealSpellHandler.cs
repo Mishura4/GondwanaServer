@@ -252,22 +252,18 @@ namespace DOL.GS.Spells
             return;
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.OmniHeal.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                int recastSeconds = Spell.RecastDelay / 1000;
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.OmniHeal.MainDescription", Spell.Value);
-
-                if (Spell.RecastDelay > 0)
-                {
-                    string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                    return mainDesc + "\n\n" + secondDesc;
-                }
-
-                return mainDesc;
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
             }
+
+            return mainDesc;
         }
     }
 }

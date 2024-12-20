@@ -26,6 +26,8 @@ using DOL.Events;
 using DOL.GS.Geometry;
 using System.Collections;
 using System.Collections.Generic;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -70,6 +72,23 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             tempest = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.DazzlingArray.MainDescription1", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.DazzlingArray.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     [SpellHandlerAttribute("StormMissHit")]
     public class StormMissHit : MasterlevelBuffHandling
@@ -101,6 +120,22 @@ namespace DOL.GS.Spells
 
         // constructor
         public StormMissHit(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.StormMissHit.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -160,8 +195,21 @@ namespace DOL.GS.Spells
 
         public VacuumVortexSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Ground targeted effect that pushes any storms near the ground target directly away from that point.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.VacuumVortex.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -207,6 +255,22 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             tempest = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.EnervatingGas.MainDescription", Spell.Damage);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     [SpellHandlerAttribute("StormEnduDrain")]
     public class StormEndudrain : SpellHandler
@@ -227,7 +291,7 @@ namespace DOL.GS.Spells
 
             if (target is GamePlayer)
                 ((GamePlayer)target).Out.SendMessage(" You lose " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-            (m_caster as GamePlayer).Out.SendMessage("" + (m_caster as GamePlayer).GetPersonalizedName(target) + " loses " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+            (m_caster as GamePlayer)!.Out.SendMessage("" + (m_caster as GamePlayer)!.GetPersonalizedName(target) + " loses " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
             return true;
         }
 
@@ -243,8 +307,21 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override string ShortDescription
-            => "Storm that drains fatigue from enemies who stand inside it.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.StormEndudrain.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -288,6 +365,22 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             tempest = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.InebriatingFumes.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     /// <summary>
     /// Dex/Qui stat specline debuff
@@ -323,6 +416,22 @@ namespace DOL.GS.Spells
 
         // constructor
         public StormDexQuickDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -365,6 +474,22 @@ namespace DOL.GS.Spells
             s = new Spell(dbs, 1);
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             tempest = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
+        }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.MentalSiphon.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
         }
     }
 
@@ -424,8 +549,21 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override string ShortDescription
-            => "Storm that drains power from enemies who stand inside it.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.PowerDrainStorm.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 
     #endregion
@@ -447,7 +585,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GameStorm)
             {
                 GameStorm targetStorm = effect.Owner as GameStorm;
-                targetStorm.Movable = false;
+                targetStorm!.Movable = false;
                 MessageToCaster("Now the vortex of this storm is locked!", eChatType.CT_YouWereHit);
                 GameEventMgr.AddHandler(m_caster, GameLivingEvent.Moving, new DOLEventHandler(LivingMoves));
             }
@@ -458,7 +596,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GameStorm)
             {
                 GameStorm targetStorm = effect.Owner as GameStorm;
-                targetStorm.Movable = true;
+                targetStorm!.Movable = true;
                 GameEventMgr.RemoveHandler(m_caster, GameLivingEvent.Moving, new DOLEventHandler(LivingMoves));
             }
             return base.OnEffectExpires(effect, noMessages);
@@ -477,8 +615,21 @@ namespace DOL.GS.Spells
         }
         public FocusingWindsSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Cast on a friendly storm, focusing on it to hold it in place.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.FocusingWinds.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -522,6 +673,22 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             tempest = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.ChokingVapors.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     /// <summary>
     /// Str/Con stat specline debuff
@@ -557,6 +724,21 @@ namespace DOL.GS.Spells
 
         // constructor
         public StormStrConstDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.StormStrConstDebuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -600,6 +782,22 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             tempest = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.SenseDullingCloud.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     /// <summary>
     /// Acuity stat baseline debuff
@@ -634,6 +832,22 @@ namespace DOL.GS.Spells
 
         // constructor
         public StormAcuityDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.StormAcuityDebuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -676,6 +890,23 @@ namespace DOL.GS.Spells
             s = new Spell(dbs, 1);
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             tempest = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
+        }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.EnergyTempest.MainDescription", Spell.Damage);
+            string RvRDesc = LanguageMgr.GetTranslation(language, "SpellDescription.FocusShell.OnlyInPvPORvR");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc + "\n\n" + RvRDesc;
+            }
+
+            return mainDesc + "\n\n" + RvRDesc;
         }
     }
     [SpellHandlerAttribute("StormEnergyTempest")]
@@ -749,8 +980,22 @@ namespace DOL.GS.Spells
 
         public StormEnergyTempest(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Storm that wracks the enemy with essence damage.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string spellTarget = LanguageMgr.GetTargetOfType(language, m_spell.Target.ToString());
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Stormlord.StormEnergyTempest.MainDescription", spellTarget, Spell.Value, Spell.Duration);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 

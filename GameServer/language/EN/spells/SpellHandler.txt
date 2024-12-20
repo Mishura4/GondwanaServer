@@ -273,6 +273,9 @@ SpellHandler.DebuffImmunity.GainImmunity:		You gain immunity to all debuffs, inc
 SpellHandler.DebuffImmunity.WornOff:			Your Debuff Immunity has worn off.
 SpellHandler.DebuffImmunity.TargetGainImmunity:	{0}'s chance to resist debuff spells has increased.
 SpellHandler.DebuffImmunity.TargetWornOff:		{0}'s Debuff Immunity has worn off.
+SpellHandler.GatewayPersonalBind.CantUseHere:	You can't use that here!
+SpellHandler.GatewayPersonalBind.MustStandStill:	You must be standing still to use this item!
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	You have been in combat recently and cannot use this item!
 
 SpellHandler.Warlock.AlreadyPreparingRangeSpell:			You are already preparing a Range spell.
 SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	You are already preparing an Uninterruptable spell.
@@ -281,8 +284,8 @@ SpellHandler.Warlock.MustFinishCastingRange:				You must finish casting Range be
 SpellHandler.Warlock.MustFinishCastingUninterruptable:		You must finish casting Uninterruptable before you can cast it again.
 SpellHandler.Warlock.MustFinishCastingPowerless:			You must finish casting Powerless before you can cast it again.
 
-SummonMonster.Target.Resist:					{0} has been resurrected from the limbs as a zombie and can't be effected by this spell!
-IllusionSpell.Target.Resist:					{0} has created an illusion and can't be effected by this spell!
-Morphed.Target.Resist:							{0} has been shapeshifted and can't be effected by this spell!
+SpellHandler.SummonMonster.Target.Resist:					{0} has been resurrected from the limbs as a zombie and can't be effected by this spell!
+SpellHandler.IllusionSpell.Target.Resist:					{0} has created an illusion and can't be effected by this spell!
+SpellHandler.Morphed.Target.Resist:							{0} has been shapeshifted and can't be effected by this spell!
 
 SpellHandler.DelveInfo.Sec:			sec

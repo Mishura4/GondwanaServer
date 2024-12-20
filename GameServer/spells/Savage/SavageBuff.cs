@@ -24,6 +24,7 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using System.Collections;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -149,7 +150,21 @@ namespace DOL.GS.Spells
 
         public SavageParryBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"Your chance to parry is increased by {Spell.Value}%.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SavageParryBuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 
     [SpellHandler("SavageEvadeBuff")]
@@ -159,7 +174,21 @@ namespace DOL.GS.Spells
 
         public SavageEvadeBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"Your chance to evade is increased by {Spell.Value}%.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SavageEvadeBuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 
     [SpellHandler("SavageCombatSpeedBuff")]
@@ -169,7 +198,21 @@ namespace DOL.GS.Spells
 
         public SavageCombatSpeedBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"Increases your combat speed by {Spell.Value}%.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SavageCombatSpeedBuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     [SpellHandler("SavageDPSBuff")]
     public class SavageDPSBuff : AbstractSavageStatBuff
@@ -178,7 +221,21 @@ namespace DOL.GS.Spells
 
         public SavageDPSBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"You do {Spell.Value} additional damage with melee attacks.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.SavageDPSBuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 
     [SpellHandler("SavageSlashResistanceBuff")]
@@ -187,6 +244,11 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.Resist_Slash; } }
 
         public SavageSlashResistanceBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.ResistBuff.MainDescription", LanguageMgr.GetDamageOfType(delveClient, (eDamageType)Property1), Spell.Value);
+        }
     }
 
     [SpellHandler("SavageThrustResistanceBuff")]
@@ -195,6 +257,11 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.Resist_Thrust; } }
 
         public SavageThrustResistanceBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.ResistBuff.MainDescription", LanguageMgr.GetDamageOfType(delveClient, (eDamageType)Property1), Spell.Value);
+        }
     }
 
     [SpellHandler("SavageCrushResistanceBuff")]
@@ -203,6 +270,11 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.Resist_Crush; } }
 
         public SavageCrushResistanceBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.ResistBuff.MainDescription", LanguageMgr.GetDamageOfType(delveClient, (eDamageType)Property1), Spell.Value);
+        }
     }
 }
 

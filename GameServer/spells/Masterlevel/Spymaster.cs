@@ -25,6 +25,8 @@ using DOL.Events;
 using DOL.Database;
 using DOL.AI.Brain;
 using log4net;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -129,8 +131,21 @@ namespace DOL.GS.Spells
             decoy.GuildName = "";
         }
 
-        public override string ShortDescription
-            => "Ground targeted summon that creates a simulacrum of a realm ally.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.Decoy.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -157,8 +172,21 @@ namespace DOL.GS.Spells
 
         public SabotageSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Destroys a targeted ward or piece of siege equipment.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.Sabotage.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -206,8 +234,21 @@ namespace DOL.GS.Spells
             trap = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
 
-        public override string ShortDescription
-            => "Rune that snares enemies when it detonates.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.TangleSnare.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -255,8 +296,21 @@ namespace DOL.GS.Spells
             trap = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
 
-        public override string ShortDescription
-            => "Rune that poisons enemies when it detonates.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.PoisonSpike.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #region Subspell
     [SpellHandlerAttribute("PoisonspikeDot")]
@@ -327,8 +381,22 @@ namespace DOL.GS.Spells
         }
         public LoockoutSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Watcher cannot move while hidden, but any hidden enemy moving within 350 units is exposed along with the watcher.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.Loockout.MainDescription1", Spell.Value);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.Loockout.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -397,9 +465,22 @@ namespace DOL.GS.Spells
             trap = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
 
-        public override string ShortDescription
-            => "Rune that does major damage to siege engines when it detonates.\n\n" +
-            $"Does {Spell.Damage} Essence damage to the target.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.SiegeWrecker.MainDescription1", Spell.Damage);
+            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.SiegeWrecker.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + secondDesc;
+            }
+
+            return mainDesc1 + "\n\n" + mainDesc2;
+        }
     }
     #endregion
 
@@ -425,8 +506,21 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
-            => "Summons a poison that mezmerizes the enemy and all enemies nearby when applied.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.EssenceFlare.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -434,7 +528,7 @@ namespace DOL.GS.Spells
     [SpellHandler("BlanketOfCamouflage")]
     public class GroupStealthHandler : MasterlevelHandling
     {
-        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public GroupStealthHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
@@ -629,8 +723,21 @@ namespace DOL.GS.Spells
                    ownerEffect.Cancel(false);
         }
 
-        public override string ShortDescription
-            => "Conceal your group in stealth. Moving will break the effect for non-stealthers.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 }

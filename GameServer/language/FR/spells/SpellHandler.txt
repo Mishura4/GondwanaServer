@@ -273,6 +273,9 @@ SpellHandler.DebuffImmunity.GainImmunity:		Vous bénéficiez d'une immunité con
 SpellHandler.DebuffImmunity.WornOff:			Votre Immunité aux sorts d'affaiblissements se dissipe.
 SpellHandler.DebuffImmunity.TargetGainImmunity:	Les chances de {0} de résister aux sorts d'affaiblissements ont augmenté.
 SpellHandler.DebuffImmunity.TargetWornOff:		L'Immunité aux sorts d'affaiblissements de {0} s'est dissipée.
+SpellHandler.GatewayPersonalBind.CantUseHere:	Vous ne pouvez pas utiliser cet objet ici !
+SpellHandler.GatewayPersonalBind.MustStandStill:	Vous devez être immobile pour utiliser cet objet !
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	Vous avez été en combat récemment et ne pouvez pas utiliser cet objet !
 
 SpellHandler.Warlock.AlreadyPreparingRangeSpell:			Vous êtes déjà en train de préparer un sort à distance.
 SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Vous êtes déjà en train de préparer un sort non-interruptible.
@@ -281,8 +284,8 @@ SpellHandler.Warlock.MustFinishCastingRange:				Vous devez finir d'incanter votr
 SpellHandler.Warlock.MustFinishCastingUninterruptable:		Vous devez finir d'incanter votre sort non-interruptible avant de le relancer.
 SpellHandler.Warlock.MustFinishCastingPowerless:			Vous devez finir d'incanter votre sort sans consommation de mana avant de le relancer.
 
-SummonMonster.Target.Resist:					{0} a été ressuscité des limbes sous forme de zombie et reste insensible à ce sort !
-IllusionSpell.Target.Resist:					{0} a invoqué une illusion et ne peut pas être affecté contre ce sort !
-Morphed.Target.Resist:							{0} a subi une métamorphose et ne peut pas être affecté par ce sort !
+SpellHandler.SummonMonster.Target.Resist:					{0} a été ressuscité des limbes sous forme de zombie et reste insensible à ce sort !
+SpellHandler.IllusionSpell.Target.Resist:					{0} a invoqué une illusion et ne peut pas être affecté contre ce sort !
+SpellHandler.Morphed.Target.Resist:							{0} a subi une métamorphose et ne peut pas être affecté par ce sort !
 
 SpellHandler.DelveInfo.Sec:			sec

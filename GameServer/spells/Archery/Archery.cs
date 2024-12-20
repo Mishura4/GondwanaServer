@@ -23,6 +23,7 @@ using DOL.GS.Effects;
 using DOL.Events;
 using DOL.AI.Brain;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -284,7 +285,7 @@ namespace DOL.GS.Spells
             }
             else
             {
-                if (target.Realm == 0 || Caster.Realm == 0)
+                if (target!.Realm == 0 || Caster.Realm == 0)
                 {
                     target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
                     Caster.LastAttackTickPvE = Caster.CurrentRegion.Time;
@@ -421,5 +422,36 @@ namespace DOL.GS.Spells
         }
 
         public Archery(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string damageTypeName = LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType);
+            string mainDesc;
+
+            if (Spell.Radius > 0)
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Archery.AreaTarget", Spell.Damage, damageTypeName);
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Archery.SingleTarget", Spell.Damage, damageTypeName);
+            }
+
+            if (Spell.Value > 0)
+            {
+                string effectivenessLine = LanguageMgr.GetTranslation(language, "SpellDescription.Archery.SecondaryEffectiveness", Spell.Value);
+                mainDesc += "\n\n" + effectivenessLine;
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

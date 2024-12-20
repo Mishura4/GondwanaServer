@@ -83,6 +83,16 @@ Language.DamageType.Melee.Damage:				melee damage
 Language.DamageType.Spell.Damage:				spell damage
 Language.DamageType.DoT.Damage:					damage-over-time
 
+# Target
+Language.SpellTarget.Realm:						realm
+Language.SpellTarget.Self:						self
+Language.SpellTarget.Enemy:						enemy
+Language.SpellTarget.Pet:						pet
+Language.SpellTarget.Group:						group
+Language.SpellTarget.Area:						area
+Language.SpellTarget.Corpse:					corpse
+Language.SpellTarget.Unknown:					unknown target
+
 Language.InternalError:							A server error has occured while trying to complete this action; please contact server staff.
 
 

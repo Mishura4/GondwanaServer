@@ -183,30 +183,26 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description;
+
+            if (Spell.Value >= 99)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description;
-
-                if (Spell.Value >= 99)
-                {
-                    description = LanguageMgr.GetTranslation(language, "SpellDescription.SpeedDecrease.Rooted");
-                }
-                else
-                {
-                    description = LanguageMgr.GetTranslation(language, "SpellDescription.Slow.MainDescription", Spell.Value);
-                }
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.Rooted");
             }
+            else
+            {
+                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Slow.MainDescription", Spell.Value);
+            }
+
+            if (Spell.IsSecondary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            return description;
         }
     }
 }

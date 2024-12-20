@@ -22,6 +22,7 @@ using System.Collections;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -77,5 +78,19 @@ namespace DOL.GS.Spells
         }
 
         public FuryHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Fury.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
 }

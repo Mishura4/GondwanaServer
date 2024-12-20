@@ -27,13 +27,9 @@ namespace DOL.GS.Spells
             get => eBuffBonusCategory.Other;
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.CraftingSpeedBuff.MainDescription", Spell.Value);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.CraftingSpeedBuff.MainDescription", Spell.Value);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

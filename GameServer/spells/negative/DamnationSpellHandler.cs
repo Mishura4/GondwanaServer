@@ -49,79 +49,64 @@ namespace DOL.GS.Spells
                         return 443;
                     else
                         return 442;
-                    break;
                 case 2:
                 case 11:
                     if (living.Gender == eGender.Female)
                         return 451;
                     else
                         return 452;
-                    break;
                 case 4:
                 case 7:
                     if (living.Gender == eGender.Female)
                         return 468;
                     else
                         return 467;
-                    break;
                 case 5:
                 case 17:
                     if (living.Gender == eGender.Female)
                         return 445;
                     else
                         return 446;
-                    break;
                 case 6:
                     return 444;
-                    break;
                 case 8:
                     if (living.Gender == eGender.Female)
                         return 682;
                     else
                         return 683;
-                    break;
                 case 10:
                     if (living.Gender == eGender.Female)
                         return 681;
                     else
                         return 680;
-                    break;
                 case 12:
                     if (living.Gender == eGender.Female)
                         return 1380;
                     else
                         return 1379;
-                    break;
                 case 13:
                     if (living.Gender == eGender.Female)
                         return 1352;
                     else
                         return 1351;
-                    break;
                 case 14:
                     return 1210;
-                    break;
                 case 15:
                     if (living.Gender == eGender.Female)
                         return 890;
                     else
                         return 889;
-                    break;
                 case 18:
                     if (living.Gender == eGender.Female)
                         return 1386;
                     else
                         return 1385;
-                    break;
                 case 19:
                     return 1576;
-                    break;
                 case 20:
                     return 1579;
-                    break;
                 case 21:
                     return 1582;
-                    break;
                 default:
                     break;
             }
@@ -354,34 +339,30 @@ namespace DOL.GS.Spells
             return base.CalculateToHitChance(target);
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Damnation.MainDescription1", Spell.AmnesiaChance, Spell.Duration / 1000);
+
+            string healingPart = string.Empty;
+            if (Spell.Value < 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription1", Spell.AmnesiaChance, Spell.Duration / 1000);
-
-                string healingPart = string.Empty;
-                if (Spell.Value < 0)
-                {
-                    // Severely reduced healing
-                    healingPart = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription2", Math.Abs(Spell.Value));
-                }
-                else if (Spell.Value == 0)
-                {
-                    // No healing effect
-                    healingPart = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription3");
-                }
-                else if (Spell.Value > 0)
-                {
-                    // Healing converted to damage
-                    healingPart = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription4", Spell.Value);
-                }
-
-                string undeadNote = LanguageMgr.GetTranslation(language, "SpellDescription.Damnation.MainDescription5");
-
-                return mainDesc + "\n\n" + healingPart + "\n\n" + undeadNote;
+                // Severely reduced healing
+                healingPart = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Damnation.MainDescription2", Math.Abs(Spell.Value));
             }
+            else if (Spell.Value == 0)
+            {
+                // No healing effect
+                healingPart = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Damnation.MainDescription3");
+            }
+            else if (Spell.Value > 0)
+            {
+                // Healing converted to damage
+                healingPart = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Damnation.MainDescription4", Spell.Value);
+            }
+
+            string undeadNote = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Damnation.MainDescription5");
+
+            return mainDesc + "\n\n" + healingPart + "\n\n" + undeadNote;
         }
     }
 }

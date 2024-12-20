@@ -522,31 +522,15 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            if (!charmSpeciesKeys.TryGetValue(Spell.AmnesiaChance, out string speciesKey))
-            {
-                speciesKey = "SpellDescription.Charm.Species.All";
-            }
-            string language = delveClient?.Account?.Language ?? ServerProperties.Properties.SERV_LANGUAGE;
-            string charmableSpecies = LanguageMgr.GetTranslation(language, speciesKey);
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            CharmSpellHandler.eCharmType charmType = (CharmSpellHandler.eCharmType)Spell.AmnesiaChance;
+            string charmableSpecies = LanguageMgr.GetCharmSpeciesOfType(language, charmType);
             string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription1", charmableSpecies);
             string secondDesc = "";
             if (Spell.Pulse == 0)
                 secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Charm.MainDescription2", Spell.Damage, Spell.Value);
             return baseDesc + "\n\n" + secondDesc;
         }
-
-        private static readonly Dictionary<int, string> charmSpeciesKeys = new Dictionary<int, string>()
-        {
-            {(int)eCharmType.Humanoid, "SpellDescription.Charm.Species.Humanoid"},
-            {(int)eCharmType.Animal, "SpellDescription.Charm.Species.Animal"},
-            {(int)eCharmType.Insect, "SpellDescription.Charm.Species.Insect"},
-            {(int)eCharmType.Reptile, "SpellDescription.Charm.Species.Reptile"},
-            {(int)eCharmType.HumanoidAnimal, "SpellDescription.Charm.Species.HumanoidAnimal"},
-            {(int)eCharmType.HumanoidAnimalInsect, "SpellDescription.Charm.Species.HumanoidAnimalInsect"},
-            {(int)eCharmType.HumanoidAnimalInsectMagical, "SpellDescription.Charm.Species.HumanoidAnimalInsectMagical"},
-            {(int)eCharmType.HumanoidAnimalInsectMagicalUndead, "SpellDescription.Charm.Species.HumanoidAnimalInsectMagicalUndead"},
-            {(int)eCharmType.All, ""},
-        };
 
         public CharmSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }

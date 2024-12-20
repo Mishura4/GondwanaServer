@@ -23,7 +23,6 @@ using System.Collections.Specialized;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -338,13 +337,9 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.Resurrect.MainDescription", Spell.ResurrectHealth, Spell.ResurrectMana);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Resurrect.MainDescription", Spell.ResurrectHealth, Spell.ResurrectMana);
         }
     }
 }

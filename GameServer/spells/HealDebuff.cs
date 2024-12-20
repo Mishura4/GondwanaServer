@@ -21,7 +21,6 @@ using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.Language;
 using DOL.GS.Effects;
-using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -109,14 +108,18 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.HealDebuff.MainDescription", Spell.Value);
+
+            if (Spell.RecastDelay > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.HealDebuff.MainDescription", Spell.Value);
-                return description;
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
             }
+
+            return mainDesc;
         }
     }
 }

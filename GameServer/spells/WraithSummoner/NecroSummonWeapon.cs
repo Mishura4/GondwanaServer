@@ -22,7 +22,6 @@ using System.Linq;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
 using DOL.Language;
 using log4net;
@@ -157,15 +156,19 @@ namespace DOL.GS.Spells
             player.TempProperties.removeProperty("SummonNethersbaneHandler");
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string desc1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SummonNethersbane.MainDescription1");
+            string desc2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SummonNethersbane.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string desc1 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonNethersbane.MainDescription1");
-                string desc2 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonNethersbane.MainDescription2");
-                return desc1 + "\n\n" + desc2;
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return desc1 + "\n\n" + desc2 + "\n\n" + secondDesc;
             }
+
+            return desc1 + "\n\n" + desc2;
         }
     }
 
@@ -295,16 +298,19 @@ namespace DOL.GS.Spells
             player.TempProperties.removeProperty("SummonIcebrandHandler");
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string desc1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SummonIcebrand.MainDescription1");
+            string desc2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SummonIcebrand.MainDescription2");
+
+            if (Spell.RecastDelay > 0)
             {
-                string language = Properties.SERV_LANGUAGE;
-                // Combine the two lines with line breaks
-                string desc1 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonIcebrand.MainDescription1");
-                string desc2 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonIcebrand.MainDescription2");
-                return desc1 + "\n\n" + desc2;
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return desc1 + "\n\n" + desc2 + "\n\n" + secondDesc;
             }
+
+            return desc1 + "\n\n" + desc2;
         }
     }
 }

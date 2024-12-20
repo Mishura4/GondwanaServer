@@ -28,7 +28,7 @@ namespace DOL.GS.Spells
     [SpellHandler("BeltOfMoon")]
     public class BeltOfMoon : SummonItemSpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private ItemTemplate m_MoonMace;
         private ItemTemplate m_MoonStaff;
@@ -290,7 +290,7 @@ namespace DOL.GS.Spells
 
             GamePlayer player = sender as GamePlayer;
 
-            lock (player.Inventory)
+            lock (player!.Inventory)
             {
                 var items = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack);
                 foreach (InventoryItem invItem in items)
@@ -325,7 +325,7 @@ namespace DOL.GS.Spells
                 return;
 
             GamePlayer player = sender as GamePlayer;
-            lock (player.Inventory)
+            lock (player!.Inventory)
             {
                 var items = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack);
                 foreach (InventoryItem invItem in items)

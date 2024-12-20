@@ -396,8 +396,6 @@ namespace DOL.GS.Spells
         {
             ISpellHandler subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
             string subDesc = subSpell != null ? subSpell.GetDelveDescription(delveClient) : $"Spell with ID {Spell.Value} not found";
-
-            // Translate the main part similar to TriggerSpellHandler
             string baseDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DefensiveProc.MainDescription", Spell.Name, (Spell.Frequency / 100));
 
             return baseDesc + "\n\n" + subDesc;

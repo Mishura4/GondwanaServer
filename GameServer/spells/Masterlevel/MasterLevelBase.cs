@@ -26,6 +26,8 @@ using DOL.AI.Brain;
 using DOL.Database;
 using System.Numerics;
 using DOL.GS.ServerProperties;
+using DOL.Language;
+using System.Linq;
 
 namespace DOL.GS.Spells
 {
@@ -1024,8 +1026,20 @@ namespace DOL.GS.Spells
 
         public BanelordSnare(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
-            => "Point blank area effect shout that snares nearby enemies, but stuns the user.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.MLBase.BanelordSnare.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 
@@ -1103,7 +1117,14 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return $"Creates a cloud that affects everyone in the area.\n\n Cloud spell:\n{heal.GetDelveDescription(delveClient)}";
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string subSpellDescription = heal.GetDelveDescription(delveClient);
+
+
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription1");
+            string cloudEffect = LanguageMgr.GetTranslation(language, "SpellDescription.GroundArea.MainDescription2");
+
+            return mainDesc + "\n\n" + cloudEffect + "\n" + subSpellDescription;
         }
     }
     #endregion
@@ -1280,7 +1301,7 @@ namespace DOL.GS.Spells
 
                 foreach (InventoryItem item in items)
                 {
-                    if (targetPlayer.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item))
+                    if (targetPlayer!.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item))
                     {
                         any = true;
                         InventoryLogging.LogInventoryAction(Caster, targetPlayer, eInventoryActionType.Other, item, item.Count);
@@ -1309,8 +1330,20 @@ namespace DOL.GS.Spells
         }
         public TargetModifierSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-            => "Self buff that grants the next non-area effect direct damage spell cast a radius, or increases the radius of an area effect damage spell.";
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.MLBase.TargetModifier.MainDescription");
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
+        }
     }
     #endregion
 

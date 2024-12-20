@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using System.Reflection;
 using DOL.GS.PacketHandler;
-using DOL.GS.ServerProperties;
 using DOL.Language;
 using log4net;
 
@@ -143,21 +142,17 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpreadHeal.MainDescription", Spell.Value);
+
+            if (Spell.IsSecondary)
             {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.SpreadHeal.MainDescription", Spell.Value);
-
-                if (Spell.IsSecondary)
-                {
-                    string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
-                    description += "\n\n" + secondaryMessage;
-                }
-
-                return description;
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
             }
+
+            return description;
         }
     }
 }

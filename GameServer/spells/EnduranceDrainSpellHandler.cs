@@ -108,13 +108,9 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                return LanguageMgr.GetTranslation(language, "SpellDescription.EnduranceDrain.MainDescription", Spell.Damage);
-            }
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.EnduranceDrain.MainDescription", Spell.Damage);
         }
     }
 }

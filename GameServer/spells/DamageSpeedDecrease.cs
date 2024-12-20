@@ -213,14 +213,11 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string damageTypeName = Spell.DamageType.ToString();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.DamageSpeedDecrease.MainDescription", Spell.Value, Spell.Damage, damageTypeName);
-            }
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string damageTypeName = LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType);
+            return LanguageMgr.GetTranslation(language, "SpellDescription.DamageSpeedDecrease.MainDescription", Spell.Value, Spell.Damage, damageTypeName);
         }
 
         public DamageSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

@@ -46,8 +46,8 @@ namespace DOL.GS.Spells
                 return false;
 
             m_pet.TempProperties.setProperty("target", target);
-            (m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
-            (m_pet.Brain as TheurgistPetBrain).Think();
+            (m_pet.Brain as IOldAggressiveBrain)!.AddToAggroList(target, 1);
+            (m_pet.Brain as TheurgistPetBrain)!.Think();
 
             Caster.PetCount++;
             return true;

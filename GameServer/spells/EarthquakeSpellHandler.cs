@@ -370,17 +370,20 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                double intensityValue = Spell.Value / 50.0;
-                string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Earthquake.MainDescription1", intensityValue.ToString("0.##"), Spell.Damage, Spell.AmnesiaChance);
-                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Earthquake.MainDescription2");
+            double intensityValue = Spell.Value / 50.0;
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Earthquake.MainDescription1", intensityValue.ToString("0.##"), Spell.Damage, Spell.AmnesiaChance);
+            string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Earthquake.MainDescription2");
 
-                return mainDesc + "\n\n" + secondDesc;
+            if (Spell.RecastDelay > 0)
+            {
+                string thirdDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc + "\n\n" + thirdDesc;
             }
+
+            return mainDesc + "\n\n" + secondDesc;
         }
     }
 }

@@ -263,15 +263,11 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string spellValue = Spell.Value.ToString();
-                string spellDamage = Spell.Damage.ToString();
-                return LanguageMgr.GetTranslation(language, "SpellDescription.MagicHealAbsorb.MainDescription", spellValue, spellDamage);
-            }
+            string spellValue = Spell.Value.ToString();
+            string spellDamage = Spell.Damage.ToString();
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MagicHealAbsorb.MainDescription", spellValue, spellDamage);
         }
     }
 }

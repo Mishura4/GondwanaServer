@@ -23,7 +23,8 @@ DelveInfo.ValueNegative:				Value: -{0}
 SpellDescription.DirectDamage.MainDescription:		Deals {0} {1} to the target.
 SpellDescription.DoT.MainDescription:				Target takes {0} {1} every {2} seconds.
 SpellDescription.BoltSpell.MainDescription:			A magical bolt shoots toward the target, exploding on impact for {0} {1}. Can be blocked.
-SpellDescription.LifeDrain.MainDescription:			The target takes {0} {1} damage and the attacker is healed for {2}% of the damage dealt.
+SpellDescription.LifeDrain.MainDescription:			The target takes {0} {1} and the attacker is healed for {2}% of the damage dealt.
+SpellDescription.DirectDamageWithDebuff.MainDescription:	Does {0} {1} and decreases the target's {2} by {3}%.
 SpellDescription.Nearsight.MainDescription1:		Target's effective range is reduced by {0}% for ranged attacks.
 SpellDescription.Nearsight.MainDescription2:		Nearsight spells cast upon the caster's group are reduced in effectiveness by {0}%, or outright resisted.
 SpellDescription.SpreadHeal.MainDescription:		Spreadheal for {0}.
@@ -56,7 +57,8 @@ SpellDescription.HoT.MainDescription:				The target regenerates {0} health every
 SpellDescription.DDWithDebuff.MainDescription:		Deals {0} {1} damage and reduces the target's {1} resistance by {2}%.
 SpellDescription.AfHitsBuff.MainDescription:		Increases the target's armor and health by {0}% while within range of this aura.
 SpellDescription.AllStatsBuff.MainDescription:		Increases all of {0}'s stats by {1}.
-SpellDescription.PowerDrain.MainDescription:		Deals {0} Spirit damage to the target, and the caster regains {1}% of the damage as power.
+SpellDescription.PowerDrain.MainDescription:		Deals {0} {1} to the target, and the caster regains {2}% of the damage as power.
+SpellDescription.RealPowerDrain.MainDescription:	Deals {0} {1} to the target, the caster regains {2}% of the damage as power, and the target loses {3}% of its total mana.
 SpellDescription.PowerLock.MainDescription1:		Locks you and your target in place, siphoning {0}% base power from them every {1}s for {2} seconds.
 SpellDescription.PowerLock.MainDescription2:		While grappled, neither you nor your target can be damaged by melee attacks.
 SpellDescription.PowerLock.MainDescription3:		Can only be used against players or player-controlled pets.
@@ -71,7 +73,7 @@ SpellDescription.MonsterRez.DamageRadius:			and its surroundings
 SpellDescription.MonsterRez.DamageFrequency:		every {0} seconds
 SpellDescription.MonsterRez.DamageDuration:			over a period of {0} seconds
 SpellDescription.SummonMonster.MainDescription:		Corpse resurrection.
-SpellDescription.DamageAdd.MainDescription:			{0}'s melee attacks do an additional {1} {2}.
+SpellDescription.DamageAdd.MainDescription:			The target's melee attacks do an additional {0} {1}.
 SpellDescription.DamageShield.MainDescription:		The target deals {0} {1} to enemies that hit them with a melee attack.
 SpellDescription.SpellReflection.MainDescription1:	{0} reflects spells back at the attacker with a {1}% chance and at {2}% of their original damage, while absorbing {3}% of damage dealt.
 SpellDescription.SpellReflection.MainDescription2:	Close combat or archery spells aren't reflected.
@@ -134,14 +136,18 @@ SpellDescription.OmniHeal.MainDescription:					The target regains {0}% of health
 SpellDescription.OmniLifeDrain.MainDescription:				Damages the target. {0}% of the damage is returned as health, {1}% as power, and {2}% as endurance to the caster.
 SpellDescription.PowerHeal.MainDescription:					Replenishes the target's power pool by {0}%.
 SpellDescription.Silence.MainDescription:					Enemy is silenced and can't cast spells for {0} seconds.
-SpellDescription.IllusionSpell.MainDescription1:			The caster creates {0} illusions {1} to surround themselves, confusing their opponents.
+SpellDescription.IllusionSpell.MainDescription1:			The caster summons {0} illusions {1} to surround himself, confusing his opponents.
 SpellDescription.IllusionSpell.MainDescription2:			Illusions deal {0}% of the caster's damage, have {1}% of the caster's max health, and fade after {2} seconds.
-SpellDescription.IllusionSpell.SubDescription1:				The caster is shapechanged into a creature, and the {0} illusions share the same appearance.
-SpellDescription.IllusionSpell.SubDescription2a:			Illusions move with the caster, mimicking their movements, styles, and spells.
+SpellDescription.IllusionSpell.SubDescription1:				The caster is shapechanged into a creature, and the {0} summoned illusions will share the same appearance.
+SpellDescription.IllusionSpell.SubDescription2a:			Illusions move alongside the caster, mimicking his movements, styles, and spells.
 SpellDescription.IllusionSpell.SubDescription2b:			Illusions vanish immediately and the spell ends if the caster moves.
 SpellDescription.Bump.MainDescriptionSingle:		Throws the targeted enemy {0} units high into the air and launches it forward between {1}% and {2}% of the maximum throw distance, stunning it mid-flight.
 SpellDescription.Bump.MainDescriptionArea:			All enemies within {3} units are hurled {0} units high and flung forward between {1}% and {2}% of the maximum throw distance, leaving them stunned while airborne.
 SpellDescription.Bump.MainDescriptionCone:			Enemies in a cone before the caster are tossed {0} units high and thrown forward between {1}% and {2}% of the maximum throw distance, leaving them stunned in mid-air.
+SpellDescription.Conversion.MainDescription:		{0}% of any damage done to you is converted into health, endurance, and mana.
+SpellDescription.MagicConversion.MainDescription:	{0}% of any spell damage done to you is converted into health, endurance, and mana.
+SpellDescription.Fury.MainDescription:				Gives a {0}% chance to deflect crowd control spells, and increases all magical resists by {0}%.
+SpellDescription.HealthToFatigue.MainDescription:	Target regains {0}% of lost endurance.
 SpellDescription.Chamber.MainDescription:			Allows you to preload a chamber containing a primary spell and a secondary spell which can be instantly unloaded upon your target.
 SpellDescription.Chamber.CanContainBolts:			Can contain bolts.
 SpellDescription.Chamber.CannotContainBolts:		Cannot contain bolts.
@@ -191,18 +197,139 @@ SpellDescription.FatigueConsumptionDebuff.MainDescription:	Increases the enduran
 SpellDescription.FumbleChanceDebuff.MainDescription:		Increases the target's chance to fumble by {0}%.
 SpellDescription.DPSDebuff.MainDescription:					Decreases DPS by {0}%.
 SpellDescription.SkillsDebuff.MainDescription:				Decreases skills by {0}%.
-SpellDescription.Warlock.SecondarySpell:			This is a secondary spell.
-SpellDescription.Trigger.MainDescription:           Generates a magic Proc as a buff on the target. {0} gets triggered when the target is hit.
+SpellDescription.Warlock.SecondarySpell:					This is a secondary spell.
+SpellDescription.AllStatsDebuff.MainDescription:			Decreases all stats of the target by {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:		Decreases all stats of the target by {0}%.
+SpellDescription.Morph.MainDescription:						Target has been shapechanged to {0}.
+SpellDescription.PowerRend.MainDescription:					Target loses {0}% power.
+SpellDescription.SummonAnimistFnF.MainDescription:		Summons a stationary turret at your ground target location that attacks all enemies within range.
+SpellDescription.Bomber.MainDescription:				Summons an elemental spirit that moves towards the target and explodes, casting its spell upon arrival.
+SpellDescription.SavageParryBuff.MainDescription:		Increases your chance to parry by {0}%.
+SpellDescription.SavageEvadeBuff.MainDescription:		Increases your chance to evade by {0}%.
+SpellDescription.SavageCombatSpeedBuff.MainDescription:	Increases your attack speed by {0}%.
+SpellDescription.SavageDPSBuff.MainDescription:			Increases your melee damage by {0}.
+SpellDescription.SavageEnduranceHeal.MainDescription:	You regain {0} endurance at the cost of some of your health.
+SpellDescription.Archery.SingleTarget:					Deals {0} {1} to the target.
+SpellDescription.Archery.AreaTarget:					Deals {0} {1} to the target and its surroundings.
+SpellDescription.Archery.SecondaryEffectiveness:		The shot's effectiveness is increased by {0}%.
+SpellDescription.Fear.SingleTarget:						Frightens away the targeted enemy. Cannot affect enemies above level {0}.
+SpellDescription.Fear.AreaTarget:						A point-blank area of effect fear that frightens away enemies within {1} units of the caster. Cannot affect enemies above level {0}.
+SpellDescription.BainsheePulseDmg.MainDescription:		Target takes {0} {1}.
+SpellDescription.BainsheePulseDmg.AreaDescription:		The spell affects all enemies in the immediate radius of the caster.
+SpellDescription.BainsheePulseDmg.SecondaryDescription:	Casting the chant again while it is running cancels it. The spell effect drops if the caster moves.
+SpellDescription.BeFriend.MainDescriptionArea:			Temporarily charms all monsters within the spell's radius around the caster, as long as they are below level {0}, making them friendly and acting like allies.
+SpellDescription.BeFriend.MainDescriptionSingle:		Temporarily charms the targeted monster, as long as it is below level {0}, making it friendly and acting like an ally.
+SpellDescription.VampiirStealthDetection.MainDescription:	Increases the target's ability to detect stealthed enemies by {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Temporarily debuffs the target's skill bonuses by {0}%.
+SpellDescription.VampiirMeleeResistance.MainDescription:	Increases the target's melee resistances by {0}%.
+SpellDescription.VampiirMagicResistance.MainDescription:	Target's chance to resist magical damage is increased by {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Temporarily reduces the target's effectiveness by {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Can be cast while in combat.
+SpellDescription.VampiirArmorDebuff.MainDescription:		Temporarily debuffs the absorption and armor factor of one random piece of armor on the target by {0}%.
+SpellDescription.VampiirArmorDebuff.AdditionalInfo:			This will only affect the Head, Torso, or Legs armor of the target.
+SpellDescription.RangeShield.MainDescription:			Shields the caster's group from ranged physical attacks.
 
-SpellDescription.AllStatsDebuff.MainDescription:             Decreases all stats of the target by {0}.
-SpellDescription.AllStatsPercentDebuff.MainDescription:      Decreases all stats of the target by {0}%.
-SpellDescription.Morph.MainDescription:                      Target has been shapechanged to {0}.
-SpellDescription.PowerRend.MainDescription:                  Target loses {0}% power.
-SpellDescription.DirectDamage.MainDescription:               Deals {0} {1} to the target.
-SpellDescription.Convoker.SummonWood.MainDescription:        Summon boards of wood usable for repairing keep doors.
-SpellDescription.Convoker.PrescienceNode.MainDescription:    Ground targeted ward that can make enemy stealthers visible, without removing their stealth.
-SpellDescription.Convoker.Prescience.MainDescription:        You have been detected by a Prescience Node!
-SpellDescription.SingleStatBuff.MainDescription:			 Augmente {0} de {1}.
+# ML Spells ShortDescriptions
+SpellDescription.Convoker.SummonWood.MainDescription:			Summons 100 random material boards of wood usable for upgrading and repairing keep doors and walls.
+SpellDescription.Convoker.PrescienceNode.MainDescription1:		Ground targeted ward (1000 radius) that can make enemy stealthers visible, without removing their stealth.
+SpellDescription.Convoker.PrescienceNode.MainDescription2:		Prescience Node has {0} hit points and can be attacked and destroyed.
+SpellDescription.Convoker.Prescience.MainDescription1:			You have been detected by a Prescience Node!
+SpellDescription.Convoker.Prescience.MainDescription2:			Empowers you with prescient abilities, allowing better anticipation of enemy moves.
+SpellDescription.Convoker.PowerTrap.MainDescription:			Deploys a rune that drains 20% power from enemies when it detonates (works only on enemies that have a power pool).
+SpellDescription.Convoker.SpeedWrap.MainDescription:			Ward that negates the effects of speed boosts for enemies who pass through it. Those affected cannot gain the benefit of speed spells for 6 seconds after leaving the speedwarp radius.
+SpellDescription.Convoker.SummonWarcrystal.MainDescription:		Summons a powerful piece of siege ammunition into the user's inventory (either grapeshot, bullets, balls of ice, or catapult stones).
+SpellDescription.Convoker.Battlewarder.MainDescription1:		Summons a Battle Warder that remains stationary to intercept and defend against enemy attacks. Drains power from the caster while standing.
+SpellDescription.Convoker.Battlewarder.MainDescription2:		Ground-targetted cast. Other pets can be up at the same time as a Battlewarder, and multiple Battlewarders can be up at once.
+SpellDescription.Convoker.DissonanceTrap.MainDescription:		Places a dissonance trap rune that deals {0} {1} to enemies upon detonation.
+SpellDescription.Convoker.BrittleGuard.MainDescription1:		Summons a Brittle Guard that intercepts incoming melee attacks on your behalf.
+SpellDescription.Convoker.BrittleGuard.MainDescription2:		Brittle Guard has only a single hit point and so dies after intercepting a hit. Only one brittle guard can be summoned at a time.
+SpellDescription.Convoker.SummonMastery.MainDescription:		Boosts the effective level of your pets, enhancing their melee damage and armor absorption.
+SpellDescription.Convoker.SummonTitan.MainDescription1:			Summons a Titan that grows in size and strength over time, pummeling enemies with immense power.
+SpellDescription.Convoker.SummonTitan.MainDescription2:			Titan does not move and will only attack those within melee range.
+SpellDescription.Spymaster.Decoy.MainDescription:				Summon random epic dressed realmmate with one hit point and no offense to distract opponents.
+SpellDescription.Spymaster.Sabotage.MainDescription:			Destroys a targeted ward or piece of siege equipment, rendering it unusable.
+SpellDescription.Spymaster.TangleSnare.MainDescription:			Deploys a rune that snares enemies by {0}% within its radius when detonated. Breaks stealth when cast.
+SpellDescription.Spymaster.PoisonSpike.MainDescription:			Deploys a rune that releases a poison spike against enemies upon detonation, dealing {0} {1}. Breaks stealth when cast.
+SpellDescription.Spymaster.Loockout.MainDescription1:			Watcher cannot move while hidden, but any stealthed enemy moving within {0} units is exposed along with the watcher.
+SpellDescription.Spymaster.Loockout.MainDescription2:			Target of lookout must be sitting and not move. Once you move, the effect breaks and normal stealth detection range applies.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Rune that does major damage to siege engines when it detonates.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		Does {0} damage to the target.
+SpellDescription.Spymaster.EssenceFlare.MainDescription:		Summons a poison that mesmerizes the enemy and all nearby enemies for 15 seconds when applied.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Conceal your group in stealth. Moving, casting or chanting will break the effect for non-stealthers.
+SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Drains {0} fatigue from surrounding enemies.
+SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Gives a {0}% damage hit bonus against objects such as siege equipment and keep components.
+SpellDescription.Battlemaster.MLManadrain.MainDescription:		Drains {0} power from surrounding enemies.
+SpellDescription.Battlemaster.Grapple.MainDescription1:			Short range single target effect that stuns the attacker for {0} seconds nullifying all effects.
+SpellDescription.Battlemaster.Grapple.MainDescription2:			It roots the target making them unable to move or use melee, but they may still cast and use chants/pulsing spells for 10 seconds.
+SpellDescription.Battlemaster.Grapple.MainDescription3:			Grappled target cannot be attacked by melee.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	Gives a {0}% chance to gain bonus essence damage when attacking in melee combat.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		A ranged attack using melee damage formulas.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Cannot attack with normal melee for 10 seconds afterwards.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Decreases the resistances to Essence damage by {0}% of surrounding enemies.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription2:	Decreases the target's resistances to Essence damage by {0}%.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Ability that protects a groupmate from enemy melee attack. Target of Bodyguard can't be attacked by melee until the bodyguard is killed or moves out of range.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	Target of Bodyguard must not be moving.
+SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Reduces the target's agility by {0}%.
+SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:	Reduces enemies casting speed by {0}%.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Reduces the power/health/fatigue of enemies within the area of effect by {0}% of the their current value.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Reduces the power/health/fatigue of enemies within the area of effect by {0}% of the their current value, but costs the user {1}% of their own health.
+SpellDescription.Banelord.Oppression.MainDescription:			Point blank area effect shout that decreases enemies' maximum encumbrance by {0}%.
+SpellDescription.Banelord.FatDebuff.MainDescription:			Point blank area effect shout that increases the fatigue cost of enemy actions by {0}%.
+SpellDescription.Banelord.MissHit.MainDescription:				Point blank area effect shout that decreases the chance for enemies to hit nearby allies by {0}%.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Point blank area effect shout that snares nearby enemies by {0}% of the enemies' current speed, but also stuns the user.
+SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:	Stuns the target for {0} seconds, making them unable to perform actions.
+SpellDescription.Banelord.ToHitBuff.MainDescription:			Point blank area effect shout that provides a {0}% increase to the chance for allies to hit enemies.
+SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Point blank area effect shout that reduces the effective spec of enemies for determining variance for spell and melee damage by {0}%.
+SpellDescription.Banelord.Banespike.MainDescription:			Point blank area effect shout that boosts the damage of attacks from nearby allies by {0}%.
+SpellDescription.Banelord.NbTargetAffected.MainDescription:		Maximum number of enemies affected is {0}.
+SpellDescription.Perfector.FOH.MainDescription1:				Creates a sphere at the caster's feet that restores allies's for {0} health over time. Up to 40 nearby allies can be healed at the same time.
+SpellDescription.Perfector.FOH.MainDescription2:				Healing done by the Sphere gets aggro for the caster in PvE.
+SpellDescription.Perfector.FOP.MainDescription1:				Creates a sphere at the caster's feet that restores allies's for {0} power over time. Up to 40 nearby allies can be regenerated at the same time.
+SpellDescription.Perfector.FOP.MainDescription2:				The sphere does not affect those that have been in PvE combat in the last 10 seconds.
+SpellDescription.Perfector.FOR.MainDescription:					Ward which reduces by {0}% the effect of crowd control spells on allies within its influence.
+SpellDescription.Perfector.SickHeal.MainDescription:			Target recovers from the effect of resurrection.
+SpellDescription.Perfector.FOD.MainDescription:					Ward which drains {0}% power from enemies who stand within its radius.
+SpellDescription.Perfector.PoT.MainDescription:					Apply a Power Over Time effect that restores {-0}% additional power every tick.
+SpellDescription.Perfector.CCResist.MainDescription:			Increase your resistance to crowd control effects by {0} seconds.
+SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Point blank area effect shout that restores health, power, and endurance of allies by {0}% of their maximum.
+SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Heals the target for 1000 hit points at the cost of {0}% of caster's health.
+SpellDescription.Warlord.CoweringBellow.MainDescription:		Cowers all controlled enemy pets within {0} radius, reducing their attack effectiveness.
+SpellDescription.Warlord.Critical.MainDescription1:				Increases critical hit chance allies of your {0} by {1}% for their next attack.
+SpellDescription.Warlord.Critical.MainDescription2:				Increases target's critical hit chance by {0}% for his next attack.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Reduces the effectiveness of damage-over-time spells on allies within a {0} radius by {1}%. If damage is reduced below zero, the DoT is dispelled.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Reduces the effectiveness of damage-over-time spells on target by {0}%. If damage is reduced below zero, the DoT is dispelled.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Increases allies' effectiveness by {1}% for determining damage variance on spells and melee attacks within a {0} radius.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Increases target's effectiveness by {0}% for determining damage variance on spells and melee attacks.
+SpellDescription.Warlord.MLABSBuff.MainDescription1:			Increases armor absorption by {1}% for allies within a {0} radius.
+SpellDescription.Warlord.MLABSBuff.MainDescription2:			Increases target's armor absorption by {0}%.
+SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription:	Destroys the targeted rune and any nearby runes within a {0} radius.
+SpellDescription.Sojourner.AncientTransmuter.MainDescription:	Summons a vendor to buy and sell basic supplies.
+SpellDescription.Sojourner.Port.MainDescription1:				Teleport to your world bindpoint. This spell will fail if you are in combat or in an RvR zone.
+SpellDescription.Sojourner.Port.MainDescription2:				Teleports {0} players within a radius of {1} to their last world bindpoint. This spell will fail if you are in combat or in an RvR zone.
+SpellDescription.Sojourner.EssenceResist.MainDescription:		Increases target's resistance to natural (essence) damage by {0}%.
+SpellDescription.Sojourner.Zephyr.MainDescription1:				Targeted summon that picks up the selected enemy player and carries them in a random direction. The zephyred player is immune to damage for the duration.
+SpellDescription.Sojourner.Zephyr.MainDescription2:				Once zephyred, a player cannot be zephyred again for {0} minute.
+SpellDescription.Sojourner.Phaseshift.MainDescription:			Self buff that provides near-invulnerability to spells and melee for {0} seconds.
+SpellDescription.Sojourner.Groupport.MainDescription:			Teleport your group to your world bindpoint. If any group member is in combat, this spell will fail.
+SpellDescription.Stormlord.DazzlingArray.MainDescription1:		Casts a stun feedback buff that makes it {0}% harder for enemies to hit allies inside its radius.
+SpellDescription.Stormlord.DazzlingArray.MainDescription2:		Only works versus casted, non-realm ability stuns, melee style stuns will still land.
+SpellDescription.Stormlord.StormMissHit.MainDescription:		Reduces the target's chance to hit by {0}%.
+SpellDescription.Stormlord.VacuumVortex.MainDescription:		Ground targeted effect that pushes any storms near the ground target directly away from that point, toward a random point at the edge of the vortex.
+SpellDescription.Stormlord.EnervatingGas.MainDescription:		Emits enervating gas that drains {0}% endurance from enemies within the storm.
+SpellDescription.Stormlord.StormEndudrain.MainDescription:		Storm that drains {0} endurance from enemies that stay inside it.
+SpellDescription.Stormlord.InebriatingFumes.MainDescription:	Storm that releases fumes reducing dexterity and quickness by {0}% for enemies inside it. The longer enemies remain in the cloud, the more Dex/Quick they lose.
+SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription:	Reduces the target's Dexterity and Quickness by {0}%.
+SpellDescription.Stormlord.MentalSiphon.MainDescription:		Storm that drains {0} power from enemies who stand inside it.
+SpellDescription.Stormlord.PowerDrainStorm.MainDescription:		Steals {0} power from the target.
+SpellDescription.Stormlord.FocusingWinds.MainDescription:		Cast and locks a friendly storm in place; breaks if you move.
+SpellDescription.Stormlord.ChokingVapors.MainDescription:		Storm that releases vapors reducing Strength and Constitution by {0}% for enemies inside it. The longer enemies remain in the cloud, the more Str/Con they lose.
+SpellDescription.Stormlord.StormStrConstDebuff.MainDescription:	Reduces the target's Strength and Constitution by {0}%.
+SpellDescription.Stormlord.SenseDullingCloud.MainDescription:	Storm that releases vapors reducing Acuity by {0}% for enemies inside it.
+SpellDescription.Stormlord.StormAcuityDebuff.MainDescription:	Reduces the target's Acuity by {0}%.
+SpellDescription.Stormlord.EnergyTempest.MainDescription:		Storm that inflicts essence damage on enemies inside it.
+SpellDescription.Stormlord.StormEnergyTempest.MainDescription:	Causes a storm that wracks {0} {1} over {2} seconds to the enemy.
+SpellDescription.MLBase.TargetModifier.MainDescription:			Self buff that grants the next non-AoE direct damage spell cast a radius, or increases the radius of an area effect damage spell.
+SpellDescription.MLBase.BanelordSnare.MainDescription:			Point blank area effect shout that snares nearby enemies, but stuns the user.
 
 # AblativeArmor
 AblativeArmor.DelveInfo.Function:			Function: melee hitpoint buffer (?)
@@ -231,9 +358,9 @@ CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			humanoid, animal, insec
 CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	humanoid, animal, insect, magical and undead
 
 #IllusionSpell SpellHandler
-SpellDescription.IllusionSpell.Arrangement.Random:		aléatoirement
-SpellDescription.IllusionSpell.Arrangement.Circle:		en cercle
-SpellDescription.IllusionSpell.Arrangement.Line:		en ligne
+IllusionSpell.Arrangement.Random:		randomly
+IllusionSpell.Arrangement.Circle:		in a circle
+IllusionSpell.Arrangement.Line:			in a line
 
 # DamageAddAndShield
 DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} does {1} extra damage(s) to you!
@@ -357,3 +484,19 @@ Spells.NecroSumonWeap.Icebrand.You:				You summon the Icebrand.
 Spells.NecroSumonWeap.Icebrand.Target:			{0} summons the Icebrand.
 Spells.NecroSumonWeap.Nethersbane.You:			You summon the Nethersbane.
 Spells.NecroSumonWeap.Nethersbane.Target:		{0} summons the Nethersbane.
+
+# StyleHandler
+StyleHandler.StyleNotFound:						Style not found.
+StyleHandler.UseStyle:							Use {0} style for melee combat.
+StyleHandler.NeedsRequirement:					Needs {0} to execute the style.
+StyleHandler.NeedsWeapon:						Needs a {0} to perform this style.
+StyleHandler.AllWeaponTypes:					All weapon types can be used to perform this style.
+StyleHandler.UnknownWeaponType:					Unknown weapon type requirement.
+StyleHandler.StyleNotImplemented:				That style is not implemented!
+StyleHandler.Opening.DefensiveActionUsing:		a defensive action using {0}
+StyleHandler.Opening.DefensiveAction:			a defensive action
+StyleHandler.Opening.Positional.Back:			to be on the back position from the enemy
+StyleHandler.Opening.Positional.Side:			to be on the side position from the enemy
+StyleHandler.Opening.Positional.Front:			to be on the front position from the enemy
+StyleHandler.Opening.Positional.Specific:		a specific position relative to the enemy
+StyleHandler.Opening.Default:					a specific opening requirement
