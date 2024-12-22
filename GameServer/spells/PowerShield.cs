@@ -69,7 +69,7 @@ namespace DOL.GS.Spells
             AttackData ad = args.AttackData;
             GameLiving target = ad.Target;
 
-            if (target == null || !target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active)
+            if (target == null || !target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active || ad.IsHit == false)
                 return;
 
             bool isDDandDoTSpell = false;
