@@ -182,7 +182,7 @@ namespace DOL.GS
             // First see if there are any MobXLootTemplates associated with this mob
             IList<MobDropTemplate> mxlts = DOLDB<MobDropTemplate>.SelectObjects(DB.Column(nameof(MobDropTemplate.MobName)).IsEqualTo(mob.Name));
 
-            if (mxlts != null)
+            if (mxlts != null && mxlts.Count > 0)
             {
                 lock (m_mobXLootTemplates)
                 {
@@ -334,36 +334,17 @@ namespace DOL.GS
                     // and add every 100% chance items to the loots Fixed list and add the rest to the Random list
                     // due to the fact that 100% items always drop regardless of the drop limit
                     List<DropTemplateXItemTemplate> lootTemplatesToDrop = new List<DropTemplateXItemTemplate>();
+                    bool hasDefaultDrops = false;
                     foreach (MobDropTemplate mobXLootTemplate in killedMobXLootTemplates)
                     {
-                        loot = GenerateLootFromMobXLootTemplates(mobXLootTemplate, lootTemplatesToDrop, loot, player);
+                        if (string.Equals(mobXLootTemplate.LootTemplateName, mob.Name, StringComparison.InvariantCultureIgnoreCase))
+                            hasDefaultDrops = true;
+                        loot = GenerateLootFromMobXLootTemplates(mobXLootTemplate.LootTemplateName.ToLower(), lootTemplatesToDrop, loot, player);
                         loot.DropCount = Math.Max(mobXLootTemplate.DropCount, loot.DropCount);
-                        foreach (DropTemplateXItemTemplate lootTemplate in lootTemplatesToDrop)
-                        {
-                            ItemTemplate drop = GameServer.Database.FindObjectByKey<ItemTemplate>(lootTemplate.ItemTemplateID);
-
-                            if (drop.Realm == (int)player.Realm || drop.Realm == 0 || player.CanUseCrossRealmItems)
-                            {
-                                int lootChanceModifier = player.LootChance;
-                                int finalChance = Math.Min(100, lootTemplate.Chance + lootChanceModifier);
-
-                                if (!string.IsNullOrEmpty(lootTemplate.ActiveEventId))
-                                {
-                                    var activeEvent = GameEventManager.Instance.GetEventByID(lootTemplate.ActiveEventId);
-                                    if (activeEvent == null || !activeEvent.StartedTime.HasValue || (activeEvent.EndTime.HasValue && DateTimeOffset.UtcNow > activeEvent.EndTime.Value))
-                                    {
-                                        continue; // Skip loot if the event is not active
-                                    }
-                                }
-
-                                if (player.Level >= lootTemplate.MinLevel && player.Level <= lootTemplate.MaxLevel &&
-                                    IsWithinHourRange(lootTemplate.HourMin, lootTemplate.HourMax, player) &&
-                                    (lootTemplate.QuestID == 0 || IsQuestStepCompleted(player, lootTemplate.QuestID, lootTemplate.QuestStepID)) && (!lootTemplate.IsRenaissance || player.IsRenaissance))
-                                {
-                                    loot.AddRandom(finalChance, drop, lootTemplate.Count);
-                                }
-                            }
-                        }
+                    }
+                    if (!hasDefaultDrops)
+                    {
+                        GenerateLootFromMobXLootTemplates(mob.Name, lootTemplatesToDrop, loot, player);
                     }
                 }
             }
@@ -384,16 +365,13 @@ namespace DOL.GS
         /// <param name="lootList">List to hold loot.</param>
         /// <param name="player">Player used to determine realm</param>
         /// <returns>lootList (for readability)</returns>
-        private static LootList GenerateLootFromMobXLootTemplates(MobDropTemplate mobXLootTemplates, List<DropTemplateXItemTemplate> lootTemplates, LootList lootList, GamePlayer player)
+        private static LootList GenerateLootFromMobXLootTemplates(string lootTemplateName, List<DropTemplateXItemTemplate> lootTemplates, LootList lootList, GamePlayer player)
         {
-            if (mobXLootTemplates == null || lootTemplates == null || player == null)
+            if (string.IsNullOrEmpty(lootTemplateName) || lootTemplates == null || player == null)
                 return lootList;
 
             Dictionary<string, DropTemplateXItemTemplate> templateList = null;
-            if (m_lootTemplates.ContainsKey(mobXLootTemplates.LootTemplateName.ToLower()))
-                templateList = m_lootTemplates[mobXLootTemplates.LootTemplateName.ToLower()];
-
-            if (templateList != null)
+            if (m_lootTemplates.TryGetValue(lootTemplateName.ToLower(), out templateList))
             {
                 foreach (DropTemplateXItemTemplate lootTemplate in templateList.Values)
                 {
@@ -420,7 +398,7 @@ namespace DOL.GS
                             if (finalChance == 100)
                                 lootList.AddFixed(drop, lootTemplate.Count);
                             else
-                                lootTemplates.Add(lootTemplate);
+                                lootList.AddRandom(finalChance, drop, lootTemplate.Count);
                         }
                     }
                 }
