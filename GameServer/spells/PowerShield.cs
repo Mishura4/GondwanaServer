@@ -74,23 +74,9 @@ namespace DOL.GS.Spells
 
             bool isDDandDoTSpell = false;
 
-            if (ad.AttackType == AttackData.eAttackType.Spell)
+            if (ad.AttackType is AttackData.eAttackType.Spell or AttackData.eAttackType.DoT)
             {
-                if (ad.SpellHandler != null && ad.SpellHandler.Spell != null)
-                {
-                    if (ad.SpellHandler.Spell.SpellType == "DirectDamage" || ad.SpellHandler.Spell.SpellType == "DamageOverTime" || ad.SpellHandler.Spell.SpellType == "Bolt" || ad.SpellHandler.Spell.SpellType == "Bomber" || ad.SpellHandler.Spell.SpellType == "Archery" || ad.SpellHandler.Spell.SpellType == "ArcheryDOT" || ad.SpellHandler.Spell.SpellType == "SiegeArrow" || ad.SpellHandler.Spell.SpellType == "HereticDamageSpeedDecreaseLOP" || ad.SpellHandler.Spell.SpellType == "HereticDoTLostOnPulse" || ad.SpellHandler.Spell.SpellType == "DirectDamageWithDebuff" || ad.SpellHandler.Spell.SpellType == "Lifedrain" || ad.SpellHandler.Spell.SpellType == "OmniLifedrain")
-                    {
-                        isDDandDoTSpell = true;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    return;
-                }
+                isDDandDoTSpell = ad.Damage > 0;
             }
 
             bool isMeleeAttack = ad.AttackType == AttackData.eAttackType.MeleeOneHand ||
