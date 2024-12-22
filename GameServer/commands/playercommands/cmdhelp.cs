@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System.Collections.Generic;
 
@@ -104,21 +105,28 @@ namespace DOL.GS.Commands
             }
         }
 
-        private static IDictionary<ePrivLevel, String[]> m_commandLists = new Dictionary<ePrivLevel, String[]>();
+        private static Dictionary<ePrivLevel, Dictionary<string, String[]>> m_commandLists = new();
+        
         private static object m_syncObject = new object();
 
         private String[] GetCommandList(GameClient client, ePrivLevel privilegeLevel)
         {
+            string language = client?.Account?.Language ?? Properties.SERV_LANGUAGE;
             lock (m_syncObject)
             {
-                if (!m_commandLists.ContainsKey(privilegeLevel))
+                Dictionary<string, string[]> langDict;
+                if (!m_commandLists.TryGetValue(privilegeLevel, out langDict))
                 {
-                    String[] commandList = ScriptMgr.GetCommandList(privilegeLevel, true, client.Account.Language);
-                    Array.Sort(commandList);
-                    m_commandLists[privilegeLevel] = commandList;
+                    langDict = new Dictionary<string, string[]>();
+                    m_commandLists[privilegeLevel] = langDict;
                 }
-
-                return m_commandLists[privilegeLevel];
+                if (!langDict.TryGetValue(language, out string[] commandList))
+                {
+                    commandList = ScriptMgr.GetCommandList(privilegeLevel, true, language);
+                    Array.Sort(commandList);
+                    langDict[language] = commandList;
+                }
+                return commandList;
             }
         }
     }
