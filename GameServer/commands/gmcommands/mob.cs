@@ -101,7 +101,7 @@ namespace DOL.GS.Commands
          "'/mob dropcount [number]' to set the max number of drops for mob (omit number to view current value).",
          "'/mob dropcount2 [number]' same as '/mob dropcount' but for the 'MobDrop' generator.",
          "'/mob addloot <ItemTemplateID> <chance> [count]' to add loot to the mob's unique drop table.  Optionally specify count of how many to drop if chance = 100%.",
-         "'/mob addloot2 <ItemTemplateID> <chance> [count]' to add loot to the mob's drop table. Optionally specify count of how many item to drop if chance < 100%.",
+         "'/mob addloot2 <ItemTemplateID> <chance> [count] [minHour] [maxHour] [minLevel] [maxLevel] [questID] [questStepID] [activeEventID] [isRenaissance]' to add loot to the mob's drop table. Optionally specify count of how many item to drop if chance < 100%.",
          "'/mob addotd <ItemTemplateID> <min level>' add a one time drop to this mob..",
          "'/mob viewloot [random] [inv]' to view the selected mob's loot table.  Use random to simulate a kill drop, random inv to simulate and generate the loots.",
          "'/mob removeloot <ItemTemplateID>' to remove loot from the mob's unique drop table.",
@@ -2131,6 +2131,29 @@ namespace DOL.GS.Commands
                 if (numDrops < 1)
                     numDrops = 1;
 
+                int argc = 5;
+                
+                int minHour = args.Length > 5 ? int.Parse(args[5]) : 0;
+                int maxHour = args.Length > 6 ? int.Parse(args[6]) : 24;
+                int minLevel = args.Length > 7 ? int.Parse(args[7]) : 0;
+                int maxLevel = args.Length > 8 ? int.Parse(args[8]) : 50;
+                int questId = args.Length > 9 ? int.Parse(args[9]) : 0;
+                int questStepId = args.Length > 10 ? int.Parse(args[10]) : 0;
+                string activeEventId = args.Length > 11 ? args[11] : string.Empty;
+                bool isRenaissance = false;
+                if (args.Length > 12)
+                {
+                    string arg = args[12].ToLower();
+                    if (arg is "true" or "1" or "yes" or "oui")
+                        isRenaissance = true;
+                    else if (arg is "false" or "0" or "no" or "non")
+                        isRenaissance = false;
+                    else
+                    {
+                        DisplaySyntax(client, args[1]);
+                    }
+                }
+
                 ItemTemplate item = GameServer.Database.FindObjectByKey<ItemTemplate>(lootTemplateID);
                 if (item == null)
                 {
@@ -2140,35 +2163,31 @@ namespace DOL.GS.Commands
                 }
 
                 var template = DOLDB<LootTemplateType>.SelectObjects(DB.Column(nameof(LootTemplate.TemplateName)).IsEqualTo(name).And(DB.Column(nameof(LootTemplate.ItemTemplateID)).IsEqualTo(lootTemplateID)));
+                LootTemplate lt;
                 if (template != null)
                 {
                     GameServer.Database.DeleteObject(template);
-
-                    LootTemplateType lt = Activator.CreateInstance<LootTemplateType>();
-                    lt.Chance = chance;
-                    lt.TemplateName = name;
-                    lt.ItemTemplateID = lootTemplateID;
-                    lt.Count = numDrops;
-                    GameServer.Database.AddObject(lt);
-                    refreshloot(client, targetMob, null);
                 }
-                else
+
+                lt = Activator.CreateInstance<LootTemplateType>();
+                lt.Chance = chance;
+                lt.TemplateName = name;
+                lt.ItemTemplateID = lootTemplateID;
+                lt.Count = numDrops;
+                if (typeof(LootTemplateType) == typeof(DropTemplateXItemTemplate))
                 {
-                    ItemTemplate itemtemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(lootTemplateID);
-                    if (itemtemplate == null)
-                    {
-                        DisplayMessage(client, "ItemTemplate " + lootTemplateID + " not found!");
-                        return;
-                    }
-
-                    LootTemplateType lt = Activator.CreateInstance<LootTemplateType>();
-                    lt.Chance = chance;
-                    lt.TemplateName = name;
-                    lt.ItemTemplateID = lootTemplateID;
-                    lt.Count = numDrops;
-                    GameServer.Database.AddObject(lt);
-                    refreshloot(client, targetMob, null);
+                    var dt = (DropTemplateXItemTemplate)lt;
+                    dt.HourMin = minHour;
+                    dt.HourMax = maxHour;
+                    dt.MinLevel = minLevel;
+                    dt.MaxLevel = maxLevel;
+                    dt.QuestID = questId;
+                    dt.QuestStepID = questStepId;
+                    dt.ActiveEventId = activeEventId;
+                    dt.IsRenaissance = isRenaissance;
                 }
+                GameServer.Database.AddObject(lt);
+                refreshloot(client, targetMob, null);
 
                 if (chance < 100)
                 {
