@@ -105,6 +105,9 @@ namespace DOL.GameEvents
 
         private void MobCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (Area == null)
+                return; // TODO: Check why this is the case? Shouldn't we prevent the timer from running if the area is not found?
+            
             //check if all the mobs are in the area
             var areaEvent = GetGameEvent();
             if (areaEvent != null)
