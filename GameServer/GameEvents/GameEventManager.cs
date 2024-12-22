@@ -1,10 +1,12 @@
-﻿using DOL.Database;
+﻿using Discord;
+using DOL.Database;
 using DOL.events.server;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
+using DOL.GS.Spells;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
 using log4net;
@@ -942,11 +944,7 @@ namespace DOL.GameEvents
 
             if (e.DebutText != null && e.EventZones?.Any() == true)
             {
-                foreach (var player in GetPlayersInEventZones(e.EventZones))
-                {
-                    string message = e.GetFormattedDebutText(player);
-                    SendEventNotification(e, message, (e.Discord == 1 || e.Discord == 3));
-                }
+                SendEventNotification(e, (lang) => e.FormatEventMessage(e.GetFormattedDebutText(lang, e.Owner)), (e.Discord == 1 || e.Discord == 3), true);
             }
 
             if (e.HasHandomText)
@@ -1027,15 +1025,37 @@ namespace DOL.GameEvents
             }
         }
 
-        private void SendEventNotification(GameEvent e, string message, bool sendDiscord)
+        public void SendEventNotification(GameEvent e, Func<string, string> message, bool sendDiscord, bool createNews = false)
         {
-            NotifyPlayersInEventZones(e.AnnonceType, message, e.EventZones);
-            if (Properties.DISCORD_ACTIVE && sendDiscord)
+            string lang = Properties.SERV_LANGUAGE!;
+            string msg = message(lang) ?? string.Empty;
+            Dictionary<string, string> cachedMessages = new Dictionary<string, string>(8)
             {
-                var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
-                hook.SendMessage(message);
+                { lang, msg }
+            };
+
+            if (!String.IsNullOrEmpty(msg))
+            {
+                if (Properties.DISCORD_ACTIVE && sendDiscord)
+                {
+                    var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                    hook.SendMessage(msg);
+                }
+                if (createNews)
+                {
+                    NewsMgr.CreateNews(msg, 0, eNewsType.RvRLocal, false);
+                }
             }
-            NewsMgr.CreateNews(message, 0, eNewsType.RvRLocal, false);
+            foreach (var player in GetPlayersInEventZones(e.EventZones))
+            {
+                lang = player?.Client?.Account?.Language ?? Properties.SERV_LANGUAGE!;
+                if (!cachedMessages.TryGetValue(lang, out msg))
+                {
+                    msg = message(lang) ?? string.Empty;
+                    cachedMessages[lang] = msg;
+                }
+                NotifyPlayer(player, e.AnnonceType, msg);
+            }
         }
 
         public async Task StopEvent(GameEvent e, EndingConditionType end)
@@ -1044,55 +1064,7 @@ namespace DOL.GameEvents
 
             if (e.EndText != null && e.EventZones?.Any() == true)
             {
-                string message = e.GetFormattedEndText(e.Owner);
-                if (message.Contains("<guilde>"))
-                {
-                    if (e.Owner != null && e.Owner.Guild is not { GuildType: Guild.eGuildType.ServerGuild })
-                    {
-                        message = message.Replace("<guilde>", e.Owner.GuildName);
-                        SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
-                    }
-                }
-                else if (message.Contains("<player>"))
-                {
-                    if (e.Owner != null)
-                    {
-                        message = message.Replace("<player>", e.Owner.Name);
-                        SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
-
-                    }
-                }
-                else if (message.Contains("<group>"))
-                {
-                    if (e.Owner != null && e.Owner.Group != null)
-                    {
-                        message = message.Replace("<group>", e.Owner.Group.Leader.Name);
-                        SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
-
-                    }
-                }
-                else if (message.Contains("<race>"))
-                {
-                    if (e.Owner != null)
-                    {
-                        message = message.Replace("<race>", e.Owner.RaceName);
-                        SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
-
-                    }
-                }
-                else if (message.Contains("<class>"))
-                {
-                    if (e.Owner != null)
-                    {
-                        message = message.Replace("<class>", e.Owner.CharacterClass.Name);
-                        SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
-
-                    }
-                }
-                else
-                {
-                    SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
-                }
+                SendEventNotification(e, (string lang) => e.FormatEventMessage(e.GetFormattedEndText(lang, e.Owner)), (e.Discord == 2 || e.Discord == 3), true);
 
                 foreach (var player in GetPlayersInEventZones(e.EventZones))
                 {
@@ -1383,8 +1355,7 @@ namespace DOL.GameEvents
             DBTPPoint randomDBTPPoint = tpPoints[Util.Random(tpPoints.Count - 1)];
             return new TPPoint(randomDBTPPoint.Region, randomDBTPPoint.X, randomDBTPPoint.Y, randomDBTPPoint.Z, eTPPointType.Random, randomDBTPPoint);
         }
-
-        public static void NotifyPlayersInEventZones(AnnonceType annonceType, string message, IEnumerable<string> zones)
+        public static void NotifyPlayer(GamePlayer player, AnnonceType annonceType, string message)
         {
             eChatType type;
             eChatLoc loc;
@@ -1411,17 +1382,14 @@ namespace DOL.GameEvents
                     loc = eChatLoc.CL_SystemWindow;
                     break;
             }
-
-            foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => zones.Contains(c.Player.CurrentZone.ID.ToString())))
+            
+            if (annonceType == AnnonceType.Confirm)
             {
-                if (annonceType == AnnonceType.Confirm)
-                {
-                    cl.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, message);
-                }
-                else
-                {
-                    cl.Out.SendMessage(message, type, loc);
-                }
+                player.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, message);
+            }
+            else
+            {
+                player.Out.SendMessage(message, type, loc);
             }
         }
 

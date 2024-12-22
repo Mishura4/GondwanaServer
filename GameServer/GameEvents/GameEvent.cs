@@ -1,4 +1,5 @@
 ﻿using DOL.Database;
+using DOL.Events;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
@@ -226,6 +227,46 @@ namespace DOL.GameEvents
                 IsTimingEvent = true;
             }
         }
+        
+        public string FormatEventMessage(string message)
+        {
+            if (message.Contains("<guilde>"))
+            {
+                if (Owner != null && Owner.Guild is not { GuildType: Guild.eGuildType.ServerGuild })
+                {
+                    message = message.Replace("<guilde>", Owner.GuildName);
+                }
+            }
+            if (message.Contains("<player>"))
+            {
+                if (Owner != null)
+                {
+                    message = message.Replace("<player>", Owner.Name);
+                }
+            }
+            if (message.Contains("<group>"))
+            {
+                if (Owner != null && Owner.Group != null)
+                {
+                    message = message.Replace("<group>", Owner.Group.Leader.Name);
+                }
+            }
+            if (message.Contains("<race>"))
+            {
+                if (Owner != null)
+                {
+                    message = message.Replace("<race>", Owner.RaceName);
+                }
+            }
+            if (message.Contains("<class>"))
+            {
+                if (Owner != null)
+                {
+                    message = message.Replace("<class>", Owner.CharacterClass.Name);
+                }
+            }
+            return message;
+        }
 
         private IEnumerable<GamePlayer> GetPlayersInEventZones(IEnumerable<string> eventZones)
         {
@@ -238,8 +279,8 @@ namespace DOL.GameEvents
         {
             foreach (var player in GetPlayersInEventZones(this.EventZones))
             {
-                string message = this.GetFormattedRemainingTimeText(player);
-                GameEventManager.NotifyPlayersInEventZones(this.AnnonceType, message, this.EventZones);
+                string message = this.GetFormattedRemainingTimeText(player.Client.Account.Language, player);
+                GameEventManager.NotifyPlayer(player, AnnonceType, message);
             }
 
             if (this.RemainingTimeEvSound > 0)
@@ -258,8 +299,8 @@ namespace DOL.GameEvents
 
             foreach (var player in GetPlayersInEventZones(this.EventZones))
             {
-                string message = this.GetFormattedRandomText(player);
-                GameEventManager.NotifyPlayersInEventZones(this.AnnonceType, message, this.EventZones);
+                string message = this.GetFormattedRandomText(player.Client.Account.Language, player);
+                GameEventManager.NotifyPlayer(player, this.AnnonceType, message);
             }
 
             if (!string.IsNullOrEmpty(this.RandomEventSound))
@@ -561,23 +602,21 @@ namespace DOL.GameEvents
 
         public int? TPPointID { get; set; }
 
-        public string GetFormattedDebutText(GamePlayer player)
+        public string GetFormattedDebutText(string language, GamePlayer player)
         {
             if (string.IsNullOrEmpty(DebutText))
                 return string.Empty;
 
-            string language = player?.Client.Account.Language ?? Properties.SERV_LANGUAGE!;
-            
             return LanguageMgr.GetEventMessage(language, DebutText, player?.Name ?? string.Empty);
         }
 
-        public string GetFormattedEndText(GamePlayer player)
+        public string GetFormattedEndText(string language, GamePlayer player)
         {
             if (string.IsNullOrEmpty(EndText))
                 return string.Empty;
 
             if (player == null)
-                return LanguageMgr.GetEventMessage(Properties.SERV_LANGUAGE, EndText, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                return LanguageMgr.GetEventMessage(language, EndText, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
             
             string playerName = player.Name;
             string groupName = player.Group?.Leader?.Name ?? "???";
@@ -585,26 +624,24 @@ namespace DOL.GameEvents
             string className = player.CharacterClass?.Name ?? "???";
             string raceName = player.RaceName ?? "???";
 
-            return LanguageMgr.GetEventMessage(player.Client.Account.Language, EndText ?? string.Empty, playerName, groupName, guildName, className, raceName);
+            return LanguageMgr.GetEventMessage(language, EndText ?? string.Empty, playerName, groupName, guildName, className, raceName);
         }
 
-        public string GetFormattedRemainingTimeText(GamePlayer player)
+        public string GetFormattedRemainingTimeText(string language, GamePlayer player)
         {
             if (string.IsNullOrEmpty(RemainingTimeText))
                 return string.Empty;
 
             if (player == null)
-                return LanguageMgr.GetEventMessage(Properties.SERV_LANGUAGE, RemainingTimeText);
+                return LanguageMgr.GetEventMessage(language, RemainingTimeText);
 
-            return LanguageMgr.GetEventMessage(player.Client.Account.Language, RemainingTimeText, player.Name);
+            return LanguageMgr.GetEventMessage(language, RemainingTimeText, player.Name);
         }
 
-        public string GetFormattedRandomText(GamePlayer player)
+        public string GetFormattedRandomText(string language, GamePlayer player)
         {
             if (RandomText?.Any() != true)
                 return string.Empty;
-            
-            string language = player?.Client.Account.Language ?? Properties.SERV_LANGUAGE!;
             
             var rand = new Random(DateTime.Now.Millisecond);
             string message = RandomText.ElementAt(rand.Next(0, RandomText.Count()));
