@@ -7,6 +7,7 @@ using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
+using DOL.Language;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
 using log4net;
@@ -1033,7 +1034,7 @@ namespace DOL.GameEvents
             {
                 { lang, msg }
             };
-
+            
             if (!String.IsNullOrEmpty(msg))
             {
                 if (Properties.DISCORD_ACTIVE && sendDiscord)
@@ -1043,7 +1044,12 @@ namespace DOL.GameEvents
                 }
                 if (createNews)
                 {
-                    NewsMgr.CreateNews(msg, 0, eNewsType.RvRLocal, false);
+                    foreach (string l in LanguageMgr.GetAllSupportedLanguages())
+                    {
+                        if (!cachedMessages.ContainsKey(l))
+                            cachedMessages[l] = message(l);
+                    }
+                    NewsMgr.CreateNews(cachedMessages, 0, eNewsType.RvRLocal, false);
                 }
             }
             foreach (var player in GetPlayersInEventZones(e.EventZones))
@@ -1051,7 +1057,9 @@ namespace DOL.GameEvents
                 lang = player?.Client?.Account?.Language ?? Properties.SERV_LANGUAGE!;
                 if (!cachedMessages.TryGetValue(lang, out msg))
                 {
-                    msg = message(lang) ?? string.Empty;
+                    msg = message(lang);
+                    if (string.IsNullOrEmpty(msg))
+                        msg = message(Properties.SERV_LANGUAGE);
                     cachedMessages[lang] = msg;
                 }
                 NotifyPlayer(player, e.AnnonceType, msg);

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS
@@ -36,7 +37,7 @@ namespace DOL.GS
 
     public class NewsMgr
     {
-        public static void CreateNews(string message, eRealm realm, eNewsType type, bool sendMessage, bool translate = false, params object[] args)
+        public static void CreateNews(IDictionary<string, string> translations, eRealm realm, eNewsType type, bool sendMessage, params object[] args)
         {
             if (sendMessage)
             {
@@ -44,13 +45,23 @@ namespace DOL.GS
                 {
                     if (client.Player == null)
                         continue;
-                    if ((client.Account.PrivLevel != 1 || realm == eRealm.None) || ServerProperties.Properties.SERVER_IS_CROSS_REALM || client.Player.Realm == realm)
+
+
+                    if (client.Account.PrivLevel <= 1 && realm != eRealm.None && client.Player.Realm != realm && !Properties.SERVER_IS_CROSS_REALM)
+                        continue;
+
+                    string lang = client.Player.Client.Account.Language;
+                    string translated = null;
+                    if (!translations.TryGetValue(lang, out translated))
                     {
-                        if (translate)
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, message, args), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        else
-                            client.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        lang = Properties.SERV_LANGUAGE;
+                        if (!translations.TryGetValue(lang, out translated))
+                        {
+                            continue;
+                        }
                     }
+                    if (!string.IsNullOrEmpty(translated))
+                        client.Out.SendMessage(translated, eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
 
@@ -59,15 +70,37 @@ namespace DOL.GS
                 DBNews news = new DBNews();
                 news.Type = (byte)type;
                 news.Realm = (byte)realm;
-                if (translate)
-                {
-                    news.Text = LanguageMgr.GetTranslation("EN", message, args);
-                    news.TextFR = LanguageMgr.GetTranslation("FR", message, args);
-                }
-                else
-                    news.Text = message;
+                string str;
+                if (translations.TryGetValue(LanguageMgr.ENGLISH, out str))
+                    news.Text = str;
+                if (translations.TryGetValue(LanguageMgr.FRENCH, out str))
+                    news.TextFR = str;
                 GameServer.Database.AddObject(news);
                 GameEventMgr.Notify(DatabaseEvent.NewsCreated, new NewsEventArgs(news));
+            }
+        }
+        
+        public static void CreateNews(string message, eRealm realm, eNewsType type, bool sendMessage, bool translate = false, params object[] args)
+        {
+            if (translate)
+            {
+                var translations = LanguageMgr.GetAllTranslations(message, args);
+                CreateNews(translations, realm, type, sendMessage, args);
+            }
+            else
+            {
+                CreateNews(new Dictionary<string, string>(){ { LanguageMgr.ENGLISH, message } }, realm, type, sendMessage, args);
+            }
+        }
+        
+        public static void CreateNews(Func<string, string> messageSupplier, eRealm realm, eNewsType type, bool sendMessage, params object[] args)
+        {
+            var dict = new Dictionary<string, string>();
+            foreach (string lang in LanguageMgr.GetAllSupportedLanguages())
+            {
+                string translation = messageSupplier(lang);
+                if (!string.IsNullOrEmpty(translation))
+                    dict[lang] = translation;
             }
         }
 

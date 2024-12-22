@@ -44,6 +44,14 @@ namespace DOL.Language
     {
         private static LanguageMgr soleInstance = new LanguageMgr();
 
+        public const string ENGLISH = "EN";
+        public const string FRENCH = "FR";
+
+        public static string[] GetAllSupportedLanguages()
+        {
+            return new[] { ENGLISH, FRENCH };
+        }
+
         public static void LoadTestDouble(LanguageMgr testDouble) { soleInstance = testDouble; }
 
         protected virtual bool TryGetTranslationImpl(out string translation, ref string language, string translationId, ref object[] args)
@@ -555,6 +563,18 @@ namespace DOL.Language
             string translation;
             TryGetTranslation(out translation, language, translationId, args);
             return translation;
+        }
+
+        public static IDictionary<string, string> GetAllTranslations(string translationId, params object[] args)
+        {
+            var dict = new Dictionary<string, string>(2);
+            foreach (string lang in GetAllSupportedLanguages())
+            {
+                string translation;
+                if (TryGetTranslation(out translation, lang, translationId, args))
+                    dict[lang] = translation;
+            }
+            return dict;
         }
 
         public static string GetDamageTypeNoun(string language, eDamageType resist)
