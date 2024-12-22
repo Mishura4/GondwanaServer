@@ -1427,24 +1427,30 @@ namespace DOL.GameEvents
 
         private static void CleanEvent(GameEvent e)
         {
-            foreach (var mob in e.Mobs)
+            try
             {
-                if (mob.ObjectState == GameObject.eObjectState.Active)
+                foreach (var mob in e.Mobs)
                 {
-                    if (!mob.IsPeaceful)
-                        mob.Health = 0;
-                    mob.RemoveFromWorld();
-                    mob.Delete();
+                    if (mob.ObjectState == GameObject.eObjectState.Active)
+                    {
+                        if (!mob.IsPeaceful)
+                            mob.Health = 0;
+                        mob.RemoveFromWorld();
+                        mob.Delete();
+                    }
                 }
-            }
 
-            foreach (var coffre in e.Coffres)
+                foreach (var coffre in e.Coffres)
+                {
+                    if (coffre.ObjectState == GameObject.eObjectState.Active)
+                        coffre.RemoveFromWorld();
+                }
+                e.Clean();
+            }
+            catch (Exception ex)
             {
-                if (coffre.ObjectState == GameObject.eObjectState.Active)
-                    coffre.RemoveFromWorld();
+                log.Error($"Exception while cleaning up event {e.ID}: {ex}");
             }
-
-            e.Clean();
             
             List<GameNPC> npc;
             lock (e.RelatedNPCs)

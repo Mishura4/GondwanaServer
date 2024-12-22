@@ -285,16 +285,19 @@ namespace DOL.GS.Scripts
         {
             base.AddToWorld();
 
-            lock (ChestsByName)
+            if (!string.IsNullOrEmpty(Name))
             {
-                if (!ChestsByName.TryGetValue(Name, out List<GameCoffre> list))
+                lock (ChestsByName)
                 {
-                    list = new List<GameCoffre>(){ this };
-                    ChestsByName[Name] = list;
-                }
-                else
-                {
-                    list.Add(this);
+                    if (!ChestsByName.TryGetValue(Name, out List<GameCoffre> list))
+                    {
+                        list = new List<GameCoffre>(){ this };
+                        ChestsByName[Name] = list;
+                    }
+                    else
+                    {
+                        list.Add(this);
+                    }
                 }
             }
 
@@ -337,19 +340,24 @@ namespace DOL.GS.Scripts
                 proximityTimer = null;
             }
 
-            lock (ChestsByFamily)
+            if (!string.IsNullOrEmpty(SwitchFamily))
             {
-                if (ChestsByFamily.TryGetValue(SwitchFamily, out List<GameCoffre> list))
+                lock (ChestsByFamily)
                 {
-                    list.Remove(this);
+                    if (ChestsByFamily.TryGetValue(SwitchFamily, out List<GameCoffre> list))
+                    {
+                        list.Remove(this);
+                    }
                 }
             }
-
-            lock (ChestsByName)
+            if (!string.IsNullOrEmpty(Name))
             {
-                if (ChestsByName.TryGetValue(Name, out List<GameCoffre> list))
+                lock (ChestsByName)
                 {
-                    list.Remove(this);
+                    if (ChestsByName.TryGetValue(Name, out List<GameCoffre> list))
+                    {
+                        list.Remove(this);
+                    }
                 }
             }
             return base.RemoveFromWorld();
