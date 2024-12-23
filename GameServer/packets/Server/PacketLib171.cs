@@ -23,6 +23,7 @@ using System.Reflection;
 using DOL.Database;
 using DOL.Language;
 using DOL.AI.Brain;
+using DOL.GameEvents;
 using DOL.GS.Keeps;
 using DOL.GS.Quests;
 using DOL.MobGroups;
@@ -247,6 +248,13 @@ namespace DOL.GS.PacketHandler
                 if ((npcFlags & GameNPC.eFlags.DONTSHOWNAME) != 0)
                     if (m_gameClient.Account.PrivLevel > 1) add += "-NON"; // indicates NON flag for GMs
                     else flags2 |= 0x02;
+                if (m_gameClient.Account.PrivLevel > 1)
+                {
+                    if (npc.Event is { InstancedConditionType: not InstancedConditionTypes.All })
+                    {
+                        add += $"-EV.{npc.Event.Owner.Name}";
+                    }
+                }
 
                 if ((npcFlags & GameNPC.eFlags.STEALTH) > 0)
                     flags2 |= 0x04;

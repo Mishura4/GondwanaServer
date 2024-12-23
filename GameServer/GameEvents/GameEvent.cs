@@ -106,7 +106,7 @@ namespace DOL.GameEvents
                 newMob.GuildName = mobDef.Guild;
                 newMob.LoadFromDatabase(mobDef);
                 newMob.BuildAmbientTexts();
-                newMob.EventID = ID;
+                newMob.Event = this;
                 Mobs.Add(newMob);
             }
 
@@ -230,42 +230,52 @@ namespace DOL.GameEvents
         
         public string FormatEventMessage(string message)
         {
-            if (message.Contains("<guilde>"))
+            if (Owner == null)
+                return message;
+            
+            if (Owner.Guild is not { GuildType: Guild.eGuildType.ServerGuild })
             {
-                if (Owner != null && Owner.Guild is not { GuildType: Guild.eGuildType.ServerGuild })
-                {
-                    message = message.Replace("<guilde>", Owner.GuildName);
-                }
+                message = message.Replace("<guilde>", Owner.GuildName);
             }
             if (message.Contains("<player>"))
             {
-                if (Owner != null)
-                {
-                    message = message.Replace("<player>", Owner.Name);
-                }
+                message = message.Replace("<player>", Owner.Name);
             }
-            if (message.Contains("<group>"))
+            if (Owner.Group != null)
             {
-                if (Owner != null && Owner.Group != null)
-                {
-                    message = message.Replace("<group>", Owner.Group.Leader.Name);
-                }
+                message = message.Replace("<group>", Owner.Group.Leader.Name);
             }
-            if (message.Contains("<race>"))
+            if (Owner != null)
             {
-                if (Owner != null)
-                {
-                    message = message.Replace("<race>", Owner.RaceName);
-                }
+                message = message.Replace("<race>", Owner.RaceName);
             }
-            if (message.Contains("<class>"))
+            if (Owner != null)
             {
-                if (Owner != null)
-                {
-                    message = message.Replace("<class>", Owner.CharacterClass.Name);
-                }
+                message = message.Replace("<class>", Owner.CharacterClass.Name);
             }
             return message;
+        }
+
+        public bool IsVisibleTo(GameObject obj)
+        {
+            if (Owner == obj)
+                return true;
+            
+            switch (InstancedConditionType)
+            {
+                case InstancedConditionTypes.All:
+                    return true;
+                case InstancedConditionTypes.Player:
+                    return Owner == obj;
+                case InstancedConditionTypes.Group:
+                    return obj is GameLiving living && Owner?.Group?.IsInTheGroup(living) == true;
+                case InstancedConditionTypes.Guild:
+                    return Owner?.Guild is { IsSystemGuild: false } && (obj as GamePlayer)?.Guild == Owner.Guild;
+                case InstancedConditionTypes.Battlegroup:
+                    return obj is GamePlayer player && Owner?.BattleGroup?.IsInTheBattleGroup(player) == true;
+                default:
+                    return false; // Unknown instance type
+            }
         }
 
         private IEnumerable<GamePlayer> GetPlayersInEventZones(IEnumerable<string> eventZones)
@@ -648,7 +658,11 @@ namespace DOL.GameEvents
             return LanguageMgr.GetEventMessage(language, message, player?.Name);
         }
 
-        public GamePlayer Owner { get => owner; set => owner = value; }
+        public GamePlayer Owner
+        {
+            get => owner;
+            set => owner = value;
+        }
 
         public void Clean()
         {

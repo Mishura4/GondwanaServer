@@ -293,6 +293,9 @@ namespace DOL.GS.ServerRules
                 defenderNpc is { IsPeaceful: true })
                 return false;
 
+            if (!defender.IsVisibleTo(attacker))
+                return false;
+
             var playerAttacker = attacker as GamePlayer;
             var playerDefender = defender as GamePlayer;
 

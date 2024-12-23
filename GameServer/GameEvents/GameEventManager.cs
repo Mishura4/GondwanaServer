@@ -75,7 +75,7 @@ namespace DOL.GameEvents
                 else counter++;
             }
 
-            var chanceEvents = this.Events.Where(e => e.Status == EventStatus.NotOver && e.EventChanceInterval.HasValue && e.EventChance > 0 && !e.StartedTime.HasValue);
+            var chanceEvents = this.Events.Where(e => e.Status == EventStatus.NotOver && e.EventChanceInterval.HasValue && e.EventChance > 0 && !e.StartedTime.HasValue).ToList();
             var rand = new Random((int)(DateTimeOffset.Now.ToUnixTimeSeconds() / 10000));
 
 
@@ -762,46 +762,80 @@ namespace DOL.GameEvents
                 List<Group> addedGroups = new List<Group>();
                 List<Guild> addedGuilds = new List<Guild>();
                 List<object> addedBattlegroups = new List<object>();
-                foreach (var cl in areaEvent.GetPlayersInArea())
+                bool isFirst = true;
+                bool CreateInstance(GamePlayer playerFor)
                 {
+                    // If player already has this event continue
+                    if (Instance.Events.Any(e => e.Owner == playerFor && e.ID == ev.ID))
+                        return false;
+                    
                     switch (ev.InstancedConditionType)
                     {
                         case InstancedConditionTypes.Player:
-                            newEvent.Owner = cl.Player;
-                            break;
+                            if (!isFirst)
+                                newEvent = new GameEvent(ev);
+                            isFirst = false;
+                            newEvent.Owner = playerFor;
+                            return true;
                         case InstancedConditionTypes.Group:
-                            if (cl.Player.Group != null && !addedGroups.Contains(cl.Player.Group))
+                            if (playerFor.Group != null)
                             {
-                                newEvent.Owner = cl.Player.Group.Leader;
-                                addedGroups.Add(cl.Player.Group);
+                                if (addedGroups.Contains(playerFor.Group))
+                                    return false;
+                                addedGroups.Add(playerFor.Group);
                             }
-                            break;
+                            if (!isFirst)
+                                newEvent = new GameEvent(ev);
+                            isFirst = false;
+                            newEvent.Owner = playerFor;
+                            return true;
                         case InstancedConditionTypes.Guild:
-                            if (cl.Player.Guild != null && !addedGuilds.Contains(cl.Player.Guild))
+                            if (playerFor.Guild != null)
                             {
-                                newEvent.Owner = cl.Player;
-                                addedGuilds.Add(cl.Player.Guild);
+                                if (addedGuilds.Contains(playerFor.Guild))
+                                {
+                                    return false;
+                                }
+                                addedGuilds.Add(playerFor.Guild);
                             }
-                            break;
+                            if (!isFirst)
+                                newEvent = new GameEvent(ev);
+                            isFirst = false;
+                            newEvent.Owner = playerFor;
+                            return true;
                         case InstancedConditionTypes.Battlegroup:
-                            if (cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null && !addedBattlegroups.Contains(cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null)))
+                            var battleGroup = (playerFor.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) as BattleGroup) ?? playerFor.BattleGroup;
+                            if (battleGroup != null)
                             {
-                                newEvent.Owner = cl.Player;
-                                addedBattlegroups.Add(cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null));
+                                if (addedBattlegroups.Contains(battleGroup))
+                                {
+                                    return false;
+                                }
+                                addedBattlegroups.Add(battleGroup);
                             }
-                            break;
+                            if (!isFirst)
+                                newEvent = new GameEvent(ev);
+                            isFirst = false;
+                            newEvent.Owner = playerFor;
+                            return true;
                         default:
                             break;
                     }
-                    events.Add(newEvent);
+                    return false;
+                }
 
-                    // If player already has this event continue
-                    if (Instance.Events.Any(e => e.Owner == cl.Player && e.ID == ev.ID))
-                        continue;
+                var players = areaEvent.GetPlayersInArea();
+                if (startingPlayer != null)
+                    players.Add(startingPlayer.Client);
+                foreach (var cl in players)
+                {
+                    if (CreateInstance(cl.Player))
+                    {
+                        events.Add(newEvent);
 
-                    if (!Instance.Events.Contains(newEvent))
-                        Instance.Events.Add(newEvent);
-                    newEvent = new GameEvent(ev);
+                        if (!Instance.Events.Contains(newEvent))
+                            Instance.Events.Add(newEvent);
+                    }
                 }
 
             }
@@ -882,6 +916,7 @@ namespace DOL.GameEvents
             foreach (var mob in e.Mobs)
             {
                 mob.Health = mob.MaxHealth;
+                mob.Event = e;
                 var db = GameServer.Database.FindObjectByKey<Mob>(mob.InternalID);
                 mob.LoadFromDatabase(db);
 

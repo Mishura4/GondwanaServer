@@ -36,6 +36,7 @@ using DOL.GS.Utils;
 using log4net;
 using Microsoft.VisualBasic;
 using DOL.AI.Brain;
+using DOL.GameEvents;
 using DOL.GS.Spells;
 using System.Collections.Specialized;
 
@@ -345,6 +346,12 @@ namespace DOL.GS
                 (InHouse && (!checkObject.InHouse || CurrentHouse != checkObject.CurrentHouse)))
             {
                 return false;
+            }
+
+            if (checkObject is GameNPC { Event: { InstancedConditionType: not InstancedConditionTypes.All } ev })
+            {
+                if (!ev.IsVisibleTo(this))
+                    return false;
             }
 
             return true;

@@ -209,10 +209,33 @@ namespace DOL.GS
             set { m_translationId = (value == null ? "" : value); }
         }
 
+        private GameEvent m_event = null;
+
+        public GameEvent Event
+        {
+            get => m_event;
+            set
+            {
+                m_event = value;
+                m_eventID = Event?.ID;
+            }
+        }
+
+        private string m_eventID = null;
+
         public string EventID
         {
-            get;
-            set;
+            get => m_eventID;
+            set
+            {
+                if (m_event != null)
+                {
+                    if (value == m_event.ID)
+                        return;
+                }
+                m_eventID = value;
+                m_event = string.IsNullOrEmpty(value) ? null : GameEventManager.Instance.GetEventByID(m_eventID);
+            }
         }
 
         public int ExperienceEventFactor
@@ -1201,32 +1224,11 @@ namespace DOL.GS
         {
             if (base.IsVisibleTo(checkObject))
             {
-                if (EventID != null && EventID != "" && checkObject is GamePlayer player)
+                if (Event != null && !Event.IsVisibleTo(checkObject))
                 {
-                    var gameEvents = GameEventManager.Instance.Events.Where(e => e.ID.Equals(EventID));
-                    switch (gameEvents.FirstOrDefault()!.InstancedConditionType)
-                    {
-                        case InstancedConditionTypes.All:
-                            return true;
-                        case InstancedConditionTypes.Player:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner == player && e.Mobs.Contains(this)).Any();
-                        case InstancedConditionTypes.Group:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner.Group != null && e.Owner.Group.IsInTheGroup(player) && e.Mobs.Contains(this)).Any();
-                        case InstancedConditionTypes.Guild:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner.Guild != null && e.Owner.Guild == player.Guild && e.Mobs.Contains(this)).Any();
-                        case InstancedConditionTypes.Battlegroup:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
-                            e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
-                            player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) && e.Mobs.Contains(this)).Any();
-                        default:
-                            break;
-                    }
+                    return checkObject is GamePlayer { Client.Account.PrivLevel: > 1 };
                 }
-                else
-                {
-                    return true;
-                }
-
+                return true;
             }
             return false;
         }
