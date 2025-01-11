@@ -2112,7 +2112,6 @@ namespace DOL.GS
 
             Spell? spell0 = SpellID == 0 ? null : SkillBase.GetSpellByID(SpellID);
             Spell? spell1 = SpellID == 1 ? null : SkillBase.GetSpellByID(SpellID1);
-            spell1 = spell0;
             if (spell0 != null && spell1 != null)
             {
                 list.Add(LanguageMgr.GetTranslation(client.Account.Language, "Language.Systems.Spell") + " 1:");
