@@ -9208,17 +9208,17 @@ namespace DOL.GS
 
         private void FinalizeItemCast(ISpellHandler handler)
         {
-            InventoryItem lastUsedItem = null;
-            TempProperties.removeAndGetProperty(LAST_USED_ITEM_SPELL, out lastUsedItem);
-            if (handler is not SpellHandler { Item: { } useItem, Status: SpellHandler.eStatus.Success })
+            InventoryItem useItem = null;
+            TempProperties.removeAndGetProperty(LAST_USED_ITEM_SPELL, out useItem);
+            if (handler is SpellHandler { Item: { } spellItem, Status: SpellHandler.eStatus.Success })
+                useItem = spellItem;
+
+            if (useItem == null)
                 return;
             
-            if (lastUsedItem != null)
+            if (handler.StartReuseTimer)
             {
-                if (handler.StartReuseTimer)
-                {
-                    lastUsedItem.CanUseAgainIn = lastUsedItem.CanUseEvery;
-                }
+                useItem.CanUseAgainIn = useItem.CanUseEvery;
             }
 
             if (useItem.Count > 1)
@@ -10690,7 +10690,7 @@ namespace DOL.GS
                 test = spellHandler.StartSpell(target, useItem);
                 if (test && spellHandler.Status == SpellHandler.eStatus.Success)
                 {
-                    useItem.Charges--;
+                    FinalizeItemCast(spellHandler);
                 }
             }
             return test;
