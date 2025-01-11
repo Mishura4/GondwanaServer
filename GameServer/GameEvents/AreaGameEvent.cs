@@ -23,7 +23,7 @@ namespace DOL.GameEvents
         public GameEvent LaunchedEvent;
         public GamePlayer LaunchedPlayer;
 
-        public AreaGameEvent(AreaXEvent db)
+        public AreaGameEvent(AreaXEvent db, AbstractArea area)
         {
             _db = db.Clone();
             this.LaunchTimer = new Timer();
@@ -32,6 +32,7 @@ namespace DOL.GameEvents
             UseItemCounter = 0;
             WhisperCounter = 0;
             Mobs = new Dictionary<string, int>();
+            Area = area;
 
             ParseValuesFromDb(db);
 
@@ -39,7 +40,7 @@ namespace DOL.GameEvents
             LaunchTimer.Elapsed += LaunchTimer_Elapsed;
             MobCheckTimer.Interval = 2000; // update every 2 seconds
             MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
-            if (Mobs.Count() != 0 && Mobs != null)
+            if (Mobs != null && Mobs.Count != 0)
             {
                 MobCheckTimer.AutoReset = true;
                 MobCheckTimer.Start();
@@ -62,8 +63,12 @@ namespace DOL.GameEvents
 
             LaunchTimer.Interval = ((AreaXEvent)_db).TimerCount * 1000;
             LaunchTimer.Elapsed += LaunchTimer_Elapsed;
-            MobCheckTimer.Interval = 2000; // update every 2 seconds
-            MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
+
+            if (Mobs.Count > 0)
+            {
+                MobCheckTimer.Interval = 2000; // update every 2 seconds
+                MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
+            }
         }
 
         public void ParseValuesFromDb(AreaXEvent db)
@@ -71,7 +76,7 @@ namespace DOL.GameEvents
             EventID = db.EventID;
             AreaID = db.AreaID;
             PlayersNb = db.PlayersNb;
-            if (db.Mobs != "" && db.Mobs != null)
+            if (!string.IsNullOrEmpty(db.Mobs))
             {
                 var mobs = db.Mobs.Split(new char[] { ';' });
                 foreach (var mob in mobs)
@@ -105,9 +110,6 @@ namespace DOL.GameEvents
 
         private void MobCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (Area == null)
-                return; // TODO: Check why this is the case? Shouldn't we prevent the timer from running if the area is not found?
-            
             //check if all the mobs are in the area
             var areaEvent = GetGameEvent();
             if (areaEvent != null)
@@ -147,11 +149,6 @@ namespace DOL.GameEvents
         }
         public bool CheckConditions(AbstractArea area = null)
         {
-            if (area != null)
-                Area = area;
-            if (Area == null)
-                return false;
-
             var areaEvent = GetGameEvent();
 
             if (areaEvent != null)

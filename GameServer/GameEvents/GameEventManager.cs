@@ -117,9 +117,15 @@ namespace DOL.GameEvents
                 return;
             }
 
-            foreach (var area in areasFromDb)
+            foreach (var dbEvent in areasFromDb)
             {
-                var areaEvent = new AreaGameEvent(area);
+                var area = WorldMgr.GetAllRegions().Select(w => w.GetArea(dbEvent.AreaID)).OfType<AbstractArea>().FirstOrDefault();
+                if (area == null)
+                {
+                    log.Warn($"DB Area event {dbEvent.EventID} has invalid area ${dbEvent.AreaID}");
+                    continue;
+                }
+                var areaEvent = new AreaGameEvent(dbEvent, area);
                 Instance.Areas.Add(areaEvent);
             }
         }

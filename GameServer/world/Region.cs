@@ -121,6 +121,8 @@ namespace DOL.GS
             get { return m_Areas; }
         }
 
+        private Dictionary<string, AbstractArea> m_DBAreas = new();
+
         /// <summary>
         /// Cache for zone area mapping to quickly access all areas within a certain zone
         /// </summary>
@@ -1391,6 +1393,10 @@ namespace DOL.GS
             {
                 area.ID = (ushort)(m_Areas.Keys.Union(new[] { (ushort)0 }).Max() + 1);
                 m_Areas.Add(area.ID, area);
+                if (area is AbstractArea { DbArea: { } dbArea } aArea)
+                {
+                    m_DBAreas.Add(dbArea.ObjectId, aArea);
+                }
 
                 int zonePos = 0;
                 foreach (Zone zone in Zones)
@@ -1421,6 +1427,10 @@ namespace DOL.GS
                 if (m_Areas.ContainsKey(area.ID) == false)
                 {
                     return;
+                }
+                if (area is AbstractArea { DbArea: { } dbArea } aArea)
+                {
+                    m_DBAreas.Remove(dbArea.ObjectId);
                 }
 
                 m_Areas.Remove(area.ID);
@@ -2091,6 +2101,10 @@ namespace DOL.GS
 
         #endregion
 
+        public IArea GetArea(string areaId)
+        {
+            return m_DBAreas.GetValueOrDefault(areaId, null);
+        }
     }
     #region Helpers classes
 
