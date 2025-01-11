@@ -164,7 +164,7 @@ namespace DOL.GS.Spells
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return true;
             }
-            if (!base.ApplyEffectOnTarget(Caster, effectiveness))
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
                 return false;
            
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
