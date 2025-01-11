@@ -121,12 +121,14 @@ namespace DOL.GS.Spells
                             CausesCombat = false,
                         };
                         healTarget.TakeDamage(ad);
+                        healed = true;
 
                         MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetDamnedDamaged", damageAmount), eChatType.CT_YouDied);
                     }
                     else if (harmvalue < 0)
                     {
                         heal = (heal * Math.Abs(harmvalue)) / 100;
+                        healed = true;
                         MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetDamnedPartiallyHealed"), eChatType.CT_SpellResisted);
                     }
                     else
@@ -147,10 +149,23 @@ namespace DOL.GS.Spells
             }
 
             // group heals seem to use full power even if no heals
-            if (!healed && Spell.Target.ToLower() == "realm")
-                m_caster.Mana -= PowerCost(target) >> 1; // only 1/2 power if no heal
-            else
+            if (healed)
+            {
+                Status = eStatus.Success; // Consume item charges
                 m_caster.Mana -= PowerCost(target);
+            }
+            else
+            {
+                if (Spell.Target.ToLower() == "realm")
+                {
+                    Status = eStatus.Success; // Consume item charges
+                    m_caster.Mana -= PowerCost(target) >> 1; // only 1/2 power if no heal
+                }
+                else
+                {
+                    Status = eStatus.Failure;
+                }
+            }
 
             // send animation for non pulsing spells only
             if (Spell.Pulse == 0)

@@ -9210,8 +9210,12 @@ namespace DOL.GS
         {
             InventoryItem useItem = null;
             TempProperties.removeAndGetProperty(LAST_USED_ITEM_SPELL, out useItem);
-            if (handler is SpellHandler { Item: { } spellItem, Status: SpellHandler.eStatus.Success })
+            if (handler is SpellHandler { Item: { } spellItem } sHandler)
+            {
+                if (sHandler.Status != SpellHandler.eStatus.Success)
+                    return;
                 useItem = spellItem;
+            }
 
             if (useItem == null)
                 return;

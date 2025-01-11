@@ -27,6 +27,7 @@ namespace DOL.GS.Spells
 
             CalculateEnduranceVariance(out minEnd, out maxEnd);
             CalculateManaVariance(out minMana, out maxMana);
+            // TODO: check if we actually do the healing of mana & endurance? Doesn't look like it...
             return true;
         }
 

@@ -87,7 +87,7 @@ namespace DOL.GS.Spells
             Success
         }
 
-        public eStatus Status { get; private set; }
+        public eStatus Status { get; protected set; }
 
         /// <summary>
         /// Has the spell been interrupted
