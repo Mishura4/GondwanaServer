@@ -9206,45 +9206,50 @@ namespace DOL.GS
             }
         }
 
+        private void FinalizeItemCast(ISpellHandler handler)
+        {
+            InventoryItem lastUsedItem = null;
+            TempProperties.removeAndGetProperty(LAST_USED_ITEM_SPELL, out lastUsedItem);
+            if (handler is not SpellHandler { Item: { } useItem, Status: SpellHandler.eStatus.Success })
+                return;
+            
+            if (lastUsedItem != null)
+            {
+                if (handler.StartReuseTimer)
+                {
+                    lastUsedItem.CanUseAgainIn = lastUsedItem.CanUseEvery;
+                }
+            }
+
+            if (useItem.Count > 1)
+            {
+                Inventory.RemoveCountFromStack(useItem, 1);
+                InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
+            }
+            else
+            {
+                useItem.Charges--;
+                if (useItem.Charges < 1)
+                {
+                    Inventory.RemoveCountFromStack(useItem, 1);
+                    InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
+                }
+            }
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.Used", useItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            if (useItem.IsPotion())
+                TempProperties.setProperty(NEXT_POTION_AVAIL_TIME + "_Type" + (handler.Spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
+            else if (useItem.IsParchment())
+                TempProperties.setProperty(NEXT_PARCH_AVAIL_TIME + "_Type" + (handler.Spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
+        }
+
         /// <summary>
         /// Callback after spell execution finished and next spell can be processed
         /// </summary>
         /// <param name="handler"></param>
         public override void OnAfterSpellCastSequence(ISpellHandler handler)
         {
-            InventoryItem lastUsedItem = null;
-            TempProperties.removeAndGetProperty(LAST_USED_ITEM_SPELL, out lastUsedItem);
-            if (handler is SpellHandler { Item: { } useItem, Status: SpellHandler.eStatus.Success })
-            {
-                if (lastUsedItem != null)
-                {
-                    if (handler.StartReuseTimer)
-                    {
-                        lastUsedItem.CanUseAgainIn = lastUsedItem.CanUseEvery;
-                    }
-                }
-
-                if (useItem.Count > 1)
-                {
-                    Inventory.RemoveCountFromStack(useItem, 1);
-                    InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
-                }
-                else
-                {
-                    useItem.Charges--;
-                    if (useItem.Charges < 1)
-                    {
-                        Inventory.RemoveCountFromStack(useItem, 1);
-                        InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
-                    }
-                }
-                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.Used", useItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-                if (useItem.IsPotion())
-                    TempProperties.setProperty(NEXT_POTION_AVAIL_TIME + "_Type" + (handler.Spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
-                else if (useItem.IsParchment())
-                    TempProperties.setProperty(NEXT_PARCH_AVAIL_TIME + "_Type" + (handler.Spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
-            }
+            FinalizeItemCast(handler);
 
             lock (m_spellQueueAccessMonitor)
             {
@@ -10681,7 +10686,13 @@ namespace DOL.GS
             if (isParchment)
                 test = CastSpell(spell, potionEffectLine, useItem);
             else
+            {
                 test = spellHandler.StartSpell(target, useItem);
+                if (test && spellHandler.Status == SpellHandler.eStatus.Success)
+                {
+                    useItem.Charges--;
+                }
+            }
             return test;
         }
 
