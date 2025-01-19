@@ -46,10 +46,11 @@ namespace DOL.GameEvents
 
             LaunchTimer.Interval = db.TimerCount * 1000;
             LaunchTimer.Elapsed += LaunchTimer_Elapsed;
-            MobCheckTimer.Interval = 2000; // update every 2 seconds
-            MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
-            if (Mobs != null && Mobs.Count != 0)
+            m_hasMobs = Mobs?.Count is null or 0;
+            if (!m_hasMobs)
             {
+                MobCheckTimer.Interval = 2000; // update every 2 seconds
+                MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
                 MobCheckTimer.AutoReset = true;
                 MobCheckTimer.Start();
             }
@@ -69,8 +70,8 @@ namespace DOL.GameEvents
 
             LaunchTimer.Interval = ((AreaXEvent)_db).TimerCount * 1000;
             LaunchTimer.Elapsed += LaunchTimer_Elapsed;
-
-            if (Mobs.Count > 0)
+            m_hasMobs = Mobs?.Count is null or 0;
+            if (!m_hasMobs)
             {
                 MobCheckTimer.Interval = 2000; // update every 2 seconds
                 MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
