@@ -284,7 +284,8 @@ namespace DOL.GameEvents
         
         private void _Reset()
         {
-            Status = EventStatus.Ending;
+            var prev = ExchangeStatus(EventStatus.Ending);
+            log.DebugFormat("Starting reset of event {0} ({1}) owned by {2} (status is {3})", EventName, ID, Owner, prev);
             try
             {
                 StartedTime = (DateTimeOffset?)null;
@@ -345,6 +346,24 @@ namespace DOL.GameEvents
                 log.Error($"Exception while resetting event {EventName} ({ID}): {ex}");
             }
             Status = EventStatus.Idle;
+            log.DebugFormat("Finished reset of event {0} ({1}) owned by {2}", EventName, ID, Owner);
+            if (IsInstancedEvent && !IsInstanceMaster)
+            {
+                var master = GameEventManager.Instance.GetEventByID(ID);
+                if (master != null)
+                    master.RemoveInstance(this);
+            }
+        }
+        
+        public void RemoveInstance(GameEvent instance)
+        {
+            if (Instances == null)
+                return;
+
+            lock (Instances)
+            {
+                Instances.Remove(instance);
+            }
         }
 
         public void Reset()
@@ -640,11 +659,8 @@ namespace DOL.GameEvents
 
         public async Task Stop(EndingConditionType end)
         {
-            if (ExchangeStatus(EventStatus.Ending) == EventStatus.Ending)
-            {
-                return;
-            }
-
+            var prev = ExchangeStatus(EventStatus.Ending);
+            log.DebugFormat("Attempting to end event {0} ({1}) by player {2} (IsInstance = {3}), was {4}", EventName, ID, Owner, IsInstancedEvent && !IsInstanceMaster, prev);
             try
             {
                 EndTime = DateTimeOffset.UtcNow;
@@ -752,6 +768,7 @@ namespace DOL.GameEvents
             {
                 Status = EventStatus.Idle;
             }
+            log.DebugFormat("Finished event {0} ({1}) owned by {2}", EventName, ID, Owner);
         }
 
         public void SendEventNotification(Func<string, string> message, bool sendDiscord, bool createNews = false)
@@ -834,6 +851,7 @@ namespace DOL.GameEvents
 
         public GameEvent Instantiate(GamePlayer owner)
         {
+            log.DebugFormat("Instantiating event {0} {1} for player {2}", EventName, ID, owner);
             GameEvent ret = new GameEvent(this);
 
             ret.Owner = owner;
@@ -1640,8 +1658,8 @@ namespace DOL.GameEvents
                     if (instance == null)
                     {
                         instance = Instantiate(triggerPlayer);
+                        Instances.Add(instance);
                     }
-                    Instances.Add(instance);
                     return instance;
                 }
             }
