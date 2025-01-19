@@ -9,6 +9,7 @@ using DOL.Events;
 using DOL.GS;
 using DOL.Language;
 using DOLDatabase.Tables;
+using System.Security.Cryptography;
 
 namespace DOL.GameEvents
 {
@@ -125,21 +126,32 @@ namespace DOL.GameEvents
                     if (!PlayersUsedItem.Contains(player))
                         PlayersUsedItem.Add(player);
                 }
+                TryStartEvent();
             }
         }
 
         private void PlayerWhisperEvent(DOLEvent e, object sender, EventArgs args)
         {
-            if (sender is not GamePlayer player || args is not WhisperEventArgs whisperArgs)
+            if (sender is not GamePlayer player)
                 return;
 
-            if (String.Equals(whisperArgs.Text, Whisper, StringComparison.InvariantCultureIgnoreCase))
+            string text = string.Empty;
+            if (args is WhisperEventArgs whisper)
+            {
+                text = whisper.Text;
+            }
+            else if (args is SayEventArgs say)
+            {
+                text = say.Text;
+            }
+            if (String.Equals(text, Whisper, StringComparison.InvariantCultureIgnoreCase))
             {
                 lock (PlayersWhispered)
                 {
                     if (!PlayersWhispered.Contains(player))
                         PlayersWhispered.Add(player);
                 }
+                TryStartEvent();
             }
         }
 
@@ -160,6 +172,7 @@ namespace DOL.GameEvents
                     if (PlayersWhispered != null)
                     {
                         GameEventMgr.AddHandler(player, GamePlayerEvent.Whisper, PlayerWhisperEvent);
+                        GameEventMgr.AddHandler(player, GamePlayerEvent.Say, PlayerWhisperEvent);
                     }
                 }
             }
