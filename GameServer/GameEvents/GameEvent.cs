@@ -406,8 +406,11 @@ namespace DOL.GameEvents
 
         private async Task<bool> _Start(GamePlayer? triggerPlayer)
         {
-            if (!TryExchangeStatus(EventStatus.Starting, EventStatus.Idle))
+            log.DebugFormat("Attempting to start event {0} ({1}) for player {2} (IsInstance = {3})", EventName, ID, triggerPlayer, IsInstancedEvent && !IsInstanceMaster);
+            var prev = CompareExchangeStatus(EventStatus.Starting, EventStatus.Idle);
+            if (prev != EventStatus.Idle)
             {
+                log.DebugFormat("Cannot start event {0} ({1}) for player {2} (IsInstance = {3}), status is {4}", EventName, ID, triggerPlayer, IsInstancedEvent && !IsInstanceMaster, prev);
                 return false;
             }
             Owner ??= triggerPlayer;
@@ -463,6 +466,7 @@ namespace DOL.GameEvents
                     {
                         await Task.Run(() => StartEventEffects());
                         
+                        log.DebugFormat("Event {0} ({1}) started by player {2} (IsInstance = {3})", EventName, ID, triggerPlayer, IsInstancedEvent && !IsInstanceMaster);
                         SaveToDatabase();
                         return true;
                     }

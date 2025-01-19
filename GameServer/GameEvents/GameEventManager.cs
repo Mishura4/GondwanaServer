@@ -863,7 +863,7 @@ namespace DOL.GameEvents
         
         public bool StopEvent(GameEvent gameEvent, EndingConditionType endType, GamePlayer? triggerPlayer = null)
         {
-            gameEvent = gameEvent.Instances.FirstOrDefault(i => i.IsOwnedBy(triggerPlayer));
+            gameEvent = gameEvent.GetInstances().FirstOrDefault(i => i.IsOwnedBy(triggerPlayer));
             if (gameEvent == null)
                 return false;
             Task.Run(() => gameEvent.Stop(endType));

@@ -4640,13 +4640,13 @@ namespace DOL.GS
             {
                 var ev = GameEventManager.Instance.GetEventByID(EventID);
 
-                if (ev != null)
+                if (ev is { IsKillingEvent: true })
                 {
                     //Check if mob is a mob to kill in event
+                    ev = ev.GetInstance(killer);
                     if (ev.Mobs.Contains(this) && ev.IsKillingEvent && ev.MobNamesToKill?.Contains(this.Name) == true)
                     {
                         ev.WantedMobsCount--;
-
                         if (ev.WantedMobsCount == 0)
                         {
                             GamePlayer player = killer as GamePlayer;
