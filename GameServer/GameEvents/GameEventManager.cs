@@ -656,9 +656,9 @@ namespace DOL.GameEvents
 
             if (action == EndingAction.BindStone)
             {
-                foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => zones.Contains(c.Player.CurrentZone.ID.ToString())))
+                foreach (var cl in startingEvent.GetPlayersInEventZones(zones))
                 {
-                    cl.Player.MoveToBind();
+                    cl.MoveToBind();
                 }
 
                 return;
@@ -695,9 +695,9 @@ namespace DOL.GameEvents
 
                     if (tpPoint != null)
                     {
-                        foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => zones.Contains(c.Player.CurrentZone.ID.ToString())))
+                        foreach (var cl in startingEvent.GetPlayersInEventZones(zones))
                         {
-                            cl.Player.MoveTo(Position.Create(tpPoint.Region, tpPoint.Position.X, tpPoint.Position.Y, tpPoint.Position.Z));
+                            cl.MoveTo(Position.Create(tpPoint.Region, tpPoint.Position.X, tpPoint.Position.Y, tpPoint.Position.Z));
                         }
                     }
                 }

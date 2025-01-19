@@ -444,7 +444,7 @@ namespace DOL.GameEvents
                 {
                     if (StartEventSound > 0)
                     {
-                        foreach (var player in GetPlayersInEventZones(EventZones).Where(IsOwnedBy))
+                        foreach (var player in GetPlayersInEventZones(EventZones))
                         {
                             player.Out.SendSoundEffect((ushort)StartEventSound, player.Position, 0);
                         }
@@ -1150,7 +1150,7 @@ namespace DOL.GameEvents
             }
         }
 
-        private IEnumerable<GamePlayer> GetPlayersInEventZones(IEnumerable<string> eventZones)
+        public IEnumerable<GamePlayer> GetPlayersInEventZones(IEnumerable<string> eventZones)
         {
             IEnumerable<GamePlayer> enumerable;
 
