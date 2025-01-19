@@ -138,7 +138,7 @@ namespace DOL.GameEvents
             {
                 text = say.Text;
             }
-            if (String.Equals(text, Whisper, StringComparison.InvariantCultureIgnoreCase))
+            if (text != null && text.Contains(Whisper, StringComparison.InvariantCultureIgnoreCase))
             {
                 lock (PlayersWhispered)
                 {

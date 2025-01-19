@@ -1132,6 +1132,9 @@ namespace DOL.GameEvents
         {
             if (Owner == obj)
                 return true;
+
+            if (obj is GamePlayer { Client.Account.PrivLevel: > 1 })
+                return true;
             
             switch (InstancedConditionType)
             {

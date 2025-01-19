@@ -1226,7 +1226,7 @@ namespace DOL.GS
             {
                 if (Event != null && !Event.IsVisibleTo(checkObject))
                 {
-                    return checkObject is GamePlayer { Client.Account.PrivLevel: > 1 };
+                    return false;
                 }
                 return true;
             }
