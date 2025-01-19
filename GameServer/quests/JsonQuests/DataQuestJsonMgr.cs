@@ -177,36 +177,27 @@ public static class DataQuestJsonMgr
             player.Out.SendQuestListUpdate();
         }
 
-        var questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-        e.QuestStartingId?.Equals(dq.Quest.Id + "-start") == true &&
-       !e.StartedTime.HasValue &&
-        e.Status == EventStatus.NotOver &&
-        e.StartConditionType == StartingConditionType.Quest);
-        if (questEvent != null)
+        foreach (var e in GameEventManager.Instance.GetEventsStartedByQuest(dq.Quest.Id + "-start").Where(e => e.IsReady && e.StartConditionType == StartingConditionType.Quest))
         {
-            System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, player));
+            Task.Run(() => e.Start(player));
         }
-        if (dq.Quest.StartEvent)
+        if (!string.IsNullOrEmpty(dq.Quest.StartEventId))
         {
-            questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-            e.ID?.Equals(dq.Quest.StartEventId) == true &&
-            !e.StartedTime.HasValue &&
-            e.Status == EventStatus.NotOver &&
-            e.StartConditionType == StartingConditionType.Quest);
-            if (questEvent != null)
+            var questEvent = GameEventManager.Instance.GetEventByID(dq.Quest.StartEventId);
+            if (questEvent == null)
             {
-                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, player));
+                log.Warn($"Quest {dq.QuestId} ({dq.Quest.Name}) is linked to event {dq.Quest.StartEventId} which was not found");
             }
-        }
-        else if (dq.Quest.ResetEvent)
-        {
-            questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-            e.ID?.Equals(dq.Quest.StartEventId) == true &&
-            e.StartedTime.HasValue &&
-            e.StartConditionType == StartingConditionType.Quest);
-            if (questEvent != null)
+            else
             {
-                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
+                if (dq.Quest.ResetEvent)
+                {
+                    questEvent.GetInstance(player)?.Reset();
+                }
+                if (dq.Quest.StartEvent)
+                {
+                    Task.Run(() => questEvent.Start(player));
+                }
             }
         }
     }

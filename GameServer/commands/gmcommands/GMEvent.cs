@@ -448,29 +448,27 @@ namespace DOL.GS.Commands
 
                     case "start":
 
-                        if (id != null)
+                        if (id == null)
                         {
-                            var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(id));
+                            DisplaySyntax(client);
+                            break;
+                        }
+                        
+                        var ev = GameEventManager.Instance.GetEventByID(id);
+                        if (ev == null)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.EventNotFound", id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
 
-                            if (ev == null)
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.EventNotFound", id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
-                                return;
-                            }
-
-                            if (ev.StartedTime.HasValue)
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.EventAlreadyStarted", id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
-                            }
-                            else
-                            {
-                                await GameEventManager.Instance.StartEvent(ev);
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.EventStarted", id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
-                            }
+                        if (ev.StartedTime.HasValue)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.EventAlreadyStarted", id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
                         }
                         else
                         {
-                            DisplaySyntax(client);
+                            await ev.Start();
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.EventStarted", id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
                         }
 
                         break;
@@ -535,8 +533,7 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            var e = GameEventManager.Instance.Events.FirstOrDefault(ev => ev.ID.Equals(id));
-
+            var e = GameEventManager.Instance.GetEventByID(id);
             if (e == null)
             {
                 client.Out.SendMessage($"L'event avec l'id {id} n'a pas été trouvé.", eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
@@ -763,7 +760,7 @@ namespace DOL.GS.Commands
 
         private GameEvent GetEventById(GameClient client, string id)
         {
-            var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(id));
+            var ev = GameEventManager.Instance.GetEventByID(id);
 
             if (ev == null)
             {
@@ -856,7 +853,7 @@ namespace DOL.GS.Commands
                 }
                 else
                 {
-                    GameEventManager.Instance.ResetEvent(ev);
+                    ev.Reset();
                 }
 
                 resetIds.Add(ev.ID);
@@ -875,7 +872,7 @@ namespace DOL.GS.Commands
 
         private bool ChangeRespawnValue(GameClient client, string name, string id, bool canRespawn, bool isMob)
         {
-            var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(id));
+            var ev = GameEventManager.Instance.GetEventByID(id);
 
             if (ev == null)
             {
@@ -990,7 +987,7 @@ namespace DOL.GS.Commands
 
         private bool AddItemToEvent(GameObject item, string id, bool isCoffre, int xpMultiplicator)
         {
-            var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(id));
+            var ev = GameEventManager.Instance.GetEventByID(id);
 
             if (ev == null)
             {

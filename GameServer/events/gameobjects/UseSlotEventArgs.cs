@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Database;
 using System;
 
 namespace DOL.Events
@@ -25,18 +26,16 @@ namespace DOL.Events
     /// </summary>
     public class UseSlotEventArgs : EventArgs
     {
-        private int m_slot;
-        private int m_type;
-
         /// <summary>
         /// Constructs new UseSlotEventArgs
         /// </summary>
         /// <param name="slot">The used slot</param>
         /// <param name="type">The type of 'use' used (0=simple click on icon, 1=/use, 2=/use2)</param>
-        public UseSlotEventArgs(int slot, int type)
+        public UseSlotEventArgs(int slot, int type, InventoryItem item = null)
         {
-            this.m_slot = slot;
-            this.m_type = type;
+            Slot = slot;
+            Type = type;
+            Item = item;
         }
 
         /// <summary>
@@ -44,7 +43,8 @@ namespace DOL.Events
         /// </summary>
         public int Slot
         {
-            get { return m_slot; }
+            get;
+            init;
         }
 
         /// <summary>
@@ -52,7 +52,14 @@ namespace DOL.Events
         /// </summary>
         public int Type
         {
-            get { return m_type; }
+            get;
+            init;
+        }
+
+        public InventoryItem Item
+        {
+            get;
+            init;
         }
     }
 }

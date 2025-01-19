@@ -214,17 +214,13 @@ namespace DOL.Territories
             {
                 return;
             }
-
+            
+            // TODO: Review this, this seems extremely inefficient...
             Territory territory = this.Territories.FirstOrDefault(t => t.BossId.Equals(mob.InternalID));
             //For Boss change also Guild for Mob linked in same Event
-            if (mob.EventID != null)
+            if (mob.Event != null)
             {
-                var gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(mob.EventID));
-
-                if (gameEvent?.Mobs?.Any() == true)
-                {
-                    gameEvent.Mobs.ForEach(m => m.GuildName = guild.Name);
-                }
+                mob.Event.Mobs!.ForEach(m => m.GuildName = guild.Name);
             }
 
             if (territory == null || territory.Mobs == null)
@@ -238,8 +234,8 @@ namespace DOL.Territories
 
         public MobInfo FindBossFromGroupId(string groupId)
         {
-            var bossEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.KillStartingGroupMobId?.Equals(groupId) == true);
-
+            // TODO: Review this, this seems extremely inefficient...
+            var bossEvent = GameEventManager.Instance.Events.Values.FirstOrDefault(e => e.KillStartingGroupMobId?.Equals(groupId) == true);
             if (bossEvent == null)
             {
                 return new MobInfo()

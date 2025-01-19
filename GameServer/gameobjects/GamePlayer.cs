@@ -10272,8 +10272,7 @@ namespace DOL.GS
                     }
                 }
                 // notify event handlers about used slot
-                GameEventManager.AreaUseItemEvent(this, useItem.Id_nb);
-                Notify(GamePlayerEvent.UseSlot, this, new UseSlotEventArgs(slot, type));
+                Notify(GamePlayerEvent.UseSlot, this, new UseSlotEventArgs(slot, type, useItem));
             }
         }
 

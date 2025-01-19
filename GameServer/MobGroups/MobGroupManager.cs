@@ -54,15 +54,8 @@ namespace DOL.MobGroups
 
                 //Notify
                 GameEventMgr.Notify(GroupMobEvent.MobGroupDead, group);
-                var mobGroupEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-                                                                                        e.KillStartingGroupMobId?.Equals(group.GroupId) == true &&
-                                                                                        !e.StartedTime.HasValue &&
-                                                                                        e.Status == EventStatus.NotOver &&
-                                                                                        e.StartConditionType == StartingConditionType.Kill);
-                if (mobGroupEvent != null)
-                {
-                    Task.Run(() => GameEventManager.Instance.StartEvent(mobGroupEvent, null, killer as GamePlayer));
-                }
+                var mobGroupEvent = GameEventManager.Instance.GetEventsStartedByKillingGroup(group);
+                mobGroupEvent.ForEach(e => Task.Run(() => GameEventManager.Instance.StartEvent(e, killer as GamePlayer)));
             }
         }
 

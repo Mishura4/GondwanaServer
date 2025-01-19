@@ -248,7 +248,7 @@ namespace DOL.GS.Scripts
             //Stop Event
             if (StopEventResponses != null && StopEventResponses.TryGetValue(str, out eventId))
             {
-                var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(eventId));
+                var ev = GameEventManager.Instance.GetEventByID(eventId);
 
                 if (ev != null)
                 {
@@ -256,7 +256,7 @@ namespace DOL.GS.Scripts
                     {
                         if (ev.StartedTime.HasValue)
                         {
-                            GameEventManager.Instance.StopEvent(ev, EndingConditionType.TextNPC);
+                            GameEventManager.Instance.StopEvent(ev, EndingConditionType.TextNPC, source as GamePlayer);
                         }
                     }
                 }
@@ -264,7 +264,7 @@ namespace DOL.GS.Scripts
             //Start Event
             if (StartEventResponses != null && StartEventResponses.TryGetValue(str, out eventId))
             {
-                var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(eventId));
+                var ev = GameEventManager.Instance.GetEventByID(eventId);
 
                 if (ev != null)
                 {
@@ -272,7 +272,7 @@ namespace DOL.GS.Scripts
                     {
                         if (!ev.StartedTime.HasValue)
                         {
-                            GameEventManager.Instance.StartEvent(ev);
+                            GameEventManager.Instance.StartEvent(ev, source as GamePlayer);
                         }
                     }
                 }

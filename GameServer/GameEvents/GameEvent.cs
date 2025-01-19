@@ -13,6 +13,10 @@ using System.Timers;
 using DOL.Language;
 using Grpc.Core;
 using System.Net;
+using DOL.MobGroups;
+using System.Threading;
+using System.Threading.Tasks;
+using Timer = System.Timers.Timer;
 
 namespace DOL.GameEvents
 {
@@ -32,18 +36,86 @@ namespace DOL.GameEvents
         public Dictionary<string, GameNPC> RemovedMobs { get; }
         public Dictionary<string, GameStaticItem> RemovedCoffres { get; }
         public List<GameNPC> RelatedNPCs { get; } = new();
+        public GameEventAreaTrigger? AreaConditions { get; init; }
 
+        /**
+         * @brief Event instance constructor
+         */
         public GameEvent(GameEvent ev)
         {
+            ParallelLaunch = ev.ParallelLaunch;
+            IsInstanceMaster = false;
             _db = ev._db;
             ID = ev.ID;
             RandomTextTimer = new Timer();
             RemainingTimeTimer = new Timer();
             ResetFamilyTimer = new Timer();
             Owner = ev.Owner;
-            InstancedConditionType = ev.InstancedConditionType;
 
-            ParseValuesFromDb(ev._db as EventDB);
+            EventAreas = ev.EventAreas;
+            EventChance = ev.EventChance;
+            EventName = ev.EventName;
+            EventZones = ev.EventZones;
+            ShowEvent = ev.ShowEvent;
+            StartConditionType = ev.StartConditionType;
+            EventChanceInterval = ev.EventChanceInterval;
+            DebutText = ev.DebutText;
+            EndText = ev.EndText;
+            StartedTime = (DateTimeOffset?)null;
+            EndingConditionTypes = ev.EndingConditionTypes;
+            RandomText = ev.RandomText;
+            RandTextInterval = ev.RandTextInterval;
+            RemainingTimeInterval = ev.RemainingTimeInterval;
+            RemainingTimeText = ev.RemainingTimeText;
+            EndingActionA = ev.EndingActionA;
+            EndingActionB = ev.EndingActionB;
+            MobNamesToKill = ev.MobNamesToKill;
+            EndActionStartEventID = ev.EndActionStartEventID;
+            StartActionStopEventID = ev.StartActionStopEventID;
+            StartTriggerTime = ev.StartTriggerTime;
+            TimerType = ev.TimerType;
+            EndTime = (DateTimeOffset?)null;
+            ChronoTime = ev.ChronoTime;
+            KillStartingGroupMobId = ev.KillStartingGroupMobId;
+            ResetEventId = ev.ResetEventId;
+            ChanceLastTimeChecked = DateTimeOffset.FromUnixTimeSeconds(0);
+            AnnonceType = ev.AnnonceType;
+            Discord = ev.Discord;
+            InstancedConditionType = ev.InstancedConditionType;
+            AreaStartingId = ev.AreaStartingId;
+            QuestStartingId = ev.QuestStartingId;
+            ParallelLaunch = ev.ParallelLaunch;
+            StartEventSound = ev.StartEventSound;
+            RandomEventSound = ev.RandomEventSound;
+            RemainingTimeEvSound = ev.RemainingTimeEvSound;
+            EndEventSound = ev.EndEventSound;
+            TPPointID = ev.TPPointID;
+            EventFamily = ev.EventFamily;
+            TimeBeforeReset = ev.TimeBeforeReset;
+            if (TimeBeforeReset > 0)
+            {
+                ResetFamilyTimer.Interval = ((long)TimeBeforeReset) * 1000;
+                ResetFamilyTimer.Elapsed += ResetFamilyTimer_Elapsed;
+            }
+
+            if (RandTextInterval.HasValue && RandomText != null && this.EventZones?.Any() == true)
+            {
+                this.RandomTextTimer.Interval = ((long)RandTextInterval.Value.TotalMinutes).ToTimerMilliseconds();
+                this.RandomTextTimer.Elapsed += RandomTextTimer_Elapsed;
+                this.RandomTextTimer.AutoReset = true;
+                this.HasHandomText = true;
+            }
+
+            if (RemainingTimeText != null && RemainingTimeInterval.HasValue && this.EventZones?.Any() == true)
+            {
+                this.HasRemainingTimeText = true;
+                this.RemainingTimeTimer.Interval = ((long)RemainingTimeInterval.Value.TotalMinutes).ToTimerMilliseconds();
+                this.RemainingTimeTimer.AutoReset = true;
+                this.RemainingTimeTimer.Elapsed += RemainingTimeTimer_Elapsed;
+            }
+
+            IsKillingEvent = ev.IsKillingEvent;
+            IsTimingEvent = ev.IsTimingEvent;
 
             Coffres = new List<GameStaticItem>();
             foreach (var coffre in ev.Coffres)
@@ -114,6 +186,15 @@ namespace DOL.GameEvents
             EndEffects = new Dictionary<string, ushort>(ev.EndEffects);
             RemovedMobs = new Dictionary<string, GameNPC>(ev.RemovedMobs);
             RemovedCoffres = new Dictionary<string, GameStaticItem>(ev.RemovedCoffres);
+            InstancedConditionType = ev.InstancedConditionType;
+            EndingConditionTypes = ev.EndingConditionTypes;
+            EndTime = ev.EndTime;
+            ChronoTime = ev.ChronoTime;
+            if (ev.AreaConditions != null)
+            {
+                AreaConditions = new GameEventAreaTrigger(ev.AreaConditions);
+                AreaConditions.MasterEvent = this;
+            }
         }
 
         public GameEvent(EventDB db)
@@ -124,8 +205,26 @@ namespace DOL.GameEvents
             this.RemainingTimeTimer = new Timer();
             this.ResetFamilyTimer = new Timer();
             this.EventFamily = new Dictionary<string, bool>();
+            IsInstanceMaster = true;
+
+            AreaXEvent? dbAreaConditions = GameServer.Database.SelectObject<AreaXEvent>(e => e.EventID == this.ID);
+            if (dbAreaConditions != null)
+            {
+                var area = WorldMgr.GetAllRegions().Select(r => r.GetArea(dbAreaConditions.AreaID)).OfType<AbstractArea>().FirstOrDefault();
+                if (area == null)
+                {
+                    log.Warn($"AreaXEvent for {EventName} ({ID}) has invalid area ${dbAreaConditions.AreaID}");
+                }
+                else
+                {
+                    AreaConditions = new GameEventAreaTrigger(this, dbAreaConditions, area);
+                }
+            }
 
             ParseValuesFromDb(db);
+
+            if (ParallelLaunch)
+                Instances = new List<GameEvent>();
 
             this.Coffres = new List<GameStaticItem>();
             this.Mobs = new List<GameNPC>();
@@ -133,6 +232,722 @@ namespace DOL.GameEvents
             this.EndEffects = new Dictionary<string, ushort>();
             RemovedMobs = new Dictionary<string, GameNPC>();
             RemovedCoffres = new Dictionary<string, GameStaticItem>();
+        }
+
+        private void _Cleanup()
+        {
+            try
+            {
+                foreach (var mob in Mobs)
+                {
+                    if (mob.ObjectState == GameObject.eObjectState.Active)
+                    {
+                        if (!mob.IsPeaceful)
+                            mob.Health = 0;
+                        mob.RemoveFromWorld();
+                        mob.Delete();
+                    }
+                }
+
+                foreach (var coffre in Coffres)
+                {
+                    if (coffre.ObjectState == GameObject.eObjectState.Active)
+                        coffre.RemoveFromWorld();
+                }
+                
+                if (this.RandomTextTimer != null)
+                {
+                    this.RandomTextTimer.Stop();
+                }
+
+                if (this.RemainingTimeTimer != null)
+                {
+                    this.RemainingTimeTimer.Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception while cleaning up event {this}: {ex}");
+            }
+
+            List<GameNPC> npc;
+            lock (RelatedNPCs)
+            {
+                npc = new List<GameNPC>(RelatedNPCs);
+            }
+            foreach (var mob in npc)
+            {
+                mob.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>().ForEach(mob.RefreshEffects);
+            }
+            AreaConditions?.Reset();
+        }
+        
+        private void _Reset()
+        {
+            Status = EventStatus.Ending;
+            try
+            {
+                StartedTime = (DateTimeOffset?)null;
+                EndTime = (DateTimeOffset?)null;
+                WantedMobsCount = 0;
+                _Cleanup();
+
+                if (IsInstanceMaster && StartConditionType == StartingConditionType.Money)
+                {
+                    // TODO: review this, this won't work for instanced events...
+                    //Reset related NPC Money
+                    var moneyNpcDb = GameServer.Database.SelectObjects<MoneyNpcDb>(DB.Column("EventID").IsEqualTo(ID))?.FirstOrDefault();
+
+                    if (moneyNpcDb != null)
+                    {
+                        var mob = GameServer.Database.FindObjectByKey<Mob>(moneyNpcDb.MobID);
+
+                        if (mob != null)
+                        {
+                            MoneyEventNPC mobIngame = WorldMgr.Regions[mob.Region].Objects?.FirstOrDefault(o => o?.InternalID?.Equals(mob.ObjectId) == true && o is MoneyEventNPC) as MoneyEventNPC;
+
+                            if (mobIngame != null)
+                            {
+                                mobIngame.CurrentSilver = 0;
+                                mobIngame.CurrentCopper = 0;
+                                mobIngame.CurrentGold = 0;
+                                mobIngame.CurrentMithril = 0;
+                                mobIngame.CurrentPlatinum = 0;
+                                mobIngame.SaveIntoDatabase();
+                            }
+                        }
+
+
+                        moneyNpcDb.CurrentAmount = 0;
+                        GameServer.Database.SaveObject(moneyNpcDb);
+                    }
+
+                }
+
+                //restore temporarly disabled RemovedMobs
+                foreach (var mob in RemovedMobs)
+                {
+                    mob.Value.InternalID = mob.Key;
+                    mob.Value.AddToWorld();
+                }
+                RemovedMobs.Clear();
+
+                foreach (var item in RemovedCoffres)
+                {
+                    item.Value.InternalID = item.Key;
+                    item.Value.AddToWorld();
+                }
+                RemovedCoffres.Clear();
+                SaveToDatabase();
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception while resetting event {EventName} ({ID}): {ex}");
+            }
+            Status = EventStatus.Idle;
+        }
+
+        public void Reset()
+        {
+            GetInstances().ForEach(ev => ev._Reset());
+        }
+
+        private void ApplyEffect(GameObject item, Dictionary<string, ushort> dic)
+        {
+            foreach (GamePlayer pl in item.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                pl.Out.SendSpellEffectAnimation(item, item, dic[item.InternalID], 0, false, 5);
+            }
+        }
+        
+        public async Task<bool> StartEventEffects()
+        {
+            foreach (var mob in Mobs)
+            {
+                if (StartEffects.ContainsKey(mob.InternalID))
+                {
+                    ApplyEffect(mob, StartEffects);
+                }
+            }
+
+            foreach (var coffre in Coffres)
+            {
+                if (StartEffects.ContainsKey(coffre.InternalID))
+                {
+                    ApplyEffect(coffre, StartEffects);
+                }
+            }
+
+            List<GameNPC> npc;
+            lock (RelatedNPCs)
+            {
+                npc = new List<GameNPC>(RelatedNPCs);
+            }
+            foreach (var mob in npc)
+            {
+                mob.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>().ForEach(mob.RefreshEffects);
+            }
+
+            if (!string.IsNullOrEmpty(StartActionStopEventID))
+            {
+                var ev = GameEventManager.Instance.GetEventByID(StartActionStopEventID);
+                if (ev == null)
+                {
+                    log.Error(string.Format("Impossible To Stop Event Id {0} from StartActionStopEventID (Event {1}). Event not found", StartActionStopEventID, this.ID));
+                }
+                else
+                {
+                    log.Info(string.Format("Stop Event Id {0} from StartActionStopEventID (Event {1})", StartActionStopEventID, this.ID));
+                }
+                await ev.Stop(EndingConditionType.StartingEvent);
+            }
+            return true;
+        }
+
+        private async Task<bool> _Start(GamePlayer? triggerPlayer)
+        {
+            if (!TryExchangeStatus(EventStatus.Starting, EventStatus.Idle))
+            {
+                return false;
+            }
+            Owner ??= triggerPlayer;
+            try
+            {
+                //temporarly disable
+                var disabledMobs = GameServer.Database.SelectObjects<Mob>(DB.Column("RemovedByEventID").IsNotNull());
+                foreach (var mob in disabledMobs)
+                {
+                    if (mob.RemovedByEventID.Split("|").Contains(ID.ToString()))
+                    {
+                        var mobInRegion = WorldMgr.Regions[mob.Region].Objects.FirstOrDefault(o => o != null && o is GameNPC npc && npc.InternalID != null && npc.InternalID.Equals(mob.ObjectId));
+                        if (mobInRegion != null)
+                        {
+                            var npcInRegion = mobInRegion as GameNPC;
+                            //copy npc
+                            RemovedMobs[npcInRegion!.InternalID] = npcInRegion;
+                            npcInRegion.RemoveFromWorld();
+                            npcInRegion.Delete();
+                        }
+                    }
+                }
+                var disabledCoffres = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("RemovedByEventID").IsNotNull());
+                foreach (var coffre in disabledCoffres)
+                {
+                    if (coffre.RemovedByEventID.Split("|").Contains(ID.ToString()))
+                    {
+                        var coffreInRegion = WorldMgr.Regions[coffre.Region].Objects.FirstOrDefault(o => o != null && o is GameStaticItem item && item.InternalID.Equals(coffre.ObjectId)) as GameStaticItem;
+                        if (coffreInRegion != null)
+                        {
+                            var itemInRegion = coffreInRegion as GameStaticItem;
+                            RemovedCoffres[itemInRegion.InternalID] = itemInRegion;
+                            itemInRegion.RemoveFromWorld();
+                            itemInRegion.Delete();
+                        }
+                    }
+                }
+
+                if (StartEventSetup())
+                {
+                    if (StartEventSound > 0)
+                    {
+                        foreach (var player in GetPlayersInEventZones(EventZones).Where(IsOwnedBy))
+                        {
+                            player.Out.SendSoundEffect((ushort)StartEventSound, player.Position, 0);
+                        }
+                    }
+
+                    //need give more time to client after addtoworld to perform animation
+                    await Task.Delay(500);
+
+                    if (TryExchangeStatus(EventStatus.Started, EventStatus.Starting))
+                    {
+                        await Task.Run(() => StartEventEffects());
+                        
+                        SaveToDatabase();
+                        return true;
+                    }
+                }
+                else
+                {
+                    log.Warn($"Event startup of {EventName} ({ID}) was aborted: status changed");
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception while trying to start event {EventName} ({ID}): {ex}");
+            }
+            _Reset();
+            return false;
+        }
+
+        public async Task<bool> StartParallel(GamePlayer? triggerPlayer = null)
+        {
+            if (!TryExchangeStatus(EventStatus.Starting, EventStatus.Idle))
+            {
+                return false;
+            }
+            try
+            {
+                var condition = InstancedConditionType;
+                if (condition == InstancedConditionTypes.All)
+                    condition = InstancedConditionTypes.Player; // This doesn't seem right to me, but this is what was happening before
+
+                // Keep track of instances we spawn
+                Dictionary<object, GamePlayer> playersRegistered = new();
+                Func<GamePlayer, object> getKey = (GamePlayer p) =>
+                {
+                    switch (condition)
+                    {
+                        case InstancedConditionTypes.All:
+                            return this;
+
+                        case InstancedConditionTypes.Player:
+                            return p;
+
+                        case InstancedConditionTypes.Group:
+                            return p.Group ?? (object)p;
+
+                        case InstancedConditionTypes.Guild:
+                            return p.Guild?.IsSystemGuild == false ? p.Guild : p;
+
+                        case InstancedConditionTypes.Battlegroup:
+                            return p.BattleGroup ?? (object)p;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                };
+
+                // Register all players in the area, TODO: There has to be a better way to do this?
+                foreach (var player in WorldMgr.GetAllPlayingClients().Select(c => c.Player).Where(p => p.CurrentAreas.OfType<AbstractArea>().Any(a => a.DbArea.ObjectId == AreaStartingId))) // 
+                {
+                    var key = getKey(player);
+                    playersRegistered.TryAdd(key, player);
+                }
+
+                // Unregister players with running instances, prepare to start existing ready instances
+                List<GameEvent> startingExistingInstances = new();
+                lock (Instances)
+                {
+                    foreach (var i in Instances)
+                    {
+                        playersRegistered.Remove(getKey(i.Owner));
+                        if (i.IsReady)
+                            startingExistingInstances.Add(i);
+                    }
+                }
+
+                if (playersRegistered.Count > 0 || startingExistingInstances.Count > 0)
+                {
+                    // Spawn an instance for every registered player
+                    List<GameEvent> spawnedInstances = new();
+                    foreach (GamePlayer pl in playersRegistered.Values)
+                    {
+                        try
+                        {
+                            spawnedInstances.Add(Instantiate(pl));
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Error($"Could not instantiate event {this.EventName} ({ID}) for player {pl}: {ex}");
+                        }
+                    }
+
+                    List<(GameEvent ev, Task<bool> task)> allTasks = new();
+                    foreach (GameEvent e in startingExistingInstances.Concat(spawnedInstances))
+                    {
+                        // Start all events...
+                        allTasks.Add((e, e._Start(triggerPlayer)));
+                    }
+                    foreach (var entry in allTasks)
+                    {
+                        try
+                        {
+                            // Await all startups
+                            await entry.task;
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Error($"Could not start event {this.EventName} ({ID}) instance owned by {entry.ev.Owner}: {ex}");
+                            entry.ev.Reset();
+                        }
+                    }
+                    lock (Instances)
+                    {
+                        Instances.AddRange(spawnedInstances.Where(i => i.IsRunning));
+                    }
+                }
+                Status = EventStatus.Idle;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception while starting event {this.EventName} ({ID}): {ex}");
+                Reset();
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> Start(GamePlayer? triggerPlayer = null)
+        {
+            if (ParallelLaunch)
+            {
+                if (IsInstanceMaster)
+                    return await StartParallel(triggerPlayer);
+                else
+                {
+                    GameEvent master = GameEventManager.Instance.GetEventByID(this.ID);
+                    if (master != null)
+                        return await master.StartParallel(triggerPlayer);
+                }
+            }
+            if (IsInstanceMaster)
+            {
+                GameEvent instance = GetOrCreateInstance(triggerPlayer);
+                if (instance == null)
+                {
+                    return false;
+                }
+                return await instance._Start(triggerPlayer);
+            }
+            return await _Start(triggerPlayer);
+        }
+
+        private async Task ShowEndEffects()
+        {
+            foreach (var mob in Mobs)
+            {
+                if (EndEffects.ContainsKey(mob.InternalID))
+                {
+                    this.ApplyEffect(mob, EndEffects);
+                }
+            }
+
+            foreach (var coffre in Coffres)
+            {
+                if (EndEffects.ContainsKey(coffre.InternalID))
+                {
+                    this.ApplyEffect(coffre, EndEffects);
+                }
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(5));
+        }
+
+        public async Task Stop(EndingConditionType end)
+        {
+            if (ExchangeStatus(EventStatus.Ending) == EventStatus.Ending)
+            {
+                return;
+            }
+
+            try
+            {
+                EndTime = DateTimeOffset.UtcNow;
+                if (EndText != null && EventZones?.Any() == true)
+                {
+                    SendEventNotification((string lang) => FormatEventMessage(GetFormattedEndText(lang, Owner)), (Discord == 2 || Discord == 3), true);
+
+                    foreach (var player in GetPlayersInEventZones(EventZones))
+                    {
+                        if (EndEventSound > 0)
+                        {
+                            player.Out.SendSoundEffect((ushort)EndEventSound, player.Position, 0);
+                        }
+                    }
+
+                    //Enjoy the message
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
+
+                if (end == EndingConditionType.Kill && IsKillingEvent)
+                {
+                    Status = EventStatus.EndedByKill;
+                    //Allow time to loot
+                    await Task.Delay(TimeSpan.FromSeconds(15));
+                    await ShowEndEffects();
+                    _Cleanup();
+                }
+                else if (end == EndingConditionType.StartingEvent)
+                {
+                    Status = EventStatus.EndedByEventStarting;
+                    await ShowEndEffects();
+                    _Cleanup();
+                }
+                else if (end == EndingConditionType.Timer)
+                {
+                    Status = EventStatus.EndedByTimer;
+                    await ShowEndEffects();
+                    _Cleanup();
+                }
+                else if (end == EndingConditionType.AreaEvent)
+                {
+                    Status = EventStatus.EndedByAreaEvent;
+                    await ShowEndEffects();
+                    _Cleanup();
+                }
+                else if (end == EndingConditionType.TextNPC)
+                {
+                    Status = EventStatus.EndedByTextNPC;
+                    await ShowEndEffects();
+                    _Cleanup();
+                }
+                else if (end == EndingConditionType.Switch)
+                {
+                    Status = EventStatus.EndedBySwitch;
+                    await ShowEndEffects();
+                    _Cleanup();
+                }
+
+                var eventsCount = GameEventManager.Instance.GetEventByID(ID).GetInstances().Count();
+                if (eventsCount == 1)
+                {
+                    //restore temporarly disabled
+                    foreach (var mob in RemovedMobs)
+                    {
+                        mob.Value.AddToWorld();
+                        mob.Value.InternalID = mob.Key;
+                    }
+                    RemovedMobs.Clear();
+
+                    foreach (var item in RemovedCoffres)
+                    {
+                        item.Value.AddToWorld();
+                        item.Value.InternalID = item.Key;
+                    }
+                    RemovedCoffres.Clear();
+                }
+
+                //Handle Consequences
+                //Consequence A
+                if (EndingConditionTypes.Count() == 1 || (EndingConditionTypes.Count() > 1 && EndingConditionTypes.First() == end))
+                {
+                    await GameEventManager.Instance.HandleConsequence(EndingActionA, EventZones, EndActionStartEventID, ResetEventId, this);
+                }
+                else
+                {
+                    //Consequence B
+                    await GameEventManager.Instance.HandleConsequence(EndingActionB, EventZones, EndActionStartEventID, ResetEventId, this);
+                }
+
+                log.Info(string.Format("Event Id: {0}, Name: {1} was stopped At: {2}", ID, EventName, DateTime.Now.ToString()));
+
+                //Handle Interval Starting Event
+                //let a chance to this event to trigger at next interval
+                if (StartConditionType == StartingConditionType.Interval)
+                {
+                    Status = EventStatus.Idle;
+                    StartedTime = null;
+                    EndTime = null;
+                    ChanceLastTimeChecked = (DateTimeOffset?)null;
+                }
+
+                SaveToDatabase();
+            }
+            finally
+            {
+                Status = EventStatus.Idle;
+            }
+        }
+
+        public void SendEventNotification(Func<string, string> message, bool sendDiscord, bool createNews = false)
+        {
+            string lang = Properties.SERV_LANGUAGE!;
+            string msg = message(lang) ?? string.Empty;
+            Dictionary<string, string> cachedMessages = new Dictionary<string, string>(8)
+            {
+                { lang, msg }
+            };
+            
+            if (!String.IsNullOrEmpty(msg))
+            {
+                if (Properties.DISCORD_ACTIVE && sendDiscord)
+                {
+                    var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                    hook.SendMessage(msg);
+                }
+                if (createNews)
+                {
+                    foreach (string l in LanguageMgr.GetAllSupportedLanguages())
+                    {
+                        if (!cachedMessages.ContainsKey(l))
+                            cachedMessages[l] = message(l);
+                    }
+                    NewsMgr.CreateNews(cachedMessages, 0, eNewsType.RvRLocal, false);
+                }
+            }
+            foreach (var player in GetPlayersInEventZones(EventZones))
+            {
+                lang = player?.Client?.Account?.Language ?? Properties.SERV_LANGUAGE!;
+                if (!cachedMessages.TryGetValue(lang, out msg))
+                {
+                    msg = message(lang);
+                    if (string.IsNullOrEmpty(msg))
+                        msg = message(Properties.SERV_LANGUAGE);
+                    cachedMessages[lang] = msg;
+                }
+                NotifyPlayer(player, AnnonceType, msg);
+            }
+        }
+        
+        public static void NotifyPlayer(GamePlayer player, AnnonceType annonceType, string message)
+        {
+            eChatType type;
+            eChatLoc loc;
+
+            switch (annonceType)
+            {
+                case AnnonceType.Log:
+                    type = eChatType.CT_Merchant;
+                    loc = eChatLoc.CL_SystemWindow;
+                    break;
+
+                case AnnonceType.Send:
+                    type = eChatType.CT_Send;
+                    loc = eChatLoc.CL_SystemWindow;
+                    break;
+
+                case AnnonceType.Windowed:
+                    type = eChatType.CT_System;
+                    loc = eChatLoc.CL_PopupWindow;
+                    break;
+
+                default:
+                    type = eChatType.CT_ScreenCenter;
+                    loc = eChatLoc.CL_SystemWindow;
+                    break;
+            }
+            
+            if (annonceType == AnnonceType.Confirm)
+            {
+                player.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, message);
+            }
+            else
+            {
+                player.Out.SendMessage(message, type, loc);
+            }
+        }
+
+        public GameEvent Instantiate(GamePlayer owner)
+        {
+            GameEvent ret = new GameEvent(this);
+
+            ret.Owner = owner;
+            return ret;
+        }
+        
+        private bool StartEventSetup()
+        {
+            WantedMobsCount = 0;
+            if (EndingConditionTypes?.Contains(EndingConditionType.Timer) == true)
+            {
+                if (TimerType == TimerType.ChronoType)
+                {
+                    EndTime = DateTimeOffset.UtcNow.AddMinutes(ChronoTime);
+                }
+                else
+                {
+                    //Cannot launch event if Endate is not set in DateType and no other ending exists
+                    if (!EndTime.HasValue)
+                    {
+                        if (EndingConditionTypes.Count() == 1)
+                        {
+                            log.Error(string.Format("Cannot Launch Event {0}, Name: {1} with DateType because EndDate is Null", ID, EventName));
+                            return false;
+                        }
+                        else
+                        {
+                            log.Warn(string.Format("Event Id: {0}, Name: {1}, started with ending type Timer DateType but Endate is Null, Event Started with other endings", ID, EventName));
+                        }
+                    }
+                }
+            }
+
+            foreach (var mob in Mobs)
+            {
+                mob.Health = mob.MaxHealth;
+                mob.Event = this;
+                var db = GameServer.Database.FindObjectByKey<Mob>(mob.InternalID);
+                mob.LoadFromDatabase(db);
+
+                var dbGroupMob = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(mob.InternalID))?.FirstOrDefault();
+
+                if (dbGroupMob != null)
+                {
+                    MobGroup mobGroup;
+                    if (MobGroupManager.Instance.Groups.TryGetValue(dbGroupMob.GroupId, out mobGroup))
+                    {
+                        mob.AddToMobGroup(mobGroup);
+                        if (!mobGroup.NPCs.Contains(mob))
+                        {
+                            mobGroup.NPCs.Add(mob);
+                            mobGroup.ApplyGroupInfos();
+                        }
+                    }
+                    else
+                    {
+                        var mobgroupDb = GameServer.Database.FindObjectByKey<GroupMobDb>(dbGroupMob.GroupId);
+                        if (mobgroupDb != null)
+                        {
+                            var groupInteraction = mobgroupDb.GroupMobInteract_FK_Id != null ?
+                            GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null;
+
+                            var groupOriginStatus = mobgroupDb.GroupMobOrigin_FK_Id != null ?
+                            GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
+                            mobGroup = new MobGroup(mobgroupDb, groupInteraction, groupOriginStatus);
+                            MobGroupManager.Instance.Groups.Add(dbGroupMob.MobID, mobGroup);
+                            mobGroup.NPCs.Add(mob);
+                            mob.AddToMobGroup(mobGroup);
+                            mobGroup.ApplyGroupInfos();
+                        }
+                    }
+                }
+
+                if (IsKillingEvent && MobNamesToKill.Contains(mob.Name))
+                {
+                    WantedMobsCount++;
+                }
+            }
+
+            if (IsKillingEvent)
+            {
+                int delta = MobNamesToKill.Count() - WantedMobsCount;
+
+                if (WantedMobsCount == 0 && EndingConditionTypes.Where(ed => ed != EndingConditionType.Kill).Count() == 0)
+                {
+                    log.Error(string.Format("Event ID: {0}, Name: {1}, cannot be start because No Mobs found for Killing Type ending and no other ending type set", ID, EventName));
+                    return false;
+                }
+                else if (delta > 0)
+                {
+                    log.Error(string.Format("Event ID: {0}, Name {1}: with Kill type has {2} mobs missings, MobNamesToKill column in datatabase and tagged mobs Name should match.", ID, EventName, delta));
+                }
+            }
+
+
+            if (DebutText != null && EventZones?.Any() == true)
+            {
+                SendEventNotification((lang) => FormatEventMessage(GetFormattedDebutText(lang, Owner)), (Discord == 1 || Discord == 3), true);
+            }
+
+            if (HasHandomText)
+            {
+                RandomTextTimer.Start();
+            }
+
+            if (HasRemainingTimeText)
+            {
+                RemainingTimeTimer.Start();
+            }
+
+            foreach (var mob in Mobs)
+            {
+                mob.AddToWorld();
+            }
+
+            Coffres.ForEach(c => c.AddToWorld());
+            StartedTime = DateTimeOffset.UtcNow;
+            return true;
         }
 
         public void ParseValuesFromDb(EventDB db)
@@ -163,7 +978,6 @@ namespace DOL.GameEvents
             ChronoTime = db.ChronoTime;
             KillStartingGroupMobId = !string.IsNullOrEmpty(db.KillStartingGroupMobId) ? db.KillStartingGroupMobId : null;
             ResetEventId = !string.IsNullOrEmpty(db.ResetEventId) ? db.ResetEventId : null;
-            Status = EventStatus.NotOver;
             ChanceLastTimeChecked = DateTimeOffset.FromUnixTimeSeconds(0);
             AnnonceType = Enum.TryParse(db.AnnonceType.ToString(), out AnnonceType a) ? a : AnnonceType.Center;
             Discord = db.Discord;
@@ -225,6 +1039,30 @@ namespace DOL.GameEvents
             if (EndTime.HasValue && EndingConditionTypes.Contains(EndingConditionType.Timer))
             {
                 IsTimingEvent = true;
+            }
+        }
+
+        public bool IsOwnedBy(GamePlayer player)
+        {
+            switch (InstancedConditionType)
+            {
+                case InstancedConditionTypes.All:
+                    return true;
+
+                case InstancedConditionTypes.Player:
+                    return Owner == player;
+
+                case InstancedConditionTypes.Group:
+                    return Owner?.Group != null ? player.Group == Owner.Group : player == Owner;
+
+                case InstancedConditionTypes.Guild:
+                    return Owner?.Guild?.IsSystemGuild == false ? player.Guild == Owner.Guild : player == Owner;
+
+                case InstancedConditionTypes.Battlegroup:
+                    return Owner?.BattleGroup != null ? player.BattleGroup == Owner.BattleGroup : player == Owner;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
         
@@ -290,7 +1128,7 @@ namespace DOL.GameEvents
             foreach (var player in GetPlayersInEventZones(this.EventZones))
             {
                 string message = this.GetFormattedRemainingTimeText(player.Client.Account.Language, player);
-                GameEventManager.NotifyPlayer(player, AnnonceType, message);
+                NotifyPlayer(player, AnnonceType, message);
             }
 
             if (this.RemainingTimeEvSound > 0)
@@ -310,7 +1148,7 @@ namespace DOL.GameEvents
             foreach (var player in GetPlayersInEventZones(this.EventZones))
             {
                 string message = this.GetFormattedRandomText(player.Client.Account.Language, player);
-                GameEventManager.NotifyPlayer(player, this.AnnonceType, message);
+                NotifyPlayer(player, this.AnnonceType, message);
             }
 
             if (!string.IsNullOrEmpty(this.RandomEventSound))
@@ -544,10 +1382,27 @@ namespace DOL.GameEvents
 
         public int EndEventSound { get; set; }
 
+        private int _status = (int)EventStatus.Idle;
+
+        private EventStatus CompareExchangeStatus(EventStatus desired, EventStatus expected)
+        {
+            return (EventStatus)Interlocked.CompareExchange(ref _status, (int)desired, (int)expected);
+        }
+
+        private EventStatus ExchangeStatus(EventStatus desired)
+        {
+            return (EventStatus)Interlocked.Exchange(ref _status, (int)desired);
+        }
+        
+        private bool TryExchangeStatus(EventStatus desired, EventStatus expected)
+        {
+            return ((EventStatus)Interlocked.CompareExchange(ref _status, (int)desired, (int)expected)) == expected;
+        }
+
         public EventStatus Status
         {
-            get;
-            set;
+            get => (EventStatus)_status;
+            private set => _status = (int)value;
         }
 
         public EndingAction EndingActionA
@@ -597,6 +1452,12 @@ namespace DOL.GameEvents
             get;
             set;
         }
+
+        public bool IsInstancedEvent => ParallelLaunch;
+        
+        public bool IsInstanceMaster { get; set; }
+        
+        public List<GameEvent> Instances { get; init; }
 
         public Dictionary<string, bool> EventFamily
         {
@@ -664,21 +1525,11 @@ namespace DOL.GameEvents
             set => owner = value;
         }
 
-        public void Clean()
-        {
-            if (this.RandomTextTimer != null)
-            {
-                this.RandomTextTimer.Stop();
-            }
-
-            if (this.RemainingTimeTimer != null)
-            {
-                this.RemainingTimeTimer.Stop();
-            }
-        }
-
         public void SaveToDatabase()
         {
+            if (!IsInstanceMaster)
+                return;
+            
             var db = _db as EventDB;
             bool needClone = false;
 
@@ -741,5 +1592,63 @@ namespace DOL.GameEvents
             if (needClone)
                 _db = db.Clone();
         }
+
+        public IEnumerable<GameEvent> GetInstances()
+        {
+            if (IsInstancedEvent && IsInstanceMaster)
+            {
+                lock (Instances)
+                {
+                    return Instances.ToList();
+                }
+            }
+            else
+            {
+                return new[] { this };
+            }
+        }
+
+        public GameEvent? GetInstance(GameObject objectFor)
+        {
+            if (objectFor is GameLiving living)
+            {
+                var controller = living.GetController();
+                if (controller is GameNPC eventNPC)
+                    return eventNPC.Event;
+
+                if (controller is GamePlayer player)
+                    return GetInstances().FirstOrDefault(i => i.IsOwnedBy(player));
+            }
+            return null;
+        }
+        
+        public GameEvent GetOrCreateInstance(GamePlayer? triggerPlayer)
+        {
+            if (IsInstancedEvent)
+            {
+                if (!IsInstanceMaster)
+                {
+                    return GameEventManager.Instance.GetEventByID(ID)?.GetOrCreateInstance(triggerPlayer);
+                }
+                lock (Instances)
+                {
+                    GameEvent instance = Instances.FirstOrDefault(i => i.IsOwnedBy(triggerPlayer));
+                    if (instance == null)
+                    {
+                        instance = Instantiate(triggerPlayer);
+                    }
+                    Instances.Add(instance);
+                    return instance;
+                }
+            }
+            else
+            {
+                return this;
+            }
+        }
+
+        public bool IsReady => ParallelLaunch || Status == EventStatus.Idle;
+
+        public bool IsRunning => GetInstances().Any(ev => ev.Status == EventStatus.Started);
     }
 }

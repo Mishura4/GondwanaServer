@@ -702,7 +702,8 @@ namespace DOL.Territories
             ToggleBannerUnsafe(false);
             if (Boss != null)
             {
-                var gameEvents = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(Boss.EventID));
+                // TODO: review this, this seems inefficient
+                var gameEvents = GameEventManager.Instance.GetEventByID(Boss.EventID);
 
                 if (gameEvents?.Mobs?.Any() == true)
                 {
@@ -860,7 +861,7 @@ namespace DOL.Territories
             if (this.Boss != null)
             {
                 this.Boss.CurrentTerritory = this;
-                GameEventManager.Instance.Events.Where(e => e.ID.Equals(this.Boss.EventID)).SelectMany(e => e.Mobs).ForEach(m => m.CurrentTerritory = this);
+                GameEventManager.Instance.GetEventByID(Boss.EventID)?.Mobs.ForEach(m => m.CurrentTerritory = this);
                 if (!this.Mobs.Contains(Boss))
                 {
                     this.Mobs.Add(Boss);
@@ -877,8 +878,7 @@ namespace DOL.Territories
 
             if (this.Boss != null)
             {
-                var gameEvent = GameEvents.GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(this.Boss.EventID));
-
+                var gameEvent = GameEventManager.Instance.GetEventByID(Boss.EventID);
                 if (gameEvent?.Mobs?.Any() == true)
                 {
                     gameEvent.Mobs.ForEach(m => this.SaveMobOriginalGuildname(m));

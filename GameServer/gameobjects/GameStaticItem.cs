@@ -520,26 +520,10 @@ namespace DOL.GS
         {
             if (base.IsVisibleTo(checkObject))
             {
-                if (EventID != null && EventID != "" && checkObject is GamePlayer player)
+                if (!string.IsNullOrEmpty(EventID) && checkObject is GamePlayer player)
                 {
-                    var gameEvents = GameEventManager.Instance.Events.Where(e => e.ID.Equals(EventID));
-                    switch (gameEvents.FirstOrDefault().InstancedConditionType)
-                    {
-                        case InstancedConditionTypes.All:
-                            return true;
-                        case InstancedConditionTypes.Player:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner == player && e.Coffres.Contains(this)).Any();
-                        case InstancedConditionTypes.Group:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner.Group != null && e.Owner.Group.IsInTheGroup(player) && e.Coffres.Contains(this)).Any();
-                        case InstancedConditionTypes.Guild:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner.Guild != null && e.Owner.Guild == player.Guild && e.Coffres.Contains(this)).Any();
-                        case InstancedConditionTypes.Battlegroup:
-                            return gameEvents.Where(e => e.Owner != null && e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
-                            e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
-                            player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) && e.Coffres.Contains(this)).Any();
-                        default:
-                            break;
-                    }
+                    var gameEvents = GameEventManager.Instance.GetEventByID(EventID);
+                    return gameEvents.IsOwnedBy(player);
                 }
                 else
                 {

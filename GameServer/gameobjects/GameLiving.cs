@@ -6407,10 +6407,7 @@ namespace DOL.GS
             {
                 return false;
             }
-
-            if (this is GamePlayer)
-                GameEventManager.AreaWhisperEvent((GamePlayer)this, str);
-
+            
             if (target is GameLiving)
             {
                 if (!((GameLiving)target).WhisperReceive(this, str))

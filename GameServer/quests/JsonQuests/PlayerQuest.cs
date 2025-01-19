@@ -9,6 +9,9 @@ using DOL.Language;
 using DOL.GameEvents;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
+using System.Threading.Tasks;
+using log4net;
+using System.Reflection;
 
 namespace DOL.GS.Quests
 {
@@ -29,6 +32,8 @@ namespace DOL.GS.Quests
     /// </summary>
     public class PlayerQuest : IQuestPlayerData
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
         private ushort m_questId;
         public ushort QuestId => m_questId;
         public readonly List<PlayerGoalState> GoalStates = new();
@@ -135,37 +140,28 @@ namespace DOL.GS.Quests
             Owner.AddFinishedQuest(this);
             Owner.SaveIntoDatabase();
             Owner.Out.SendQuestListUpdate();
-
-            var questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-            e.QuestStartingId?.Equals(Quest.Id + "-end") == true &&
-           !e.StartedTime.HasValue &&
-            e.Status == EventStatus.NotOver &&
-            e.StartConditionType == StartingConditionType.Quest);
-            if (questEvent != null)
+            
+            foreach (var e in GameEventManager.Instance.GetEventsStartedByQuest(Quest.Id + "-end").Where(e => e.IsReady && e.StartConditionType == StartingConditionType.Quest))
             {
-                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, Owner));
+                Task.Run(() => e.Start(Owner));
             }
-            if (Quest.EndStartEvent)
+            if (!string.IsNullOrEmpty(Quest.EndEventId))
             {
-                questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-                e.ID?.Equals(Quest.EndEventId) == true &&
-                !e.StartedTime.HasValue &&
-                e.Status == EventStatus.NotOver &&
-                e.StartConditionType == StartingConditionType.Quest);
-                if (questEvent != null)
+                var questEvent = GameEventManager.Instance.GetEventByID(Quest.EndEventId);
+                if (questEvent == null)
                 {
-                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, Owner));
+                    log.Warn($"Quest {QuestId} ({Quest.Name}) is linked to event {Quest.EndEventId} which was not found");
                 }
-            }
-            else if (Quest.EndResetEvent)
-            {
-                questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-                e.ID?.Equals(Quest.EndEventId) == true &&
-                e.StartedTime.HasValue &&
-                e.StartConditionType == StartingConditionType.Quest);
-                if (questEvent != null)
+                else
                 {
-                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
+                    if (Quest.EndResetEvent)
+                    {
+                        questEvent.GetInstance(Owner)?.Reset();
+                    }
+                    if (Quest.EndStartEvent)
+                    {
+                        Task.Run(() => questEvent.Start(Owner));
+                    }
                 }
             }
             if (Quest.RelatedMobGroups != null)

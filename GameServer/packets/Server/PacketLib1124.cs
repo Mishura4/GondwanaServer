@@ -250,7 +250,7 @@ namespace DOL.GS.PacketHandler
                 {
                     if (npc.Event is { InstancedConditionType: not InstancedConditionTypes.All })
                     {
-                        add += $"-EV.{npc.Event.Owner.Name}";
+                        add += $"-EV.{npc.Event.Owner?.Name}";
                     }
                 }
 

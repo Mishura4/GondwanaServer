@@ -2,7 +2,10 @@
 {
     public enum EventStatus
     {
-        NotOver,
+        Idle,
+        Starting,
+        Started,
+        Ending,
         EndedByTimer,
         EndedByKill,
         EndedByEventStarting,

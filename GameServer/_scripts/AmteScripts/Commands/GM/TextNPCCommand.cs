@@ -976,7 +976,7 @@ namespace DOL.GS.Scripts
                             {
                                 foreach (var startevent in textnpc.StartEventResponses)
                                 {
-                                    GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(startevent.Value));
+                                    GameEvent ev = GameEventManager.Instance.GetEventByID(startevent.Value);
                                     lines.Add("[" + startevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + startevent.Value + ")");
                                 }
                             }
@@ -990,7 +990,7 @@ namespace DOL.GS.Scripts
                                 break;
                             }
                             reponse = string.Join(" ", args, 4, args.Length - 4);
-                            GameEvent gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(args[3]));
+                            GameEvent gameEvent = GameEventManager.Instance.GetEventByID(args[3]);
                             if (gameEvent == null)
                             {
                                 player.Out.SendMessage("L'évènement avec ID `" + args[3] + "` n'a pas pu être trouvé", eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1040,7 +1040,7 @@ namespace DOL.GS.Scripts
                             {
                                 foreach (var startevent in textnpc.StartEventResponses)
                                 {
-                                    GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(startevent.Value));
+                                    GameEvent ev = GameEventManager.Instance.GetEventByID(startevent.Value);
                                     lines.Add("[" + startevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + startevent.Value + ")");
                                 }
                             }
@@ -1054,7 +1054,7 @@ namespace DOL.GS.Scripts
                                 break;
                             }
                             reponse = string.Join(" ", args, 4, args.Length - 4);
-                            GameEvent? gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(args[3]));
+                            GameEvent? gameEvent = GameEventManager.Instance.GetEventByID(args[3]);
                             if (gameEvent == null)
                             {
                                 player.Out.SendMessage("L'évènement avec ID `" + args[3] + "` n'a pas pu être trouvé", eChatType.CT_System, eChatLoc.CL_SystemWindow);

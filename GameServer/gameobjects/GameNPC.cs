@@ -4636,9 +4636,9 @@ namespace DOL.GS
                 base.Die(killer);
             }
 
-            if (this.EventID != null)
+            if (!string.IsNullOrEmpty(EventID))
             {
-                var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(this.EventID));
+                var ev = GameEventManager.Instance.GetEventByID(EventID);
 
                 if (ev != null)
                 {
@@ -4655,7 +4655,7 @@ namespace DOL.GS
                                 controller = living.ControlledBrain.Owner as GamePlayer;
                             if (player != null || controller != null)
                                 ev.Owner = player ?? controller;
-                            Task.Run(() => GameEventManager.Instance.StopEvent(ev, EndingConditionType.Kill));
+                            Task.Run(() => GameEventManager.Instance.StopEvent(ev, EndingConditionType.Kill, player));
                         }
                     }
                 }

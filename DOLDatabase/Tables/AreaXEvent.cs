@@ -10,12 +10,12 @@ namespace DOLDatabase.Tables
     {
         private string m_eventID;
         private string m_areaID;
-        private int m_playersNb;
-        private string m_mobs;
-        private string m_useItem;
-        private string m_whisper;
-        private bool m_playersLeave;
-        private bool m_resetEvent;
+        private int? m_playersNb;
+        private string? m_mobs;
+        private string? m_useItem;
+        private string? m_whisper;
+        private bool? m_playersLeave;
+        private bool? m_resetEvent;
         private int m_timerCount;
 
         [DataElement(AllowDbNull = false, Varchar = 255, Index = true)]
@@ -50,7 +50,7 @@ namespace DOLDatabase.Tables
 
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public int PlayersNb
+        public int? PlayersNb
         {
             get
             {
@@ -65,7 +65,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string Mobs
+        public string? Mobs
         {
             get
             {
@@ -80,7 +80,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string UseItem
+        public string? UseItem
         {
             get
             {
@@ -95,7 +95,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string Whisper
+        public string? Whisper
         {
             get
             {
@@ -110,7 +110,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public bool PlayersLeave
+        public bool? PlayersLeave
         {
             get
             {
@@ -125,7 +125,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public bool ResetEvent
+        public bool? ResetEvent
         {
             get
             {
