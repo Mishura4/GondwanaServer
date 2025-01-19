@@ -108,12 +108,12 @@ namespace DOL.GameEvents
             
             lock (_eventStorageLock)
             {
-                events = TimeEndEvents.SelectMany(ev => ev.GetInstances()).ToList();
+                events = TimeEndEvents.SelectMany(ev => ev.GetInstances()).Where(ev => ev.IsRunning).ToList();
             }
             foreach (GameEvent ev in events)
             {
                 // Do we really want to do this here?
-                if (ev.IsRunning && ev.EndTime.HasValue && now >= ev.EndTime)
+                if (ev.EndTime.HasValue && now >= ev.EndTime)
                 {
                     await ev.Stop(EndingConditionType.Timer);
                 }
@@ -298,6 +298,25 @@ namespace DOL.GameEvents
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                foreach (KeyValuePair<int, EndingConditionType> entry in newEvent.EndingConditionTypes.Select((x, i) => new KeyValuePair<int, EndingConditionType>(i, x)))
+                {
+                    switch (entry.Value)
+                    {
+                        case EndingConditionType.Timer:
+                            Instance._timeEndEvents.Add(newEvent);
+                            break;
+                        case EndingConditionType.Kill:
+                        case EndingConditionType.StartingEvent:
+                        case EndingConditionType.AreaEvent:
+                        case EndingConditionType.TextNPC:
+                        case EndingConditionType.Switch:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+                
                 if (newEvent.Status == EventStatus.Starting || newEvent.Status == EventStatus.Ending)
                     newEvent.Reset();
             }
