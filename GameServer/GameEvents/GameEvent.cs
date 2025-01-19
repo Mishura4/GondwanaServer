@@ -1152,9 +1152,45 @@ namespace DOL.GameEvents
 
         private IEnumerable<GamePlayer> GetPlayersInEventZones(IEnumerable<string> eventZones)
         {
-            return WorldMgr.GetAllPlayingClients()
-                .Where(c => eventZones.Contains(c.Player.CurrentZone.ID.ToString()))
-                .Select(c => c.Player);
+            IEnumerable<GamePlayer> enumerable;
+
+            var condition = InstancedConditionType;
+            if (!IsInstancedEvent)
+                condition = InstancedConditionTypes.All;
+            
+            switch (condition)
+            {
+                case InstancedConditionTypes.All:
+                    enumerable = WorldMgr.GetAllPlayingClients().Select(c => c.Player);
+                    break;
+
+                case InstancedConditionTypes.Player:
+                    enumerable = Owner == null ? Enumerable.Empty<GamePlayer>() : new GamePlayer[] { Owner };
+                    break;
+
+                case InstancedConditionTypes.Group:
+                    enumerable = Owner == null ? Enumerable.Empty<GamePlayer>() : Owner?.Group?.GetPlayersInTheGroup() ?? Enumerable.Empty<GamePlayer>();
+                    break;
+                
+                case InstancedConditionTypes.Guild:
+                    enumerable = Owner == null ? Enumerable.Empty<GamePlayer>() : Owner?.Guild?.GetListOfOnlineMembers() ?? Enumerable.Empty<GamePlayer>();
+                    break;
+
+                case InstancedConditionTypes.Battlegroup:
+                    enumerable = Owner == null ? Enumerable.Empty<GamePlayer>() : Owner?.BattleGroup?.Members.Values.OfType<GamePlayer>() ?? Enumerable.Empty<GamePlayer>();
+                    break;
+                case InstancedConditionTypes.GroupOrSolo:
+                    enumerable = Owner == null ? Enumerable.Empty<GamePlayer>() : Owner?.Group?.GetPlayersInTheGroup() ?? new GamePlayer[] { Owner };
+                    break;
+                
+                case InstancedConditionTypes.GuildOrSolo:
+                    enumerable = Owner == null ? Enumerable.Empty<GamePlayer>() : Owner?.Guild?.GetListOfOnlineMembers() ?? new GamePlayer[] { Owner };
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return enumerable
+                .Where(p => eventZones.Contains(p.CurrentZone.ID.ToString()));
         }
 
         private void RemainingTimeTimer_Elapsed(object sender, ElapsedEventArgs e)
