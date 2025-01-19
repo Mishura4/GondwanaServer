@@ -280,6 +280,27 @@ namespace DOL.GameEvents
                 mob.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>().ForEach(mob.RefreshEffects);
             }
             AreaConditions?.Reset();
+
+            //Handle Interval Starting Event
+            //let a chance to this event to trigger at next interval
+            if (StartConditionType == StartingConditionType.Interval)
+            {
+                Status = EventStatus.Idle;
+                StartedTime = null;
+                EndTime = null;
+                ChanceLastTimeChecked = (DateTimeOffset?)null;
+            }
+            
+            if (IsInstancedEvent)
+            {
+                var master = GameEventManager.Instance.GetEventByID(ID);
+                if (master != null)
+                    master.RemoveInstance(this);
+            }
+            if (!IsRunning)
+            {
+                RestoreMobs();
+            }
         }
         
         private void _Reset()
@@ -325,20 +346,6 @@ namespace DOL.GameEvents
 
                 }
 
-                //restore temporarly disabled RemovedMobs
-                foreach (var mob in RemovedMobs)
-                {
-                    mob.Value.InternalID = mob.Key;
-                    mob.Value.AddToWorld();
-                }
-                RemovedMobs.Clear();
-
-                foreach (var item in RemovedCoffres)
-                {
-                    item.Value.InternalID = item.Key;
-                    item.Value.AddToWorld();
-                }
-                RemovedCoffres.Clear();
                 SaveToDatabase();
             }
             catch (Exception ex)
@@ -347,12 +354,6 @@ namespace DOL.GameEvents
             }
             Status = EventStatus.Idle;
             log.DebugFormat("Finished reset of event {0} ({1}) owned by {2}", EventName, ID, Owner);
-            if (IsInstancedEvent && !IsInstanceMaster)
-            {
-                var master = GameEventManager.Instance.GetEventByID(ID);
-                if (master != null)
-                    master.RemoveInstance(this);
-            }
         }
         
         public void RemoveInstance(GameEvent instance)
@@ -436,37 +437,8 @@ namespace DOL.GameEvents
             try
             {
                 //temporarly disable
-                var disabledMobs = GameServer.Database.SelectObjects<Mob>(DB.Column("RemovedByEventID").IsNotNull());
-                foreach (var mob in disabledMobs)
-                {
-                    if (mob.RemovedByEventID.Split("|").Contains(ID.ToString()))
-                    {
-                        var mobInRegion = WorldMgr.Regions[mob.Region].Objects.FirstOrDefault(o => o != null && o is GameNPC npc && npc.InternalID != null && npc.InternalID.Equals(mob.ObjectId));
-                        if (mobInRegion != null)
-                        {
-                            var npcInRegion = mobInRegion as GameNPC;
-                            //copy npc
-                            RemovedMobs[npcInRegion!.InternalID] = npcInRegion;
-                            npcInRegion.RemoveFromWorld();
-                            npcInRegion.Delete();
-                        }
-                    }
-                }
-                var disabledCoffres = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("RemovedByEventID").IsNotNull());
-                foreach (var coffre in disabledCoffres)
-                {
-                    if (coffre.RemovedByEventID.Split("|").Contains(ID.ToString()))
-                    {
-                        var coffreInRegion = WorldMgr.Regions[coffre.Region].Objects.FirstOrDefault(o => o != null && o is GameStaticItem item && item.InternalID.Equals(coffre.ObjectId)) as GameStaticItem;
-                        if (coffreInRegion != null)
-                        {
-                            var itemInRegion = coffreInRegion as GameStaticItem;
-                            RemovedCoffres[itemInRegion.InternalID] = itemInRegion;
-                            itemInRegion.RemoveFromWorld();
-                            itemInRegion.Delete();
-                        }
-                    }
-                }
+                var eventMaster = GameEventManager.Instance.GetEventByID(ID) ?? this;
+                eventMaster.DisableMobs();
 
                 if (StartEventSetup())
                 {
@@ -501,6 +473,59 @@ namespace DOL.GameEvents
             }
             _Reset();
             return false;
+        }
+        
+        private void DisableMobs()
+        {
+            var disabledMobs = GameServer.Database.SelectObjects<Mob>(DB.Column("RemovedByEventID").IsNotNull());
+            foreach (var mob in disabledMobs)
+            {
+                if (mob.RemovedByEventID.Split("|").Contains(ID.ToString()))
+                {
+                    var mobInRegion = WorldMgr.Regions[mob.Region].Objects.FirstOrDefault(o => o != null && o is GameNPC npc && npc.InternalID != null && npc.InternalID.Equals(mob.ObjectId));
+                    if (mobInRegion != null)
+                    {
+                        var npcInRegion = mobInRegion as GameNPC;
+                        //copy npc
+                        RemovedMobs[npcInRegion!.InternalID] = npcInRegion;
+                        npcInRegion.RemoveFromWorld();
+                        npcInRegion.Delete();
+                    }
+                }
+            }
+            var disabledCoffres = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("RemovedByEventID").IsNotNull());
+            foreach (var coffre in disabledCoffres)
+            {
+                if (coffre.RemovedByEventID.Split("|").Contains(ID.ToString()))
+                {
+                    var coffreInRegion = WorldMgr.Regions[coffre.Region].Objects.FirstOrDefault(o => o != null && o is GameStaticItem item && item.InternalID.Equals(coffre.ObjectId)) as GameStaticItem;
+                    if (coffreInRegion != null)
+                    {
+                        var itemInRegion = coffreInRegion as GameStaticItem;
+                        RemovedCoffres[itemInRegion.InternalID] = itemInRegion;
+                        itemInRegion.RemoveFromWorld();
+                        itemInRegion.Delete();
+                    }
+                }
+            }
+        }
+
+        private void RestoreMobs()
+        {
+            //restore temporarly disabled RemovedMobs
+            foreach (var mob in RemovedMobs)
+            {
+                mob.Value.InternalID = mob.Key;
+                mob.Value.AddToWorld();
+            }
+            RemovedMobs.Clear();
+
+            foreach (var item in RemovedCoffres)
+            {
+                item.Value.InternalID = item.Key;
+                item.Value.AddToWorld();
+            }
+            RemovedCoffres.Clear();
         }
 
         public async Task<bool> StartParallel(GamePlayer? triggerPlayer = null)
@@ -719,25 +744,6 @@ namespace DOL.GameEvents
                     _Cleanup();
                 }
 
-                var eventsCount = GameEventManager.Instance.GetEventByID(ID).GetInstances().Count();
-                if (eventsCount == 1)
-                {
-                    //restore temporarly disabled
-                    foreach (var mob in RemovedMobs)
-                    {
-                        mob.Value.AddToWorld();
-                        mob.Value.InternalID = mob.Key;
-                    }
-                    RemovedMobs.Clear();
-
-                    foreach (var item in RemovedCoffres)
-                    {
-                        item.Value.AddToWorld();
-                        item.Value.InternalID = item.Key;
-                    }
-                    RemovedCoffres.Clear();
-                }
-
                 //Handle Consequences
                 //Consequence A
                 if (EndingConditionTypes.Count() == 1 || (EndingConditionTypes.Count() > 1 && EndingConditionTypes.First() == end))
@@ -752,6 +758,12 @@ namespace DOL.GameEvents
 
                 log.Info(string.Format("Event Id: {0}, Name: {1} was stopped At: {2}", ID, EventName, DateTime.Now.ToString()));
 
+                SaveToDatabase();
+            }
+            finally
+            {
+                Status = EventStatus.Idle;
+
                 //Handle Interval Starting Event
                 //let a chance to this event to trigger at next interval
                 if (StartConditionType == StartingConditionType.Interval)
@@ -761,12 +773,6 @@ namespace DOL.GameEvents
                     EndTime = null;
                     ChanceLastTimeChecked = (DateTimeOffset?)null;
                 }
-
-                SaveToDatabase();
-            }
-            finally
-            {
-                Status = EventStatus.Idle;
             }
             log.DebugFormat("Finished event {0} ({1}) owned by {2}", EventName, ID, Owner);
         }
@@ -1671,6 +1677,22 @@ namespace DOL.GameEvents
 
         public bool IsReady => ParallelLaunch || Status == EventStatus.Idle;
 
-        public bool IsRunning => GetInstances().Any(ev => ev.Status == EventStatus.Started);
+        public bool IsRunning
+        {
+            get
+            {
+                if (IsInstancedEvent && IsInstanceMaster)
+                {
+                    lock (Instances)
+                    {
+                        return Instances.Any(e => e.IsRunning);
+                    }
+                }
+                else
+                {
+                    return Status is EventStatus.Started or EventStatus.Starting;
+                }
+            }
+        }
     }
 }
