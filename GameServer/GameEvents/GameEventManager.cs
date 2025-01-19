@@ -61,6 +61,8 @@ namespace DOL.GameEvents
         private Dictionary<string, List<GameEvent>> _groupKillEvents = new();
         
         private Dictionary<string, List<GameEvent>> _questEvents = new();
+        
+        private Dictionary<InstancedConditionTypes, List<GameEvent>> _instancedEvents = new();
 
         public IDictionary<IArea, List<GameEvent>> AreaEvents => _areaEvents;
 
@@ -150,7 +152,7 @@ namespace DOL.GameEvents
 
             foreach (var areaEv in areaEvents.Where(ev => ev.AreaConditions != null))
             {
-                areaEv.GetOrCreateInstance(player).AreaConditions.PlayerEntersArea(player, area);
+                areaEv.GetOrCreateInstance(player)?.AreaConditions.PlayerEntersArea(player, area);
             }
         }
 
@@ -161,7 +163,7 @@ namespace DOL.GameEvents
 
             foreach (var areaEv in areaEvents.Where(ev => ev.AreaConditions != null))
             {
-                areaEv.GetOrCreateInstance(player).AreaConditions.PlayerLeavesArea(player, area);
+                areaEv.GetInstance(player)?.AreaConditions.PlayerLeavesArea(player, area);
             }
         }
 
@@ -283,13 +285,13 @@ namespace DOL.GameEvents
                         if (!string.IsNullOrEmpty(newEvent.QuestStartingId))
                         {
                             string key = newEvent.QuestStartingId;
-                            if (Instance._groupKillEvents.TryGetValue(key, out List<GameEvent> list))
+                            if (Instance._questEvents.TryGetValue(key, out List<GameEvent> list))
                             {
                                 list.Add(newEvent);
                             }
                             else
                             {
-                                Instance._groupKillEvents.Add(key, new List<GameEvent>{ newEvent });
+                                Instance._questEvents.Add(key, new List<GameEvent>{ newEvent });
                             }
                         }
                         break;
@@ -314,6 +316,18 @@ namespace DOL.GameEvents
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
+                    }
+                }
+
+                if (newEvent.IsInstancedEvent)
+                {
+                    if (Instance._instancedEvents.TryGetValue(newEvent.InstancedConditionType, out List<GameEvent> list))
+                    {
+                        list.Add(newEvent);
+                    }
+                    else
+                    {
+                        Instance._instancedEvents.Add(newEvent.InstancedConditionType, new List<GameEvent>{ newEvent });
                     }
                 }
                 

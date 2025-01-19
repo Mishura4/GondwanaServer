@@ -21,12 +21,15 @@
         TextNPC,
         Switch
     }
+    
     public enum InstancedConditionTypes
     {
         All,
         Player,
         Group,
         Guild,
-        Battlegroup
+        Battlegroup,
+        GroupOrSolo,
+        GuildOrSolo,
     }
 }

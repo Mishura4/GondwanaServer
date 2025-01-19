@@ -542,35 +542,13 @@ namespace DOL.GameEvents
 
                 // Keep track of instances we spawn
                 Dictionary<object, GamePlayer> playersRegistered = new();
-                Func<GamePlayer, object> getKey = (GamePlayer p) =>
-                {
-                    switch (condition)
-                    {
-                        case InstancedConditionTypes.All:
-                            return this;
-
-                        case InstancedConditionTypes.Player:
-                            return p;
-
-                        case InstancedConditionTypes.Group:
-                            return p.Group ?? (object)p;
-
-                        case InstancedConditionTypes.Guild:
-                            return p.Guild?.IsSystemGuild == false ? p.Guild : p;
-
-                        case InstancedConditionTypes.Battlegroup:
-                            return p.BattleGroup ?? (object)p;
-
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                };
 
                 // Register all players in the area, TODO: There has to be a better way to do this?
                 foreach (var player in WorldMgr.GetAllPlayingClients().Select(c => c.Player).Where(p => p.CurrentAreas.OfType<AbstractArea>().Any(a => a.DbArea.ObjectId == AreaStartingId))) // 
                 {
-                    var key = getKey(player);
-                    playersRegistered.TryAdd(key, player);
+                    var key = GetOwnerKey(player);
+                    if (key != null)
+                        playersRegistered.TryAdd(key, player);
                 }
 
                 // Unregister players with running instances, prepare to start existing ready instances
@@ -579,7 +557,11 @@ namespace DOL.GameEvents
                 {
                     foreach (var i in Instances)
                     {
-                        playersRegistered.Remove(getKey(i.Owner));
+                        var key = GetOwnerKey(i.Owner);
+                        if (key == null)
+                            continue;
+                        
+                        playersRegistered.Remove(key);
                         if (i.IsReady)
                             startingExistingInstances.Add(i);
                     }
@@ -593,7 +575,9 @@ namespace DOL.GameEvents
                     {
                         try
                         {
-                            spawnedInstances.Add(Instantiate(pl));
+                            var instance = Instantiate(pl);
+                            if (instance != null)
+                                spawnedInstances.Add(instance);
                         }
                         catch (Exception ex)
                         {
@@ -858,9 +842,22 @@ namespace DOL.GameEvents
         public GameEvent Instantiate(GamePlayer owner)
         {
             log.DebugFormat("Instantiating event {0} {1} for player {2}", EventName, ID, owner);
-            GameEvent ret = new GameEvent(this);
 
-            ret.Owner = owner;
+            GamePlayer? trueOwner = InstancedConditionType switch
+            {
+                InstancedConditionTypes.All => owner,
+                InstancedConditionTypes.Player => owner,
+                InstancedConditionTypes.Group => owner.Group?.Leader,
+                InstancedConditionTypes.Guild => owner.Guild == null ? null : owner,
+                InstancedConditionTypes.Battlegroup => owner.BattleGroup == null ? null : owner,
+                InstancedConditionTypes.GroupOrSolo => owner.Group?.Leader ?? owner,
+                InstancedConditionTypes.GuildOrSolo => owner,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            if (trueOwner == null)
+                return null;
+            GameEvent ret = new GameEvent(this);
+            ret.Owner = trueOwner;
             return ret;
         }
         
@@ -1072,6 +1069,9 @@ namespace DOL.GameEvents
 
         public bool IsOwnedBy(GamePlayer player)
         {
+            if (ParallelLaunch && IsInstanceMaster)
+                return false;
+            
             switch (InstancedConditionType)
             {
                 case InstancedConditionTypes.All:
@@ -1081,10 +1081,16 @@ namespace DOL.GameEvents
                     return Owner == player;
 
                 case InstancedConditionTypes.Group:
-                    return Owner?.Group != null ? player.Group == Owner.Group : player == Owner;
+                    return player.Group != null && player.Group.Leader == Owner;
+
+                case InstancedConditionTypes.GroupOrSolo:
+                    return player.Group == null ? player == Owner : player.Group.Leader == Owner;
 
                 case InstancedConditionTypes.Guild:
-                    return Owner?.Guild?.IsSystemGuild == false ? player.Guild == Owner.Guild : player == Owner;
+                    return player.Guild?.IsSystemGuild == false && player.Guild == Owner.Guild;
+
+                case InstancedConditionTypes.GuildOrSolo:
+                    return player.Guild?.IsSystemGuild != false ? player == Owner : player.Guild == Owner.Guild;
 
                 case InstancedConditionTypes.Battlegroup:
                     return Owner?.BattleGroup != null ? player.BattleGroup == Owner.BattleGroup : player == Owner;
@@ -1438,8 +1444,7 @@ namespace DOL.GameEvents
             get;
             set;
         }
-
-
+        
         public EndingAction EndingActionB
         {
             get;
@@ -1547,6 +1552,36 @@ namespace DOL.GameEvents
             return LanguageMgr.GetEventMessage(language, message, player?.Name);
         }
 
+        public object GetOwnerKey(GamePlayer player)
+        {
+            switch (InstancedConditionType)
+            {
+                case InstancedConditionTypes.All:
+                    return this;
+
+                case InstancedConditionTypes.Player:
+                    return player;
+
+                case InstancedConditionTypes.Group:
+                    return player.Group;
+
+                case InstancedConditionTypes.Guild:
+                    return player.Guild?.IsSystemGuild == false ? player.Guild : null;
+
+                case InstancedConditionTypes.GroupOrSolo:
+                    return player.Group ?? (object)player;
+
+                case InstancedConditionTypes.GuildOrSolo:
+                    return player.Guild?.IsSystemGuild == false ? player.Guild : (object)player;
+
+                case InstancedConditionTypes.Battlegroup:
+                    return player.BattleGroup;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public GamePlayer Owner
         {
             get => owner;
@@ -1650,7 +1685,7 @@ namespace DOL.GameEvents
             return null;
         }
         
-        public GameEvent GetOrCreateInstance(GamePlayer? triggerPlayer)
+        public GameEvent? GetOrCreateInstance(GamePlayer? triggerPlayer)
         {
             if (IsInstancedEvent)
             {
@@ -1660,10 +1695,15 @@ namespace DOL.GameEvents
                 }
                 lock (Instances)
                 {
+                    var key = GetOwnerKey(triggerPlayer);
+                    if (key == null)
+                        return null;
                     GameEvent instance = Instances.FirstOrDefault(i => i.IsOwnedBy(triggerPlayer));
                     if (instance == null)
                     {
                         instance = Instantiate(triggerPlayer);
+                        if (instance == null)
+                            return null;
                         Instances.Add(instance);
                     }
                     return instance;

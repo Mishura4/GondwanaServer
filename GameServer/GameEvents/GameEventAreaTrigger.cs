@@ -44,17 +44,7 @@ namespace DOL.GameEvents
             Area = area;
 
             ParseValuesFromDb(db);
-
-            LaunchTimer.Interval = db.TimerCount * 1000;
-            LaunchTimer.Elapsed += LaunchTimer_Elapsed;
-            m_hasMobs = Mobs?.Count is null or 0;
-            if (!m_hasMobs)
-            {
-                MobCheckTimer.Interval = 2000; // update every 2 seconds
-                MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
-                MobCheckTimer.AutoReset = true;
-                MobCheckTimer.Start();
-            }
+            Init();
         }
 
         public GameEventAreaTrigger(GameEventAreaTrigger areaTrigger)
@@ -68,7 +58,11 @@ namespace DOL.GameEvents
             Area = areaTrigger.Area;
 
             ParseValuesFromDb((AreaXEvent)_db);
+            Init();
+        }
 
+        public void Init()
+        {
             LaunchTimer.Interval = ((AreaXEvent)_db).TimerCount * 1000;
             LaunchTimer.Elapsed += LaunchTimer_Elapsed;
             m_hasMobs = Mobs?.Count is null or 0;
