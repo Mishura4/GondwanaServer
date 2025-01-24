@@ -31,6 +31,7 @@ using DOL.GS.Friends;
 using DOL.GS.Finance;
 using GameServerScripts.Amtescripts.Managers;
 using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.Commands
 {
@@ -210,8 +211,17 @@ namespace DOL.GS.Commands
                                     client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you a free half level!",
                                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
-
                     }
+
+                    pToLevel.Out.SendUpdatePlayer();
+                    pToLevel.Out.SendUpdatePoints();
+                    pToLevel.Out.SendCharStatsUpdate();
+                    pToLevel.Out.SendCharResistsUpdate();
+                    pToLevel.UpdatePlayerStatus();
+                    pToLevel.RefreshItemBonuses();
+                    pToLevel.UpdateEquipmentAppearance();
+                    pToLevel.Out.SendUpdateWeaponAndArmorStats();
+                    pToLevel.Out.SendStatusUpdate();
 
                     break;
                 case "reset":
@@ -285,11 +295,15 @@ namespace DOL.GS.Commands
                                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             }
 
-
                             player.Out.SendUpdatePlayer();
                             player.Out.SendUpdatePoints();
                             player.Out.SendCharStatsUpdate();
+                            player.Out.SendCharResistsUpdate();
                             player.UpdatePlayerStatus();
+                            player.RefreshItemBonuses();
+                            player.UpdateEquipmentAppearance();
+                            player.Out.SendUpdateWeaponAndArmorStats();
+                            player.Out.SendStatusUpdate();
                             player.SaveIntoDatabase();
                         }
 
@@ -315,6 +329,11 @@ namespace DOL.GS.Commands
                         if (player.Champion == false)
                         {
                             player.Champion = true;
+                            player.Out.SendUpdatePlayer();
+                            player.Out.SendCharStatsUpdate();
+                            player.Out.SendCharResistsUpdate();
+                            player.UpdatePlayerStatus();
+                            player.RefreshItemBonuses();
                             player.SaveIntoDatabase();
                             client.Out.SendMessage(player.Name + " is now on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has started you on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -345,6 +364,12 @@ namespace DOL.GS.Commands
                             player = client.Player;
 
                         player.RemoveChampionLevels();
+                        player.Out.SendUpdatePlayer();
+                        player.Out.SendCharStatsUpdate();
+                        player.Out.SendCharResistsUpdate();
+                        player.UpdatePlayerStatus();
+                        player.RefreshItemBonuses();
+                        player.SaveIntoDatabase();
                         client.Out.SendMessage("You have cleared " + player.Name + "'s Champion levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has cleared your Champion levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
@@ -391,6 +416,11 @@ namespace DOL.GS.Commands
                         if (player.MLGranted == false)
                         {
                             player.MLGranted = true;
+                            player.Out.SendUpdatePlayer();
+                            player.Out.SendCharStatsUpdate();
+                            player.Out.SendCharResistsUpdate();
+                            player.UpdatePlayerStatus();
+                            player.RefreshItemBonuses();
                             player.SaveIntoDatabase();
                             client.Out.SendMessage(player.Name + " is now ready to start Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has started your Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -421,8 +451,12 @@ namespace DOL.GS.Commands
 
                         player.MLLevel = level;
                         player.MLExperience = 0;
-                        player.SaveIntoDatabase();
                         player.Out.SendUpdatePlayer();
+                        player.Out.SendCharStatsUpdate();
+                        player.Out.SendCharResistsUpdate();
+                        player.UpdatePlayerStatus();
+                        player.RefreshItemBonuses();
+                        player.SaveIntoDatabase();
                         player.Out.SendMasterLevelWindow((byte)player.MLLevel);
                         client.Out.SendMessage(player.Name + " Master Level is set to " + level + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your Master Level to " + level + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -2076,6 +2110,8 @@ namespace DOL.GS.Commands
                         player.Out.SendUpdateMaxSpeed();
                         player.Out.SendStatusUpdate();
                         player.Out.SendCharResistsUpdate();
+                        player.RefreshItemBonuses();
+                        player.UpdateEquipmentAppearance();
                         client.Out.SendMessage(player.Name + " updated successfully!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                     break;
@@ -2329,6 +2365,16 @@ namespace DOL.GS.Commands
                                     }
 
                                     SetClass(targetPlayer, int.Parse(args[2]));
+                                    targetPlayer.Out.SendUpdatePlayer();
+                                    targetPlayer.Out.SendUpdatePlayerSkills();
+                                    targetPlayer.Out.SendCharStatsUpdate();
+                                    targetPlayer.Out.SendUpdatePoints();
+                                    targetPlayer.Out.SendUpdateMaxSpeed();
+                                    targetPlayer.Out.SendStatusUpdate();
+                                    targetPlayer.Out.SendCharResistsUpdate();
+                                    targetPlayer.RefreshItemBonuses();
+                                    targetPlayer.UpdateEquipmentAppearance();
+                                    targetPlayer.SaveIntoDatabase();
                                 }
                                 break;
                         }
@@ -2379,6 +2425,15 @@ namespace DOL.GS.Commands
                             {
                                 this.SetIsRenaissance(targetPlayer, isRenaissance);
                                 client.Out.SendMessage(client.Player.Name + " isRenaissance est maintenant: " + isRenaissance, eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+                                targetPlayer.Out.SendUpdatePlayer();
+                                targetPlayer.Out.SendCharStatsUpdate();
+                                targetPlayer.Out.SendUpdatePoints();
+                                targetPlayer.Out.SendUpdateMaxSpeed();
+                                targetPlayer.Out.SendStatusUpdate();
+                                targetPlayer.Out.SendCharResistsUpdate();
+                                targetPlayer.RefreshItemBonuses();
+                                targetPlayer.UpdateEquipmentAppearance();
+                                targetPlayer.SaveIntoDatabase();
                             }
                             else
                             {

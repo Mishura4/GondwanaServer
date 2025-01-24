@@ -146,7 +146,7 @@ namespace DOL.GS.Commands
         )]
     public class MobCommandHandler : AbstractCommandHandler, ICommandHandler
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private const ushort AUTOSELECT_RADIUS = 100; // /mob select command
 
@@ -293,7 +293,7 @@ namespace DOL.GS.Commands
                     case "isRenaissance": Renaissance(client, targetMob, args); break;
                     case "isboss":
                     case "IsBoss": SetIsBoss(client, targetMob, args); break;
-                    case "debug": targetMob.DebugMode = !targetMob.DebugMode; break;
+                    case "debug": targetMob!.DebugMode = !targetMob.DebugMode; break;
                     default:
                         DisplaySyntax(client);
                         return;
@@ -1081,6 +1081,7 @@ namespace DOL.GS.Commands
         private void movehere(GameClient client, GameNPC targetMob, string[] args)
         {
             targetMob.MoveTo(client.Player.Position);
+            targetMob.ForceUpdateSpawnPos = true;
             targetMob.SaveIntoDatabase();
             client.Out.SendMessage("Target Mob '" + targetMob.Name + "' moved to your location!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
@@ -1349,7 +1350,7 @@ namespace DOL.GS.Commands
             {
                 info.Add(" ");
                 Keeps.IKeepItem keepItem = targetMob as Keeps.IKeepItem;
-                if (keepItem.Component != null && keepItem.Component.Keep != null)
+                if (keepItem!.Component != null && keepItem.Component.Keep != null)
                 {
                     info.Add(" + KeepItem: " + keepItem.Component.Keep.Name);
                 }
@@ -1666,8 +1667,8 @@ namespace DOL.GS.Commands
 
                 try
                 {
-                    client.Out.SendDebugMessage(Assembly.GetAssembly(typeof(GameServer)).FullName);
-                    brains = (ABrain)Assembly.GetAssembly(typeof(GameServer)).CreateInstance(brainType, false);
+                    client.Out.SendDebugMessage(Assembly.GetAssembly(typeof(GameServer))!.FullName);
+                    brains = (ABrain)Assembly.GetAssembly(typeof(GameServer))!.CreateInstance(brainType, false);
                 }
                 catch (Exception e)
                 {
@@ -2351,12 +2352,12 @@ namespace DOL.GS.Commands
             }
             if (mobXloot == null || (mobXloot != null && mobXloot.Count() == 0)) mobXloot = DOLDB<MobDropTemplateType>.SelectObjects(DB.Column(nameof(MobXLootTemplate.MobName)).IsEqualTo(mobName));
 
-            foreach (var mobXtemplate in mobXloot)
+            foreach (var mobXtemplate in mobXloot!)
             {
                 didDefault = didDefault || mobXtemplate.LootTemplateName == mobName;
                 var template = DOLDB<LootTemplateType>.SelectObjects(DB.Column(nameof(LootTemplate.TemplateName)).IsEqualTo(mobXtemplate.LootTemplateName));
                 if (template.Count > 0)
-                    text.Add("+ Mob's template [from " + (fromNPCT ? mob.NPCTemplate.TemplateId.ToString() : mobName) + "]: " + mobXtemplate.LootTemplateName + " (DropCount: " + mobXtemplate.DropCount + ")");
+                    text.Add("+ Mob's template [from " + (fromNPCT ? mob.NPCTemplate!.TemplateId.ToString() : mobName) + "]: " + mobXtemplate.LootTemplateName + " (DropCount: " + mobXtemplate.DropCount + ")");
                 text.AddRange(
                     from loot in template
                     let drop = GameServer.Database.FindObjectByKey<ItemTemplate>(loot.ItemTemplateID)
@@ -2534,7 +2535,7 @@ namespace DOL.GS.Commands
             {
                 foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    brain = (ABrain)assembly.CreateInstance(targetMob.Brain.GetType().FullName, true);
+                    brain = (ABrain)assembly.CreateInstance(targetMob.Brain.GetType().FullName!, true);
                     if (brain != null)
                         break;
                 }
@@ -2550,7 +2551,7 @@ namespace DOL.GS.Commands
                 {
                     foreach (Assembly assembly in ScriptMgr.Scripts)
                     {
-                        brain = assembly.CreateInstance(targetMob.Brain.GetType().FullName, true) as ABrain;
+                        brain = assembly.CreateInstance(targetMob.Brain.GetType().FullName!, true) as ABrain;
 
                         if (brain != null)
                             break;
@@ -2645,7 +2646,7 @@ namespace DOL.GS.Commands
 
                 foreach (Assembly script in ScriptMgr.GameServerScripts)
                 {
-                    mob = (GameNPC)script.CreateInstance(targetMob.GetType().FullName, false);
+                    mob = (GameNPC)script.CreateInstance(targetMob.GetType().FullName!, false);
                     if (mob != null)
                         break;
                 }
@@ -2716,7 +2717,7 @@ namespace DOL.GS.Commands
             ABrain brain = null;
             foreach (Assembly script in ScriptMgr.GameServerScripts)
             {
-                brain = (ABrain)script.CreateInstance(targetMob.Brain.GetType().FullName, false);
+                brain = (ABrain)script.CreateInstance(targetMob.Brain.GetType().FullName!, false);
                 if (brain != null)
                     break;
             }
@@ -3438,7 +3439,7 @@ namespace DOL.GS.Commands
 
             if (targetMob.Brain != null && targetMob.Brain is StandardMobBrain)
             {
-                Dictionary<GameLiving, long> aggroList = (targetMob.Brain as StandardMobBrain).AggroTable;
+                Dictionary<GameLiving, long> aggroList = (targetMob.Brain as StandardMobBrain)!.AggroTable;
 
                 if (aggroList.Count > 0)
                 {

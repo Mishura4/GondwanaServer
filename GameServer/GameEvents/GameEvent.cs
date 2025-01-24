@@ -80,6 +80,7 @@ namespace DOL.GameEvents
             ResetEventId = ev.ResetEventId;
             ChanceLastTimeChecked = DateTimeOffset.FromUnixTimeSeconds(0);
             AnnonceType = ev.AnnonceType;
+            SecondaryAnnonceType = ev.SecondaryAnnonceType;
             Discord = ev.Discord;
             InstancedConditionType = ev.InstancedConditionType;
             AreaStartingId = ev.AreaStartingId;
@@ -330,17 +331,32 @@ namespace DOL.GameEvents
 
                             if (mobIngame != null)
                             {
+                                // Reset money to 0
                                 mobIngame.CurrentSilver = 0;
                                 mobIngame.CurrentCopper = 0;
                                 mobIngame.CurrentGold = 0;
                                 mobIngame.CurrentMithril = 0;
                                 mobIngame.CurrentPlatinum = 0;
+
+                                // ALSO reset the resources to 0
+                                mobIngame.CurrentResource1 = 0;
+                                mobIngame.CurrentResource2 = 0;
+                                mobIngame.CurrentResource3 = 0;
+                                mobIngame.CurrentResource4 = 0;
+
                                 mobIngame.SaveIntoDatabase();
                             }
                         }
 
-
+                        // Reset money in the DB
                         moneyNpcDb.CurrentAmount = 0;
+
+                        // Reset resources in the DB
+                        moneyNpcDb.CurrentResource1 = 0;
+                        moneyNpcDb.CurrentResource2 = 0;
+                        moneyNpcDb.CurrentResource3 = 0;
+                        moneyNpcDb.CurrentResource4 = 0;
+
                         GameServer.Database.SaveObject(moneyNpcDb);
                     }
 
@@ -839,6 +855,31 @@ namespace DOL.GameEvents
             }
         }
 
+        public static void NotifyPlayerSecondary(GamePlayer player, SecondaryAnnonceType secondType, string message)
+        {
+            eChatType type;
+            eChatLoc loc;
+
+            switch (secondType)
+            {
+                case SecondaryAnnonceType.Log:
+                    type = eChatType.CT_Merchant;
+                    loc = eChatLoc.CL_SystemWindow;
+                    break;
+
+                case SecondaryAnnonceType.Send:
+                    type = eChatType.CT_Send;
+                    loc = eChatLoc.CL_SystemWindow;
+                    break;
+
+                default:
+                    type = eChatType.CT_ScreenCenter;
+                    loc = eChatLoc.CL_SystemWindow;
+                    break;
+            }
+            player.Out.SendMessage(message, type, loc);
+        }
+
         public GameEvent Instantiate(GamePlayer owner)
         {
             log.DebugFormat("Instantiating event {0} {1} for player {2}", EventName, ID, owner);
@@ -1005,6 +1046,7 @@ namespace DOL.GameEvents
             ResetEventId = !string.IsNullOrEmpty(db.ResetEventId) ? db.ResetEventId : null;
             ChanceLastTimeChecked = DateTimeOffset.FromUnixTimeSeconds(0);
             AnnonceType = Enum.TryParse(db.AnnonceType.ToString(), out AnnonceType a) ? a : AnnonceType.Center;
+            SecondaryAnnonceType = (SecondaryAnnonceType)db.SecondaryAnnonceType;
             Discord = db.Discord;
             InstancedConditionType = Enum.TryParse(db.InstancedConditionType.ToString(), out InstancedConditionTypes inst) ? inst : InstancedConditionTypes.All;
             AreaStartingId = !string.IsNullOrEmpty(db.AreaStartingId) ? db.AreaStartingId : null;
@@ -1201,7 +1243,7 @@ namespace DOL.GameEvents
             foreach (var player in GetPlayersInEventZones(this.EventZones))
             {
                 string message = this.GetFormattedRemainingTimeText(player.Client.Account.Language, player);
-                NotifyPlayer(player, AnnonceType, message);
+                NotifyPlayerSecondary(player, this.SecondaryAnnonceType, message);
             }
 
             if (this.RemainingTimeEvSound > 0)
@@ -1221,7 +1263,7 @@ namespace DOL.GameEvents
             foreach (var player in GetPlayersInEventZones(this.EventZones))
             {
                 string message = this.GetFormattedRandomText(player.Client.Account.Language, player);
-                NotifyPlayer(player, this.AnnonceType, message);
+                NotifyPlayerSecondary(player, this.SecondaryAnnonceType, message);
             }
 
             if (!string.IsNullOrEmpty(this.RandomEventSound))
@@ -1364,6 +1406,11 @@ namespace DOL.GameEvents
         }
 
         public AnnonceType AnnonceType
+        {
+            get;
+            set;
+        }
+        public SecondaryAnnonceType SecondaryAnnonceType
         {
             get;
             set;
@@ -1670,6 +1717,7 @@ namespace DOL.GameEvents
             db.ResetEventId = ResetEventId;
             db.ChanceLastTimeChecked = ChanceLastTimeChecked.HasValue ? ChanceLastTimeChecked.Value.ToUnixTimeSeconds() : 0;
             db.AnnonceType = (byte)AnnonceType;
+            db.SecondaryAnnonceType = (byte)SecondaryAnnonceType;
             db.Discord = Discord;
             db.InstancedConditionType = (int)InstancedConditionType;
             db.AreaStartingId = AreaStartingId;

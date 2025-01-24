@@ -3724,6 +3724,12 @@ namespace DOL.GS.Commands
 
                     #region territories
                     case "territories":
+                        if (client.Player.Guild == null || client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Territories.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+
                         IList<string> infos = TerritoryManager.Instance.GetTerritoriesInformations(client.Player);
                         client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Territories.WindowTitle"), infos);
                         break;
@@ -3731,6 +3737,12 @@ namespace DOL.GS.Commands
 
                     #region subterritories
                     case "subterritories":
+                        if (client.Player.Guild == null || client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Subterritories.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+
                         infos = TerritoryManager.Instance.GetSubterritoriesInformations(client.Player);
                         client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Subterritories.WindowTitle"), infos);
                         break;

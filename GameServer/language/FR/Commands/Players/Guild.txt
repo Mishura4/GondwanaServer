@@ -353,6 +353,7 @@ Commands.Players.Guild.Territories.TotalBPBonus:		Bonus total de points de butin
 Commands.Players.Guild.Territories.Bonuses:				---- Bonus des territoires ----
 Commands.Players.Guild.Territories.DebuffDuration:		Durée des effets négatifs
 Commands.Players.Guild.Territories.SpellRange:			Portée des sorts
+Commands.Players.Guild.Territories.TerritoryBeGuilded:	Vous devez appartenir à une guilde pour accéder aux détails sur les territoires !
 
 Commands.Players.Guild.Subterritories.WindowTitle:			[ SOUS-TERRITOIRES ]
 Commands.Players.Guild.Subterritories.TerritoriesOwned:		---- Sous-territoires possédés par {0} ----
@@ -360,6 +361,7 @@ Commands.Players.Guild.Subterritories.TerritoriesOther:		---- Autres sous-territ
 Commands.Players.Guild.Subterritories.TerritoriesList:		---- Sous-territories ----
 Commands.Players.Guild.Subterritories.TerritoryNeutral:		Neutre
 Commands.Players.Guild.Subterritories.TerritoryExpiresIn:	Expire dans {0}
+Commands.Players.Guild.Subterritories.TerritoryBeGuilded:	Vous devez appartenir à une guilde pour accéder aux détails sur les sous-territoires !
 
 
 Commands.Players.Guild.TotalMemberOnline:   Nombre de joueurs en ligne dans la guilde.

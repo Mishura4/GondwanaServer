@@ -1,23 +1,24 @@
 
 # DelveInfo
-DelveInfo.CastingTime:					Casting time: {0}
-DelveInfo.ConcentrationCost:				Concentration cost: {0}
-DelveInfo.Damage:					Damage: {0}
-DelveInfo.DamageType:					Damage Type: {0}
-DelveInfo.Duration:					Duration: 
-DelveInfo.Focus:					This is a focus spell. Cancels if you do any action.
-DelveInfo.Frequency:					Frequency: {0}
-DelveInfo.HealthReturned:				Health returned: {0}% of damage(s) dealt
-DelveInfo.InstrumentRequire:				Instrument required: {0}
-DelveInfo.PowerCost:					Power cost: {0}
-DelveInfo.HealthCost:					Health cost: {0}
-DelveInfo.Radius:					Radius: {0}
-DelveInfo.Range:					Range: {0}
-DelveInfo.RangeModified:				Range: {0} {1}
-DelveInfo.RecastTime:					Recast time: 
-DelveInfo.Target:					Target: {0}
-DelveInfo.Value:					Value: {0}
-DelveInfo.ValueNegative:				Value: -{0}
+DelveInfo.CastingTime:			Casting time: {0}
+DelveInfo.ConcentrationCost:	Concentration cost: {0}
+DelveInfo.Damage:				Damage: {0}
+DelveInfo.DamageType:			Damage Type: {0}
+DelveInfo.Duration:				Duration: 
+DelveInfo.Focus:				This is a focus spell. Cancels if you do any action.
+DelveInfo.Frequency:			Frequency: {0}
+DelveInfo.HealthReturned:		Health returned: {0}% of damage(s) dealt
+DelveInfo.InstrumentRequire:	Instrument required: {0}
+DelveInfo.PowerCost:			Power cost: {0}
+DelveInfo.HealthCost:			Health cost: {0}
+DelveInfo.Radius:				Radius: {0}
+DelveInfo.Range:				Range: {0}
+DelveInfo.RangeModified:		Range: {0} {1}
+DelveInfo.RecastTime:			Recast time: 
+DelveInfo.Target:				Target: {0}
+DelveInfo.Value:				Value: {0}
+DelveInfo.ValueNegative:		Value: -{0}
+DelveInfo.Destination:			Destination : {0}
 
 # Spell ShortDescriptions
 SpellDescription.DirectDamage.MainDescription:		Deals {0} {1} to the target.
@@ -35,8 +36,10 @@ SpellDescription.SpeedDecrease.MainDescription:		The target is slowed by {0}%.
 SpellDescription.SpeedDecrease.Rooted:				Target is rooted in place.
 SpellDescription.Slow.MainDescription:				The target is slowed by {0}%. There's no immunity against this spell and it cannot be interrupted by hits.
 SpellDescription.Bladeturn.MainDescription:			Creates a 'bubble' that absorbs the damage of a single melee hit.
-SpellDescription.Demi.MainDescription:				{0} reduces enemy's life by half. It doesn't affect weak enemies or enemies having a level above {1}. This spell rarely affects ghosts, demons, necromancers, bainshees, and vampiirs.
-SpellDescription.Quarter.MainDescription:			{0} reduces enemy's life to a quarter. It doesn't affect weak enemies or enemies having a level above {1}. This spell rarely affects ghosts, demons, necromancers, bainshees, and vampiirs.
+SpellDescription.Demi.MainDescription:				{0} reduces enemy's life by half.
+SpellDescription.Quarter.MainDescription:			{0} reduces enemy's life to a quarter.
+SpellDescription.DemiQuarter.AmnesiaDescription:	It doesn't affect weak enemies or enemies having a level above {0}.
+SpellDescription.DemiQuarter.EndDescription:		This spell has a lower chance to affect ghosts, demons, necromancers, bainshees, and vampiirs.
 SpellDescription.LifeTransfer.MainDescription:		Transfers {0} health from the caster to the target.
 SpellDescription.Heal.MainDescription:				The target regains {0} hit points.
 SpellDescription.Disease.MainDescription:			Inflicts a wasting disease that slows the target by {0}%, reduces its strength by {1}% and inhibits healing by {2}%.
@@ -133,6 +136,7 @@ SpellDescription.SummonIcebrand.MainDescription1:			Summon Icebrand, the evil bl
 SpellDescription.SummonIcebrand.MainDescription2:			The Damage type of Icebrand is Cold.
 SpellDescription.GoldenSpearJavelin.MainDescription:		Summons 5 magical javelins.
 SpellDescription.OmniHeal.MainDescription:					The target regains {0}% of health, endurance, and power.
+SpellDescription.OmniHarm.MainDescription:					Additionally, the target loses {0} endurance and {1} power.
 SpellDescription.OmniLifeDrain.MainDescription:				Damages the target. {0}% of the damage is returned as health, {1}% as power, and {2}% as endurance to the caster.
 SpellDescription.PowerHeal.MainDescription:					Replenishes the target's power pool by {0}%.
 SpellDescription.Silence.MainDescription:					Enemy is silenced and can't cast spells for {0} seconds.
@@ -175,7 +179,7 @@ SpellDescription.ResistDebuff.MainDescription:				Decreases the target's resista
 SpellDescription.CrushSlashThrustDebuff.MainDescription:	Decreases the target's resistances to melee damage by {0}%.
 SpellDescription.EssenceDebuff.MainDescription:				Decreases the target's resistances to 'essence' damage by {0}%.
 SpellDescription.DualStatDebuff.MainDescription:			Reduces the target's {0} and {1} by {2}.
-SpellDescription.DualStatBuff.MainDescription:				{0} {1} and {2} are increased by {3}.
+SpellDescription.DualStatBuff.MainDescription:				Increases {0} and {1} by {2}.
 SpellDescription.SingleStatBuff.MainDescription:			Increases {0} by {1}.
 SpellDescription.CombatSpeedBuff.MainDescription:			Increases attack speed by {0}%.
 SpellDescription.FatigueConsumptionBuff.MainDescription:	Actions require {0}% less endurance.

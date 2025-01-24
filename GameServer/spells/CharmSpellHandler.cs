@@ -27,6 +27,7 @@ using DOL.GS.Effects;
 using DOL.GS.PropertyCalc;
 using DOL.Language;
 using DOL.GS.ServerProperties;
+using DOL.Database;
 
 namespace DOL.GS.Spells
 {
@@ -167,7 +168,8 @@ namespace DOL.GS.Spells
                 }
 
                 // If server properties prevent Named charm.
-                if (ServerProperties.Properties.SPELL_CHARM_NAMED_CHECK != 0 && !target.Name[0].ToString().ToLower().Equals(target.Name[0].ToString()))
+                // if (Properties.SPELL_CHARM_NAMED_CHECK != 0 && !target.Name[0].ToString().ToLower().Equals(target.Name[0].ToString()))
+                if (Properties.SPELL_CHARM_ISBOSS_CHECK != 0 && target is GameNPC npc && npc.IsBoss)
                 {
                     if (Caster is GamePlayer playerCaster)
                         MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.CannotCharm"), eChatType.CT_SpellResisted);

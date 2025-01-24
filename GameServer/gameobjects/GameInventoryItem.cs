@@ -29,6 +29,7 @@ using log4net;
 using DOL.GS.Geometry;
 using DOL.Bonus;
 using System.Linq;
+using Discord;
 
 namespace DOL.GS
 {
@@ -549,22 +550,34 @@ namespace DOL.GS
                 }
             }
 
-            if (!IsDropable || !IsPickable || IsIndestructible)
+            if (!IsDropable || !IsPickable || !IsTradable || IsIndestructible || !CanUseInRvR || Flags == 2 || (Flags == 1 && IsDropable))
                 delve.Add(" ");
 
             if (!IsPickable)
+                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotPick"));
+
+            if (!IsTradable)
                 delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotTraded"));
 
             if (!IsDropable)
+            {
+                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.GetShortItemInfo.NoDrop"));
                 delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotSold"));
+            }
 
             if (IsIndestructible)
                 delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotDestroyed"));
 
-            if (BonusLevel > 0)
+            if (!CanUseInRvR)
+                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR"));
+
+            if (Flags == 1 && IsDropable)
+                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotSold"));
+
+            if (Flags == 2)
             {
                 delve.Add(" ");
-                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.BonusLevel", BonusLevel));
+                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.EffectWhenSitting"));
             }
 
             //Add admin info
@@ -598,7 +611,6 @@ namespace DOL.GS
 
         protected virtual void WriteMagicalBonuses(IList<string> output, GameClient client, bool shortInfo)
         {
-            
             var utility = GetTotalUtility();
             if (Math.Abs(utility) >= 0.01)
             {
@@ -673,6 +685,11 @@ namespace DOL.GS
 
             if (!shortInfo)
             {
+                if (BonusLevel > 0)
+                {
+                    output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.BonusLevel", BonusLevel));
+                }
+
                 if (ProcSpellID != 0 || ProcSpellID1 != 0 || SpellID != 0 || SpellID1 != 0)
                 {
                     int requiredLevel = LevelRequirement > 0 ? LevelRequirement : Math.Min(50, Level);
@@ -1955,55 +1972,152 @@ namespace DOL.GS
 
         protected virtual void WriteBonusLine(IList<string> list, GameClient client, int bonusCat, int bonusValue)
         {
-            if (bonusCat != 0 && bonusValue != 0 && !SkillBase.CheckPropertyType((eProperty)bonusCat, ePropertyType.Focus))
-            {
-                string singleUti = String.Format("{0:0.00}", GetSingleUtility(bonusCat, bonusValue));
-                //- Axe: 5 pts
-                //- Strength: 15 pts
-                //- Constitution: 15 pts
-                //- Hits: 40 pts
-                //- Fatigue: 8 pts
-                //- Heat: 7%
-                //Bonus to casting speed: 2%
-                //Bonus to armor factor (AF): 18
-                //Power: 6 % of power pool.
-                string bonusValueStr = bonusValue.ToString("0 ;-0;0 ");
-                string formattedLine = $"{singleUti} | {SkillBase.GetPropertyName(client, (eProperty)bonusCat)}: {bonusValueStr}";
+            if (bonusCat == 0 || bonusValue == 0) return;
+            if (SkillBase.CheckPropertyType((eProperty)bonusCat, ePropertyType.Focus))
+                return;
 
-                if (bonusCat == (int)eProperty.PowerPool
-                    || (bonusCat >= (int)eProperty.Resist_First && bonusCat <= (int)eProperty.Resist_Last)
-                    || (bonusCat >= (int)eProperty.ResCapBonus_First && bonusCat <= (int)eProperty.ResCapBonus_Last)
-                    || bonusCat == (int)eProperty.CraftingSkillGain
-                    || bonusCat == (int)eProperty.SpellShieldChance
-                    || bonusCat == (int)eProperty.RobberyResist
-                    || bonusCat == (int)eProperty.MythicalCoin
-                    || (bonusCat >= 116 && bonusCat <= 119)
-                    || (bonusCat >= 146 && bonusCat <= 147)
-                    || (bonusCat >= 149 && bonusCat <= 155)
-                    || (bonusCat >= 169 && bonusCat <= 186)
-                    || (bonusCat >= 188 && bonusCat <= 199)
-                    || (bonusCat >= 232 && bonusCat <= 233)
-                    || (bonusCat >= 245 && bonusCat <= 269))
-                {
-                    formattedLine += "%";
-                }
-                else
-                {
-                    formattedLine += LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusLine.Points");
-                }
-                list.Add(formattedLine);
+            //- Axe: 5 pts
+            //- Strength: 15 pts
+            //- Constitution: 15 pts
+            //- Hits: 40 pts
+            //- Fatigue: 8 pts
+            //- Heat: 7%
+            //Bonus to casting speed: 2%
+            //Bonus to armor factor (AF): 18
+            //Power: 6 % of power pool.
+            string singleUti = String.Format("{0:0.00}", GetSingleUtility(bonusCat, bonusValue));
+            string bonusValueStr = bonusValue.ToString("0 ;-0;0 ");
+            string propertyName = SkillBase.GetPropertyName(client, (eProperty)bonusCat);
+            if (string.IsNullOrEmpty(propertyName))
+                propertyName = "UnknownProperty";
+
+            // Build the line e.g. "2.50 | Strength: 15"
+            string formattedLine = $"{singleUti} | {propertyName}: {bonusValueStr}";
+
+            // If it's a % type, add a '%' at the end
+            if (bonusCat == (int)eProperty.PowerPool
+                || (bonusCat >= (int)eProperty.Resist_First && bonusCat <= (int)eProperty.Resist_Last)
+                || (bonusCat >= (int)eProperty.ResCapBonus_First && bonusCat <= (int)eProperty.ResCapBonus_Last)
+                || bonusCat == (int)eProperty.CraftingSkillGain
+                || bonusCat == (int)eProperty.SpellShieldChance
+                || bonusCat == (int)eProperty.RobberyResist
+                || bonusCat == (int)eProperty.MythicalCoin
+                || (bonusCat >= 116 && bonusCat <= 119)
+                || (bonusCat >= 146 && bonusCat <= 147)
+                || (bonusCat >= 149 && bonusCat <= 155)
+                || (bonusCat >= 169 && bonusCat <= 186)
+                || (bonusCat >= 188 && bonusCat <= 199)
+                || (bonusCat >= 232 && bonusCat <= 233)
+                || (bonusCat >= 245 && bonusCat <= 269))
+            {
+                formattedLine += "%";
             }
+            else
+            {
+                formattedLine += LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusLine.Points");
+            }
+
+            // A) If player's level < item.BonusLevel => entire item is inactive
+            bool itemAllInactive = false;
+            if (client.Player != null && client.Player.Level < this.BonusLevel)
+            {
+                itemAllInactive = true;
+            }
+
+            // B) Check per-bonus condition
+            string bonusName = MatchBonusName(bonusCat, bonusValue);
+
+            bool passBonusCondition = IsBonusConditionMet(bonusName, client.Player);
+
+            if (itemAllInactive || !passBonusCondition)
+            {
+                formattedLine += " (inactive)";
+            }
+
+            list.Add(formattedLine);
+        }
+
+        private string MatchBonusName(int bonusCat, int bonusValue)
+        {
+            if (this.Bonus1Type == bonusCat && this.Bonus1 == bonusValue)
+                return nameof(this.Bonus1);
+            if (this.Bonus2Type == bonusCat && this.Bonus2 == bonusValue)
+                return nameof(this.Bonus2);
+            if (this.Bonus3Type == bonusCat && this.Bonus3 == bonusValue)
+                return nameof(this.Bonus3);
+            if (this.Bonus4Type == bonusCat && this.Bonus4 == bonusValue)
+                return nameof(this.Bonus4);
+            if (this.Bonus5Type == bonusCat && this.Bonus5 == bonusValue)
+                return nameof(this.Bonus5);
+            if (this.Bonus6Type == bonusCat && this.Bonus6 == bonusValue)
+                return nameof(this.Bonus6);
+            if (this.Bonus7Type == bonusCat && this.Bonus7 == bonusValue)
+                return nameof(this.Bonus7);
+            if (this.Bonus8Type == bonusCat && this.Bonus8 == bonusValue)
+                return nameof(this.Bonus8);
+            if (this.Bonus9Type == bonusCat && this.Bonus9 == bonusValue)
+                return nameof(this.Bonus9);
+            if (this.Bonus10Type == bonusCat && this.Bonus10 == bonusValue)
+                return nameof(this.Bonus10);
+            if (this.ExtraBonusType == bonusCat && this.ExtraBonus == bonusValue)
+                return nameof(this.ExtraBonus);
+
+            return "";
         }
 
         protected virtual void WriteFocusLine(GameClient client, IList<string> list, int focusCat, int focusLevel)
         {
-            if (SkillBase.CheckPropertyType((eProperty)focusCat, ePropertyType.Focus))
+            if (!SkillBase.CheckPropertyType((eProperty)focusCat, ePropertyType.Focus))
+                return;
+            if (focusLevel <= 0)
+                return;
+
+            string propertyName = SkillBase.GetPropertyName(client, (eProperty)focusCat);
+            if (string.IsNullOrEmpty(propertyName))
+                propertyName = "UnknownFocus";
+
+            string line = $"- {propertyName}: {focusLevel} lvls";
+
+            bool itemAllInactive = false;
+            if (client.Player != null && client.Player.Level < this.BonusLevel)
             {
-                //- Body Magic: 4 lvls
-                list.Add(string.Format("- {0}: {1} lvls", SkillBase.GetPropertyName(client, (eProperty)focusCat), focusLevel));
+                itemAllInactive = true;
             }
+
+            string bonusName = MatchBonusName(focusCat, focusLevel);
+
+            bool passBonusCondition = IsBonusConditionMet(bonusName, client.Player);
+
+            if (itemAllInactive || !passBonusCondition)
+            {
+                line += " (inactive)";
+            }
+
+            list.Add(line);
         }
 
+        /// <summary>
+        /// Checks if the player meets the custom bonus conditions for a given bonusName
+        /// (ChampionLevel, MLlevel, IsRenaissance).
+        /// </summary>
+        private bool IsBonusConditionMet(string bonusName, GamePlayer player)
+        {
+            var cond = this.BonusConditions?.FirstOrDefault(
+                b => b.BonusName.Equals(bonusName, StringComparison.InvariantCultureIgnoreCase));
+
+            if (cond == null)
+                return true;
+
+            // If item requires ChampionLevel or MLlevel or Renaissance
+            if (cond.ChampionLevel > 0 && player.ChampionLevel < cond.ChampionLevel)
+                return false;
+            if (cond.MlLevel > 0 && player.MLLevel < cond.MlLevel)
+                return false;
+            if (cond.IsRenaissanceRequired && !player.IsRenaissance)
+                return false;
+
+            return true;
+        }
 
         protected virtual bool IsPvEBonus(eProperty property)
         {

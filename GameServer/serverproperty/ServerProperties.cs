@@ -2544,8 +2544,8 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("spells", "spell_interrupt_max_intermediate_stagelength", "Max length of stage 2, 1000 = 1 second. 999999 to disable", 3000)]
         public static int SPELL_INTERRUPT_MAX_INTERMEDIATE_STAGELENGTH;
 
-        [ServerProperty("spells", "spell_charm_named_check", "Prevents charm spell to work on Named Mobs, 0 = disable, 1 = enable", 1)]
-        public static int SPELL_CHARM_NAMED_CHECK;
+        [ServerProperty("spells", "spell_charm_isboss_check", "Prevents charm spell to work on Bosses, 0 = disable, 1 = enable", 1)]
+        public static int SPELL_CHARM_ISBOSS_CHECK;
 
         [ServerProperty("damnation", "max_damnation_duration", "Maximum duration (in seconds) for the Damnation effect. Set to 0 for no cap.", 600)]
         public static int MAX_DAMNATION_DURATION;

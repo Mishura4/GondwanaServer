@@ -20,6 +20,8 @@ namespace DOLDatabase.Tables
         private string needMoreMoneyText;
         private string validateText;
         private string interactText;
+        private string requirementsReachedEmote;
+        private int requirementsReachedSpellId;
         private string resource1;
         private string resource2;
         private string resource3;
@@ -101,6 +103,28 @@ namespace DOLDatabase.Tables
             set
             {
                 validateText = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string RequirementsReachedEmote
+        {
+            get => requirementsReachedEmote;
+            set
+            {
+                requirementsReachedEmote = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int RequirementsReachedSpellId
+        {
+            get => requirementsReachedSpellId;
+            set
+            {
+                requirementsReachedSpellId = value;
                 Dirty = true;
             }
         }

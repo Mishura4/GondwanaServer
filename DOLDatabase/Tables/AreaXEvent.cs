@@ -17,6 +17,9 @@ namespace DOLDatabase.Tables
         private bool? m_playersLeave;
         private bool? m_resetEvent;
         private int m_timerCount;
+        private bool m_allowItemDestroy;
+        private int m_useItemEffect;
+        private int m_useItemSound;
 
         [DataElement(AllowDbNull = false, Varchar = 255, Index = true)]
         public string EventID
@@ -151,6 +154,27 @@ namespace DOLDatabase.Tables
                 m_timerCount = value;
                 Dirty = true;
             }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool AllowItemDestroy
+        {
+            get => m_allowItemDestroy;
+            set { m_allowItemDestroy = value; Dirty = true; }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int UseItemEffect
+        {
+            get => m_useItemEffect;
+            set { m_useItemEffect = value; Dirty = true; }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int UseItemSound
+        {
+            get => m_useItemSound;
+            set { m_useItemSound = value; Dirty = true; }
         }
     }
 }

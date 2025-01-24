@@ -1687,6 +1687,7 @@ namespace DOL.AI.Brain
                 case "DeathClaw":
                 case "CallAreaEffect":
                 case "BumpSpell":
+                case "OmniHarm":
                     if (!LivingHasEffect(lastTarget as GameLiving, spell))
                     {
                         Body.TargetObject = lastTarget;

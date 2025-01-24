@@ -14,4 +14,11 @@ namespace DOL.GameEvents
         Send,
         Confirm
     }
+
+    public enum SecondaryAnnonceType
+    {
+        Center,
+        Log,
+        Send
+    }
 }

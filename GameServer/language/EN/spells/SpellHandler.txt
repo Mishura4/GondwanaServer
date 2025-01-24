@@ -104,6 +104,8 @@ SpellHandler.IchorOfTheDeep.HitPlayer:		You hit {0} for {1} damage(s).
 SpellHandler.OmniHeal.SelfHealed:		You gain {0} endurance and {1} power points.
 SpellHandler.OmniHeal.TargetHealed:		You heal {0} for {1} endurance and {2} power points.
 SpellHandler.OmniHeal.YouAreHealed:		You are healed by {0} for {1} endurance and {2} power points.
+SpellHandler.OmniHarm.InflictLossesToTarget:	You also inflict {0} Endurance and {1} Power losses to {2}!
+SpellHandler.OmniHarm.InflictLossesToYou:		{0} inflicts {1} Endurance and {2} Power losses to you!
 
 SpellHandler.HealSpell.TargetDead:		{0} is dead!
 SpellHandler.HealSpell.NoHelp:			That player does not want assistance.

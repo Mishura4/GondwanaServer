@@ -22,12 +22,13 @@ using DOL.Database;
 using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.Geometry;
+using DOL.Language;
 
 namespace DOL.GS.Housing
 {
     public class GameLotMarker : GameStaticItem
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private DBHouse m_dbitem;
 
@@ -46,15 +47,15 @@ namespace DOL.GS.Housing
         public override IList GetExamineMessages(GamePlayer player)
         {
             IList list = new ArrayList();
-            list.Add("You target lot number " + DatabaseItem.HouseNumber + ".");
+            list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Housing.LotMarker.TargetLotNumber", DatabaseItem.HouseNumber));
 
             if (string.IsNullOrEmpty(DatabaseItem.OwnerID))
             {
-                list.Add(" It can be bought for " + Money.GetString(HouseTemplateMgr.GetLotPrice(DatabaseItem)) + ".");
+                list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Housing.LotMarker.ItCanBeBoughtFor", Money.GetString(HouseTemplateMgr.GetLotPrice(DatabaseItem))));
             }
             else if (!string.IsNullOrEmpty(DatabaseItem.Name))
             {
-                list.Add(" It is owned by " + DatabaseItem.Name + ".");
+                list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Housing.LotMarker.ItIsOwnedBy", DatabaseItem.Name));
             }
 
             return list;
@@ -72,14 +73,14 @@ namespace DOL.GS.Housing
                 //the player might be targeting a lot he already purchased that has no house on it yet
                 if (house.HouseNumber != DatabaseItem.HouseNumber && player.Client.Account.PrivLevel != (int)ePrivLevel.Admin)
                 {
-                    ChatUtil.SendSystemMessage(player, "You already own a house!");
+                    ChatUtil.SendSystemMessage(player, "Housing.LotMarker.YouAlreadyOwnAHouse");
                     return false;
                 }
             }
 
             if (string.IsNullOrEmpty(DatabaseItem.OwnerID))
             {
-                player.Out.SendCustomDialog("Do you want to buy this lot?\r\n It costs " + Money.GetString(HouseTemplateMgr.GetLotPrice(DatabaseItem)) + "!", BuyLot);
+                player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "Housing.LotMarker.DoYouWantToBuyThisLot1") + "\r\n" + LanguageMgr.GetTranslation(player.Client.Account.Language, "Housing.LotMarker.DoYouWantToBuyThisLot2", Money.GetString(HouseTemplateMgr.GetLotPrice(DatabaseItem))), BuyLot);
             }
             else
             {
@@ -89,7 +90,7 @@ namespace DOL.GS.Housing
                 }
                 else
                 {
-                    ChatUtil.SendSystemMessage(player, "You do not own this lot!");
+                    ChatUtil.SendSystemMessage(player, "Housing.LotMarker.YouDoNotOwnThisLot");
                 }
             }
 
@@ -108,14 +109,14 @@ namespace DOL.GS.Housing
 
                 if (HouseMgr.GetHouseNumberByPlayer(player) != 0 && player.Client.Account.PrivLevel != (int)ePrivLevel.Admin)
                 {
-                    ChatUtil.SendMerchantMessage(player, "You already own another lot or house (Number " + HouseMgr.GetHouseNumberByPlayer(player) + ").");
+                    ChatUtil.SendMerchantMessage(player, "Housing.LotMarker.YouAlreadyOwnAnotherLotOrHouse", HouseMgr.GetHouseNumberByPlayer(player));
                     return;
                 }
 
                 var totalCost = Currency.Copper.Mint(HouseTemplateMgr.GetLotPrice(DatabaseItem));
                 if (player.RemoveMoney(totalCost))
                 {
-                    player.SendMessage(string.Format("You just bought this lot for {0}.", totalCost.ToText()), eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
+                    player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Housing.LotMarker.YouJustBoughtThisLotFor", totalCost.ToText()), eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
                     InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, totalCost.Amount);
                     DatabaseItem.LastPaid = DateTime.Now;
                     DatabaseItem.OwnerID = player.ObjectId;
@@ -123,7 +124,7 @@ namespace DOL.GS.Housing
                 }
                 else
                 {
-                    ChatUtil.SendMerchantMessage(player, "You dont have enough money!");
+                    ChatUtil.SendMerchantMessage(player, "Housing.LotMarker.YouDontHaveEnoughMoney");
                 }
             }
         }
@@ -190,7 +191,7 @@ namespace DOL.GS.Housing
                 return true;
             }
 
-            ChatUtil.SendSystemMessage(player, "You do not own this lot!");
+            ChatUtil.SendSystemMessage(player, "Housing.LotMarker.YouDoNotOwnThisLot");
 
             return false;
         }
@@ -229,9 +230,9 @@ namespace DOL.GS.Housing
 
         public virtual bool OnPlayerSell(GamePlayer player, InventoryItem item)
         {
-            if (!item.IsDropable)
+            if (!item.IsDropable || item.Flags == 1)
             {
-                ChatUtil.SendMerchantMessage(player, "This item can't be sold.");
+                ChatUtil.SendMerchantMessage(player, "Housing.LotMarker.ThisItemCantBeSold");
                 return false;
             }
 

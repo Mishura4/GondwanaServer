@@ -21,3 +21,4 @@ TaskMaster.GainMoney:		You have gained {0} for this task.
 TaskMaster.Disabled:		I cannot take this from you at this time.
 TaskMaster.NoProfession:	You have not yet chosen a crafting profession. Please Look for a Craft Master to choose a profession and come back here with the token to receive your crafting bonuses.
 TaskMaster.GainCraftingPoints:	You have gained {0} points in your main crafting skill and {1} points in your secondary crafting skills.
+TaskMaster.NoServicesAround:	I haven't heard of anyone nearby needing any services right now.

@@ -5,7 +5,7 @@ Tasks.PvETasks: ===== TACHES PvE =====
 Tasks.CraftingTasks: ===== TACHES D'ARTISANAT =====
 Tasks.SpecialTasks: ===== TACHES SPECIALES =====
 Tasks.TaskCompletionTokenInfo: Chaque jeton de tâches PvP, RvR, GvG, PvE ou d'Artisanat doit être remis au Maître des Tâches pour recevoir des récompenses.
-Tasks.SpecialTaskCompletionTokenInfo: Les jetons de tâches spéciales sont spécifiques à chaque tâche. Ces jetons débloquent de nouveaux titres de joueur auxquels ont associés des bonus spéciaux.
+Tasks.SpecialTaskCompletionTokenInfo: Les jetons de tâches spéciales sont spécifiques à chaque tâche. Ces jetons débloquent de nouveaux titres de joueur auxquels sont associés des bonus spéciaux.
 Tasks.SnapshotTitle: TACHES
 Tasks.KillEnemyPlayersGroup: Tuez des joueurs ennemis en étant groupé
 Tasks.KillEnemyPlayersAlone: Tuez des joueurs ennemis seul

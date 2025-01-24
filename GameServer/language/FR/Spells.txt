@@ -18,6 +18,7 @@ DelveInfo.RecastTime:           Délai de réutilisation:
 DelveInfo.Target:               Cible : {0}
 DelveInfo.Value:                Valeur : {0}
 DelveInfo.ValueNegative:        Valeur : -{0}
+DelveInfo.Destination:			Destination : {0}
 
 # Spell ShortDescriptions
 SpellDescription.DirectDamage.MainDescription:		Inflige {0} {1} à la cible.
@@ -35,8 +36,10 @@ SpellDescription.SpeedDecrease.MainDescription:		La cible est ralentie de {0}%.
 SpellDescription.SpeedDecrease.Rooted:				La cible est immobilisée sur place.
 SpellDescription.Slow.MainDescription:				La cible est ralentie de {0}%. Il n'y a aucune immunité contre ce sort et il ne peut pas être interrompu par des coups.
 SpellDescription.Bladeturn.MainDescription:			Crée une « bulle » qui absorbe les dégâts d'un seul coup de mêlée.
-SpellDescription.Demi.MainDescription:				{0} réduit la vie de l'ennemi de moitié. Il n'affecte pas les ennemis faibles ni ceux dont le niveau est supérieur à {1}. Ce sort affecte rarement les fantômes, démons, nécromanciens, banshees et vampiirs.
-SpellDescription.Quarter.MainDescription:			{0} réduit la vie de l'ennemi à un quart. Il n'affecte pas les ennemis faibles ni ceux dont le niveau est supérieur à {1}. Ce sort affecte rarement les fantômes, démons, nécromanciens, banshees et vampiirs.
+SpellDescription.Demi.MainDescription:				{0} réduit la vie de l'ennemi de moitié.
+SpellDescription.Quarter.MainDescription:			{0} réduit la vie de l'ennemi à un quart.
+SpellDescription.DemiQuarter.AmnesiaDescription:	N'affecte pas les ennemis faibles ni ceux dont le niveau est supérieur à {0}.
+SpellDescription.DemiQuarter.EndDescription:		Ce sort affecte rarement les fantômes, démons, nécromanciens, banshees et vampiirs.
 SpellDescription.LifeTransfer.MainDescription:		Transfère {0} points de vie de l'incantateur vers sa cible.
 SpellDescription.Heal.MainDescription:				La cible est soignée de {0} points de vie.
 SpellDescription.Disease.MainDescription:			Inflige une maladie invalidante qui ralentit la cible de {0}%, réduisant sa force de {1}% et inhibant les effets de soins de {2}%.
@@ -133,6 +136,7 @@ SpellDescription.SummonIcebrand.MainDescription1:			Invoque Icebrand, la lame ma
 SpellDescription.SummonIcebrand.MainDescription2:			Le type de dégâts d'Icebrand est Froid.
 SpellDescription.GoldenSpearJavelin.MainDescription:		Invoque 5 javelots magiques.
 SpellDescription.OmniHeal.MainDescription:					La cible récupère {0}% de points de vie, d'endurance et de mana.
+SpellDescription.OmniHarm.MainDescription:					La cible perd aussi {0} point(s) d'endurance et {1} point(s) de mana.
 SpellDescription.OmniLifeDrain.MainDescription:				Inflige des dégâts à la cible. {0}% des dégâts sont rendus sous forme de vie, {1}% sous forme de mana et {2}% sous forme d'endurance au lanceur du sort.
 SpellDescription.PowerHeal.MainDescription:					Restaure {0}% de la réserve de mana de la cible.
 SpellDescription.Silence.MainDescription:					L'ennemi est réduit au silence et ne peut pas lancer de sorts pendant {0} secondes.

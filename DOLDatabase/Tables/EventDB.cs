@@ -41,6 +41,7 @@ namespace DOLDatabase.Tables
         private string m_resetEventId;
         private long m_chanceLastTimeChecked;
         private byte m_AnnonceType;
+        private byte m_secondaryAnnonceType;
         private int m_Discord;
         private int m_instancedConditionType;
         private string m_areaStartingId;
@@ -183,6 +184,21 @@ namespace DOLDatabase.Tables
             set
             {
                 m_AnnonceType = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public byte SecondaryAnnonceType
+        {
+            get
+            {
+                return m_secondaryAnnonceType;
+            }
+
+            set
+            {
+                m_secondaryAnnonceType = value;
                 Dirty = true;
             }
         }

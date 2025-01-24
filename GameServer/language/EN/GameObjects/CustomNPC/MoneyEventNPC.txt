@@ -3,7 +3,11 @@
 MoneyEventNPC.NeedMoreMoneyTextDefault:         Thank you! However I may need more money to be able to launch the event...
 MoneyEventNPC.ValidateTextDefault:              Well... Tt seems you were able to raise enough funds to be able to launch the event!
 MoneyEventNPC.InteractTextDefault:              Greetings! I would need {0} gold to launch my new event! And I only have {1}, I'm counting on you to get some funding!
-MoneyEventNPC.NeedMoreResource1TextDefault:              Greetings! I would need {0} gold and {2} {3} to launch my new event! And I only have {1} gold, {4} {3}, I'm counting on you to get some funding!
-MoneyEventNPC.NeedMoreResource2TextDefault:              Greetings! I would need {0} gold, {2] {3} and {4} {5} to launch my new event! And I only have {1} gold, {6} {3}, {8} {5}, I'm counting on you to get some funding!
-MoneyEventNPC.NeedMoreResource3TextDefault:              Greetings! I would need {0} gold, {2] {3}, {4} {5} and {6} {7} to launch my new event! And I only have {1} gold, {8} {3}, {10} {5}, {11} {7}, I'm counting on you to get some funding!
-MoneyEventNPC.NeedMoreResource4TextDefault:              Greetings! I would need {0} gold, {2] {3}, {4} {5}, {6} {7} and {8} {9} to launch my new event! And I only have {1} gold, {10} {3}, {12} {5}, {14} {7}, {16} {9}, I'm counting on you to get some funding!
+MoneyEventNPC.NeedMoreResource1TextDefault:		Greetings! I would need {0} gold, plus {2} {3} to launch my event! Currently, I only have {1} gold and {4} {3}. I'm counting on you!
+MoneyEventNPC.NeedMoreResource2TextDefault:		Greetings! I would need {0} gold, plus {2} {3} and {4} {5} to launch my event! Currently, I only have {1} gold, {6} {3}, and {7} {5}. I’m counting on you!
+MoneyEventNPC.NeedMoreResource3TextDefault:		Greetings! I would need {0} gold, plus {2} {3}, {4} {5}, and {6} {7} to launch my event! Currently, I only have {1} gold, {8} {3}, {9} {5}, and {10} {7}. I'm counting on you!
+MoneyEventNPC.NeedMoreResource4TextDefault:		Greetings! I would need {0} gold, plus {2} {3}, {4} {5}, {6} {7}, and {8} {9} to launch my event! Currently, I only have {1} gold, {10} {3}, {11} {5}, {12} {7}, and {13} {9}. I'm counting on you!
+MoneyEventNPC.MoneyRequirementsReached:			We have reached the exact amount of money need! Thank you!
+MoneyEventNPC.ResourceRequirementsReached:		We have reached the exact amount of {0} we need! Thank you!
+MoneyEventNPC.NoNeedMoreMoney:					No more money is needed, but I appreciate it!
+MoneyEventNPC.NoNeedMoreResources:				No more {0} is needed, thank you.

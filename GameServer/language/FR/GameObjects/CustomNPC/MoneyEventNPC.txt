@@ -3,7 +3,11 @@
 MoneyEventNPC.NeedMoreMoneyTextDefault:         Merci, mais il me faudrait davantage d'argent pour pouvoir lancer l'évènement...
 MoneyEventNPC.ValidateTextDefault:              Bien... vous avez pu réunir la somme convenue pour pouvoir lancer l'évènement!
 MoneyEventNPC.InteractTextDefault:              Salutations! Il me faudrait {0} pièces d'or pour lancer mon évenement! Et je ne dispose que de {1} pièces d'or, je compte sur toi !
-MoneyEventNPC.NeedMoreResource1TextDefault:              Salutations! Il me faudrait {0} pièces d'or and {2} {3} pour lancer mon évenement! Et je ne dispose que de {1} pièces d'or, {4} {5}, je compte sur toi !
-MoneyEventNPC.NeedMoreResource2TextDefault:              Salutations! Il me faudrait {0} pièces d'or, {2] {3} and {4} {5} pour lancer mon évenement! Et je ne dispose que de {1} pièces d'or, {6} {7}, {8} {9}, je compte sur toi !
-MoneyEventNPC.NeedMoreResource3TextDefault:              Salutations! Il me faudrait {0} pièces d'or, {2] {3}, {4} {5} and {6} {7} pour lancer mon évenement! Et je ne dispose que de {1} pièces d'or, {8} {9}, {10} {11}, je compte sur toi !
-MoneyEventNPC.NeedMoreResource4TextDefault:              Salutations! Il me faudrait {0} pièces d'or, {2] {3}, {4} {5}, {6} {7} and {8} {9} pour lancer mon évenement! Et je ne dispose que de {1} pièces d'or, {10} {11}, {12} {13}, {14} {15}, {16} {17}, je compte sur toi !
+MoneyEventNPC.NeedMoreResource1TextDefault:		Salutations ! Il me faudrait {0} pièces d'or et {2} {3} pour lancer mon événement ! Actuellement, je n'ai que {1} pièces d'or et {4} {3}. Je compte sur toi!
+MoneyEventNPC.NeedMoreResource2TextDefault:		Salutations ! Il me faudrait {0} pièces d'or, ainsi que {2} {3} et {4} {5} pour lancer mon événement ! Actuellement, je n'ai que {1} pièces d'or, {6} {3}, et {7} {5}. Je compte sur toi!
+MoneyEventNPC.NeedMoreResource3TextDefault:		Salutations ! Il me faudrait {0} pièces d'or, ainsi que {2} {3}, {4} {5}, et {6} {7} pour lancer mon événement ! Actuellement, je n'ai que {1} pièces d'or, {8} {3}, {9} {5}, et {10} {7}. Je compte sur toi!
+MoneyEventNPC.NeedMoreResource4TextDefault:		Salutations ! Il me faudrait {0} pièces d'or, ainsi que {2} {3}, {4} {5}, {6} {7}, et {8} {9} pour lancer mon événement ! Actuellement, je n'ai que {1} pièces d'or, {10} {3}, {11} {5}, {12} {7}, et {13} {9}. Je compte sur toi!
+MoneyEventNPC.MoneyRequirementsReached:			Le compte est bon ! Nous avons pu réunir les fonds nécessaires !
+MoneyEventNPC.ResourceRequirementsReached:		Nous avons pu réunir le nombre de {0} nécessaires ! Merci !
+MoneyEventNPC.NoNeedMoreMoney:					Nous avons déjà assez d’argent, merci !
+MoneyEventNPC.NoNeedMoreResources:				Je n’ai pas besoin de plus de {0}, merci.

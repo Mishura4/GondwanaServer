@@ -60,15 +60,29 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             int recastSeconds = Spell.RecastDelay / 1000;
-            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Demi.MainDescription", Spell.Name, Spell.AmnesiaChance);
+            string mainDesc;
+
+            if (Spell.AmnesiaChance > 0)
+            {
+                string shortPart1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Demi.MainDescription", Spell.Name);
+                string shortPart2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DemiQuarter.AmnesiaDescription", Spell.AmnesiaChance);
+
+                mainDesc = shortPart1 + " " + shortPart2;
+            }
+            else
+            {
+                mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Demi.MainDescription", Spell.Name);
+            }
+
+            string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DemiQuarter.EndDescription");
 
             if (Spell.RecastDelay > 0)
             {
-                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                return mainDesc + "\n\n" + secondDesc;
+                string thirdDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc + "\n\n" + thirdDesc;
             }
 
-            return mainDesc;
+            return mainDesc + "\n\n" + secondDesc;
         }
     }
 }

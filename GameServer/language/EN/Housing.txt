@@ -59,6 +59,19 @@ HousingPlaceItemHandler.IndoorObjectPlaced:		Objet intérieur placé. {0} places
 HousingPlaceItemHandler.NoHookpoint:			Il n'y a plus de point d'ancrage !
 HousingPlaceItemHandler.PutMoney:				Vous déposez de l'argent sur le compte de votre maison.
 
+# /Housing LotMarker
+Housing.LotMarker.TargetLotNumber:				You target lot number {0}.
+Housing.LotMarker.ItCanBeBoughtFor:				It can be bought for {0}.
+Housing.LotMarker.ItIsOwnedBy:					It is owned by {0}.
+Housing.LotMarker.YouAlreadyOwnAHouse:			You already own a house!
+Housing.LotMarker.DoYouWantToBuyThisLot1:		Do you want to buy this lot?
+Housing.LotMarker.DoYouWantToBuyThisLot2:		It costs {0}!
+Housing.LotMarker.YouDoNotOwnThisLot:			You do not own this lot!
+Housing.LotMarker.YouAlreadyOwnAnotherLotOrHouse:	You already own another lot or house (Number {0}).
+Housing.LotMarker.YouJustBoughtThisLotFor:		You just bought this lot for {0}.
+Housing.LotMarker.YouDontHaveEnoughMoney:		You don't have enough money!
+Housing.LotMarker.ThisItemCantBeSold:			This item can't be sold.
+
 Scripts.Player.Housing.BadShieldBanner:			That is not a valid shield or banner object.
 Scripts.Player.Housing.CantBeSold:			This item cannot be sold!
 Scripts.Player.Housing.CarpetsRemoved:			Your carpets have been removed.

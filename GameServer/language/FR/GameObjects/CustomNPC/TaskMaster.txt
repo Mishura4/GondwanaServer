@@ -21,3 +21,4 @@ TaskMaster.GainMoney:		Vous avez gagné {0} pour cette tâche.
 TaskMaster.Disabled:		Je ne peux pas accepter cela pour le moment.
 TaskMaster.NoProfession:	Vous n'avez pas encore choisi de profession d'artisanat. Veuillez chercher un Maître Artisan pour choisir une profession et revenez ici avec le jeton pour recevoir vos bonus d'artisanat.
 TaskMaster.GainCraftingPoints:	Vous avez gagné {0} points dans votre compétence principale d'artisanat et {1} points dans vos compétences secondaires d'artisanat.
+TaskMaster.NoServicesAround:	Il semble n'y avoir personne à proximité ayant besoin de services pour le moment.

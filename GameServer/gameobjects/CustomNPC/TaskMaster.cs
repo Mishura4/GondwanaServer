@@ -19,7 +19,7 @@ namespace DOL.GS
 {
     public class TaskMaster : GameNPC
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         public TextNPCCondition Condition { get; private set; }
 
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
@@ -54,30 +54,48 @@ namespace DOL.GS
             {
                 case "services":
                     {
-                        //get list of all itextnpcs from db, that have isintaskmaster==1
-                        IList<DBTextNPC> taskGivingNPCs = GameServer.Database.SelectObjects<DBTextNPC>(DB.Column("IsInTaskMaster").IsEqualTo("1"));
+                        IList<DBTextNPC> taskGivingNPCs =
+                            GameServer.Database.SelectObjects<DBTextNPC>(DB.Column("IsInTaskMaster").IsEqualTo("1"));
+
+                        bool foundAnyServices = false;
+
                         foreach (var taskNPC in taskGivingNPCs)
                         {
                             Condition = new TextNPCCondition(taskNPC.Condition);
-                            if (Condition.CheckAccess(player))
-                            {
-                                var text = taskNPC.MobName + "\n";
-                                if (player.Client.Account.Language == "EN")
-                                    text += taskNPC.TaskDescEN;
-                                else if (player.Client.Account.Language == "FR")
-                                    text += taskNPC.TaskDescFR;
-                                //get taskNPC 
-                                var mob = DOLDB<Mob>.SelectObject(DB.Column("Mob_ID").IsEqualTo(taskNPC.MobID));
-                                var region = WorldMgr.GetRegion(mob.Region);
-                                if (region != null)
-                                {
-                                    var zone = region.GetZone(mob.X, mob.Y);
-                                    if (zone != null)
-                                    {
-                                        player.Out.SendMessage(text + "\n" + zone.Description + "\n", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                                    }
-                                }
-                            }
+
+                            if (!Condition.CheckAccess(player))
+                                continue;
+
+                            var mob = DOLDB<Mob>.SelectObject(DB.Column("Mob_ID").IsEqualTo(taskNPC.MobID));
+                            if (mob == null)
+                                continue;
+
+                            if (mob.Region != this.CurrentRegionID)
+                                continue;
+
+                            // Retrieve the region and zone for the final text
+                            var region = WorldMgr.GetRegion(mob.Region);
+                            if (region == null)
+                                continue;
+
+                            var zone = region.GetZone(mob.X, mob.Y);
+                            if (zone == null)
+                                continue;
+
+                            foundAnyServices = true;
+                            var text = $"{taskNPC.MobName}\n";
+
+                            if (player.Client.Account.Language == "EN")
+                                text += taskNPC.TaskDescEN;
+                            else if (player.Client.Account.Language == "FR")
+                                text += taskNPC.TaskDescFR;
+
+                            player.Out.SendMessage(text + "\n" + zone.Description + "\n", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        }
+
+                        if (!foundAnyServices)
+                        {
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.NoServicesAround"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         }
                         break;
                     }

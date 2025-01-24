@@ -19,7 +19,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
+using Discord;
 using DOL.Database;
 using DOL.GS.Delve;
 using DOL.GS.Effects;
@@ -29,6 +31,7 @@ using DOL.GS.Spells;
 using DOL.GS.Styles;
 using DOL.Language;
 using log4net;
+using static ICSharpCode.SharpZipLib.Zip.ExtendedUnixData;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
@@ -224,24 +227,34 @@ namespace DOL.GS.PacketHandler.Client.v168
                             }
                         }
 
-                        if (!invItem.IsDropable || !invItem.IsPickable || invItem.IsIndestructible)
+                        if (!invItem.IsDropable || !invItem.IsPickable || !invItem.IsTradable || invItem.IsIndestructible || !invItem.CanUseInRvR || invItem.Flags == 2 || (invItem.Flags == 1 && invItem.IsDropable))
                             objectInfo.Add(" ");
 
                         if (!invItem.IsPickable)
+                            objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotPick"));
+
+                        if (!invItem.IsTradable)
                             objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotTraded"));
 
                         if (!invItem.IsDropable)
+                        {
+                            objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.GetShortItemInfo.NoDrop"));
                             objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotSold"));
+                        }
 
                         if (invItem.IsIndestructible)
                             objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotDestroyed"));
 
+                        if (!invItem.CanUseInRvR)
+                            objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR"));
 
-                        if (invItem.BonusLevel > 0)
+                        if (invItem.Flags == 1 && invItem.IsDropable)
+                            objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotSold"));
+
+                        if (invItem.Flags == 2)
                         {
                             objectInfo.Add(" ");
-                            objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.BonusLevel", invItem.BonusLevel));
-
+                            objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.EffectWhenSitting"));
                         }
 
                         //Add admin info
@@ -1109,13 +1122,29 @@ namespace DOL.GS.PacketHandler.Client.v168
             if (item.Object_Type == (int)eObjectType.Magical && item.Item_Type == 40) // potion
                 WritePotionInfo(objectInfo, item, client);
 
+            if (!item.IsPickable)
+                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotPick"));
+
+            if (!item.IsTradable)
+                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotTraded"));
+
             if (!item.IsDropable)
             {
                 objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.GetShortItemInfo.NoDrop"));
-                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.GetShortItemInfo.NoSell"));
+                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotSold"));
             }
-            if (!item.IsPickable)
-                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.GetShortItemInfo.NoTrade"));
+
+            if (item.IsIndestructible)
+                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotDestroyed"));
+
+            if (!item.CanUseInRvR)
+                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR"));
+
+            if (item.Flags == 1 && item.IsDropable)
+                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CannotSold"));
+
+            if (item.Flags == 2)
+                objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.EffectWhenSitting"));
 
             foreach (string s in objectInfo)
                 str += " " + s;
@@ -1348,6 +1377,11 @@ namespace DOL.GS.PacketHandler.Client.v168
 
             if (!shortInfo)
             {
+                if (item.BonusLevel > 0)
+                {
+                    output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.BonusLevel", item.BonusLevel));
+                }
+
                 if (item.ProcSpellID != 0 || item.ProcSpellID1 != 0 || item.SpellID != 0 || item.SpellID1 != 0)
                 {
                     int requiredLevel = item.LevelRequirement > 0 ? item.LevelRequirement : Math.Min(50, item.Level);

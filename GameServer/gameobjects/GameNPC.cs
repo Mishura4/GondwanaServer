@@ -1083,6 +1083,19 @@ namespace DOL.GS
         public override bool IsUnderwater
             => Flags.HasFlag(eFlags.SWIMMING) || base.IsUnderwater;
 
+        private bool m_forceUpdateSpawnPos = false;
+
+        /// <summary>
+        /// If true, next time SaveIntoDatabase() is called,
+        /// we overwrite the DB's X/Y/Z with our *current* position.
+        /// Otherwise we keep old spawn coords.
+        /// </summary>
+        public bool ForceUpdateSpawnPos
+        {
+            get => m_forceUpdateSpawnPos;
+            set => m_forceUpdateSpawnPos = value;
+        }
+
         /// <summary>
         /// Set the NPC to stealth or unstealth
         /// </summary>
@@ -2227,7 +2240,10 @@ namespace DOL.GS
             GuildName = dbMob.Guild;
             ExamineArticle = dbMob.ExamineArticle;
             MessageArticle = dbMob.MessageArticle;
+
             Position = Position.Create(dbMob.Region, dbMob.X, dbMob.Y, dbMob.Z, dbMob.Heading);
+            this.SpawnPosition = this.Position;
+
             m_maxSpeedBase = (short)dbMob.Speed;
             m_currentSpeed = 0;
             m_tension = 0;
@@ -2411,13 +2427,27 @@ namespace DOL.GS
             mob.Guild = GuildName;
             mob.ExamineArticle = ExamineArticle;
             mob.MessageArticle = MessageArticle;
-            mob.X = (int)Position.X;
-            mob.Y = (int)Position.Y;
-            mob.Z = (int)Position.Z;
-            mob.Heading = Heading;
             mob.Speed = MaxSpeedBase;
             mob.Region = CurrentRegionID;
             mob.Realm = (byte)Realm;
+
+            if (ForceUpdateSpawnPos)
+            {
+                mob.X = (int)this.Position.X;
+                mob.Y = (int)this.Position.Y;
+                mob.Z = (int)this.Position.Z;
+                mob.Heading = (ushort)this.Position.Orientation.InHeading;
+
+                this.SpawnPosition = this.Position;
+                ForceUpdateSpawnPos = false;
+            }
+            else
+            {
+                mob.X = (int)this.SpawnPosition.X;
+                mob.Y = (int)this.SpawnPosition.Y;
+                mob.Z = (int)this.SpawnPosition.Z;
+                mob.Heading = (ushort)this.SpawnPosition.Orientation.InHeading;
+            }
 
             //If mob is part of GroupMob we need to save the changing properties from PropertyDb which contains original value from db or new values from Commands
             if (this.MobGroups is { Count: 0 })

@@ -336,7 +336,6 @@ Commands.Players.Guild.InviteNotThis:				You cannot invite a member of this real
 Commands.Players.Guild.TerritoryPaid:				The amount of {0} Gold has been withdrawn from your guild's bank to fund your territories.
 Commands.Players.Guild.TerritoryNoMoney:			Your guild could not honor its debts and lost its conquered territories.  
 Commands.Players.Guild.TerritoryMeritPoints:		Territories occupation earns your guild {0} merit points.
-Commands.Players.Guild.TerritoryBeGuilded:			You must belong to a guild to see occupied territories.
 
 Commands.Players.Guild.Territories.WindowTitle:			[ TERRITORIES ]
 Commands.Players.Guild.Territories.TerritoriesOwned:	---- Territories owned by {0} ----
@@ -353,6 +352,7 @@ Commands.Players.Guild.Territories.TotalBPBonus:		Total bonus bounty points for 
 Commands.Players.Guild.Territories.Bonuses:				---- Territory Bonuses ----
 Commands.Players.Guild.Territories.DebuffDuration:		Nefarious effect duration
 Commands.Players.Guild.Territories.SpellRange:			Spell range
+Commands.Players.Guild.Territories.TerritoryBeGuilded:	You must belong to a regular guild to see Territories informations!
 
 Commands.Players.Guild.Subterritories.WindowTitle:			[ SUBTERRITORIES ]
 Commands.Players.Guild.Subterritories.TerritoriesOwned:		---- Subterritories owned by {0} ----
@@ -360,6 +360,7 @@ Commands.Players.Guild.Subterritories.TerritoriesOther:		---- Other subterritori
 Commands.Players.Guild.Subterritories.TerritoriesList:		---- Subterritories ----
 Commands.Players.Guild.Subterritories.TerritoryNeutral:		Neutral
 Commands.Players.Guild.Subterritories.TerritoryExpiresIn:	Expires in {0}
+Commands.Players.Guild.Subterritories.TerritoryBeGuilded:	You must belong to a regular guild to see Subterritories informations!
 
 
 Commands.Players.Guild.TotalMemberOnline:   Number of online players in the guild.

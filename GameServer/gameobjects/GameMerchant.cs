@@ -271,7 +271,7 @@ namespace DOL.GS
         public virtual void OnPlayerSell(GamePlayer player, InventoryItem item)
         {
             if (item == null || player == null) return;
-            if (!item.IsDropable)
+            if (!item.IsDropable || item.Flags == 1)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerSell.CantBeSold"), eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
                 return;
@@ -321,7 +321,7 @@ namespace DOL.GS
 
             long val = item.Price * itemCount / packSize * ServerProperties.Properties.ITEM_SELL_RATIO / 100;
 
-            if (!item.IsDropable)
+            if (!item.IsDropable || item.Flags == 1)
             {
                 val = 0;
             }

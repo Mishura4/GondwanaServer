@@ -10,6 +10,7 @@ using DOL.GS;
 using DOL.Language;
 using DOLDatabase.Tables;
 using System.Security.Cryptography;
+using DOL.GS.PacketHandler;
 
 namespace DOL.GameEvents
 {
@@ -25,6 +26,9 @@ namespace DOL.GameEvents
         public GameEvent MasterEvent { get; set; }
 
         private bool m_hasMobs = true;
+        public bool AllowItemDestroy { get; set; }
+        public int UseItemEffect { get; set; }
+        public int UseItemSound { get; set; }
 
         public GameEventAreaTrigger(GameEvent masterEvent, AreaXEvent db, AbstractArea area)
         {
@@ -95,16 +99,29 @@ namespace DOL.GameEvents
             PlayersLeave = db.PlayersLeave;
             ResetEvent = db.ResetEvent;
             TimerCount = db.TimerCount;
+            AllowItemDestroy = db.AllowItemDestroy;
+            UseItemEffect = db.UseItemEffect;
+            UseItemSound = db.UseItemSound;
         }
 
         private void LaunchTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            LaunchTimer.Stop();
             Reset();
 
             foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentAreas.Any(
                     a => ((AbstractArea)a).DbArea != null && AreaID == (((AbstractArea)a).DbArea.ObjectId))))
             {
                 ChatUtil.SendImportant(cl.Player, LanguageMgr.GetTranslation(cl.Account.Language, "Area.Event.Timer.Stop"));
+            }
+
+            if (ResetEvent == true)
+            {
+                MasterEvent.Reset();
+            }
+            else
+            {
+                Task.Run(() => MasterEvent.Stop(EndingConditionType.Timer));
             }
         }
 
@@ -115,13 +132,79 @@ namespace DOL.GameEvents
 
             if (useArgs.Item?.Id_nb == UseItem)
             {
+                if (MasterEvent.IsRunning)
+                {
+                    player.Out.SendMessage("You cannot use that item again for now!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+
                 lock (PlayersUsedItem)
                 {
-                    if (!PlayersUsedItem.Contains(player))
-                        PlayersUsedItem.Add(player);
+                    if (PlayersUsedItem.Contains(player))
+                        return;
                 }
-                TryStartEvent();
+
+                if (AllowItemDestroy)
+                {
+                    player.TempProperties.setProperty("AreaTriggerForDestroy", this);
+                    player.TempProperties.setProperty("UseItemSlot", useArgs.Slot);
+                    player.Out.SendCustomDialog($"Are you sure you want to use [{useArgs.Item.Name}]?", new CustomDialogResponse(UseItemDestroyConfirmation));
+                }
+                else
+                {
+                    lock (PlayersUsedItem)
+                    {
+                        PlayersUsedItem.Add(player);
+                    }
+
+                    player.Out.SendMessage($"You used [{useArgs.Item.Name}].", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    TryStartEvent();
+                }
             }
+        }
+
+        private static void UseItemDestroyConfirmation(GamePlayer player, byte response)
+        {
+            if (response != 0x01)
+                return;
+
+            var areaTrigger = player.TempProperties.getProperty<GameEventAreaTrigger>("AreaTriggerForDestroy", null);
+            var slot = player.TempProperties.getProperty<int>("UseItemSlot", -1);
+
+            player.TempProperties.removeProperty("AreaTriggerForDestroy");
+            player.TempProperties.removeProperty("UseItemSlot");
+
+            if (areaTrigger == null || slot < 0)
+                return;
+
+            var item = player.Inventory.GetItem((eInventorySlot)slot);
+            if (item == null)
+            {
+                player.Out.SendMessage("You no longer have that item in your backpack!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
+            player.Inventory.RemoveCountFromStack(item, 1);
+
+            lock (areaTrigger.PlayersUsedItem)
+            {
+                if (!areaTrigger.PlayersUsedItem.Contains(player))
+                    areaTrigger.PlayersUsedItem.Add(player);
+            }
+
+            player.Out.SendMessage($"You used [{item.Name}].", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            if (areaTrigger.UseItemEffect > 0)
+            {
+                player.Out.SendSpellEffectAnimation(player, player, (ushort)areaTrigger.UseItemEffect, 0, false, 1);
+            }
+
+            if (areaTrigger.UseItemSound > 0)
+            {
+                player.Out.SendSoundEffect((ushort)areaTrigger.UseItemSound, player.Position, 0);
+            }
+
+            areaTrigger.TryStartEvent();
         }
 
         private void PlayerWhisperEvent(DOLEvent e, object sender, EventArgs args)
@@ -192,6 +275,13 @@ namespace DOL.GameEvents
             // TODO: Clean up instances upstream?
             if (PlayersLeave == true && players == 0)
             {
+                bool isSinglePlayerInstance = (MasterEvent.InstancedConditionType == InstancedConditionTypes.Player);
+                string cancelMessage = isSinglePlayerInstance
+                    ? "You have left the area so the event is cancelled!"
+                    : "All players have left the area so the event is cancelled!";
+
+                ChatUtil.SendImportant(player, cancelMessage);
+
                 LaunchTimer.Stop();
                 if (ResetEvent == true)
                     MasterEvent.Reset();
@@ -237,31 +327,38 @@ namespace DOL.GameEvents
             
             TryStartEvent();
         }
-        
+
         public bool TryStartEvent()
         {
             if (!MasterEvent.IsReady)
                 return false;
 
+            if (MasterEvent.IsRunning || LaunchTimer.Enabled)
+                return false;
+
             if (!CheckConditions())
             {
-                if (TimerCount > 0 && !LaunchTimer.Enabled)
-                {
-                    LaunchTimer.Start();
-
-                    foreach (var player in PlayersInArea)
-                    {
-                        ChatUtil.SendImportant(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.Timer.Start", TimerCount));
-                    }
-                }
                 return false;
             }
-            
-            LaunchTimer.Stop();
+
+            if (LaunchTimer.Enabled)
+                LaunchTimer.Stop();
+
+            if (TimerCount > 0)
+            {
+                LaunchTimer.Interval = TimerCount * 1000;
+                LaunchTimer.Start();
+
+                foreach (var player in PlayersInArea)
+                {
+                    ChatUtil.SendImportant(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.Timer.Start", TimerCount));
+                }
+            }
+
             Task.Run(() => MasterEvent.Start(MasterEvent.Owner));
             return true;
         }
-        
+
         public bool CheckConditions(AbstractArea area = null)
         {
             if (PlayersUsedItem == null && PlayersWhispered == null) // Count is about the current players in the area

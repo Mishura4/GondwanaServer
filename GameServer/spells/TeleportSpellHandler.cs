@@ -1,6 +1,7 @@
 ﻿using DOL.gameobjects.CustomNPC;
 using DOL.GS.ServerProperties;
 using DOL.Language;
+using System.Collections.Generic;
 
 
 namespace DOL.GS.Spells
@@ -45,6 +46,30 @@ namespace DOL.GS.Spells
             target.TPPoint = tPPoint;
             target.MoveTo(tPPoint.Position.With(target.Orientation));
             return true;
+        }
+
+        public override IList<string> DelveInfo
+        {
+            get
+            {
+                var list = new List<string>();
+                if (Spell.LifeDrainReturn != 0)
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Destination", zoneName));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Target", Spell.Target));
+                if (Spell.Range != 0)
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Range", Spell.Range));
+                if (Spell.Power != 0)
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.PowerCost", Spell.Power.ToString("0;0'%'")));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
+                if (Spell.RecastDelay > 60000)
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 60000).ToString() + ":" + (Spell.RecastDelay % 60000 / 1000).ToString("00") + " min");
+                else if (Spell.RecastDelay > 0)
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 1000).ToString() + " sec");
+                if (Spell.Radius != 0)
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Radius", Spell.Radius));
+
+                return list;
+            }
         }
 
         public override string GetDelveDescription(GameClient delveClient)

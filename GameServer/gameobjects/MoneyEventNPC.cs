@@ -2,6 +2,7 @@
 using DOL.GameEvents;
 using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using DOLDatabase.Tables;
 using System;
 using System.Linq;
@@ -173,6 +174,11 @@ namespace DOL.GS
             set;
         }
 
+        private bool _hasShownRequirementsReached = false;
+        public string RequirementsReachedText { get; set; }
+        public string RequirementsReachedEmoteName { get; set; }
+        public int RequirementsReachedSpellId { get; set; }
+
         public override bool Interact(GamePlayer player)
         {
             if (!base.Interact(player))
@@ -188,15 +194,60 @@ namespace DOL.GS
             string currentMoney = Money.GetString(Money.GetMoney(this.CurrentMithril, this.CurrentPlatinum, CurrentGold, CurrentSilver, CurrentCopper));
             string text;
             if (!string.IsNullOrEmpty(Resource4))
-                text = Language.LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreResource4TextDefault, Money.GetString(this.RequiredMoney), currentMoney, RequiredResource1, Resource1, RequiredResource2, Resource2, RequiredResource3, Resource3, RequiredResource4, Resource4, CurrentResource1, CurrentResource2, CurrentResource3, CurrentResource4);
+            {
+                text = LanguageMgr.GetTranslation(
+                    player.Client.Account.Language,
+                    "MoneyEventNPC.NeedMoreResource4TextDefault",
+                    Money.GetString(RequiredMoney),
+                    currentMoney,
+                    RequiredResource1, ResourceName1,
+                    RequiredResource2, ResourceName2,
+                    RequiredResource3, ResourceName3,
+                    RequiredResource4, ResourceName4,
+                    CurrentResource1, CurrentResource2, CurrentResource3, CurrentResource4
+                );
+            }
             else if (!string.IsNullOrEmpty(Resource3))
-                text = Language.LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreResource3TextDefault, Money.GetString(this.RequiredMoney), currentMoney, RequiredResource1, Resource1, RequiredResource2, Resource2, RequiredResource3, Resource3, CurrentResource1, CurrentResource2, CurrentResource3);
+            {
+                text = LanguageMgr.GetTranslation(
+                    player.Client.Account.Language,
+                    "MoneyEventNPC.NeedMoreResource3TextDefault",
+                    Money.GetString(RequiredMoney),
+                    currentMoney,
+                    RequiredResource1, ResourceName1,
+                    RequiredResource2, ResourceName2,
+                    RequiredResource3, ResourceName3,
+                    CurrentResource1, CurrentResource2, CurrentResource3
+                );
+            }
             else if (!string.IsNullOrEmpty(Resource2))
-                text = Language.LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreResource2TextDefault, Money.GetString(this.RequiredMoney), currentMoney, RequiredResource1, Resource1, RequiredResource2, Resource2, CurrentResource1, CurrentResource2);
-            if (!string.IsNullOrEmpty(Resource1))
-                text = Language.LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreResource1TextDefault, Money.GetString(this.RequiredMoney), currentMoney, RequiredResource1, Resource1, CurrentResource1);
+            {
+                text = LanguageMgr.GetTranslation(
+                    player.Client.Account.Language,
+                    "MoneyEventNPC.NeedMoreResource2TextDefault",
+                    Money.GetString(RequiredMoney),
+                    currentMoney,
+                    RequiredResource1, ResourceName1,
+                    RequiredResource2, ResourceName2,
+                    CurrentResource1, CurrentResource2
+                );
+            }
+            else if (!string.IsNullOrEmpty(Resource1))
+            {
+                text = LanguageMgr.GetTranslation(
+                    player.Client.Account.Language,
+                    "MoneyEventNPC.NeedMoreResource1TextDefault",
+                    Money.GetString(RequiredMoney),
+                    currentMoney,
+                    RequiredResource1, ResourceName1,
+                    CurrentResource1
+                );
+            }
             else
-                text = Language.LanguageMgr.GetTranslation(player.Client.Account.Language, InteractDefault, Money.GetString(this.RequiredMoney), currentMoney);
+            {
+                // No resources, only money
+                text = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.InteractTextDefault", Money.GetString(RequiredMoney), currentMoney);
+            }
             player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;
@@ -214,31 +265,107 @@ namespace DOL.GS
             if (ev == null)
                 return base.ReceiveItem(source, item);
 
+            bool matched = false;
+            int newValue = 0;
             if (item.Template.Id_nb == Resource1)
-                CurrentResource1 += item.Count;
-            if (item.Template.Id_nb == Resource2)
-                CurrentResource2 += item.Count;
-            if (item.Template.Id_nb == Resource3)
-                CurrentResource3 += item.Count;
-            if (item.Template.Id_nb == Resource4)
-                CurrentResource4 += item.Count;
-            else
-                return false;
+            {
+                if (AddResource(player, CurrentResource1, RequiredResource1, ResourceName1, item, out newValue))
+                {
+                    CurrentResource1 = newValue;
+                    matched = true;
+                }
+            }
+            else if (item.Template.Id_nb == Resource2)
+            {
+                if (AddResource(player, CurrentResource2, RequiredResource2, ResourceName2, item, out newValue))
+                {
+                    CurrentResource2 = newValue;
+                    matched = true;
+                }
+            }
+            else if (item.Template.Id_nb == Resource3)
+            {
+                if (AddResource(player, CurrentResource3, RequiredResource3, ResourceName3, item, out newValue))
+                {
+                    CurrentResource3 = newValue;
+                    matched = true;
+                }
+            }
+            else if (item.Template.Id_nb == Resource4)
+            {
+                if (AddResource(player, CurrentResource4, RequiredResource4, ResourceName4, item, out newValue))
+                {
+                    CurrentResource4 = newValue;
+                    matched = true;
+                }
+            }
+
+            if (!matched) return false;
 
             if (CheckRequiredResources())
             {
-                var text = ValidateText ?? Language.LanguageMgr.GetTranslation(player.Client.Account.Language, ValidateTextDefault);
-                player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-                player.Inventory.RemoveItem(item);
+                if (!_hasShownRequirementsReached)
+                {
+                    string resourceName = string.Join(", ", new[] { ResourceName1, ResourceName2, ResourceName3, ResourceName4 }.Where(name => !string.IsNullOrEmpty(name)));
+                    string reachedText = RequirementsReachedText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.ResourceRequirementsReached", resourceName);
+                    player.Out.SendMessage(reachedText, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+
+                    eEmote finalEmote = ParseEmoteString(this.RequirementsReachedEmoteName);
+                    if (finalEmote != 0)
+                    {
+                        foreach (GamePlayer plr in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                        {
+                            plr.Out.SendEmoteAnimation(this, finalEmote);
+                        }
+                    }
+
+                    if (RequirementsReachedSpellId != 0)
+                    {
+                        ushort effectId = (ushort)RequirementsReachedSpellId;
+                        foreach (GamePlayer plr in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                        {
+                            plr.Out.SendSpellEffectAnimation(this, this, effectId, 0, false, 1);
+                        }
+                    }
+                }
+
+                string text = ValidateText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.ValidateTextDefault");
+                player.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+
                 this.SaveIntoDatabase();
                 Task.Run(() => GameEventManager.Instance.StartEvent(ev, player));
             }
             else
             {
-                string text = Language.LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreMoneyTextDefault);
-                player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-                player.Inventory.RemoveItem(item);
+                string text = NeedMoreMoneyText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreMoneyTextDefault");
+                player.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+
                 this.SaveIntoDatabase();
+            }
+
+            return true;
+        }
+
+        private bool AddResource(GamePlayer player, int current, int required, string resourceName, InventoryItem item, out int newValue)
+        {
+            newValue = current;
+
+            if (newValue >= required)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NoNeedMoreResources", resourceName), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return false;
+            }
+
+            int needed = required - newValue;
+            if (item.Count > needed)
+            {
+                newValue += needed;
+                player.Inventory.RemoveCountFromStack(item, needed);
+            }
+            else
+            {
+                newValue += item.Count;
+                player.Inventory.RemoveItem(item);
             }
 
             return true;
@@ -246,8 +373,26 @@ namespace DOL.GS
 
         private bool CheckRequiredResources()
         {
-            return CurrentMoney >= RequiredMoney && CurrentResource1 >= RequiredResource1 && CurrentResource2 >= RequiredResource2 && CurrentResource3 >= RequiredResource3 && CurrentResource4 >= CurrentResource4;
+            return CurrentMoney >= RequiredMoney
+                && CurrentResource1 >= RequiredResource1
+                && CurrentResource2 >= RequiredResource2
+                && CurrentResource3 >= RequiredResource3
+                && CurrentResource4 >= RequiredResource4;
         }
+
+        private string GetItemName(string resourceId)
+        {
+            if (string.IsNullOrEmpty(resourceId))
+                return string.Empty;
+
+            var itemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(resourceId);
+            return itemTemplate?.Name ?? resourceId;
+        }
+
+        public string ResourceName1 => GetItemName(Resource1);
+        public string ResourceName2 => GetItemName(Resource2);
+        public string ResourceName3 => GetItemName(Resource3);
+        public string ResourceName4 => GetItemName(Resource4);
 
         public override bool ReceiveMoney(GameLiving source, long money)
         {
@@ -262,29 +407,76 @@ namespace DOL.GS
                 return base.ReceiveMoney(source, money);
 
 
-            this.CurrentGold += Money.GetGold(money);
-            this.CurrentPlatinum += Money.GetPlatinum(money);
-            this.CurrentMithril += Money.GetMithril(money);
-            this.CurrentSilver += Money.GetSilver(money);
-            this.CurrentCopper += Money.GetCopper(money);
+            if (CurrentMoney >= RequiredMoney)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NoNeedMoreMoney"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return false;
+            }
+
+            long needed = RequiredMoney - CurrentMoney;
+
+            if (money > needed)
+            {
+                AddMoney(needed);
+                player.RemoveMoney(Currency.Copper.Mint(needed));
+                long leftover = money - needed;
+            }
+            else
+            {
+                AddMoney(money);
+                player.RemoveMoney(Currency.Copper.Mint(money));
+            }
 
             if (CheckRequiredResources())
             {
-                var text = ValidateText ?? Language.LanguageMgr.GetTranslation(player.Client.Account.Language, ValidateTextDefault);
+                if (!_hasShownRequirementsReached)
+                {
+                    string reachedText = RequirementsReachedText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.MoneyRequirementsReached");
+                    player.Out.SendMessage(reachedText, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+
+                    eEmote finalEmote = ParseEmoteString(this.RequirementsReachedEmoteName);
+                    if (finalEmote != 0)
+                    {
+                        foreach (GamePlayer plr in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                        {
+                            plr.Out.SendEmoteAnimation(this, finalEmote);
+                        }
+                    }
+
+                    if (RequirementsReachedSpellId != 0)
+                    {
+                        ushort effectId = (ushort)RequirementsReachedSpellId;
+                        foreach (GamePlayer plr in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                        {
+                            plr.Out.SendSpellEffectAnimation(this, this, effectId, 0, false, 1);
+                        }
+                    }
+                }
+
+                var text = ValidateText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, ValidateTextDefault);
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-                player.RemoveMoney(Currency.Copper.Mint(money));
+
                 this.SaveIntoDatabase();
                 Task.Run(() => GameEventManager.Instance.StartEvent(ev, player));
             }
             else
             {
-                var text = NeedMoreMoneyText ?? Language.LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreMoneyTextDefault);
+                var text = NeedMoreMoneyText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreMoneyTextDefault);
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-                player.RemoveMoney(Currency.Copper.Mint(money));
+
                 this.SaveIntoDatabase();
             }
 
             return true;
+        }
+
+        private void AddMoney(long copper)
+        {
+            CurrentGold += Money.GetGold(copper);
+            CurrentPlatinum += Money.GetPlatinum(copper);
+            CurrentMithril += Money.GetMithril(copper);
+            CurrentSilver += Money.GetSilver(copper);
+            CurrentCopper += Money.GetCopper(copper);
         }
 
         private GameEvent CheckEventValidity()
@@ -299,6 +491,46 @@ namespace DOL.GS
             }
 
             return ev;
+        }
+
+        private eEmote ParseEmoteString(string emoteStr)
+        {
+            if (string.IsNullOrEmpty(emoteStr))
+                return 0;
+
+            switch (emoteStr.ToLower())
+            {
+                case "angry": return eEmote.Angry;
+                case "bang": return eEmote.BangOnShield;
+                case "beckon": return eEmote.Beckon;
+                case "beg": return eEmote.Beg;
+                case "blush": return eEmote.Blush;
+                case "bow": return eEmote.Bow;
+                case "cheer": return eEmote.Cheer;
+                case "clap": return eEmote.Clap;
+                case "cry": return eEmote.Cry;
+                case "dance": return eEmote.Dance;
+                case "kiss": return eEmote.BlowKiss;
+                case "laugh": return eEmote.Laugh;
+                case "no": return eEmote.No;
+                case "point": return eEmote.Point;
+                case "ponder": return eEmote.Ponder;
+                case "pray": return eEmote.Pray;
+                case "roar": return eEmote.Roar;
+                case "salute": return eEmote.Salute;
+                case "shrug": return eEmote.Shrug;
+                case "slap": return eEmote.Slap;
+                case "slit": return eEmote.Slit;
+                case "smile": return eEmote.Smile;
+                case "taunt": return eEmote.Taunt;
+                case "victory": return eEmote.Victory;
+                case "wave": return eEmote.Wave;
+                case "yawn": return eEmote.Yawn;
+                case "yes": return eEmote.Yes;
+
+                default:
+                    return 0;
+            }
         }
 
         public override bool AddToWorld()
@@ -345,6 +577,8 @@ namespace DOL.GS
                 this.NeedMoreMoneyText = eventNpc.NeedMoreMoneyText;
                 this.ValidateText = eventNpc.ValidateText;
                 this.InteractText = eventNpc.InteractText;
+                this.RequirementsReachedEmoteName = eventNpc.RequirementsReachedEmote;
+                this.RequirementsReachedSpellId = eventNpc.RequirementsReachedSpellId;
                 CurrentResource1 = eventNpc.CurrentResource1;
                 CurrentResource2 = eventNpc.CurrentResource2;
                 CurrentResource3 = eventNpc.CurrentResource3;
@@ -388,6 +622,8 @@ namespace DOL.GS
                 db.RequiredMoney = RequiredMoney;
                 db.MobID = this.InternalID;
                 db.MobName = this.Name;
+                db.RequirementsReachedEmote = this.RequirementsReachedEmoteName;
+                db.RequirementsReachedSpellId = this.RequirementsReachedSpellId;
                 db.CurrentResource1 = CurrentResource1;
                 db.CurrentResource2 = CurrentResource2;
                 db.CurrentResource3 = CurrentResource3;
@@ -414,13 +650,12 @@ namespace DOL.GS
             if (id == null)
             {
                 GameServer.Database.AddObject(db);
-                id = db.ObjectId;
+                id = db!.ObjectId;
             }
             else
             {
                 GameServer.Database.SaveObject(db);
             }
         }
-
     }
 }
