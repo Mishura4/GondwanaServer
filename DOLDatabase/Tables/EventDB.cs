@@ -50,6 +50,7 @@ namespace DOLDatabase.Tables
         private string m_eventFamily;
         private int m_timerBeforeReset;
         private int? m_tppointid;
+        private int m_cancelQuestId;
 
         [DataElement(AllowDbNull = false, Varchar = 255)]
         public string EventName
@@ -640,6 +641,17 @@ namespace DOLDatabase.Tables
             set
             {
                 m_tppointid = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int ActionCancelQuestId
+        {
+            get => m_cancelQuestId;
+            set
+            {
+                m_cancelQuestId = value;
                 Dirty = true;
             }
         }

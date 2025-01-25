@@ -6,6 +6,7 @@
         BindStone,
         Event,
         Reset,
-        JumpToTPPoint
+        JumpToTPPoint,
+        CancelQuest
     }
 }

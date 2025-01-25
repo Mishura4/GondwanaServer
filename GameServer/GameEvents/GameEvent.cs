@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOLDatabase.Tables;
@@ -17,6 +18,7 @@ using DOL.MobGroups;
 using System.Threading;
 using System.Threading.Tasks;
 using Timer = System.Timers.Timer;
+using System.Reactive;
 
 namespace DOL.GameEvents
 {
@@ -93,6 +95,7 @@ namespace DOL.GameEvents
             TPPointID = ev.TPPointID;
             EventFamily = ev.EventFamily;
             TimeBeforeReset = ev.TimeBeforeReset;
+            ActionCancelQuestId = ev.ActionCancelQuestId;
             if (TimeBeforeReset > 0)
             {
                 ResetFamilyTimer.Interval = ((long)TimeBeforeReset) * 1000;
@@ -307,7 +310,7 @@ namespace DOL.GameEvents
         private void _Reset()
         {
             var prev = ExchangeStatus(EventStatus.Ending);
-            log.DebugFormat("Starting reset of event {0} ({1}) owned by {2} (status is {3})", EventName, ID, Owner, prev);
+            log.DebugFormat("Starting reset of event {0} (status is {1})", this, prev);
             try
             {
                 StartedTime = (DateTimeOffset?)null;
@@ -369,7 +372,7 @@ namespace DOL.GameEvents
                 log.Error($"Exception while resetting event {EventName} ({ID}): {ex}");
             }
             Status = EventStatus.Idle;
-            log.DebugFormat("Finished reset of event {0} ({1}) owned by {2}", EventName, ID, Owner);
+            log.DebugFormat("Finished reset of event {0}", this);
         }
         
         public void RemoveInstance(GameEvent instance)
@@ -473,7 +476,7 @@ namespace DOL.GameEvents
                     {
                         await Task.Run(() => StartEventEffects());
                         
-                        log.DebugFormat("Event {0} ({1}) started by player {2} (IsInstance = {3})", EventName, ID, triggerPlayer, IsInstancedEvent && !IsInstanceMaster);
+                        log.DebugFormat("Event {0} started by {1}", this, triggerPlayer == null ? "server" : triggerPlayer);
                         SaveToDatabase();
                         return true;
                     }
@@ -616,7 +619,7 @@ namespace DOL.GameEvents
                         }
                         catch (Exception ex)
                         {
-                            log.Error($"Could not start event {this.EventName} ({ID}) instance owned by {entry.ev.Owner}: {ex}");
+                            log.Error($"Could not start event {this}: {ex}");
                             entry.ev.Reset();
                         }
                     }
@@ -682,10 +685,205 @@ namespace DOL.GameEvents
             await Task.Delay(TimeSpan.FromSeconds(5));
         }
 
+        private async Task StartChainedEvent(string evID)
+        {
+            var ev = evID == this.ID ? this : GameEventManager.Instance.GetEventByID(evID)?.GetOrCreateInstance(Owner);
+            if (ev == null)
+            {
+                log.Warn($"Cannot perform ending action {EndingAction.Event}: no event with ID {evID} was found");
+                return;
+            }
+            if (ev.Status == EventStatus.EndedByTimer)
+            {
+                log.Warn($"Cannot perform ending action {EndingAction.Event}: event with ID {evID} is ended by a timer (TODO: why is this an error?)");
+                return;
+            }
+            
+            // TODO: Why is this here, what does it do?
+            bool startEvent = true;
+            bool startTimer = false;
+            ev.EventFamily[this.ID] = true;
+            foreach (var family in ev.EventFamily)
+            {
+                if (family.Value == false)
+                {
+                    startTimer = true;
+                    startEvent = false;
+                }
+            }
+
+            if (startTimer == true)
+            {
+                ev.ResetFamilyTimer.Start();
+            }
+
+            if (startEvent == false)
+            {
+                return;
+            }
+            else
+            {
+                ev.ResetFamilyTimer.Stop();
+                foreach (var family in ev.EventFamily)
+                {
+                    ev.EventFamily[family.Key] = false;
+                }
+            }
+
+            if (ev.StartConditionType != StartingConditionType.Event)
+            {
+                log.Error(string.Format("Ending Consequence Event: Impossible to start Event ID: {0}. Event start type is not Event (why is this an error?)", ev.ID));
+            }
+            else
+            {
+                ev.StartedTime = null;
+                await ev.Start();
+            }
+        }
+
+        private async Task ResetOtherEvent(string evID)
+        {
+            var resetEvent = GameEventManager.Instance.GetEventByID(evID);
+            if (resetEvent == null)
+            {
+                log.Error("Impossible to reset Event from resetEventId : cannot find event " + evID);
+                return;
+            }
+
+            if (resetEvent.TimerType == TimerType.DateType && resetEvent.EndingConditionTypes.Contains(EndingConditionType.Timer) && resetEvent.EndingConditionTypes.Count() == 1)
+            {
+                // Why is this an error?
+                log.Error(string.Format("Cannot Reset Event {0}, Name: {1} with DateType with only Timer as Ending condition", resetEvent.ID, resetEvent.EventName));
+            }
+            else
+            {
+                GameEventManager.Instance.ResetEventsFromId(ResetEventId);
+            }
+        }
+
+        private async Task TeleportPlayers(int tpPointId)
+        {
+            IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(tpPointId));
+            DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(tpPointId)).FirstOrDefault();
+
+            if (tpPoints != null && tpPoints.Count > 0 && dbtp != null)
+            {
+                TPPoint tpPoint = null;
+                switch ((eTPPointType)dbtp.TPType)
+                {
+                    case eTPPointType.Loop:
+                        tpPoint = GameEventManager.Instance.GetLoopNextTPPoint(dbtp.TPID, tpPoints);
+                        break;
+
+                    case eTPPointType.Random:
+                        tpPoint = GameEventManager.Instance.GetRandomTPPoint(tpPoints);
+                        break;
+
+                    case eTPPointType.Smart:
+                        tpPoint = GameEventManager.Instance.GetSmartNextTPPoint(tpPoints);
+                        break;
+                }
+
+                if (tpPoint != null)
+                {
+                    foreach (var cl in GetPlayersInEventZones(this.EventZones))
+                    {
+                        cl.MoveTo(Position.Create(tpPoint.Region, tpPoint.Position.X, tpPoint.Position.Y, tpPoint.Position.Z));
+                    }
+                }
+            }
+        }
+
+        private async Task PerformEndAction(EndingAction action)
+        {
+            switch (action)
+            {
+                case EndingAction.None:
+                    return;
+                
+                case EndingAction.BindStone:
+                    foreach (var pl in GetPlayersInEventZones(EventZones))
+                        pl.MoveToBind();
+                    return;
+                
+                case EndingAction.Event:
+                    await StartChainedEvent(EndActionStartEventID);
+                    return;
+                
+                case EndingAction.Reset:
+                    if (string.IsNullOrEmpty(ResetEventId))
+                        log.WarnFormat("Event {0} has ending action Reset but no ResetEventId", this);
+                    else
+                        await ResetOtherEvent(ResetEventId);
+                    return;
+
+                case EndingAction.JumpToTPPoint:
+                    if (!TPPointID.HasValue)
+                    {
+                        log.Error($"Event {this} has JumpToTPPoint action but no TPPointID is set.");
+                    }
+                    else
+                    {
+                        await TeleportPlayers(TPPointID.Value);
+                    }
+                    return;
+                
+                case EndingAction.CancelQuest:
+                    if (ActionCancelQuestId == 0)
+                    {
+                        log.Error($"Event {this} has CancelQuest action but no ActionCancelQuestId is set.");
+                    }
+                    else
+                    {
+                        CancelQuest(ActionCancelQuestId);
+                    }
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
+            }
+        }
+
+        private IEnumerable<GamePlayer> GetAllPlayersInvolved()
+        {
+            switch (InstancedConditionType)
+            {
+                case InstancedConditionTypes.All:
+                    return GetPlayersInEventZones(this.EventZones);
+
+                case InstancedConditionTypes.Player:
+                    return Owner != null ? new GamePlayer[] { Owner } : Enumerable.Empty<GamePlayer>();
+
+                case InstancedConditionTypes.Group:
+                    return Owner?.Group.GetPlayersInTheGroup() ?? Enumerable.Empty<GamePlayer>();
+
+                case InstancedConditionTypes.Guild:
+                    // TODO: how to handle offline players, for example with CancelQuest?
+                    return Owner?.Guild?.IsSystemGuild == false ? Owner.Guild.GetListOfOnlineMembers() : Enumerable.Empty<GamePlayer>();
+
+                case InstancedConditionTypes.Battlegroup:
+                    return Owner?.BattleGroup?.GetPlayersInTheBattleGroup() ?? Enumerable.Empty<GamePlayer>();
+
+                case InstancedConditionTypes.GroupOrSolo:
+                    return Owner != null ? (Owner.Group?.GetPlayersInTheGroup() ?? new GamePlayer[] { Owner }) : Enumerable.Empty<GamePlayer>();
+
+                case InstancedConditionTypes.GuildOrSolo:
+                    return Owner != null ? (Owner?.Guild?.IsSystemGuild == false ? Owner.Guild.GetListOfOnlineMembers() : new GamePlayer[] { Owner }) : Enumerable.Empty<GamePlayer>();
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        
+        private void CancelQuest(int actionCancelQuestId)
+        {
+            GetAllPlayersInvolved().ForEach(p => p.QuestList.FirstOrDefault(q => q.QuestId == actionCancelQuestId)?.AbortQuest());
+        }
+
         public async Task Stop(EndingConditionType end)
         {
             var prev = ExchangeStatus(EventStatus.Ending);
-            log.DebugFormat("Attempting to end event {0} ({1}) by player {2} (IsInstance = {3}), was {4}", EventName, ID, Owner, IsInstancedEvent && !IsInstanceMaster, prev);
+            log.DebugFormat("Attempting to end event {0}, was {1}", this, prev);
             try
             {
                 EndTime = DateTimeOffset.UtcNow;
@@ -748,12 +946,12 @@ namespace DOL.GameEvents
                 //Consequence A
                 if (EndingConditionTypes.Count() == 1 || (EndingConditionTypes.Count() > 1 && EndingConditionTypes.First() == end))
                 {
-                    await GameEventManager.Instance.HandleConsequence(EndingActionA, EventZones, EndActionStartEventID, ResetEventId, this);
+                    await PerformEndAction(EndingActionA);
                 }
                 else
                 {
                     //Consequence B
-                    await GameEventManager.Instance.HandleConsequence(EndingActionB, EventZones, EndActionStartEventID, ResetEventId, this);
+                    await PerformEndAction(EndingActionB);
                 }
 
                 log.Info(string.Format("Event Id: {0}, Name: {1} was stopped At: {2}", ID, EventName, DateTime.Now.ToString()));
@@ -774,7 +972,7 @@ namespace DOL.GameEvents
                     ChanceLastTimeChecked = (DateTimeOffset?)null;
                 }
             }
-            log.DebugFormat("Finished event {0} ({1}) owned by {2}", EventName, ID, Owner);
+            log.DebugFormat("Finished event {0}", this);
         }
 
         public void SendEventNotification(Func<string, string> message, bool sendDiscord, bool createNews = false)
@@ -1057,6 +1255,7 @@ namespace DOL.GameEvents
             RemainingTimeEvSound = db.RemainingTimeEvSound;
             EndEventSound = db.EndEventSound;
             TPPointID = db.TPPointID;
+            ActionCancelQuestId = db.ActionCancelQuestId;
 
             // get kes from string[] db.EventFamily, and set values to false 
             if (db.EventFamily != null)
@@ -1107,6 +1306,12 @@ namespace DOL.GameEvents
             {
                 IsTimingEvent = true;
             }
+        }
+        
+        public int ActionCancelQuestId
+        {
+            get;
+            set;
         }
 
         public bool IsOwnedBy(GamePlayer player)
@@ -1820,6 +2025,19 @@ namespace DOL.GameEvents
                     return Status is EventStatus.Started or EventStatus.Starting;
                 }
             }
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            string ret = this.ID + "(\"" + this.EventName + "\")";
+            bool isInstance = IsInstancedEvent && !IsInstanceMaster;
+            if (Owner != null || isInstance)
+            {
+                ret += '[' + (isInstance ? "owner:" : "instance:") + (Owner == null ? "server" : Owner) + ']';
+            }
+
+            return ret;
         }
     }
 }

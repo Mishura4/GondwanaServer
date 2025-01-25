@@ -666,41 +666,6 @@ namespace DOL.GameEvents
 
             if (action == EndingAction.JumpToTPPoint)
             {
-                if (!startingEvent.TPPointID.HasValue)
-                {
-                    log.Error($"Event {startingEvent.ID} has JumpToTPPoint action but no TPPointID is set.");
-                    return;
-                }
-
-                IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(startingEvent.TPPointID.Value));
-                DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(startingEvent.TPPointID.Value)).FirstOrDefault();
-
-                if (tpPoints != null && tpPoints.Count > 0 && dbtp != null)
-                {
-                    TPPoint tpPoint = null;
-                    switch ((eTPPointType)dbtp.TPType)
-                    {
-                        case eTPPointType.Loop:
-                            tpPoint = GetLoopNextTPPoint(dbtp.TPID, tpPoints);
-                            break;
-
-                        case eTPPointType.Random:
-                            tpPoint = GetRandomTPPoint(tpPoints);
-                            break;
-
-                        case eTPPointType.Smart:
-                            tpPoint = GetSmartNextTPPoint(tpPoints);
-                            break;
-                    }
-
-                    if (tpPoint != null)
-                    {
-                        foreach (var cl in startingEvent.GetPlayersInEventZones(zones))
-                        {
-                            cl.MoveTo(Position.Create(tpPoint.Region, tpPoint.Position.X, tpPoint.Position.Y, tpPoint.Position.Z));
-                        }
-                    }
-                }
                 return;
             }
 
@@ -759,28 +724,12 @@ namespace DOL.GameEvents
 
             if (resetEventId != null)
             {
-                var resetEvent = this.GetEventByID(eventId);
-
-                if (resetEvent == null)
-                {
-                    log.Error("Impossible to reset Event from resetEventId : " + resetEventId);
-                    return;
-                }
-
-                if (resetEvent.TimerType == TimerType.DateType && resetEvent.EndingConditionTypes.Contains(EndingConditionType.Timer) && resetEvent.EndingConditionTypes.Count() == 1)
-                {
-                    log.Error(string.Format("Cannot Reset Event {0}, Name: {1} with DateType with only Timer as Ending condition", resetEvent.ID, resetEvent.EventName));
-                }
-                else
-                {
-                    this.ResetEventsFromId(resetEventId);
-                }
             }
         }
 
         private Dictionary<int, int> tpPointSteps = new Dictionary<int, int>();
 
-        private TPPoint GetSmartNextTPPoint(IList<DBTPPoint> tpPoints)
+        public TPPoint GetSmartNextTPPoint(IList<DBTPPoint> tpPoints)
         {
             TPPoint smartNextPoint = null;
             int maxPlayerCount = 0;
@@ -798,7 +747,7 @@ namespace DOL.GameEvents
             return smartNextPoint ?? new TPPoint(tpPoints.First().Region, tpPoints.First().X, tpPoints.First().Y, tpPoints.First().Z, eTPPointType.Smart, tpPoints.First());
         }
 
-        private TPPoint GetLoopNextTPPoint(int tpid, IList<DBTPPoint> tpPoints)
+        public TPPoint GetLoopNextTPPoint(int tpid, IList<DBTPPoint> tpPoints)
         {
             if (!tpPointSteps.ContainsKey(tpid))
             {
@@ -812,7 +761,7 @@ namespace DOL.GameEvents
             return tpPoint;
         }
 
-        private TPPoint GetRandomTPPoint(IList<DBTPPoint> tpPoints)
+        public TPPoint GetRandomTPPoint(IList<DBTPPoint> tpPoints)
         {
             DBTPPoint randomDBTPPoint = tpPoints[Util.Random(tpPoints.Count - 1)];
             return new TPPoint(randomDBTPPoint.Region, randomDBTPPoint.X, randomDBTPPoint.Y, randomDBTPPoint.Z, eTPPointType.Random, randomDBTPPoint);
