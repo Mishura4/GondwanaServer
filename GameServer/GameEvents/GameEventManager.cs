@@ -706,7 +706,7 @@ namespace DOL.GameEvents
 
             if (startEventId != null && startingEvent.Status != EventStatus.EndedByTimer)
             {
-                var ev = GetEventByID(eventId);
+                var ev = GetEventByID(startEventId);
                 if (ev != null && ev.TimeBeforeReset != 0)
                 {
                     bool startEvent = true;
