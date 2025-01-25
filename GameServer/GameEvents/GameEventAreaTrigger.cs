@@ -30,6 +30,8 @@ namespace DOL.GameEvents
         public int UseItemEffect { get; set; }
         public int UseItemSound { get; set; }
 
+        public bool IsPlayerEnterAreaCondition => PlayersUsedItem == null && PlayersWhispered == null;
+
         public GameEventAreaTrigger(GameEvent masterEvent, AreaXEvent db, AbstractArea area)
         {
             _db = db.Clone();
@@ -253,7 +255,8 @@ namespace DOL.GameEvents
                     }
                 }
             }
-            TryStartEvent();
+            if (IsPlayerEnterAreaCondition) // Only start timer on player entering if the condition is that players enter, and not give item or whisper
+                TryStartEvent();
         }
 
         public void PlayerLeavesArea(GamePlayer player, IArea area)
@@ -296,7 +299,6 @@ namespace DOL.GameEvents
             {
                 GameEventMgr.RemoveHandler(player, GamePlayerEvent.Whisper, PlayerWhisperEvent);
             }
-            TryStartEvent();
         }
 
         private bool CheckMobs()
@@ -333,29 +335,27 @@ namespace DOL.GameEvents
             if (!MasterEvent.IsReady)
                 return false;
 
-            if (MasterEvent.IsRunning || LaunchTimer.Enabled)
-                return false;
-
             if (!CheckConditions())
             {
+                if (TimerCount > 0)
+                {
+                    LaunchTimer.Interval = TimerCount * 1000;
+                    LaunchTimer.Start();
+
+                    foreach (var player in PlayersInArea)
+                    {
+                        ChatUtil.SendImportant(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.Timer.Start", TimerCount));
+                    }
+                }
                 return false;
             }
-
-            if (LaunchTimer.Enabled)
-                LaunchTimer.Stop();
-
-            if (TimerCount > 0)
+            else
             {
-                LaunchTimer.Interval = TimerCount * 1000;
-                LaunchTimer.Start();
+                if (LaunchTimer.Enabled)
+                    LaunchTimer.Stop();
 
-                foreach (var player in PlayersInArea)
-                {
-                    ChatUtil.SendImportant(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.Timer.Start", TimerCount));
-                }
+                Task.Run(() => MasterEvent.Start(MasterEvent.Owner));
             }
-
-            Task.Run(() => MasterEvent.Start(MasterEvent.Owner));
             return true;
         }
 
