@@ -39,6 +39,9 @@ namespace DOL.GameEvents
         public Dictionary<string, GameStaticItem> RemovedCoffres { get; }
         public List<GameNPC> RelatedNPCs { get; } = new();
         public GameEventAreaTrigger? AreaConditions { get; init; }
+        
+        public GameEvent? ChainPreviousEvent { get; set; }
+        public GameEvent? ChainNextEvent { get; set; }
 
         /**
          * @brief Event instance constructor
@@ -295,12 +298,6 @@ namespace DOL.GameEvents
                 ChanceLastTimeChecked = (DateTimeOffset?)null;
             }
             
-            if (IsInstancedEvent)
-            {
-                var master = GameEventManager.Instance.GetEventByID(ID);
-                if (master != null)
-                    master.RemoveInstance(this);
-            }
             if (!IsRunning)
             {
                 RestoreMobs();
@@ -317,6 +314,26 @@ namespace DOL.GameEvents
                 EndTime = (DateTimeOffset?)null;
                 WantedMobsCount = 0;
                 _Cleanup();
+                
+                if (IsInstancedEvent)
+                {
+                    if (IsInstanceMaster)
+                    {
+                        List<GameEvent> instances;
+                        lock (Instances)
+                        {
+                            instances = Instances.ToList();
+                            Instances.Clear();
+                        }
+                        instances.ForEach(ev => ev.Reset());
+                    }
+                    else
+                    {
+                        var master = GameEventManager.Instance.GetEventByID(ID);
+                        if (master != null)
+                            master.RemoveInstance(this);
+                    }
+                }
 
                 if (IsInstanceMaster && StartConditionType == StartingConditionType.Money)
                 {
@@ -388,7 +405,18 @@ namespace DOL.GameEvents
 
         public void Reset()
         {
-            GetInstances().ForEach(ev => ev._Reset());
+            GameEvent ev = this;
+            while (ev.ChainNextEvent != null)
+            {
+                ev = ev.ChainNextEvent;
+            }
+            while (ev != null)
+            {
+                ev._Reset();
+                ev = ev.ChainPreviousEvent;
+                if (ev == this)
+                    return; // We have cyclic dependencies...
+            }
         }
 
         private void ApplyEffect(GameObject item, Dictionary<string, ushort> dic)
@@ -443,16 +471,21 @@ namespace DOL.GameEvents
             return true;
         }
 
-        private async Task<bool> _Start(GamePlayer? triggerPlayer)
+        private async Task<bool> _Start(GamePlayer? triggerPlayer, GameEvent? starterEvent)
         {
             log.DebugFormat("Attempting to start event {0} ({1}) for player {2} (IsInstance = {3})", EventName, ID, triggerPlayer, IsInstancedEvent && !IsInstanceMaster);
             var prev = CompareExchangeStatus(EventStatus.Starting, EventStatus.Idle);
-            if (prev != EventStatus.Idle)
+            if (prev is EventStatus.Starting or EventStatus.Started or EventStatus.Ending)
             {
                 log.DebugFormat("Cannot start event {0} ({1}) for player {2} (IsInstance = {3}), status is {4}", EventName, ID, triggerPlayer, IsInstancedEvent && !IsInstanceMaster, prev);
                 return false;
             }
             Owner ??= triggerPlayer;
+            ChainPreviousEvent = starterEvent;
+            if (starterEvent != null)
+            {
+                starterEvent.ChainNextEvent = this;
+            }
             try
             {
                 //temporarly disable
@@ -490,7 +523,7 @@ namespace DOL.GameEvents
             {
                 log.Error($"Exception while trying to start event {EventName} ({ID}): {ex}");
             }
-            _Reset();
+            Reset();
             return false;
         }
         
@@ -547,7 +580,7 @@ namespace DOL.GameEvents
             RemovedCoffres.Clear();
         }
 
-        public async Task<bool> StartParallel(GamePlayer? triggerPlayer = null)
+        public async Task<bool> StartParallel(GamePlayer? triggerPlayer = null, GameEvent? previousEvent = null)
         {
             if (!TryExchangeStatus(EventStatus.Starting, EventStatus.Idle))
             {
@@ -608,7 +641,7 @@ namespace DOL.GameEvents
                     foreach (GameEvent e in startingExistingInstances.Concat(spawnedInstances))
                     {
                         // Start all events...
-                        allTasks.Add((e, e._Start(triggerPlayer)));
+                        allTasks.Add((e, e._Start(triggerPlayer, previousEvent)));
                     }
                     foreach (var entry in allTasks)
                     {
@@ -639,17 +672,17 @@ namespace DOL.GameEvents
             return true;
         }
 
-        public async Task<bool> Start(GamePlayer? triggerPlayer = null)
+        public async Task<bool> Start(GamePlayer? triggerPlayer = null, GameEvent? previousEvent = null)
         {
             if (ParallelLaunch)
             {
                 if (IsInstanceMaster)
-                    return await StartParallel(triggerPlayer);
+                    return await StartParallel(triggerPlayer, previousEvent);
                 else
                 {
                     GameEvent master = GameEventManager.Instance.GetEventByID(this.ID);
                     if (master != null)
-                        return await master.StartParallel(triggerPlayer);
+                        return await master.StartParallel(triggerPlayer, previousEvent);
                 }
             }
             if (IsInstanceMaster)
@@ -659,9 +692,9 @@ namespace DOL.GameEvents
                 {
                     return false;
                 }
-                return await instance._Start(triggerPlayer);
+                return await instance._Start(triggerPlayer, previousEvent);
             }
-            return await _Start(triggerPlayer);
+            return await _Start(triggerPlayer, previousEvent);
         }
 
         private async Task ShowEndEffects()
@@ -737,7 +770,7 @@ namespace DOL.GameEvents
             else
             {
                 ev.StartedTime = null;
-                await ev.Start();
+                await ev.Start(Owner, this);
             }
         }
 
@@ -957,6 +990,13 @@ namespace DOL.GameEvents
                 log.Info(string.Format("Event Id: {0}, Name: {1} was stopped At: {2}", ID, EventName, DateTime.Now.ToString()));
 
                 SaveToDatabase();
+                
+                if (IsInstancedEvent && ChainNextEvent != null)
+                {
+                    var master = GameEventManager.Instance.GetEventByID(ID);
+                    if (master != null)
+                        master.RemoveInstance(this);
+                }
             }
             finally
             {
@@ -1080,7 +1120,7 @@ namespace DOL.GameEvents
 
         public GameEvent Instantiate(GamePlayer owner)
         {
-            log.DebugFormat("Instantiating event {0} {1} for player {2}", EventName, ID, owner);
+            log.DebugFormat("Instantiating event {0} {1} for {2}", EventName, ID, owner?.Name ?? "(no owner)");
 
             GamePlayer? trueOwner = InstancedConditionType switch
             {
@@ -1879,6 +1919,11 @@ namespace DOL.GameEvents
             set => owner = value;
         }
 
+        public string OwnerDebugName
+        {
+            get => Owner != null ? $"player ${Owner}" : "<server>";
+        }
+
         public void SaveToDatabase()
         {
             if (!IsInstanceMaster)
@@ -2007,7 +2052,7 @@ namespace DOL.GameEvents
             }
         }
 
-        public bool IsReady => ParallelLaunch || Status == EventStatus.Idle;
+        public bool IsReady => (ParallelLaunch && IsInstanceMaster) || (Status == EventStatus.Idle && (ChainNextEvent == null || ChainNextEvent.IsReady));
 
         public bool IsRunning
         {
