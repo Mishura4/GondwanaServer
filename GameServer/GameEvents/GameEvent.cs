@@ -194,7 +194,7 @@ namespace DOL.GameEvents
             if (ev.AreaConditions != null)
             {
                 AreaConditions = new GameEventAreaTrigger(ev.AreaConditions);
-                AreaConditions.MasterEvent = this;
+                AreaConditions.Event = this;
             }
         }
 

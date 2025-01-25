@@ -26,7 +26,7 @@ namespace DOL.GameEvents
         public Timer LaunchTimer { get; }
         public Timer MobCheckTimer { get; }
         public AbstractArea Area { get; set; }
-        public GameEvent MasterEvent { get; set; }
+        public GameEvent Event { get; set; }
 
         private bool m_hasMobs = true;
         public bool AllowItemDestroy { get; set; }
@@ -35,10 +35,10 @@ namespace DOL.GameEvents
 
         public bool IsPlayerEnterAreaCondition => PlayersUsedItem == null && PlayersWhispered == null;
 
-        public GameEventAreaTrigger(GameEvent masterEvent, AreaXEvent db, AbstractArea area)
+        public GameEventAreaTrigger(GameEvent ev, AreaXEvent db, AbstractArea area)
         {
             _db = db.Clone();
-            MasterEvent = masterEvent;
+            Event = ev;
             this.LaunchTimer = new Timer();
             this.MobCheckTimer = new Timer();
             if (!string.IsNullOrEmpty(db.UseItem))
@@ -55,9 +55,9 @@ namespace DOL.GameEvents
             ParseValuesFromDb(db);
             Init();
 
-            if (RequiredPlayerCount > 1 && masterEvent.IsInstancedEvent && masterEvent.InstancedConditionType == InstancedConditionTypes.Player)
+            if (RequiredPlayerCount > 1 && ev.IsInstancedEvent && ev.InstancedConditionType == InstancedConditionTypes.Player)
             {
-                log.Warn($"Event {masterEvent.EventName} ({masterEvent.ID}) requires {RequiredPlayerCount} players, but it is instanced by player, there will never be more than 1!");
+                log.Warn($"Event {ev.EventName} ({ev.ID}) requires {RequiredPlayerCount} players, but it is instanced by player, there will never be more than 1!");
             }
         }
 
@@ -127,11 +127,11 @@ namespace DOL.GameEvents
 
             if (ResetEvent == true)
             {
-                MasterEvent.Reset();
+                Event.Reset();
             }
             else
             {
-                Task.Run(() => MasterEvent.Stop(EndingConditionType.Timer));
+                Task.Run(() => Event.Stop(EndingConditionType.Timer));
             }
         }
 
@@ -142,7 +142,7 @@ namespace DOL.GameEvents
 
             if (useArgs.Item?.Id_nb == UseItem)
             {
-                if (MasterEvent.IsRunning)
+                if (Event.IsRunning)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.CannotUseItemAgain"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
@@ -280,13 +280,13 @@ namespace DOL.GameEvents
                 players = PlayersInArea.Count;
             }
 
-            if (MasterEvent == null)
+            if (Event == null)
                 return;
 
             // TODO: Clean up instances upstream?
             if (PlayersLeave == true && players == 0)
             {
-                bool isSinglePlayerInstance = (MasterEvent.InstancedConditionType == InstancedConditionTypes.Player);
+                bool isSinglePlayerInstance = (Event.InstancedConditionType == InstancedConditionTypes.Player);
                 string cancelMessage = isSinglePlayerInstance
                     ? LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.LeftAreaCancelSingle")
                     : LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.LeftAreaCancelMultiple");
@@ -295,9 +295,9 @@ namespace DOL.GameEvents
 
                 LaunchTimer.Stop();
                 if (ResetEvent == true)
-                    MasterEvent.Reset();
+                    Event.Reset();
                 else
-                    Task.Run(() => MasterEvent.Stop(EndingConditionType.AreaEvent));
+                    Task.Run(() => Event.Stop(EndingConditionType.AreaEvent));
             }
             if (PlayersUsedItem != null)
             {
@@ -340,7 +340,7 @@ namespace DOL.GameEvents
 
         public bool TryStartEvent()
         {
-            if (!MasterEvent.IsReady)
+            if (!Event.IsReady)
                 return false;
 
             if (!CheckConditions())
@@ -362,7 +362,7 @@ namespace DOL.GameEvents
                 if (LaunchTimer.Enabled)
                     LaunchTimer.Stop();
 
-                Task.Run(() => MasterEvent.Start(MasterEvent.Owner));
+                Task.Run(() => Event.Start(Event.Owner));
             }
             return true;
         }
