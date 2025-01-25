@@ -11,11 +11,14 @@ using DOL.Language;
 using DOLDatabase.Tables;
 using System.Security.Cryptography;
 using DOL.GS.PacketHandler;
+using log4net;
+using System.Reflection;
 
 namespace DOL.GameEvents
 {
     public class GameEventAreaTrigger
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private object _db;
         public List<GamePlayer> PlayersInArea { get; } = new List<GamePlayer>();
         public List<GamePlayer> PlayersUsedItem { get; }
@@ -51,6 +54,11 @@ namespace DOL.GameEvents
 
             ParseValuesFromDb(db);
             Init();
+
+            if (RequiredPlayerCount > 1 && masterEvent.IsInstancedEvent && masterEvent.InstancedConditionType == InstancedConditionTypes.Player)
+            {
+                log.Warn($"Event {masterEvent.EventName} ({masterEvent.ID}) requires {RequiredPlayerCount} players, but it is instanced by player, there will never be more than 1!");
+            }
         }
 
         public GameEventAreaTrigger(GameEventAreaTrigger areaTrigger)
