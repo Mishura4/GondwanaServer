@@ -22,22 +22,17 @@ using System.Collections.Generic;
 
 namespace DOL.GS
 {
-    public class BountyCrafting : AbstractCraftingSkill
+    public class CookingCrafting : AbstractCraftingSkill
     {
-        public BountyCrafting()
+        public CookingCrafting()
         {
-            Icon = 0x05;
-            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "Crafting.Name.BountyCrafing");
-            eSkill = eCraftingSkill.BountyCrafting;
+
+            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "Crafting.Name.CookingCrafting");
+            eSkill = eCraftingSkill.CookingCrafting;
         }
 
         public override void GainCraftingSkillPoints(GamePlayer player, Recipe recipe)
         {
-        }
-
-        public override int CalculateChanceToMakeItem(GamePlayer player, int craftingLevel)
-        {
-            return 100;
         }
     }
 }

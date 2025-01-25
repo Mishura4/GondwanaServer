@@ -69,7 +69,7 @@ namespace DOL.GS.Spells
 
             if (Caster.ControlledBrain == null)
             {
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "PetSpellHandler.CheckBeginCast.NoControlledBrainForCast"), eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "PetSpellHandler.CheckBeginCast.NoControlledBrainForCast"), eChatType.CT_SpellResisted);
                 return false;
             }
             return true;
@@ -115,16 +115,29 @@ namespace DOL.GS.Spells
         public PetSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine)
             : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+            string desc1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PetSpell.MainDescription1");
+            string desc2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PetSpell.MainDescription2");
+
+            var subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID(Spell.SubSpellID), null);
+            string subSpellDelveInfo = "";
+            if (subSpellHandler != null && subSpellHandler.DelveInfo != null)
             {
-                var subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID(Spell.SubSpellID), null);
-                var subSpellDelveInfo = "";
-                foreach (var line in subSpell.DelveInfo) subSpellDelveInfo += line + "\n";
-                return "Pet Spell: \n"
-                + subSpellDelveInfo;
+                foreach (var line in subSpellHandler.DelveInfo)
+                {
+                    subSpellDelveInfo += line + "\n";
+                }
             }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string desc3 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return desc1 + "\n" + desc2 + "\n\n" + subSpellDelveInfo + "\n\n" + desc3;
+            }
+
+            return desc1 + "\n" + desc2 + "\n\n" + subSpellDelveInfo;
         }
     }
 }

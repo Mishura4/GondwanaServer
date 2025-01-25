@@ -43,15 +43,8 @@ namespace DOL.GS.Spells
         // constructor
         public StrengthShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription
-        {
-            get
-            {
-                string language = Properties.SERV_LANGUAGE;
-                string description = LanguageMgr.GetTranslation(language, "SpellDescription.BuffShear.Str");
-                return description;
-            }
-        }
+        /// <inheritdoc />
+        public override string GetDelveDescription(GameClient delveClient) => LanguageMgr.GetTranslation(delveClient, "SpellDescription.BuffShear.Str");
     }
 
     /// <summary>

@@ -33,7 +33,7 @@ namespace DOL.GS
     /// </summary>
     public abstract class AbstractCraftingSkill
     {
-        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         #region Declaration
         /// <summary>
@@ -555,25 +555,41 @@ namespace DOL.GS
                 }
 
                 player.Inventory.CommitChanges();
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Successfully", product.Name, newItem.Quality), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Successfully", product.Name, newItem!.Quality), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
 
                 int con = GetItemCon(player.GetCraftingSkillValue(m_eskill), recipe.Level);
+                bool canAwardTokens = (this.eSkill == eCraftingSkill.BountyCrafting) || (recipe.Level >= Properties.CRAFTING_TASKTOKEN_MINRECIPELVL);
 
-                if (recipe.IsForUniqueProduct && newItem.Quality == 100)
+                if (canAwardTokens)
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
-                    player.Out.SendPlaySound(eSoundType.Craft, 0x04);
-                    if (con > -3)
+                    if (recipe.IsForUniqueProduct && newItem.Quality == 100)
                     {
-                        TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                        player.Out.SendPlaySound(eSoundType.Craft, 0x04);
+                        if (con > -3)
+                        {
+                            TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                        }
+                    }
+                    else
+                    {
+                        player.Out.SendPlaySound(eSoundType.Craft, 0x03);
+                        if (con > -2)
+                        {
+                            TaskManager.UpdateTaskProgress(player, "MasteredCrafts", 1);
+                        }
                     }
                 }
                 else
                 {
-                    player.Out.SendPlaySound(eSoundType.Craft, 0x03);
-                    if (con > -2)
+                    if (recipe.IsForUniqueProduct && newItem.Quality == 100)
                     {
-                        TaskManager.UpdateTaskProgress(player, "MasteredCrafts", 1);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                        player.Out.SendPlaySound(eSoundType.Craft, 0x04);
+                    }
+                    else
+                    {
+                        player.Out.SendPlaySound(eSoundType.Craft, 0x03);
                     }
                 }
             }
@@ -673,6 +689,14 @@ namespace DOL.GS
             }
 
             int craftingTime = (int)(baseMultiplier * materialsCount / 4);
+
+            if (this.eSkill == eCraftingSkill.BountyCrafting)
+            {
+                if (!Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
+                    craftingTime = craftingTime * 2;
+                else
+                    craftingTime = craftingTime * 5;
+            }
 
             // Player does check for capital city bonus as well
             craftingTime = (int)(craftingTime / player.CraftingSpeed);

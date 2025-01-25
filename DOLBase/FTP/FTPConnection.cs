@@ -253,9 +253,9 @@ namespace DOL.FTP
 
                 if (_mode == FTPMode.Active)
                 {
-                    client = listener.AcceptTcpClient();
+                    client = listener!.AcceptTcpClient();
                 }
-                networkStream = client.GetStream();
+                networkStream = client!.GetStream();
 
                 fileList = ReadLines(networkStream);
 
@@ -281,7 +281,7 @@ namespace DOL.FTP
 
                 if (_mode == FTPMode.Active)
                 {
-                    listener.Stop();
+                    listener!.Stop();
                 }
             }
 
@@ -326,10 +326,10 @@ namespace DOL.FTP
 
                 if (_mode == FTPMode.Active)
                 {
-                    client = listener.AcceptTcpClient();
+                    client = listener!.AcceptTcpClient();
                 }
 
-                networkStream = client.GetStream();
+                networkStream = client!.GetStream();
 
                 var buf = new byte[BlockSize];
                 int bytesRead = 0;
@@ -349,7 +349,7 @@ namespace DOL.FTP
 
                 if (_mode == FTPMode.Active)
                 {
-                    listener.Stop();
+                    listener!.Stop();
                 }
 
                 if (tempMessageList.Count == 1)
@@ -433,10 +433,10 @@ namespace DOL.FTP
 
                 if (_mode == FTPMode.Active)
                 {
-                    client = listener.AcceptTcpClient();
+                    client = listener!.AcceptTcpClient();
                 }
 
-                networkStream = client.GetStream();
+                networkStream = client!.GetStream();
 
                 var buffer = new byte[BlockSize];
                 int bytesRead = 0;
@@ -460,7 +460,7 @@ namespace DOL.FTP
 
                 if (_mode == FTPMode.Active)
                 {
-                    listener.Stop();
+                    listener!.Stop();
                 }
 
                 if (tempMessageList.Count == 1)

@@ -2758,6 +2758,13 @@ namespace DOL.GS.ServerProperties
         #region CRAFT / SALVAGE
 
         /// <summary>
+        /// Minimum recipe level required to gain MasterpieceCrafted/MasteredCrafts task tokens.
+        /// If using BountyCrafting, we bypass this requirement entirely.
+        /// </summary>
+        [ServerProperty("craft", "crafting_tasktoken_minrecipelvl", "Minimum recipe level required to gain MasterpieceCrafted or MasteredCrafts tasks (non-BountyCrafting).", 600)]
+        public static int CRAFTING_TASKTOKEN_MINRECIPELVL;
+
+        /// <summary>
         /// If players should have craftingPrimary skill = 0 by default at character creation
         /// </summary>
         [ServerProperty("craft", "playercreation_primary_craftingskill", "If players should have craftingPrimary skill = 0 by default at character creation", false)]

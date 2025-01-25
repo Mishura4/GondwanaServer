@@ -27,6 +27,7 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using log4net;
 using DOL.GS.ServerProperties;
+using Newtonsoft.Json.Linq;
 
 namespace DOL.GS.Spells
 {
@@ -125,7 +126,14 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
             string description = LanguageMgr.GetTranslation(language, "SpellDescription.DamageAdd.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+
+            if (Spell.RecastDelay > 0)
+            {
+                string thirdDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return description + "\n\n" + thirdDesc;
+            }
 
             return description;
         }
@@ -209,7 +217,14 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
             string description = LanguageMgr.GetTranslation(language, "SpellDescription.DamageShield.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return description + "\n\n" + secondDesc;
+            }
 
             return description;
         }

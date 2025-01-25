@@ -212,9 +212,18 @@ namespace DOL.GS.Spells
         }
         public override string GetDelveDescription(GameClient delveClient)
         {
+            int recastSeconds = Spell.RecastDelay / 1000;
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
             string spellTarget = LanguageMgr.GetTargetOfType(language, m_spell.Target.ToString());
-            return LanguageMgr.GetTranslation(language, "SpellDescription.PlayerPortal.MainDescription", spellTarget);
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.PlayerPortal.MainDescription", spellTarget);
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return mainDesc + "\n\n" + secondDesc;
+            }
+
+            return mainDesc;
         }
     }
 }

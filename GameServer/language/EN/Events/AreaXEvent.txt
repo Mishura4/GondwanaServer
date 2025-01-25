@@ -1,2 +1,8 @@
-Area.Event.Timer.Start:			An event is triggering, you've got {0} seconds to act.
-Area.Event.Timer.Stop:			Event's times up! Try again!
+Area.Event.Timer.Start:				An event is triggering, you've got {0} seconds to act.
+Area.Event.Timer.Stop:				Event's times up! Try again!
+Area.Event.CannotUseItemAgain:		You cannot use that item again for now!
+Area.Event.ConfirmUseItem:			Are you sure you want to use [{0}]?
+Area.Event.UsedItem:				You used [{0}].
+Area.Event.ItemNotInBackpack:		You no longer have that item in your backpack!
+Area.Event.LeftAreaCancelSingle:	You have left the area so the event is cancelled!
+Area.Event.LeftAreaCancelMultiple:	All players have left the area so the event is cancelled!

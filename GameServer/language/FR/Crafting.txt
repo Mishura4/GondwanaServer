@@ -30,13 +30,15 @@ Crafting.Name.Evocation:				Arcanes
 Crafting.Name.Fletching:				Empennage
 Crafting.Name.Gemcutting:				Gemmes
 Crafting.Name.Herbcrafting:				Herboristerie
-Crafting.Name.Leathercrafting:				Maroquinerie
+Crafting.Name.Leathercrafting:			Maroquinerie
 Crafting.Name.Metalworking:				Métallurgie
 Crafting.Name.Siegecraft:				Ingénieurie
 Crafting.Name.Tailoring:				Couture
 Crafting.Name.Weaponcraft:				Forge
 Crafting.Name.Woodworking:				Menuiserie
 Crafting.Name.BountyCrafing:			Bountycraft
+Crafting.Name.CookingCrafting:			Gastronomie
+Crafting.Name.ScholarCrafting:			Artisan Académique
 Crafting.Respec.Confirm:				Êtes-vous sûr(e) de vouloir réinitialiser vos compétences d'artisanat? Vous perdrez toutes vos compétences d'artisanat ainsi que vos titres!
 Crafting.Respec.SkillsReset:			Vos compétences d'artisanat on été réinitialisées.
 
@@ -206,3 +208,7 @@ SpellCrafting.ShowSpellCraftingInfos.Modified:		(Cette pénalité est modifiée 
 SpellCrafting.ShowSpellCraftingInfos.Penality:		{0} pénalité de surcharge.
 SpellCrafting.ShowSpellCraftingInfos.Success:		{0}% surcharge effectuée.
 SpellCrafting.ShowSpellCraftingInfos.TotalImbue:	Imprégnation {0} ({1} total des points imprégnés).
+
+# /BountyCrafting
+BountyCraft.Promotion.Unlock:						Vous obtenez les compétences de BountyCrafting !
+BountyCraft.Promotion.LegendaryMaster:				Félicitations ! Vous avez atteint le rang d'Artisan Légendaire et débloqué les compétences de BountyCrafting !

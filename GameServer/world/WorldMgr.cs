@@ -47,7 +47,7 @@ namespace DOL.GS
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Ping timeout definition in seconds
@@ -458,9 +458,10 @@ namespace DOL.GS
                 zoneData.AllowMagicalItem = dbZone.AllowMagicalItem;
                 zoneData.AllowReputation = dbZone.AllowReputation;
                 zoneData.TensionRate = dbZone.TensionRate;
+                zoneData.IsDungeon = dbZone.IsDungeon;
 
                 RegisterZone(zoneData, zoneData.ZoneID, zoneData.RegionID, zoneData.Description,
-                             dbZone.Experience, dbZone.Realmpoints, dbZone.Bountypoints, dbZone.Coin, dbZone.Realm, dbZone.AllowMagicalItem, dbZone.AllowReputation, dbZone.TensionRate);
+                             dbZone.Experience, dbZone.Realmpoints, dbZone.Bountypoints, dbZone.Coin, dbZone.Realm, dbZone.AllowMagicalItem, dbZone.AllowReputation, dbZone.TensionRate, dbZone.IsDungeon);
 
                 //Save the zonedata.
                 if (!m_zonesData.ContainsKey(zoneData.RegionID))
@@ -912,7 +913,7 @@ namespace DOL.GS
         /// <summary>
         /// Registers a Zone into a Region
         /// </summary>
-        public static void RegisterZone(ZoneData zoneData, ushort zoneID, ushort regionID, string zoneName, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation, float tensionRate)
+        public static void RegisterZone(ZoneData zoneData, ushort zoneID, ushort regionID, string zoneName, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation, float tensionRate, bool IsDungeon)
         {
             Region region = GetRegion(regionID);
             if (region == null)
@@ -956,7 +957,8 @@ namespace DOL.GS
                 realm,
                 allowMagicalItem,
                 allowReputation,
-                tensionRate);
+                tensionRate,
+                zoneData.IsDungeon);
 
             //Dinberg:Instances
             //ZoneID will always be constant as last parameter, because ZoneSkinID will effectively be a bluff, to remember
@@ -1061,12 +1063,12 @@ namespace DOL.GS
         public static object[] OfTypeAndToArray<T>(this IEnumerable<T> input, Type type)
         {
             MethodInfo methodOfType = typeof(Enumerable).GetMethod("OfType");
-            MethodInfo genericOfType = methodOfType.MakeGenericMethod(new Type[] { type });
+            MethodInfo genericOfType = methodOfType!.MakeGenericMethod(new Type[] { type });
             // Use .NET 4 covariance
             var result = (IEnumerable<object>)genericOfType.Invoke(null, new object[] { input });
 
             MethodInfo methodToArray = typeof(Enumerable).GetMethod("ToArray");
-            MethodInfo genericToArray = methodToArray.MakeGenericMethod(new Type[] { type });
+            MethodInfo genericToArray = methodToArray!.MakeGenericMethod(new Type[] { type });
 
             return (object[])genericToArray.Invoke(null, new object[] { result });
         }
@@ -1918,12 +1920,12 @@ namespace DOL.GS
                                                   return true;
                                               }))
                 {
-                    RegisterZone(dat, (ushort)zoneID, ID, $"{dat.Description} (Instance)", 0, 0, 0, 0, 0, dat.AllowMagicalItem, dat.AllowReputation, dat.TensionRate);
+                    RegisterZone(dat, (ushort)zoneID, ID, $"{dat.Description} (Instance)", 0, 0, 0, 0, 0, dat.AllowMagicalItem, dat.AllowReputation, dat.TensionRate, dat.IsDungeon);
                 }
             }
 
             // Start the instance and execute any final startup tasks
-            instance.Start();
+            instance!.Start();
 
             return instance;
         }

@@ -41,7 +41,7 @@ namespace DOL.GS
         So for old version please have a look in old release
          */
 
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         #region constants data
 
@@ -61,6 +61,8 @@ namespace DOL.GS
         public const ushort MAX_REFRESH_INTERVAL = 2000; // in milliseconds
 
         private bool m_allowReputation;
+
+        private bool m_isDungeon;
 
         #endregion
 
@@ -225,7 +227,7 @@ namespace DOL.GS
         /// <param name="width">the Width of this zone</param>
         /// <param name="height">the Height of this zone</param>
         /// <param name="zoneskinID">For clientside positioning in instances: The 'fake' zoneid we send to clients.</param>
-        public Zone(Region region, ushort id, string desc, int xoff, int yoff, int width, int height, ushort zoneskinID, bool isDivingEnabled, int waterlevel, bool islava, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation, float tensionRate)
+        public Zone(Region region, ushort id, string desc, int xoff, int yoff, int width, int height, ushort zoneskinID, bool isDivingEnabled, int waterlevel, bool islava, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation, float tensionRate, bool isDungeon)
         {
             m_Region = region;
             m_ID = id;
@@ -251,7 +253,7 @@ namespace DOL.GS
             m_initialized = false;
             m_realm = (eRealm)realm;
             m_allowReputation = allowReputation;
-
+            m_isDungeon = isDungeon;
         }
 
         public void Delete()
@@ -318,64 +320,8 @@ namespace DOL.GS
 
         public bool IsDungeon
         {
-            get
-            {
-                switch (m_Region.ID)
-                {
-                    case 20:
-                    case 21:
-                    case 22:
-                    case 23:
-                    case 24:
-                    case 50:
-                    case 60:
-                    case 61:
-                    case 62:
-                    case 63:
-                    case 64:
-                    case 65:
-                    case 66:
-                    case 67:
-                    case 68:
-                    case 69:
-                    case 92:
-                    case 93:
-                    case 109:
-                    case 149:
-                    case 196:
-                    case 221:
-                    case 227:
-                    case 228:
-                    case 229:
-                    case 244:
-                    case 249:
-                    case 296:
-                    case 297:
-                    case 298:
-                    case 326:
-                    case 335:
-                    case 352:
-                    case 356:
-                    case 376:
-                    case 377:
-                    case 379:
-                    case 382:
-                    case 383:
-                    case 386:
-                    case 387:
-                    case 388:
-                    case 390:
-                    case 395:
-                    case 396:
-                    case 397:
-                    case 415:
-                    case 443:
-                    case 489://lvl5-9 Demons breach
-                        return true;
-                    default:
-                        return false;
-                }
-            }
+            get { return m_isDungeon; }
+            set { m_isDungeon = value; }
         }
 
         /// <summary>
@@ -1013,7 +959,7 @@ namespace DOL.GS
                 for (int i = 0; i < currentList.Count; i++)
                 {
                     currentElement = (SubNodeElement)currentList[i];
-                    currentZone = ZoneRegion.GetZone(currentElement.data.Coordinate);
+                    currentZone = ZoneRegion.GetZone(currentElement!.data.Coordinate);
 
                     if (currentZone != null)
                     {
@@ -1350,7 +1296,8 @@ namespace DOL.GS
         /// </summary>
         public float TensionRate
         {
-            get => m_tensionRate;
+            get { return m_tensionRate; }
+            set { m_tensionRate = value; }
         }
 
         #endregion

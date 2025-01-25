@@ -134,7 +134,7 @@ namespace DOL.GameEvents
             {
                 if (MasterEvent.IsRunning)
                 {
-                    player.Out.SendMessage("You cannot use that item again for now!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.CannotUseItemAgain"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 
@@ -148,7 +148,7 @@ namespace DOL.GameEvents
                 {
                     player.TempProperties.setProperty("AreaTriggerForDestroy", this);
                     player.TempProperties.setProperty("UseItemSlot", useArgs.Slot);
-                    player.Out.SendCustomDialog($"Are you sure you want to use [{useArgs.Item.Name}]?", new CustomDialogResponse(UseItemDestroyConfirmation));
+                    player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.ConfirmUseItem", useArgs.Item.Name), new CustomDialogResponse(UseItemDestroyConfirmation));
                 }
                 else
                 {
@@ -157,7 +157,7 @@ namespace DOL.GameEvents
                         PlayersUsedItem.Add(player);
                     }
 
-                    player.Out.SendMessage($"You used [{useArgs.Item.Name}].", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.UsedItem", useArgs.Item.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     TryStartEvent();
                 }
             }
@@ -180,7 +180,7 @@ namespace DOL.GameEvents
             var item = player.Inventory.GetItem((eInventorySlot)slot);
             if (item == null)
             {
-                player.Out.SendMessage("You no longer have that item in your backpack!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.ItemNotInBackpack"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -192,7 +192,7 @@ namespace DOL.GameEvents
                     areaTrigger.PlayersUsedItem.Add(player);
             }
 
-            player.Out.SendMessage($"You used [{item.Name}].", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.UsedItem", item.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             if (areaTrigger.UseItemEffect > 0)
             {
@@ -277,8 +277,8 @@ namespace DOL.GameEvents
             {
                 bool isSinglePlayerInstance = (MasterEvent.InstancedConditionType == InstancedConditionTypes.Player);
                 string cancelMessage = isSinglePlayerInstance
-                    ? "You have left the area so the event is cancelled!"
-                    : "All players have left the area so the event is cancelled!";
+                    ? LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.LeftAreaCancelSingle")
+                    : LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.LeftAreaCancelMultiple");
 
                 ChatUtil.SendImportant(player, cancelMessage);
 

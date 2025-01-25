@@ -30,7 +30,7 @@ public class CraftAction : RegionAction
     /// <summary>
     /// Defines a logger for this class.
     /// </summary>
-    private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
     /// <summary>
     /// The current recipe being crafted
@@ -80,7 +80,7 @@ public class CraftAction : RegionAction
     public override void Stop()
     {
         GamePlayer player = m_actionSource as GamePlayer;
-        player.Out.SendCloseTimerWindow();
+        player!.Out.SendCloseTimerWindow();
         player.TempProperties.removeProperty("CraftQueueRemaining");
         base.Stop();
     }
@@ -88,7 +88,7 @@ public class CraftAction : RegionAction
     protected virtual void MakeItem()
     {
         GamePlayer player = m_actionSource as GamePlayer;
-        int queue = player.TempProperties.getProperty<int>("CraftQueueLength");
+        int queue = player!.TempProperties.getProperty<int>("CraftQueueLength");
         int remainingToCraft = player.TempProperties.getProperty<int>("CraftQueueRemaining");
 
         if (player == null || m_recipe == null/* || skill == null */)
@@ -147,7 +147,7 @@ public class CraftAction : RegionAction
     {
         GamePlayer player = m_actionSource as GamePlayer;
 
-        if (player.IsMezzed || player.IsStunned)
+        if (player!.IsMezzed || player.IsStunned)
         {
             Stop();
             return;

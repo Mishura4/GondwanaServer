@@ -38,7 +38,7 @@ namespace DOL.GS
 
     public static class LosCheckMgr
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// When a (N+1)-th triangle is added in a node, it will be divised (if it's not the max level and min size)
@@ -120,7 +120,7 @@ namespace DOL.GS
         public static LosTreeType InitializeForTestOnly(string filename)
         {
             var reg = WorldMgr.GetAllRegions().FirstOrDefault();
-            var zone = new Zone(reg, 0, "Test zone", 8, 8, 8, 8, 0, false, 0, false, 0, 0, 0, 0, 0, true, true, 1.0f);
+            var zone = new Zone(reg, 0, "Test zone", 8, 8, 8, 8, 0, false, 0, false, 0, 0, 0, 0, 0, true, true, 1.0f, false);
             return _LoadZone(reg, zone, filename);
         }
 

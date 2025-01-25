@@ -46,7 +46,9 @@ namespace DOL.GS
         WoodWorking = 14,
         BasicCrafting = 15,
         BountyCrafting = 16,
-        _Last = 16,
+        CookingCrafting = 17,
+        ScholarCrafting = 18,
+        _Last = 18,
     }
 
     public class CraftingMgr
@@ -54,7 +56,7 @@ namespace DOL.GS
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Hold all crafting skill
@@ -93,6 +95,8 @@ namespace DOL.GS
             m_craftingskills[(int)eCraftingSkill.WoodWorking - 1] = new WoodWorking();
             m_craftingskills[(int)eCraftingSkill.BasicCrafting - 1] = new BasicCrafting();
             m_craftingskills[(int)eCraftingSkill.BountyCrafting - 1] = new BountyCrafting();
+            m_craftingskills[(int)eCraftingSkill.CookingCrafting - 1] = new CookingCrafting();
+            m_craftingskills[(int)eCraftingSkill.ScholarCrafting - 1] = new ScholarCrafting();
 
             //Advanced skill
             m_craftingskills[(int)eCraftingSkill.Alchemy - 1] = new Alchemy();

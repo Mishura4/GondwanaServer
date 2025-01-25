@@ -232,6 +232,8 @@ SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Can be cast while i
 SpellDescription.VampiirArmorDebuff.MainDescription:		Temporarily debuffs the absorption and armor factor of one random piece of armor on the target by {0}%.
 SpellDescription.VampiirArmorDebuff.AdditionalInfo:			This will only affect the Head, Torso, or Legs armor of the target.
 SpellDescription.RangeShield.MainDescription:			Shields the caster's group from ranged physical attacks.
+SpellDescription.PetSpell.MainDescription1:				Pet Spell:
+SpellDescription.PetSpell.MainDescription2:				Increases the target's listed stat(s).
 
 # ML Spells ShortDescriptions
 SpellDescription.Convoker.SummonWood.MainDescription:			Summons 100 random material boards of wood usable for upgrading and repairing keep doors and walls.

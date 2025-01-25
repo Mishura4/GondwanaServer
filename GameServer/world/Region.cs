@@ -45,7 +45,7 @@ namespace DOL.GS
     /// </summary>
     public class Region
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         #region Region Variables
 
@@ -195,7 +195,7 @@ namespace DOL.GS
                     {
                         ConstructorInfo info = t.GetConstructor(new Type[] { typeof(GameTimer.TimeManager), typeof(RegionData) });
 
-                        Region r = (Region)info.Invoke(new object[] { time, data });
+                        Region r = (Region)info!.Invoke(new object[] { time, data });
 
                         if (r != null)
                         {
@@ -204,7 +204,7 @@ namespace DOL.GS
                             return r;
                         }
 
-                        log.ErrorFormat("Failed to Invoke Region {0} using ClassType '{1}'", r.ID, data.ClassType);
+                        log.ErrorFormat("Failed to Invoke Region {0} using ClassType '{1}'", r!.ID, data.ClassType);
                     }
                     else
                     {
@@ -400,18 +400,8 @@ namespace DOL.GS
         {
             get
             {
-                const int dungeonOffset = 8192;
-                const int zoneCount = 1;
-
-                if (Zones.Count != zoneCount)
-                    return false; //Dungeons only have 1 zone!
-
-                var zone = Zones[0];
-                
-                if (zone.Offset.X == dungeonOffset && zone.Offset.Y == dungeonOffset)
-                    return true; //Only dungeons got this offset
-
-                return false;
+                // If ANY zone in the region is flagged as a dungeon, treat the whole region as a dungeon.
+                return Zones.Any(z => z.IsDungeon);
             }
         }
 
@@ -882,7 +872,7 @@ namespace DOL.GS
 
                         try
                         {
-                            myMob = (GameNPC)gasm.CreateInstance(classtype, false);
+                            myMob = (GameNPC)gasm!.CreateInstance(classtype, false);
                         }
                         catch
                         {
@@ -970,7 +960,7 @@ namespace DOL.GS
                     GameStaticItem myItem;
                     if (!string.IsNullOrEmpty(item.ClassType))
                     {
-                        myItem = gasm.CreateInstance(item.ClassType, false) as GameStaticItem;
+                        myItem = gasm!.CreateInstance(item.ClassType, false) as GameStaticItem;
                         if (myItem == null)
                         {
                             foreach (Assembly asm in ScriptMgr.Scripts)

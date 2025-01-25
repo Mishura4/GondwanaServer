@@ -76,7 +76,7 @@ namespace DOL.Integration.Server
             if (WorldMgr.GetRegion(testRegionData.Id) == null)
                 WorldMgr.RegisterRegion(null, testRegionData);
             if (WorldMgr.GetZone(testZoneData.ZoneID) == null)
-                WorldMgr.RegisterZone(testZoneData, 0, 0, "TEST", 1, 1, 1, 1, (byte)eRealm.None, true, true, 1.0f);
+                WorldMgr.RegisterZone(testZoneData, 0, 0, "TEST", 1, 1, 1, 1, (byte)eRealm.None, true, true, 1.0f, false);
         }
 
         [Test]

@@ -232,6 +232,8 @@ SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Peut être lancé e
 SpellDescription.VampiirArmorDebuff.MainDescription:		Réduit temporairement l'absorption et le facteur d'armure d'une pièce d'armure aléatoire de la cible de {0}%.
 SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Cela n'affectera que le heaume, le torse ou les jambes de la cible.
 SpellDescription.RangeShield.MainDescription:			Protège le groupe de l'incantateur contre les attaques physiques d'archerie.
+SpellDescription.PetSpell.MainDescription1:				Sort de familier :
+SpellDescription.PetSpell.MainDescription2:				Augmente les statistiques listés de la cible.
 
 # ML Spells ShortDescriptions
 SpellDescription.Convoker.SummonWood.MainDescription:			Invoque et génère 100 planches de bois au hasard utilisables pour améliorer et réparer les portes et les murs des forteresses.

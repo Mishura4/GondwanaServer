@@ -36,6 +36,8 @@ Crafting.Name.Tailoring:				Tailoring
 Crafting.Name.Weaponcraft:				Weaponcraft
 Crafting.Name.Woodworking:				Woodworking
 Crafting.Name.BountyCrafing:			Bountycraft
+Crafting.Name.CookingCrafting:			Cooking
+Crafting.Name.ScholarCrafting:			Academic mastery
 Crafting.Respec.Confirm:				Are you sure you want to reset your crafting skills? You will lose all of your crafting skills as well as your crafting titles!
 Crafting.Respec.SkillsReset:			Your crafting skills have been reset.
 
@@ -204,4 +206,6 @@ SpellCrafting.ShowSpellCraftingInfos.Penality:		{0} overcharge penality.
 SpellCrafting.ShowSpellCraftingInfos.Success:		{0}% overcharge success.
 SpellCrafting.ShowSpellCraftingInfos.TotalImbue:	Spellcrafting the {0} ({1} total imbue points).
 
-
+# /BountyCrafting
+BountyCraft.Promotion.Unlock:						You have unlocked BountyCrafting skills!
+BountyCraft.Promotion.LegendaryMaster:				Congratulations! You have reached the rank of Legendary craft master and unlocked BountyCrafting skills!

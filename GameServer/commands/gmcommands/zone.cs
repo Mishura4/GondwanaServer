@@ -24,6 +24,8 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.Database;
 using DOL.GS.Geometry;
+using Google.Protobuf.WellKnownTypes;
+using System.Security.Policy;
 
 namespace DOL.GS.Commands
 {
@@ -34,7 +36,10 @@ namespace DOL.GS.Commands
         "/zone divingflag <0 = use region, 1 = on, 2 = off>",
         "/zone waterlevel <#>",
         "/zone bonus <zoneID|current> <xpBonus> <rpBonus> <bpBonus> <coinBonus> <Save? (true/false)>",
-        "/zone allowMagicalItem <true|false> Should Players use Magical items in this zone")]
+        "/zone allowMagicalItem <true|false> Should Players use Magical items in this zone",
+        "/zone allowReputation <true|false> - Allow or disallow the reputation system in this zone",
+        "/zone tensionrate <float> - Set the tension rate for this zone",
+        "/zone isdungeon <true|false> - Flag the zone as Dungeon or Overworld")]
     public class ZoneCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -67,6 +72,12 @@ namespace DOL.GS.Commands
                     info.Add(" Zone DivingEnabled: " + client.Player.CurrentZone.IsDivingEnabled);
                     info.Add(" Zone Waterlevel: " + client.Player.CurrentZone.Waterlevel);
                     info.Add(" Zone AllowMagical Items: " + client.Player.CurrentZone.AllowMagicalItem);
+                    info.Add(" Zone AllowMagical Items: " + client.Player.CurrentZone.AllowMagicalItem);
+
+                    bool internalFlag = client.Player.CurrentZone.AllowReputation;
+                    bool displayedFlag = !internalFlag;
+                    info.Add(" Zone AllowReputation: " + displayedFlag + " (" + (internalFlag ? "Reputation System Not Active" : "Reputation Decreases Allowed") + ")");
+                    info.Add(" Zone TensionRate: " + client.Player.CurrentZone.TensionRate);
 
                     zone = WorldMgr.GetZone(client.Player.CurrentZone.ID);
                     var dbZone = DOLDB<Zones>.SelectObject(DB.Column(nameof(Zones.ZoneID)).IsEqualTo(zone.ID).And(DB.Column(nameof(Zones.RegionID)).IsEqualTo(zone.ZoneRegion.ID)));
@@ -166,7 +177,73 @@ namespace DOL.GS.Commands
                     return;
                 }
 
-                // otherwise set zone bonuses
+                if (args.Length == 3 && args[1].ToLowerInvariant() == "allowreputation"
+    && bool.TryParse(args[2], out bool userTypedValue))
+                {
+                    bool actualInternalValue = !userTypedValue;
+
+                    zone = WorldMgr.GetZone(client.Player.CurrentZone.ID);
+                    zone.AllowReputation = actualInternalValue;
+
+                    // Update existing players in the zone
+                    foreach (var plr in WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentZone.ID == zone.ID))
+                    {
+                        plr.Player.CurrentZone.AllowReputation = actualInternalValue;
+                    }
+
+                    // Update DB
+                    var dbZone = DOLDB<Zones>.SelectObject(DB.Column(nameof(Zones.ZoneID)).IsEqualTo(zone.ID).And(DB.Column(nameof(Zones.RegionID)).IsEqualTo(zone.ZoneRegion.ID)));
+                    if (dbZone != null)
+                    {
+                        dbZone.AllowReputation = actualInternalValue;
+                        GameServer.Database.SaveObject(dbZone);
+                    }
+
+                    DisplayMessage(client,$"AllowReputation for Zone {zone.ID}:{zone.Description} set to {userTypedValue}.");
+                    return;
+                }
+
+                if (args.Length == 3 && args[1].ToLowerInvariant() == "tensionrate")
+                {
+                    zone = WorldMgr.GetZone(client.Player.CurrentZone.ID);
+                    if (!float.TryParse(args[2], out float tensionRate))
+                    {
+                        DisplayMessage(client, "Invalid tension rate (must be a float).");
+                        return;
+                    }
+
+                    // Set the tension rate in memory
+                    zone.TensionRate = tensionRate;
+
+                    // Update DB
+                    var dbZone = DOLDB<Zones>.SelectObject(DB.Column(nameof(Zones.ZoneID)).IsEqualTo(zone.ID).And(DB.Column(nameof(Zones.RegionID)).IsEqualTo(zone.ZoneRegion.ID)));
+                    if (dbZone != null)
+                    {
+                        dbZone.TensionRate = tensionRate;
+                        GameServer.Database.SaveObject(dbZone);
+                    }
+
+                    DisplayMessage(client,$"TensionRate for {zone.ID}:{zone.Description} changed to {tensionRate}.");
+                    return;
+                }
+
+                if (args.Length == 3 && args[1].ToLowerInvariant() == "isdungeon"
+                    && bool.TryParse(args[2], out bool isDungeon))
+                {
+                    zone = WorldMgr.GetZone(client.Player.CurrentZone.ID);
+                    zone.IsDungeon = isDungeon;
+
+                    // Update DB
+                    var dbZone = DOLDB<Zones>.SelectObject(DB.Column(nameof(Zones.ZoneID)).IsEqualTo(zone.ID).And(DB.Column(nameof(Zones.RegionID)).IsEqualTo(zone.ZoneRegion.ID)));
+                    if (dbZone != null)
+                    {
+                        dbZone.IsDungeon = isDungeon;
+                        GameServer.Database.SaveObject(dbZone);
+                    }
+
+                    DisplayMessage(client, $"Zone {zone.ID}:{zone.Description} IsDungeon set to {isDungeon}.");
+                    return;
+                }
 
                 //make sure that only numbers are used to avoid errors.
                 foreach (char c in string.Join(" ", args, 2, 4))

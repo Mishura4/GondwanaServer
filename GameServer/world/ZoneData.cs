@@ -66,6 +66,12 @@ namespace DOL.GS
 
         public float TensionRate { get => m_tensionRate; set => m_tensionRate = value; }
 
+        public bool IsDungeon
+        {
+            get { return m_isDungeon; }
+            set { m_isDungeon = value; }
+        }
+
         private byte m_OffX, m_OffY, m_Height, m_Width;
         private ushort m_ZoneID, m_RegionID;
         private string m_description;
@@ -73,6 +79,7 @@ namespace DOL.GS
         private byte m_divingFlag;
         private bool m_IsLava;
         private float m_tensionRate = 1.0f;
+        private bool m_isDungeon;
 
         public ZoneData() { }
         public ZoneData(Zones z)
@@ -90,6 +97,7 @@ namespace DOL.GS
             AllowMagicalItem = z.AllowMagicalItem;
             AllowReputation = z.AllowReputation;
             TensionRate = z.TensionRate;
+            IsDungeon = z.IsDungeon;
         }
     }
 }
