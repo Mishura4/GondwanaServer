@@ -726,11 +726,6 @@ namespace DOL.GameEvents
                 log.Warn($"Cannot perform ending action {EndingAction.Event}: no event with ID {evID} was found");
                 return;
             }
-            if (ev.Status == EventStatus.EndedByTimer)
-            {
-                log.Warn($"Cannot perform ending action {EndingAction.Event}: event with ID {evID} is ended by a timer (TODO: why is this an error?)");
-                return;
-            }
             
             // TODO: Why is this here, what does it do?
             bool startEvent = true;
