@@ -142,7 +142,12 @@ namespace DOL.GameEvents
         {
             if (sender is not GamePlayer player || args is not UseSlotEventArgs useArgs)
                 return;
-
+            
+            if (!player.CurrentAreas.Contains(Area))
+            {
+                log.Warn($"GameEventAreaTrigger ${Event} detected player ${player.Name} used an item, but player is not in area {Area.Description}");
+                return;
+            }
             if (useArgs.Item?.Id_nb == UseItem)
             {
                 if (Event.IsRunning)
@@ -225,6 +230,11 @@ namespace DOL.GameEvents
             if (sender is not GamePlayer player)
                 return;
 
+            if (!player.CurrentAreas.Contains(Area))
+            {
+                log.Warn($"GameEventAreaTrigger ${Event} detected player ${player.Name} whispered, but player is not in area {Area.Description}");
+                return;
+            }
             string text = string.Empty;
             if (args is WhisperEventArgs whisper)
             {
@@ -308,6 +318,7 @@ namespace DOL.GameEvents
             }
             if (PlayersWhispered != null)
             {
+                GameEventMgr.RemoveHandler(player, GamePlayerEvent.Say, PlayerWhisperEvent);
                 GameEventMgr.RemoveHandler(player, GamePlayerEvent.Whisper, PlayerWhisperEvent);
             }
         }
