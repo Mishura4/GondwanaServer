@@ -32,7 +32,7 @@ namespace DOL.GS.Spells
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer player = target as GamePlayer;
-            if (!base.ApplyEffectOnTarget(Caster, effectiveness))
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
                 return false;
 
             Caster.StopAttack();

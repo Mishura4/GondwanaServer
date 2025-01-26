@@ -71,7 +71,7 @@ namespace DOL.GS.Spells
                 Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
             }
             
-            if (!base.ApplyEffectOnTarget(Caster, effectiveness))
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
                 return false;
 
             if (Spell.CastTime > 0)
