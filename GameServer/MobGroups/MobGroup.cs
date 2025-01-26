@@ -7,6 +7,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -327,13 +328,13 @@ namespace DOL.MobGroups
             set;
         }
 
-        public ImmutableList<GameNPC> NPCs
+        public ReadOnlyCollection<GameNPC> NPCs
         {
             get
             {
                 lock (m_NPCs)
                 {
-                    return m_NPCs.ToImmutableList();
+                    return m_NPCs.AsReadOnly();
                 }
             }
         }

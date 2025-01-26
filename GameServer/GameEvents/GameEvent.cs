@@ -1184,7 +1184,7 @@ namespace DOL.GameEvents
                         mob.AddToMobGroup(mobGroup);
                         if (!mobGroup.NPCs.Contains(mob))
                         {
-                            mobGroup.NPCs.Add(mob);
+                            mobGroup.AddMob(mob, true);
                             mobGroup.ApplyGroupInfos();
                         }
                     }
@@ -1200,7 +1200,7 @@ namespace DOL.GameEvents
                             GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
                             mobGroup = new MobGroup(mobgroupDb, groupInteraction, groupOriginStatus);
                             MobGroupManager.Instance.Groups.Add(dbGroupMob.MobID, mobGroup);
-                            mobGroup.NPCs.Add(mob);
+                            mobGroup.AddMob(mob, true);
                             mob.AddToMobGroup(mobGroup);
                             mobGroup.ApplyGroupInfos();
                         }
@@ -2079,7 +2079,7 @@ namespace DOL.GameEvents
             bool isInstance = IsInstancedEvent && !IsInstanceMaster;
             if (Owner != null || isInstance)
             {
-                ret += '[' + (isInstance ? "owner:" : "instance:") + (Owner == null ? "server" : Owner) + ']';
+                ret += '[' + (isInstance ? "owner:" : "instance:") + (Owner == null ? "server" : Owner.Name) + ']';
             }
 
             return ret;

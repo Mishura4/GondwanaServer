@@ -46,6 +46,7 @@ namespace DOL.MobGroups
 
             foreach (MobGroup group in npc.MobGroups.Where(g => g.IsAllDead(npc)))
             {
+                this.Groups.TryGetValue(group.GroupId, out MobGroup value);
                 //Handle interaction if any slave group
                 this.HandleInteraction(group);
 
@@ -55,7 +56,7 @@ namespace DOL.MobGroups
                 //Notify
                 GameEventMgr.Notify(GroupMobEvent.MobGroupDead, group);
                 var mobGroupEvent = GameEventManager.Instance.GetEventsStartedByKillingGroup(group);
-                mobGroupEvent.ForEach(e => Task.Run(() => GameEventManager.Instance.StartEvent(e, killer as GamePlayer)));
+                mobGroupEvent.ForEach(e => GameEventManager.Instance.StartEvent(e, killer as GamePlayer));
             }
         }
 
@@ -190,7 +191,7 @@ namespace DOL.MobGroups
 
                         if (mobInWorld != null && this.Groups.TryGetValue(group.GroupId, out MobGroup mobGroup))
                         {
-                            if (!mobGroup.NPCs.Exists(m => m.InternalID.Equals(mobInWorld.InternalID)))
+                            if (!mobGroup.NPCs.Any(m => m.InternalID.Equals(mobInWorld.InternalID)))
                             {
                                 mobGroup.AddMob(mobInWorld);
                                 mobInWorld.AddToMobGroup(mobGroup);
