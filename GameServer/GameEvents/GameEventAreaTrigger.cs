@@ -77,8 +77,11 @@ namespace DOL.GameEvents
 
         public void Init()
         {
-            LaunchTimer.Interval = ((AreaXEvent)_db).TimerCount * 1000;
-            LaunchTimer.Elapsed += LaunchTimer_Elapsed;
+            if (TimerCount > 0)
+            {
+                LaunchTimer.Interval = ((AreaXEvent)_db).TimerCount * 1000;
+                LaunchTimer.Elapsed += LaunchTimer_Elapsed;
+            }
             m_hasMobs = Mobs?.Count is null or 0;
             if (!m_hasMobs)
             {
