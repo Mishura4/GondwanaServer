@@ -1,0 +1,2 @@
+
+Languages.DBItemDesc.DDamageDieProc_Token01:			Ceci est un DD jeton DieProc.

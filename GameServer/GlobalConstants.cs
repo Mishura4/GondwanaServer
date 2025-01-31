@@ -1917,6 +1917,8 @@ namespace DOL.GS
                 case eObjectType.Cloth:
                 case eObjectType.Leather:
                 //Misc
+                case eObjectType.MaulerStaff:
+                case eObjectType.FistWraps:
                 case eObjectType.GenericItem:
                 case eObjectType.GenericWeapon:
                 case eObjectType.GenericArmor:

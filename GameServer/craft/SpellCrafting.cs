@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.Language;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS
 {
@@ -96,9 +97,69 @@ namespace DOL.GS
         public SpellCrafting()
         {
             Icon = 0x0D;
-            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE,
-                "Crafting.Name.Evocation");
+            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "Crafting.Name.Evocation");
             eSkill = eCraftingSkill.SpellCrafting;
+        }
+
+        protected override bool CheckForTools(GamePlayer player, Recipe recipe)
+        {
+            if (player.Client.Account.PrivLevel > 1)
+                return true;
+
+            if (!Properties.ALLOW_CLASSIC_CRAFT_TOOLCHECK)
+                return true;
+
+            eObjectType objectType = (eObjectType)recipe.Product.Object_Type;
+
+            if (objectType == eObjectType.Magical || objectType == eObjectType.SpellcraftGem)
+            {
+                if (!HasSpellcraftKit(player))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindSpellcraftKit", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
+                if (!IsNearAlchemyTable(player))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindAlchemyTable"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool HasSpellcraftKit(GamePlayer player)
+        {
+            for (int slot = (int)eInventorySlot.FirstBackpack; slot <= (int)eInventorySlot.LastBackpack; slot++)
+            {
+                InventoryItem invItem = player.Inventory.GetItem((eInventorySlot)slot);
+                if (invItem == null)
+                    continue;
+
+                string idnb = invItem.Id_nb?.ToLower();
+                if (idnb == "spellcraft_kit" || idnb == "spellcraft_kit2" || idnb == "spellcraft_kit3")
+                    return true;
+            }
+            return false;
+        }
+
+        private bool IsNearAlchemyTable(GamePlayer player)
+        {
+            var objectsInRange = player.GetItemsInRadius(CRAFT_DISTANCE);
+            foreach (object obj in objectsInRange)
+            {
+                if (obj is GameStaticItem gsi)
+                {
+                    string nameLower = gsi.Name.ToLower();
+                    if (nameLower == "alchemy table" || nameLower == "table d'alchimie" || gsi.Model == 820)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         #region Classic craft functions
@@ -128,7 +189,7 @@ namespace DOL.GS
         {
             if (!base.IsAllowedToCombine(player, item)) return false;
 
-            if (((InventoryItem)player.TradeWindow.TradeItems[0]).Model == 525) // first ingredient to combine is Dust => echantement
+            if (((InventoryItem)player.TradeWindow.TradeItems[0])!.Model == 525) // first ingredient to combine is Dust => echantement
             {
                 if (item.Level < 15)
                 {
@@ -182,7 +243,7 @@ namespace DOL.GS
                     {
                         InventoryItem currentItem = (InventoryItem)player.TradeWindow.TradeItems[i];
 
-                        if (currentItem.Object_Type != (int)eObjectType.SpellcraftGem)
+                        if (currentItem!.Object_Type != (int)eObjectType.SpellcraftGem)
                         {
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SpellCrafting.IsAllowedToCombine.FalseItem"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return false;
@@ -235,11 +296,11 @@ namespace DOL.GS
         {
             if (item == null || player.TradeWindow.TradeItems[0] == null) return; // be sure at least one item in each side
 
-            if (((InventoryItem)player.TradeWindow.TradeItems[0]).Model == 525) // Echant item
+            if (((InventoryItem)player.TradeWindow.TradeItems[0])!.Model == 525) // Echant item
             {
                 ApplyMagicalDusts(player, item);
             }
-            else if (((InventoryItem)player.TradeWindow.TradeItems[0]).Object_Type == (int)eObjectType.SpellcraftGem) // Spellcraft item
+            else if (((InventoryItem)player.TradeWindow.TradeItems[0])!.Object_Type == (int)eObjectType.SpellcraftGem) // Spellcraft item
             {
                 ApplySpellcraftGems(player, item);
             }
@@ -435,7 +496,7 @@ namespace DOL.GS
         /// <param name="item"></param>
         public virtual void ShowSpellCraftingInfos(GamePlayer player, InventoryItem item)
         {
-            if (((InventoryItem)player.TradeWindow.TradeItems[0]).Model == 525) return; // check if applying dust
+            if (((InventoryItem)player.TradeWindow.TradeItems[0])!.Model == 525) return; // check if applying dust
 
             ArrayList spellcraftInfos = new ArrayList(10);
 
@@ -466,7 +527,7 @@ namespace DOL.GS
                 for (int i = 0; i < player.TradeWindow.ItemsCount; i++)
                 {
                     InventoryItem currentGem = (InventoryItem)player.TradeWindow.TradeItems[i];
-                    spellcraftInfos.Add("\t" + currentGem.Name + " - " + SkillBase.GetPropertyName(player.Client, (eProperty)currentGem.Bonus1Type) + ": (" + GetGemImbuePoints(currentGem.Bonus1Type, currentGem.Bonus1) + ") " + currentGem.Bonus1 + " " + ((currentGem.Bonus1Type >= (int)eProperty.Resist_First && currentGem.Bonus1Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
+                    spellcraftInfos.Add("\t" + currentGem!.Name + " - " + SkillBase.GetPropertyName(player.Client, (eProperty)currentGem.Bonus1Type) + ": (" + GetGemImbuePoints(currentGem.Bonus1Type, currentGem.Bonus1) + ") " + currentGem.Bonus1 + " " + ((currentGem.Bonus1Type >= (int)eProperty.Resist_First && currentGem.Bonus1Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
                 }
             }
             spellcraftInfos.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "SpellCrafting.ShowSpellCraftingInfos.ImbueCapacity", totalGemmesCharges, totalItemCharges));
@@ -589,7 +650,7 @@ namespace DOL.GS
                 for (int i = 0; i < player.TradeWindow.TradeItems.Count; i++)
                 {
                     InventoryItem currentGem = (InventoryItem)player.TradeWindow.TradeItems[i];
-                    int currentGemCharge = GetGemImbuePoints(currentGem.Bonus1Type, currentGem.Bonus1);
+                    int currentGemCharge = GetGemImbuePoints(currentGem!.Bonus1Type, currentGem.Bonus1);
                     if (currentGemCharge > biggerGemCharge) biggerGemCharge = currentGemCharge;
 
                     totalGemBonus += currentGemCharge;

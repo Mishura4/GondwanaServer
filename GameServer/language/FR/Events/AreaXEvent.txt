@@ -1,5 +1,5 @@
 Area.Event.Timer.Start:			Un évènement se déclenche, vous avez {0} secondes pour agir.
-Area.Event.Timer.Stop:			Le temps de l'évènement est écoulé ! Essayez à nouveau!
+Area.Event.Timer.Stop:			Le temps de l'évènement est écoulé ! Essayez à nouveau !
 Area.Event.CannotUseItemAgain:		Vous ne pouvez pas utiliser cet objet à nouveau pour le moment !
 Area.Event.ConfirmUseItem:			Êtes-vous sûr de vouloir utiliser [{0}] ?
 Area.Event.UsedItem:				Vous avez utilisé [{0}].

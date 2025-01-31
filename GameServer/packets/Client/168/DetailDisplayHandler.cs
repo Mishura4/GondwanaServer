@@ -140,7 +140,17 @@ namespace DOL.GS.PacketHandler.Client.v168
                         // Delve() and you're done, spells, charges and everything else.
 
                         // Let the player class create the appropriate item to delve
-                        caption = invItem!.Name;
+                        GameInventoryItem gii = invItem as GameInventoryItem;
+                        if (gii != null)
+                        {
+                            // We can call your new GetTranslatedName
+                            caption = gii.GetTranslatedName(client.Player);
+                        }
+                        else
+                        {
+                            // fallback if it's not a GameInventoryItem
+                            caption = invItem!.Name;
+                        }
 
                         if (client.Player.DelveItem(invItem, objectInfo))
                             break;
@@ -150,7 +160,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                         //**********************************
                         //show crafter name
                         //**********************************
-                        if (invItem.IsCrafted)
+                        if (invItem!.IsCrafted)
                         {
                             objectInfo.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.CrafterName", invItem.Creator));
                             objectInfo.Add(" ");

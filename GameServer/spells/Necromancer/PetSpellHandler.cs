@@ -22,6 +22,7 @@ using DOL.GS.PacketHandler;
 using DOL.Events;
 using DOL.Language;
 using DOL.GS.PacketHandler.Client.v168;
+using System.Collections.Generic;
 
 namespace DOL.GS.Spells
 {
@@ -121,23 +122,32 @@ namespace DOL.GS.Spells
             string desc1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PetSpell.MainDescription1");
             string desc2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.PetSpell.MainDescription2");
 
-            var subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID(Spell.SubSpellID), null);
-            string subSpellDelveInfo = "";
-            if (subSpellHandler != null && subSpellHandler.DelveInfo != null)
+            Spell subSpell = SkillBase.GetSpellByID(Spell.SubSpellID);
+            var subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, subSpell, null);
+            string subSpellDescription = subSpellHandler.GetDelveDescription(delveClient);
+
+            IList<string> allLines = subSpellHandler.DelveInfo;
+            var filteredLines = new List<string>();
+            foreach (string line in allLines)
             {
-                foreach (var line in subSpellHandler.DelveInfo)
-                {
-                    subSpellDelveInfo += line + "\n";
-                }
+                if (line.Equals(subSpellHandler.Spell.Description, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                filteredLines.Add(line);
             }
+
+            string subSpellDelveInfo = string.Join("\n", filteredLines);
 
             if (Spell.RecastDelay > 0)
             {
                 string desc3 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                return desc1 + "\n" + desc2 + "\n\n" + subSpellDelveInfo + "\n\n" + desc3;
+                return desc1 + "\n" + desc2 + "\n\n" + subSpellDescription + "\n\n" + subSpellDelveInfo + "\n\n" + desc3;
             }
 
-            return desc1 + "\n" + desc2 + "\n\n" + subSpellDelveInfo;
+            return desc1 + "\n" + desc2 + "\n\n" + subSpellDescription + "\n\n" + subSpellDelveInfo;
         }
     }
 }

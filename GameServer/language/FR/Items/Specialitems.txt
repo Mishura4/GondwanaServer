@@ -28,5 +28,8 @@ Items.Specialitems.MiniPetNoCast:					Vous ne pouvez pas lancer ce sort ici !
 Items.Specialitems.FirecampNoSit:					Ne restez pas assis près d'un feu de camp pour retirer cet effet.
 Items.Specialitems.FirecampHeatRegen:				La chaleur du feu de camp permet de vous reposer plus rapidement.
 
-Items.Specialitems.StorageBag.NoBag:				Vous n'avez pas de sac ouvert!
-Items.Specialitems.StorageBag.BadItem:				Vous ne pouvez pas mettre cet object dans ce sac!
+Items.Specialitems.StorageBag.NoBag:				Vous n'avez pas de sac ouvert !
+Items.Specialitems.StorageBag.BadItem:				Vous ne pouvez pas mettre cet object dans ce sac !
+
+Items.Specialitems.DieTriggerSpell.Destroyed:		Votre {0} se brise après s'être déclenché lors de la mort !
+Items.Specialitems.DieTriggerSpell.FailDestroy:		Échec de la destruction de l'objet pour une raison inconnue !

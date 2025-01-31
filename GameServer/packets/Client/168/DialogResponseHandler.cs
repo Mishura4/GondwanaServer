@@ -30,7 +30,7 @@ namespace DOL.GS.PacketHandler.Client.v168
     [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.DialogResponse, "Response Packet from a Question Dialog", eClientStatus.PlayerInGame)]
     public class DialogResponseHandler : IPacketHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public void HandlePacket(GameClient client, GSPacketIn packet)
         {
@@ -130,14 +130,12 @@ namespace DOL.GS.PacketHandler.Client.v168
                             {
                                 if (guildLeader == null)
                                 {
-                                    player.Out.SendMessage("You need to be in the same region as the guild leader to accept an invitation.",
-                                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.SameRegionGuildLeaderToAccept"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
                                 if (player.Guild != null)
                                 {
-                                    player.Out.SendMessage("You are still in a guild, you'll have to leave it first.", eChatType.CT_System,
-                                                           eChatLoc.CL_SystemWindow);
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.StillInGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
                                 if (guildLeader.Guild != null)
@@ -146,15 +144,13 @@ namespace DOL.GS.PacketHandler.Client.v168
                                     return;
                                 }
 
-                                player.Out.SendMessage("Player doing the invite is not in a guild!", eChatType.CT_System,
-                                                       eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.GuildLeaderNotInGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
                             if (guildLeader != null)
                             {
-                                guildLeader.Out.SendMessage(player.Name + " declined your invite.", eChatType.CT_System,
-                                                            eChatLoc.CL_SystemWindow);
+                                guildLeader.Out.SendMessage(LanguageMgr.GetTranslation(guildLeader.Client.Account.Language, "DialogResponseHandler.GuildInviteDeclined", player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             return;
                         }
@@ -164,7 +160,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                             {
                                 if (player.Guild == null)
                                 {
-                                    player.Out.SendMessage("You are not in a guild.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.NotInGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
 
@@ -172,7 +168,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                             }
                             else
                             {
-                                player.Out.SendMessage("You decline to quit your guild.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.GuildDeclineQuit"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                             break;
@@ -209,7 +205,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
                                 if (player.Group != null)
                                 {
-                                    player.Out.SendMessage("You are still in a group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.StillInGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
                                 if (!GameServer.ServerRules.IsAllowedToGroup(groupLeader, player, false))
@@ -218,7 +214,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                                 }
                                 if (player.InCombatPvE)
                                 {
-                                    player.Out.SendMessage("You can't join a group while in combat!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.CannotJoinGroupInCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
                                 if (groupLeader.Group != null)
@@ -226,7 +222,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                                     if (groupLeader.Group.Leader != groupLeader) return;
                                     if (groupLeader.Group.MemberCount >= ServerProperties.Properties.GROUP_MAX_MEMBER)
                                     {
-                                        player.Out.SendMessage("The group is full.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.GroupFull"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                         return;
                                     }
                                     groupLeader.Group.AddMember(player);
@@ -252,16 +248,14 @@ namespace DOL.GS.PacketHandler.Client.v168
                             {
                                 if (player.Guild == null)
                                 {
-                                    player.Out.SendMessage("You have to be a member of a guild, before you can use any of the commands!",
-                                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.MustBeGuildMemberToUseCommands"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
 
                                 AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(player.Position, WorldMgr.VISIBILITY_DISTANCE);
                                 if (keep == null)
                                 {
-                                    player.Out.SendMessage("You have to be near the keep to claim it.", eChatType.CT_System,
-                                                           eChatLoc.CL_SystemWindow);
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.NearKeepToClaim"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
 
@@ -316,11 +310,12 @@ namespace DOL.GS.PacketHandler.Client.v168
                                 player.SaveIntoDatabase();
 
                                 // notify the player of what we took and how long they are prepaid for
-                                player.Out.SendMessage("You deposit " + Money.GetString(moneyToAdd) + " in the lockbox.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                player.Out.SendMessage("The lockbox now has " + Money.GetString(house.KeptMoney) + " in it.  The weekly payment is " +
-                                    Money.GetString(HouseMgr.GetRentByModel(house.Model)) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                player.Out.SendMessage("The house is now prepaid for the next " + (house.KeptMoney / HouseMgr.GetRentByModel(house.Model)) +
-                                    " payments.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                string depositMoneyMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.DepositInLockbox", Money.GetString(moneyToAdd));
+                                player.Out.SendMessage(depositMoneyMsg, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                string lockboxMoneyMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.LockboxHasMoneyWeeklyPayment", Money.GetString(house.KeptMoney), Money.GetString(HouseMgr.GetRentByModel(house.Model)));
+                                player.Out.SendMessage(lockboxMoneyMsg, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                string housePrepaidMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.HousePrepaidForPayments", (house.KeptMoney / HouseMgr.GetRentByModel(house.Model)));
+                                player.Out.SendMessage(housePrepaidMsg, eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                                 // clean up
                                 player.TempProperties.removeProperty(HousingConstants.MoneyForHouseRent);
@@ -341,11 +336,12 @@ namespace DOL.GS.PacketHandler.Client.v168
                                 player.SaveIntoDatabase();
 
                                 // notify the player of what we took and how long they are prepaid for
-                                player.Out.SendMessage("You deposit " + Money.GetString(bpsToMoney) + " in the lockbox.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                player.Out.SendMessage("The lockbox now has " + Money.GetString(house.KeptMoney) + " in it.  The weekly payment is " +
-                                    Money.GetString(HouseMgr.GetRentByModel(house.Model)) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                player.Out.SendMessage("The house is now prepaid for the next " + (house.KeptMoney / HouseMgr.GetRentByModel(house.Model)) +
-                                    " payments.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                string depositBPsMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.DepositInLockbox", Money.GetString(bpsToMoney));
+                                player.Out.SendMessage(depositBPsMsg, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                string lockboxBPsMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.LockboxHasMoneyWeeklyPayment", Money.GetString(house.KeptMoney), Money.GetString(HouseMgr.GetRentByModel(house.Model)));
+                                player.Out.SendMessage(lockboxBPsMsg, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                string housePrepaidBPsMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.HousePrepaidForPayments", (house.KeptMoney / HouseMgr.GetRentByModel(house.Model)));
+                                player.Out.SendMessage(housePrepaidBPsMsg, eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                                 // clean up
                                 player.TempProperties.removeProperty(HousingConstants.BPsForHouseRent);

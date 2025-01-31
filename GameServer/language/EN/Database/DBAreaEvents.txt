@@ -1,0 +1,2 @@
+
+Languages.DBAreaEvents.0056TimerStart:			You entered on a Storm platform. You and your partner have {0} seconds to say the magic word.

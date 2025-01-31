@@ -1,0 +1,5 @@
+
+Languages.DBMoneyNPC.0064NeedMoreMoney:			It won't be enough!
+Languages.DBMoneyNPC.0064Validate:			Great thanks! The 3rd event in the chain will start...
+Languages.DBMoneyNPC.0064Interact:			Hi my friend! I would need {0}, plus {2} {3} and {5} {6} to launch my event! Currently, I only have {1}, {4} {3}, and {7} {6}. Your support would be welcomed to start something amazing!
+Languages.DBMoneyNPC.0064Interact2:			Hi my friend! I would need {0}, plus {2} {3}, {5} {6}, {8} {9}, and {11} {12} to launch my event! Currently, I only have {1}, {4} {3}, {7} {6}, {10} {9}, and {13} {12}. Your support would be welcomed to start something amazing!

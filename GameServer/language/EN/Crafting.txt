@@ -4,10 +4,14 @@ Crafting.CheckTool.FindAlchemyKit:			You must find a alchemy kit!
 Crafting.CheckTool.FindAlchemyTable:		You must find a alchemy table!
 Crafting.CheckTool.FindForge:				You must find a forge!
 Crafting.CheckTool.FindLathe:				You must find a lathe!
+Crafting.CheckTool.FindWeaverTannery:		You must find a weaver or a tannery!
+Crafting.CheckTool.FindForgeLathe:			You must find a forge or a lathe!
 Crafting.CheckTool.FindMortarPestle:		You must find a mortar and pestle!
-Crafting.CheckTool.FindPlaningTool:			You must find a planing tool!
+Crafting.CheckTool.FindSmithPlaningTool:	You must find a planing tool!
 Crafting.CheckTool.FindSewingKit:			You must find a sewing kit!
 Crafting.CheckTool.FindSmithTool:			You must find a smith tool!
+Crafting.CheckTool.FindPlaningTool:			You must find a smith tool or a planing tool!
+Crafting.CheckTool.FindSmithSewingTool:		You must find a smith tool and a sewing tool!
 Crafting.CheckTool.FindSpellcraftKit:		You must find a spellcraft kit!
 Crafting.CheckTool.MortarAndPestle:			mortar and pestle
 Crafting.CheckTool.NotHaveTools:			You do not have the tools to make the {0}.
@@ -209,3 +213,4 @@ SpellCrafting.ShowSpellCraftingInfos.TotalImbue:	Spellcrafting the {0} ({1} tota
 # /BountyCrafting
 BountyCraft.Promotion.Unlock:						You have unlocked BountyCrafting skills!
 BountyCraft.Promotion.LegendaryMaster:				Congratulations! You have reached the rank of Legendary craft master and unlocked BountyCrafting skills!
+BountyCraft.Class.CannotCraft:						Your class doesn't allow you to craft this item!

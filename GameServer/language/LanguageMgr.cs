@@ -1265,6 +1265,76 @@ namespace DOL.Language
             return string.Format(messageKey, args);
         }
 
+        public static string GetAreaEventMessage(string language, string messageKey, params object[] args)
+        {
+            if (string.IsNullOrEmpty(messageKey))
+            {
+                return string.Empty;
+            }
+
+            if (messageKey.StartsWith("Languages.DBAreaEvents.", StringComparison.OrdinalIgnoreCase))
+            {
+                if (TryGetTranslation(out string translation, language, messageKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return $"(Translation not found for {messageKey})";
+                }
+            }
+
+            return string.Format(messageKey, args);
+        }
+
+        public static string GetMoneyNPCMessage(string language, string messageKey, params object[] args)
+        {
+            if (string.IsNullOrEmpty(messageKey))
+                return string.Empty;
+
+            if (messageKey.StartsWith("Languages.DBMoneyNPC.", StringComparison.OrdinalIgnoreCase))
+            {
+                if (TryGetTranslation(out string translation, language, messageKey, args))
+                    return translation;
+                else
+                    return $"(Translation not found for {messageKey})";
+            }
+
+            return string.Format(messageKey, args);
+        }
+
+        public static string GetItemNameMessage(string language, string messageKey)
+        {
+            if (string.IsNullOrEmpty(messageKey))
+                return string.Empty;
+
+            if (messageKey.StartsWith("Languages.DBItemName.", StringComparison.OrdinalIgnoreCase))
+            {
+                if (TryGetTranslation(out string translation, language, messageKey))
+                    return translation;
+                else
+                    return $"(Translation not found for {messageKey})";
+            }
+
+            return messageKey;
+        }
+
+        public static string GetItemDescMessage(string language, string messageKey, params object[] args)
+        {
+            if (string.IsNullOrEmpty(messageKey))
+                return string.Empty;
+
+            if (messageKey.StartsWith("Languages.DBItemDesc.", StringComparison.OrdinalIgnoreCase))
+            {
+                if (TryGetTranslation(out string translation, language, messageKey, args))
+                    return translation;
+                else
+                    return $"(Translation not found for {messageKey})";
+            }
+
+            return string.Format(messageKey, args);
+        }
+
         #endregion Database translations
     }
 }

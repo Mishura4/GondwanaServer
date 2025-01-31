@@ -253,7 +253,7 @@ namespace DOL.GS.ServerRules
             }
 
             //allow confused mobs to attack same realm
-            if (attacker is GameNPC && (attacker as GameNPC).IsConfused && attacker.Realm == defender.Realm)
+            if (attacker is GameNPC && (attacker as GameNPC)!.IsConfused && attacker.Realm == defender.Realm)
                 return true;
 
             // "friendly" NPCs can't attack "friendly" players
@@ -275,7 +275,7 @@ namespace DOL.GS.ServerRules
                 if (defender is GameKeepGuard)
                     return false;
 
-                if (defender is GameNPC && (defender as GameNPC).Brain is IControlledBrain == false)
+                if (defender is GameNPC && (defender as GameNPC)!.Brain is IControlledBrain == false)
                     return false;
             }
 
@@ -505,7 +505,7 @@ namespace DOL.GS.ServerRules
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.KillOutdoorsCreatures") + ": " + player.TaskXPlayer.KillOutdoorsCreaturesStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.TotalCreaturesKilled") + ": " + (player.TaskXPlayer.KillCreaturesInDungeonsStats + player.TaskXPlayer.KillOutdoorsCreaturesStats).ToString("F0"));
                     stat.Add(" ");
-                    stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.StatsCrafting"));
+                    stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.StatsCrafting", Properties.CRAFTING_TASKTOKEN_MINRECIPELVL));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SuccessfulItemCombinations") + ": " + player.TaskXPlayer.SuccessfulItemCombinationsStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.MasteredCrafts") + ": " + player.TaskXPlayer.MasteredCraftsStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.MasterpieceCrafted") + ": " + player.TaskXPlayer.MasterpieceCraftedStats.ToString("F0"));
@@ -657,7 +657,7 @@ namespace DOL.GS.ServerRules
             //pvp servers, the realm changes to the group leaders realm
             if (killer is GamePlayer)
             {
-                Group group = ((killer as GamePlayer).Group);
+                Group group = ((killer as GamePlayer)!.Group);
                 if (group != null)
                     realm = (eRealm)group.Leader.Realm;
                 else realm = (eRealm)killer.Realm;

@@ -693,9 +693,9 @@ namespace DOL.GS
             if (this.eSkill == eCraftingSkill.BountyCrafting)
             {
                 if (!Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
-                    craftingTime = craftingTime * 2;
+                    craftingTime = craftingTime * 3;
                 else
-                    craftingTime = craftingTime * 5;
+                    craftingTime = craftingTime * 7;
             }
 
             // Player does check for capital city bonus as well

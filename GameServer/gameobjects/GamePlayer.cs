@@ -8975,6 +8975,18 @@ namespace DOL.GS
             {
                 PlayerKilledByPlayer(playerKiller);
             }
+
+            for (int slot = (int)eInventorySlot.FirstBackpack; slot <= (int)eInventorySlot.LastBackpack; slot++)
+            {
+                base.Die(killer);
+                InventoryItem item = Inventory.GetItem((eInventorySlot)slot);
+
+                if (item is DieTriggerSpell dieTrigger)
+                {
+                    dieTrigger.OnPlayerDie(this, killer);
+                    break; // stop looking, only use the first item we find
+                }
+            }
         }
 
         /// <summary>

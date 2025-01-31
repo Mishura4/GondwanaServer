@@ -127,6 +127,7 @@ DetailDisplayHandler.WriteMagicalBonuses.UsedItem:			- Le sort a une chance d'ê
 DetailDisplayHandler.WriteMagicalBonuses.UseItem1:			Peut être utilisé toutes les : {0} secondes.
 DetailDisplayHandler.WriteMagicalBonuses.UseItem2:			Peut être utilisé toutes les : {0}:{1} min.
 DetailDisplayHandler.WriteMagicalBonuses.UseItem3:			Peut être réutilisé dans : {0}.
+DetailDisplayHandler.WriteMagicalBonuses.Inactive:			(inactif)
 DetailDisplayHandler.WriteBonusConditions.Title:			Conditions de Bonus:
 DetailDisplayHandler.WriteBonusConditions.Renaissance:		Doit être "Renaissance"
 DetailDisplayHandler.WritePoisonInfo.Charges:				- {0} Charges
@@ -216,3 +217,22 @@ DestroyItemRequestHandler.CantDestroyItem:		Vous ne pouvez pas détruire {0} !
 DestroyItemRequestHandler.CantDestroyRelic:		Vous ne pouvez pas détruire une relique !
 DestroyItemRequestHandler.CantDestroyEquippedItem:		Vous ne pouvez pas détruire un objet équipé !
 DestroyItemRequestHandler.ItemDestroyed:		Vous détruisez {0}.
+
+# /DialogResponseHandler
+DialogResponseHandler.SameRegionGuildLeaderToAccept:		Vous devez être dans la même région que le chef de guilde pour accepter une invitation.
+DialogResponseHandler.StillInGuild:							Vous êtes toujours dans une guilde, vous devrez la quitter d'abord.
+DialogResponseHandler.GuildLeaderNotInGuild:				Le joueur qui invite n'est pas dans une guilde !
+DialogResponseHandler.GuildInviteDeclined:					{0} a décliné votre invitation.
+DialogResponseHandler.NotInGuild:							Vous n'êtes pas dans une guilde.
+DialogResponseHandler.GuildDeclineQuit:						Vous refusez de quitter votre guilde.
+DialogResponseHandler.StillInGroup:							Vous êtes encore dans le groupe.
+DialogResponseHandler.CannotJoinGroupInCombat:				Vous ne pouvez pas rejoindre un groupe pendant un combat !
+DialogResponseHandler.GroupFull:							Le groupe est complet.
+DialogResponseHandler.MustBeGuildMemberToUseCommands:		Vous devez être membre d'une guilde avant de pouvoir utiliser ces commandes !
+DialogResponseHandler.NearKeepToClaim:						Vous devez être près du fort pour le réclamer.
+DialogResponseHandler.DepositInLockbox:						Vous déposez {0} dans la boîte de dépôt.
+DialogResponseHandler.LockboxHasMoneyWeeklyPayment:			La boîte de dépôt contient maintenant {0}. Le paiement hebdomadaire est de {1}.
+DialogResponseHandler.HousePrepaidForPayments:				La maison est maintenant prépayée pour les {0} prochains paiements.
+
+# /EmblemDialogReponseHandler
+EmblemDialogReponseHandler.EmblemAlreadyInUse:				Cet emblème est déjà utilisé par une autre guilde, veuillez en choisir un autre !

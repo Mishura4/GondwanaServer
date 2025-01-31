@@ -152,7 +152,7 @@ namespace DOL.GameEvents
 
             foreach (var areaEv in areaEvents.Where(ev => ev.AreaConditions != null))
             {
-                areaEv.GetOrCreateInstance(player)?.AreaConditions.PlayerEntersArea(player, area);
+                areaEv.GetOrCreateInstance(player)?.AreaConditions!.PlayerEntersArea(player, area);
             }
         }
 
@@ -163,7 +163,7 @@ namespace DOL.GameEvents
 
             foreach (var areaEv in areaEvents.Where(ev => ev.AreaConditions != null))
             {
-                areaEv.GetInstance(player)?.AreaConditions.PlayerLeavesArea(player, area);
+                areaEv.GetInstance(player)?.AreaConditions!.PlayerLeavesArea(player, area);
             }
         }
 
@@ -549,7 +549,8 @@ namespace DOL.GameEvents
             }
 
             infos.Add(" -- EndActionStartEventID: " + (e.EndActionStartEventID ?? string.Empty));
-            infos.Add(" -- EndText: " + e.EndText ?? string.Empty);
+            infos.Add(" -- EndTextA: " + e.EndTextA ?? string.Empty);
+            infos.Add(" -- EndTextB: " + e.EndTextB ?? string.Empty);
             infos.Add(" -- EventChance: " + e.EventChance);
             infos.Add(" -- EventChanceInterval: " + (e.EventChanceInterval.HasValue ? (e.EventChanceInterval.Value.TotalMinutes + " mins") : string.Empty));
             infos.Add(" -- RemainingTimeText: " + e.RemainingTimeText ?? string.Empty);

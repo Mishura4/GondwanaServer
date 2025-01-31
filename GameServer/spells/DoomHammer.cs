@@ -23,7 +23,7 @@ namespace DOL.GS.Spells
         {
             if (Caster.IsDisarmed)
             {
-                MessageToCaster("You are disarmed and can't use this spell!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "GameObjects.GamePlayer.StartAttack.CantDisarmed2", Caster.GetPersonalizedName(selectedTarget)), eChatType.CT_SpellResisted);
                 return false;
             }
             return base.CheckBeginCast(selectedTarget, quiet);
@@ -64,6 +64,7 @@ namespace DOL.GS.Spells
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
             string damageTypeName = LanguageMgr.GetDamageOfType(language, Spell.DamageType);
             int recastSeconds = Spell.RecastDelay / 1000;
+            int durationSeconds = Spell.Duration / 1000;
 
             string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.DoomHammer.MainDescription", Spell.Damage, damageTypeName);
 
@@ -84,11 +85,18 @@ namespace DOL.GS.Spells
                 }
             }
 
+            if (Spell.Duration > 0)
+            {
+                string durationDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription1", durationSeconds);
+                sb.Append("\n\n");
+                sb.Append(durationDesc);
+            }
+
             if (Spell.RecastDelay > 0)
             {
-                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                string recastDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
                 sb.Append("\n\n");
-                sb.Append(secondDesc);
+                sb.Append(recastDesc);
             }
 
             return sb.ToString().TrimEnd();

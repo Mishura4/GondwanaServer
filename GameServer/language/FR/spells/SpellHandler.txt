@@ -168,6 +168,8 @@ SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Autorisez-vous {0} à vous 
 SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Personne n'essaie actuellement de vous ressusciter.
 SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Vous refusez d'être ressuscité.
 SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Vous avez été ressuscité par {0} !
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	Une force miraculeuse vous ranime !
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	Une force miraculeuse vous ranime ! Elle vous rendra {0}% de vie.
 SpellHandler.ResurrectSpellHandler.RezExpired:			Votre sort de résurrection a expiré.
 SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Votre cible envisage déjà une résurrection !
 SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		Le joueur que vous avez ressuscité ne valait aucun points de royaume à sa mort.

@@ -82,10 +82,16 @@ namespace DOL.GS.Spells
                 }
 
                 GamePlayer casterPlayer = m_caster as GamePlayer;
-                if (casterPlayer != null)
+                if (casterPlayer != null && targetPlayer != null)
                 {
-                    //send resurrect dialog
-                    targetPlayer.Out.SendCustomDialog(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.ResurrectSpellHandler.ResurrectDialog", targetPlayer.GetPersonalizedName(casterPlayer), m_spell.ResurrectHealth), new CustomDialogResponse(ResurrectResponceHandler));
+                    if (casterPlayer == targetPlayer)
+                    {
+                        targetPlayer.Out.SendCustomDialog(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog", m_spell.ResurrectHealth), new CustomDialogResponse(ResurrectResponceHandler));
+                    }
+                    else
+                    {
+                        targetPlayer.Out.SendCustomDialog(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.ResurrectSpellHandler.ResurrectDialog", targetPlayer.GetPersonalizedName(casterPlayer), m_spell.ResurrectHealth), new CustomDialogResponse(ResurrectResponceHandler));
+                    }
                 }
             }
             return true;
@@ -202,7 +208,14 @@ namespace DOL.GS.Spells
                 player.StopReleaseTimer();
                 player.Out.SendPlayerRevive(player);
                 player.UpdatePlayerStatus();
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.ResurrectSpellHandler.ResurrectedBy", m_caster.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                if (m_caster == player)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.ResurrectSpellHandler.ResurrectedByToken"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                else
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.ResurrectSpellHandler.ResurrectedBy", m_caster.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
                 player.Notify(GamePlayerEvent.Revive, player, new RevivedEventArgs(Caster, Spell));
 
                 //Lifeflight add this should make it so players who have been ressurected don't take damage for 5 seconds
@@ -222,7 +235,7 @@ namespace DOL.GS.Spells
                 }
 
                 GamePlayer casterPlayer = Caster as GamePlayer;
-                if (casterPlayer != null)
+                if (casterPlayer != null && casterPlayer != player)
                 {
                     long rezRps = player.LastDeathRealmPoints * (Spell.ResurrectHealth + 50) / 1000;
                     if (rezRps > 0)

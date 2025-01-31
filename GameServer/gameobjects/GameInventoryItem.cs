@@ -465,9 +465,11 @@ namespace DOL.GS
                 delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.HandlePacket.CrafterName", Creator));
                 delve.Add(" ");
             }
-            if (Description != null && Description != "")
+
+            string desc = GetTranslatedDescription(player);
+            if (!string.IsNullOrEmpty(desc))
             {
-                delve.Add(Description);
+                delve.Add(desc);
                 delve.Add(" ");
             }
 
@@ -509,7 +511,7 @@ namespace DOL.GS
                 WritePoisonInfo(delve, player.Client);
             }
 
-            if (this.IsPotion()) // potion
+            if (this.IsPotion() || this.ClassType.Contains("DOL.GS.DieTriggerSpell")) // potion or "DieTriggerSpell" token
             {
                 WritePotionInfo(delve, player.Client);
             }
@@ -2031,7 +2033,7 @@ namespace DOL.GS
 
             if (itemAllInactive || !passBonusCondition)
             {
-                formattedLine += " (inactive)";
+                formattedLine += " " + LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.Inactive");
             }
 
             list.Add(formattedLine);
@@ -2090,7 +2092,7 @@ namespace DOL.GS
 
             if (itemAllInactive || !passBonusCondition)
             {
-                line += " (inactive)";
+                line += " " + LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.Inactive");
             }
 
             list.Add(line);
@@ -2400,6 +2402,18 @@ namespace DOL.GS
                 effectiveAF = af * Quality / 100.0 * Condition / MaxCondition * (1 + SPD_ABS / 100.0);
                 delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "DetailDisplayHandler.WriteClassicArmorInfos.Factor", (int)effectiveAF));
             }
+        }
+
+        public string GetTranslatedName(GamePlayer player)
+        {
+            string lang = player?.Client?.Account?.Language ?? LanguageMgr.DefaultLanguage;
+            return LanguageMgr.GetItemNameMessage(lang, Template?.Name ?? Name);
+        }
+
+        public string GetTranslatedDescription(GamePlayer player)
+        {
+            string lang = player?.Client?.Account?.Language ?? LanguageMgr.DefaultLanguage;
+            return LanguageMgr.GetItemDescMessage(lang, Template?.Description ?? Description);
         }
 
         /// <summary>

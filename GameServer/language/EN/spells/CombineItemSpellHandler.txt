@@ -12,7 +12,7 @@ Spell.CombineItemSpellHandler.InternalError:		An internal error has occured. The
 ToolName.Forge:			a forge
 ToolName.Tannery:		a tannery
 ToolName.Weaver:		a weaver
-ToolName.CarpentryWorkshop:	a carpentry workshop
+ToolName.CarpentryWorkshop:	a lathe
 ToolName.Cauldron:		a cauldron
 ToolName.AlchemyTable:		an alchemy table
 ToolName.Fire:			a campfire

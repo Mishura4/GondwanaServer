@@ -21,6 +21,7 @@ using DOL.Language;
 using DOL.GS.PacketHandler;
 using System;
 using System.Collections.Generic;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS
 {
@@ -29,8 +30,7 @@ namespace DOL.GS
         public WeaponCrafting()
         {
             Icon = 0x01;
-            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE,
-                "Crafting.Name.Weaponcraft");
+            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "Crafting.Name.Weaponcraft");
             eSkill = eCraftingSkill.WeaponCrafting;
         }
 
@@ -42,21 +42,155 @@ namespace DOL.GS
             }
         }
 
+        /// <summary>
+        /// Checks the player's backpack tools and nearby static items (forge, lathe).
+        /// Also implements GM bypass at the top if you want staff to skip checks.
+        /// </summary>
         protected override bool CheckForTools(GamePlayer player, Recipe recipe)
         {
-            foreach (GameStaticItem item in player.GetItemsInRadius(CRAFT_DISTANCE))
-            {
-                if (item.Name.ToLower() == "forge" || item.Model == 478) // Forge
-                    return true;
-            }
-
-            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForge"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
             if (player.Client.Account.PrivLevel > 1)
                 return true;
 
-            return false;
+            eObjectType objectType = (eObjectType)recipe.Product.Object_Type;
+
+            if (!CheckNearbyStaticItemRequirements(player, recipe, objectType))
+                return false;
+
+            if (!Properties.ALLOW_CLASSIC_CRAFT_TOOLCHECK)
+                return true;
+
+            if (!CheckInventoryToolRequirements(player, recipe, objectType))
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if the player has the needed backpack tool(s) 
+        /// for forging certain weapon objectTypes.
+        /// </summary>
+        private bool CheckInventoryToolRequirements(GamePlayer player, Recipe recipe, eObjectType objectType)
+        {
+            bool HasAnyTools(params string[] toolIdNbs)
+            {
+                for (int slot = (int)eInventorySlot.FirstBackpack; slot <= (int)eInventorySlot.LastBackpack; slot++)
+                {
+                    InventoryItem invItem = player.Inventory.GetItem((eInventorySlot)slot);
+                    if (invItem == null)
+                        continue;
+
+                    string itemIdNb = invItem.Id_nb?.ToLower();
+                    if (itemIdNb == null)
+                        continue;
+
+                    foreach (var neededId in toolIdNbs)
+                    {
+                        if (itemIdNb == neededId.ToLower())
+                            return true;
+                    }
+                }
+                return false;
+            }
+
+            var forgingNeeded = new List<eObjectType>()
+            {
+                eObjectType.LeftAxe, eObjectType.Sword, eObjectType.Axe, eObjectType.Hammer, eObjectType.Shield,
+                eObjectType.Blades, eObjectType.Piercing, eObjectType.Blunt, eObjectType.LargeWeapons,
+                eObjectType.CrushingWeapon, eObjectType.SlashingWeapon, eObjectType.ThrustWeapon,
+                eObjectType.TwoHandedWeapon, eObjectType.Plate, eObjectType.Scale, eObjectType.Chain
+            };
+
+            if (forgingNeeded.Contains(objectType))
+            {
+                bool hasHammer = HasAnyTools("smiths_hammer", "smiths_hammer2", "smiths_hammer3");
+                if (!hasHammer)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindSmithTool", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+
+            var forgingOrLathe = new List<eObjectType>()
+            {
+                eObjectType.Spear, eObjectType.HandToHand, eObjectType.CelticSpear, eObjectType.PolearmWeapon, eObjectType.FistWraps
+            };
+            if (forgingOrLathe.Contains(objectType))
+            {
+                bool hasHammer = HasAnyTools("smiths_hammer", "smiths_hammer2", "smiths_hammer3");
+                bool hasPlaningTool = HasAnyTools("planing_tool", "planing_tool2", "planing_tool3");
+                if (!hasHammer && !hasPlaningTool)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindSmithPlaningTool", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if the player is near the correct static item (forge or lathe) 
+        /// depending on the weapon objectType.
+        /// </summary>
+        private bool CheckNearbyStaticItemRequirements(GamePlayer player, Recipe recipe, eObjectType objectType)
+        {
+            var objectsInRange = player.GetItemsInRadius(CRAFT_DISTANCE);
+
+            List<GameStaticItem> staticItemsInRange = new List<GameStaticItem>();
+            foreach (object obj in objectsInRange)
+            {
+                if (obj is GameStaticItem gsi)
+                    staticItemsInRange.Add(gsi);
+            }
+
+            bool IsNearForge()
+            {
+                return staticItemsInRange.Exists(item => item.Name.ToLower() == "forge" || item.Model == 478);
+            }
+
+            bool IsNearForgeOrLathe()
+            {
+                return staticItemsInRange.Exists(item =>
+                    item.Name.ToLower() == "forge" ||
+                    item.Name.ToLower() == "lathe" ||
+                    item.Name.ToLower() == "atelier de menuiserie" ||
+                    item.Model == 478 || item.Model == 481);
+            }
+
+            var forgingNeeded = new List<eObjectType>()
+            {
+                eObjectType.LeftAxe, eObjectType.Sword, eObjectType.Axe, eObjectType.Hammer, eObjectType.Shield,
+                eObjectType.Blades, eObjectType.Piercing, eObjectType.Blunt, eObjectType.LargeWeapons,
+                eObjectType.CrushingWeapon, eObjectType.SlashingWeapon, eObjectType.ThrustWeapon,
+                eObjectType.TwoHandedWeapon, eObjectType.Plate, eObjectType.Scale, eObjectType.Chain
+            };
+
+            if (forgingNeeded.Contains(objectType))
+            {
+                if (!IsNearForge())
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForge"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+                return true;
+            }
+
+            var forgingOrLathe = new List<eObjectType>()
+            {
+                eObjectType.Spear, eObjectType.HandToHand, eObjectType.CelticSpear, eObjectType.PolearmWeapon, eObjectType.FistWraps
+            };
+            if (forgingOrLathe.Contains(objectType))
+            {
+                if (!IsNearForgeOrLathe())
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForgeLathe"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+                return true;
+            }
+            return true;
         }
 
         /// <summary>
@@ -83,6 +217,7 @@ namespace DOL.GS
                 case (int)eObjectType.LargeWeapons:
                 case (int)eObjectType.CelticSpear:
                 case (int)eObjectType.Scythe:
+                case (int)eObjectType.FistWraps:
                     return recipe.Level - 60;
             }
 

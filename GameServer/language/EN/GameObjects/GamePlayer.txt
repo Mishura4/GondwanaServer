@@ -385,6 +385,7 @@ GameObjects.GamePlayer.StartAttack.CannotWithoutWeapon:		You cannot enter combat
 GameObjects.GamePlayer.StartAttack.CantAttackmesmerized:	You can't attack when you are mesmerized!			
 GameObjects.GamePlayer.StartAttack.CantAttackStunned:		You can't attack when you are stunned!			
 GameObjects.GamePlayer.StartAttack.CantDisarmed:			You are disarmed and cannot attack!
+GameObjects.GamePlayer.StartAttack.CantDisarmed2:			You are disarmed and can't use this spell!
 GameObjects.GamePlayer.StartAttack.CantInShadeMode:			You cannot enter combat in shade mode!
 GameObjects.GamePlayer.StartAttack.CantUseQuiver:			You can't use the selected quiver ammo with your weapon!		
 GameObjects.GamePlayer.StartAttack.CombatNoTarget:			You enter combat mode but have no target!		

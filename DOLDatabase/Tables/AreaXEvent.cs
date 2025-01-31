@@ -17,6 +17,7 @@ namespace DOLDatabase.Tables
         private bool? m_playersLeave;
         private bool? m_resetEvent;
         private int m_timerCount;
+        private string m_timerstarttext;
         private bool m_allowItemDestroy;
         private int m_useItemEffect;
         private int m_useItemSound;
@@ -152,6 +153,21 @@ namespace DOLDatabase.Tables
             set
             {
                 m_timerCount = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255, Index = true)]
+        public string TimerStartText
+        {
+            get
+            {
+                return m_timerstarttext;
+            }
+
+            set
+            {
+                m_timerstarttext = value;
                 Dirty = true;
             }
         }

@@ -1,9 +1,9 @@
 
 Tasks.SystemDisabled: The task system is currently disabled.
-Tasks.PvPRvRGvGTasks: ==== PvP/RvR/GvG TASKS ====
-Tasks.PvETasks: ===== PvE TASKS =====
-Tasks.CraftingTasks: ===== CRAFTING TASKS =====
-Tasks.SpecialTasks: ===== SPECIAL TASKS =====
+Tasks.PvPRvRGvGTasks: ======= PvP/RvR/GvG TASKS =======
+Tasks.PvETasks: ======== PvE TASKS ========
+Tasks.CraftingTasks: == CRAFTING TASKS (Level Min: {0}) ==
+Tasks.SpecialTasks: ======== SPECIAL TASKS ========
 Tasks.TaskCompletionTokenInfo: Each task completion token for PvP, RvR, GvG, PvE, or crafting tasks should be returned to the Taskmaster to receive rewards.
 Tasks.SpecialTaskCompletionTokenInfo: Special task completion tokens are specific to each task. These tokens unlock new player titles and provide special bonuses associated with those titles.
 Tasks.SnapshotTitle: TASKS

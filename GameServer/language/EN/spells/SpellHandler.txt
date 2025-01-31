@@ -168,6 +168,8 @@ SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Do you allow {0} to resurre
 SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		No one is currently trying to resurrect you.
 SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		You decline to be resurrected.
 SpellHandler.ResurrectSpellHandler.ResurrectedBy:		You have been resurrected by {0}!
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	A miraculous force revives you!
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	A miraculous force revives you! It will restore {0}% health.
 SpellHandler.ResurrectSpellHandler.RezExpired:			Your resurrection spell has expired.
 SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Your target is already considering a resurrection!
 SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		The player you resurrected was not worth realm points on death.

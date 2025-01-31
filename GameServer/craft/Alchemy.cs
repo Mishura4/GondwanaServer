@@ -20,7 +20,9 @@
 using DOL.Database;
 using DOL.Language;
 using System;
+using DOL.GS.PacketHandler;
 using System.Collections.Generic;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS
 {
@@ -29,8 +31,7 @@ namespace DOL.GS
         public Alchemy()
         {
             Icon = 0x04;
-            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE,
-                "Crafting.Name.Alchemy");
+            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "Crafting.Name.Alchemy");
             eSkill = eCraftingSkill.Alchemy;
         }
 
@@ -40,6 +41,87 @@ namespace DOL.GS
             {
                 return "CraftersProfession.Alchemist";
             }
+        }
+
+        protected override bool CheckForTools(GamePlayer player, Recipe recipe)
+        {
+            if (player.Client.Account.PrivLevel > 1)
+                return true;
+
+            if (!Properties.ALLOW_CLASSIC_CRAFT_TOOLCHECK)
+                return true;
+
+            eObjectType objectType = (eObjectType)recipe.Product.Object_Type;
+
+            if (objectType == eObjectType.Magical || objectType == eObjectType.AlchemyTincture || objectType == eObjectType.Poison)
+            {
+                if (!HasAnyTools(player, "mortar_and_pestle", "mortar_and_pestle2", "mortar_and_pestle3"))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindMortarPestle", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
+                if (!HasAnyTools(player, "alchemy_kit", "alchemy_kit2", "alchemy_kit3"))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindAlchemyKit", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
+                if (!IsNearAlchemyTable(player))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindAlchemyTable"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+            else if (objectType == eObjectType.GenericItem)
+            {
+                if (!HasAnyTools(player, "mortar_and_pestle", "mortar_and_pestle2", "mortar_and_pestle3"))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindMortarPestle", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool HasAnyTools(GamePlayer player, params string[] toolIds)
+        {
+            for (int slot = (int)eInventorySlot.FirstBackpack; slot <= (int)eInventorySlot.LastBackpack; slot++)
+            {
+                InventoryItem invItem = player.Inventory.GetItem((eInventorySlot)slot);
+                if (invItem == null)
+                    continue;
+
+                string idnb = invItem.Id_nb?.ToLower();
+                if (idnb == null)
+                    continue;
+
+                foreach (string tid in toolIds)
+                {
+                    if (idnb == tid.ToLower())
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsNearAlchemyTable(GamePlayer player)
+        {
+            var objectsInRange = player.GetItemsInRadius(CRAFT_DISTANCE);
+            foreach (object obj in objectsInRange)
+            {
+                if (obj is GameStaticItem gsi)
+                {
+                    string nameLower = gsi.Name.ToLower();
+                    if (nameLower == "alchemy table" || nameLower == "table d'alchimie" || gsi.Model == 820)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         #region Classic Crafting Overrides
@@ -70,7 +152,7 @@ namespace DOL.GS
             if (!base.IsAllowedToCombine(player, item))
                 return false;
 
-            if (((InventoryItem)player.TradeWindow.TradeItems[0]).Object_Type !=
+            if (((InventoryItem)player.TradeWindow.TradeItems[0])!.Object_Type !=
                 (int)eObjectType.AlchemyTincture)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,

@@ -1,9 +1,9 @@
 
 Tasks.SystemDisabled: Le système de tâches est actuellement désactivé.
-Tasks.PvPRvRGvGTasks: ==== TACHES PvP/RvR/GvG ====
-Tasks.PvETasks: ===== TACHES PvE =====
-Tasks.CraftingTasks: ===== TACHES D'ARTISANAT =====
-Tasks.SpecialTasks: ===== TACHES SPECIALES =====
+Tasks.PvPRvRGvGTasks: ======= TACHES PvP/RvR/GvG =======
+Tasks.PvETasks: ======== TACHES PvE ========
+Tasks.CraftingTasks: == TACHES D'ARTISANAT (Niveau min : {0}) ==
+Tasks.SpecialTasks: ======== TACHES SPECIALES ========
 Tasks.TaskCompletionTokenInfo: Chaque jeton de tâches PvP, RvR, GvG, PvE ou d'Artisanat doit être remis au Maître des Tâches pour recevoir des récompenses.
 Tasks.SpecialTaskCompletionTokenInfo: Les jetons de tâches spéciales sont spécifiques à chaque tâche. Ces jetons débloquent de nouveaux titres de joueur auxquels sont associés des bonus spéciaux.
 Tasks.SnapshotTitle: TACHES

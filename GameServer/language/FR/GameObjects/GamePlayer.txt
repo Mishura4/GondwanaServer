@@ -385,6 +385,7 @@ GameObjects.GamePlayer.StartAttack.CannotWithoutWeapon:	    Vous ne pouvez pas a
 GameObjects.GamePlayer.StartAttack.CantAttackmesmerized:    Vous ne pouvez pas attaquer lorsque vous êtes endormi·e.
 GameObjects.GamePlayer.StartAttack.CantAttackStunned:	    Vous ne pouvez pas attaquer lorsque vous êtes assommé·e.
 GameObjects.GamePlayer.StartAttack.CantDisarmed:			Vous êtes désarmé et ne pouvez pas attaquer !
+GameObjects.GamePlayer.StartAttack.CantDisarmed2:			Vous êtes désarmé et ne pouvez pas lancer ce sort !
 GameObjects.GamePlayer.StartAttack.CantInShadeMode:			Vous ne pouvez pas entrer en combat en mode ombre !
 GameObjects.GamePlayer.StartAttack.CantUseQuiver:		    Vous ne pouvez pas sélectionner ce carquois avec votre arme courante.
 GameObjects.GamePlayer.StartAttack.CombatNoTarget:		    Vous entrez en combat, mais n'avez aucune cible.

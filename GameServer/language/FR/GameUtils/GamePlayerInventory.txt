@@ -1,0 +1,17 @@
+GameUtils.GamePlayerInventory.ErrorAddingArtifact:							Erreur lors de l'ajout de l'artefact à l'inventaire, l'objet pourrait être perdu !
+GameUtils.GamePlayerInventory.ErrorAddingItemDatabase:						Erreur lors de l'ajout de l'objet à la base de données, l'objet pourrait être perdu !
+GameUtils.GamePlayerInventory.ErrorSavingItemDatabase:						Erreur lors de l'enregistrement de l'objet dans la base de données, cet objet pourrait être perdu !
+GameUtils.GamePlayerInventory.ErrorDeletingItemDatabase:					Erreur lors de la suppression de l'objet de la base de données, opération annulée !
+GameUtils.GamePlayerInventory.ErrorSavingItemDatabaseOperationAborted:		Erreur lors de l'enregistrement de l'objet dans la base de données, opération annulée !
+GameUtils.GamePlayerInventory.CannotChangeInventoryWhenDead:				Vous ne pouvez pas modifier votre inventaire lorsque vous êtes mort !
+GameUtils.GamePlayerInventory.CannotMoveActiveHorseToSaddlebag:				Vous ne pouvez pas déplacer votre cheval actif dans une sacoche !
+GameUtils.GamePlayerInventory.ClassCannotUseThisItem:						Votre classe ne peut pas utiliser cet objet !
+GameUtils.GamePlayerInventory.ItemCantGoThere:								{0} ne peut pas être placé ici !
+GameUtils.GamePlayerInventory.CantUseItemChampionLevel:						Vous ne pouvez pas utiliser {0}, vous devriez augmenter votre niveau de champion.
+GameUtils.GamePlayerInventory.CantPutItemInActiveBardingSlot:				Vous ne pouvez pas placer {0} dans votre emplacement de bardage actif !
+GameUtils.GamePlayerInventory.CantPutItemInActiveHorseArmorSlot:			Vous ne pouvez pas placer {0} dans votre emplacement d'armure de cheval actif !
+GameUtils.GamePlayerInventory.CantPutItemInActiveMountSlot:					Vous ne pouvez pas placer {0} dans votre emplacement de monture actif !
+GameUtils.GamePlayerInventory.NoSkillInUsingWeaponType:						Vous n'avez pas les compétences pour utiliser ce type d'arme !
+GameUtils.GamePlayerInventory.NoSkillInWearingArmorType:					Vous n'avez pas les compétences pour porter ce type d'armure !
+GameUtils.GamePlayerInventory.CantPutItemInQuiver:							Vous ne pouvez pas placer votre {0} dans votre carquois !
+GameUtils.GamePlayerInventory.CannotPutItemFromThisRealm:					Vous ne pouvez pas placer un objet de ce royaume !

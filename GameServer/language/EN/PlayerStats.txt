@@ -38,7 +38,7 @@ PlayerStatistic.StatsPVP:					PvP Statistics:
 PlayerStatistic.StatsRVR:					RvR Statistics:
 PlayerStatistic.StatsGVG:					GvG Territories Statistics:
 PlayerStatistic.StatsPVE:					PvE Statistics:
-PlayerStatistic.StatsCrafting:				Crafting Statistics:
+PlayerStatistic.StatsCrafting:				Crafting Statistics (lv.>{0}):
 PlayerStatistic.StatsGreatAchievements:		Great Achievements:
 PlayerStatistic.StatsSpecialAchievements:	Special Achievements:
 PlayerStatistic.TotalCreaturesKilled:		Total Creatures killed

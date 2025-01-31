@@ -1,14 +1,18 @@
 # (All)
 Crafting.CheckTool.AlchemyKit:            Kit d'alchimie
-Crafting.CheckTool.FindAlchemyKit:      Vous devez trouver un kit d'alchimie !
-Crafting.CheckTool.FindAlchemyTable:    Vous devez trouver une table d'alchimie !
-Crafting.CheckTool.FindForge:           Vous devez trouver une forge !
-Crafting.CheckTool.FindLathe:           Vous devez trouver un tour !
-Crafting.CheckTool.FindMortarPestle:	Vous devez trouver un mortier et un pilon !
-Crafting.CheckTool.FindPlaningTool:     Vous devez trouver un outil de rabotage !
-Crafting.CheckTool.FindSewingKit:       Vous devez trouver un kit de couture !
-Crafting.CheckTool.FindSmithTool:       Vous devez trouver des outils de forgeron !
-Crafting.CheckTool.FindSpellcraftKit:   Vous devez trouver un kit d'arcanisme !
+Crafting.CheckTool.FindAlchemyKit:      Vous devez trouver un kit d'alchimie !
+Crafting.CheckTool.FindAlchemyTable:    Vous devez trouver une table d'alchimie !
+Crafting.CheckTool.FindForge:           Vous devez trouver une forge !
+Crafting.CheckTool.FindLathe:           Vous devez trouver un atelier de menuiserie !
+Crafting.CheckTool.FindWeaverTannery:   Vous devez trouver une fileuse ou une tannerie !
+Crafting.CheckTool.FindForgeLathe:   Vous devez trouver une forge ou un atelier de menuiserie !
+Crafting.CheckTool.FindMortarPestle:	Vous devez trouver un mortier et un pilon !
+Crafting.CheckTool.FindPlaningTool:     Vous devez trouver un outil de rabotage !
+Crafting.CheckTool.FindSewingKit:       Vous devez trouver un kit de couture !
+Crafting.CheckTool.FindSmithTool:       Vous devez trouver des outils de forgeron !
+Crafting.CheckTool.FindPlaningTool:		Vous devez trouver des outils de forgeron ou un outil de rabotage !
+Crafting.CheckTool.FindSmithSewingTool:	Vous devez trouver des outils de forgeron et un outil de rabotage !
+Crafting.CheckTool.FindSpellcraftKit:   Vous devez trouver un kit d'arcanisme !
 Crafting.CheckTool.MortarAndPestle:         Mortier et pilon
 Crafting.CheckTool.NotHaveTools:         Vous n'avez pas les outils pour le {0}.
 Crafting.CheckTool.PlaningTool:            Outil de rabotage
@@ -16,11 +20,11 @@ Crafting.CheckTool.SewingKit:            Kit de couture
 Crafting.CheckTool.SmithsHammer:         Marteau de forgeron
 Crafting.CheckTool.SpellcraftKit:         Kit d'arcanisme
 
-Crafting.GainCraftingSkillPoints.RaiseAlchemy:      Vous devez voir votre entraîneur pour augmenter votre niveau en Alchimie !
-Crafting.GainCraftingSkillPoints.RaiseArmorcraft:   Vous devez voir votre entraîneur pour augmenter votre niveau en Armurerie !
-Crafting.GainCraftingSkillPoints.RaiseFletching:    Vous devez voir votre entraîneur pour augmenter votre niveau en Empennage !
-Crafting.GainCraftingSkillPoints.RaiseSpellcraft:   Vous devez voir votre entraîneur pour augmenter votre niveau en Alchimie !
-Crafting.GainCraftingSkillPoints.RaiseTailoring:    Vous devez voir votre entraîneur pour augmenter votre niveau en Couture !
+Crafting.GainCraftingSkillPoints.RaiseAlchemy:      Vous devez voir votre entraîneur pour augmenter votre niveau en Alchimie !
+Crafting.GainCraftingSkillPoints.RaiseArmorcraft:   Vous devez voir votre entraîneur pour augmenter votre niveau en Armurerie !
+Crafting.GainCraftingSkillPoints.RaiseFletching:    Vous devez voir votre entraîneur pour augmenter votre niveau en Empennage !
+Crafting.GainCraftingSkillPoints.RaiseSpellcraft:   Vous devez voir votre entraîneur pour augmenter votre niveau en Alchimie !
+Crafting.GainCraftingSkillPoints.RaiseTailoring:    Vous devez voir votre entraîneur pour augmenter votre niveau en Couture !
 Crafting.GainCraftingSkillPoints.RaiseWeaponcraft:  Vous devez voir votre entraîneur pour augmenter votre niveau en Forge !
 Crafting.Name.Alchemy:					Alchimie
 Crafting.Name.Armorcraft:				Armurerie
@@ -39,7 +43,7 @@ Crafting.Name.Woodworking:				Menuiserie
 Crafting.Name.BountyCrafing:			Bountycraft
 Crafting.Name.CookingCrafting:			Gastronomie
 Crafting.Name.ScholarCrafting:			Artisan Académique
-Crafting.Respec.Confirm:				Êtes-vous sûr(e) de vouloir réinitialiser vos compétences d'artisanat? Vous perdrez toutes vos compétences d'artisanat ainsi que vos titres!
+Crafting.Respec.Confirm:				Êtes-vous sûr(e) de vouloir réinitialiser vos compétences d'artisanat ? Vous perdrez toutes vos compétences d'artisanat ainsi que vos titres !
 Crafting.Respec.SkillsReset:			Vos compétences d'artisanat on été réinitialisées.
 
 # /CraftLevelToCraftTitle (OLD)
@@ -111,15 +115,15 @@ AbstractCraftingSkill.BuildCraftedItem.Masterpiece:   Bravo, Vous avez créé un
 AbstractCraftingSkill.BuildCraftedItem.Successfully:   Vous avez correctement fabriqué {0}! ({1})
 AbstractCraftingSkill.CheckRawMaterial.NoIngredients:   Vous n'avez pas les ingrédients pour faire le {0}.
 AbstractCraftingSkill.CheckRawMaterial.RawMaterial:     Impossible de trouver l'objet avec l'ID de {0}, veuillez nous contacter !
-AbstractCraftingSkill.CheckRawMaterial.YouAreMissing:   Il vous manque :
+AbstractCraftingSkill.CheckRawMaterial.YouAreMissing:   Il vous manque :
 AdvancedCraftingSkill.IsAllowedToCombine.NoGoodCombine:	Cet objet ne peut pas être imprégné par cette teinture!
 AdvancedCraftingSkill.IsAllowedToCombine.ProblemCombine:	L'object est mal configuré, prévenez un gm!
 
-AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoClothworkingSkill:      Vous n'avez pas le niveau minimum dans la compétence Tissage ({0}) Pour confectionner le {1} !
-AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoLeathercraftingSkill:   Vous n'avez pas le niveau minimum dans la compétence Maroquinerie ({0}) Pour confectionner le {1} !
-AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoMetalworkingSkill:      Vous n'avez pas le niveau minimum dans la compétence Métallurgie ({0}) Pour confectionner le {1} !
-AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoWoodworkingSkill:       Vous n'avez pas le niveau minimum dans la compétence Menuiserie ({0}) Pour confectionner le {1} !
-AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.Rawmaterial:              Impossible de trouver l'objet avec l'ID de {0}, veuillez nous contacter !
+AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoClothworkingSkill:      Vous n'avez pas le niveau minimum dans la compétence Tissage ({0}) Pour confectionner le {1} !
+AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoLeathercraftingSkill:   Vous n'avez pas le niveau minimum dans la compétence Maroquinerie ({0}) Pour confectionner le {1} !
+AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoMetalworkingSkill:      Vous n'avez pas le niveau minimum dans la compétence Métallurgie ({0}) Pour confectionner le {1} !
+AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoWoodworkingSkill:       Vous n'avez pas le niveau minimum dans la compétence Menuiserie ({0}) Pour confectionner le {1} !
+AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.Rawmaterial:              Impossible de trouver l'objet avec l'ID de {0}, veuillez nous contacter !
 
 AbstractCraftingSkill.CraftItem.CantCraftInCombat:   Vous ne pouvez pas faire d'artisanat, vous étiez en combat récemment.
 AbstractCraftingSkill.CraftItem.BeginWork:      Vous commencez à travailler sur le {0} ({1}%).
@@ -212,3 +216,4 @@ SpellCrafting.ShowSpellCraftingInfos.TotalImbue:	Imprégnation {0} ({1} total de
 # /BountyCrafting
 BountyCraft.Promotion.Unlock:						Vous obtenez les compétences de BountyCrafting !
 BountyCraft.Promotion.LegendaryMaster:				Félicitations ! Vous avez atteint le rang d'Artisan Légendaire et débloqué les compétences de BountyCrafting !
+BountyCraft.Class.CannotCraft:						Votre classe ne vous permet pas de confectionner cet objet !

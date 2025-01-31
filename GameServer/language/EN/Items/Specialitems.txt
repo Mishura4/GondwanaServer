@@ -30,3 +30,6 @@ Items.Specialitems.FirecampHeatRegen:				The warmth of the bonfire allows you to
 
 Items.Specialitems.StorageBag.NoBag:				You are not viewing a bag!
 Items.Specialitems.StorageBag.BadItem:				You cannot put this item in this bag!
+
+Items.Specialitems.DieTriggerSpell.Destroyed:		Your {0} shatters after triggering on death!
+Items.Specialitems.DieTriggerSpell.FailDestroy:		Failed to destroy item for some reason!

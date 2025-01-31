@@ -120,14 +120,14 @@ namespace DOL.GS.Commands
 
             foreach (var creatureType in activeCreatureTypes)
             {
-                messages.Add(FormatTaskStatus(player, creatureType, taskData.GetType().GetProperty(creatureType).GetValue(taskData).ToString()));
+                messages.Add(FormatTaskStatus(player, creatureType, taskData.GetType().GetProperty(creatureType)!.GetValue(taskData)!.ToString()));
             }
 
             messages.Add("");
             messages.Add(FormatTaskStatus(player, "TurnInPvETaskToken", taskData.TurnInPvETaskToken));
             messages.Add("");
             messages.Add("");
-            messages.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.CraftingTasks"));
+            messages.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.CraftingTasks", Properties.CRAFTING_TASKTOKEN_MINRECIPELVL));
             messages.Add(FormatTaskStatus(player, "SuccessfulItemCombinations", taskData.SuccessfulItemCombinations));
             messages.Add(FormatTaskStatus(player, "MasteredCrafts", taskData.MasteredCrafts));
             messages.Add(FormatTaskStatus(player, "MasterpieceCrafted", taskData.MasterpieceCrafted));

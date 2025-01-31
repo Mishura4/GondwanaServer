@@ -5,6 +5,7 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOLDatabase.Tables;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -192,64 +193,70 @@ namespace DOL.GS
 
             TurnTo(player, 5000);
             string currentMoney = Money.GetString(Money.GetMoney(this.CurrentMithril, this.CurrentPlatinum, CurrentGold, CurrentSilver, CurrentCopper));
-            string text;
+            if (!string.IsNullOrEmpty(InteractText))
+            {
+                List<object> args = new List<object> { Money.GetString(RequiredMoney), currentMoney };
+
+                if (!string.IsNullOrEmpty(Resource1))
+                {
+                    args.Add(RequiredResource1);
+                    args.Add(ResourceName1);
+                    args.Add(CurrentResource1);
+                }
+                if (!string.IsNullOrEmpty(Resource2))
+                {
+                    args.Add(RequiredResource2);
+                    args.Add(ResourceName2);
+                    args.Add(CurrentResource2);
+                }
+                if (!string.IsNullOrEmpty(Resource3))
+                {
+                    args.Add(RequiredResource3);
+                    args.Add(ResourceName3);
+                    args.Add(CurrentResource3);
+                }
+                if (!string.IsNullOrEmpty(Resource4))
+                {
+                    args.Add(RequiredResource4);
+                    args.Add(ResourceName4);
+                    args.Add(CurrentResource4);
+                }
+
+                string text = LanguageMgr.GetMoneyNPCMessage(player.Client.Account.Language, InteractText, args.ToArray());
+
+                player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
+            string text2;
+            List<object> fallbackArgs = new List<object> { Money.GetString(RequiredMoney), currentMoney };
+
             if (!string.IsNullOrEmpty(Resource4))
             {
-                text = LanguageMgr.GetTranslation(
-                    player.Client.Account.Language,
-                    "MoneyEventNPC.NeedMoreResource4TextDefault",
-                    Money.GetString(RequiredMoney),
-                    currentMoney,
-                    RequiredResource1, ResourceName1,
-                    RequiredResource2, ResourceName2,
-                    RequiredResource3, ResourceName3,
-                    RequiredResource4, ResourceName4,
-                    CurrentResource1, CurrentResource2, CurrentResource3, CurrentResource4
-                );
+                fallbackArgs.AddRange(new object[] { RequiredResource1, ResourceName1, RequiredResource2, ResourceName2, RequiredResource3, ResourceName3, RequiredResource4, ResourceName4, CurrentResource1, CurrentResource2, CurrentResource3, CurrentResource4 });
+                text2 = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreResource4TextDefault", fallbackArgs.ToArray());
             }
             else if (!string.IsNullOrEmpty(Resource3))
             {
-                text = LanguageMgr.GetTranslation(
-                    player.Client.Account.Language,
-                    "MoneyEventNPC.NeedMoreResource3TextDefault",
-                    Money.GetString(RequiredMoney),
-                    currentMoney,
-                    RequiredResource1, ResourceName1,
-                    RequiredResource2, ResourceName2,
-                    RequiredResource3, ResourceName3,
-                    CurrentResource1, CurrentResource2, CurrentResource3
-                );
+                fallbackArgs.AddRange(new object[] { RequiredResource1, ResourceName1, RequiredResource2, ResourceName2, RequiredResource3, ResourceName3, CurrentResource1, CurrentResource2, CurrentResource3 });
+                text2 = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreResource3TextDefault", fallbackArgs.ToArray());
             }
             else if (!string.IsNullOrEmpty(Resource2))
             {
-                text = LanguageMgr.GetTranslation(
-                    player.Client.Account.Language,
-                    "MoneyEventNPC.NeedMoreResource2TextDefault",
-                    Money.GetString(RequiredMoney),
-                    currentMoney,
-                    RequiredResource1, ResourceName1,
-                    RequiredResource2, ResourceName2,
-                    CurrentResource1, CurrentResource2
-                );
+                fallbackArgs.AddRange(new object[] { RequiredResource1, ResourceName1, RequiredResource2, ResourceName2, CurrentResource1, CurrentResource2 });
+                text2 = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreResource2TextDefault", fallbackArgs.ToArray());
             }
             else if (!string.IsNullOrEmpty(Resource1))
             {
-                text = LanguageMgr.GetTranslation(
-                    player.Client.Account.Language,
-                    "MoneyEventNPC.NeedMoreResource1TextDefault",
-                    Money.GetString(RequiredMoney),
-                    currentMoney,
-                    RequiredResource1, ResourceName1,
-                    CurrentResource1
-                );
+                fallbackArgs.AddRange(new object[] { RequiredResource1, ResourceName1, CurrentResource1 });
+                text2 = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreResource1TextDefault", fallbackArgs.ToArray());
             }
             else
             {
-                // No resources, only money
-                text = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.InteractTextDefault", Money.GetString(RequiredMoney), currentMoney);
+                text2 = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.InteractTextDefault", fallbackArgs.ToArray());
             }
-            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
+            player.Out.SendMessage(text2, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             return true;
         }
 
@@ -329,7 +336,15 @@ namespace DOL.GS
                     }
                 }
 
-                string text = ValidateText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.ValidateTextDefault");
+                string text;
+                if (string.IsNullOrEmpty(ValidateText))
+                {
+                    text = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.ValidateTextDefault");
+                }
+                else
+                {
+                    text = LanguageMgr.GetMoneyNPCMessage(player.Client.Account.Language, ValidateText);
+                }
                 player.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
 
                 this.SaveIntoDatabase();
@@ -337,12 +352,19 @@ namespace DOL.GS
             }
             else
             {
-                string text = NeedMoreMoneyText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreMoneyTextDefault");
+                string text;
+                if (string.IsNullOrEmpty(NeedMoreMoneyText))
+                {
+                    text = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreMoneyTextDefault");
+                }
+                else
+                {
+                    text = LanguageMgr.GetMoneyNPCMessage(player.Client.Account.Language, NeedMoreMoneyText);
+                }
                 player.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
 
                 this.SaveIntoDatabase();
             }
-
             return true;
         }
 
@@ -453,7 +475,15 @@ namespace DOL.GS
                     }
                 }
 
-                var text = ValidateText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, ValidateTextDefault);
+                string text;
+                if (string.IsNullOrEmpty(ValidateText))
+                {
+                    text = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.ValidateTextDefault");
+                }
+                else
+                {
+                    text = LanguageMgr.GetMoneyNPCMessage(player.Client.Account.Language, ValidateText);
+                }
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
 
                 this.SaveIntoDatabase();
@@ -461,7 +491,15 @@ namespace DOL.GS
             }
             else
             {
-                var text = NeedMoreMoneyText ?? LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreMoneyTextDefault);
+                string text;
+                if (string.IsNullOrEmpty(NeedMoreMoneyText))
+                {
+                    text = LanguageMgr.GetTranslation(player.Client.Account.Language, "MoneyEventNPC.NeedMoreMoneyTextDefault");
+                }
+                else
+                {
+                    text = LanguageMgr.GetMoneyNPCMessage(player.Client.Account.Language, NeedMoreMoneyText);
+                }
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
 
                 this.SaveIntoDatabase();
@@ -540,6 +578,12 @@ namespace DOL.GS
                 return false;
             }
 
+            var ev = this.CheckEventValidity();
+            if (ev != null && CheckRequiredResources() && !ev.StartedTime.HasValue)
+            {
+                this.SaveIntoDatabase();
+                Task.Run(() => GameEventManager.Instance.StartEvent(ev, null));
+            }
             this.ReloadMoneyValues();
             return true;
         }

@@ -112,6 +112,7 @@ namespace DOL.GameEvents
             PlayersLeave = db.PlayersLeave;
             ResetEvent = db.ResetEvent;
             TimerCount = db.TimerCount;
+            TimerStartText = db.TimerStartText;
             AllowItemDestroy = db.AllowItemDestroy;
             UseItemEffect = db.UseItemEffect;
             UseItemSound = db.UseItemSound;
@@ -366,7 +367,10 @@ namespace DOL.GameEvents
 
                     foreach (var player in PlayersInArea)
                     {
-                        ChatUtil.SendImportant(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "Area.Event.Timer.Start", TimerCount));
+                        string textKey = !string.IsNullOrEmpty(TimerStartText) ? TimerStartText : "Area.Event.Timer.Start";
+
+                        string finalText = LanguageMgr.GetAreaEventMessage(player.Client.Account.Language, textKey, TimerCount);
+                        ChatUtil.SendImportant(player, finalText);
                     }
                 }
                 return false;
@@ -457,6 +461,12 @@ namespace DOL.GameEvents
         }
 
         public int TimerCount
+        {
+            get;
+            set;
+        }
+
+        public string TimerStartText
         {
             get;
             set;

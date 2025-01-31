@@ -1,0 +1,2 @@
+
+Languages.DBAreaEvents.0056TimerStart:			Vous êtes entré sur la plateforme de la Foudre. Vous ainsi que votre compagnion avez {0} secondes pour prononcer le mot magique.

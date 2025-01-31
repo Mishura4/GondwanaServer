@@ -21,6 +21,7 @@ using DOL.Language;
 using DOL.GS.PacketHandler;
 using System;
 using System.Collections.Generic;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS
 {
@@ -37,28 +38,120 @@ namespace DOL.GS
         public Fletching()
         {
             Icon = 0x0C;
-            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE,
-                "Crafting.Name.Fletching");
+            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "Crafting.Name.Fletching");
             eSkill = eCraftingSkill.Fletching;
         }
 
+        /// <summary>
+        /// Our main check for the needed tools/stations for Fletching.
+        /// Includes GM bypass, inventory checks for planing tool (if desired),
+        /// and lathe checks for specific item types (except Arrow / Bolt).
+        /// </summary>
         protected override bool CheckForTools(GamePlayer player, Recipe recipe)
         {
-            if (recipe.Product.Object_Type != (int)eObjectType.Arrow &&
-                recipe.Product.Object_Type != (int)eObjectType.Bolt)
-            {
-                foreach (GameStaticItem item in player.GetItemsInRadius(CRAFT_DISTANCE))
-                {
-                    if (item.Name.ToLower() == "lathe" || item.Model == 481) // Lathe
-                        return true;
-                }
+            if (player.Client.Account.PrivLevel > 1)
+                return true;
 
+            eObjectType objectType = (eObjectType)recipe.Product.Object_Type;
+
+            if (!CheckNearbyStaticItemRequirements(player, recipe, objectType))
+                return false;
+
+            if (!Properties.ALLOW_CLASSIC_CRAFT_TOOLCHECK)
+                return true;
+
+            if (!CheckInventoryToolRequirements(player, recipe, objectType))
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if the player has the required tool(s) in the backpack
+        /// for bows, instruments, staves, etc.
+        /// (Arrows and bolts generally don't need a planing tool.)
+        /// </summary>
+        private bool CheckInventoryToolRequirements(GamePlayer player, Recipe recipe, eObjectType objectType)
+        {
+            bool HasAnyTools(params string[] toolIds)
+            {
+                for (int slot = (int)eInventorySlot.FirstBackpack; slot <= (int)eInventorySlot.LastBackpack; slot++)
+                {
+                    InventoryItem invItem = player.Inventory.GetItem((eInventorySlot)slot);
+                    if (invItem == null)
+                        continue;
+
+                    string idnb = invItem.Id_nb?.ToLower();
+                    if (idnb == null)
+                        continue;
+
+                    foreach (var neededId in toolIds)
+                    {
+                        if (idnb == neededId.ToLower())
+                            return true;
+                    }
+                }
+                return false;
+            }
+
+            if (objectType == eObjectType.Arrow || objectType == eObjectType.Bolt)
+            {
+                return true;
+            }
+
+            var latheNeeded = new List<eObjectType>
+            {
+                eObjectType.Staff,
+                eObjectType.Crossbow,
+                eObjectType.RecurvedBow,
+                eObjectType.Longbow,
+                eObjectType.Fired,
+                eObjectType.Instrument,
+                eObjectType.CompositeBow,
+                eObjectType.MaulerStaff,
+                eObjectType.Scythe
+            };
+
+            if (latheNeeded.Contains(objectType))
+            {
+                bool hasPlaningTool = HasAnyTools("planing_tool", "planing_tool2", "planing_tool3");
+                if (!hasPlaningTool)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindPlaningTool", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool CheckNearbyStaticItemRequirements(GamePlayer player, Recipe recipe, eObjectType objectType)
+        {
+            if (objectType == eObjectType.Arrow || objectType == eObjectType.Bolt)
+                return true;
+
+            var objectsInRange = player.GetItemsInRadius(CRAFT_DISTANCE);
+
+            bool nearLathe = false;
+            foreach (object obj in objectsInRange)
+            {
+                if (obj is GameStaticItem gsi)
+                {
+                    string nameLower = gsi.Name.ToLower();
+                    if (nameLower == "lathe" ||
+                        nameLower == "atelier de menuiserie" ||
+                        gsi.Model == 481)
+                    {
+                        nearLathe = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!nearLathe)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindLathe"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-                if (player.Client.Account.PrivLevel > 1)
-                    return true;
-
                 return false;
             }
 
@@ -83,6 +176,7 @@ namespace DOL.GS
                     return recipe.Level - 15;
 
                 case (int)eObjectType.Staff: //tested
+                case (int)eObjectType.MaulerStaff:
                     return recipe.Level - 35;
             }
 

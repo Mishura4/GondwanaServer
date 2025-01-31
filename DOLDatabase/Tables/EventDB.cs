@@ -22,12 +22,14 @@ namespace DOLDatabase.Tables
         private string m_remainingTimeText;
         private int m_remainingTimeEvSound;
         private long m_remainingTimeInterval;
-        private string m_endText;
-        private int m_endEventSound;
+        private long m_endTime;
+        private string m_endTextA;
+        private string m_endTextB;
+        private int m_endEventSoundA;
+        private int m_endEventSoundB;
         private int m_status;
         private int m_endingActionB;
         private int m_endingActionA;
-        private long m_endTime;
         private long m_startedTime;
         private long m_eventChanceInterval;
         private string m_endingConditionTypes;
@@ -390,29 +392,31 @@ namespace DOLDatabase.Tables
 
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string EndText
+        public string EndTextA
         {
-            get
-            {
-                return m_endText;
-            }
+            get;
+            set;
+        }
 
-            set
-            {
-                m_endText = value;
-                Dirty = true;
-            }
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string EndTextB
+        {
+            get;
+            set;
         }
 
         [DataElement(AllowDbNull = true)]
-        public int EndEventSound
+        public int EndEventSoundA
         {
-            get => m_endEventSound;
-            set
-            {
-                m_endEventSound = value;
-                Dirty = true;
-            }
+            get;
+            set;
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int EndEventSoundB
+        {
+            get;
+            set;
         }
 
         [DataElement(AllowDbNull = false)]

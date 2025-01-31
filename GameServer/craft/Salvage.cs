@@ -37,7 +37,7 @@ namespace DOL.GS
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         #region Declaration
 
@@ -98,7 +98,7 @@ namespace DOL.GS
 
                 if (material == null)
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "CantfindItem", material.Id_nb), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "CantfindItem", material!.Id_nb), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     log.ErrorFormat("Salvage Error for ID: {0}:  Material not found: {1}", salvageYield.ID, material.Id_nb);
                 }
             }
@@ -132,9 +132,9 @@ namespace DOL.GS
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Salvage.BeginWork.BeginSalvage", item.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             // clone the yield entry and update values to work with this salvage (not saved to the DB)
-            SalvageYield yield = salvageYield.Clone() as SalvageYield;
+            SalvageYield yield = salvageYield!.Clone() as SalvageYield;
 
-            if (item.SalvageYieldID == 0 || yield.Count == 0)
+            if (item.SalvageYieldID == 0 || yield!.Count == 0)
             {
                 // Calculated salvage values
                 int count = GetMaterialYield(player, item, yield, material);
@@ -145,7 +145,7 @@ namespace DOL.GS
                 }
             }
 
-            player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "Salvage.BeginWork.Salvaging", item.Name), yield.Count);
+            player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "Salvage.BeginWork.Salvaging", item.Name), yield!.Count);
             player.CraftTimer = new RegionTimer(player)
             {
                 Callback = new RegionTimerCallback(Proceed)
@@ -238,7 +238,7 @@ namespace DOL.GS
 
             if (player == null || itemToSalvage == null || yield == null || materialCount == 0)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Salvage.Proceed.ErrorRetrievingSalvage2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Salvage.Proceed.ErrorRetrievingSalvage2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 log.Error("Salvage: There was a problem getting back salvage info from the craft timer.");
                 return 0;
             }

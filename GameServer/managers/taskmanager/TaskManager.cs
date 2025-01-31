@@ -70,8 +70,8 @@ namespace DOL.GS
                 taskData = EnsureTaskData(player);
             }
 
-            var taskValue = taskData.GetType().GetProperty(taskName).GetValue(taskData).ToString();
-            var parts = taskValue.Split('|');
+            var taskValue = taskData.GetType().GetProperty(taskName)!.GetValue(taskData)!.ToString();
+            var parts = taskValue!.Split('|');
             var level = int.Parse(parts[0]);
             var currentProgress = int.Parse(parts[1]);
             var maxLevel = GetMaxLevel(taskName);
@@ -174,7 +174,7 @@ namespace DOL.GS
                 GiveTaskToken(player, taskName, level);
             }
 
-            taskData.GetType().GetProperty(taskName).SetValue(taskData, $"{level}|{currentProgress}");
+            taskData.GetType().GetProperty(taskName)!.SetValue(taskData, $"{level}|{currentProgress}");
             GameServer.Database.SaveObject(taskData);
 
             string message = taskName switch
@@ -253,8 +253,8 @@ namespace DOL.GS
             if (!Properties.ENABLE_TASK_SYSTEM)
                 return;
 
-            var tokenValue = taskData.GetType().GetProperty(tokenName).GetValue(taskData).ToString();
-            var parts = tokenValue.Split('|');
+            var tokenValue = taskData.GetType().GetProperty(tokenName)!.GetValue(taskData)!.ToString();
+            var parts = tokenValue!.Split('|');
             var level = int.Parse(parts[0]);
             var currentProgress = int.Parse(parts[1]);
 
@@ -277,7 +277,7 @@ namespace DOL.GS
                     player.Out.SendMessage(message, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
                 }
             }
-            taskData.GetType().GetProperty(tokenName).SetValue(taskData, $"{level}|{currentProgress}");
+            taskData.GetType().GetProperty(tokenName)!.SetValue(taskData, $"{level}|{currentProgress}");
         }
 
         private static bool IsPvPTask(string taskName)
@@ -525,20 +525,20 @@ namespace DOL.GS
                 },
                 "SuccessfulItemCombinations" => level switch
                 {
-                    0 => 20,
-                    1 => 40,
-                    2 => 60,
-                    3 => 85,
-                    4 => 120,
+                    0 => 30,
+                    1 => 50,
+                    2 => 80,
+                    3 => 110,
+                    4 => 160,
                     _ => int.MaxValue
                 },
                 "MasteredCrafts" => level switch
                 {
-                    0 => 25,
-                    1 => 40,
-                    2 => 75,
-                    3 => 110,
-                    4 => 150,
+                    0 => 40,
+                    1 => 60,
+                    2 => 100,
+                    3 => 150,
+                    4 => 200,
                     _ => int.MaxValue
                 },
                 "MasterpieceCrafted" => level switch

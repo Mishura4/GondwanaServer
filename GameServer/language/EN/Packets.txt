@@ -123,10 +123,11 @@ DetailDisplayHandler.WriteMagicalBonuses.MagicBonus:	Magical Bonuses:
 DetailDisplayHandler.WriteMagicalBonuses.MaxCharges:	- {0} Max
 DetailDisplayHandler.WriteMagicalBonuses.StrikeArmor:	- Spell has a chance of casting when enemy strikes at this armor.
 DetailDisplayHandler.WriteMagicalBonuses.StrikeEnemy:	- Spell has a chance of casting when this weapon strikes an enemy.
-DetailDisplayHandler.WriteMagicalBonuses.UsedItem:	- Spell has a chance of casting when this item is used.
-DetailDisplayHandler.WriteMagicalBonuses.UseItem1:	Can use item every: {0}
-DetailDisplayHandler.WriteMagicalBonuses.UseItem2:	Can use item every: {0}:{1} min.
-DetailDisplayHandler.WriteMagicalBonuses.UseItem3:	Can use again in: {0}.
+DetailDisplayHandler.WriteMagicalBonuses.UsedItem:		- Spell has a chance of casting when this item is used.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem1:		Can use item every: {0}
+DetailDisplayHandler.WriteMagicalBonuses.UseItem2:		Can use item every: {0}:{1} min.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem3:		Can use again in: {0}.
+DetailDisplayHandler.WriteMagicalBonuses.Inactive:		(inactive)
 DetailDisplayHandler.WriteBonusConditions.Title:		Bonus Requirements:
 DetailDisplayHandler.WriteBonusConditions.Renaissance:	Must be "Reborn"
 DetailDisplayHandler.WritePoisonInfo.Charges:		- {0} Charges
@@ -232,3 +233,22 @@ DestroyItemRequestHandler.CantDestroyItem:		You can't destroy {0}!
 DestroyItemRequestHandler.CantDestroyRelic:		You cannot destroy a relic!
 DestroyItemRequestHandler.CantDestroyEquippedItem:		You cannot destroy an equipped item!
 DestroyItemRequestHandler.ItemDestroyed:		You destroy the {0}.
+
+# /DialogResponseHandler
+DialogResponseHandler.SameRegionGuildLeaderToAccept:		You need to be in the same region as the guild leader to accept an invitation.
+DialogResponseHandler.StillInGuild:							You are still in a guild, you'll have to leave it first.
+DialogResponseHandler.GuildLeaderNotInGuild:				Player doing the invite is not in a guild!
+DialogResponseHandler.GuildInviteDeclined:					{0} declined your invite.
+DialogResponseHandler.NotInGuild:							You are not in a guild.
+DialogResponseHandler.GuildDeclineQuit:						You decline to quit your guild.
+DialogResponseHandler.StillInGroup:							You are still in a group.
+DialogResponseHandler.CannotJoinGroupInCombat:				You can't join a group while in combat!
+DialogResponseHandler.GroupFull:							The group is full.
+DialogResponseHandler.MustBeGuildMemberToUseCommands:		You have to be a member of a guild, before you can use any of the commands!
+DialogResponseHandler.NearKeepToClaim:						You have to be near the keep to claim it.
+DialogResponseHandler.DepositInLockbox:						You deposit {0} in the lockbox.
+DialogResponseHandler.LockboxHasMoneyWeeklyPayment:			The lockbox now has {0} in it. The weekly payment is {1}.
+DialogResponseHandler.HousePrepaidForPayments:				The house is now prepaid for the next {0} payments.
+
+# /EmblemDialogReponseHandler
+EmblemDialogReponseHandler.EmblemAlreadyInUse:				This emblem is already in use by another guild, please choose another!

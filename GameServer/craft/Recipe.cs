@@ -29,7 +29,7 @@ namespace DOL.GS
 {
     public class Recipe
     {
-        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private Ingredient[] ingredients;
 
@@ -128,7 +128,7 @@ namespace DOL.GS
 
     public class RecipeDB
     {
-        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private static Dictionary<ushort, Recipe> recipeCache = new Dictionary<ushort, Recipe>();
 
         public static Recipe FindBy(ushort recipeDatabaseID)
@@ -156,7 +156,7 @@ namespace DOL.GS
             finally
             {
                 if (Properties.CRAFTING_ADJUST_PRODUCT_PRICE)
-                    recipe.SetRecommendedProductPriceInDB();
+                    recipe!.SetRecommendedProductPriceInDB();
                 recipeCache[recipeDatabaseID] = recipe;
             }
 

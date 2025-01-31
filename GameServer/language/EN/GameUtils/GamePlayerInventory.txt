@@ -1,0 +1,17 @@
+GameUtils.GamePlayerInventory.ErrorAddingArtifact:						Error adding artifact to the inventory, item may be lost!
+GameUtils.GamePlayerInventory.ErrorAddingItemDatabase:					Error adding item to the database, item may be lost!
+GameUtils.GamePlayerInventory.ErrorSavingItemDatabase:					Error saving item to the database, this item may be lost!
+GameUtils.GamePlayerInventory.ErrorDeletingItemDatabase:				Error deleting item from the database, operation aborted!
+GameUtils.GamePlayerInventory.ErrorSavingItemDatabaseOperationAborted:	Error saving item to the database, operation aborted!
+GameUtils.GamePlayerInventory.CannotChangeInventoryWhenDead:			You can't change your inventory when dead!
+GameUtils.GamePlayerInventory.CannotMoveActiveHorseToSaddlebag:			You can't move your active horse into a saddlebag!
+GameUtils.GamePlayerInventory.ClassCannotUseThisItem:					Your class cannot use this item!
+GameUtils.GamePlayerInventory.ItemCantGoThere:							{0} can't go there!
+GameUtils.GamePlayerInventory.CantUseItemChampionLevel:					You can't use {0}, you should increase your champion level.
+GameUtils.GamePlayerInventory.CantPutItemInActiveBardingSlot:			You can't put {0} in your active barding slot!
+GameUtils.GamePlayerInventory.CantPutItemInActiveHorseArmorSlot:		You can't put {0} in your active horse armor slot!
+GameUtils.GamePlayerInventory.CantPutItemInActiveMountSlot:				You can't put {0} in your active mount slot!
+GameUtils.GamePlayerInventory.NoSkillInUsingWeaponType:					You have no skill in using this weapon type!
+GameUtils.GamePlayerInventory.NoSkillInWearingArmorType:				You have no skill in wearing this armor type!
+GameUtils.GamePlayerInventory.CantPutItemInQuiver:						You can't put your {0} in your quiver!
+GameUtils.GamePlayerInventory.CannotPutItemFromThisRealm:				You cannot put an item from this realm!

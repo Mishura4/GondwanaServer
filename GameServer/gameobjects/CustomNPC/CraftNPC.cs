@@ -68,11 +68,8 @@ namespace DOL.GS
                     if (player.GetCraftingSkillValue(eCraftingSkill.BountyCrafting) < 1)
                     {
                         player.AddCraftingSkill(eCraftingSkill.BountyCrafting, 1);
-
-                        string bountyMessage1 = "You have unlocked BountyCrafting skills!";
-                        player.Out.SendMessage(bountyMessage1, eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
-                        string bountyMessage2 = "Congratulations! You have reached the rank of Legendary craft master and unlocked BountyCrafting skills!";
-                        player.Out.SendMessage(bountyMessage2, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BountyCraft.Promotion.Unlock"), eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BountyCraft.Promotion.LegendaryMaster"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
 

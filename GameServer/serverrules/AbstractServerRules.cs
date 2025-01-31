@@ -48,7 +48,7 @@ namespace DOL.GS.ServerRules
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// This is called after the rules are created to do any event binding or other tasks
@@ -461,7 +461,7 @@ namespace DOL.GS.ServerRules
                 }
             }
             // Your pet can only attack stealthed players you have selected
-            if (defender.IsStealthed && attacker.GetController() is GamePlayer controller)
+            if (defender!.IsStealthed && attacker.GetController() is GamePlayer controller)
                 if (controller.TargetObject != defender) // TODO: should this really be the case for AOEs?
                     return false;
 
@@ -533,7 +533,7 @@ namespace DOL.GS.ServerRules
                 {
                     GameNPC defenderNpc = realDefender as GameNPC;
 
-                    if (defenderNpc.Brain is GuardNPCBrain defenderGuardBrain)
+                    if (defenderNpc!.Brain is GuardNPCBrain defenderGuardBrain)
                     {
                         if (realAttacker is GamePlayer)
                         {
@@ -629,7 +629,7 @@ namespace DOL.GS.ServerRules
                 }
 
                 if (!isAllowed && caster is GamePlayer)
-                    (caster as GamePlayer).Client.Out.SendMessage(LanguageMgr.GetTranslation((caster as GamePlayer).Client.Account.Language, "ServerRules.AbstractServerRules.CantCastSpell", target.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    (caster as GamePlayer)!.Client.Out.SendMessage(LanguageMgr.GetTranslation((caster as GamePlayer)!.Client.Account.Language, "ServerRules.AbstractServerRules.CantCastSpell", target.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                 return isAllowed;
             }
@@ -862,7 +862,7 @@ namespace DOL.GS.ServerRules
 
                 if (ServerProperties.Properties.ALLOW_CROSS_REALM_ITEMS && item.Item_Type != (int)eEquipmentItems.HEAD)
                 {
-                    switch (player.Realm) // Choose based on player rather than item region
+                    switch (player!.Realm) // Choose based on player rather than item region
                     {
                         case eRealm.Albion: armorAbility = living.GetAbilityLevel(Abilities.AlbArmor); break;
                         case eRealm.Hibernia: armorAbility = living.GetAbilityLevel(Abilities.HibArmor); break;
@@ -1303,7 +1303,7 @@ namespace DOL.GS.ServerRules
                 if (living is NecromancerPet)
                 {
                     NecromancerPet necroPet = living as NecromancerPet;
-                    player = ((necroPet.Brain as IControlledBrain).Owner) as GamePlayer;
+                    player = ((necroPet!.Brain as IControlledBrain)!.Owner) as GamePlayer;
                 }
 
                 //Check stipulations
@@ -1601,7 +1601,7 @@ namespace DOL.GS.ServerRules
                 if (living is GamePlayer)
                 {
                     GamePlayer killerPlayer = living as GamePlayer;
-                    if (killerPlayer.Group != null && killerPlayer.Group.MemberCount > 1)
+                    if (killerPlayer!.Group != null && killerPlayer.Group.MemberCount > 1)
                     {
                         lock (killerPlayer.Group)
                         {
@@ -1847,7 +1847,7 @@ namespace DOL.GS.ServerRules
                     if (keep != null)
                     {
                         byte bonus = 0;
-                        if (keep.Guild != null && keep.Guild == (living as GamePlayer).Guild)
+                        if (keep.Guild != null && keep.Guild == (living as GamePlayer)!.Guild)
                             bonus = 20;
                         else if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_Normal &&
                                  keep.Realm == living.Realm)
@@ -1866,7 +1866,7 @@ namespace DOL.GS.ServerRules
                 {
                     long money = (long)(playerMoneyValue * damagePercent);
                     GamePlayer player = living as GamePlayer;
-                    if (player.GetSpellLine("Spymaster") != null)
+                    if (player!.GetSpellLine("Spymaster") != null)
                     {
                         money += 20 * money / 100;
                     }
@@ -2093,7 +2093,7 @@ namespace DOL.GS.ServerRules
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.KillOutdoorsCreatures") + ": " + player.TaskXPlayer.KillOutdoorsCreaturesStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.TotalCreaturesKilled") + ": " + (player.TaskXPlayer.KillCreaturesInDungeonsStats + player.TaskXPlayer.KillOutdoorsCreaturesStats).ToString("F0"));
                     stat.Add(" ");
-                    stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.StatsCrafting"));
+                    stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.StatsCrafting", Properties.CRAFTING_TASKTOKEN_MINRECIPELVL));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SuccessfulItemCombinations") + ": " + player.TaskXPlayer.SuccessfulItemCombinationsStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.MasteredCrafts") + ": " + player.TaskXPlayer.MasteredCraftsStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.MasterpieceCrafted") + ": " + player.TaskXPlayer.MasterpieceCraftedStats.ToString("F0"));
@@ -2539,7 +2539,7 @@ namespace DOL.GS.ServerRules
                     defaultClassType = npcTemplate.ClassType;
                 }
 
-                var npc = (GameNPC)Assembly.GetAssembly(typeof(GameServer)).CreateInstance(defaultClassType, false);
+                var npc = (GameNPC)Assembly.GetAssembly(typeof(GameServer))!.CreateInstance(defaultClassType, false);
                 if (npc == null)
                 {
                     foreach (Assembly asm in ScriptMgr.Scripts)

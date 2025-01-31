@@ -65,7 +65,10 @@ namespace DOL.GameEvents
             StartConditionType = ev.StartConditionType;
             EventChanceInterval = ev.EventChanceInterval;
             DebutText = ev.DebutText;
-            EndText = ev.EndText;
+            EndTextA = ev.EndTextA;
+            EndTextB = ev.EndTextB;
+            EndEventSoundA = ev.EndEventSoundA;
+            EndEventSoundB = ev.EndEventSoundB;
             StartedTime = (DateTimeOffset?)null;
             EndingConditionTypes = ev.EndingConditionTypes;
             RandomText = ev.RandomText;
@@ -94,7 +97,6 @@ namespace DOL.GameEvents
             StartEventSound = ev.StartEventSound;
             RandomEventSound = ev.RandomEventSound;
             RemainingTimeEvSound = ev.RemainingTimeEvSound;
-            EndEventSound = ev.EndEventSound;
             TPPointID = ev.TPPointID;
             EventFamily = ev.EventFamily;
             TimeBeforeReset = ev.TimeBeforeReset;
@@ -153,7 +155,7 @@ namespace DOL.GameEvents
                 {
                     try
                     {
-                        newMob = (GameNPC)gasm.CreateInstance(mobDef.ClassType, false);
+                        newMob = (GameNPC)gasm!.CreateInstance(mobDef.ClassType, false);
                     }
                     catch
                     {
@@ -466,7 +468,7 @@ namespace DOL.GameEvents
                 {
                     log.Info(string.Format("Stop Event Id {0} from StartActionStopEventID (Event {1})", StartActionStopEventID, this.ID));
                 }
-                await ev.Stop(EndingConditionType.StartingEvent);
+                await ev!.Stop(EndingConditionType.StartingEvent);
             }
             return true;
         }
@@ -915,19 +917,25 @@ namespace DOL.GameEvents
             try
             {
                 EndTime = DateTimeOffset.UtcNow;
-                if (EndText != null && EventZones?.Any() == true)
-                {
-                    SendEventNotification((string lang) => FormatEventMessage(GetFormattedEndText(lang, Owner)), (Discord == 2 || Discord == 3), true);
+                var (endText, endSound) = GetEndingTextAndSound(end);
 
+                if (!string.IsNullOrEmpty(endText) && EventZones?.Any() == true)
+                {
+                    SendEventNotification((string lang) => FormatEventMessage(GetFormattedEndText(lang, Owner, endText)), (Discord == 2 || Discord == 3), true);
+                    //Enjoy the message
+                }
+
+                if (endSound > 0 && EventZones?.Any() == true)
+                {
                     foreach (var player in GetPlayersInEventZones(EventZones))
                     {
-                        if (EndEventSound > 0)
-                        {
-                            player.Out.SendSoundEffect((ushort)EndEventSound, player.Position, 0);
-                        }
+                        player.Out.SendSoundEffect((ushort)endSound, player.Position, 0);
                     }
 
-                    //Enjoy the message
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
+                else
+                {
                     await Task.Delay(TimeSpan.FromSeconds(5));
                 }
 
@@ -1008,6 +1016,26 @@ namespace DOL.GameEvents
                 }
             }
             log.DebugFormat("Finished event {0}", this);
+        }
+
+        private (string text, int sound) GetEndingTextAndSound(EndingConditionType triggeredEnd)
+        {
+            var conds = EndingConditionTypes.ToList();
+            bool single = (conds.Count == 1);
+
+            if (single)
+            {
+                return (EndTextA, EndEventSoundA);
+            }
+
+            if (triggeredEnd == conds.First())
+            {
+                return (EndTextA, EndEventSoundA);
+            }
+            else
+            {
+                return (EndTextB, EndEventSoundB);
+            }
         }
 
         public void SendEventNotification(Func<string, string> message, bool sendDiscord, bool createNews = false)
@@ -1121,10 +1149,10 @@ namespace DOL.GameEvents
             {
                 InstancedConditionTypes.All => owner,
                 InstancedConditionTypes.Player => owner,
-                InstancedConditionTypes.Group => owner.Group?.Leader,
-                InstancedConditionTypes.Guild => owner.Guild == null ? null : owner,
-                InstancedConditionTypes.Battlegroup => owner.BattleGroup == null ? null : owner,
-                InstancedConditionTypes.GroupOrSolo => owner.Group?.Leader ?? owner,
+                InstancedConditionTypes.Group => owner!.Group?.Leader,
+                InstancedConditionTypes.Guild => owner!.Guild == null ? null : owner,
+                InstancedConditionTypes.Battlegroup => owner!.BattleGroup == null ? null : owner,
+                InstancedConditionTypes.GroupOrSolo => owner!.Group?.Leader ?? owner,
                 InstancedConditionTypes.GuildOrSolo => owner,
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -1259,7 +1287,10 @@ namespace DOL.GameEvents
             StartConditionType = Enum.TryParse(db.StartConditionType.ToString(), out StartingConditionType st) ? st : StartingConditionType.Timer;
             EventChanceInterval = db.EventChanceInterval > 0 && db.EventChanceInterval < long.MaxValue ? TimeSpan.FromMinutes(db.EventChanceInterval) : (TimeSpan?)null;
             DebutText = !string.IsNullOrEmpty(db.DebutText) ? db.DebutText : null;
-            EndText = !string.IsNullOrEmpty(db.EndText) ? db.EndText : null;
+            EndTextA = !string.IsNullOrEmpty(db.EndTextA) ? db.EndTextA : null;
+            EndTextB = !string.IsNullOrEmpty(db.EndTextB) ? db.EndTextB : null;
+            EndEventSoundA = db.EndEventSoundA;
+            EndEventSoundB = db.EndEventSoundB;
             StartedTime = (DateTimeOffset?)null;
             EndingConditionTypes = db.EndingConditionTypes.Split(new char[] { '|' }).Select(c => Enum.TryParse(c, out EndingConditionType end) ? end : GameEvents.EndingConditionType.Timer);
             RandomText = !string.IsNullOrEmpty(db.RandomText) ? db.RandomText.Split(new char[] { '|' }) : null;
@@ -1288,7 +1319,6 @@ namespace DOL.GameEvents
             StartEventSound = db.StartEventSound;
             RandomEventSound = db.RandomEventSound;
             RemainingTimeEvSound = db.RemainingTimeEvSound;
-            EndEventSound = db.EndEventSound;
             TPPointID = db.TPPointID;
             ActionCancelQuestId = db.ActionCancelQuestId;
 
@@ -1381,7 +1411,7 @@ namespace DOL.GameEvents
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
+
         public string FormatEventMessage(string message)
         {
             if (Owner == null)
@@ -1734,13 +1764,21 @@ namespace DOL.GameEvents
             set;
         }
 
-        public string EndText
+        public string EndTextA
         {
             get;
             set;
         }
 
-        public int EndEventSound { get; set; }
+        public string EndTextB
+        {
+            get;
+            set;
+        }
+
+        public int EndEventSoundA { get; set; }
+
+        public int EndEventSoundB { get; set; }
 
         private int _status = (int)EventStatus.Idle;
 
@@ -1840,13 +1878,13 @@ namespace DOL.GameEvents
             return LanguageMgr.GetEventMessage(language, DebutText, player?.Name ?? string.Empty);
         }
 
-        public string GetFormattedEndText(string language, GamePlayer player)
+        public string GetFormattedEndText(string language, GamePlayer player, string endText)
         {
-            if (string.IsNullOrEmpty(EndText))
+            if (string.IsNullOrEmpty(endText))
                 return string.Empty;
 
             if (player == null)
-                return LanguageMgr.GetEventMessage(language, EndText, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                return LanguageMgr.GetEventMessage(language, endText, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
             
             string playerName = player.Name;
             string groupName = player.Group?.Leader?.Name ?? "???";
@@ -1854,7 +1892,7 @@ namespace DOL.GameEvents
             string className = player.CharacterClass?.Name ?? "???";
             string raceName = player.RaceName ?? "???";
 
-            return LanguageMgr.GetEventMessage(language, EndText ?? string.Empty, playerName, groupName, guildName, className, raceName);
+            return LanguageMgr.GetEventMessage(language, endText, playerName, groupName, guildName, className, raceName);
         }
 
         public string GetFormattedRemainingTimeText(string language, GamePlayer player)
@@ -1942,7 +1980,10 @@ namespace DOL.GameEvents
             db.EndingConditionTypes = string.Join("|", EndingConditionTypes.Select(t => ((int)t).ToString()));
             db.EventChanceInterval = EventChanceInterval.HasValue ? (long)EventChanceInterval.Value.TotalMinutes : 0;
             db.DebutText = !string.IsNullOrEmpty(DebutText) ? DebutText : null;
-            db.EndText = EndText;
+            db.EndTextA = EndTextA;
+            db.EndTextB = EndTextB;
+            db.EndEventSoundA = EndEventSoundA;
+            db.EndEventSoundB = EndEventSoundB;
             db.StartedTime = StartedTime?.ToUnixTimeSeconds() ?? 0;
             db.EndTime = EndTime.HasValue ? EndTime.Value.ToUnixTimeSeconds() : 0;
             db.RandomText = RandomText != null ? string.Join("|", RandomText) : null;
@@ -1970,7 +2011,6 @@ namespace DOL.GameEvents
             db.StartEventSound = StartEventSound;
             db.RandomEventSound = RandomEventSound;
             db.RemainingTimeEvSound = RemainingTimeEvSound;
-            db.EndEventSound = EndEventSound;
             db.TPPointID = TPPointID;
 
             if (ID == null)
