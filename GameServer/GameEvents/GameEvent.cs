@@ -1,24 +1,21 @@
 ﻿using DOL.Database;
-using DOL.Events;
 using DOL.GS;
+using DOL.GS.Commands;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
+using DOL.Language;
+using DOL.MobGroups;
 using DOLDatabase.Tables;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Timers;
-using DOL.Language;
-using Grpc.Core;
-using System.Net;
-using DOL.MobGroups;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Timer = System.Timers.Timer;
-using System.Reactive;
 
 namespace DOL.GameEvents
 {
@@ -98,7 +95,7 @@ namespace DOL.GameEvents
             RandomEventSound = ev.RandomEventSound;
             RemainingTimeEvSound = ev.RemainingTimeEvSound;
             TPPointID = ev.TPPointID;
-            EventFamily = ev.EventFamily;
+            _eventFamily = new(ev.EventFamily);
             TimeBeforeReset = ev.TimeBeforeReset;
             ActionCancelQuestId = ev.ActionCancelQuestId;
             if (TimeBeforeReset > 0)
@@ -129,7 +126,9 @@ namespace DOL.GameEvents
             Coffres = new List<GameStaticItem>();
             foreach (var coffre in ev.Coffres)
             {
-                Coffres.Add(coffre.Copy());
+                var copy = coffre.Copy();
+                copy.LoadedFromScript = true;
+                Coffres.Add(copy);
             }
             Mobs = new List<GameNPC>();
             foreach (var mob in ev.Mobs)
@@ -213,7 +212,7 @@ namespace DOL.GameEvents
             this.RandomTextTimer = new Timer();
             this.RemainingTimeTimer = new Timer();
             this.ResetFamilyTimer = new Timer();
-            this.EventFamily = new Dictionary<string, bool>();
+            _eventFamily = new List<Child>();
             IsInstanceMaster = true;
 
             AreaXEvent? dbAreaConditions = GameServer.Database.SelectObject<AreaXEvent>(e => e.EventID == this.ID);
@@ -315,6 +314,7 @@ namespace DOL.GameEvents
                 StartedTime = (DateTimeOffset?)null;
                 EndTime = (DateTimeOffset?)null;
                 WantedMobsCount = 0;
+                EventFamily.ForEach(c => c.Active = false);
                 _Cleanup();
                 
                 if (IsInstancedEvent)
@@ -596,11 +596,14 @@ namespace DOL.GameEvents
 
                 // Keep track of instances we spawn
                 Dictionary<object, GamePlayer> playersRegistered = new();
-
+                
+                var key = GetOwnerKey(triggerPlayer);
+                if (key != null) 
+                    playersRegistered.TryAdd(key, triggerPlayer);
                 // Register all players in the area, TODO: There has to be a better way to do this?
                 foreach (var player in WorldMgr.GetAllPlayingClients().Select(c => c.Player).Where(p => p.CurrentAreas.OfType<AbstractArea>().Any(a => a.DbArea.ObjectId == AreaStartingId))) // 
                 {
-                    var key = GetOwnerKey(player);
+                    key = GetOwnerKey(player);
                     if (key != null)
                         playersRegistered.TryAdd(key, player);
                 }
@@ -611,7 +614,7 @@ namespace DOL.GameEvents
                 {
                     foreach (var i in Instances)
                     {
-                        var key = GetOwnerKey(i.Owner);
+                        key = GetOwnerKey(i.Owner);
                         if (key == null)
                             continue;
                         
@@ -729,36 +732,8 @@ namespace DOL.GameEvents
                 return;
             }
             
-            // TODO: Why is this here, what does it do?
-            bool startEvent = true;
-            bool startTimer = false;
-            ev.EventFamily[this.ID] = true;
-            foreach (var family in ev.EventFamily)
-            {
-                if (family.Value == false)
-                {
-                    startTimer = true;
-                    startEvent = false;
-                }
-            }
-
-            if (startTimer == true)
-            {
-                ev.ResetFamilyTimer.Start();
-            }
-
-            if (startEvent == false)
-            {
+            if (!ev.OnChildRequestStart(this))
                 return;
-            }
-            else
-            {
-                ev.ResetFamilyTimer.Stop();
-                foreach (var family in ev.EventFamily)
-                {
-                    ev.EventFamily[family.Key] = false;
-                }
-            }
 
             if (ev.StartConditionType != StartingConditionType.Event)
             {
@@ -769,6 +744,46 @@ namespace DOL.GameEvents
                 ev.StartedTime = null;
                 await ev.Start(Owner, this);
             }
+        }
+
+        private bool OnChildRequestStart(GameEvent gameEvent)
+        {
+            if (EventFamily.Count == 0)
+                return true;
+
+            return ActivateChildUnordered(gameEvent);
+        }
+
+        private bool ActivateChildUnordered(GameEvent childEvent)
+        {
+            var child = GetFamilyChild(childEvent.ID);
+            if (child != null)
+            {
+                child.Active = true;
+            }
+            bool ok = EventFamily.All(c => c.Active == true);
+            if (ok)
+            {
+                if (TimeBeforeReset > 0)
+                {
+                    ResetFamilyTimer.Stop();
+                }
+                return true;
+            }
+            else
+            {
+                if (TimeBeforeReset > 0 && !ResetFamilyTimer.Enabled)
+                {
+                    ResetFamilyTimer.Start();
+                }
+                return false;
+            }
+        }
+        
+        private Child? GetFamilyChild(string id)
+        {
+            int idx = _eventFamily.FindIndex((child) => child.EventID == id);
+            return idx < 0 ? null : EventFamily[idx];
         }
 
         private async Task ResetOtherEvent(string evID)
@@ -1325,7 +1340,7 @@ namespace DOL.GameEvents
             // get kes from string[] db.EventFamily, and set values to false 
             if (db.EventFamily != null)
                 foreach (string family in db.EventFamily.Split('|'))
-                    EventFamily.Add(family, false);
+                    _eventFamily.Add(new Child { Active = false, EventID = family });
             if (db.TimerBeforeReset != 0)
             {
                 TimeBeforeReset = db.TimerBeforeReset;
@@ -1549,14 +1564,18 @@ namespace DOL.GameEvents
 
         private void ResetFamilyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            ResetChildren();
+        }
+
+        public void ResetChildren()
+        {
             ResetFamilyTimer.Stop();
-            foreach (var family in EventFamily)
+            foreach (var child in EventFamily)
             {
-                if (EventFamily[family.Key])
-                {
-                    GameEventManager.Instance.ResetEventsFromId(family.Key);
-                    EventFamily[family.Key] = false;
-                }
+                GameEvent ev = GameEventManager.Instance.GetEventByID(child.EventID).GetInstance(Owner);
+                if (ev != null)
+                    ev.Reset();
+                child.Active = false;
             }
         }
 
@@ -1856,10 +1875,18 @@ namespace DOL.GameEvents
         
         public List<GameEvent> Instances { get; init; }
 
-        public Dictionary<string, bool> EventFamily
+        public class Child
         {
-            get;
-            set;
+            public String EventID { get; init; }
+            
+            public bool Active { get; set; }
+        }
+
+        private List<Child> _eventFamily = new();
+
+        public IReadOnlyList<Child> EventFamily
+        {
+            get => _eventFamily.AsReadOnly();
         }
 
         public int TimeBeforeReset
@@ -2045,6 +2072,11 @@ namespace DOL.GameEvents
 
         public GameEvent? GetInstance(GameObject objectFor)
         {
+            if (!IsInstancedEvent)
+            {
+                return this;
+            }
+            
             if (objectFor is GameLiving living)
             {
                 var controller = living.GetController();

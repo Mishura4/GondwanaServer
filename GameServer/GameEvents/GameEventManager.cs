@@ -62,6 +62,8 @@ namespace DOL.GameEvents
         
         private Dictionary<string, List<GameEvent>> _questEvents = new();
         
+        private Dictionary<string, List<GameEvent>> _eventRelations = new();
+        
         private Dictionary<InstancedConditionTypes, List<GameEvent>> _instancedEvents = new();
 
         public IDictionary<IArea, List<GameEvent>> AreaEvents => _areaEvents;
@@ -75,6 +77,8 @@ namespace DOL.GameEvents
         public IEnumerable<GameEvent> GroupKillEvents => _groupKillEvents!.Values.SelectMany(l => l);
 
         public IEnumerable<GameEvent> QuestEvents => _questEvents!.Values.SelectMany(l => l);
+
+        public IDictionary<string, List<GameEvent>> EventRelations => _eventRelations;
 
         public IEnumerable<GameEvent> GetEventsStartedByKillingGroup(MobGroup group)
         {
@@ -328,6 +332,18 @@ namespace DOL.GameEvents
                     else
                     {
                         Instance._instancedEvents.Add(newEvent.InstancedConditionType, new List<GameEvent>{ newEvent });
+                    }
+                }
+
+                foreach (var child in newEvent.EventFamily.Select(child => child.EventID))
+                {
+                    if (Instance._eventRelations.TryGetValue(child, out List<GameEvent> list))
+                    {
+                        list.Add(newEvent);
+                    }
+                    else
+                    {
+                        Instance._eventRelations.Add(child, new List<GameEvent>{ newEvent });
                     }
                 }
                 
@@ -700,9 +716,9 @@ namespace DOL.GameEvents
             if (ev == null)
                 return null;
             
-            var deps = this.SearchDependencies(ev.ID);
-            if (deps == null)
-                return ids.Any() ? ids : null;
+            var deps = this.SearchDependencies(ev);
+            if (!deps.Any())
+                return null;
             
             ids = deps.ToList();
             List<string> loopMem = new List<string>();
@@ -711,7 +727,11 @@ namespace DOL.GameEvents
                 loopMem.Clear();
                 foreach (var i in ids)
                 {
-                    deps = this.SearchDependencies(i);
+                    ev = Instance.GetEventByID(i);
+                    if (ev == null)
+                        continue;
+                    
+                    deps = this.SearchDependencies(ev);
                     if (deps != null)
                     {
                         newIds = this.Add(deps, ids);
@@ -750,16 +770,10 @@ namespace DOL.GameEvents
             return (newIds == null || !newIds.Any()) ? null : newIds;
         }
 
-        private IEnumerable<string> SearchDependencies(string id)
+        private IEnumerable<string> SearchDependencies(GameEvent ev)
         {
-            var ev = Instance.Events.Values.Where(e => e.EndActionStartEventID?.Equals(id) == true);
-
-            if (!ev.Any())
-            {
-                return null;
-            }
-
-            return ev.Select(e => e.ID);
+            var events = Instance.Events.Values.Where(e => e.EndActionStartEventID?.Equals(ev.ID) == true).Select(e => e.ID).Concat(ev.EventFamily.Select(c => c.EventID));
+            return events;
         }
         
         public void StartEvent(GameEvent gameEvent, GamePlayer? triggerPlayer = null)

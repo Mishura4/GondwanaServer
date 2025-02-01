@@ -65,6 +65,7 @@ namespace DOL.GS
             item.Emblem = Emblem;
             item.TranslationId = TranslationId;
             item.EventID = EventID;
+            item.InternalID = InternalID;
             item.Name = Name;
             item.ExamineArticle = ExamineArticle;
             item.Level = Level;

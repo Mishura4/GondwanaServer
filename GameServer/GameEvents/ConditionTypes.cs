@@ -32,4 +32,14 @@
         GroupOrSolo,
         GuildOrSolo,
     }
+
+    public enum FamilyConditionType
+    {
+        EndAction, // Event must be registered through EndingAction.StartEvent
+        EndActionOrdered, // Event must be registered through EndingAction.StartEvent
+        EventStarted, // Event must be started, can end
+        EventStartedOrdered, // Event must be started, can have ended
+        EventRunning, // Event must be currently running
+        EventRunningOrdered, // Event must be currently running
+    }
 }
