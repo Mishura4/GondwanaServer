@@ -1183,7 +1183,7 @@ namespace DOL.GS
             {
                 if (!m_initialized) InitializeZone();
                 // select random starting subzone and iterate over all objects in subzone than in all subzone...
-                int currentSubZoneIndex = Util.Random(SUBZONE_NBR);
+                int currentSubZoneIndex = Util.Random(SUBZONE_NBR - 1);
                 int startSubZoneIndex = currentSubZoneIndex;
                 GameNPC currentNPC = null;
                 bool stopSearching = false;
