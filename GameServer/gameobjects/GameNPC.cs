@@ -5161,7 +5161,19 @@ namespace DOL.GS
         /// </summary>
         public bool AutoRespawn
         {
-            get => !SpawnFlags.HasFlag(eSpawnFlags.NORESPAWN);
+            get
+            {
+                if (SpawnFlags.HasFlag(eSpawnFlags.NORESPAWN))
+                {
+                    return false;
+                }
+
+                if (Event is { IsRunning: false })
+                {
+                    return false;
+                }
+                return true;
+            }
             set
             {
                 bool prev = AutoRespawn;
@@ -5225,6 +5237,18 @@ namespace DOL.GS
                     CurrentRegion.MobsRespawning.TryAdd(this, respawnInt);
 
                     m_respawnTimer.Start(respawnInt);
+                }
+            }
+        }
+        
+        public void StopRespawn()
+        {
+            lock (m_respawnTimerLock)
+            {
+                if (m_respawnTimer != null && m_respawnTimer.IsAlive)
+                {
+                    m_respawnTimer.Stop();
+                    CurrentRegion.MobsRespawning.Remove(this, out _);
                 }
             }
         }

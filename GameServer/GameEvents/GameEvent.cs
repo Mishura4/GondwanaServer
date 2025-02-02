@@ -931,6 +931,8 @@ namespace DOL.GameEvents
             log.DebugFormat("Attempting to end event {0}, was {1}", this, prev);
             try
             {
+                // Disable mob respawns
+                this.Mobs.ForEach(npc => npc.StopRespawn());
                 EndTime = DateTimeOffset.UtcNow;
                 var (endText, endSound) = GetEndingTextAndSound(end);
 
