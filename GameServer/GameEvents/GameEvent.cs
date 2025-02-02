@@ -396,7 +396,6 @@ namespace DOL.GameEvents
 
                         GameServer.Database.SaveObject(moneyNpcDb);
                     }
-
                 }
 
                 SaveToDatabase();
@@ -507,16 +506,16 @@ namespace DOL.GameEvents
             {
                 if (GameEventManager.Instance.EventRelations.TryGetValue(ID, out var list) && list.Count > 0)
                 {
-                    bool any = false;
+                    bool success = true;
                     foreach (var ev in list)
                     {
                         if (ev.EventFamilyType is FamilyConditionType.EventStarted or FamilyConditionType.EventRunning)
                         {
                             var instance = ev.GetOrCreateInstance(triggerPlayer);
-                            any = any || (instance?.OnChildStart(this) == true);
+                            success = success && (instance?.OnChildStart(this) == true);
                         }
                     }
-                    if (!any)
+                    if (!success)
                     {
                         _Reset();
                         return false;
