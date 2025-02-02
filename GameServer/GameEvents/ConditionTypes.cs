@@ -19,7 +19,8 @@
         StartingEvent,
         AreaEvent,
         TextNPC,
-        Switch
+        Switch,
+        Family
     }
     
     public enum InstancedConditionTypes
@@ -35,11 +36,19 @@
 
     public enum FamilyConditionType
     {
-        EndAction, // Event must be registered through EndingAction.StartEvent
-        EndActionOrdered, // Event must be registered through EndingAction.StartEvent
+        EndAction = 0, // Event must be registered through EndingAction.StartEvent
         EventStarted, // Event must be started, can end
-        EventStartedOrdered, // Event must be started, can have ended
         EventRunning, // Event must be currently running
-        EventRunningOrdered, // Event must be currently running
+        EventEnded, // Event must have ended, regardless of ending condition
+    }
+
+    public enum FamilyOrdering
+    {
+        Unordered = 0, // Child events can be activated in any order
+        Soft, // Child events need a specific order, but don't do anything on wrong order
+        Hidden, // Child events need a specific order, only reset the saved order on wrong order, don't prevent starting
+        Strict, // Child events need a specific order, prevent starting with wrong order
+        Stop, // Child events need a specific order, and stop all family events on error
+        Reset // Child events need a specific order, and reset all family events on error
     }
 }

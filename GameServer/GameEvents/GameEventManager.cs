@@ -751,7 +751,7 @@ namespace DOL.GameEvents
                 }
             }
 
-            return ids.Any() ? ids : null;
+            return ids.Any() ? ids.Distinct() : null;
         }
 
 

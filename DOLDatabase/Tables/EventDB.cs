@@ -53,6 +53,9 @@ namespace DOLDatabase.Tables
         private int m_timerBeforeReset;
         private int? m_tppointid;
         private int m_cancelQuestId;
+        private int m_eventFamilyType = 1;
+        private int m_eventFamilyOrdering;
+        private string m_familyFailTest;
 
         [DataElement(AllowDbNull = false, Varchar = 255)]
         public string EventName
@@ -624,6 +627,39 @@ namespace DOLDatabase.Tables
                 Dirty = true;
             }
         }
+
+        [DataElement(AllowDbNull = false)]
+        public int EventFamilyType
+        {
+            get => m_eventFamilyType;
+            set
+            {
+                m_eventFamilyType = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int EventFamilyOrdering
+        {
+            get => m_eventFamilyOrdering;
+            set
+            {
+                m_eventFamilyOrdering = value;
+            }
+        }
+
+
+        [DataElement(AllowDbNull = false, Varchar = 255)]
+        public string FamilyFailText
+        {
+            get => m_familyFailTest;
+            set
+            {
+                m_familyFailTest = value;
+                Dirty = true;
+            }
+        }
+        
 
         [DataElement(AllowDbNull = true)]
         public int TimerBeforeReset

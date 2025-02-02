@@ -1,4 +1,5 @@
 ﻿using DOL.Database;
+using DOL.Events;
 using DOL.GS;
 using DOL.GS.Commands;
 using DOL.GS.Geometry;
@@ -97,6 +98,8 @@ namespace DOL.GameEvents
             TPPointID = ev.TPPointID;
             _eventFamily = new(ev.EventFamily);
             TimeBeforeReset = ev.TimeBeforeReset;
+            EventFamilyType = ev.EventFamilyType;
+            EventFamilyOrdering = ev.EventFamilyOrdering;
             ActionCancelQuestId = ev.ActionCancelQuestId;
             if (TimeBeforeReset > 0)
             {
@@ -195,7 +198,6 @@ namespace DOL.GameEvents
             RemovedMobs = new Dictionary<string, GameNPC>(ev.RemovedMobs);
             RemovedCoffres = new Dictionary<string, GameStaticItem>(ev.RemovedCoffres);
             InstancedConditionType = ev.InstancedConditionType;
-            EndingConditionTypes = ev.EndingConditionTypes;
             EndTime = ev.EndTime;
             ChronoTime = ev.ChronoTime;
             if (ev.AreaConditions != null)
@@ -316,6 +318,19 @@ namespace DOL.GameEvents
                 WantedMobsCount = 0;
                 EventFamily.ForEach(c => c.Active = false);
                 _Cleanup();
+                
+                if (GameEventManager.Instance.EventRelations.TryGetValue(ID, out var list))
+                {
+                    foreach (var ev in list)
+                    {
+                        if (ev.EventFamilyType == FamilyConditionType.EventRunning)
+                        {
+                            var instance = ev.GetInstance(Owner);
+                            if (instance != null)
+                                instance.OnChildReset(this);
+                        }
+                    }
+                }
                 
                 if (IsInstancedEvent)
                 {
@@ -490,6 +505,24 @@ namespace DOL.GameEvents
             }
             try
             {
+                if (GameEventManager.Instance.EventRelations.TryGetValue(ID, out var list) && list.Count > 0)
+                {
+                    bool any = false;
+                    foreach (var ev in list)
+                    {
+                        if (ev.EventFamilyType is FamilyConditionType.EventStarted or FamilyConditionType.EventRunning)
+                        {
+                            var instance = ev.GetOrCreateInstance(triggerPlayer);
+                            any = any || (instance?.OnChildStart(this) == true);
+                        }
+                    }
+                    if (!any)
+                    {
+                        _Reset();
+                        return false;
+                    }
+                }
+                
                 //temporarly disable
                 var eventMaster = GameEventManager.Instance.GetEventByID(ID) ?? this;
                 eventMaster.DisableMobs();
@@ -731,28 +764,166 @@ namespace DOL.GameEvents
                 log.Warn($"Cannot perform ending action {EndingAction.Event}: no event with ID {evID} was found");
                 return;
             }
-            
-            if (!ev.OnChildRequestStart(this))
-                return;
 
-            if (ev.StartConditionType != StartingConditionType.Event)
-            {
-                log.Error(string.Format("Ending Consequence Event: Impossible to start Event ID: {0}. Event start type is not Event (why is this an error?)", ev.ID));
-            }
-            else
-            {
-                ev.StartedTime = null;
-                await ev.Start(Owner, this);
-            }
+            ev.OnRequestStart(this);
         }
 
-        private bool OnChildRequestStart(GameEvent gameEvent)
+        private bool OnRequestStart(GameEvent gameEvent)
+        {
+            if (EventFamily.Count == 0)
+            {
+                Task.Run(() => Start(Owner));
+                return true;
+            }
+
+            bool success;
+            if (OrderedFamily)
+            {
+                success = ActivateChildOrdered(gameEvent);
+                if (!success)
+                {
+                    OnBadFamilyOrder();
+                }
+            }
+            else
+                success = ActivateChildUnordered(gameEvent);
+
+            if (success)
+                return CheckFamily();
+            return false;
+        }
+
+        private bool OnChildStart(GameEvent gameEvent)
         {
             if (EventFamily.Count == 0)
                 return true;
+            
+            bool success;
+            if (EventFamilyType is FamilyConditionType.EventStarted or FamilyConditionType.EventRunning)
+            {
+                if (OrderedFamily)
+                {
+                    success = ActivateChildOrdered(gameEvent);
+                    if (!success)
+                    {
+                        OnBadFamilyOrder();
+                        if (IsFamilyOrderEnforced)
+                            return false;  // prevent starting
+                    }
+                }
+                else
+                    success = ActivateChildUnordered(gameEvent);
 
-            return ActivateChildUnordered(gameEvent);
+                if (success)
+                    CheckFamily();
+            }
+            return true;
         }
+
+        private void OnChildReset(GameEvent gameEvent)
+        {
+            if (EventFamily.Count == 0)
+                return;
+
+            if (EventFamilyType is FamilyConditionType.EventRunning)
+            {
+                var child = EventFamily.FirstOrDefault(c => c.EventID == gameEvent.ID);
+                if (child != null)
+                {
+                    if (child.Active && OrderedFamily)
+                    {
+                        EventFamily.ForEach(c => c.Active = false);
+                    }
+                    child.Active = false;
+                }
+            }
+        }
+
+        private void OnChildEnd(GameEvent gameEvent)
+        {
+            if (IsRunning || EventFamily.Count == 0)
+                return;
+            
+            if (EventFamilyType is FamilyConditionType.EventEnded)
+            {
+                bool success;
+                if (OrderedFamily)
+                {
+                    success = ActivateChildOrdered(gameEvent);
+                    if (!success)
+                    {
+                        OnBadFamilyOrder();
+                        return;
+                    }
+                }
+                else
+                    success = ActivateChildUnordered(gameEvent);
+                if (success)
+                    CheckFamily();
+            }
+            else if (EventFamilyType is FamilyConditionType.EventRunning)
+            {
+                var child = EventFamily.FirstOrDefault(c => c.EventID == gameEvent.ID);
+                if (child != null)
+                {
+                    if (child.Active && OrderedFamily)
+                    {
+                        OnBadFamilyOrder();
+                    }
+                    child.Active = false;
+                }
+            }
+        }
+
+        private bool ActivateChildOrdered(GameEvent childEvent)
+        {
+            var child = EventFamily.FirstOrDefault(c => c.Active == false);
+            if (child == null)
+                return false;
+
+            if (child.EventID == childEvent.ID)
+            {
+                child.Active = true;
+                return true;
+            }
+            return false;
+        }
+
+        private void OnBadFamilyOrder()
+        {
+            if (!string.IsNullOrEmpty(FamilyFailText) && EventFamily.Any(c => c.Active))
+            {
+                foreach (var cl in GetPlayersInEventZones(this.EventZones))
+                {
+                    ChatUtil.SendImportant(cl, FamilyFailText);
+                }
+            }
+            switch (EventFamilyOrdering)
+            {
+                case FamilyOrdering.Unordered:
+                case FamilyOrdering.Soft:
+                case FamilyOrdering.Strict:
+                    break;
+                
+                case FamilyOrdering.Hidden:
+                    EventFamily.ForEach(c => c.Active = false);
+                    break;
+
+                case FamilyOrdering.Reset:
+                    EventFamily.ForEach(c => c.Active = false);
+                    ResetChildren();
+                    break;
+
+                case FamilyOrdering.Stop:
+                    EventFamily.ForEach(c => c.Active = false);
+                    StopChildren();
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        
 
         private bool ActivateChildUnordered(GameEvent childEvent)
         {
@@ -760,7 +931,13 @@ namespace DOL.GameEvents
             if (child != null)
             {
                 child.Active = true;
+                return true;
             }
+            return false;
+        }
+
+        private bool CheckFamily()
+        {
             bool ok = EventFamily.All(c => c.Active == true);
             if (ok)
             {
@@ -768,6 +945,7 @@ namespace DOL.GameEvents
                 {
                     ResetFamilyTimer.Stop();
                 }
+                Task.Run(() => Start(Owner));
                 return true;
             }
             else
@@ -927,7 +1105,13 @@ namespace DOL.GameEvents
 
         public async Task Stop(EndingConditionType end)
         {
-            var prev = ExchangeStatus(EventStatus.Ending);
+            var prev = CompareExchangeStatus(EventStatus.Ending, EventStatus.Started);
+            if (prev != EventStatus.Started)
+            {
+                prev = CompareExchangeStatus(EventStatus.Ending, EventStatus.Starting);
+                if (prev != EventStatus.Starting)
+                    return;
+            }
             log.DebugFormat("Attempting to end event {0}, was {1}", this, prev);
             try
             {
@@ -993,6 +1177,23 @@ namespace DOL.GameEvents
                     Status = EventStatus.EndedBySwitch;
                     await ShowEndEffects();
                     _Cleanup();
+                }
+                
+                if (GameEventManager.Instance.EventRelations.TryGetValue(ID, out var list))
+                {
+                    foreach (var ev in list)
+                    {
+                        if (ev.EventFamilyType is  FamilyConditionType.EventRunning)
+                        {
+                            var instance = ev.GetInstance(Owner);
+                            instance.OnChildEnd(this);
+                        }
+                        else if (ev.EventFamilyType is FamilyConditionType.EventEnded)
+                        {
+                            var instance = ev.GetOrCreateInstance(Owner);
+                            instance.OnChildEnd(this);
+                        }
+                    }
                 }
 
                 //Handle Consequences
@@ -1338,6 +1539,9 @@ namespace DOL.GameEvents
             RemainingTimeEvSound = db.RemainingTimeEvSound;
             TPPointID = db.TPPointID;
             ActionCancelQuestId = db.ActionCancelQuestId;
+            EventFamilyType = (FamilyConditionType)db.EventFamilyType;
+            EventFamilyOrdering = (FamilyOrdering)db.EventFamilyOrdering;
+            FamilyFailText = db.FamilyFailText;
 
             // get kes from string[] db.EventFamily, and set values to false 
             if (db.EventFamily != null)
@@ -1390,6 +1594,12 @@ namespace DOL.GameEvents
             }
         }
         
+        public string FamilyFailText
+        {
+            get;
+            set;
+        }
+
         public int ActionCancelQuestId
         {
             get;
@@ -1567,6 +1777,18 @@ namespace DOL.GameEvents
         private void ResetFamilyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             ResetChildren();
+        }
+
+        public void StopChildren()
+        {
+            ResetFamilyTimer.Stop();
+            foreach (var child in EventFamily)
+            {
+                GameEvent ev = GameEventManager.Instance.GetEventByID(child.EventID).GetInstance(Owner);
+                if (ev != null)
+                    Task.Run(() => ev.Stop(EndingConditionType.Family));
+                child.Active = false;
+            }
         }
 
         public void ResetChildren()
@@ -1891,6 +2113,22 @@ namespace DOL.GameEvents
             get => _eventFamily.AsReadOnly();
         }
 
+        public FamilyConditionType EventFamilyType
+        {
+            get;
+            set;
+        }
+
+        public FamilyOrdering EventFamilyOrdering
+        {
+            get;
+            set;
+        }
+
+        public bool OrderedFamily => EventFamilyOrdering is not FamilyOrdering.Unordered;
+
+        public bool IsFamilyOrderEnforced => EventFamilyOrdering is not (FamilyOrdering.Unordered or FamilyOrdering.Soft or FamilyOrdering.Hidden);
+
         public int TimeBeforeReset
         {
             get;
@@ -2041,6 +2279,9 @@ namespace DOL.GameEvents
             db.RandomEventSound = RandomEventSound;
             db.RemainingTimeEvSound = RemainingTimeEvSound;
             db.TPPointID = TPPointID;
+            db.EventFamilyType = (int)EventFamilyType;
+            db.EventFamilyOrdering = (int)EventFamilyOrdering;
+            db.FamilyFailText = FamilyFailText ?? string.Empty;
 
             if (ID == null)
             {

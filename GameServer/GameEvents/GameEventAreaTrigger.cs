@@ -360,7 +360,7 @@ namespace DOL.GameEvents
 
             if (!CheckConditions())
             {
-                if (TimerCount > 0)
+                if (TimerCount > 0 && !LaunchTimer.Enabled)
                 {
                     LaunchTimer.Interval = TimerCount * 1000;
                     LaunchTimer.Start();
