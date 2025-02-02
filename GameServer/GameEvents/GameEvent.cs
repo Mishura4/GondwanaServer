@@ -866,11 +866,10 @@ namespace DOL.GameEvents
                 var child = EventFamily.FirstOrDefault(c => c.EventID == gameEvent.ID);
                 if (child != null)
                 {
-                    if (child.Active && OrderedFamily)
+                    if (child.Active && IsFamilyOrderEnforced)
                     {
-                        OnBadFamilyOrder();
+                        ResetChildren();
                     }
-                    child.Active = false;
                 }
             }
         }
