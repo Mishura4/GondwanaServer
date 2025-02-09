@@ -268,8 +268,10 @@ namespace DOL.GS
             if (player == null)
                 return base.ReceiveItem(source, item);
 
-            var ev = this.GetStartedEvent();
+            if (Event?.IsOwnedBy(player) == false)
+                return base.ReceiveItem(source, item);
 
+            var ev = this.GetStartedEvent();
             if (ev == null)
                 return base.ReceiveItem(source, item);
 
@@ -583,7 +585,7 @@ namespace DOL.GS
             if (ev != null && CheckRequiredResources() && !ev.StartedTime.HasValue)
             {
                 this.SaveIntoDatabase();
-                Task.Run(() => GameEventManager.Instance.StartEvent(ev, null));
+                Task.Run(() => GameEventManager.Instance.StartEvent(ev, Event?.Owner));
             }
             this.ReloadMoneyValues();
             return true;
@@ -649,6 +651,7 @@ namespace DOL.GS
             if (db == null)
                 return;
             
+            db.CurrentAmount = Money.GetMoney(CurrentMithril, CurrentPlatinum, CurrentGold, CurrentSilver, CurrentCopper);
             db.CurrentResource1 = CurrentResource1;
             db.CurrentResource2 = CurrentResource2;
             db.CurrentResource3 = CurrentResource3;
