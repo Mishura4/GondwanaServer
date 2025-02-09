@@ -175,6 +175,8 @@ namespace DOL.GS
             set;
         }
 
+        public bool ShouldSaveProgress => Event == null || Event.IsInstanceMaster;
+
         private bool _hasShownRequirementsReached = false;
         public string RequirementsReachedText { get; set; }
         public string RequirementsReachedEmoteName { get; set; }
@@ -187,9 +189,8 @@ namespace DOL.GS
                 return false;
             }
 
-            if (this.CheckEventValidity() == null)
+            if (this.GetStartedEvent() == null)
                 return false;
-
 
             TurnTo(player, 5000);
             string currentMoney = Money.GetString(Money.GetMoney(this.CurrentMithril, this.CurrentPlatinum, CurrentGold, CurrentSilver, CurrentCopper));
@@ -267,7 +268,7 @@ namespace DOL.GS
             if (player == null)
                 return base.ReceiveItem(source, item);
 
-            var ev = this.CheckEventValidity();
+            var ev = this.GetStartedEvent();
 
             if (ev == null)
                 return base.ReceiveItem(source, item);
@@ -347,7 +348,7 @@ namespace DOL.GS
                 }
                 player.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
 
-                this.SaveIntoDatabase();
+                this.SaveResources();
                 Task.Run(() => GameEventManager.Instance.StartEvent(ev, player));
             }
             else
@@ -363,7 +364,7 @@ namespace DOL.GS
                 }
                 player.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
 
-                this.SaveIntoDatabase();
+                this.SaveResources();
             }
             return true;
         }
@@ -423,7 +424,7 @@ namespace DOL.GS
             if (player == null)
                 return base.ReceiveMoney(source, money);
 
-            var ev = this.CheckEventValidity();
+            var ev = this.GetStartedEvent();
 
             if (ev == null)
                 return base.ReceiveMoney(source, money);
@@ -517,7 +518,7 @@ namespace DOL.GS
             CurrentCopper += Money.GetCopper(copper);
         }
 
-        private GameEvent CheckEventValidity()
+        private GameEvent GetStartedEvent()
         {
             if (ServingEventID == null)
                 return null;
@@ -578,7 +579,7 @@ namespace DOL.GS
                 return false;
             }
 
-            var ev = this.CheckEventValidity();
+            var ev = this.GetStartedEvent();
             if (ev != null && CheckRequiredResources() && !ev.StartedTime.HasValue)
             {
                 this.SaveIntoDatabase();
@@ -641,6 +642,28 @@ namespace DOL.GS
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
             return eQuestIndicator.Lesson;
+        }
+
+        private void SaveResources(MoneyNpcDb db)
+        {
+            if (db == null)
+                return;
+            
+            db.CurrentResource1 = CurrentResource1;
+            db.CurrentResource2 = CurrentResource2;
+            db.CurrentResource3 = CurrentResource3;
+            db.CurrentResource4 = CurrentResource4;
+            GameServer.Database.SaveObject(db);
+        }
+
+        private void SaveResources()
+        {
+            if (!ShouldSaveProgress)
+            {
+                return;
+            }
+
+            SaveResources(GameServer.Database.FindObjectByKey<MoneyNpcDb>(this.id));
         }
 
 
