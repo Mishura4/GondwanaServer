@@ -44,19 +44,34 @@ namespace DOL.MobGroups
                 return;
             }
 
-            foreach (MobGroup group in npc.MobGroups.Where(g => g.IsAllDead(npc)))
+            bool? forceRespawn = null;
+            int respawnTimer = 0;
+            foreach (MobGroup group in npc.MobGroups)
             {
-                this.Groups.TryGetValue(group.GroupId, out MobGroup value);
-                //Handle interaction if any slave group
-                this.HandleInteraction(group);
+                bool allDead = group.IsAllDead(npc);
+                if (allDead)
+                {
+                    this.Groups.TryGetValue(group.GroupId, out MobGroup value);
+                    //Handle interaction if any slave group
+                    this.HandleInteraction(group);
 
-                //Reset GroupInfo
-                group.ResetGroupInfo();
+                    //Reset GroupInfo
+                    group.ResetGroupInfo();
 
-                //Notify
-                GameEventMgr.Notify(GroupMobEvent.MobGroupDead, group);
-                var mobGroupEvent = GameEventManager.Instance.GetEventsStartedByKillingGroup(group);
-                mobGroupEvent.ForEach(e => GameEventManager.Instance.StartEvent(e, killer as GamePlayer));
+                    //Notify
+                    GameEventMgr.Notify(GroupMobEvent.MobGroupDead, group);
+                    var mobGroupEvent = GameEventManager.Instance.GetEventsStartedByKillingGroup(group);
+                    mobGroupEvent.ForEach(e => GameEventManager.Instance.StartEvent(e, killer as GamePlayer));
+                }
+                if (group.RespawnTogether)
+                {
+                    forceRespawn = (forceRespawn ?? true) && allDead;
+                    respawnTimer = Math.Max(respawnTimer, group.NPCs.Max(npc => npc.RespawnInterval));
+                }
+            }
+            if (forceRespawn == true)
+            {
+                npc.MobGroups.Where(g => g.RespawnTogether).SelectMany(g => g.NPCs).ForEach(npc => npc.StartRespawn(respawnTimer));
             }
         }
 

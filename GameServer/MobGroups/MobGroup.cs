@@ -24,6 +24,12 @@ namespace DOL.MobGroups
         private bool isLoadedFromScript;
 
         public string SwitchFamily { get; set; }
+        
+        public bool RespawnTogether
+        {
+            get;
+            set;
+        }
 
         public MobGroup(string id, bool isLoadedFromScript)
         {
@@ -64,6 +70,7 @@ namespace DOL.MobGroups
             this.HasOriginalStatus = IsStatusOriginal();
             this.SwitchFamily = db.SwitchFamily;
             this.AssistRange = db.AssistRange;
+            this.RespawnTogether = db.RespawnTogether;
         }
 
         /// <summary>

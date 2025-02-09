@@ -398,6 +398,14 @@ namespace DOL.GameEvents
                     }
                 }
 
+                if (!IsInstancedEvent || IsInstanceMaster)
+                {
+                    if (!string.IsNullOrEmpty(KillStartingGroupMobId) && MobGroupManager.Instance.Groups.TryGetValue(KillStartingGroupMobId, out MobGroup group))
+                    {
+                        group.NPCs.Where(npc => npc.Event is null or { IsRunning: true }).ForEach(npc => npc.Spawn());
+                    }
+                }
+
                 SaveToDatabase();
             }
             catch (Exception ex)

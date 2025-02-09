@@ -33,6 +33,7 @@ namespace DOLDatabase.Tables
         private int m_completedQuestCount;
         private string m_switchFamily;
         private int m_assistRange;
+        private bool m_respawnTogether = false;
 
         [DataElement(AllowDbNull = false, Varchar = 255, Unique = true)]
         public string GroupId
@@ -60,6 +61,17 @@ namespace DOLDatabase.Tables
         {
             get => m_visibleSlot;
             set { Dirty = true; m_visibleSlot = value; }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool RespawnTogether
+        {
+            get => m_respawnTogether;
+            set
+            {
+                Dirty = true;
+                m_respawnTogether = value;
+            }
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]

@@ -3309,12 +3309,12 @@ namespace DOL.GS
 
         public virtual bool Spawn()
         {
-            CurrentRegion.MobsRespawning.TryRemove(this, out _);
-
             lock (m_respawnTimerLock)
             {
                 if (m_respawnTimer != null)
                 {
+                    CurrentRegion.MobsRespawning.TryRemove(this, out _);
+
                     m_respawnTimer.Stop();
                     m_respawnTimer = null;
                 }
@@ -5168,10 +5168,15 @@ namespace DOL.GS
                     return false;
                 }
 
-                if (Event is { IsRunning: false })
+                if (Event != null)
                 {
-                    return false;
+                    if (!Event.IsRunning)
+                        return false;
                 }
+
+                if (MobGroups?.Any(g => g.RespawnTogether) == true)
+                    return false;
+                
                 return true;
             }
             set
@@ -5191,8 +5196,7 @@ namespace DOL.GS
                     if (prev)
                     {
                         SpawnFlags |= eSpawnFlags.NORESPAWN;
-                        if (m_respawnTimer?.IsAlive == true)
-                            m_respawnTimer.Stop();
+                        StopRespawn();
                     }
                 }
             }
@@ -5208,7 +5212,7 @@ namespace DOL.GS
         /// <summary>
         /// Starts the Respawn Timer
         /// </summary>
-        public virtual void StartRespawn()
+        public virtual void StartRespawn(int time)
         {
             if (IsAlive)
                 return;
@@ -5219,8 +5223,7 @@ namespace DOL.GS
             if (this.EventID != null && !CanRespawnWithinEvent)
                 return;
 
-            int respawnInt = RespawnInterval;
-            if (respawnInt > 0)
+            if (time > 0)
             {
                 lock (m_respawnTimerLock)
                 {
@@ -5234,12 +5237,14 @@ namespace DOL.GS
                         m_respawnTimer.Stop();
                     }
                     // register Mob as "respawning"
-                    CurrentRegion.MobsRespawning.TryAdd(this, respawnInt);
+                    CurrentRegion.MobsRespawning.TryAdd(this, time);
 
-                    m_respawnTimer.Start(respawnInt);
+                    m_respawnTimer.Start(time);
                 }
             }
         }
+
+        public void StartRespawn() => StartRespawn(RespawnInterval);
         
         public void StopRespawn()
         {
