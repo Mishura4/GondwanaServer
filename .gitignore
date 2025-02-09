@@ -8,7 +8,7 @@
 /NetCore/Debug
 /NetCore/Release
 **/*.csproj.user
-**/*.sln.user
+**/*.DotSettings.user
 
 /Pathing_native/Detour/.vs
 /Pathing_native/Detour/out

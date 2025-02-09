@@ -27,10 +27,16 @@ namespace DOL.GS.Spells
                     anyHealed = true;
             }
 
+            bool consume = false;
             if (!anyHealed && Spell.Target.Equals("Realm", StringComparison.OrdinalIgnoreCase))
+            {
                 Caster.Mana -= (PowerCost(baseTarget) >> 1);
+                consume = true; // For AOEs, mark the spell as success even if nobody was healed, so item charges can be consumed similar to mana
+            }
             else
+            {
                 Caster.Mana -= PowerCost(baseTarget);
+            }
 
             if (Spell.Pulse == 0)
             {
@@ -44,7 +50,7 @@ namespace DOL.GS.Spells
                     SendEffectAnimation(Caster, 0, false, 0);
                 }
             }
-            return true;
+            return consume;
         }
 
         /// <summary>
