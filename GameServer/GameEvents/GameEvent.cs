@@ -233,7 +233,7 @@ namespace DOL.GameEvents
 
             ParseValuesFromDb(db);
 
-            if (ParallelLaunch)
+            if (IsInstancedEvent)
                 Instances = new List<GameEvent>();
 
             this.Coffres = new List<GameStaticItem>();
@@ -505,10 +505,10 @@ namespace DOL.GameEvents
                 return false;
             }
             Owner ??= triggerPlayer;
-            ChainPreviousEvent = starterEvent;
-            if (starterEvent != null)
+            ChainPreviousEvent = starterEvent?.GetInstance(triggerPlayer);
+            if (ChainPreviousEvent != null)
             {
-                starterEvent.ChainNextEvent = this;
+                ChainPreviousEvent.ChainNextEvent = this;
             }
             try
             {
@@ -519,6 +519,10 @@ namespace DOL.GameEvents
                     {
                         if (ev.EventFamilyType is FamilyConditionType.EventStarted or FamilyConditionType.EventRunning)
                         {
+                            if (IsInstancedEvent && !ev.IsInstancedEvent && ev.OrderedFamily)
+                            {
+                                log.Warn($"Event {ev} parent of an ordered family event is not instanced, but its child {this} is instanced, this will behave in very unintuitive ways!");
+                            }
                             var instance = ev.GetOrCreateInstance(triggerPlayer);
                             success = success && (instance?.OnChildStart(this) == true);
                         }
@@ -622,7 +626,7 @@ namespace DOL.GameEvents
             RemovedCoffres.Clear();
         }
 
-        public async Task<bool> StartParallel(GamePlayer? triggerPlayer = null, GameEvent? previousEvent = null)
+        public async Task<bool> StartInstances(GamePlayer? triggerPlayer = null, GameEvent? previousEvent = null)
         {
             if (!TryExchangeStatus(EventStatus.Starting, EventStatus.Idle))
             {
@@ -636,7 +640,6 @@ namespace DOL.GameEvents
 
                 // Keep track of instances we spawn
                 Dictionary<object, GamePlayer> playersRegistered = new();
-                
                 var key = GetOwnerKey(triggerPlayer);
                 if (key != null) 
                     playersRegistered.TryAdd(key, triggerPlayer);
@@ -666,19 +669,22 @@ namespace DOL.GameEvents
 
                 if (playersRegistered.Count > 0 || startingExistingInstances.Count > 0)
                 {
-                    // Spawn an instance for every registered player
                     List<GameEvent> spawnedInstances = new();
-                    foreach (GamePlayer pl in playersRegistered.Values)
+                    if (ParallelLaunch == EventLaunchType.InstancedStartAll)
                     {
-                        try
+                        // Spawn an instance for every registered player
+                        foreach (GamePlayer pl in playersRegistered.Values)
                         {
-                            var instance = Instantiate(pl);
-                            if (instance != null)
-                                spawnedInstances.Add(instance);
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Error($"Could not instantiate event {this.EventName} ({ID}) for player {pl}: {ex}");
+                            try
+                            {
+                                var instance = Instantiate(pl);
+                                if (instance != null)
+                                    spawnedInstances.Add(instance);
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Error($"Could not instantiate event {this.EventName} ({ID}) for player {pl}: {ex}");
+                            }
                         }
                     }
 
@@ -701,9 +707,12 @@ namespace DOL.GameEvents
                             entry.ev.Reset();
                         }
                     }
-                    lock (Instances)
+                    if (ParallelLaunch == EventLaunchType.InstancedStartAll)
                     {
-                        Instances.AddRange(spawnedInstances.Where(i => i.IsRunning));
+                        lock (Instances)
+                        {
+                            Instances.AddRange(spawnedInstances.Where(i => i.IsRunning));
+                        }
                     }
                 }
                 Status = EventStatus.Idle;
@@ -719,25 +728,23 @@ namespace DOL.GameEvents
 
         public async Task<bool> Start(GamePlayer? triggerPlayer = null, GameEvent? previousEvent = null)
         {
-            if (ParallelLaunch)
+            if (IsInstancedEvent)
             {
-                if (IsInstanceMaster)
-                    return await StartParallel(triggerPlayer, previousEvent);
-                else
+                if (IsInstanceMultiStart)
                 {
-                    GameEvent master = GameEventManager.Instance.GetEventByID(this.ID);
+                    GameEvent master = IsInstanceMaster ? this : GameEventManager.Instance.GetEventByID(this.ID);
                     if (master != null)
-                        return await master.StartParallel(triggerPlayer, previousEvent);
+                        return await StartInstances(triggerPlayer, previousEvent);
                 }
-            }
-            if (IsInstanceMaster)
-            {
-                GameEvent instance = GetOrCreateInstance(triggerPlayer);
-                if (instance == null)
+                if (IsInstanceMaster)
                 {
-                    return false;
+                    GameEvent instance = GetOrCreateInstance(triggerPlayer);
+                    if (instance == null)
+                    {
+                        return false;
+                    }
+                    return await instance._Start(triggerPlayer, previousEvent);
                 }
-                return await instance._Start(triggerPlayer, previousEvent);
             }
             return await _Start(triggerPlayer, previousEvent);
         }
@@ -1539,7 +1546,7 @@ namespace DOL.GameEvents
             InstancedConditionType = Enum.TryParse(db.InstancedConditionType.ToString(), out InstancedConditionTypes inst) ? inst : InstancedConditionTypes.All;
             AreaStartingId = !string.IsNullOrEmpty(db.AreaStartingId) ? db.AreaStartingId : null;
             QuestStartingId = !string.IsNullOrEmpty(db.QuestStartingId) ? db.QuestStartingId : null;
-            ParallelLaunch = db.ParallelLaunch;
+            ParallelLaunch = (EventLaunchType)db.ParallelLaunch;
             StartEventSound = db.StartEventSound;
             RandomEventSound = db.RandomEventSound;
             RemainingTimeEvSound = db.RemainingTimeEvSound;
@@ -1614,8 +1621,8 @@ namespace DOL.GameEvents
 
         public bool IsOwnedBy(GamePlayer player)
         {
-            if (ParallelLaunch && IsInstanceMaster)
-                return false;
+            if (IsInstancedEvent && IsInstanceMaster)
+                return false; // Noone owns the root event, players own specific instances
             
             switch (InstancedConditionType)
             {
@@ -2093,13 +2100,28 @@ namespace DOL.GameEvents
             get;
         }
 
-        public bool ParallelLaunch
+        public enum EventLaunchType
+        {
+            Normal, // Not instanced
+            Instanced, // Each instance has their own separate starting conditions
+            InstancedStartAll, // Start all existing instances together
+            InstancedEveryone, // Start all existing instances together, and start new instances for everyone in event areas
+        }
+        
+        public EventLaunchType ParallelLaunch
         {
             get;
             set;
         }
 
-        public bool IsInstancedEvent => ParallelLaunch;
+        /// <summary>
+        /// If true, this event spawns an instance when starting, separately from the master event.
+        /// This means the event can be started again by other players while it is running.
+        /// Players not part of an instance cannot see the mobs belonging to that instance.
+        /// </summary>
+        public bool IsInstancedEvent => ParallelLaunch != EventLaunchType.Normal;
+        
+        public bool IsInstanceMultiStart => (int) ParallelLaunch >= (int) EventLaunchType.InstancedStartAll;
         
         public bool IsInstanceMaster { get; set; }
         
@@ -2368,7 +2390,7 @@ namespace DOL.GameEvents
             }
         }
 
-        public bool IsReady => (ParallelLaunch && IsInstanceMaster) || (Status == EventStatus.Idle && (ChainNextEvent == null || ChainNextEvent.IsReady));
+        public bool IsReady => (IsInstancedEvent && IsInstanceMaster) || (Status == EventStatus.Idle && (ChainNextEvent == null || ChainNextEvent.IsReady));
 
         public bool IsRunning
         {

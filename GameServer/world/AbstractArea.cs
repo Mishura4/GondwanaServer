@@ -300,8 +300,8 @@ namespace DOL.GS
             }
 
             player.IsAllowToVolInThisArea = this.CanVol;
-            GameEventManager.Instance.PlayerEntersArea(player, this);
             player.Notify(AreaEvent.PlayerEnter, this, new AreaEventArgs(this, player));
+            GameEventManager.Instance.PlayerEntersArea(player, this);
         }
 
         public abstract void LoadFromDatabase(DBArea area);

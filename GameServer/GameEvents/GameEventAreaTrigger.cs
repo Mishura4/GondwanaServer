@@ -143,6 +143,9 @@ namespace DOL.GameEvents
         {
             if (sender is not GamePlayer player || args is not UseSlotEventArgs useArgs)
                 return;
+
+            if (!Event.IsOwnedBy(player))
+                return;
             
             if (!player.CurrentAreas.Contains(Area))
             {
@@ -231,6 +234,9 @@ namespace DOL.GameEvents
             if (sender is not GamePlayer player)
                 return;
 
+            if (!Event.IsOwnedBy(player))
+                return;
+            
             if (!player.CurrentAreas.Contains(Area))
             {
                 log.Warn($"GameEventAreaTrigger ${Event} detected player ${player.Name} whispered, but player is not in area {Area.Description}");
@@ -259,6 +265,9 @@ namespace DOL.GameEvents
         public void PlayerEntersArea(GamePlayer player, IArea area)
         {
             if (area != Area)
+                return;
+
+            if (!Event.IsOwnedBy(player))
                 return;
 
             lock (PlayersInArea)

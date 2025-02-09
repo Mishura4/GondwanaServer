@@ -48,7 +48,7 @@ namespace DOLDatabase.Tables
         private int m_instancedConditionType;
         private string m_areaStartingId;
         private string m_questStartingId;
-        private bool m_parallelLaunch;
+        private int m_parallelLaunch;
         private string m_eventFamily;
         private int m_timerBeforeReset;
         private int? m_tppointid;
@@ -606,7 +606,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true)]
-        public bool ParallelLaunch
+        public int ParallelLaunch
         {
             get => m_parallelLaunch;
 
