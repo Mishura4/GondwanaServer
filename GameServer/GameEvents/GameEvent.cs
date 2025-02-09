@@ -340,6 +340,7 @@ namespace DOL.GameEvents
                         List<GameEvent> instances;
                         lock (Instances)
                         {
+                            // Calling reset on instances will modify the list, so we need to copy first
                             instances = Instances.ToList();
                             Instances.Clear();
                         }
@@ -347,9 +348,21 @@ namespace DOL.GameEvents
                     }
                     else
                     {
-                        var master = GameEventManager.Instance.GetEventByID(ID);
-                        if (master != null)
-                            master.RemoveInstance(this);
+                        bool deleteInstance = true;
+                        if (AreaConditions != null)
+                        {
+                            AreaConditions.Reset();
+                            if (AreaConditions.PlayersInArea.Count != 0)
+                            {
+                                deleteInstance = false;
+                            }
+                        }
+                        if (deleteInstance)
+                        {
+                            var master = GameEventManager.Instance.GetEventByID(ID);
+                            if (master != null)
+                                master.RemoveInstance(this);
+                        }
                     }
                 }
 
@@ -415,6 +428,14 @@ namespace DOL.GameEvents
             }
             Status = EventStatus.Idle;
             log.DebugFormat("Finished reset of event {0}", this);
+
+            if (IsInstanceMaster && AreaConditions != null)
+            {
+                foreach (var player in AreaConditions.Area.Players)
+                {
+                    GetOrCreateInstance(player)?.AreaConditions!.PlayerEntersArea(player, AreaConditions.Area);
+                }
+            }
         }
         
         public void RemoveInstance(GameEvent instance)
@@ -2367,7 +2388,7 @@ namespace DOL.GameEvents
             {
                 if (!IsInstanceMaster)
                 {
-                    return GameEventManager.Instance.GetEventByID(ID)?.GetOrCreateInstance(triggerPlayer);
+                    return IsOwnedBy(triggerPlayer) ? this : GameEventManager.Instance.GetEventByID(ID)?.GetOrCreateInstance(triggerPlayer);
                 }
                 lock (Instances)
                 {

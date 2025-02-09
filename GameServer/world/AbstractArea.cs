@@ -24,6 +24,8 @@ using DOL.Language;
 using DOL.GS.PacketHandler;
 using DOL.GameEvents;
 using DOL.GS.Geometry;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -253,12 +255,29 @@ namespace DOL.GS
 
         public DBArea DbArea { get => dbArea; set => dbArea = value; }
 
+        private List<GamePlayer> _players = new();
+
+        public IReadOnlyList<GamePlayer> Players
+        {
+            get
+            {
+                lock (_players)
+                {
+                    return new List<GamePlayer>(_players).AsReadOnly();
+                }
+            }
+        }
+
         /// <summary>
         /// Called whenever a player leaves the given area
         /// </summary>
         /// <param name="player"></param>
         public virtual void OnPlayerLeave(GamePlayer player)
         {
+            lock (_players)
+            {
+                _players.Remove(player);
+            }
             if (m_displayMessage)
             {
                 string description = GetDescriptionForPlayer(player);
@@ -280,6 +299,10 @@ namespace DOL.GS
         /// <param name="player"></param>
         public virtual void OnPlayerEnter(GamePlayer player)
         {
+            lock (_players)
+            {
+                _players.Add(player);
+            }
             if (m_displayMessage)
             {
                 string description = GetDescriptionForPlayer(player, out string screenDescription);
