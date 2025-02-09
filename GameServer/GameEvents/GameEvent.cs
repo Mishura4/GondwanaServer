@@ -122,6 +122,7 @@ namespace DOL.GameEvents
                 this.RemainingTimeTimer.AutoReset = true;
                 this.RemainingTimeTimer.Elapsed += RemainingTimeTimer_Elapsed;
             }
+            FamilyFailText = ev.FamilyFailText;
 
             IsKillingEvent = ev.IsKillingEvent;
             IsTimingEvent = ev.IsTimingEvent;
