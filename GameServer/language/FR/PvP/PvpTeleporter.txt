@@ -4,7 +4,7 @@ TeleporterPvP.CannotHelpPart1:             Bonjour {0}, je ne peux rien faire po
 TeleporterPvP.CannotHelpPart2:             Revenez plus tard !
 TeleporterPvP.ChickenOutPart1:             Pff, tu es trop une poule mouillée pour rester ?!
 TeleporterPvP.ChickenOutPart2:             [Partir]
-TeleporterPvP.SendToCombat:                Bonjour {0}, je peux vous envoyer au combat ! [Prêt] ?!
+TeleporterPvP.SendToCombat:                Bonjour {0}, je peux vous envoyer au combat ! Prêt ?!
 TeleporterPvP.InCombat:                    Vous ne pouvez pas être téléporté en étant en combat !
 TeleporterPvP.Leave:                       Partir
 TeleporterPvP.Ready:                       Prêt

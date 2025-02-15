@@ -225,6 +225,7 @@ Commands.Players.Guild.NoPlayerWithName:        There is no player with the name
 Commands.Players.Guild.NotInYourGuild:			This player is not in the guild.
 Commands.Players.Guild.NotMember:				You must be in a guild to use this command.
 Commands.Players.Guild.SystemGuild:				You cannot use this command in this guild.
+Commands.Players.Guild.CmdCannotUseHere:		You cannot use this command here.
 Commands.Players.Guild.OMotdSet:				The officers' message is now updated.
 Commands.Players.Guild.PlayerNotFound:			This player is not online or is in another realm.
 Commands.Players.Guild.PromotedOther:			{0} has been promoted to rank {1}.

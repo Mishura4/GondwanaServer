@@ -35,7 +35,7 @@ namespace DOL.GS.PacketHandler
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Constructs a new PacketLib for Version 1.76 clients
@@ -105,7 +105,7 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)obj.ObjectID);
 
                 if (obj is GameStaticItem)
-                    pak.WriteShort((ushort)(obj as GameStaticItem).Emblem);
+                    pak.WriteShort((ushort)(obj as GameStaticItem)!.Emblem);
                 else
                     pak.WriteShort(0);
 
@@ -130,7 +130,7 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)flag);
                 if (obj is GameStaticItem)
                 {
-                    int newEmblemBitMask = ((obj as GameStaticItem).Emblem & 0x010000) << 9;
+                    int newEmblemBitMask = ((obj as GameStaticItem)!.Emblem & 0x010000) << 9;
                     pak.WriteInt((uint)newEmblemBitMask);//TODO other bits
                 }
                 else pak.WriteInt(0);
@@ -159,7 +159,7 @@ namespace DOL.GS.PacketHandler
                 if (obj is IDoor)
                 {
                     pak.WriteByte(4);
-                    pak.WriteInt((uint)(obj as IDoor).DoorID);
+                    pak.WriteInt((uint)(obj as IDoor)!.DoorID);
                 }
                 else pak.WriteByte(0x00);
                 SendTCP(pak);
@@ -478,7 +478,10 @@ namespace DOL.GS.PacketHandler
             base.SendPlayerCreate(playerToCreate);
 
             if (playerToCreate.GuildBanner != null)
+            {
                 playerToCreate.Out.SendRvRGuildBanner(playerToCreate, true);
+                playerToCreate.Out.SendPvPGuildBanner(playerToCreate, true);
+            }
         }
 
     }

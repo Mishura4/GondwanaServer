@@ -49,8 +49,8 @@ namespace AmteScripts.Managers
         //const string RvRDivineMID = "RvR-Divine-MID";
 
         private static int RVR_RADIUS = Properties.RvR_AREA_RADIUS;
-        private static DateTime _startTime = DateTime.Today.AddHours(23D).Add(TimeSpan.FromMinutes(5)); //20H00
-        private static DateTime _endTime = _startTime.Add(TimeSpan.FromMinutes(20)); //2H00 + 1
+        private static DateTime _startTime = DateTime.Today.AddHours(20D); //20H00
+        private static DateTime _endTime = _startTime.Add(TimeSpan.FromHours(4)).Add(TimeSpan.FromMinutes(5)); //4H00 + 5
         private const int _checkInterval = 30 * 1000; // 30 seconds
         private static readonly Position _stuckSpawn = Position.Create(51, 434303, 493165, 3088, 1069);
         private Dictionary<ushort, IList<string>> RvrStats = new Dictionary<ushort, IList<string>>();
@@ -717,6 +717,7 @@ namespace AmteScripts.Managers
                 return false;
             }
             RvrPlayer rvr = new RvrPlayer(player);
+            rvr.SessionType = "RvR";
             GameServer.Database.AddObject(rvr);
 
             if (player.Guild != null)
@@ -876,6 +877,7 @@ namespace AmteScripts.Managers
                     }
                 }
                 player.SaveIntoDatabase();
+                rvrPlayer.SessionType = "None";
                 GameServer.Database.DeleteObject(rvrPlayer);
             }
         }

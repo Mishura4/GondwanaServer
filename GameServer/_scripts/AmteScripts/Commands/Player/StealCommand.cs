@@ -148,7 +148,7 @@ namespace DOL.GS.Commands
                 if (result.Status == StealResultStatus.SUCCESS_MONEY)
                 {
                     var moneyPerc = rand.Next(10, 41);
-                    result.Money = ((target.GetCurrentMoney() * moneyPerc) / 100);
+                    result.Money = ((target.CopperBalance * moneyPerc) / 100);
                 }
             }
 
@@ -157,8 +157,7 @@ namespace DOL.GS.Commands
 
         public static void CancelVol(GamePlayer Player)
         {
-            CancelVol(Player,
-                Player.TempProperties.getProperty<object>(PLAYER_VOL_TIMER, null) as RegionTimer);
+            CancelVol(Player, Player.TempProperties.getProperty<object>(PLAYER_VOL_TIMER, null) as RegionTimer);
         }
 
         private static void DisableRobbing(GamePlayer player, int duration)
@@ -172,8 +171,9 @@ namespace DOL.GS.Commands
 
         public static void CancelVol(GamePlayer Player, RegionTimer Timer)
         {
-            DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION);
-            
+            DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION_CHEST);
+            DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION_PLAYER);
+
             Timer.Stop();
 
             Player.Out.SendCloseTimerWindow();
@@ -250,7 +250,6 @@ namespace DOL.GS.Commands
             }
 
             var targetPlayer = Player.TargetObject as GamePlayer;
-
             if (targetPlayer != null)
             {
                 if (targetPlayer.PlayerAfkMessage != null)
@@ -260,21 +259,84 @@ namespace DOL.GS.Commands
                 }
             }
 
-            long VolChangeTick = Player.TempProperties.getProperty<long>(
-                VolAbilityHandler.DISABLE_PROPERTY, 0L);
-            long ChangeTime = Player.CurrentRegion.Time - VolChangeTick;
-            if (ChangeTime < VolAbilityHandler.DISABLE_DURATION && Player.Client.Account.PrivLevel < 3) //Allow Admin
-            {
-                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Time", ((VolAbilityHandler.DISABLE_DURATION - ChangeTime) / 1000).ToString()),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
-            }
-
             GamePlayer Target = Player.TargetObject as GamePlayer;
             if (Target == null && args.Length >= 2)
             {
                 Target = WorldMgr.GetClientByPlayerName(args[1],
                     false, true).Player;
+            }
+
+            if (Player.TargetObject is PVPChest chestTarget)
+            {
+                var sbOwner = chestTarget.GetScoreboardPlayer();
+                if (sbOwner != null && sbOwner.IsInPvP)
+                {
+                    if (!chestTarget.IsGroupChest)
+                    {
+                        if (Player == sbOwner)
+                        {
+                            Player.Out.SendMessage("You cannot steal from your own locked chest!",
+                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (Player.Group != null && sbOwner.Group != null && Player.Group == sbOwner.Group)
+                        {
+                            Player.Out.SendMessage("You cannot steal from your group's locked chest!",
+                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+                    }
+                }
+
+                InventoryItem crochets = Player.Inventory.GetFirstItemByID("oneuse_vang_crochets", eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                if (crochets == null)
+                {
+                    Player.Out.SendMessage("You need a Crochets to be able to steal this chest.",
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    Player.Out.SendCloseTimerWindow();
+                    Player.TempProperties.removeProperty(PLAYER_VOL_TIMER);
+                    return;
+                }
+
+                long VolChangeTick = Player.TempProperties.getProperty<long>(VolAbilityHandler.DISABLE_PROPERTY, 0L);
+                long changeTime = Player.CurrentRegion.Time - VolChangeTick;
+                if (changeTime < VolAbilityHandler.DISABLE_DURATION_CHEST && Player.Client.Account.PrivLevel < 3)
+                {
+                    long remaining = ((VolAbilityHandler.DISABLE_DURATION_CHEST) - changeTime) / 1000;
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Time", remaining.ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+
+                int volTime = Util.Random(MIN_VOL_TIME, MAX_VOL_TIME);
+                Player.Out.SendMessage("You attempt to pick the chest's lock...", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                Player.Out.SendTimerWindow("Stealing Treasure...", volTime);
+
+                RegionTimer Timer = new RegionTimer(Player);
+                Timer.Callback = new RegionTimerCallback(VolTargetChest);
+                Timer.Properties.setProperty(PLAYER_STEALER, Player);
+                Timer.Properties.setProperty("TREASURE_CHEST_TARGET", chestTarget);
+                Timer.Start(volTime * 1000);
+                Player.TempProperties.setProperty(PLAYER_VOL_TIMER, Timer);
+
+                DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION_CHEST);
+
+                return;
+            }
+            else if (Target != null)
+            {
+                // Check the player-specific disable timer
+                long playerDisableTick = Player.TempProperties.getProperty<long>(VolAbilityHandler.DISABLE_PROPERTY, 0L);
+                long playerChangeTime = Player.CurrentRegion.Time - playerDisableTick;
+                if (playerChangeTime < VolAbilityHandler.DISABLE_DURATION_PLAYER && Player.Client.Account.PrivLevel < 3)
+                {
+                    long remaining = (VolAbilityHandler.DISABLE_DURATION_PLAYER - playerChangeTime) / 1000;
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Time", remaining.ToString()),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
             }
 
             if (CanVol(Player, Target))
@@ -295,7 +357,7 @@ namespace DOL.GS.Commands
                 Target.TempProperties.setProperty(PLAYER_STEALER, Player);
                 Player.TempProperties.setProperty(PLAYER_VOL_TIMER, Timer);
 
-                DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION);
+                DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION_PLAYER);
             }
             else
             {
@@ -356,6 +418,89 @@ namespace DOL.GS.Commands
 
             CancelVol(stealer, Timer);
 
+            return 0;
+        }
+
+        /// <summary>
+        /// Timer callback for chest-steal attempts.
+        /// This callback is invoked after the timer expires and then executes the chest steal logic.
+        /// </summary>
+        private int VolTargetChest(RegionTimer Timer)
+        {
+            GamePlayer stealer = Timer.Properties.getProperty<object>(PLAYER_STEALER, null) as GamePlayer;
+            PVPChest chest = Timer.Properties.getProperty<object>("TREASURE_CHEST_TARGET", null) as PVPChest;
+            InventoryItem crochets = stealer!.Inventory.GetFirstItemByID("oneuse_vang_crochets", eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+
+            if (stealer == null || chest == null)
+            {
+                return 0;
+            }
+
+            if (!stealer.Inventory.IsSlotsFree(1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
+            {
+                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.FullInventory"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                stealer.Out.SendCloseTimerWindow();
+                stealer.TempProperties.removeProperty(PLAYER_VOL_TIMER);
+                return 0;
+            }
+
+            if (!stealer.Inventory.RemoveCountFromStack(crochets, 1))
+            {
+                stealer.Out.SendMessage("Error consuming the Crochets.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                stealer.Out.SendCloseTimerWindow();
+                stealer.TempProperties.removeProperty(PLAYER_VOL_TIMER);
+                return 0;
+            }
+
+            int baseChance = 50;
+            int bonusChance = stealer.GetModified(eProperty.RobberyChanceBonus);
+            int totalChance = baseChance + bonusChance;
+            Random rand = new Random(DateTime.Now.Millisecond);
+            int roll = rand.Next(1, 101);
+            if (roll > totalChance)
+            {
+                stealer.Out.SendMessage("You failed your steal attempt on this chest, you are empty handed.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            else
+            {
+                var stolenData = chest.StealRandomItem();
+                if (stolenData == null)
+                {
+                    stealer.Out.SendMessage("You tried to steal the treasure in this chest, but it is empty.",
+                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                }
+                else
+                {
+                    ItemTemplate template = GameServer.Database.SelectObject<ItemTemplate>(
+                        DB.Column("Id_nb").IsEqualTo(stolenData.Id_nb));
+                    if (template == null)
+                    {
+                        stealer.Out.SendMessage("The item template could not be found.",
+                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        InventoryItem stolenItem = GameInventoryItem.Create(template);
+                        stolenItem.Count = 1;
+                        eInventorySlot freeSlot = stealer.Inventory.FindFirstEmptySlot(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                        if (freeSlot == eInventorySlot.Invalid)
+                        {
+                            stealer.Out.SendMessage("You don't have a free inventory slot.",
+                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            stealer.Inventory.AddItem(freeSlot, stolenItem);
+                            stealer.Out.SendMessage("You successfully got a " + stolenItem.Name + " from the Treasure chest!",
+                                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
+                    }
+                    chest.OnTreasureStolen(stealer, stolenData);
+                }
+            }
+            stealer.Out.SendCloseTimerWindow();
+            stealer.TempProperties.removeProperty(PLAYER_VOL_TIMER);
             return 0;
         }
 
@@ -442,7 +587,7 @@ namespace DOL.GS.Commands
     public class StealCommandHandler : StealCommandHandlerBase
     {
     }
-    
+
     [CmdAttribute(
         "&vol",
         ePrivLevel.Player,

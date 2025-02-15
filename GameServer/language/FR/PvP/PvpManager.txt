@@ -1,0 +1,16 @@
+
+PvPManager.PvPNotOpen:				Le PvP n'est pas ouvert pour le moment !
+PvPManager.GroupSessionRequired:	Vous devez faire partie d'un groupe pour accéder à cette session PvP !
+PvPManager.NoGroup:					Vous n'avez pas de groupe !
+PvPManager.GroupTooLarge:			Votre groupe est plus grand que permis : {0}
+PvPManager.CannotCreatePvPGuild:	Impossible de créer une guilde PvP !
+PvPManager.PvPTreasureRemoved:		Tous vos objets de Trésor PvP ({0}) ont été retirés de votre inventaire puisque vous avez quitté le PvP !
+PvPManager.LeftPvP:					Vous avez quitté la session PvP !
+PvPManager.CannotFindSpawn:			Impossible de trouver un lieu d'apparition !
+PvPManager.JoinedPvP:				Vous avez rejoint la session PvP : {0}
+PvPManager.GroupJoinedPvP:			Votre groupe entier a rejoint la session PvP : {0}
+PvPManager.AlreadyInSoloQueue:		Vous êtes déjà dans la file d'attente solo !
+PvPManager.JoinedSoloQueue:			Vous avez rejoint la file d'attente solo pour la prochaine session de groupe.
+PvPManager.CouldNotCreatePvPGuild:	Impossible de créer une guilde PvP...
+PvPManager.LeftGroupQueue:			Vous avez quitté la file d'attente de groupe PvP.
+PvPManager.BroughtToSafety:			Vous avez réussi à mettre {0} en sécurité ! (+{1} pts)

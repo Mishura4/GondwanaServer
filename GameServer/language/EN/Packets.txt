@@ -233,6 +233,7 @@ DestroyItemRequestHandler.CantDestroyItem:		You can't destroy {0}!
 DestroyItemRequestHandler.CantDestroyRelic:		You cannot destroy a relic!
 DestroyItemRequestHandler.CantDestroyEquippedItem:		You cannot destroy an equipped item!
 DestroyItemRequestHandler.ItemDestroyed:		You destroy the {0}.
+DestroyItemRequestHandler.CantDestroyPvPFlag:	The PvP Flag cannot be destroyed!
 
 # /DialogResponseHandler
 DialogResponseHandler.SameRegionGuildLeaderToAccept:		You need to be in the same region as the guild leader to accept an invitation.

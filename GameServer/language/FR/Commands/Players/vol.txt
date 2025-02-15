@@ -17,7 +17,7 @@ Commands.Players.Vol.TargetAFK: 			Vous ne pouvez pas voler un joueur afk !
 Commands.Players.Vol.Time: 					Vous devez attendre {0} secondes avant de pouvoir voler à nouveau !
 Commands.Players.Vol.Steal: 				Vous commencez à voler {0}
 Commands.Players.Vol.StealWindow: 			Vous êtes actuellement en train de voler
-Commands.Players.Vol.CantSteal: 			Vous ne pouvez volez ce personnage !
+Commands.Players.Vol.CantSteal: 			Vous ne pouvez volez cette cible !
 Commands.Players.Vol.StealSleeping: 		Vous perdez 1 point de réputation pour avoir tenté de voler un joueur endormi.
 Commands.Players.Vol.StealSleapingPartner:	Vous perdez 1 point de réputation pour avoir contribué à un vol en endormant un joueur.
 Commands.Players.Vol.Fail:					Vous n'avez pas réussi à voler ce personnage !

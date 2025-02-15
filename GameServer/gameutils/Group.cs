@@ -23,6 +23,8 @@ using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
 using DOL.Language;
+using AmteScripts.Managers;
+using DOL.Database;
 
 namespace DOL.GS
 {
@@ -186,6 +188,10 @@ namespace DOL.GS
         /// <returns>true if added successfully</returns>
         public virtual bool AddMember(GameLiving living)
         {
+            var player = living as GamePlayer;
+            if (!CheckInviteAllowed(player))
+                return true;
+
             if (!m_groupMembers.FreezeWhile<bool>(l =>
             {
                 if (l.Count >= ServerProperties.Properties.GROUP_MAX_MEMBER || l.Count >= (byte.MaxValue - 1))
@@ -205,8 +211,12 @@ namespace DOL.GS
             // update icons of joined player to everyone in the group
             UpdateMember(living, true, false);
 
+            if (PvpManager.Instance.IsPlayerInQueue(player))
+            {
+                PvpManager.Instance.DequeueSolo(player);
+            }
+
             // update all icons for just joined player
-            var player = living as GamePlayer;
             if (player != null)
             {
                 player.Out.SendGroupMembersUpdate(true, true);
@@ -226,6 +236,10 @@ namespace DOL.GS
         /// <returns>true if removed, false if not</returns>
         public virtual bool RemoveMember(GameLiving living)
         {
+            var player = living as GamePlayer;
+            if (!CheckDisbandAllowed(player))
+                return true;
+
             if (!m_groupMembers.TryRemove(living))
                 return false;
 
@@ -234,8 +248,8 @@ namespace DOL.GS
 
             living.Group = null;
             living.GroupIndex = 0xFF;
+
             // Update Player.
-            var player = living as GamePlayer;
             if (player != null)
             {
                 player.Out.SendGroupWindowUpdate();
@@ -259,6 +273,21 @@ namespace DOL.GS
             {
                 // RR4: Group is disbanded, ending mission group if any
                 RemoveMember(m_groupMembers.First());
+                GameLiving remaining = m_groupMembers.First();
+
+                if (remaining is GamePlayer remainingPlayer)
+                {
+                    remainingPlayer.Out.SendMessage("Your group has been automatically disbanded because you are the only member remaining.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+
+                DisbandGroup();
+
+                if (remaining is GamePlayer gp && PvpManager.Instance.IsOpen && PvpManager.Instance.CurrentSession != null && PvpManager.Instance.CurrentSession.GroupCompoOption == 2)
+                {
+                    PvpManager.Instance.RemovePlayer(gp);
+                }
+
+                return true;
             }
 
             // Update all members
@@ -309,6 +338,46 @@ namespace DOL.GS
                 for (byte ind = 0; ind < l.Count; ind++)
                     l[ind].GroupIndex = ind;
             });
+        }
+
+        private bool CheckInviteAllowed(GamePlayer player)
+        {
+            if (!player.IsInPvP || !PvpManager.Instance.IsOpen)
+                return true;
+
+            var session = PvpManager.Instance.CurrentSession;
+            if (session == null)
+                return true;
+
+            if (!session.AllowGroupDisbandCreate)
+            {
+                player.Out.SendMessage(
+                    "Creating or joining groups is not allowed in this PvP session.",
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool CheckDisbandAllowed(GamePlayer player)
+        {
+            if (!player.IsInPvP || !PvpManager.Instance.IsOpen)
+                return true;
+
+            var session = PvpManager.Instance.CurrentSession;
+            if (session == null)
+                return true;
+
+            if (!session.AllowGroupDisbandCreate)
+            {
+                player.Out.SendMessage(
+                    "You cannot disband a group in this PvP session.",
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

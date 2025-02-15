@@ -202,6 +202,12 @@ namespace DOL.GS.Commands
             {
                 if (args.Length == 1)
                 {
+                    if (client.Account.PrivLevel <= 1 && client.Player.Guild == null)
+                    {
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
+
                     DisplayHelp(client);
                     return;
                 }
@@ -310,8 +316,11 @@ namespace DOL.GS.Commands
                     // --------------------------------------------------------------------------------
                     case "rename":
                         {
-                            if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
-                                return;
+                            if (!client.Player.IsInPvP)
+                            {
+                                if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
+                                    return;
+                            }
 
                             if (args.Length < 5)
                             {
@@ -1033,7 +1042,7 @@ namespace DOL.GS.Commands
                             {
                                 bannerPrice = 0;
                             }
-                            else if (client.Player.Guild.GuildType == Guild.eGuildType.RvRGuild) // RvR guilds can buy a banner for 1000 MP
+                            else if (client.Player.Guild.GuildType == Guild.eGuildType.RvRGuild || client.Player.Guild.GuildType == Guild.eGuildType.PvPGuild) // RvR guilds can buy a banner for 1000 MP
                             {
                                 bannerPrice = 1000;
                             }
@@ -1060,6 +1069,8 @@ namespace DOL.GS.Commands
                                 bannerPrice = (client.Player.Guild.GuildLevel * 100);
                             }
 
+                            if (!CheckBannerAllowed(client.Player))
+                                return;
 
                             if (client.Player.Guild.HasGuildBanner)
                             {
@@ -1126,7 +1137,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (client.Account.PrivLevel <= 1 && client.Player.Guild.GuildType != Guild.eGuildType.RvRGuild)
+                            if (client.Account.PrivLevel <= 1 && client.Player.Guild.GuildType != Guild.eGuildType.RvRGuild && client.Player.Guild.GuildType != Guild.eGuildType.PvPGuild)
                             {
                                 if (client.Player.Guild.IsSystemGuild)
                                 {
@@ -1146,6 +1157,9 @@ namespace DOL.GS.Commands
                                     return;
                                 }
                             }
+
+                            if (!CheckBannerAllowed(client.Player))
+                                return;
 
                             if (!client.Player.Guild.HasGuildBanner)
                             {
@@ -3724,10 +3738,18 @@ namespace DOL.GS.Commands
 
                     #region territories
                     case "territories":
-                        if (client.Player.Guild == null || client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild)
+                        if (client.Account.PrivLevel == 1)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Territories.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
+                            if (client.Player.Guild == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Territories.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                            else if (client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
                         }
 
                         IList<string> infos = TerritoryManager.Instance.GetTerritoriesInformations(client.Player);
@@ -3737,10 +3759,23 @@ namespace DOL.GS.Commands
 
                     #region subterritories
                     case "subterritories":
-                        if (client.Player.Guild == null || client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild)
+                        if (client.Account.PrivLevel == 1)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Subterritories.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
+                            if (client.Player.Guild == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Subterritories.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                            else if (client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild && !client.Player.IsInPvP)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                            else if (PvpManager.Instance.CurrentSession == null || PvpManager.Instance.CurrentSession.SessionType != 5)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CmdCannotUseHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
                         }
 
                         infos = TerritoryManager.Instance.GetSubterritoriesInformations(client.Player);
@@ -3912,6 +3947,22 @@ namespace DOL.GS.Commands
             player.Guild.UpdateGuildWindow();
         }
 
+        private bool CheckBannerAllowed(GamePlayer player)
+        {
+            if (player.IsInPvP && PvpManager.Instance.IsOpen)
+            {
+                var session = PvpManager.Instance.CurrentSession;
+                if (session != null && !session.AllowSummonBanner)
+                {
+                    player.Out.SendMessage(
+                        "Guild banners are not allowed in this zone.",
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public void DisplayHelp(GameClient client)
         {
             if (client.Account.PrivLevel > 1)
@@ -3925,54 +3976,103 @@ namespace DOL.GS.Commands
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRealmPoints"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMMeritPoints"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMBountyPoints"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+
+                DisplayRegularGuildHelp(client);
             }
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildUsage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildForm"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildInfo"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildRanks"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildCancel"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildDecline"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildClaim"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildQuit"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildMotd"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildAMotd"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildOMotd"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildPromote"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildDemote"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildRemove"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildRemAccount"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEmblem"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEdit"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildLeader"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildAccept"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildInvite"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildWho"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildList"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildAlli"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildAAccept"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildACancel"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildADecline"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildAInvite"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildARemove"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildARemoveAlli"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildNoteSelf"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildDues"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildDeposit"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildWithdraw"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildWebpage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEmail"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBuff"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBannerSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBannerUnsummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildSubTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryPortal"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.BuyTerritoryDefender"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.MoveTerritoryDefender"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.CombatZone"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.JailRelease"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            if (client.Player.Guild != null && client.Account.PrivLevel <= 1)
+            {
+                if (client.Player.IsInPvP)
+                {
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildUsage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildInfo"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRename"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildLeader"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildWho"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildList"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBuff"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBannerSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBannerUnsummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildSubTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                }
+                if (client.Player.IsInRvR)
+                {
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildUsage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildInfo"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildWho"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildList"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBuff"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBannerSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBannerUnsummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                }
+                if (client.Player.Guild.GuildType != Guild.eGuildType.RvRGuild && client.Player.Guild.GuildType != Guild.eGuildType.PvPGuild)
+                {
+                    DisplayRegularGuildHelp(client);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends the regular help messages to the client.
+        /// </summary>
+        private void DisplayRegularGuildHelp(GameClient client)
+        {
+            string[] helpKeys = new string[]
+            {
+                "Commands.Players.Guild.Help.GuildUsage",
+                "Commands.Players.Guild.Help.GuildForm",
+                "Commands.Players.Guild.Help.GuildInfo",
+                "Commands.Players.Guild.Help.GuildRanks",
+                "Commands.Players.Guild.Help.GuildCancel",
+                "Commands.Players.Guild.Help.GuildDecline",
+                "Commands.Players.Guild.Help.GuildClaim",
+                "Commands.Players.Guild.Help.GuildQuit",
+                "Commands.Players.Guild.Help.GuildMotd",
+                "Commands.Players.Guild.Help.GuildAMotd",
+                "Commands.Players.Guild.Help.GuildOMotd",
+                "Commands.Players.Guild.Help.GuildPromote",
+                "Commands.Players.Guild.Help.GuildDemote",
+                "Commands.Players.Guild.Help.GuildRemove",
+                "Commands.Players.Guild.Help.GuildRemAccount",
+                "Commands.Players.Guild.Help.GuildEmblem",
+                "Commands.Players.Guild.Help.GuildEdit",
+                "Commands.Players.Guild.Help.GuildLeader",
+                "Commands.Players.Guild.Help.GuildAccept",
+                "Commands.Players.Guild.Help.GuildInvite",
+                "Commands.Players.Guild.Help.GuildWho",
+                "Commands.Players.Guild.Help.GuildList",
+                "Commands.Players.Guild.Help.GuildAlli",
+                "Commands.Players.Guild.Help.GuildAAccept",
+                "Commands.Players.Guild.Help.GuildACancel",
+                "Commands.Players.Guild.Help.GuildADecline",
+                "Commands.Players.Guild.Help.GuildAInvite",
+                "Commands.Players.Guild.Help.GuildARemove",
+                "Commands.Players.Guild.Help.GuildARemoveAlli",
+                "Commands.Players.Guild.Help.GuildNoteSelf",
+                "Commands.Players.Guild.Help.GuildDues",
+                "Commands.Players.Guild.Help.GuildDeposit",
+                "Commands.Players.Guild.Help.GuildWithdraw",
+                "Commands.Players.Guild.Help.GuildWebpage",
+                "Commands.Players.Guild.Help.GuildEmail",
+                "Commands.Players.Guild.Help.GuildBuff",
+                "Commands.Players.Guild.Help.GuildBuyBanner",
+                "Commands.Players.Guild.Help.GuildBannerSummon",
+                "Commands.Players.Guild.Help.GuildBannerUnsummon",
+                "Commands.Players.Guild.Help.GuildTerritories",
+                "Commands.Players.Guild.Help.GuildSubTerritories",
+                "Commands.Players.Guild.Help.TerritoryBanner",
+                "Commands.Players.Guild.Help.TerritoryPortal",
+                "Commands.Players.Guild.Help.BuyTerritoryDefender",
+                "Commands.Players.Guild.Help.MoveTerritoryDefender",
+                "Commands.Players.Guild.Help.CombatZone",
+                "Commands.Players.Guild.Help.JailRelease"
+            };
+
+            foreach (string key in helpKeys)
+            {
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, key), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            }
         }
 
         /// <summary>
@@ -4395,36 +4495,39 @@ namespace DOL.GS.Commands
 
         public void DisplayEditHelp(GameClient client)
         {
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildUsage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditTitle"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditRankLevel"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditEmblem"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditGCHear"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditGCSpeak"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditOCHear"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditOCSpeak"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditACHear"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditACSpeak"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditInvite"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditPromote"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditRemove"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditView"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditAlli"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditClaim"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditUpgrade"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditRelease"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditDues"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildSubTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryPortal"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.CombatZone"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage("/gc edit <ranknum> buff <y/n>", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditWithdraw"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditVault"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditTerritoryDefenders"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            if (!client.Player.IsInRvR && !client.Player.IsInPvP && client.Player.Guild != null)
+            {
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildUsage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditTitle"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditRankLevel"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditEmblem"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditGCHear"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditGCSpeak"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditOCHear"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditOCSpeak"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditACHear"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditACSpeak"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditInvite"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditPromote"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditRemove"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditView"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditAlli"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditClaim"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditUpgrade"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditRelease"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditDues"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildSubTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryPortal"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.CombatZone"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage("/gc edit <ranknum> buff <y/n>", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditWithdraw"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditVault"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditTerritoryDefenders"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            }
         }
     }
 }

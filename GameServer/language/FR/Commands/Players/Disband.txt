@@ -6,3 +6,4 @@ Commands.Players.Disband.NotLeader:		Vous n'êtes pas le chef du groupe.
 Commands.Players.Disband.NoYourself:	Vous ne pouvez pas vous dégrouper de cette manière.
 Commands.Players.Disband.Usage:			'/disband' # Vous vous séparez du groupe.
 Commands.Players.Disband.Usage.Name:	'/disband <name> # Dégrouper le joueur spécifié.
+Commands.Players.Disband.NotAllowed:	Vous ne pouvez pas dégrouper dans cette session PvP.

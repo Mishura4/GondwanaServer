@@ -3778,6 +3778,10 @@ namespace DOL.GS.PacketHandler
         {
         }
 
+        public virtual void SendPvPGuildBanner(GamePlayer player, bool show)
+        {
+        }
+
         public virtual void SendPlayerFreeLevelUpdate()
         {
         }

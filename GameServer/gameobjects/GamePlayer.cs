@@ -56,6 +56,7 @@ using DOL.GS.Scripts;
 using log4net;
 using System.Collections.Immutable;
 using DOL.GS.Geometry;
+using AmteScripts.PvP.CTF;
 using Discord;
 
 namespace DOL.GS
@@ -851,6 +852,26 @@ namespace DOL.GS
                 }
             }
 
+            if (IsInPvP)
+            {
+                RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(this.InternalID));
+
+                if (record != null)
+                {
+                    DBCharacter.Region = record.OldRegion;
+                    DBCharacter.Xpos = record.OldX;
+                    DBCharacter.Ypos = record.OldY;
+                    DBCharacter.Zpos = record.OldZ;
+                    DBCharacter.BindRegion = record.OldBindRegion;
+                    DBCharacter.BindXpos = record.OldBindX;
+                    DBCharacter.BindYpos = record.OldBindY;
+                    DBCharacter.BindZpos = record.OldBindZ;
+                    DBCharacter.BindHeading = record.OldBindHeading;
+
+                    PvpManager.Instance.RemovePlayerForQuit(this);
+                }
+            }
+
             Out.SendPlayerQuit(false);
             Quit(true);
             SaveIntoDatabase();
@@ -887,6 +908,11 @@ namespace DOL.GS
         #endregion
 
         #region Player Linking Dead
+        /// <summary>
+        /// Grace timer used in case a player who is in PvP don't lose everything (PvP coordinates, PvP guild, inventory treasures...)
+        /// </summary>
+        public RegionTimer m_PvPGraceTimer;
+
         /// <summary>
         /// Callback method, called when the player went linkdead and now he is
         /// allowed to be disconnected
@@ -967,12 +993,24 @@ namespace DOL.GS
                 m_quitTimer = null;
             }
 
-            int secondsToQuit = QuitTime;
-            if (log.IsInfoEnabled)
-                log.InfoFormat("Linkdead player {0}({1}) will quit in {2}", Name, Client.Account.Name, secondsToQuit);
-            RegionTimer timer = new RegionTimer(this); // make sure it is not stopped!
-            timer.Callback = new RegionTimerCallback(LinkdeathTimerCallback);
-            timer.Start(1 + secondsToQuit * 1000);
+            if (this.IsInPvP)
+            {
+                int gracePeriodMs = 20 * 60 * 1000;
+                m_PvPGraceTimer = new RegionTimer(this);
+                m_PvPGraceTimer.Callback = new RegionTimerCallback(LinkdeathPvPGraceCallback);
+                m_PvPGraceTimer.Start(1 + gracePeriodMs);
+                if (log.IsInfoEnabled)
+                    log.InfoFormat("Linkdead PvP player {0}({1}) will be removed in {2} minutes if not reconnected.", Name, Client.Account.Name, gracePeriodMs / 60000);
+            }
+            else
+            {
+                int secondsToQuit = QuitTime;
+                if (log.IsInfoEnabled)
+                    log.InfoFormat("Linkdead player {0}({1}) will quit in {2}", Name, Client.Account.Name, secondsToQuit);
+                RegionTimer timer = new RegionTimer(this); // make sure it is not stopped!
+                timer.Callback = new RegionTimerCallback(LinkdeathTimerCallback);
+                timer.Start(1 + secondsToQuit * 1000);
+            }
 
             if (TradeWindow != null)
                 TradeWindow.CloseTrade();
@@ -1156,6 +1194,22 @@ namespace DOL.GS
             }
 
             #endregion TempPropertiesManager LookUp
+        }
+
+        /// <summary>
+        /// Called when a PvP linkdead player’s grace period expires.
+        /// The callback removes the player from the PvP session (using the same cleanup as for quitting)
+        /// and disconnects the client.
+        /// </summary>
+        protected int LinkdeathPvPGraceCallback(RegionTimer timer)
+        {
+            if (log.IsInfoEnabled)
+                log.InfoFormat("PvP grace period expired for linkdead player {0}({1}). Removing from PvP.", Name, Client.Account.Name);
+
+            PvpManager.Instance.RemovePlayer(this);
+
+            Client.Quit();
+            return 0;
         }
 
         /// <summary>
@@ -1421,10 +1475,11 @@ namespace DOL.GS
                     else
                     {
                         bound = true;
-                        double angle = house.Heading * ((Math.PI * 2) / 360); // angle*2pi/360;
+                        Angle houseAngle = Angle.Heading(house.Orientation);
+                        double angle = houseAngle.InDegrees * ((Math.PI * 2) / 360); // angle in radians
                         int outsideX = (int)(house.Position.X + (0 * Math.Cos(angle) + 500 * Math.Sin(angle)));
                         int outsideY = (int)(house.Position.Y - (500 * Math.Cos(angle) - 0 * Math.Sin(angle)));
-                        ushort outsideHeading = (ushort)((house.Heading < 180 ? house.Heading + 180 : house.Heading - 180) / 0.08789);
+                        ushort outsideHeading = (ushort)((houseAngle.InDegrees < 180 ? houseAngle.InDegrees + 180 : houseAngle.InDegrees - 180) / 0.08789);
                         BindHousePosition = house.OutdoorJumpPosition;
                         if (DBCharacter != null)
                             GameServer.Database.SaveObject(DBCharacter);
@@ -1695,7 +1750,7 @@ namespace DOL.GS
                         if (!ServerProperties.Properties.DISABLE_TUTORIAL)
                         {
                             //Tutorial
-                            if (BindRegion == 27)
+                            if (BindPosition.RegionID == 27)
                             {
                                 switch (Realm)
                                 {
@@ -1758,7 +1813,7 @@ namespace DOL.GS
                             //nf
                             case 163:
                                 {
-                                    if (BindRegion != 163)
+                                    if (BindPosition.RegionID != 163)
                                     {
                                         switch (Realm)
                                         {
@@ -8652,6 +8707,11 @@ namespace DOL.GS
                             {
                                 TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
                             }
+
+                            if (killerPlayer.IsInPvP)
+                            {
+                                PvpManager.Instance.HandlePlayerKill(killerPlayer, this);
+                            }
                         }
                     }
                 }
@@ -8986,6 +9046,115 @@ namespace DOL.GS
                     dieTrigger.OnPlayerDie(this, killer);
                     break; // stop looking, only use the first item we find
                 }
+            }
+
+            DropPvPTreasuresOnDeath(killer);
+            DropFlagsOnDeath((GameLiving)killer);
+        }
+
+        protected virtual void DropPvPTreasuresOnDeath(GameObject killer)
+        {
+            if (!IsInPvP) return;
+
+            var pm = PvpManager.Instance;
+            if (pm == null || !pm.IsOpen) return;
+            // if (pm.CurrentSession?.SessionType != 3) return;
+
+            List<InventoryItem> treasureStacks = new List<InventoryItem>();
+            for (eInventorySlot slot = eInventorySlot.FirstBackpack;
+                 slot <= eInventorySlot.LastBackpack; slot++)
+            {
+                var item = Inventory.GetItem(slot);
+                if (item is PvPTreasure)
+                {
+                    treasureStacks.Add(item);
+                }
+            }
+            if (treasureStacks.Count == 0)
+                return;
+
+            int totalCarried = treasureStacks.Sum(t => t.Count);
+            if (totalCarried < 1) return; // none to drop
+            int dropCount = Util.Random(2, 10);
+            dropCount = Math.Min(dropCount, totalCarried);
+
+            int droppedSoFar = 0;
+            for (int i = 0; i < dropCount; i++)
+            {
+                int idx = Util.Random(treasureStacks.Count - 1);
+                InventoryItem chosenStack = treasureStacks[idx];
+
+                chosenStack.Count--;
+                if (chosenStack.Count <= 0)
+                {
+                    Inventory.RemoveItem(chosenStack);
+                    treasureStacks.RemoveAt(idx);
+
+                    if (treasureStacks.Count == 0 && i < dropCount - 1)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    // optional: 
+                    //   player.Out.SendInventorySlotsUpdate(...) 
+                    // or  GameServer.Database.SaveObject(chosenStack);
+                }
+
+                var singleTreasure = new PvPTreasure(chosenStack)
+                {
+                    Count = 1
+                };
+                var worldItem = new WorldInventoryItem(singleTreasure);
+
+                double angle = Util.RandomDouble() * 2 * Math.PI;
+                double distance = Util.Random(100);
+                int xoff = (int)(distance * Math.Cos(angle));
+                int yoff = (int)(distance * Math.Sin(angle));
+
+                worldItem.Position = Position.Create(
+                    CurrentRegionID,
+                    Position.X + xoff,
+                    Position.Y + yoff,
+                    Position.Z,
+                    Heading
+                );
+
+                worldItem.AddToWorld();
+                droppedSoFar++;
+            }
+
+            if (droppedSoFar > 0)
+            {
+                Out.SendMessage($"You have dropped {droppedSoFar} of your treasure item(s) upon dying!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+        }
+
+        private void DropFlagsOnDeath(GameObject killer)
+        {
+            GameLiving livingKiller = killer as GameLiving;
+            if (livingKiller == null)
+            {
+                return;
+            }
+
+            if (!PvpManager.Instance.IsOpen || PvpManager.Instance.CurrentSession?.SessionType != 2)
+                return;
+
+            var toRemove = new List<FlagInventoryItem>();
+            for (eInventorySlot slot = eInventorySlot.FirstBackpack; slot <= eInventorySlot.LastBackpack; slot++)
+            {
+                var item = Inventory.GetItem(slot);
+                if (item is FlagInventoryItem flagItem)
+                    toRemove.Add(flagItem);
+            }
+
+            if (toRemove.Count == 0) return;
+
+            foreach (var flagItem in toRemove)
+            {
+                flagItem.DropFlagOnGround(this, livingKiller);
             }
         }
 
@@ -10409,7 +10578,7 @@ namespace DOL.GS
 
             try
             {
-                eHorseSaddleBag saddleBagRequired = (eHorseSaddleBag)Enum.GetValues(typeof(eHorseSaddleBag)).GetValue(((slot / NUM_SLOTS_PER_SADDLEBAG) - 19)); // 1, 2, 3, or 4
+                eHorseSaddleBag saddleBagRequired = (eHorseSaddleBag)Enum.GetValues(typeof(eHorseSaddleBag)).GetValue(((slot / NUM_SLOTS_PER_SADDLEBAG) - 19))!; // 1, 2, 3, or 4
 
                 // ChatUtil.SendDebugMessage(this, string.Format("Check slot {0} if between {1} and {2}.  CL is {3}, ActiveSaddleBags is {4}, Required Bag is {5}", slot, (int)eInventorySlot.FirstBagHorse, (int)eInventorySlot.LastBagHorse, ChampionLevel, ActiveSaddleBags, saddleBagRequired));
 

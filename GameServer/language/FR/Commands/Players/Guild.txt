@@ -225,6 +225,7 @@ Commands.Players.Guild.NoPlayerWithName:        Il n'y a pas de joueur avec le n
 Commands.Players.Guild.NotInYourGuild:			Ce joueur n'est pas dans la guilde.
 Commands.Players.Guild.NotMember:				Vous devez être dans une guilde pour utiliser cette commande.
 Commands.Players.Guild.SystemGuild:				Vous ne pouvez pas utiliser cette commande dans cette guilde.
+Commands.Players.Guild.CmdCannotUseHere:		Vous ne pouvez pas utiliser cette commande ici.
 Commands.Players.Guild.OMotdSet:				Le message des officiers est maintenant actualisé.
 Commands.Players.Guild.PlayerNotFound:			Ce joueur n'est pas en ligne ou se trouve dans un autre royaume.
 Commands.Players.Guild.PromotedOther:			{0} est promu(e) au rang {1}.

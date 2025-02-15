@@ -2791,7 +2791,7 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("craft", "crafting_speed", "Crafting Speed Modifier - Edit this to change the speed at which you craft e.g 1.5 is 50% faster 2.0 is twice as fast (100%) 0.5 is half the speed (50%)", 1.0)]
         public static double CRAFTING_SPEED;
         /// <summary>
-        /// The crafting speed modifier
+        /// To force or not players to use classic inventory tools for crafting items
         /// </summary>
         [ServerProperty("craft", "allow_classic_craft_toolcheck", "Allow Classic crafting tools in player's inventory as well as worldobject to be checked for the player to be able to craft items", true)]
         public static bool ALLOW_CLASSIC_CRAFT_TOOLCHECK;

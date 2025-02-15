@@ -1,0 +1,16 @@
+
+PvPManager.PvPNotOpen:				PvP is not open right now!
+PvPManager.GroupSessionRequired:	This session requires a group to join!
+PvPManager.NoGroup:					You have no group!
+PvPManager.GroupTooLarge:			Your group is bigger than allowed: {0}
+PvPManager.CannotCreatePvPGuild:	Could not create PvP guild!
+PvPManager.PvPTreasureRemoved:		All your {0} PvPTreasure item(s) have been forcibly removed since you left PvP!
+PvPManager.LeftPvP:					You have left the PvP session!
+PvPManager.CannotFindSpawn:			Could not find spawn location!
+PvPManager.JoinedPvP:				You have joined the PvP session: {0}
+PvPManager.GroupJoinedPvP:			Your entire group has joined the PvP session: {0}
+PvPManager.AlreadyInSoloQueue:		You are already in the solo queue!
+PvPManager.JoinedSoloQueue:			You have joined the solo queue for the next group session.
+PvPManager.CouldNotCreatePvPGuild:	Could not create PvP guild...
+PvPManager.LeftGroupQueue:			You have left the PvP group queue.
+PvPManager.BroughtToSafety:			You have successfully brought {0} to safety! (+{1} pts)

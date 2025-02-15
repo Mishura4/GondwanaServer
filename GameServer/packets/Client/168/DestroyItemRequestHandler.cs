@@ -18,6 +18,8 @@
  */
 using System;
 using System.Collections;
+using AmteScripts.PvP.CTF;
+using System.Numerics;
 using DOL.Database;
 using DOL.Language;
 
@@ -42,6 +44,12 @@ namespace DOL.GS.PacketHandler.Client.v168
                 if (item.Id_nb == "ARelic")
                 {
                     client.Out.SendMessage(LanguageMgr.GetTranslation(client, "DestroyItemRequestHandler.CantDestroyRelic"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+
+                if (item is FlagInventoryItem)
+                {
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client, "DestroyItemRequestHandler.CantDestroyPvPFlag"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 

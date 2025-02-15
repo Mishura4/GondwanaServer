@@ -25,8 +25,8 @@ RvRManager.Seconds:					seconds
 
 RvRManager.RvROpened:					The RvR zones have been opened with regions {0}.
 RvRManager.RvRNotOpened:				The RvR zones could not be opened.
-RvRManager.PvPOpened:					The PvP zone has been opened with region {0}.
-RvRManager.PvPNotOpened:				The PvP zone could not be opened in region {0}.
+RvRManager.PvPOpened:					The PvP zone has been opened in {1} (Region {0}).
+RvRManager.PvPNotOpened:				The PvP zone could not be opened in {1} (Region {0}).
 RvRManager.RvRClosed:					The RvR zone has been closed.
 RvRManager.RvRNotClosed:				The RvR zone could not be closed.
 RvRManager.PvPClosed:					The PvP zone has been closed.
@@ -37,6 +37,9 @@ RvRManager.PvPUnforceNotPossible:		PvP must be open to allow the unforce.
 RvRManager.PvPWillCloseAutomatically:	The PvP zone will automatically close if it is outside the allowed hours.
 RvRManager.RvRStatus:					The current RvR status is: {0}
 RvRManager.PvPStatus:					The current PvP regions status is: {0}
-RvRManager.RvRAndPvPMustBeClosed:		RvR and PvP zones must be closed to refresh the list of available maps.
-RvRManager.MapsUsed:					RvR uses maps: {0}, PvP uses maps: {1}.
-RvRManager.RvRPvPReset:					RvR and PvP have been reset.
+RvRManager.RvRMustBeClosed:				RvR zones must be closed to refresh the list of available maps.
+RvRManager.PvPMustBeClosed:				PvP zones must be closed to refresh the list of available maps.
+RvRManager.RvRMapsUsed:					RvR uses maps: {0}.
+RvRManager.PvPMapsUsed:					PvP uses maps: {0}.
+RvRManager.RvRReset:					RvR has been reset.
+RvRManager.PvPReset:					PvP has been reset.

@@ -288,7 +288,8 @@ namespace DOL.GS
         {
             PlayerGuild,
             ServerGuild,
-            RvRGuild
+            RvRGuild,
+            PvPGuild
         }
 
         public eGuildType GuildType { get; set; }
@@ -297,7 +298,7 @@ namespace DOL.GS
         {
             get
             {
-                return GuildType is eGuildType.ServerGuild or eGuildType.RvRGuild;
+                return GuildType is eGuildType.ServerGuild or eGuildType.RvRGuild or eGuildType.PvPGuild;
             }
         }
 

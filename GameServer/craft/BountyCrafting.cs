@@ -18,6 +18,7 @@
  */
 using DOL.Database;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace DOL.GS
         public BountyCrafting()
         {
             Icon = 0x05;
-            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "Crafting.Name.BountyCrafing");
+            Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "Crafting.Name.BountyCrafing");
             eSkill = eCraftingSkill.BountyCrafting;
         }
 
@@ -59,10 +60,13 @@ namespace DOL.GS
                 return false;
             }
 
-            if (!CheckInventoryToolRequirements(player, recipe))
+            if (!CheckNearbyStaticItemRequirements(player, recipe))
                 return false;
 
-            if (!CheckNearbyStaticItemRequirements(player, recipe))
+            if (!Properties.ALLOW_CLASSIC_CRAFT_TOOLCHECK)
+                return true;
+
+            if (!CheckInventoryToolRequirements(player, recipe))
                 return false;
 
             return true;
@@ -645,7 +649,7 @@ namespace DOL.GS
                 if (!IsNearAlchemyTable())
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindAlchemyTable"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(Properties.DB_LANGUAGE, "Crafting.CheckTool.FindAlchemyTable"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 return true;
@@ -656,7 +660,7 @@ namespace DOL.GS
                 if (!IsNearForge())
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForge"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForge"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 return true;
@@ -667,7 +671,7 @@ namespace DOL.GS
                 if (!IsNearForgeOrLathe())
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForgeLathe"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForgeLathe"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 return true;
@@ -678,7 +682,7 @@ namespace DOL.GS
                 if (!IsNearLathe())
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindLathe"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(Properties.DB_LANGUAGE, "Crafting.CheckTool.FindLathe"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 return true;
@@ -686,10 +690,13 @@ namespace DOL.GS
 
             if (weaverTanneryNeeded.Contains(objectType))
             {
+                if (!Properties.ALLOW_CLASSIC_CRAFT_TOOLCHECK)
+                    return true;
+
                 if (!IsNearWeaverOrTannery())
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindWeaverTannery"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(Properties.DB_LANGUAGE, "Crafting.CheckTool.FindWeaverTannery"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 return true;

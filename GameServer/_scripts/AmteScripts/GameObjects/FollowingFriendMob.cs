@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Timers;
+using AmteScripts.Managers;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Geometry;
+using DOLVector = DOL.GS.Geometry.Vector;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using DOL.MobGroups;
@@ -32,6 +35,7 @@ namespace DOL.GS.Scripts
         public string AreaToEnter { get; set; }
         public int TimerBeforeReset { get; set; }
         public bool WaitingInArea { get; set; }
+        public bool InFinalSafeAreaJourney { get; set; }
         public string ungroupText;
 
         public Timer ResetTimer { get; set; }
@@ -75,12 +79,18 @@ namespace DOL.GS.Scripts
             
             if (TextNPCIdle == null)
                 return false;
-            
+
+            if (WaitingInArea && IsPeaceful)
+                return false;
+
             return TextNPCIdle.Interact(player);
         }
         
         public override bool WhisperReceive(GameLiving source, string str)
         {
+            if (WaitingInArea && IsPeaceful)
+                return false;
+
             if (!base.WhisperReceive(source, str))
                 return false;
             if (source is not GamePlayer player)
@@ -241,7 +251,7 @@ namespace DOL.GS.Scripts
             ResetSelf();
         }
 
-        private void ResetSelf()
+        public void ResetSelf()
         {
             if (WaitingInArea == true && PlayerFollow != null)
             {
@@ -312,132 +322,157 @@ namespace DOL.GS.Scripts
             if (IsCasting)
                 return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
 
-            bool wasInRange = m_followTimer.Properties.getProperty(FOLLOW_TARGET_IN_RANGE, false);
-            m_followTimer.Properties.removeProperty(FOLLOW_TARGET_IN_RANGE);
-
-            GamePlayer playerFollow = PlayerFollow;
-
-            if (PlayerFollow == null)
+            var playerFollow = PlayerFollow;
+            if (playerFollow == null)
             {
                 Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(null));
                 ResetFollow();
                 return 0;
             }
 
-            GameLiving followTarget = m_followTarget?.Target as GameLiving;
-
-            if (followTarget == PlayerFollow)
+            // If target is invalid (dead, different region, etc.), reset
+            if (!playerFollow.IsAlive
+                || playerFollow.ObjectState != eObjectState.Active
+                || CurrentRegionID != playerFollow.CurrentRegionID)
             {
-                if (!PlayerFollow.IsAlive)
-                {
-                    // Player died, reset
-                    PlayerFollow = null;
-                    StopFollowing();
-                    Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    ResetFollow();
-                    return 0;
-                }
-
-                if (PlayerFollow.ObjectState != eObjectState.Active || CurrentRegionID != PlayerFollow.CurrentRegionID)
-                {
-                    // Player left the game or area, reset
-                    PlayerFollow = null;
-                    StopFollowing();
-                    Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    ResetFollow();
-                    return 0;
-                }
-            }
-
-            //Calculate the difference between our position and the players position
-            var diff = followTarget.Coordinate - Coordinate;
-            
-            //SH: Removed Z checks when one of the two Z values is zero(on ground)
-            float distanceToTarget;
-            if (followTarget.Position.Z == 0 || Position.Z == 0)
-                distanceToTarget = GetDistance2DTo(followTarget);
-            else
-                distanceToTarget = GetDistanceTo(followTarget);
-
-            //Are we in range still?
-            if (followTarget == PlayerFollow)
-            {
-                if (distanceToTarget <= m_followMinDist)
-                {
-                    // Within minimum distance, nothing to do
-                    StopMoving();
-                    TurnTo(followTarget);
-
-                    if (!wasInRange)
-                    {
-                        m_followTimer.Properties.setProperty(FOLLOW_TARGET_IN_RANGE, true);
-                        FollowTargetInRange();
-                    }
-                    NotifyPresence();
-                    return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
-                }
-                else if (distanceToTarget > m_followMaxDist)
-                {
-                    // Distance is greater then the max follow distance, stop following and return home
-                    PlayerFollow = null;
-                    StopFollowing();
-                    Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
-                    Reset();
-                    return 0;
-                }
-            }
-            else
-            {
-                if (distanceToTarget <= m_followMinDist)
-                {
-                    // Within minimum distance, nothing to do
-                    StopMoving();
-                    TurnTo(followTarget);
-
-                    if (!wasInRange)
-                    {
-                        m_followTimer.Properties.setProperty(FOLLOW_TARGET_IN_RANGE, true);
-                        FollowTargetInRange();
-                    }
-                    NotifyPresence();
-                    return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
-                }
-            }
-
-            NotifyPresence();
-            //check area reached
-            var area = followTarget.CurrentAreas?.OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter);
-            if (area != null && !WaitingInArea)
-            {
-                StopFollowing();
-                var targetPos = Coordinate.Create(area.DbArea.X, area.DbArea.Y, area.DbArea.Z);
-                var angle = Math.Atan2(targetPos.Y - Position.Y, targetPos.X - Position.X);
-
-                targetPos += Vector.Create(Angle.Radians(angle), Util.Random(200, 300));
-                WaitingInArea = true;
-                followTarget.Notify(GameLivingEvent.BringAFriend, followTarget, new BringAFriendArgs(this, true));
-                WalkTo(targetPos, 130);
+                Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
+                ResetFollow();
                 return 0;
             }
-            else if (WaitingInArea)
+
+            // Decide if we are in "Bring Friends" mode for THIS mob's current zone
+            bool isBringFriends = false;
+            var currentZone = this.CurrentZone;
+            if (PvpManager.Instance != null && PvpManager.Instance.IsOpen && PvpManager.Instance.CurrentSession != null && PvpManager.Instance.CurrentSession.SessionType == 4 && currentZone != null)
+            {
+                // Check if this zone is in the ActiveSession's ZoneList
+                var zoneListStr = PvpManager.Instance.CurrentSession.ZoneList;
+                if (!string.IsNullOrEmpty(zoneListStr))
+                {
+                    var zoneStrings = zoneListStr.Split(',');
+                    foreach (var zStr in zoneStrings)
+                    {
+                        if (ushort.TryParse(zStr, out ushort zId))
+                        {
+                            if (zId == currentZone.ID)
+                            {
+                                isBringFriends = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (WaitingInArea)
             {
                 return 0;
             }
 
-            // follow on distance
-            var distanceFactor = m_followMinDist / distanceToTarget;
-            var followOffset = diff * distanceFactor;
-            var newPos = followTarget.Coordinate - followOffset;
-
-            if (followTarget == PlayerFollow)
+            // 1) If BringFriends => ignore DB area, see if the mob is in the player's safe area
+            if (isBringFriends)
             {
-                var speed = MaxSpeed;
-                if (IsWithinRadius(followTarget, 200))
-                    speed = 0;
-                WalkTo(newPos, speed);
+                var pvpMan = PvpManager.Instance;
+                if (pvpMan != null)
+                {
+                    var safeArea = pvpMan.FindSafeAreaForTarget(playerFollow);
+                    if (safeArea != null)
+                    {
+                        // Are we physically inside that area boundary already?
+                        bool inside = safeArea.IsContaining(Position.Coordinate, false);
+                        if (inside)
+                        {
+                            InFinalSafeAreaJourney = true;
+                            StopFollowing();
+                            WaitingInArea = true;
+
+                            playerFollow.Notify(GameLivingEvent.BringAFriend, playerFollow, new BringAFriendArgs(this, entered: true, following: false, finalStage: false));
+
+                            float centerX = 0f, centerY = 0f, centerZ = 0f;
+                            const int walkSpeed = 130;
+
+                            if (safeArea is AmteScripts.Areas.PvpSafeArea pvpSafe)
+                            {
+                                centerX = pvpSafe.X;
+                                centerY = pvpSafe.Y;
+                                centerZ = pvpSafe.Z;
+                            }
+                            else if (safeArea is AmteScripts.Areas.PvpCircleArea pvpCircle)
+                            {
+                                centerX = pvpCircle.X;
+                                centerY = pvpCircle.Y;
+                                centerZ = pvpCircle.Z;
+                            }
+
+                            var targetPos = Coordinate.Create((int)centerX, (int)centerY, (int)centerZ);
+                            double angle = Math.Atan2(targetPos.Y - Position.Y, targetPos.X - Position.X);
+                            targetPos += DOLVector.Create(Angle.Radians(angle), Util.Random(30, 130));
+
+                            WalkTo(targetPos, walkSpeed);
+                            return 0;
+                        }
+                    }
+                }
             }
             else
-                WalkTo(newPos, MaxSpeed);
+            {
+                // 2) Not BringFriends => use old DB-based AreaToEnter
+                if (!string.IsNullOrEmpty(AreaToEnter))
+                {
+                    var currentAreas = CurrentRegion.GetAreasOfSpot(Coordinate);
+                    var area = currentAreas?.OfType<AbstractArea>()
+                        .FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter);
+
+                    if (area != null)
+                    {
+                        StopFollowing();
+
+                        var targetPos = Coordinate.Create(area.DbArea.X, area.DbArea.Y, area.DbArea.Z);
+                        var angle = Math.Atan2(targetPos.Y - Position.Y, targetPos.X - Position.X);
+                        targetPos += DOLVector.Create(Angle.Radians(angle), Util.Random(100, 250));
+
+                        WaitingInArea = true;
+                        playerFollow.Notify(GameLivingEvent.BringAFriend, playerFollow, new BringAFriendArgs(this, entered: true, following: false));
+
+                        WalkTo(targetPos, 130);
+                        return 0;
+                    }
+                }
+            }
+
+            // 3) If not arrived => normal follow logic: check distance, approach player
+            bool wasInRange = m_followTimer.Properties.getProperty(FOLLOW_TARGET_IN_RANGE, false);
+            m_followTimer.Properties.removeProperty(FOLLOW_TARGET_IN_RANGE);
+
+            double distanceToTarget = GetDistanceTo(playerFollow);
+            if (distanceToTarget <= FOLLOW_MIN_DISTANCE)
+            {
+                StopMoving();
+                TurnTo(playerFollow);
+                if (!wasInRange)
+                {
+                    m_followTimer.Properties.setProperty(FOLLOW_TARGET_IN_RANGE, true);
+                    FollowTargetInRange();
+                }
+                return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
+            }
+            else if (distanceToTarget > FOLLOW_MAX_DISTANCE)
+            {
+                Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
+                ResetFollow();
+                return 0;
+            }
+
+            var diff = playerFollow.Position.Coordinate - Coordinate;
+            double distFactor = (double)FOLLOW_MIN_DISTANCE / distanceToTarget;
+            var followOffset = diff * distFactor;
+            var newPos = playerFollow.Position.Coordinate - followOffset;
+
+            int finalSpeed = MaxSpeed;
+            if (distanceToTarget < 300)
+                finalSpeed = 0;
+
+            WalkTo(newPos, (short)finalSpeed);
             return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
         }
 
@@ -450,19 +485,41 @@ namespace DOL.GS.Scripts
             }
         }
 
+        public override void _OnArrivedAtTarget()
+        {
+            base._OnArrivedAtTarget();
+
+            if (InFinalSafeAreaJourney)
+            {
+                InFinalSafeAreaJourney = false;
+
+                this.Flags |= GameNPC.eFlags.PEACE;
+                var owner = PlayerFollow;
+                PlayerFollow = null;
+                owner.Notify(GameLivingEvent.BringAFriend, owner, new BringAFriendArgs(this, entered: true, following: false, finalStage: true));
+            }
+        }
+
         public override IList<string> DelveInfo()
         {
             var info = base.DelveInfo();
             info.Add("");
             info.Add("-- FollowingFriendMob --");
-            info.Add(" + Mob à suivre: " + PlayerFollow.Name + " (Realm: " + PlayerFollow.Realm + ", Guilde: " + PlayerFollow.Guild.Name + ")");
+            if (PlayerFollow != null)
+            {
+                info.Add(" + Mob à suivre: " + PlayerFollow.Name + " (Realm: " + PlayerFollow.Realm + ", Guilde: " + PlayerFollow.Guild.Name + ")");
+            }
+            else
+            {
+                info.Add(" + Currently not following any player.");
+            }
             return info;
         }
 
         public override void CustomCopy(GameObject source)
         {
             var followingSource = source as FollowingFriendMob;
-            MobName = followingSource.MobName;
+            MobName = followingSource!.MobName;
             TextNPCIdle = followingSource.TextNPCIdle;
             TextNPCFollowing = followingSource.TextNPCFollowing;
             ResponsesFollow = followingSource.ResponsesFollow;
@@ -529,9 +586,10 @@ namespace DOL.AI.Brain
                 CheckNPCAggro();
             }
 
-            if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving
-                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPosition)
-                Body.TurnTo(Body.SpawnHeading);
+            if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving && Body.Heading != Body.SpawnPosition.Orientation.InHeading && Body.Position == Body.SpawnPosition)
+            {
+                Body.TurnTo(Body.SpawnPosition.Orientation);
+            }
 
             if (!Body.InCombat)
                 Body.TempProperties.removeProperty(GameLiving.LAST_ATTACK_DATA);

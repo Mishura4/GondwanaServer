@@ -21,7 +21,7 @@ namespace DOL.Territories
 {
     public class TerritoryLord : GameNPC
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public DateTime lastClaim = new DateTime(1);
 
@@ -323,7 +323,7 @@ namespace DOL.Territories
                     var renewAvailable = CurrentTerritory.RenewAvailableTime;
                     if (renewAvailable != null && renewAvailable <= DateTime.Now)
                     {
-                        string timeStr = LanguageMgr.TranslateTimeLong(player, CurrentTerritory.ClaimedTime.Value.AddMinutes(CurrentTerritory.Expiration) - DateTime.Now);
+                        string timeStr = LanguageMgr.TranslateTimeLong(player, CurrentTerritory.ClaimedTime!.Value.AddMinutes(CurrentTerritory.Expiration) - DateTime.Now);
                         player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.Renewable", eChatType.CT_System, eChatLoc.CL_PopupWindow, timeStr);
                     }
                     else
@@ -469,7 +469,7 @@ namespace DOL.Territories
 
             foreach (GamePlayer pl in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
             {
-                pl.SendTranslatedMessage("GameUtils.Guild.Territory.Capture.Start", eChatType.CT_Important, eChatLoc.CL_SystemWindow, player.GuildName, CurrentTerritory.Name);
+                pl.SendTranslatedMessage("GameUtils.Guild.Territory.Capture.Start", eChatType.CT_Important, eChatLoc.CL_SystemWindow, player.GuildName, CurrentTerritory!.Name);
             }
             return true;
         }
@@ -482,7 +482,7 @@ namespace DOL.Territories
                 return true;
             }
 
-            if (CurrentTerritory.OwnerGuild != null && CurrentTerritory.OwnerGuild != player.Guild)
+            if (CurrentTerritory!.OwnerGuild != null && CurrentTerritory.OwnerGuild != player.Guild)
             {
                 TimeSpan cooldown = TimeBeforeClaim;
                 if (cooldown.Ticks > 0)
@@ -693,7 +693,7 @@ namespace DOL.Territories
 
         protected virtual void TakeControl(GamePlayer player)
         {
-            if (CurrentTerritory == null || player is not { Guild: { GuildType: Guild.eGuildType.PlayerGuild } })
+            if (CurrentTerritory == null || player is not { Guild: { GuildType: Guild.eGuildType.PlayerGuild or Guild.eGuildType.PvPGuild } })
                 return;
 
             lastClaim = DateTime.Now;
@@ -708,6 +708,22 @@ namespace DOL.Territories
                 }
                 player.Out.SendSoundEffect(9207, player.Position, 0);
                 NewsMgr.CreateNews("GameUtils.Guild.Territory.Capture.Captured", 0, eNewsType.PvE, false, true, player.GuildName, CurrentTerritory.Name);
+
+                if (PvpManager.Instance != null && PvpManager.Instance.IsOpen)
+                {
+                    var session = PvpManager.Instance.CurrentSession;
+                    if (session != null && session.SessionType == 5)
+                    {
+                        if (CurrentTerritory.Type == Territory.eType.Subterritory)
+                        {
+                            var zoneIDs = PvpManager.Instance.Maps;
+                            if (CurrentTerritory.Zone != null && zoneIDs.Contains(CurrentTerritory.Zone.ID))
+                            {
+                                AwardSubterritoryCapturePoints(player.Guild);
+                            }
+                        }
+                    }
+                }
             }
             else
             {
@@ -715,6 +731,21 @@ namespace DOL.Territories
                 player.Out.SendSoundEffect(9207, player.Position, 0);
                 CurrentTerritory.ClaimedTime = lastClaim;
                 CurrentTerritory.SaveIntoDatabase();
+            }
+        }
+
+        private void AwardSubterritoryCapturePoints(Guild capturingGuild)
+        {
+            if (capturingGuild == null) return;
+
+            foreach (var member in capturingGuild.GetListOfOnlineMembers())
+            {
+                if (member.IsInPvP && member.Client != null && member.Client.Player != null)
+                {
+                    var score = PvpManager.Instance.GetScoreRecord(member.Client.Player);
+                    score.Terr_TerritoriesCapturedCount++;
+                    score.Terr_TerritoriesCapturedPoints += 20;
+                }
             }
         }
     }

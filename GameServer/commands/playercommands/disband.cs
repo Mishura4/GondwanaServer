@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using AmteScripts.Managers;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Linq;
@@ -32,6 +33,9 @@ namespace DOL.GS.Commands
     {
         public void OnCommand(GameClient client, string[] args)
         {
+            if (!CheckDisbandAllowed(client.Player))
+                return;
+
             if (client.Player.Group == null)
             {
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NotInGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -73,6 +77,28 @@ namespace DOL.GS.Commands
                     return;
                 }
             }
+        }
+
+        private bool CheckDisbandAllowed(GamePlayer player)
+        {
+            if (!player.IsInPvP || !PvpManager.Instance.IsOpen)
+                return true;
+
+            var session = PvpManager.Instance.CurrentSession;
+            if (session == null)
+                return true;
+
+            if (!session.AllowGroupDisbandCreate)
+            {
+                player.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        player.Client.Account.Language,
+                        "Commands.Players.Disband.NotAllowed"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            return true;
         }
     }
 }

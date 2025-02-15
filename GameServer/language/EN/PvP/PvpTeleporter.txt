@@ -4,7 +4,7 @@ TeleporterPvP.CannotHelpPart1:			Hello {0}, I cannot do anything for you right n
 TeleporterPvP.CannotHelpPart2:			Come back later!
 TeleporterPvP.ChickenOutPart1:			Pff, are you too much of a wimp to hold your ground?!
 TeleporterPvP.ChickenOutPart2:			[Leave]
-TeleporterPvP.SendToCombat:				Hello {0}, I can send you to the fight! [Ready]?!
+TeleporterPvP.SendToCombat:				Hello {0}, I can send you to the fight! Ready?!
 TeleporterPvP.InCombat:					You cannot be teleported while in combat!
 TeleporterPvP.Leave:					Leave
 TeleporterPvP.Ready:					Ready

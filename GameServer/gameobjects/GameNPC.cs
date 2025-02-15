@@ -1488,7 +1488,7 @@ namespace DOL.GS
             }
         }
 
-        protected virtual void _OnArrivedAtTarget()
+        public virtual void _OnArrivedAtTarget()
         {
             var arriveAtSpawnPoint = IsReturningHome;
                 
@@ -4674,7 +4674,7 @@ namespace DOL.GS
                 {
                     //Check if mob is a mob to kill in event
                     ev = ev.GetInstance(killer);
-                    if (ev.Mobs.Contains(this) && ev.IsKillingEvent && ev.MobNamesToKill?.Contains(this.Name) == true)
+                    if (ev!.Mobs.Contains(this) && ev.IsKillingEvent && ev.MobNamesToKill?.Contains(this.Name) == true)
                     {
                         ev.WantedMobsCount--;
                         if (ev.WantedMobsCount == 0)
@@ -6878,7 +6878,7 @@ namespace DOL.GS
             ABrain brain = null;
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                brain = (ABrain)assembly.CreateInstance(Brain.GetType().FullName, true);
+                brain = (ABrain)assembly.CreateInstance(Brain.GetType().FullName!, true);
                 if (brain != null)
                     break;
             }

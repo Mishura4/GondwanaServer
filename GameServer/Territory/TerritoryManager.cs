@@ -1,4 +1,5 @@
-﻿using DOL.Database;
+﻿using AmteScripts.Managers;
+using DOL.Database;
 using DOL.events.server;
 using DOL.Events;
 using DOL.GameEvents;
@@ -28,7 +29,7 @@ namespace DOL.Territories
 {
     public class TerritoryManager
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private static TerritoryManager instance;
         public static readonly ushort NEUTRAL_EMBLEM = 256;
         private readonly string BOSS_CLASS = "DOL.GS.Scripts.TerritoryBoss";
@@ -79,7 +80,7 @@ namespace DOL.Territories
         private void TerritoryAttackedCallback(object sender, ElapsedEventArgs e)
         {
             Timer timer = sender as Timer;
-            timer.Stop();
+            timer!.Stop();
             timer.Dispose();
             m_TerritoriesAttacked.Remove(timer);
         }
@@ -164,7 +165,7 @@ namespace DOL.Territories
                 {
                     try
                     {
-                        lord.ParseParameters(bossInfo.Skip(1).ToArray());
+                        lord.ParseParameters(bossInfo!.Skip(1).ToArray());
                     }
                     catch (Exception ex)
                     {
@@ -244,7 +245,7 @@ namespace DOL.Territories
                 };
             }
 
-            var boss = bossEvent.Mobs.FirstOrDefault(m => m.GetType().FullName.Equals(BOSS_CLASS));
+            var boss = bossEvent.Mobs.FirstOrDefault(m => m.GetType().FullName!.Equals(BOSS_CLASS));
 
             if (boss == null)
             {
@@ -375,7 +376,30 @@ namespace DOL.Territories
             string neutral = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryNeutral");
             string expiresIn = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryExpiresIn");
 
-            foreach (var territory in this.Territories.Where(t => t.Type == Territory.eType.Subterritory))
+            var allSubs = this.Territories.Where(t => t.Type == Territory.eType.Subterritory);
+            bool inPvpZone = (PvpManager.Instance != null && PvpManager.Instance.IsOpen && PvpManager.Instance.IsInActivePvpZone(player) && PvpManager.Instance.CurrentSession != null && PvpManager.Instance.CurrentSession.SessionType == 5);
+
+            IEnumerable<Territory> filtered;
+            if (inPvpZone)
+            {
+                var zoneIDs = PvpManager.Instance!.Maps;
+                filtered = allSubs.Where(t => t.Zone != null && zoneIDs.Contains(t.Zone.ID));
+            }
+            else
+            {
+                if (PvpManager.Instance != null && PvpManager.Instance.CurrentSession != null
+                    && PvpManager.Instance.CurrentSession.SessionType == 5)
+                {
+                    var zoneIDs = PvpManager.Instance.Maps;
+                    filtered = allSubs.Where(t => t.Zone == null || !zoneIDs.Contains(t.Zone.ID));
+                }
+                else
+                {
+                    filtered = allSubs;
+                }
+            }
+
+            foreach (var territory in filtered)
             {
                 string line = territory.Name + " / " + territory.Zone.Description;
 
@@ -398,6 +422,7 @@ namespace DOL.Territories
                     otherTerritories.Add(line);
                 }
             }
+
             if (ownedTerritories.Any())
             {
                 infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOwned", player.Guild.Name));
@@ -551,6 +576,18 @@ namespace DOL.Territories
         public static bool IsPlayerInOwnedTerritory(GamePlayer player, GameObject obj)
         {
             return GetCurrentTerritory(obj.CurrentAreas)?.IsOwnedBy(player) == true;
+        }
+
+        public void ReleaseSubTerritoriesInZones(IEnumerable<ushort> zoneIDs)
+        {
+            var allSubs = this.Territories.Where(t => t.Type == Territory.eType.Subterritory);
+            foreach (var terr in allSubs)
+            {
+                if (terr.Zone != null && zoneIDs.Contains(terr.Zone.ID))
+                {
+                    terr.OwnerGuild = null;
+                }
+            }
         }
     }
 

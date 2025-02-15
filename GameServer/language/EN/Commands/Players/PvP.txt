@@ -1,0 +1,8 @@
+Commands.GM.PvP.Description:		Manage and see informations about PvP sessions:
+Commands.GM.PvP.Usage.Info:			/pvp info : Show current PvP informations as well as you or your group's scoreboard for the current session.
+Commands.GM.PvP.Usage.Open:			/pvp open [region] : Force-open the PvP session
+Commands.GM.PvP.Usage.Close:		/pvp close : Force-close the PvP session
+Commands.GM.PvP.Usage.Unforce:		/pvp unforce : Re-adjust PvP session hours after '/pvp open' in order to fix eventual PvP hours misadjustments
+Commands.GM.PvP.Usage.Status:		/pvp status : Display PvP session status
+Commands.GM.PvP.Usage.Refresh:		/pvp refresh : To refresh maps available for PvP sessions
+Commands.GM.PvP.Usage.Reset:		/pvp reset : Resets the current PvP session.

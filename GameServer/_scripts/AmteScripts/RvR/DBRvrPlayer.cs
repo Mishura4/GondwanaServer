@@ -4,6 +4,7 @@ using DOL.Events;
 using DOL.Database.Attributes;
 using System.Reflection;
 using log4net;
+using DOL.GS.Geometry;
 
 namespace DOL.Database
 {
@@ -13,7 +14,7 @@ namespace DOL.Database
     [DataTable(TableName = "RvrPlayer")]
     public class RvrPlayer : DataObject
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         [ScriptLoadedEvent]
         public static void OnScriptsCompiled(DOLEvent e, object sender, EventArgs args)
@@ -61,6 +62,9 @@ namespace DOL.Database
         [DataElement(AllowDbNull = false)]
         public int OldBindRegion { get; set; }
 
+        [DataElement(AllowDbNull = false)]
+        public string SessionType { get; set; } = "None";
+
         public RvrPlayer()
         {
 
@@ -78,11 +82,13 @@ namespace DOL.Database
             OldHeading = player.Heading;
             OldRegion = player.CurrentRegionID;
 
-            OldBindX = player.BindXpos;
-            OldBindY = player.BindYpos;
-            OldBindZ = player.BindZpos;
-            OldBindHeading = player.BindHeading;
-            OldBindRegion = player.BindRegion;
+            OldBindX = player.BindPosition.Coordinate.X;
+            OldBindY = player.BindPosition.Coordinate.Y;
+            OldBindZ = player.BindPosition.Coordinate.Z;
+            OldBindHeading = (int)player.BindPosition.Orientation.InHeading;
+            OldBindRegion = player.BindPosition.RegionID;
+
+            SessionType = "None";
         }
 
         public void ResetCharacter(GamePlayer player)
@@ -92,11 +98,7 @@ namespace DOL.Database
             player.GuildID = GuildID;
             player.GuildRank = player.Guild != null ? player.Guild.GetRankByID(GuildRank) : null;
 
-            player.BindXpos = OldBindX;
-            player.BindYpos = OldBindY;
-            player.BindZpos = OldBindZ;
-            player.BindHeading = OldBindHeading;
-            player.BindRegion = OldBindRegion;
+            player.BindPosition = Position.Create((ushort)OldBindRegion, OldBindX, OldBindY, OldBindZ, (ushort)OldBindHeading);
         }
 
         public void ResetCharacter(DOLCharacters ch)

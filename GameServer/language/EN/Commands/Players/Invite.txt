@@ -11,3 +11,4 @@ Commands.Players.Invite.PlayerNotFound:	There is no player online with this name
 Commands.Players.Invite.StillGrouped:	The player is already in a group.
 Commands.Players.Invite.Usage:			Usage : '/invite <playerName>'
 Commands.Players.Invite.YouInvite:		You have invited {0} to join your group.
+Commands.Players.Invite.NotAllowed:		Creating or joining groups is not allowed in this PvP session.

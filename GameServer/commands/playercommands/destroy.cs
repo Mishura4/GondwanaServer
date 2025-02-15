@@ -2,6 +2,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Commands;
 using DOL.GS;
 using DOL.Database;
+using AmteScripts.PvP.CTF;
 using DOL.Language;
 
 namespace DOL.GS.Commands
@@ -77,6 +78,12 @@ namespace DOL.GS.Commands
             if (item.Id_nb == "ARelic")
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "DestroyItemRequestHandler.CantDestroyRelic"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
+            if (item is FlagInventoryItem)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "DestroyItemRequestHandler.CantDestroyPvPFlag"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 

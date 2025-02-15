@@ -17,7 +17,7 @@ Commands.Players.Vol.TargetAFK: 			You cannot steal a player who is afk!
 Commands.Players.Vol.Time: 					You must wait {0} seconds to be able to steal again!
 Commands.Players.Vol.Steal: 				You start a theft attempt {0}
 Commands.Players.Vol.StealWindow: 			You are currently stealing {0}
-Commands.Players.Vol.CantSteal: 			You cannot steal this player!
+Commands.Players.Vol.CantSteal: 			You cannot steal this target!
 Commands.Players.Vol.StealSleeping: 		You lose 1 reputation point for trying to steal a sleeping player.
 Commands.Players.Vol.StealSleapingPartner:	You lose 1 reputation point for contributing to a theft while mesmerizing a player.
 Commands.Players.Vol.Fail:					Your theft attempt has failed on this player!

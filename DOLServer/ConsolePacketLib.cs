@@ -44,7 +44,7 @@ namespace DOLGameServerConsole
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public void SendMessage(string msg, eChatType type, eChatLoc loc)
         {
@@ -235,6 +235,7 @@ namespace DOLGameServerConsole
         public void SendNonHybridSpellLines() { }
         public void SendCrash(string str) { }
         public void SendRvRGuildBanner(GamePlayer player, bool show) { }
+        public void SendPvPGuildBanner(GamePlayer player, bool show) { }
         public void SendPlayerFreeLevelUpdate() { }
         public void SendRegionColorScheme() { }
         public void SendRegionColorScheme(byte color) { }

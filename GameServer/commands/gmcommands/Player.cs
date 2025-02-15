@@ -32,6 +32,7 @@ using DOL.GS.Finance;
 using GameServerScripts.Amtescripts.Managers;
 using DOL.Language;
 using System.Numerics;
+using AmteScripts.Managers;
 
 namespace DOL.GS.Commands
 {
@@ -1623,6 +1624,26 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KickUseNameForGMs"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 return;
                             }
+
+                            if (player.IsInPvP)
+                            {
+                                RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
+
+                                if (record != null)
+                                {
+                                    player.DBCharacter.Region = record.OldRegion;
+                                    player.DBCharacter.Xpos = record.OldX;
+                                    player.DBCharacter.Ypos = record.OldY;
+                                    player.DBCharacter.Zpos = record.OldZ;
+                                    player.DBCharacter.BindRegion = record.OldBindRegion;
+                                    player.DBCharacter.BindXpos = record.OldBindX;
+                                    player.DBCharacter.BindYpos = record.OldBindY;
+                                    player.DBCharacter.BindZpos = record.OldBindZ;
+                                    player.DBCharacter.BindHeading = record.OldBindHeading;
+
+                                    PvpManager.Instance.RemovePlayerForQuit(player);
+                                }
+                            }
                             player.Client.Out.SendPlayerQuit(true);
                             player.Client.Player.SaveIntoDatabase();
                             player.Client.Player.Quit(true);
@@ -1640,6 +1661,26 @@ namespace DOL.GS.Commands
                                             if (allplayer.Account.PrivLevel == 1)
                                             {
                                                 allplayer.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KickAllPlayers", client.Player.Name, client.Account.PrivLevel), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
+                                                if (player!.IsInPvP)
+                                                {
+                                                    RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
+
+                                                    if (record != null)
+                                                    {
+                                                        player.DBCharacter.Region = record.OldRegion;
+                                                        player.DBCharacter.Xpos = record.OldX;
+                                                        player.DBCharacter.Ypos = record.OldY;
+                                                        player.DBCharacter.Zpos = record.OldZ;
+                                                        player.DBCharacter.BindRegion = record.OldBindRegion;
+                                                        player.DBCharacter.BindXpos = record.OldBindX;
+                                                        player.DBCharacter.BindYpos = record.OldBindY;
+                                                        player.DBCharacter.BindZpos = record.OldBindZ;
+                                                        player.DBCharacter.BindHeading = record.OldBindHeading;
+
+                                                        PvpManager.Instance.RemovePlayerForQuit(player);
+                                                    }
+                                                }
                                                 allplayer.Out.SendPlayerQuit(true);
                                                 allplayer.Player.SaveIntoDatabase();
                                                 allplayer.Player.Quit(true);

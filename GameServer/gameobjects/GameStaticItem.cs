@@ -74,6 +74,8 @@ namespace DOL.GS
             return item;
         }
 
+        private Guild m_ownerGuild;
+
         #region Name/Model/GetName/GetExamineMessages
         /// <summary>
         /// gets or sets the model of this Item
@@ -225,7 +227,7 @@ namespace DOL.GS
             base.LoadFromDatabase(obj);
 
             m_loadedFromScript = false;
-            CurrentRegionID = item.Region;
+            CurrentRegionID = item!.Region;
             TranslationId = item.TranslationId;
             Name = item.Name;
             ExamineArticle = item.ExamineArticle;
@@ -280,6 +282,31 @@ namespace DOL.GS
             {
                 base.Realm = value;
             }
+        }
+
+        /// <summary>
+        /// Assigns a guild as the owner of this object.
+        /// </summary>
+        public void SetGuildOwner(Guild guild)
+        {
+            m_ownerGuild = guild;
+        }
+
+        /// <summary>
+        /// Gets the guild that owns this item, if any.
+        /// </summary>
+        public Guild GetGuildOwner()
+        {
+            return m_ownerGuild;
+        }
+
+        /// <summary>
+        /// Does a given guild own me?
+        /// (Optional convenience method)
+        /// </summary>
+        public bool IsOwnedByGuild(Guild guild)
+        {
+            return (m_ownerGuild != null && m_ownerGuild == guild);
         }
 
         /// <summary>
@@ -493,6 +520,13 @@ namespace DOL.GS
 
                 foreach (WeakReference weak in m_owners)
                     if (weak.Target == testOwner) return true;
+
+                if (testOwner is GamePlayer gp && m_ownerGuild != null)
+                {
+                    if (gp.Guild == m_ownerGuild)
+                        return true;
+                }
+
                 return false;
             }
         }

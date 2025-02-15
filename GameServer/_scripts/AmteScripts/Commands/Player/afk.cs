@@ -36,8 +36,7 @@ namespace DOL.GS.Commands
             if ((client.Player.PlayerAfkMessage != null) && args.Length == 1)
             {
                 client.Player.PlayerAfkMessage = null;
-                client.Player.DisableSkill(SkillBase.GetAbility(Abilities.Vol),
-                    VolAbilityHandler.DISABLE_DURATION);
+                client.Player.DisableSkill(SkillBase.GetAbility(Abilities.Vol), VolAbilityHandler.DISABLE_DURATION_PLAYER);
                 client.Player.ResetAFK(true);
             }
             else if (client.Player.IsAfkDelayElapsed)

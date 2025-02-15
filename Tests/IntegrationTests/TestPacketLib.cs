@@ -663,6 +663,11 @@ namespace DOL.Tests
         {
             if (SendRvRGuildBannerMethod != null) SendRvRGuildBannerMethod(this, player, show);
         }
+        public Action<TestPacketLib, GamePlayer, bool> SendPvPGuildBannerMethod { get; set; }
+        public void SendPvPGuildBanner(GamePlayer player, bool show)
+        {
+            if (SendPvPGuildBannerMethod != null) SendPvPGuildBannerMethod(this, player, show);
+        }
         public Action<TestPacketLib, GameSiegeWeapon> SendSiegeWeaponAnimationMethod { get; set; }
         public void SendSiegeWeaponAnimation(GameSiegeWeapon siegeWeapon)
         {

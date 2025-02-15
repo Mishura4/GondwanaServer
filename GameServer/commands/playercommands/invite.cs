@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using AmteScripts.Managers;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 
@@ -30,6 +31,9 @@ namespace DOL.GS.Commands
     {
         public void OnCommand(GameClient client, string[] args)
         {
+            if (!CheckInviteAllowed(client.Player))
+                return;
+
             if (client.Player.Group != null && client.Player.Group.Leader != client.Player)
             {
                 client.Out.SendMessage(
@@ -162,7 +166,7 @@ namespace DOL.GS.Commands
                         "Commands.Players.Invite.YouInvite",
                         client.Player.GetPersonalizedName(target)),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            target.Out.SendGroupInviteCommand(
+            target!.Out.SendGroupInviteCommand(
                 client.Player,
                 LanguageMgr.GetTranslation(
                     targetNewClient.Account.Language,
@@ -177,6 +181,28 @@ namespace DOL.GS.Commands
                     client.Player.GetPronoun(1, false)),
                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
+        }
+
+        private bool CheckInviteAllowed(GamePlayer player)
+        {
+            if (!player.IsInPvP || !PvpManager.Instance.IsOpen)
+                return true;
+
+            var session = PvpManager.Instance.CurrentSession;
+            if (session == null)
+                return true;
+
+            if (!session.AllowGroupDisbandCreate)
+            {
+                player.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        player.Client.Account.Language,
+                        "Commands.Players.Invite.NotAllowed"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            return true;
         }
     }
 }

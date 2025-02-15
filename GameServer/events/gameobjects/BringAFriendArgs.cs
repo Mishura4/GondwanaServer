@@ -40,14 +40,20 @@ namespace DOL.Events
         /// </summary>
         private readonly bool m_following;
 
+        // NEW: A boolean to indicate we are in the final stage
+        // of awarding pvp points (the mob actually arrived).
+        // Default is false so older code calling the 3-argument constructor
+        private readonly bool m_finalStage;
+
         /// <summary>
         /// Constructs a new BringAFriendArgs
         /// </summary>
-        public BringAFriendArgs(GameLiving friend, bool entered, bool following = false)
+        public BringAFriendArgs(GameLiving friend, bool entered, bool following = false, bool finalStage = false)
         {
             this.m_friend = friend;
             this.m_entered = entered;
             this.m_following = following;
+            this.m_finalStage = finalStage;
         }
 
         /// <summary>
@@ -74,5 +80,12 @@ namespace DOL.Events
             get { return m_friend; }
         }
 
+        /// <summary>
+        /// NEW: If true, we are in the final stage of awarding (the mob has truly arrived).
+        /// </summary>
+        public bool FinalStage
+        {
+            get { return m_finalStage; }
+        }
     }
 }

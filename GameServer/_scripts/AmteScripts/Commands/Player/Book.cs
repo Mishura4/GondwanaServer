@@ -16,7 +16,7 @@ namespace DOL.GS.Scripts
          "Commands.Players.Book.Usage")]
     public class BookCommandHandler : ICommandHandler
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         public void OnCommand(GameClient client, string[] args)
         {
             GamePlayer player = client.Player;
@@ -100,7 +100,7 @@ namespace DOL.GS.Scripts
                     #endregion
                     #region Ecriture
                     case "write":
-                        if (!HaveFeather(player) || !HaveInk(player) || !HaveRightInk(player, theScroll.InkId))
+                        if (!HaveFeather(player) || !HaveInk(player) || !HaveRightInk(player, theScroll!.InkId))
                             return;
 
                         theScroll.Ink = (theScroll.Ink == "") ? GetInkType(player) : theScroll.Ink;
@@ -119,7 +119,7 @@ namespace DOL.GS.Scripts
                         for (var i = eInventorySlot.FirstBackpack; i <= eInventorySlot.LastBackpack; i++)
                         {
                             InventoryItem itm = player.Inventory.GetItem(i);
-                            if (itm != null && itm.Name == theScroll.Name)
+                            if (itm != null && itm.Name == theScroll!.Name)
                             {
                                 player.Inventory.RemoveCountFromStack(itm, itm.Count);
                                 InventoryLogging.LogInventoryAction(player, "", "(destroy)", eInventoryActionType.Other, itm, itm.Count);
@@ -131,7 +131,7 @@ namespace DOL.GS.Scripts
                     #endregion
                     #region Correction
                     case "correct":
-                        if (theScroll.Text.IndexOf("\n") == -1)
+                        if (theScroll!.Text.IndexOf("\n") == -1)
                         {
                             player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.EmptyScroll"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             return;

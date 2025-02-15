@@ -420,6 +420,7 @@ namespace DOL.GS.PacketHandler
             if (playerToCreate.GuildBanner != null)
             {
                 SendRvRGuildBanner(playerToCreate, true);
+                SendPvPGuildBanner(playerToCreate, true);
             }
         }
 

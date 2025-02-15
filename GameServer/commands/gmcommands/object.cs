@@ -50,7 +50,7 @@ namespace DOL.GS.Commands
                   "'/object quests' to load any dataquests associated with the target object")]
     public class ObjectCommandHandler : AbstractCommandHandler, ICommandHandler
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         void setClass(GameClient client, GameStaticItem targetObj, string[] args)
         {
@@ -150,7 +150,7 @@ namespace DOL.GS.Commands
                         List<string> info = new List<string>();
 
                         string name = "(blank name)";
-                        if (!string.IsNullOrEmpty(targetObject.Name))
+                        if (!string.IsNullOrEmpty(targetObject!.Name))
                             name = targetObject.Name;
 
                         info.Add(" OID: " + targetObject.ObjectID);
@@ -186,12 +186,24 @@ namespace DOL.GS.Commands
                         info.Add(" ");
                         info.Add(" Coordinate: X= " + targetObject.Position.X + " ,Y= " + targetObject.Position.Y + " ,Z= " + targetObject.Position.Z);
 
+                        // --- Infos related to PVP Chests ---
+                        if (targetObject is PVPChest pvpChest)
+                        {
+                            info.Add(" ");
+                            info.Add("----- PvPChest Deposited Items -----");
+                            IList<string> chestInfo = pvpChest.DelveInfo();
+                            foreach (string line in chestInfo)
+                            {
+                                info.Add(line);
+                            }
+                        }
+
                         client.Out.SendCustomTextWindow("[ " + name + " ]", info);
                         break;
                     }
                 case "movehere":
                     {
-                        targetObject.Position = client.Player.Position;
+                        targetObject!.Position = client.Player.Position;
                         targetObject.Heading = client.Player.Heading;
                         targetObject.SaveIntoDatabase();
                         break;
@@ -238,7 +250,7 @@ namespace DOL.GS.Commands
                         try
                         {
                             model = Convert.ToUInt16(args[2]);
-                            targetObject.Model = model;
+                            targetObject!.Model = model;
                             targetObject.SaveIntoDatabase();
                             DisplayMessage(client, "Object model changed to: " + targetObject.Model);
                         }
@@ -251,7 +263,7 @@ namespace DOL.GS.Commands
                     }
                 case "modelinc":
                     {
-                        ushort model = targetObject.Model;
+                        ushort model = targetObject!.Model;
                         try
                         {
                             if (model < 8000)
@@ -275,7 +287,7 @@ namespace DOL.GS.Commands
                     }
                 case "modeldec":
                     {
-                        ushort model = targetObject.Model;
+                        ushort model = targetObject!.Model;
                         try
                         {
                             if (model != 1)
@@ -303,7 +315,7 @@ namespace DOL.GS.Commands
                         try
                         {
                             emblem = Convert.ToInt32(args[2]);
-                            targetObject.Emblem = emblem;
+                            targetObject!.Emblem = emblem;
                             targetObject.SaveIntoDatabase();
                             DisplayMessage(client, "Object emblem changed to: " + targetObject.Emblem);
 
@@ -326,7 +338,7 @@ namespace DOL.GS.Commands
                         if (args[2] == "1") realm = eRealm.Albion;
                         if (args[2] == "2") realm = eRealm.Midgard;
                         if (args[2] == "3") realm = eRealm.Hibernia;
-                        targetObject.Realm = realm;
+                        targetObject!.Realm = realm;
                         targetObject.SaveIntoDatabase();
                         DisplayMessage(client, "Object realm changed to: " + targetObject.Realm);
 
@@ -336,7 +348,7 @@ namespace DOL.GS.Commands
                     {
                         if (param != "")
                         {
-                            targetObject.Name = param;
+                            targetObject!.Name = param;
                             targetObject.SaveIntoDatabase();
                             DisplayMessage(client, "Object name changed to: " + targetObject.Name);
                         }
@@ -344,14 +356,14 @@ namespace DOL.GS.Commands
                     }
                 case "noname":
                     {
-                        targetObject.Name = "";
+                        targetObject!.Name = "";
                         targetObject.SaveIntoDatabase();
                         DisplayMessage(client, "Object name removed");
                         break;
                     }
                 case "copy":
                     {
-                        GameStaticItem item = CreateItemInstance(client, targetObject.GetType().FullName);
+                        GameStaticItem item = CreateItemInstance(client, targetObject!.GetType().FullName);
                         if (item == null)
                         {
                             ChatUtil.SendSystemMessage(client, "There was an error creating an instance of " + targetObject.GetType().FullName + "!");
@@ -379,14 +391,14 @@ namespace DOL.GS.Commands
 
                 case "save":
                     {
-                        targetObject.LoadedFromScript = false;
+                        targetObject!.LoadedFromScript = false;
                         targetObject.SaveIntoDatabase();
                         DisplayMessage(client, "Object saved to Database");
                         break;
                     }
                 case "remove":
                     {
-                        targetObject.DeleteFromDatabase();
+                        targetObject!.DeleteFromDatabase();
                         targetObject.Delete();
                         DisplayMessage(client, "Object removed from Clients and Database");
                         break;
@@ -408,7 +420,7 @@ namespace DOL.GS.Commands
                         int respawn = 0;
                         if (int.TryParse(args[2], out respawn))
                         {
-                            targetObject.RespawnInterval = respawn;
+                            targetObject!.RespawnInterval = respawn;
                             targetObject.SaveIntoDatabase();
                             DisplayMessage(client, "Object RespawnInterval set to " + targetObject.RespawnInterval + " seconds.");
                         }

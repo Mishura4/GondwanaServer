@@ -1,0 +1,8 @@
+Commands.GM.RvR.Description:			Commands to manage and see informations about RvR:
+Commands.GM.RvR.Usage.Info:				/rvr info : Show current RvR informations and scores.
+Commands.GM.RvR.Usage.Open:				/rvr open : Force RvR opening (RvR won't close anymore)
+Commands.GM.RvR.Usage.Close:			/rvr close : Force closing RvR
+Commands.GM.RvR.Usage.Unforce:			/rvr unforce : Re-adjust RvR session hours after '/rvr open' in order to fix eventual RvR hours misadjustments
+Commands.GM.RvR.Usage.Status:			/rvr status : Check RvR status (open/close)
+Commands.GM.RvR.Usage.Refresh:			/rvr refresh : To refresh maps available for RvR sessions
+Commands.GM.RvR.Usage.Reset:			/rvr reset : Resets the current RvR session.
