@@ -40,6 +40,6 @@ RvRManager.PvPStatus:					Les regions PvP sont actuellement: {0}
 RvRManager.RvRMustBeClosed:				Le RvR doit être fermé pour rafraichir la liste des maps disponibles.
 RvRManager.PvPMustBeClosed:				Le PvP doit être fermé pour rafraichir la liste des maps disponibles.
 RvRManager.RvRMapsUsed:					Le RvR utilise les maps: {0}.
-RvRManager.PvPMapsUsed:					Le PvP utilise les maps: {0}.
+RvRManager.PvPMapsUsed:					Le PvP utilise les zones: {0}.
 RvRManager.RvRReset:					Le RvR a été réinitialisé.
 RvRManager.PvPReset:					Le PvP a été réinitialisé.

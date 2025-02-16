@@ -142,7 +142,10 @@ namespace DOL.GS.Commands
                         }
                         // re-scan or reload DB sessions
                         PvpSessionMgr.ReloadSessions();
-                        var pvpMaps = string.Join(", ", PvpSessionMgr.AllZones);
+                        var pvpMaps = string.Join(
+                            ", ",
+                            PvpSessionMgr.GetAllSessions().Select(s => s.SessionID + " => [" + s.ZoneList + "]")
+                        );
                         DisplayMessage(client,
                             LanguageMgr.GetTranslation(client.Account.Language,
                                 "RvRManager.PvPMapsUsed", pvpMaps));
@@ -158,8 +161,14 @@ namespace DOL.GS.Commands
                     }
 
                 case "reset":
+                    var previous = PvpManager.Instance.CurrentSession?.SessionID;
+                    if (string.IsNullOrEmpty(previous))
+                    {
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPCannotReset", previous));
+                        return;
+                    }
                     PvpManager.Instance.Close();
-                    PvpManager.Instance.Open(string.Empty, false);
+                    PvpManager.Instance.Open(previous, false);
                     DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPReset"));
                     break;
 

@@ -40,6 +40,6 @@ RvRManager.PvPStatus:					The current PvP regions status is: {0}
 RvRManager.RvRMustBeClosed:				RvR zones must be closed to refresh the list of available maps.
 RvRManager.PvPMustBeClosed:				PvP zones must be closed to refresh the list of available maps.
 RvRManager.RvRMapsUsed:					RvR uses maps: {0}.
-RvRManager.PvPMapsUsed:					PvP uses maps: {0}.
+RvRManager.PvPMapsUsed:					PvP uses zones: {0}.
 RvRManager.RvRReset:					RvR has been reset.
 RvRManager.PvPReset:					PvP has been reset.
