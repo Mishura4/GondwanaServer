@@ -14,3 +14,61 @@ PvPManager.JoinedSoloQueue:			You have joined the solo queue for the next group 
 PvPManager.CouldNotCreatePvPGuild:	Could not create PvP guild...
 PvPManager.LeftGroupQueue:			You have left the PvP group queue.
 PvPManager.BroughtToSafety:			You have successfully brought {0} to safety! (+{1} pts)
+
+PvPManager.Score.Points:            {0} points
+PvPManager.Score.Pts:               {0} pts
+
+PvP.Score.PvPSoloKills:                             Solo kills
+PvP.Score.PvPGrpKills:                              Group kills
+PvP.Score.FlagPvPSoloKills:                         Solo kills
+PvP.Score.FlagPvPGrpKills:                          Group kills
+PvP.Score.FlagPvPFlagCarrierKillBonus:              Flag carrier kills
+PvP.Score.FlagPvPFlagsCaptured:                     Flags captured
+PvP.Score.FlagPvPOwnership:                         Flags held
+PvP.Score.TreasurePvPSoloKills:                     Solo kills
+PvP.Score.TreasurePvPGrpKills:                      Group kills
+PvP.Score.TreasurePvPTreasurePoints:                Treasures found
+PvP.Score.TreasurePvPStolenItemPenalty:             Items stolen
+PvP.Score.FriendsPvPSoloKills:                      Solo kills
+PvP.Score.FriendsPvPGrpKills:                       Group kills
+PvP.Score.FriendsPvPBroughtFriends:                 Friends rallied
+PvP.Score.FriendsPvPFamilyBonus:                    Family rallied
+PvP.Score.FriendsPvPLostFriends:                    Friends lost
+PvP.Score.FriendsPvPKilledOthersFriends:            Enemy's friends killed
+PvP.Score.CTTPvPSoloKills:                          Solo kills
+PvP.Score.CTTPvPGrpKills:                           Group kills
+PvP.Score.CTTPvPTerritoryCaptures:                  Territory captures
+PvP.Score.CTTPvPOwnership:                          Territory ownership
+PvP.Score.BossPvPSoloBossKills:                     Kills de boss en solo
+PvP.Score.BossPvPGroupBossKills:                    Kills de boss en groupe
+PvP.Score.BossPvPBossHits:                          Boss participation
+PvP.Score.BossPvPBossKills:                         Bosses killed
+PvP.Score.Total:                                    Total
+
+PvP.Score.PvPSoloKills.Short:                       SoloKills
+PvP.Score.PvPGrpKills.Short:                        GroupKills
+PvP.Score.FlagPvPSoloKills.Short:                   SoloKills
+PvP.Score.FlagPvPGrpKills.Short:                    GroupKills
+PvP.Score.FlagPvPFlagCarrierKillBonus.Short:        CarrierKills
+PvP.Score.FlagPvPFlagsCaptured.Short:               Captures
+PvP.Score.FlagPvPOwnership.Short:					FlagsHeld
+PvP.Score.TreasurePvPSoloKills.Short:               SoloKills
+PvP.Score.TreasurePvPGrpKills.Short:                GroupKills
+PvP.Score.TreasurePvPTreasurePoints.Short:          Treasures
+PvP.Score.TreasurePvPStolenItemPenalty.Short:       ItemsStolen
+PvP.Score.FriendsPvPSoloKills.Short:                SoloKills
+PvP.Score.FriendsPvPGrpKills.Short:                 GroupKills
+PvP.Score.FriendsPvPBroughtFriends.Short:           Friends
+PvP.Score.FriendsPvPFamilyBonus.Short:              Family
+PvP.Score.FriendsPvPLostFriends.Short:              LostFriends
+PvP.Score.FriendsPvPKilledOthersFriends.Short:      EnemyKills
+PvP.Score.CTTPvPSoloKills.Short:                    SoloKills
+PvP.Score.CTTPvPGrpKills.Short:                     GroupKills
+PvP.Score.CTTPvPTerritoryCaptures.Short:            Captures
+PvP.Score.CTTPvPOwnership.Short:                    Ownership
+PvP.Score.BossPvPSoloBossKills.Short:               SoloBossKills
+PvP.Score.BossPvPGroupBossKills.Short:              GroupBossKills
+PvP.Score.BossPvPBossHits.Short:                    BossHits
+PvP.Score.BossPvPBossKills.Short:                   BossKills
+PvP.Score.Total.Short:                              Total
+

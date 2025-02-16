@@ -16,6 +16,8 @@ using AmteScripts.PvP;
 using DOL.GS.Scripts;
 using static DOL.GS.Area;
 using AmteScripts.PvP.CTF;
+using Discord;
+using Google.Protobuf.WellKnownTypes;
 
 namespace AmteScripts.Managers
 {
@@ -1714,6 +1716,63 @@ namespace AmteScripts.Managers
         }
         #endregion
 
+        enum ScoreType
+        {
+            Bonus,
+            /// <summary>
+            /// Don't display count, display negative points
+            /// </summary>
+            Malus,
+            /// <summary>
+            /// Don't display count
+            /// </summary>
+            BonusPoints,
+            /// <summary>
+            /// Don't display count, display negative points
+            /// </summary>
+            MalusPoints
+        }
+
+        private record Score(int Points, int Count, ScoreType Type = ScoreType.Bonus);
+
+        private record ScoreLine(string Label, Score Points)
+        {
+            
+            /// <inheritdoc />
+            public override string ToString()
+            {
+                return base.ToString();
+            }
+
+            public string ToString(string language, bool shortDescription)
+            {
+                if (shortDescription)
+                {
+                    var translated = LanguageMgr.GetTranslation(language, Label + ".Short");
+                    return Points.Type switch
+                    {
+                        ScoreType.Bonus => $"    {translated}={Points.Count}({LanguageMgr.GetTranslation(language, "PvPManager.Score.Pts", Points.Points)})",
+                        ScoreType.Malus => $"    {translated}={Points.Count}(-{LanguageMgr.GetTranslation(language, "PvPManager.Score.Pts", Points.Points)})",
+                        ScoreType.BonusPoints => $"    {translated}={LanguageMgr.GetTranslation(language, "PvPManager.Score.Pts", Points.Points)}",
+                        ScoreType.MalusPoints => $"    {translated}=-{LanguageMgr.GetTranslation(language, "PvPManager.Score.Pts", Points.Points)}",
+                    };
+                }
+                else
+                {
+                    var translated = LanguageMgr.GetTranslation(language, Label);
+                    return Points.Type switch
+                    {
+                        ScoreType.Bonus => $"    {translated}: {Points.Count} - {LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                        ScoreType.Malus => $"    {translated}: {Points.Count} - -{LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                        ScoreType.BonusPoints => $"    {translated}: {LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                        ScoreType.MalusPoints => $"    {translated}: -{LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                    };
+                }
+            }
+        }
+
+        private record ScoreboardEntry(string Player, int Total, List<ScoreLine> Lines);
+
         #region Stats
         public IList<string> GetStatistics(GamePlayer viewer, bool all = false)
         {
@@ -1859,73 +1918,84 @@ namespace AmteScripts.Managers
                 var sessionType = CurrentSession!.SessionType;
                 var sorted = scores
                     .OrderByDescending(ps => ps.GetTotalPoints(sessionType))
-                    .ToList();
+                    .Select(ps => {
+                        List<ScoreLine> scoreLines = new();
+                        switch (sessionType)
+                        {
+                            case 1: // Pure PvP Combat
+                                scoreLines.Add(new ScoreLine("PvP.Score.PvPSoloKills", new Score(ps.PvP_SoloKillsPoints, ps.PvP_SoloKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.PvPGrpKills", new Score(ps.PvP_GroupKillsPoints, ps.PvP_GroupKills)));
+                                break;
+
+                            case 2: // Flag Capture
+                                scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPSoloKills", new Score(ps.Flag_SoloKillsPoints, ps.Flag_SoloKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPGrpKills", new Score(ps.Flag_GroupKillsPoints, ps.Flag_GroupKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPFlagCarrierKillBonus", new Score(ps.Flag_KillFlagCarrierPoints, ps.Flag_KillFlagCarrierCount)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPFlagsCaptured", new Score(ps.Flag_FlagReturnsPoints, ps.Flag_FlagReturnsCount)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPOwnership", new Score(ps.Flag_OwnershipPoints, 0, ScoreType.BonusPoints)));
+                                break;
+
+                            case 3: // Treasure Hunt
+                                scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPSoloKills", new Score(ps.Treasure_SoloKillsPoints, ps.Treasure_SoloKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPGrpKills", new Score(ps.Treasure_GroupKillsPoints, ps.Treasure_GroupKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPTreasurePoints", new Score(ps.Treasure_BroughtTreasuresPoints, 0, ScoreType.BonusPoints)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPStolenItemPenalty", new Score(ps.Treasure_StolenTreasuresPoints, 0, ScoreType.MalusPoints)));
+                                break;
+
+                            case 4: // Bring Friends
+                                scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPSoloKills", new Score(ps.Friends_SoloKillsPoints, ps.Friends_SoloKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPGrpKills", new Score(ps.Friends_GroupKillsPoints, ps.Friends_GroupKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPBroughtFriends", new Score(ps.Friends_BroughtFriendsPoints, 0, ScoreType.BonusPoints)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPFamilyBonus", new Score(ps.Friends_BroughtFamilyBonus, 0, ScoreType.BonusPoints)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPLostFriends", new Score(ps.Friends_FriendKilledPoints, ps.Friends_FriendKilledCount)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPKilledOthersFriends", new Score(ps.Friends_KillEnemyFriendPoints, ps.Friends_KillEnemyFriendCount)));
+                                break;
+
+                            case 5: // Capture Territories
+                                scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPSoloKills", new Score(ps.Terr_SoloKillsPoints, ps.Terr_SoloKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPGrpKills", new Score(ps.Terr_GroupKillsPoints, ps.Terr_GroupKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPTerritoryCaptures", new Score(ps.Terr_TerritoriesCapturedPoints, ps.Terr_TerritoriesCapturedCount)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPOwnership", new Score(ps.Terr_TerritoriesOwnershipPoints, 0)));
+                                break;
+
+                            case 6: // Boss Kill
+                                scoreLines.Add(new ScoreLine("PvP.Score.BossPvPSoloBossKills", new Score(ps.Boss_SoloKillsPoints, ps.Boss_SoloKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.BossPvPGroupBossKills", new Score(ps.Boss_GroupKillsPoints, ps.Boss_GroupKills)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.BossPvPBossHits", new Score(ps.Boss_BossHitsPoints, ps.Boss_BossHitsCount)));
+                                scoreLines.Add(new ScoreLine("PvP.Score.BossPvPBossKills", new Score(ps.Boss_BossKillsPoints, ps.Boss_BossKillsCount)));
+                                break;
+
+                            default:
+                                break;
+                        }
+                        scoreLines.Add(new ScoreLine("PvP.Score.Total", new Score(ps.GetTotalPoints(sessionType), 0, ScoreType.BonusPoints)));
+                        return new ScoreboardEntry(ps.PlayerName, ps.GetTotalPoints(sessionType), scoreLines);
+                    }).ToList();
+
+                var language = viewer.Client.Account.Language;
+                if (all)
+                {
+                    lines.AddRange(
+                        sorted.Select(
+                            e => $"  {e.Player}: " + string.Join(", ", e.Lines.Select(l => l.ToString(language, true)))
+                        )
+                    );
+                }
+                else
+                {
+                    foreach (var ps in sorted)
+                    {
+                        lines.Add($"  {ps.Player}:");
+                        lines.AddRange(
+                            ps.Lines.Select(
+                                l => l.ToString(language, false)
+                            )
+                        );
+                    }
+                }
 
                 foreach (var ps in sorted)
                 {
-                    int total = ps.GetTotalPoints(sessionType);
-
-                    switch (sessionType)
-                    {
-                        case 1: // Pure PvP Combat
-                            lines.Add($"  {ps.PlayerName}: " +
-                                      $"SoloKills={ps.PvP_SoloKills}({ps.PvP_SoloKillsPoints} pts), " +
-                                      $"GrpKills={ps.PvP_GroupKills}({ps.PvP_GroupKillsPoints} pts), " +
-                                      $"Total={total} pts");
-                            break;
-
-                        case 2: // Flag Capture
-                            lines.Add($"  {ps.PlayerName}: " +
-                                      $"SoloKills={ps.Flag_SoloKills}({ps.Flag_SoloKillsPoints} pts), " +
-                                      $"GrpKills={ps.Flag_GroupKills}({ps.Flag_GroupKillsPoints} pts), " +
-                                      $"FlagCarrierKillBonus={ps.Flag_KillFlagCarrierCount}({ps.Flag_KillFlagCarrierPoints} pts), " +
-                                      $"FlagsCaptured={ps.Flag_FlagReturnsCount}({ps.Flag_FlagReturnsPoints} pts), " +
-                                      $"Ownership={ps.Flag_OwnershipPoints} pts, " +
-                                      $"Total={total} pts");
-                            break;
-
-                        case 3: // Treasure Hunt
-                            lines.Add($"  {ps.PlayerName}: " +
-                                      $"SoloKills={ps.Treasure_SoloKills}({ps.Treasure_SoloKillsPoints} pts), " +
-                                      $"GrpKills={ps.Treasure_GroupKills}({ps.Treasure_GroupKillsPoints} pts), " +
-                                      $"TreasurePoints={ps.Treasure_BroughtTreasuresPoints}, " +
-                                      $"StolenItemPenalty={ps.Treasure_StolenTreasuresPoints}, " +
-                                      $"Total={total} pts");
-                            break;
-
-                        case 4: // Bring Friends
-                            lines.Add($"  {ps.PlayerName}: " +
-                                      $"SoloKills={ps.Friends_SoloKills}({ps.Friends_SoloKillsPoints} pts), " +
-                                      $"GrpKills={ps.Friends_GroupKills}({ps.Friends_GroupKillsPoints} pts), " +
-                                      $"BroughtFriends={ps.Friends_BroughtFriendsPoints} pts, " +
-                                      $"FamilyBonus={ps.Friends_BroughtFamilyBonus} pts, " +
-                                      $"LostFriends={ps.Friends_FriendKilledCount}({ps.Friends_FriendKilledPoints} pts), " +
-                                      $"KilledOthersFriends={ps.Friends_KillEnemyFriendCount}({ps.Friends_KillEnemyFriendPoints} pts), " +
-                                      $"Total={total} pts");
-                            break;
-
-                        case 5: // Capture Territories
-                            lines.Add($"  {ps.PlayerName}: " +
-                                      $"SoloKills={ps.Terr_SoloKills}({ps.Terr_SoloKillsPoints} pts), " +
-                                      $"GrpKills={ps.Terr_GroupKills}({ps.Terr_GroupKillsPoints} pts), " +
-                                      $"TerritoryCaptures={ps.Terr_TerritoriesCapturedCount}({ps.Terr_TerritoriesCapturedPoints} pts), " +
-                                      $"Ownership={ps.Terr_TerritoriesOwnershipPoints} pts, " +
-                                      $"Total={total} pts");
-                            break;
-
-                        case 6: // Boss Kill
-                            lines.Add($"  {ps.PlayerName}: " +
-                                      $"SoloBossKills={ps.Boss_SoloKills}({ps.Boss_SoloKillsPoints} pts), " +
-                                      $"GroupBossKills={ps.Boss_GroupKills}({ps.Boss_GroupKillsPoints} pts), " +
-                                      $"BossHits={ps.Boss_BossHitsCount}({ps.Boss_BossHitsPoints} pts), " +
-                                      $"BossKills={ps.Boss_BossKillsCount}({ps.Boss_BossKillsPoints} pts), " +
-                                      $"Total={total} pts");
-                            break;
-
-                        default:
-                            lines.Add($"  {ps.PlayerName}: {total} points");
-                            break;
-                    }
                 }
 
                 lines.Add("");
