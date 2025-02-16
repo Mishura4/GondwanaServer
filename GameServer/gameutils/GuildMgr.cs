@@ -177,7 +177,7 @@ namespace DOL.GS
         }
 
 
-        public static Guild CreateGuild(eRealm realm, string guildName, GamePlayer creator = null)
+        public static Guild CreateGuild(eRealm realm, string guildName, GamePlayer creator = null, bool loadedFromScript = false)
         {
             if (DoesGuildExist(guildName))
             {
