@@ -1784,27 +1784,30 @@ namespace AmteScripts.Managers
                 lines.Add("Session Type: " + sessionTypeString);
                 lines.Add("");
 
-                if (CurrentZones.Any())
+                if (_isOpen)
                 {
-                    lines.Add("Zones in this PvP session:");
-                    foreach (Zone z in CurrentZones)
+                    if (CurrentZones.Any())
                     {
-                        if (z != null)
+                        lines.Add("Zones in this PvP session:");
+                        foreach (Zone z in CurrentZones)
                         {
-                            string zoneName = !string.IsNullOrEmpty(z.Description)
-                                ? z.Description
-                                : $"Zone#{z.ID}";
-                            lines.Add("  > " + zoneName);
-                        }
-                        else
-                        {
-                            lines.Add($"  (Unknown Zone)");
+                            if (z != null)
+                            {
+                                string zoneName = !string.IsNullOrEmpty(z.Description)
+                                    ? z.Description
+                                    : $"Zone#{z.ID}";
+                                lines.Add("  > " + zoneName);
+                            }
+                            else
+                            {
+                                lines.Add($"  (Unknown Zone)");
+                            }
                         }
                     }
-                }
-                else
-                {
-                    lines.Add("No zones currently configured in the session.");
+                    else
+                    {
+                        lines.Add("No zones currently configured in the session.");
+                    }
                 }
                 lines.Add("-------------------------------------------------------------");
                 lines.Add("");
