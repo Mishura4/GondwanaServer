@@ -184,10 +184,10 @@ namespace AmteScripts.Managers
 
         public bool Open(string sessionID, bool force)
         {
+            _isForcedOpen = force;
             if (_isOpen)
                 return true;
 
-            _isForcedOpen = force;
             _isOpen = true;
 
             if (string.IsNullOrEmpty(sessionID))
