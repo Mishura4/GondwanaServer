@@ -1831,9 +1831,9 @@ namespace AmteScripts.Managers
                 else
                 {
                     Dictionary<string, PlayerScore> ourScores = new();
-                    if (_playerScores.TryGetValue(viewer.Name, out var myScore))
+                    if (_playerScores.TryGetValue(viewer.InternalID, out var myScore))
                     {
-                        ourScores[viewer.Name] = myScore;
+                        ourScores[viewer.InternalID] = myScore;
                     }
                     if (CurrentSession.GroupCompoOption == 2 || CurrentSession.GroupCompoOption == 3)
                     {
@@ -1841,9 +1841,9 @@ namespace AmteScripts.Managers
                         {
                             foreach (var friend in viewer.Group.GetPlayersInTheGroup())
                             {
-                                if (_playerScores.TryGetValue(friend.Name, out var friendScore))
+                                if (_playerScores.TryGetValue(friend.InternalID, out var friendScore))
                                 {
-                                    ourScores[friend.Name] = friendScore;
+                                    ourScores[friend.InternalID] = friendScore;
                                 }
                             }
                         }
