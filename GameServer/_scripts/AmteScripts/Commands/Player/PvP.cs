@@ -40,8 +40,7 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            ushort region = 0;
-
+            ushort region = client.Player.CurrentRegionID;
             switch (subcmd)
             {
                 case "open":
@@ -51,11 +50,16 @@ namespace DOL.GS.Commands
                             DisplayCmd(client);
                             return;
                         }
-
+                        
+                        Region reg = WorldMgr.GetRegion(region);
+                        if (reg == null)
+                        {
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.RegionNotFound", region));
+                            return;
+                        }
                         bool success = PvpManager.Instance.Open(region, true);
                         if (success)
                         {
-                            Region reg = WorldMgr.GetRegion(PvpManager.Instance.Region);
                             string regionDesc = (reg != null ? reg.Description : "Unknown Region");
 
                             string zoneNames = "no zones";
@@ -69,7 +73,6 @@ namespace DOL.GS.Commands
                         }
                         else
                         {
-                            Region reg = WorldMgr.GetRegion(PvpManager.Instance.Region);
                             string regionDesc = (reg != null ? reg.Description : "Unknown Region");
 
                             string zoneNames = "no zones";
