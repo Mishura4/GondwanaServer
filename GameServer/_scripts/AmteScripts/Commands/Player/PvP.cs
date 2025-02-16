@@ -57,6 +57,11 @@ namespace DOL.GS.Commands
                             DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.RegionNotFound", region));
                             return;
                         }
+                        if (PvpManager.Instance.IsOpen)
+                        {
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.AlreadyOpen", PvpManager.Instance.Region));
+                            return;
+                        }
                         bool success = PvpManager.Instance.Open(region, true);
                         if (success)
                         {
