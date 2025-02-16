@@ -1835,6 +1835,10 @@ namespace AmteScripts.Managers
                     {
                         ourScores[viewer.InternalID] = myScore;
                     }
+                    else
+                    {
+                        ourScores[viewer.InternalID] = new PlayerScore() { PlayerID = viewer.InternalID, PlayerName = viewer.Name };
+                    }
                     if (CurrentSession.GroupCompoOption == 2 || CurrentSession.GroupCompoOption == 3)
                     {
                         if (viewer.Group != null)
