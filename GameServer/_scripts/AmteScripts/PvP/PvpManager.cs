@@ -32,6 +32,7 @@ namespace AmteScripts.Managers
         private bool _isOpen;
         private bool _isForcedOpen;
         private ushort _currentRegionID;
+        private List<Zone> _zones = new();
 
         /// <summary>The chosen session from DB for the day</summary>
         private PvpSession _activeSession;
@@ -158,7 +159,7 @@ namespace AmteScripts.Managers
             {
                 if (DateTime.Now.TimeOfDay >= _startTime && DateTime.Now.TimeOfDay < _endTime)
                 {
-                    Open(0, false);
+                    Open(string.Empty, false);
                 }
             }
             else
@@ -174,27 +175,41 @@ namespace AmteScripts.Managers
 
         #region Public Properties
         public bool IsOpen => _isOpen;
-        public ushort Region => _currentRegionID;
         public PvpSession CurrentSession => _activeSession;
+        public IReadOnlyList<Zone> Zones => _zones.AsReadOnly();
+        public string CurrentSessionId => string.IsNullOrEmpty(CurrentSession?.SessionID) ? "(none)" : CurrentSession.SessionID;
         #endregion
 
         #region Open/Close
-        public bool Open(ushort region, bool force)
+
+        public bool Open(string sessionID, bool force)
         {
             if (_isOpen)
                 return true;
 
             _isForcedOpen = force;
             _isOpen = true;
-            _currentRegionID = region;
 
-            // pick a random session from DB
-            _activeSession = PvpSessionMgr.PickRandomSession();
-            if (_activeSession == null)
+            if (string.IsNullOrEmpty(sessionID))
             {
-                log.Warn("No PvP Sessions in DB, cannot open!");
-                _isOpen = false;
-                return false;
+                // pick a random session from DB
+                _activeSession = PvpSessionMgr.PickRandomSession();
+                if (_activeSession == null)
+                {
+                    log.Warn("No PvP Sessions in DB, cannot open!");
+                    _isOpen = false;
+                    return false;
+                }
+            }
+            else
+            {
+                _activeSession = PvpSessionMgr.GetAllSessions().First(s => string.Equals(s.SessionID, sessionID));
+                if (_activeSession == null)
+                {
+                    log.Warn($"PvP session {sessionID} could not be found, cannot open!");
+                    _isOpen = false;
+                    return false;
+                }
             }
 
             log.Info($"PvpManager: Opened session [{_activeSession.SessionID}] Type={_activeSession.SessionType}, SpawnOpt={_activeSession.SpawnOption}");
@@ -205,6 +220,7 @@ namespace AmteScripts.Managers
             _groupQueue.Clear();
 
             // Now we parse the session's ZoneList => find all "SPAWN" NPCs in those zones
+            _zones.Clear();
             _spawnNpcsGlobal.Clear();
             _spawnNpcsRealm[eRealm.Albion].Clear();
             _spawnNpcsRealm[eRealm.Midgard].Clear();
@@ -224,6 +240,7 @@ namespace AmteScripts.Managers
                 Zone zone = WorldMgr.GetZone(zoneId);
                 if (zone == null) continue;
 
+                _zones.Add(zone);
                 var npcs = WorldMgr.GetNPCsByGuild("PVP", eRealm.None).Where(n => n.CurrentZone == zone && n.Name.StartsWith("SPAWN", StringComparison.OrdinalIgnoreCase) &&
                         !n.Name.StartsWith("PADSPAWN", StringComparison.OrdinalIgnoreCase)).ToList();
 

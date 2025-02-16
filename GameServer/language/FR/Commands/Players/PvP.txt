@@ -1,10 +1,13 @@
 Commands.GM.PvP.Description:		Gère et affiche les informations concernant les sessions PvP.
 Commands.GM.PvP.Usage.Info:			/pvp info : Affiche les informations du PvP et vos scores et ceux de votre groupe pour la session en cours.
-Commands.GM.PvP.Usage.Open:			/pvp open [region] : Force l'ouverture du pvp
+Commands.GM.PvP.Usage.Open:			/pvp open [sessionId] : Force l'ouverture du pvp
 Commands.GM.PvP.Usage.Close:		/pvp close : Force la fermeture du pvp
 Commands.GM.PvP.Usage.Unforce:		/pvp unforce : Permet après un '/pvp open' de fermer le pvp s'il n'est pas dans les bonnes horaires
 Commands.GM.PvP.Usage.Status:		/pvp status : Affiche le statut de la session PvP
 Commands.GM.PvP.Usage.Refresh:		/pvp refresh : Permet de rafraîchir les maps disponibles en PvP
 Commands.GM.PvP.Usage.Reset:		/pvp reset : Réinitialise la session PvP.
-Commands.GM.PvP.RegionNotFound:		La région {0} n'a pas été trouvée.
-Commands.GM.PvP.AlreadyOpen:		Une session de PvP est déjà en cours dans la région {0}!
+Commands.GM.PvP.ZoneNotFound:		La zone {0} n'a pas été trouvée.
+Commands.GM.PvP.AlreadyOpen:		Une session de PvP est déjà en cours dans la zone {0}!
+Commands.GM.PvP.PvPOpened:			La session PvP "{0}" a été ouverte sur {1} (Région {2}).
+Commands.GM.PvP.PvPNotFound:        La session PvP "{0}" n'a pas pu être ouverte.
+Commands.GM.PvP.PvPNotOpened:       Aucune session PvP n'a pu être ouverte.

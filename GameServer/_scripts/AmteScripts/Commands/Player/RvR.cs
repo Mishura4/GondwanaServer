@@ -74,7 +74,7 @@ namespace DOL.GS.Commands
 
                 case "reset":
                     RvrManager.Instance.Close();
-                    PvpManager.Instance.Open(0, false);
+                    PvpManager.Instance.Open(string.Empty, false);
 
                     DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRReset"));
                     break;

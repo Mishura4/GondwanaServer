@@ -40,54 +40,46 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            ushort region = client.Player.CurrentRegionID;
+            string sessionID = string.Empty;
             switch (subcmd)
             {
                 case "open":
                     {
-                        if (args.Length >= 3 && !ushort.TryParse(args[2], out region))
+                        if (args.Length >= 3)
                         {
-                            DisplayCmd(client);
+                            sessionID = args[2];
+                        }
+                        
+                        if (PvpManager.Instance.IsOpen)
+                        {
+                            var msg = LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.GM.PvP.AlreadyOpen",
+                                PvpManager.Instance.CurrentSessionId,
+                                string.Join(',', PvpManager.Instance.Zones.Select(z => z.Description + "(" + z.ID + ")"))
+                            );
+                            DisplayMessage(client, msg);
                             return;
                         }
                         
-                        Region reg = WorldMgr.GetRegion(region);
-                        if (reg == null)
-                        {
-                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.RegionNotFound", region));
-                            return;
-                        }
-                        if (PvpManager.Instance.IsOpen)
-                        {
-                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.AlreadyOpen", PvpManager.Instance.Region));
-                            return;
-                        }
-                        bool success = PvpManager.Instance.Open(region, true);
+                        bool success = PvpManager.Instance.Open(sessionID, true);
                         if (success)
                         {
-                            string regionDesc = (reg != null ? reg.Description : "Unknown Region");
-
-                            string zoneNames = "no zones";
-                            var zoneList = reg?.Zones?.ToArray() ?? Array.Empty<Zone>();
-                            if (zoneList.Length > 0)
-                            {
-                                zoneNames = zoneList[0].Description;
-                            }
-
-                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPOpened", PvpManager.Instance.Region, zoneNames));
+                            var msg = LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.GM.PvP.PvPOpened",
+                                PvpManager.Instance.CurrentSessionId,
+                                string.Join(',', PvpManager.Instance.Zones.Select(z => z.Description + "(" + z.ID + ")")),
+                                string.Join(',', PvpManager.Instance.Zones.Select(z => z.ZoneRegion).Distinct().Select(r => r.Description + "(" + r.ID + ")"))
+                            );
+                            DisplayMessage(client, msg);
                         }
                         else
                         {
-                            string regionDesc = (reg != null ? reg.Description : "Unknown Region");
-
-                            string zoneNames = "no zones";
-                            var zoneList = reg?.Zones?.ToArray() ?? Array.Empty<Zone>();
-                            if (zoneList.Length > 0)
-                            {
-                                zoneNames = zoneList[0].Description;
-                            }
-
-                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPNotOpened", PvpManager.Instance.Region, zoneNames));
+                            DisplayMessage(
+                                client,
+                                string.IsNullOrEmpty(sessionID) ? LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.PvPNotOpened") : LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.PvPNotFound", sessionID)
+                            );
                         }
                         break;
                     }
@@ -118,7 +110,7 @@ namespace DOL.GS.Commands
                             break;
                         }
                         // We do an "unforce" by calling Open(...) again with force=false
-                        PvpManager.Instance.Open(0, false);
+                        PvpManager.Instance.Open(string.Empty, false);
                         DisplayMessage(client,
                             LanguageMgr.GetTranslation(client.Account.Language,
                                 "RvRManager.PvPWillCloseAutomatically"));
@@ -130,9 +122,8 @@ namespace DOL.GS.Commands
                         // Show the PvP status
                         // Example text
                         string status = PvpManager.Instance.IsOpen
-                            ? "open, region param " + PvpManager.Instance.Region +
-                              " session zones: " + string.Join(",", PvpManager.Instance.Maps)
-                            : "close";
+                            ? "open, zones: " + string.Join(',', PvpManager.Instance.Zones.Select(z => z.Description + "(" + z.ID + ")"))
+                            : "closed";
                         DisplayMessage(client,
                             LanguageMgr.GetTranslation(client.Account.Language,
                                 "RvRManager.PvPStatus", status));
@@ -167,7 +158,7 @@ namespace DOL.GS.Commands
 
                 case "reset":
                     PvpManager.Instance.Close();
-                    PvpManager.Instance.Open(0, false);
+                    PvpManager.Instance.Open(string.Empty, false);
                     DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPReset"));
                     break;
 
