@@ -27,7 +27,7 @@ namespace DOL.GS.Spells
                     anyHealed = true;
             }
 
-            bool consume = false;
+            bool consume = anyHealed;
             if (!anyHealed && Spell.Target.Equals("Realm", StringComparison.OrdinalIgnoreCase))
             {
                 Caster.Mana -= (PowerCost(baseTarget) >> 1);
