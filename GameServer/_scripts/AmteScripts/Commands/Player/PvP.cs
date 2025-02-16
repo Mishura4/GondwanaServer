@@ -19,6 +19,7 @@ namespace DOL.GS.Commands
         "Commands.GM.PvP.Usage.Close",
         "Commands.GM.PvP.Usage.Unforce",
         "Commands.GM.PvP.Usage.Status",
+        "Commands.GM.PvP.Usage.Scores",
         "Commands.GM.PvP.Usage.Refresh",
         "Commands.GM.PvP.Usage.Info",
         "Commands.GM.PvP.Usage.Reset")]
@@ -156,6 +157,14 @@ namespace DOL.GS.Commands
                     {
                         // Show PvP scoreboard or session infos
                         var stats = PvpManager.Instance.GetStatistics(client.Player);
+                        client.Out.SendCustomTextWindow("PvP Info", stats);
+                        break;
+                    }
+
+                case "scores":
+                    {
+                        // Show PvP scoreboard or session infos
+                        var stats = PvpManager.Instance.GetStatistics(client.Player, true);
                         client.Out.SendCustomTextWindow("PvP Info", stats);
                         break;
                     }

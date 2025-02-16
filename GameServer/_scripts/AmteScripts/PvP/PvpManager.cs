@@ -1715,7 +1715,7 @@ namespace AmteScripts.Managers
         #endregion
 
         #region Stats
-        public IList<string> GetStatistics(GamePlayer viewer)
+        public IList<string> GetStatistics(GamePlayer viewer, bool all = false)
         {
             var lines = new List<string>();
             string sessionTypeString = "Unknown";
@@ -1823,9 +1823,37 @@ namespace AmteScripts.Managers
             {
                 lines.Add("Current Scoreboard:");
 
+                IEnumerable<PlayerScore> scores = null;
+                if (all)
+                {
+                    scores = _playerScores.Values;
+                }
+                else
+                {
+                    Dictionary<string, PlayerScore> ourScores = new();
+                    if (_playerScores.TryGetValue(viewer.Name, out var myScore))
+                    {
+                        ourScores[viewer.Name] = myScore;
+                    }
+                    if (CurrentSession.GroupCompoOption == 2 || CurrentSession.GroupCompoOption == 3)
+                    {
+                        if (viewer.Group != null)
+                        {
+                            foreach (var friend in viewer.Group.GetPlayersInTheGroup())
+                            {
+                                if (_playerScores.TryGetValue(friend.Name, out var friendScore))
+                                {
+                                    ourScores[friend.Name] = friendScore;
+                                }
+                            }
+                        }
+                    }
+                    scores = ourScores.Values;
+                }
+
                 // We want to sort players by total points descending
                 var sessionType = CurrentSession!.SessionType;
-                var sorted = _playerScores.Values
+                var sorted = scores
                     .OrderByDescending(ps => ps.GetTotalPoints(sessionType))
                     .ToList();
 

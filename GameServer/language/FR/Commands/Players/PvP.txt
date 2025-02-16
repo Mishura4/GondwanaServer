@@ -1,5 +1,6 @@
 Commands.GM.PvP.Description:		Gère et affiche les informations concernant les sessions PvP.
 Commands.GM.PvP.Usage.Info:			/pvp info : Affiche les informations du PvP et vos scores et ceux de votre groupe pour la session en cours.
+Commands.GM.PvP.Usage.Scores:		/pvp scores : Affiche les informations du PvP et les scores de tous les participants.
 Commands.GM.PvP.Usage.Open:			/pvp open [sessionId] : Force l'ouverture du pvp
 Commands.GM.PvP.Usage.Close:		/pvp close : Force la fermeture du pvp
 Commands.GM.PvP.Usage.Unforce:		/pvp unforce : Permet après un '/pvp open' de fermer le pvp s'il n'est pas dans les bonnes horaires
