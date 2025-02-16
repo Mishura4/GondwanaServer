@@ -1880,9 +1880,8 @@ namespace AmteScripts.Managers
             }
             else
             {
-                lines.Add("Current Scoreboard:");
-
                 IEnumerable<PlayerScore> scores = null;
+                string groupName = viewer.Name;
                 if (all)
                 {
                     scores = _playerScores.Values;
@@ -1900,13 +1899,18 @@ namespace AmteScripts.Managers
                     }
                     if (CurrentSession.GroupCompoOption == 2 || CurrentSession.GroupCompoOption == 3)
                     {
-                        if (viewer.Group != null)
+                        if (viewer.Guild != null)
                         {
-                            foreach (var friend in viewer.Group.GetPlayersInTheGroup())
+                            groupName = viewer.Guild.Name;
+                            foreach (var friend in viewer.Guild.GetListOfOnlineMembers())
                             {
                                 if (_playerScores.TryGetValue(friend.InternalID, out var friendScore))
                                 {
                                     ourScores[friend.InternalID] = friendScore;
+                                }
+                                else
+                                {
+                                    ourScores[friend.InternalID] = new PlayerScore() { PlayerID = friend.InternalID, PlayerName = friend.Name };
                                 }
                             }
                         }
@@ -1975,6 +1979,8 @@ namespace AmteScripts.Managers
                 var language = viewer.Client.Account.Language;
                 if (all)
                 {
+                    lines.Add("Current Scoreboard:");
+
                     lines.AddRange(
                         sorted.Select(
                             e => $"  {e.Player}: " + string.Join(", ", e.Lines.Select(l => l.ToString(language, true)))
@@ -1983,6 +1989,8 @@ namespace AmteScripts.Managers
                 }
                 else
                 {
+                    lines.Add($"Current Scoreboard for {groupName}:");
+
                     foreach (var ps in sorted)
                     {
                         lines.Add($"  {ps.Player}:");
@@ -1992,10 +2000,6 @@ namespace AmteScripts.Managers
                             )
                         );
                     }
-                }
-
-                foreach (var ps in sorted)
-                {
                 }
 
                 lines.Add("");
