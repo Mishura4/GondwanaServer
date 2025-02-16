@@ -716,8 +716,8 @@ namespace DOL.Territories
                     {
                         if (CurrentTerritory.Type == Territory.eType.Subterritory)
                         {
-                            var zoneIDs = PvpManager.Instance.Maps;
-                            if (CurrentTerritory.Zone != null && zoneIDs.Contains(CurrentTerritory.Zone.ID))
+                            var zones = PvpManager.Instance.CurrentZones;
+                            if (zones.Contains(CurrentTerritory.Zone))
                             {
                                 AwardSubterritoryCapturePoints(player.Guild);
                             }

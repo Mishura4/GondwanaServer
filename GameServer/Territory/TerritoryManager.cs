@@ -382,16 +382,16 @@ namespace DOL.Territories
             IEnumerable<Territory> filtered;
             if (inPvpZone)
             {
-                var zoneIDs = PvpManager.Instance!.Maps;
-                filtered = allSubs.Where(t => t.Zone != null && zoneIDs.Contains(t.Zone.ID));
+                var zones = PvpManager.Instance!.CurrentZones;
+                filtered = allSubs.IntersectBy(zones, t => t.Zone);
             }
             else
             {
                 if (PvpManager.Instance != null && PvpManager.Instance.CurrentSession != null
                     && PvpManager.Instance.CurrentSession.SessionType == 5)
                 {
-                    var zoneIDs = PvpManager.Instance.Maps;
-                    filtered = allSubs.Where(t => t.Zone == null || !zoneIDs.Contains(t.Zone.ID));
+                    var zones = PvpManager.Instance!.CurrentZones;
+                    filtered = allSubs.IntersectBy(zones, t => t.Zone);
                 }
                 else
                 {
@@ -578,12 +578,12 @@ namespace DOL.Territories
             return GetCurrentTerritory(obj.CurrentAreas)?.IsOwnedBy(player) == true;
         }
 
-        public void ReleaseSubTerritoriesInZones(IEnumerable<ushort> zoneIDs)
+        public void ReleaseSubTerritoriesInZones(IEnumerable<Zone> zones)
         {
             var allSubs = this.Territories.Where(t => t.Type == Territory.eType.Subterritory);
             foreach (var terr in allSubs)
             {
-                if (terr.Zone != null && zoneIDs.Contains(terr.Zone.ID))
+                if (zones.Contains(terr.Zone))
                 {
                     terr.OwnerGuild = null;
                 }

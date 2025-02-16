@@ -176,7 +176,7 @@ namespace AmteScripts.Managers
         #region Public Properties
         public bool IsOpen => _isOpen;
         public PvpSession CurrentSession => _activeSession;
-        public IReadOnlyList<Zone> Zones => _zones.AsReadOnly();
+        public IReadOnlyList<Zone> CurrentZones => _zones.AsReadOnly();
         public string CurrentSessionId => string.IsNullOrEmpty(CurrentSession?.SessionID) ? "(none)" : CurrentSession.SessionID;
         #endregion
 
@@ -396,7 +396,7 @@ namespace AmteScripts.Managers
 
             if (_activeSession != null && _activeSession.SessionType == 5)
             {
-                TerritoryManager.Instance.ReleaseSubTerritoriesInZones(Maps);
+                TerritoryManager.Instance.ReleaseSubTerritoriesInZones(CurrentZones);
             }
 
             ResetScores();
@@ -1539,7 +1539,7 @@ namespace AmteScripts.Managers
                 return 30000;
 
             // 2) Figure out which zone IDs are in the session
-            var zoneIDs = Maps;
+            var zoneIDs = CurrentZones.Select(z => z.ID);
 
             var subterritories = TerritoryManager.Instance.Territories
                 .Where(t => t.Type == Territory.eType.Subterritory && t.OwnerGuild != null).ToList();
@@ -1584,13 +1584,7 @@ namespace AmteScripts.Managers
             if (_activeSession == null)
                 return false;
 
-            foreach (ushort zoneID in Maps)
-            {
-                Zone z = WorldMgr.GetZone(zoneID);
-                if (z != null && z.ZoneRegion != null && z.ZoneRegion.ID == regionID)
-                    return true;
-            }
-            return false;
+            return CurrentZones.Select(z => z.ID).Contains(regionID);
         }
 
         /// <summary>
@@ -1601,29 +1595,6 @@ namespace AmteScripts.Managers
             if (living is GamePlayer plr)
                 return plr.IsInPvP;
             return false;
-        }
-
-        /// <summary>
-        /// Return the zone IDs from the active session's ZoneList
-        /// </summary>
-        public IEnumerable<ushort> Maps
-        {
-            get
-            {
-                if (_activeSession == null || string.IsNullOrEmpty(_activeSession.ZoneList))
-                    return Enumerable.Empty<ushort>();
-
-                return _activeSession.ZoneList
-                    .Split(',')
-                    .Select(s => s.Trim())
-                    .Where(x => ushort.TryParse(x, out _))
-                    .Select(x => ushort.Parse(x));
-            }
-        }
-
-        public IEnumerable<ushort> FindPvPMaps()
-        {
-            return Maps;
         }
         #endregion
 
@@ -1785,14 +1756,13 @@ namespace AmteScripts.Managers
             }
             else
             {
-                if (Maps.Any())
+                if (CurrentZones.Any())
                 {
-                    foreach (ushort zoneId in Maps)
+                    foreach (Zone z in CurrentZones)
                     {
-                        Zone z = WorldMgr.GetZone(zoneId);
                         if (z != null)
                         {
-                            string zoneName = !string.IsNullOrEmpty(z.Description) ? z.Description : $"Zone#{zoneId}";
+                            string zoneName = !string.IsNullOrEmpty(z.Description) ? z.Description : $"Zone#{z.ID}";
                             lines.Add(sessionTypeString + " in " + zoneName);
                         }
                         else
@@ -1814,22 +1784,21 @@ namespace AmteScripts.Managers
                 lines.Add("Session Type: " + sessionTypeString);
                 lines.Add("");
 
-                if (Maps.Any())
+                if (CurrentZones.Any())
                 {
                     lines.Add("Zones in this PvP session:");
-                    foreach (ushort zoneId in Maps)
+                    foreach (Zone z in CurrentZones)
                     {
-                        Zone z = WorldMgr.GetZone(zoneId);
                         if (z != null)
                         {
                             string zoneName = !string.IsNullOrEmpty(z.Description)
                                 ? z.Description
-                                : $"Zone#{zoneId}";
+                                : $"Zone#{z.ID}";
                             lines.Add("  > " + zoneName);
                         }
                         else
                         {
-                            lines.Add($"  (Unknown ZoneID={zoneId})");
+                            lines.Add($"  (Unknown Zone)");
                         }
                     }
                 }

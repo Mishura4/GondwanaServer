@@ -56,7 +56,7 @@ namespace DOL.GS.Commands
                                 client.Account.Language,
                                 "Commands.GM.PvP.AlreadyOpen",
                                 PvpManager.Instance.CurrentSessionId,
-                                string.Join(',', PvpManager.Instance.Zones.Select(z => z.Description + "(" + z.ID + ")"))
+                                string.Join(',', PvpManager.Instance.CurrentZones.Select(z => z.Description + "(" + z.ID + ")"))
                             );
                             DisplayMessage(client, msg);
                             return;
@@ -69,8 +69,8 @@ namespace DOL.GS.Commands
                                 client.Account.Language,
                                 "Commands.GM.PvP.PvPOpened",
                                 PvpManager.Instance.CurrentSessionId,
-                                string.Join(',', PvpManager.Instance.Zones.Select(z => z.Description + "(" + z.ID + ")")),
-                                string.Join(',', PvpManager.Instance.Zones.Select(z => z.ZoneRegion).Distinct().Select(r => r.Description + "(" + r.ID + ")"))
+                                string.Join(',', PvpManager.Instance.CurrentZones.Select(z => z.Description + "(" + z.ID + ")")),
+                                string.Join(',', PvpManager.Instance.CurrentZones.Select(z => z.ZoneRegion).Distinct().Select(r => r.Description + "(" + r.ID + ")"))
                             );
                             DisplayMessage(client, msg);
                         }
@@ -122,7 +122,8 @@ namespace DOL.GS.Commands
                         // Show the PvP status
                         // Example text
                         string status = PvpManager.Instance.IsOpen
-                            ? "open, zones: " + string.Join(',', PvpManager.Instance.Zones.Select(z => z.Description + "(" + z.ID + ")"))
+                            ? "open, zones: " + string.Join(',', PvpManager.Instance.CurrentZones.Select(z => z.Description + "(" + z.ID + ")")) +
+                              " regions: " + string.Join(',', PvpManager.Instance.CurrentZones.Select(z => z.ZoneRegion).Distinct().Select(r => r.Description + "(" + r.ID + ")"))
                             : "closed";
                         DisplayMessage(client,
                             LanguageMgr.GetTranslation(client.Account.Language,
@@ -141,10 +142,10 @@ namespace DOL.GS.Commands
                         }
                         // re-scan or reload DB sessions
                         PvpSessionMgr.ReloadSessions();
-                        var pvpMaps = string.Join(", ", PvpManager.Instance.FindPvPMaps());
+                        var pvpMaps = string.Join(", ", PvpSessionMgr.AllZones);
                         DisplayMessage(client,
                             LanguageMgr.GetTranslation(client.Account.Language,
-                                "RvRManager.PvPMapsUsed", "???", pvpMaps));
+                                "RvRManager.PvPMapsUsed", pvpMaps));
                         break;
                     }
 

@@ -20,14 +20,28 @@ namespace AmteScripts.Managers
         private static List<PvpSession> _allSessions = new List<PvpSession>();
         private static Random _rnd = new Random();
 
+        private static List<ushort> _allZones = new();
+
+        public static IReadOnlyList<ushort> AllZones => _allZones.AsReadOnly();
+            
         /// <summary>
         /// Reload from DB
         /// </summary>
         public static void ReloadSessions()
         {
             _allSessions.Clear();
+            _allZones.Clear();
             var sessions = GameServer.Database.SelectAllObjects<PvpSession>();
             _allSessions.AddRange(sessions);
+            _allZones.AddRange(
+                sessions.SelectMany(
+                    s => s.ZoneList.Split(',')
+                        .Select(s => s.Trim())
+                        .Select(x => ushort.TryParse(x, out var parsed) ? parsed : (ushort?)null)
+                        .Where(x => x.HasValue)
+                        .Select(x => x.Value)
+                ).Distinct()
+            );
             log.InfoFormat("[PvpSessionMgr] Loaded {0} PvP sessions from DB (PvPManager table).", _allSessions.Count);
         }
 
