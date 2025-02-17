@@ -18,7 +18,11 @@ using static DOL.GS.Area;
 using AmteScripts.PvP.CTF;
 using Discord;
 using Google.Protobuf.WellKnownTypes;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using static AmteScripts.Managers.PvpManager;
+using static System.Formats.Asn1.AsnWriter;
+using static DOL.GameEvents.GameEvent;
 
 namespace AmteScripts.Managers
 {
@@ -60,6 +64,8 @@ namespace AmteScripts.Managers
         private Dictionary<Group, AbstractArea> _groupAreas = new Dictionary<Group, AbstractArea>();
         // Key = the group object, Value = the ephemeral guild we created
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
+        // Ephemeral guilds players should be in, for recovery after a disconnect or server restart
+        private Dictionary<string, Guild> _playerGroups = new Dictionary<string, Guild>();
         private List<GameFlagBasePad> _allBasePads = new List<GameFlagBasePad>();
         private int _flagCounter = 0;
         private RegionTimer _territoryOwnershipTimer = null;
@@ -186,6 +192,61 @@ namespace AmteScripts.Managers
 
         #region Open/Close
 
+        [return: NotNull]
+        private PlayerScore ParsePlayer(string playerId, IEnumerable<string> parameters)
+        {
+            PlayerScore score = new PlayerScore() { PlayerID = playerId };
+            foreach (var playerScoreInfo in parameters)
+            {
+                var playerScore = playerScoreInfo.Split(':');
+                var playerScoreKey = playerScore[0];
+
+                PropertyInfo p = typeof(PlayerScore).GetProperty(playerScoreKey);
+                if (p == null)
+                {
+                    log.Warn($"PvP score \"{playerScoreKey}\" of player {playerId} is unknown");
+                    continue;
+                }
+
+                int playerScoreValue = 0;
+                int.TryParse(playerScore[1], out playerScoreValue);
+                p.SetValue(score, playerScoreValue);
+            }
+            return score; 
+        }
+
+        private void ParseGuildEntry(IEnumerator<string> lines, string[] parameters)
+        {
+            // g;Miuna's guild
+            // f1999a9a-f590-453f-ac72-de09afa0c67a=PvP_SoloKills:1=PvP_SoloKillPoints:2
+            // c3ceb30f-3441-4fda-abbe-755dc28d9e08
+            //
+            // g;Bob's guild
+            // 2ef3beb7-11fc-4b2a-b2e7-4515275423e0=PvP_SoloKills:1=PvP_SoloKillPoints:2
+            var guildName = parameters[1];
+            Guild guild = GuildMgr.CreateGuild(eRealm.None, guildName, null, true);
+            if (guild == null)
+            {
+                guild = GuildMgr.GetGuildByName(guildName);
+                if (guild == null)
+                {
+                    log!.Warn($"Cannot recover PvP scores for guild {guildName}, guild could not be found or created");
+                }
+                return;
+            }
+            while (lines.MoveNext() && !string.IsNullOrEmpty(lines.Current))
+            {
+                var values = lines.Current.Split('=');
+                var playerId = values[0];
+                if (!_playerGroups!.TryAdd(playerId, guild))
+                {
+                    log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Name}");
+                    break;
+                }
+                GetGroupScore(guild).Scores![playerId] = new GroupScoreEntry(ParsePlayer(playerId, values.Skip(1)), DateTime.Now);
+            }
+        }
+
         public bool Open(string sessionID, bool force)
         {
             _isForcedOpen = force;
@@ -193,6 +254,59 @@ namespace AmteScripts.Managers
                 return true;
 
             _isOpen = true;
+            
+            // Reset scoreboard, queues, oldInfos
+            ResetScores();
+            _soloQueue.Clear();
+            _groupQueue.Clear();
+
+            // Now we parse the session's ZoneList => find all "SPAWN" NPCs in those zones
+            _zones.Clear();
+            _spawnNpcsGlobal.Clear();
+            _spawnNpcsRealm[eRealm.Albion].Clear();
+            _spawnNpcsRealm[eRealm.Midgard].Clear();
+            _spawnNpcsRealm[eRealm.Hibernia].Clear();
+            _usedSpawns.Clear();
+            _soloAreas.Clear();
+            _groupAreas.Clear();
+            
+            if (string.IsNullOrEmpty(sessionID))
+            {
+                try
+                {
+                    using var lines = File.ReadLines("temp/PvPScore.dat").GetEnumerator();
+                    
+                    var header = lines.Current.Split(';');
+                    sessionID = header[0];
+                    bool.TryParse(header[1], out force);
+                    _isForcedOpen = force;
+
+                    bool finished = lines.MoveNext();
+                    while (!finished)
+                    {
+                        var parameters = lines.Current.Split(';');
+                        switch (parameters[0])
+                        {
+                            case "g":
+                                {
+                                    ParseGuildEntry(lines, parameters);
+                                }
+                                break;
+                            case "p":
+                                break;
+                        }
+                        finished = lines.MoveNext();
+                    }
+                }
+                catch (FileNotFoundException)
+                {
+                    // fine
+                }
+                catch (Exception ex)
+                {
+                    log.Warn("Could not open file temp/PvPScore.dat: ", ex);
+                }
+            }
 
             if (string.IsNullOrEmpty(sessionID))
             {
@@ -217,21 +331,6 @@ namespace AmteScripts.Managers
             }
 
             log.Info($"PvpManager: Opened session [{_activeSession.SessionID}] Type={_activeSession.SessionType}, SpawnOpt={_activeSession.SpawnOption}");
-
-            // Reset scoreboard, queues, oldInfos
-            ResetScores();
-            _soloQueue.Clear();
-            _groupQueue.Clear();
-
-            // Now we parse the session's ZoneList => find all "SPAWN" NPCs in those zones
-            _zones.Clear();
-            _spawnNpcsGlobal.Clear();
-            _spawnNpcsRealm[eRealm.Albion].Clear();
-            _spawnNpcsRealm[eRealm.Midgard].Clear();
-            _spawnNpcsRealm[eRealm.Hibernia].Clear();
-            _usedSpawns.Clear();
-            _soloAreas.Clear();
-            _groupAreas.Clear();
 
             List<GameNPC> padSpawnNpcsGlobal = new List<GameNPC>();
 
@@ -294,7 +393,7 @@ namespace AmteScripts.Managers
                 GameEventMgr.AddHandler(GameLivingEvent.Dying, new DOLEventHandler(OnLivingDying_BringAFriend));
                 GameEventMgr.AddHandler(GameLivingEvent.BringAFriend, new DOLEventHandler(OnBringAFriend));
             }
-
+            
             // If we found zero spawns, the fallback logic in FindSpawnPosition might do random coords.
             // Or you can log a warning:
             if (_spawnNpcsGlobal.Count == 0)
@@ -463,9 +562,11 @@ namespace AmteScripts.Managers
         private void ResetScores()
         {
             _playerScores.Clear();
+            _groupScores.Clear();
         }
 
-        public GroupScore GetGroupScore(Guild guild)
+        [return: NotNullIfNotNull(nameof(guild))]
+        public GroupScore GetGroupScore(Guild? guild)
         {
             if (guild == null)
                 return null;
@@ -516,7 +617,8 @@ namespace AmteScripts.Managers
             }
             return (score, entry);
         }
-
+        
+        [return: NotNullIfNotNull(nameof(player))]
         public PlayerScore GetScoreRecord(GamePlayer player)
         {
             if (player == null)
@@ -1963,12 +2065,13 @@ namespace AmteScripts.Managers
         }
 
         #region Stats
-
+        
+        [return: NotNull]
         private PlayerScore GetPlayerScore(GamePlayer viewer)
         {
             if (_playerScores.TryGetValue(viewer.InternalID, out var myScore))
             {
-                return myScore;
+                return myScore!;
             }
             else
             {
@@ -1976,6 +2079,7 @@ namespace AmteScripts.Managers
             }
         }
 
+        [return: NotNull]
         private IEnumerable<PlayerScore> GetGroupScore(GamePlayer viewer)
         {
             IEnumerable<PlayerScore> list = Enumerable.Empty<PlayerScore>();
