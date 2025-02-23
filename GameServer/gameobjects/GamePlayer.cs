@@ -851,27 +851,8 @@ namespace DOL.GS
                     return 1000;
                 }
             }
-
-            if (IsInPvP)
-            {
-                RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(this.InternalID));
-
-                if (record != null)
-                {
-                    DBCharacter.Region = record.OldRegion;
-                    DBCharacter.Xpos = record.OldX;
-                    DBCharacter.Ypos = record.OldY;
-                    DBCharacter.Zpos = record.OldZ;
-                    DBCharacter.BindRegion = record.OldBindRegion;
-                    DBCharacter.BindXpos = record.OldBindX;
-                    DBCharacter.BindYpos = record.OldBindY;
-                    DBCharacter.BindZpos = record.OldBindZ;
-                    DBCharacter.BindHeading = record.OldBindHeading;
-
-                    PvpManager.Instance.RemovePlayerForQuit(this);
-                }
-            }
-
+            
+            PvpManager.Instance.RemovePlayer(this);
             Out.SendPlayerQuit(false);
             Quit(true);
             SaveIntoDatabase();

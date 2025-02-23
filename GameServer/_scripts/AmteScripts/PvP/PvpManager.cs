@@ -67,6 +67,7 @@ namespace AmteScripts.Managers
         private Dictionary<Group, AbstractArea> _groupAreas = new Dictionary<Group, AbstractArea>();
         // Key = the group object, Value = the ephemeral guild we created
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
+        private Dictionary<Guild, Group> _guildGroups = new Dictionary<Guild, Group>();
         // Ephemeral guilds players should be in, for recovery after a disconnect or server restart
         private Dictionary<string, Tuple<Guild, byte>> _playerGroups = new Dictionary<string, Tuple<Guild, byte>>();
         // Grace timer for PvP players who get linkdead so they don't lose their progress
@@ -543,7 +544,7 @@ namespace AmteScripts.Managers
                 var plr = client?.Player;
                 if (plr != null && plr.IsInPvP)
                 {
-                    RemovePlayer(plr);
+                    RemovePlayer(plr, false);
                 }
             }
 
@@ -625,6 +626,7 @@ namespace AmteScripts.Managers
                 GuildMgr.DeleteGuild(value);
             }
             _groupGuilds.Clear();
+            _guildGroups.Clear();
             _playerGroups.Clear();
             return true;
         }
@@ -1121,6 +1123,7 @@ namespace AmteScripts.Managers
                 pvpGuild.GuildType = Guild.eGuildType.PvPGuild;
                 _allGuilds.Add(pvpGuild);
                 _groupGuilds[group] = pvpGuild;
+                _guildGroups[pvpGuild] = group;
 
                 int[] emblemChoices = new int[] { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
                 pvpGuild.Emblem = emblemChoices[Util.Random(emblemChoices.Length - 1)];
@@ -1147,7 +1150,7 @@ namespace AmteScripts.Managers
         /// <summary>
         /// Remove a single player from PvP, restoring them to old location + old guild, etc.
         /// </summary>
-        public void RemovePlayer(GamePlayer player)
+        public void RemovePlayer(GamePlayer player, bool disband = true)
         {
             if (!player.IsInPvP)
                 return;
@@ -1157,10 +1160,41 @@ namespace AmteScripts.Managers
                 _graceTimers.Remove(player.InternalID);
             }
 
+            Group g = player.Group;
+            if (g != null && _groupGuilds.TryGetValue(g, out Guild pvpGuild))
+            {
+                if (player.Guild == pvpGuild)
+                {
+                    pvpGuild.RemovePlayer("PVP", player);
+                }
+                if (disband)
+                {
+                    g.RemoveMember(player);
+                }
+            }
+
+            int totalRemoved = 0;
+            for (eInventorySlot slot = eInventorySlot.FirstBackpack; slot <= eInventorySlot.LastBackpack; slot++)
+            {
+                var item = player.Inventory.GetItem(slot);
+                if (item is FlagInventoryItem || item is PvPTreasure)
+                {
+                    int count = item.Count;
+                    if (player.Inventory.RemoveItem(item))
+                        totalRemoved += count;
+                }
+            }
+
+            if (totalRemoved > 0)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.PvPTreasureRemoved", totalRemoved), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (!string.IsNullOrEmpty(record?.PvPSession))
             {
                 RemovePlayerDB(player, record);
+                player.IsInPvP = false;
             }
             else
             {
@@ -1169,69 +1203,6 @@ namespace AmteScripts.Managers
                 player.MoveTo(fallbackPos);
                 player.IsInPvP = false;
             }
-        }
-
-        private void RemovePlayerDB(GamePlayer player, RvrPlayer record)
-        {
-            Group g = player.Group;
-            if (g != null && _groupGuilds.TryGetValue(g, out Guild pvpGuild))
-            {
-                if (player.Guild == pvpGuild)
-                {
-                    pvpGuild.RemovePlayer("PVP", player);
-                }
-            }
-
-            int totalRemoved = 0;
-            var slotsToCheck = new List<eInventorySlot>();
-            for (eInventorySlot slot = eInventorySlot.FirstBackpack;
-                 slot <= eInventorySlot.LastBackpack;
-                 slot++)
-            {
-                slotsToCheck.Add(slot);
-            }
-
-            foreach (var slot in slotsToCheck)
-            {
-                InventoryItem item = player.Inventory.GetItem(slot);
-                if (item is PvPTreasure treasure)
-                {
-                    int count = treasure.Count;
-                    if (player.Inventory.RemoveItem(item))
-                    {
-                        totalRemoved += count;
-                    }
-                }
-                else if (item is FlagInventoryItem flag)
-                {
-                    int flagcount = flag.Count;
-                    if (player.Inventory.RemoveItem(item))
-                    {
-                        totalRemoved += flagcount;
-                    }
-                }
-            }
-
-            if (totalRemoved > 0)
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.PvPTreasureRemoved", totalRemoved), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-            }
-
-            record.ResetCharacter(player);
-            player.MoveTo(Position.Create((ushort)record.OldRegion, record.OldX, record.OldY, record.OldZ, (ushort)record.OldHeading));
-
-            // If the player was in a guild before PvP, re-add them.
-            if (!string.IsNullOrEmpty(record.GuildID))
-            {
-                var oldGuild = GuildMgr.GetGuildByGuildID(record.GuildID);
-                if (oldGuild != null)
-                {
-                    oldGuild.AddPlayer(player, oldGuild.GetRankByID(record.GuildRank), true);
-                }
-            }
-            player.IsInPvP = false;
-
-            GameServer.Database.DeleteObject(record);
 
             DequeueSolo(player);
             if (_soloAreas.TryGetValue(player, out var area))
@@ -1262,62 +1233,22 @@ namespace AmteScripts.Managers
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.LeftPvP"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
-        public void RemovePlayerForQuit(GamePlayer player)
+        private void RemovePlayerDB(GamePlayer player, RvrPlayer record)
         {
-            int totalRemoved = 0;
-            for (eInventorySlot slot = eInventorySlot.FirstBackpack; slot <= eInventorySlot.LastBackpack; slot++)
+            record.ResetCharacter(player);
+            player.MoveTo(Position.Create((ushort)record.OldRegion, record.OldX, record.OldY, record.OldZ, (ushort)record.OldHeading));
+
+            // If the player was in a guild before PvP, re-add them.
+            if (!string.IsNullOrEmpty(record.GuildID))
             {
-                var item = player.Inventory.GetItem(slot);
-                if (item is FlagInventoryItem || item is PvPTreasure)
+                var oldGuild = GuildMgr.GetGuildByGuildID(record.GuildID);
+                if (oldGuild != null)
                 {
-                    int count = item.Count;
-                    if (player.Inventory.RemoveItem(item))
-                        totalRemoved += count;
+                    oldGuild.AddPlayer(player, oldGuild.GetRankByID(record.GuildRank), true);
                 }
             }
 
-            RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
-            if (!string.IsNullOrEmpty(record?.PvPSession))
-            {
-                GameServer.Database.DeleteObject(record);
-            }
-
-            var g = player.Group;
-            if (g != null && _groupGuilds.TryGetValue(g, out Guild pvpGuild))
-            {
-                if (player.Guild == pvpGuild)
-                {
-                    pvpGuild.RemovePlayer("PVP", player);
-                }
-            }
-
-            DequeueSolo(player);
-            if (_soloAreas.TryGetValue(player, out var soloArea))
-            {
-                if (soloArea is PvpCircleArea circle)
-                    circle.RemoveAllOwnedObjects();
-                else if (soloArea is PvpSafeArea pvpArea)
-                    pvpArea.RemoveAllOwnedObjects();
-
-                player.CurrentRegion?.RemoveArea(soloArea);
-                _soloAreas.Remove(player);
-            }
-            if (g != null && _groupAreas.TryGetValue(g, out var grpArea))
-            {
-                bool anyoneStillPvP = g.GetPlayersInTheGroup().Any(m => m.IsInPvP);
-                if (!anyoneStillPvP)
-                {
-                    if (grpArea is PvpCircleArea circle)
-                        circle.RemoveAllOwnedObjects();
-                    else if (grpArea is PvpSafeArea pvpGroupArea)
-                        pvpGroupArea.RemoveAllOwnedObjects();
-
-                    g.Leader?.CurrentRegion?.RemoveArea(grpArea);
-                    _groupAreas.Remove(g);
-                }
-            }
-
-            player.IsInPvP = false;
+            GameServer.Database.DeleteObject(record);
         }
 
         /// <summary>

@@ -237,9 +237,7 @@ namespace DOL.GS
         public virtual bool RemoveMember(GameLiving living)
         {
             var player = living as GamePlayer;
-            if (!CheckDisbandAllowed(player))
-                return true;
-
+            
             if (!m_groupMembers.TryRemove(living))
                 return false;
 
