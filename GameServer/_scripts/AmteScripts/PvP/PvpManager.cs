@@ -251,8 +251,8 @@ namespace AmteScripts.Managers
                 if (guild == null)
                 {
                     log!.Warn($"Cannot recover PvP scores for guild {guildName}, guild could not be found or created");
+                    return;
                 }
-                return;
             }
             while (lines.MoveNext() && !string.IsNullOrEmpty(lines.Current))
             {
