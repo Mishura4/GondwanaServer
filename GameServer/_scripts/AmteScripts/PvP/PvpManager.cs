@@ -18,11 +18,13 @@ using static DOL.GS.Area;
 using AmteScripts.PvP.CTF;
 using Discord;
 using Google.Protobuf.WellKnownTypes;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using static AmteScripts.Managers.PvpManager;
 using static System.Formats.Asn1.AsnWriter;
 using static DOL.GameEvents.GameEvent;
+using Newtonsoft.Json.Linq;
 
 namespace AmteScripts.Managers
 {
@@ -35,6 +37,7 @@ namespace AmteScripts.Managers
         private static readonly TimeSpan _endTime = _startTime.Add(TimeSpan.FromHours(8));
         private const int _checkInterval = 30_000; // 30 seconds
         private static RegionTimer _timer;
+        private RegionTimer _saveTimer;
 
         private bool _isOpen;
         private bool _isForcedOpen;
@@ -65,7 +68,7 @@ namespace AmteScripts.Managers
         // Key = the group object, Value = the ephemeral guild we created
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
         // Ephemeral guilds players should be in, for recovery after a disconnect or server restart
-        private Dictionary<string, Guild> _playerGroups = new Dictionary<string, Guild>();
+        private Dictionary<string, Tuple<Guild, byte>> _playerGroups = new Dictionary<string, Tuple<Guild, byte>>();
         private List<GameFlagBasePad> _allBasePads = new List<GameFlagBasePad>();
         private int _flagCounter = 0;
         private RegionTimer _territoryOwnershipTimer = null;
@@ -89,6 +92,12 @@ namespace AmteScripts.Managers
                 _timer = new RegionTimer(region.TimeManager);
                 _timer.Callback = _instance.TickCheck;
                 _timer.Start(10_000); // start after 10s
+                _instance._saveTimer = new RegionTimer(region.TimeManager);
+                _instance._saveTimer.Callback = _ =>
+                {
+                    _instance.SaveScore();
+                    return 0;
+                };
             }
             else
             {
@@ -97,6 +106,12 @@ namespace AmteScripts.Managers
 
             // Load the DB sessions
             PvpSessionMgr.ReloadSessions();
+
+            if (File.Exists("temp/PvPScore.dat"))
+            {
+                // Reopen saved session
+                _instance.Open(string.Empty, false);
+            }
         }
 
         [ScriptUnloadedEvent]
@@ -193,24 +208,29 @@ namespace AmteScripts.Managers
         #region Open/Close
 
         [return: NotNull]
-        private PlayerScore ParsePlayer(string playerId, IEnumerable<string> parameters)
+        private static PlayerScore ParsePlayer(IEnumerable<string> parameters)
         {
-            PlayerScore score = new PlayerScore() { PlayerID = playerId };
+            PlayerScore score = new PlayerScore();
             foreach (var playerScoreInfo in parameters)
             {
-                var playerScore = playerScoreInfo.Split(':');
+                var playerScore = playerScoreInfo.Split('=');
                 var playerScoreKey = playerScore[0];
 
                 PropertyInfo p = typeof(PlayerScore).GetProperty(playerScoreKey);
                 if (p == null)
                 {
-                    log.Warn($"PvP score \"{playerScoreKey}\" of player {playerId} is unknown");
+                    log.Warn($"PvP score \"{playerScoreKey}\" with value \"{playerScore[1]}\" of player {score.PlayerID} is unknown");
                     continue;
                 }
 
-                int playerScoreValue = 0;
-                int.TryParse(playerScore[1], out playerScoreValue);
-                p.SetValue(score, playerScoreValue);
+                try
+                {
+                    p.SetValue(score, Convert.ChangeType(playerScore[1], p.PropertyType));
+                }
+                catch (Exception ex)
+                {
+                    log.Warn($"Cannot set PvP score \"{playerScoreKey}\" to value \"{playerScore[1]}\": {ex}");
+                }
             }
             return score; 
         }
@@ -236,14 +256,17 @@ namespace AmteScripts.Managers
             }
             while (lines.MoveNext() && !string.IsNullOrEmpty(lines.Current))
             {
-                var values = lines.Current.Split('=');
-                var playerId = values[0];
-                if (!_playerGroups!.TryAdd(playerId, guild))
+                var data = lines.Current.Split(';');
+                byte rank = 0;
+                byte.TryParse(data[0], out rank);
+                var entry = new GroupScoreEntry(ParsePlayer(data.Skip(1)), DateTime.Now, rank);
+                var playerId = entry.PlayerScore.PlayerID;
+                if (rank != 0 && !_playerGroups!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank)))
                 {
-                    log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Name}");
+                    log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Item1.Name}");
                     break;
                 }
-                GetGroupScore(guild).Scores![playerId] = new GroupScoreEntry(ParsePlayer(playerId, values.Skip(1)), DateTime.Now);
+                GetGroupScore(guild).Scores![playerId] = entry;
             }
         }
 
@@ -274,29 +297,7 @@ namespace AmteScripts.Managers
             {
                 try
                 {
-                    using var lines = File.ReadLines("temp/PvPScore.dat").GetEnumerator();
-                    
-                    var header = lines.Current.Split(';');
-                    sessionID = header[0];
-                    bool.TryParse(header[1], out force);
-                    _isForcedOpen = force;
-
-                    bool finished = lines.MoveNext();
-                    while (!finished)
-                    {
-                        var parameters = lines.Current.Split(';');
-                        switch (parameters[0])
-                        {
-                            case "g":
-                                {
-                                    ParseGuildEntry(lines, parameters);
-                                }
-                                break;
-                            case "p":
-                                break;
-                        }
-                        finished = lines.MoveNext();
-                    }
+                    sessionID = ParseFile();
                 }
                 catch (FileNotFoundException)
                 {
@@ -415,6 +416,43 @@ namespace AmteScripts.Managers
 
             return true;
         }
+        
+        private string ParseFile()
+        {
+            using var lines = File.ReadLines("temp/PvPScore.dat").GetEnumerator();
+                    
+            bool finished = !lines.MoveNext();
+            if (finished)
+                return string.Empty;
+            
+            var header = lines.Current.Split(';');
+            var sessionID = header[0];
+            bool.TryParse(header[1], out bool force);
+            _isForcedOpen = force;
+
+            log.Info($"Restoring PvP session {sessionID}");
+            while (!finished)
+            {
+                var parameters = lines.Current.Split(';');
+                switch (parameters[0])
+                {
+                    case "g":
+                        {
+                            ParseGuildEntry(lines, parameters);
+                        }
+                        break;
+                    case "p":
+                        {
+                            var playerScore = ParsePlayer(parameters.Skip(1));
+                            if (!string.IsNullOrEmpty(playerScore.PlayerID))
+                                _playerScores[playerScore.PlayerID] = playerScore;
+                        }
+                        break;
+                }
+                finished = !lines.MoveNext();
+            }
+            return sessionID;
+        }
 
         public bool Close()
         {
@@ -501,13 +539,48 @@ namespace AmteScripts.Managers
             {
                 TerritoryManager.Instance.ReleaseSubTerritoriesInZones(CurrentZones);
             }
-
+            
             ResetScores();
+            try
+            {
+                File.Delete("temp/PvPScore.dat");
+            }
+            catch (FileNotFoundException)
+            {
+                // fine
+            }
             _activeSession = null;
             _soloQueue.Clear();
             _groupQueue.Clear();
 
             return true;
+        }
+        
+        private void SaveScore()
+        {
+            if (!Directory.Exists("temp"))
+                Directory.CreateDirectory("temp");
+
+            var options = new FileStreamOptions();
+            options.Mode = FileMode.Create;
+            using StreamWriter file = File.CreateText("temp/PvPScore.dat");
+            file.WriteLine($"{CurrentSession.SessionID};{_isForcedOpen}");
+            file.WriteLine();
+            foreach (var (guild, score) in _groupScores)
+            {
+                file.WriteLine($"g;{guild.Name}");
+                foreach (var groupEntry in score.Scores)
+                {
+                    file.WriteLine(
+                        (int)groupEntry.Value.Rank + ";" + groupEntry.Value.PlayerScore.Serialize() 
+                    );
+                }
+                file.WriteLine();
+            }
+            foreach (var (player, score) in _playerScores)
+            {
+                file.WriteLine("p;" + score.Serialize());
+            }
         }
 
         public AbstractArea FindSafeAreaForTarget(GamePlayer player)
@@ -594,8 +667,8 @@ namespace AmteScripts.Managers
                 entry = new GroupScoreEntry(new PlayerScore
                 {
                     PlayerID = player.InternalID,
-                    PlayerName = player.Name
-                }, DateTime.Now);
+                    PlayerName = player.Name,
+                }, DateTime.Now, player.GuildRank.RankLevel);
                 score = new GroupScore(
                     player.Guild,
                     new PlayerScore() { PlayerID = player.Guild.GuildID, PlayerName = player.Guild.Name},
@@ -612,7 +685,7 @@ namespace AmteScripts.Managers
                 {
                     PlayerID = player.InternalID,
                     PlayerName = player.Name
-                }, DateTime.Now);
+                }, DateTime.Now, player.GuildRank.RankLevel);
                 score.Scores[player.InternalID] = entry;
             }
             return (score, entry);
@@ -665,6 +738,11 @@ namespace AmteScripts.Managers
                     break;
                 default:
                     break;
+            }
+
+            if (!_saveTimer.IsAlive)
+            {
+                _saveTimer.Start(5_000);
             }
         }
 
@@ -1821,6 +1899,11 @@ namespace AmteScripts.Managers
         #endregion
 
         #region PlayerScores
+
+        public class Unsaved : System.Attribute
+        {
+        }
+        
         public class PlayerScore
         {
             // --- Universal (for all sessions) ---
@@ -1829,59 +1912,103 @@ namespace AmteScripts.Managers
             public string PlayerID { get; set; }
 
             // --- For session type #1: PvP Combat ---
+            [DefaultValue(0)]
             public int PvP_SoloKills { get; set; }
+            [DefaultValue(0)]
             public int PvP_SoloKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int PvP_GroupKills { get; set; }
+            [DefaultValue(0)]
             public int PvP_GroupKillsPoints { get; set; }
 
             // --- For session type #2: Flag Capture ---
+            [DefaultValue(0)]
             public int Flag_SoloKills { get; set; }
+            [DefaultValue(0)]
             public int Flag_SoloKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Flag_GroupKills { get; set; }
+            [DefaultValue(0)]
             public int Flag_GroupKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Flag_KillFlagCarrierCount { get; set; }
+            [DefaultValue(0)]
             public int Flag_KillFlagCarrierPoints { get; set; }
+            [DefaultValue(0)]
             public int Flag_FlagReturnsCount { get; set; }
+            [DefaultValue(0)]
             public int Flag_FlagReturnsPoints { get; set; }
+            [DefaultValue(0)]
             public int Flag_OwnershipPoints { get; set; }
 
             // --- For session type #3: Treasure Hunt ---
+            [DefaultValue(0)]
             public int Treasure_SoloKills { get; set; }
+            [DefaultValue(0)]
             public int Treasure_SoloKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Treasure_GroupKills { get; set; }
+            [DefaultValue(0)]
             public int Treasure_GroupKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Treasure_BroughtTreasuresPoints { get; set; }
+            [DefaultValue(0)]
             public int Treasure_StolenTreasuresPoints { get; set; }
 
             // --- For session type #4: Bring Friends ---
+            [DefaultValue(0)]
             public int Friends_SoloKills { get; set; }
+            [DefaultValue(0)]
             public int Friends_SoloKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Friends_GroupKills { get; set; }
+            [DefaultValue(0)]
             public int Friends_GroupKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Friends_BroughtFriendsPoints { get; set; }
+            [DefaultValue(0)]
             public int Friends_BroughtFamilyBonus { get; set; }
+            [DefaultValue(0)]
             public int Friends_FriendKilledCount { get; set; }
+            [DefaultValue(0)]
             public int Friends_FriendKilledPoints { get; set; }
+            [DefaultValue(0)]
             public int Friends_KillEnemyFriendCount { get; set; }
+            [DefaultValue(0)]
             public int Friends_KillEnemyFriendPoints { get; set; }
 
             // --- For session type #5: Capture Territories ---
+            [DefaultValue(0)]
             public int Terr_SoloKills { get; set; }
+            [DefaultValue(0)]
             public int Terr_SoloKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Terr_GroupKills { get; set; }
+            [DefaultValue(0)]
             public int Terr_GroupKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Terr_TerritoriesCapturedCount { get; set; }
+            [DefaultValue(0)]
             public int Terr_TerritoriesCapturedPoints { get; set; }
+            [DefaultValue(0)]
             public int Terr_TerritoriesOwnershipPoints { get; set; }
 
             // --- For session type #6: Boss Kill Cooperation ---
+            [DefaultValue(0)]
             public int Boss_SoloKills { get; set; }
+            [DefaultValue(0)]
             public int Boss_SoloKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Boss_GroupKills { get; set; }
+            [DefaultValue(0)]
             public int Boss_GroupKillsPoints { get; set; }
+            [DefaultValue(0)]
             public int Boss_BossHitsCount { get; set; }
+            [DefaultValue(0)]
             public int Boss_BossHitsPoints { get; set; }
+            [DefaultValue(0)]
             public int Boss_BossKillsCount { get; set; }
+            [DefaultValue(0)]
             public int Boss_BossKillsPoints { get; set; }
 
             /// <summary>
@@ -1933,9 +2060,25 @@ namespace AmteScripts.Managers
                         return 0;
                 }
             }
+
+            public string Serialize()
+            {
+                var playerScoreType = typeof(PlayerScore);
+                var properties = playerScoreType.GetProperties();
+                return string.Join(
+                    ';', properties
+                        .Where(p =>
+                        {
+                            var filter = (DefaultValueAttribute?)p.GetCustomAttribute(typeof(DefaultValueAttribute));
+                            var value = p.GetValue(this);
+                            return filter == null || (filter.Value == null ? value != null : !filter.Value.Equals(value));
+                        })
+                        .Select(p => p.Name + "=" + p.GetValue(this))
+                );
+            }
         }
 
-        public record GroupScoreEntry(PlayerScore PlayerScore, DateTime TimeJoined);
+        public record GroupScoreEntry(PlayerScore PlayerScore, DateTime TimeJoined, byte Rank) {}
 
         public record GroupScore(Guild Guild, PlayerScore Totals, Dictionary<string, GroupScoreEntry> Scores)
         {
