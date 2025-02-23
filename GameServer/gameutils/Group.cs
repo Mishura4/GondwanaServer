@@ -272,8 +272,8 @@ namespace DOL.GS
             if (MemberCount == 1)
             {
                 // RR4: Group is disbanded, ending mission group if any
-                RemoveMember(m_groupMembers.First());
                 GameLiving remaining = m_groupMembers.First();
+                RemoveMember(m_groupMembers.First());
 
                 if (remaining is GamePlayer remainingPlayer)
                 {
