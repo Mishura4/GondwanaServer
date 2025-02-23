@@ -63,7 +63,7 @@ namespace DOL.Database
         public int OldBindRegion { get; set; }
 
         [DataElement(AllowDbNull = false)]
-        public string SessionType { get; set; } = "None";
+        public string PvPSession { get; set; } = string.Empty;
 
         public RvrPlayer()
         {
@@ -88,7 +88,7 @@ namespace DOL.Database
             OldBindHeading = (int)player.BindPosition.Orientation.InHeading;
             OldBindRegion = player.BindPosition.RegionID;
 
-            SessionType = "None";
+            PvPSession = "None";
         }
 
         public void ResetCharacter(GamePlayer player)

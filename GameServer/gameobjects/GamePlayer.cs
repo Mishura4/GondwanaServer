@@ -909,11 +909,6 @@ namespace DOL.GS
 
         #region Player Linking Dead
         /// <summary>
-        /// Grace timer used in case a player who is in PvP don't lose everything (PvP coordinates, PvP guild, inventory treasures...)
-        /// </summary>
-        public RegionTimer m_PvPGraceTimer;
-
-        /// <summary>
         /// Callback method, called when the player went linkdead and now he is
         /// allowed to be disconnected
         /// </summary>
@@ -995,12 +990,7 @@ namespace DOL.GS
 
             if (this.IsInPvP)
             {
-                int gracePeriodMs = 20 * 60 * 1000;
-                m_PvPGraceTimer = new RegionTimer(this);
-                m_PvPGraceTimer.Callback = new RegionTimerCallback(LinkdeathPvPGraceCallback);
-                m_PvPGraceTimer.Start(1 + gracePeriodMs);
-                if (log.IsInfoEnabled)
-                    log.InfoFormat("Linkdead PvP player {0}({1}) will be removed in {2} minutes if not reconnected.", Name, Client.Account.Name, gracePeriodMs / 60000);
+                PvpManager.Instance.PlayerLinkDeath(this);
             }
             else
             {
@@ -1194,22 +1184,6 @@ namespace DOL.GS
             }
 
             #endregion TempPropertiesManager LookUp
-        }
-
-        /// <summary>
-        /// Called when a PvP linkdead player’s grace period expires.
-        /// The callback removes the player from the PvP session (using the same cleanup as for quitting)
-        /// and disconnects the client.
-        /// </summary>
-        protected int LinkdeathPvPGraceCallback(RegionTimer timer)
-        {
-            if (log.IsInfoEnabled)
-                log.InfoFormat("PvP grace period expired for linkdead player {0}({1}). Removing from PvP.", Name, Client.Account.Name);
-
-            PvpManager.Instance.RemovePlayer(this);
-
-            Client.Quit();
-            return 0;
         }
 
         /// <summary>

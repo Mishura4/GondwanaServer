@@ -69,6 +69,8 @@ namespace AmteScripts.Managers
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
         // Ephemeral guilds players should be in, for recovery after a disconnect or server restart
         private Dictionary<string, Tuple<Guild, byte>> _playerGroups = new Dictionary<string, Tuple<Guild, byte>>();
+        // Grace timer for PvP players who get linkdead so they don't lose their progress
+        private Dictionary<string, RegionTimer> _graceTimers = new();
         private List<Guild> _allGuilds = new();
         private List<GameFlagBasePad> _allBasePads = new List<GameFlagBasePad>();
         private int _flagCounter = 0;
@@ -77,6 +79,36 @@ namespace AmteScripts.Managers
         #region Singleton
         private static PvpManager _instance;
         public static PvpManager Instance => _instance;
+
+        /// <summary>
+        /// Called when a PvP linkdead player’s grace period expires.
+        /// The callback removes the player from the PvP session (using the same cleanup as for quitting)
+        /// and disconnects the client.
+        /// </summary>
+        protected int LinkdeathPvPGraceCallback(GamePlayer player, RegionTimer timer)
+        {
+            if (log.IsInfoEnabled)
+                log.InfoFormat("PvP grace period expired for linkdead player {0}({1}). Removing from PvP.", player.Name, player.Client.Account.Name);
+
+            PvpManager.Instance.RemovePlayer(player);
+            return 0;
+        }
+
+        public void PlayerLinkDeath(GamePlayer player)
+        {
+            int gracePeriodMs = 20 * 60 * 1000;
+            var timerRegion = WorldMgr.GetRegion(1);
+            var timer = new RegionTimer(timerRegion.TimeManager);
+
+            lock (_graceTimers)
+            {
+                _graceTimers[player.InternalID] = timer;
+            }
+            timer.Callback = (t) => LinkdeathPvPGraceCallback(player, t);
+            timer.Start(1 + gracePeriodMs);
+            if (log.IsInfoEnabled)
+                log.InfoFormat("Linkdead PvP player {0}({1}) will be removed in {2} minutes if not reconnected.", player.Name, player.Client.Account.Name, gracePeriodMs / 60000);
+        }
 
         [ScriptLoadedEvent]
         public static void OnServerStart(DOLEvent e, object sender, EventArgs args)
@@ -113,6 +145,8 @@ namespace AmteScripts.Managers
                 // Reopen saved session
                 _instance.Open(string.Empty, false);
             }
+            
+            GameEventMgr.AddHandler(GamePlayerEvent.GameEntered, new DOLEventHandler(OnPlayerLogin));
         }
 
         [ScriptUnloadedEvent]
@@ -129,46 +163,69 @@ namespace AmteScripts.Managers
             var player = sender as GamePlayer;
             if (player == null) return;
 
-            if (player.IsInPvP && player.m_PvPGraceTimer != null)
-            {
-                player.m_PvPGraceTimer.Stop();
-                player.m_PvPGraceTimer = null;
-                player.Out.SendMessage("Welcome back! Your PvP state has been preserved.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            // check if we have an RvrPlayer row with a pvp session
+            RvrPlayer rec = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
+            if (rec == null || string.IsNullOrEmpty(rec.PvPSession)) return;
 
-                // Remove any FlagInventoryItem items from the player's backpack
-                int totalFlagRemoved = 0;
-                for (eInventorySlot slot = eInventorySlot.FirstBackpack;
-                     slot <= eInventorySlot.LastBackpack;
-                     slot++)
+            // Remove any FlagInventoryItem items from the player's backpack
+            int totalFlagRemoved = 0;
+            for (eInventorySlot slot = eInventorySlot.FirstBackpack;
+                 slot <= eInventorySlot.LastBackpack;
+                 slot++)
+            {
+                InventoryItem item = player.Inventory.GetItem(slot);
+                if (item is FlagInventoryItem flag)
                 {
-                    InventoryItem item = player.Inventory.GetItem(slot);
-                    if (item is FlagInventoryItem flag)
+                    int flagCount = flag.Count;
+                    if (player.Inventory.RemoveItem(item))
                     {
-                        int flagCount = flag.Count;
-                        if (player.Inventory.RemoveItem(item))
-                        {
-                            totalFlagRemoved += flagCount;
-                        }
+                        totalFlagRemoved += flagCount;
                     }
                 }
             }
-
-            // check if we have an RvrPlayer row flagged "PvP"
-            RvrPlayer rec = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
-            if (rec == null) return;
-
-            if (rec.SessionType == "PvP")
+                
+            if (!Instance.IsOpen || Instance._activeSession?.SessionID != rec.PvPSession)
             {
-                if (!Instance.IsOpen || Instance._activeSession == null)
-                {
+                Instance.RemovePlayer(player);
+            }
+            else
+            {
+                if (!Instance.TryRestorePlayer(player))
                     Instance.RemovePlayer(player);
-                }
-                else
+            }
+        }
+        
+        private bool TryRestorePlayer(GamePlayer player)
+        {
+            RegionTimer graceTimer;
+            lock (_graceTimers)
+            {
+                if (_graceTimers.Remove(player.InternalID, out graceTimer))
                 {
-                    log.Info($"{player.Name} was flagged SessionType=PvP, forcibly removing from PvP on login if ephemeral guild doesn't exist, etc.");
-                    Instance.RemovePlayer(player);
+                    graceTimer.Stop();
                 }
             }
+
+            Guild myGuild = null;
+            if (AllowsGroups && _playerGroups.TryGetValue(player.InternalID, out var myData))
+            {
+                myGuild = myData.Item1;
+
+                if (player.Guild != myGuild) // Player was kicked
+                {
+                    myGuild = null;
+                    _playerGroups.Remove(player.InternalID);
+                }
+            }
+            if (!AllowsSolo && myGuild == null)
+            {
+                player.Out.SendMessage("You have been kicked from the PvP group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            player.IsInPvP = true;
+            player.Out.SendMessage("Welcome back! Your PvP state has been preserved.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
         #endregion
@@ -204,6 +261,8 @@ namespace AmteScripts.Managers
         public PvpSession CurrentSession => _activeSession;
         public IReadOnlyList<Zone> CurrentZones => _zones.AsReadOnly();
         public string CurrentSessionId => string.IsNullOrEmpty(CurrentSession?.SessionID) ? "(none)" : CurrentSession.SessionID;
+        public bool AllowsGroups => CurrentSession?.GroupCompoOption is 2 or 3;
+        public bool AllowsSolo => CurrentSession?.GroupCompoOption is 1 or 3;
         #endregion
 
         #region Open/Close
@@ -260,12 +319,10 @@ namespace AmteScripts.Managers
             {
                 var data = lines.Current.Split(';');
                 byte? rank = null;
-                if (data.Length > 2)
-                {
-                    byte value;
-                    if (byte.TryParse(data[2], out value))
-                        rank = value;
-                }
+                byte value;
+                if (byte.TryParse(data[0], out value))
+                    rank = value;
+                
                 var entry = new GroupScoreEntry(ParsePlayer(data.Skip(1)), DateTime.Now, rank);
                 var playerId = entry.PlayerScore.PlayerID;
                 if (rank != null && !_playerGroups!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank.Value)))
@@ -586,7 +643,7 @@ namespace AmteScripts.Managers
                 foreach (var groupEntry in score.Scores)
                 {
                     file.WriteLine(
-                        groupEntry.Value.PlayerScore.Serialize() + (groupEntry.Value.Rank != null ? ";" + (int)groupEntry.Value.Rank : string.Empty)
+                        groupEntry.Value.Rank + ";" + groupEntry.Value.PlayerScore.Serialize()
                     );
                 }
                 file.WriteLine();
@@ -1093,8 +1150,13 @@ namespace AmteScripts.Managers
             if (!player.IsInPvP)
                 return;
 
+            lock (_graceTimers)
+            {
+                _graceTimers.Remove(player.InternalID);
+            }
+
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
-            if (record != null && record.SessionType == "PvP")
+            if (!string.IsNullOrEmpty(record?.PvPSession))
             {
                 RemovePlayerDB(player, record);
             }
@@ -1213,7 +1275,7 @@ namespace AmteScripts.Managers
             }
 
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
-            if (record != null && record.SessionType == "PvP")
+            if (!string.IsNullOrEmpty(record?.PvPSession))
             {
                 GameServer.Database.DeleteObject(record);
             }
@@ -1286,7 +1348,9 @@ namespace AmteScripts.Managers
                 record.OldBindRegion = player.BindPosition.RegionID;
             }
 
-            record.SessionType = "PvP";
+            record.PvPSession = String.IsNullOrEmpty(_activeSession?.SessionID) ? "PvP" : _activeSession.SessionID;
+
+            record.Dirty = true;
 
             if (isNew)
                 GameServer.Database.AddObject(record);

@@ -392,25 +392,26 @@ namespace AmteScripts.Managers
                 }
                 RemovePlayer(player, rvr);
             }
-            else
+            
+            if (!string.IsNullOrEmpty(rvr.PvPSession))
+                return;
+            
+            if (!string.IsNullOrEmpty(rvr.GuildID))
             {
-                if (!string.IsNullOrEmpty(rvr.GuildID))
-                {
-                    Guild guild = GuildMgr.GetGuildByGuildID(rvr.GuildID);
+                Guild guild = GuildMgr.GetGuildByGuildID(rvr.GuildID);
 
-                    if (guild != null)
-                    {
-                        player.RealGuild = guild;
-                    }
-                    else if (GameServer.Instance.Logger.IsDebugEnabled)
-                    {
-                        GameServer.Instance.Logger.DebugFormat("Could not find guild {0} for RvR player {1} ({2}) logging in", rvr.GuildID, player.Name, player.InternalID);
-                    }
-                }
-                if (!_isOpen && player.Client.Account.PrivLevel <= 1)
+                if (guild != null)
                 {
-                    RemovePlayer(player, rvr);
+                    player.RealGuild = guild;
                 }
+                else if (GameServer.Instance.Logger.IsDebugEnabled)
+                {
+                    GameServer.Instance.Logger.DebugFormat("Could not find guild {0} for RvR player {1} ({2}) logging in", rvr.GuildID, player.Name, player.InternalID);
+                }
+            }
+            if (!_isOpen && player.Client.Account.PrivLevel <= 1)
+            {
+                RemovePlayer(player, rvr);
             }
         }
 
@@ -717,7 +718,7 @@ namespace AmteScripts.Managers
                 return false;
             }
             RvrPlayer rvr = new RvrPlayer(player);
-            rvr.SessionType = "RvR";
+            rvr.PvPSession = "RvR";
             GameServer.Database.AddObject(rvr);
 
             if (player.Guild != null)
@@ -877,7 +878,7 @@ namespace AmteScripts.Managers
                     }
                 }
                 player.SaveIntoDatabase();
-                rvrPlayer.SessionType = "None";
+                rvrPlayer.PvPSession = "None";
                 GameServer.Database.DeleteObject(rvrPlayer);
             }
         }
