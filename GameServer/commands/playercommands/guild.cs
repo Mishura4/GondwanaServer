@@ -57,8 +57,7 @@ namespace DOL.GS.Commands
         /// <returns></returns>
         public static bool IsValidGuildName(string guildName)
         {
-            if (!Regex.IsMatch(guildName, @"^[a-zA-Z àâäèéêëîïôœùûüÿçÀÂÄÈÉÊËÎÏÔŒÙÛÜŸÇ]+$") || guildName.Length < 0)
-
+            if (!Regex.IsMatch(guildName, @"^[a-zA-Z àâäèéêëîïôœùûüÿçÀÂÄÈÉÊËÎÏÔŒÙÛÜŸÇ]+$") || guildName.Length <= 0)
             {
                 return false;
             }
