@@ -330,7 +330,9 @@ namespace AmteScripts.Managers
                     log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Item1.Name}");
                     break;
                 }
-                GetGroupScore(guild).Scores![playerId] = entry;
+                var groupScore = GetGroupScore(guild);
+                groupScore.Scores![playerId] = entry;
+                groupScore.Totals.Add(entry.PlayerScore);
             }
         }
 
@@ -2078,6 +2080,55 @@ namespace AmteScripts.Managers
             public int Boss_BossKillsCount { get; set; }
             [DefaultValue(0)]
             public int Boss_BossKillsPoints { get; set; }
+
+            public PlayerScore Add(PlayerScore rhs)
+            {
+                PvP_SoloKills += rhs.PvP_SoloKills;
+                PvP_SoloKillsPoints += rhs.PvP_SoloKillsPoints;
+                PvP_GroupKills += rhs.PvP_GroupKills;
+                PvP_GroupKillsPoints += rhs.PvP_GroupKillsPoints;
+                Flag_SoloKills += rhs.Flag_SoloKills;
+                Flag_SoloKillsPoints += rhs.Flag_SoloKillsPoints;
+                Flag_GroupKills += rhs.Flag_GroupKills;
+                Flag_GroupKillsPoints += rhs.Flag_GroupKillsPoints;
+                Flag_KillFlagCarrierCount += rhs.Flag_KillFlagCarrierCount;
+                Flag_KillFlagCarrierPoints += rhs.Flag_KillFlagCarrierPoints;
+                Flag_FlagReturnsCount += rhs.Flag_FlagReturnsCount;
+                Flag_FlagReturnsPoints += rhs.Flag_FlagReturnsPoints;
+                Flag_OwnershipPoints += rhs.Flag_OwnershipPoints;
+                Treasure_SoloKills += rhs.Treasure_SoloKills;
+                Treasure_SoloKillsPoints += rhs.Treasure_SoloKillsPoints;
+                Treasure_GroupKills += rhs.Treasure_GroupKills;
+                Treasure_GroupKillsPoints += rhs.Treasure_GroupKillsPoints;
+                Treasure_BroughtTreasuresPoints += rhs.Treasure_BroughtTreasuresPoints;
+                Treasure_StolenTreasuresPoints += rhs.Treasure_StolenTreasuresPoints;
+                Friends_SoloKills += rhs.Friends_SoloKills;
+                Friends_SoloKillsPoints += rhs.Friends_SoloKillsPoints;
+                Friends_GroupKills += rhs.Friends_GroupKills;
+                Friends_GroupKillsPoints += rhs.Friends_GroupKillsPoints;
+                Friends_BroughtFriendsPoints += rhs.Friends_BroughtFriendsPoints;
+                Friends_BroughtFamilyBonus += rhs.Friends_BroughtFamilyBonus;
+                Friends_FriendKilledCount += rhs.Friends_FriendKilledCount;
+                Friends_FriendKilledPoints += rhs.Friends_FriendKilledPoints;
+                Friends_KillEnemyFriendCount += rhs.Friends_KillEnemyFriendCount;
+                Friends_KillEnemyFriendPoints += rhs.Friends_KillEnemyFriendPoints;
+                Terr_SoloKills += rhs.Terr_SoloKills;
+                Terr_SoloKillsPoints += rhs.Terr_SoloKillsPoints;
+                Terr_GroupKills += rhs.Terr_GroupKills;
+                Terr_GroupKillsPoints += rhs.Terr_GroupKillsPoints;
+                Terr_TerritoriesCapturedCount += rhs.Terr_TerritoriesCapturedCount;
+                Terr_TerritoriesCapturedPoints += rhs.Terr_TerritoriesCapturedPoints;
+                Terr_TerritoriesOwnershipPoints += rhs.Terr_TerritoriesOwnershipPoints;
+                Boss_SoloKills += rhs.Boss_SoloKills;
+                Boss_SoloKillsPoints += rhs.Boss_SoloKillsPoints;
+                Boss_GroupKills += rhs.Boss_GroupKills;
+                Boss_GroupKillsPoints += rhs.Boss_GroupKillsPoints;
+                Boss_BossHitsCount += rhs.Boss_BossHitsCount;
+                Boss_BossHitsPoints += rhs.Boss_BossHitsPoints;
+                Boss_BossKillsCount += rhs.Boss_BossKillsCount;
+                Boss_BossKillsPoints += rhs.Boss_BossKillsPoints;
+                return this;
+            }
 
             /// <summary>
             /// Helper: returns total points for the current session type,
