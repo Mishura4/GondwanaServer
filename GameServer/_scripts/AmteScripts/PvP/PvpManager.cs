@@ -2103,8 +2103,7 @@ namespace AmteScripts.Managers
                         {
                             PlayerID = p.InternalID,
                             PlayerName = p.Name
-                        })
-                        .Prepend(groupScore.Totals);
+                        });
                 }
             }
             return list;
