@@ -42,6 +42,7 @@ namespace DOL.GS
     /// </summary>
     public class Guild
     {
+        public const int MAX_CREATE_NAME_LENGTH = 30;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public enum eRank : int

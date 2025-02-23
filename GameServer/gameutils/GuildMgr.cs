@@ -342,18 +342,23 @@ namespace DOL.GS
             return rank;
         }
 
+        public static bool DeleteGuild(string guildName)
+        {
+            Guild removeGuild = GetGuildByName(guildName);
+            // Does guild exist, if not return false.
+            if (removeGuild == null)
+                return false;
+
+            return DeleteGuild(removeGuild);
+        }
+
         /// <summary>
         /// Deletes a guild
         /// </summary>
-        public static bool DeleteGuild(string guildName)
+        public static bool DeleteGuild(Guild removeGuild)
         {
             try
             {
-                Guild removeGuild = GetGuildByName(guildName);
-                // Does guild exist, if not return false.
-                if (removeGuild == null)
-                    return false;
-
                 var listCopy = new List<Territory>(removeGuild.Territories);
                 foreach (var territory in listCopy)
                 {

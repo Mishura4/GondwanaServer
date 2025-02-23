@@ -69,6 +69,7 @@ namespace AmteScripts.Managers
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
         // Ephemeral guilds players should be in, for recovery after a disconnect or server restart
         private Dictionary<string, Tuple<Guild, byte>> _playerGroups = new Dictionary<string, Tuple<Guild, byte>>();
+        private List<Guild> _allGuilds = new();
         private List<GameFlagBasePad> _allBasePads = new List<GameFlagBasePad>();
         private int _flagCounter = 0;
         private RegionTimer _territoryOwnershipTimer = null;
@@ -254,14 +255,20 @@ namespace AmteScripts.Managers
                     return;
                 }
             }
+            _allGuilds.Add(guild);
             while (lines.MoveNext() && !string.IsNullOrEmpty(lines.Current))
             {
                 var data = lines.Current.Split(';');
-                byte rank = 0;
-                byte.TryParse(data[0], out rank);
+                byte? rank = null;
+                if (data.Length > 2)
+                {
+                    byte value;
+                    if (byte.TryParse(data[2], out value))
+                        rank = value;
+                }
                 var entry = new GroupScoreEntry(ParsePlayer(data.Skip(1)), DateTime.Now, rank);
                 var playerId = entry.PlayerScore.PlayerID;
-                if (rank != 0 && !_playerGroups!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank)))
+                if (rank != null && !_playerGroups!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank.Value)))
                 {
                     log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Item1.Name}");
                     break;
@@ -306,6 +313,7 @@ namespace AmteScripts.Managers
                 catch (Exception ex)
                 {
                     log.Warn("Could not open file temp/PvPScore.dat: ", ex);
+                    File.Copy("temp/PvPScore.dat", $"temp/PvPScore-error-{DateTime.Now}.dat");
                 }
             }
 
@@ -553,6 +561,12 @@ namespace AmteScripts.Managers
             _soloQueue.Clear();
             _groupQueue.Clear();
 
+            foreach (var value in _allGuilds)
+            {
+                GuildMgr.DeleteGuild(value);
+            }
+            _groupGuilds.Clear();
+            _playerGroups.Clear();
             return true;
         }
         
@@ -572,7 +586,7 @@ namespace AmteScripts.Managers
                 foreach (var groupEntry in score.Scores)
                 {
                     file.WriteLine(
-                        (int)groupEntry.Value.Rank + ";" + groupEntry.Value.PlayerScore.Serialize() 
+                        groupEntry.Value.PlayerScore.Serialize() + (groupEntry.Value.Rank != null ? ";" + (int)groupEntry.Value.Rank : string.Empty)
                     );
                 }
                 file.WriteLine();
@@ -1030,16 +1044,23 @@ namespace AmteScripts.Managers
             // CREATE or GET the ephemeral guild for this group
             if (!_groupGuilds.TryGetValue(group, out Guild pvpGuild))
             {
-                string guildName = groupLeader.Name + "'s guild";
+                string guildName = "[PVP] " + groupLeader.Name + "'s guild";
+                
                 pvpGuild = GuildMgr.CreateGuild(eRealm.None, guildName, groupLeader, true);
-
                 if (pvpGuild == null)
                 {
-                    groupLeader.Out.SendMessage(LanguageMgr.GetTranslation(groupLeader.Client.Account.Language, "PvPManager.CannotCreatePvPGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    return false;
+                    pvpGuild = GuildMgr.GetGuildByName(guildName);
+                    if (pvpGuild == null)
+                    {
+                        log.Error($"Failed to create or find PvP guild \"{guildName}\"");
+                        groupLeader.Out.SendMessage(LanguageMgr.GetTranslation(groupLeader.Client.Account.Language, "PvPManager.CannotCreatePvPGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return false;
+                    }
+                    log.Warn($"PvP: Guild {guildName} already exists, hijacking it");
                 }
 
                 pvpGuild.GuildType = Guild.eGuildType.PvPGuild;
+                _allGuilds.Add(pvpGuild);
                 _groupGuilds[group] = pvpGuild;
 
                 int[] emblemChoices = new int[] { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
@@ -1148,16 +1169,6 @@ namespace AmteScripts.Managers
 
             GameServer.Database.DeleteObject(record);
 
-            // Remove any ephemeral PvP guild if no member in that group remains in PvP.
-            if (g != null && _groupGuilds.TryGetValue(g, out Guild TempPvpGuild))
-            {
-                if (!g.GetPlayersInTheGroup().Any(m => m.IsInPvP))
-                {
-                    GuildMgr.DeleteGuild(TempPvpGuild.Name);
-                    _groupGuilds.Remove(g);
-                }
-            }
-
             DequeueSolo(player);
             if (_soloAreas.TryGetValue(player, out var area))
             {
@@ -1213,13 +1224,6 @@ namespace AmteScripts.Managers
                 if (player.Guild == pvpGuild)
                 {
                     pvpGuild.RemovePlayer("PVP", player);
-                }
-
-                bool stillHasMemberInPvP = g.GetPlayersInTheGroup().Any(m => m.IsInPvP);
-                if (!stillHasMemberInPvP)
-                {
-                    GuildMgr.DeleteGuild(pvpGuild.Name);
-                    _groupGuilds.Remove(g);
                 }
             }
 
@@ -2078,7 +2082,7 @@ namespace AmteScripts.Managers
             }
         }
 
-        public record GroupScoreEntry(PlayerScore PlayerScore, DateTime TimeJoined, byte Rank) {}
+        public record GroupScoreEntry(PlayerScore PlayerScore, DateTime TimeJoined, byte? Rank) {}
 
         public record GroupScore(Guild Guild, PlayerScore Totals, Dictionary<string, GroupScoreEntry> Scores)
         {

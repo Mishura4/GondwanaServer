@@ -2380,7 +2380,7 @@ namespace DOL.GS.Commands
                             #region Guild Length Naming Checks
                             //Check length of guild name.
                             string guildname = String.Join(" ", args, 2, args.Length - 2);
-                            if (guildname.Length > 30)
+                            if (guildname.Length > Guild.MAX_CREATE_NAME_LENGTH)
                             {
                                 client.Out.SendMessage(
                                     LanguageMgr.GetTranslation(
