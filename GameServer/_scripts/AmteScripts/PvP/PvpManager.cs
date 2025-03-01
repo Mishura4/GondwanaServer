@@ -167,7 +167,8 @@ namespace AmteScripts.Managers
             // check if we have an RvrPlayer row with a pvp session
             RvrPlayer rec = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (rec == null || string.IsNullOrEmpty(rec.PvPSession)) return;
-
+            
+            player.IsInPvP = true;
             // Remove any FlagInventoryItem items from the player's backpack
             int totalFlagRemoved = 0;
             for (eInventorySlot slot = eInventorySlot.FirstBackpack;
