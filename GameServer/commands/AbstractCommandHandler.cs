@@ -18,6 +18,7 @@
  */
 using System.Reflection;
 using log4net;
+using System.Linq;
 
 namespace DOL.GS.Commands
 {
@@ -96,17 +97,18 @@ namespace DOL.GS.Commands
             if (client == null || !client.IsPlaying)
                 return;
 
-            var attrib = (CmdAttribute[])GetType().GetCustomAttributes(typeof(CmdAttribute), false);
-            if (attrib.Length == 0)
+            var attributes = (CmdAttribute[])GetType().GetCustomAttributes(typeof(CmdAttribute), false);
+            if (attributes.Length == 0)
                 return;
 
-            ChatUtil.SendSystemMessage(client, attrib[0].Description, null);
-
-            foreach (string sentence in attrib[0].Usage)
+            var sorted = attributes.Where(a => a.Level <= client.Account.PrivLevel).OrderByDescending(a => a.Level);
+            var desc = sorted.Select(a => a.Description).FirstOrDefault(desc => !string.IsNullOrEmpty(desc));
+            if (!string.IsNullOrEmpty(desc))
+                ChatUtil.SendSystemMessage(client, desc, null);
+            foreach (var usage in sorted.Reverse().SelectMany(a => a.Usage))
             {
-                ChatUtil.SendSystemMessage(client, sentence, null);
+                ChatUtil.SendSystemMessage(client, usage, null);
             }
-
             return;
         }
 

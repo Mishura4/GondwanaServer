@@ -15,13 +15,17 @@ namespace DOL.GS.Commands
         "&pvp",
         ePrivLevel.Player, // or ePrivLevel.Player if you want everyone to see subcommands like "info"
         "Commands.GM.PvP.Description",
+        "Commands.GM.PvP.Usage.Info",
+        "Commands.GM.PvP.Usage.Scores")]
+    [Cmd(
+        "&pvp",
+        ePrivLevel.GM,
+        "Commands.GM.PvP.Description",
         "Commands.GM.PvP.Usage.Open",
         "Commands.GM.PvP.Usage.Close",
         "Commands.GM.PvP.Usage.Unforce",
         "Commands.GM.PvP.Usage.Status",
-        "Commands.GM.PvP.Usage.Scores",
         "Commands.GM.PvP.Usage.Refresh",
-        "Commands.GM.PvP.Usage.Info",
         "Commands.GM.PvP.Usage.Reset")]
     public class PvpCommandHandler : AbstractCommandHandler, ICommandHandler
     {
@@ -29,7 +33,7 @@ namespace DOL.GS.Commands
         {
             if (args.Length <= 1)
             {
-                DisplayCmd(client);
+                DisplaySyntax(client);
                 return;
             }
 
@@ -37,7 +41,7 @@ namespace DOL.GS.Commands
 
             if (client.Account.PrivLevel == 1 && subcmd != "info")
             {
-                DisplayCmd(client);
+                DisplaySyntax(client);
                 return;
             }
 
@@ -182,40 +186,8 @@ namespace DOL.GS.Commands
                     break;
 
                 default:
-                    DisplayCmd(client);
+                    DisplaySyntax(client);
                     break;
-            }
-        }
-
-        private void DisplayCmd(GameClient client)
-        {
-            if (client.Account.PrivLevel > 1)
-            {
-                // For GMs and admins, show the full list.
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Description"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Info"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Open"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Close"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Unforce"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Status"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Refresh"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Reset"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            }
-            else
-            {
-                // Regular players only see the description and info usage.
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Description"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.PvP.Usage.Info"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }
     }
