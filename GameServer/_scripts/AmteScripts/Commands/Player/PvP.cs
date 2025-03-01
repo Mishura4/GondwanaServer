@@ -39,16 +39,10 @@ namespace DOL.GS.Commands
 
             string subcmd = args[1].ToLower();
 
-            if (client.Account.PrivLevel == 1 && subcmd != "info")
-            {
-                DisplaySyntax(client);
-                return;
-            }
-
             string sessionID = string.Empty;
             switch (subcmd)
             {
-                case "open":
+                case "open" when client.Account.PrivLevel >= 2:
                     {
                         if (args.Length >= 3)
                         {
@@ -89,7 +83,7 @@ namespace DOL.GS.Commands
                         break;
                     }
 
-                case "close":
+                case "close" when client.Account.PrivLevel >= 2:
                     {
                         bool success = PvpManager.Instance.Close();
                         if (success)
@@ -105,7 +99,7 @@ namespace DOL.GS.Commands
                         break;
                     }
 
-                case "unforce":
+                case "unforce" when client.Account.PrivLevel >= 2:
                     {
                         if (!PvpManager.Instance.IsOpen)
                         {
@@ -122,7 +116,7 @@ namespace DOL.GS.Commands
                         break;
                     }
 
-                case "status":
+                case "status" when client.Account.PrivLevel >= 2:
                     {
                         // Show the PvP status
                         // Example text
@@ -136,7 +130,7 @@ namespace DOL.GS.Commands
                         break;
                     }
 
-                case "refresh":
+                case "refresh" when client.Account.PrivLevel >= 2:
                     {
                         if (PvpManager.Instance.IsOpen)
                         {
@@ -157,6 +151,22 @@ namespace DOL.GS.Commands
                         break;
                     }
 
+                case "reset" when client.Account.PrivLevel >= 2:
+                    var previous = PvpManager.Instance.CurrentSession?.SessionID;
+                    if (string.IsNullOrEmpty(previous))
+                    {
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPCannotReset", previous));
+                        return;
+                    }
+                    PvpManager.Instance.Close();
+                    PvpManager.Instance.Open(previous, false);
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPReset"));
+                    break;
+
+                default:
+                    DisplaySyntax(client);
+                    break;
+
                 case "info":
                     {
                         // Show PvP scoreboard or session infos
@@ -172,22 +182,6 @@ namespace DOL.GS.Commands
                         client.Out.SendCustomTextWindow("PvP Info", stats);
                         break;
                     }
-
-                case "reset":
-                    var previous = PvpManager.Instance.CurrentSession?.SessionID;
-                    if (string.IsNullOrEmpty(previous))
-                    {
-                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPCannotReset", previous));
-                        return;
-                    }
-                    PvpManager.Instance.Close();
-                    PvpManager.Instance.Open(previous, false);
-                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPReset"));
-                    break;
-
-                default:
-                    DisplaySyntax(client);
-                    break;
             }
         }
     }
