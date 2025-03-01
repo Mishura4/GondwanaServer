@@ -1074,6 +1074,11 @@ namespace AmteScripts.Managers
             player.Bind(true);
             player.SaveIntoDatabase();
 
+            if (!_saveTimer.IsAlive)
+            {
+                _saveTimer.Start(5_000);
+            }
+
             return true;
         }
 
@@ -1144,6 +1149,11 @@ namespace AmteScripts.Managers
             }
 
             TeleportEntireGroup(groupLeader);
+
+            if (!_saveTimer.IsAlive)
+            {
+                _saveTimer.Start(5_000);
+            }
             return true;
         }
 
@@ -1228,6 +1238,11 @@ namespace AmteScripts.Managers
                     g.Leader?.CurrentRegion?.RemoveArea(grpArea);
                     _groupAreas.Remove(g);
                 }
+            }
+
+            if (!_saveTimer.IsAlive)
+            {
+                _saveTimer.Start(5_000);
             }
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.LeftPvP"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -2433,7 +2448,7 @@ namespace AmteScripts.Managers
             }
 
             // Show scoreboard
-            if (!IsOpen)
+            if (!IsOpen || (all && _playerScores.Count == 0 && _groupScores.Count == 0))
             {
                 lines.Add("No scoreboard data yet!");
             }
@@ -2468,8 +2483,11 @@ namespace AmteScripts.Managers
                     {
                         AddLines(lines, ps, language, shortStats);
                     }
+
+                    lines.Add("");
+                    lines.Add("");
                 }
-                else
+                else if (viewer.IsInPvP)
                 {
                     var myScores = GetPlayerScore(viewer);
                     var ourScores = Enumerable.Empty<PlayerScore>();
@@ -2490,10 +2508,14 @@ namespace AmteScripts.Managers
                     lines.Add("");
                     lines.Add(viewer.Name + ':');
                     AddLines(lines, MakeScoreboardEntry(myScores), language, shortStats);
-                }
 
-                lines.Add("");
-                lines.Add("");
+                    lines.Add("");
+                    lines.Add("");
+                }
+            }
+
+            if (IsOpen)
+            {
                 lines.Add("");
                 lines.Add($"Waiting queue: {_soloQueue.Count} players");
                 lines.Add($"Session Max Group size: {CurrentSession?.GroupMaxSize} players");
