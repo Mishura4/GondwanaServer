@@ -2187,10 +2187,10 @@ namespace AmteScripts.Managers
                     var translated = LanguageMgr.GetTranslation(language, Label);
                     return Points.Type switch
                     {
-                        ScoreType.Bonus => $"    {translated}: {Points.Count} - {LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
-                        ScoreType.Malus => $"    {translated}: {Points.Count} - -{LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
-                        ScoreType.BonusPoints => $"    {translated}: {LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
-                        ScoreType.MalusPoints => $"    {translated}: -{LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                        ScoreType.Bonus => $"  {translated}: {Points.Count} - {LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                        ScoreType.Malus => $"  {translated}: {Points.Count} - -{LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                        ScoreType.BonusPoints => $"  {translated}: {LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
+                        ScoreType.MalusPoints => $"  {translated}: -{LanguageMgr.GetTranslation(language, "PvPManager.Score.Points", Points.Points)}",
                     };
                 }
             }
@@ -2278,7 +2278,7 @@ namespace AmteScripts.Managers
             IEnumerable<PlayerScore> list = Enumerable.Empty<PlayerScore>();
             if (_activeSession != null && viewer.Guild != null)
             {
-                if (_groupScores.TryGetValue(viewer.Guild, out GroupScore groupScore))
+                /*if (_groupScores.TryGetValue(viewer.Guild, out GroupScore groupScore))
                 {
                     list = viewer.Guild.GetListOfOnlineMembers()
                         .Select(p => groupScore.Scores.GetValueOrDefault(p.InternalID)?.PlayerScore ?? new PlayerScore()
@@ -2297,6 +2297,21 @@ namespace AmteScripts.Managers
                             PlayerID = p.InternalID,
                             PlayerName = p.Name
                         });
+                }*/
+                if (_groupScores.TryGetValue(viewer.Guild, out GroupScore groupScore))
+                {
+                    list = new [] { groupScore.Totals };
+                }
+                else
+                {
+                    list = new[]
+                    {
+                        new PlayerScore
+                        {
+                            PlayerID = viewer.Guild.GuildID,
+                            PlayerName = viewer.Guild.Name
+                        }
+                    };
                 }
             }
             return list;
@@ -2310,7 +2325,6 @@ namespace AmteScripts.Managers
             }
             else
             {
-                lines.Add($"  {entry.Player}:");
                 lines.AddRange(
                     entry.Lines.Select(
                         l => l.ToString(language, shortStats)
@@ -2318,7 +2332,7 @@ namespace AmteScripts.Managers
                 );
             }
         }
-        
+
         public IList<string> GetStatistics(GamePlayer viewer, bool all = false)
         {
             var lines = new List<string>();
@@ -2443,7 +2457,7 @@ namespace AmteScripts.Managers
                     {
                         scores = scores.Concat(_groupScores.Values.Select(s => s.Totals));
                     }
-                    
+
                     lines.Add("Current Scoreboard:");
                     scoreLines = scores
                         .OrderByDescending(s => s.GetTotalPoints(sessionType))
@@ -2472,9 +2486,9 @@ namespace AmteScripts.Managers
                             AddLines(lines, ps, language, shortStats);
                         }
                     }
-                    
+
                     lines.Add("");
-                    lines.Add("Your individual score: ");
+                    lines.Add(viewer.Name + ':');
                     AddLines(lines, MakeScoreboardEntry(myScores), language, shortStats);
                 }
 
