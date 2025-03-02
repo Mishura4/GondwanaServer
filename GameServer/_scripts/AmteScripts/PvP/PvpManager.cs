@@ -229,6 +229,12 @@ namespace AmteScripts.Managers
                 return false;
             }
 
+            if (!_zones.Contains(player.CurrentZone))
+            {
+                log.Warn($"Player {player.Name} ({player.InternalID}) has PvP data in the current zone, but is not here. This can be due to a crash right after they joined, before they were saved");
+                return false;
+            }
+
             player.IsInPvP = true;
             player.Out.SendMessage("Welcome back! Your PvP state has been preserved.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return true;
