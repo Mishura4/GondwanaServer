@@ -46,6 +46,7 @@ namespace AmteScripts.Managers
 
         /// <summary>The chosen session from DB for the day</summary>
         private PvpSession _activeSession;
+        [NotNull] private readonly object _sessionLock = new object();
 
         // Scoreboard
         private Dictionary<string, PlayerScore> _playerScores = new Dictionary<string, PlayerScore>();
@@ -64,7 +65,7 @@ namespace AmteScripts.Managers
         // Here we track solo-based safe areas (player => area)
         private Dictionary<GamePlayer, AbstractArea> _soloAreas = new Dictionary<GamePlayer, AbstractArea>();
         // And group-based safe areas (group => area)
-        private Dictionary<Group, AbstractArea> _groupAreas = new Dictionary<Group, AbstractArea>();
+        private Dictionary<Guild, AbstractArea> _groupAreas = new Dictionary<Guild, AbstractArea>();
         // Key = the group object, Value = the ephemeral guild we created
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
         private Dictionary<Guild, Group> _guildGroups = new Dictionary<Guild, Group>();
@@ -168,7 +169,6 @@ namespace AmteScripts.Managers
             RvrPlayer rec = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (rec == null || string.IsNullOrEmpty(rec.PvPSession)) return;
             
-            player.IsInPvP = true;
             // Remove any FlagInventoryItem items from the player's backpack
             int totalFlagRemoved = 0;
             for (eInventorySlot slot = eInventorySlot.FirstBackpack;
@@ -185,15 +185,19 @@ namespace AmteScripts.Managers
                     }
                 }
             }
-                
-            if (!Instance.IsOpen || Instance._activeSession?.SessionID != rec.PvPSession)
+
+            lock (Instance!._sessionLock)
             {
-                Instance.RemovePlayer(player);
-            }
-            else
-            {
-                if (!Instance.TryRestorePlayer(player))
+                player.IsInPvP = true;
+                if (!Instance.IsOpen || Instance._activeSession?.SessionID != rec.PvPSession)
+                {
                     Instance.RemovePlayer(player);
+                }
+                else
+                {
+                    if (!Instance.TryRestorePlayer(player))
+                        Instance.RemovePlayer(player);
+                }
             }
         }
         
@@ -320,18 +324,9 @@ namespace AmteScripts.Managers
             while (lines.MoveNext() && !string.IsNullOrEmpty(lines.Current))
             {
                 var data = lines.Current.Split(';');
-                byte? rank = null;
-                byte value;
-                if (byte.TryParse(data[0], out value))
-                    rank = value;
                 
-                var entry = new GroupScoreEntry(ParsePlayer(data.Skip(1)), DateTime.Now, rank);
+                var entry = new GroupScoreEntry(ParsePlayer(data), DateTime.Now);
                 var playerId = entry.PlayerScore.PlayerID;
-                if (rank != null && !_playerGroups!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank.Value)))
-                {
-                    log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Item1.Name}");
-                    break;
-                }
                 var groupScore = GetGroupScore(guild);
                 groupScore.Scores![playerId] = entry;
                 groupScore.Totals.Add(entry.PlayerScore);
@@ -340,153 +335,155 @@ namespace AmteScripts.Managers
 
         public bool Open(string sessionID, bool force)
         {
-            _isForcedOpen = force;
-            if (_isOpen)
-                return true;
+            lock (_sessionLock)
+            {
+                _isForcedOpen = force;
+                if (_isOpen)
+                    return true;
 
-            _isOpen = true;
+                _isOpen = true;
             
-            // Reset scoreboard, queues, oldInfos
-            ResetScores();
-            _soloQueue.Clear();
-            _groupQueue.Clear();
+                // Reset scoreboard, queues, oldInfos
+                ResetScores();
+                _soloQueue.Clear();
+                _groupQueue.Clear();
 
-            // Now we parse the session's ZoneList => find all "SPAWN" NPCs in those zones
-            _zones.Clear();
-            _spawnNpcsGlobal.Clear();
-            _spawnNpcsRealm[eRealm.Albion].Clear();
-            _spawnNpcsRealm[eRealm.Midgard].Clear();
-            _spawnNpcsRealm[eRealm.Hibernia].Clear();
-            _usedSpawns.Clear();
-            _soloAreas.Clear();
-            _groupAreas.Clear();
+                // Now we parse the session's ZoneList => find all "SPAWN" NPCs in those zones
+                _zones.Clear();
+                _spawnNpcsGlobal.Clear();
+                _spawnNpcsRealm[eRealm.Albion].Clear();
+                _spawnNpcsRealm[eRealm.Midgard].Clear();
+                _spawnNpcsRealm[eRealm.Hibernia].Clear();
+                _usedSpawns.Clear();
+                _soloAreas.Clear();
+                _groupAreas.Clear();
             
-            if (string.IsNullOrEmpty(sessionID))
-            {
-                try
+                if (string.IsNullOrEmpty(sessionID))
                 {
-                    sessionID = ParseFile();
-                }
-                catch (FileNotFoundException)
-                {
-                    // fine
-                }
-                catch (Exception ex)
-                {
-                    log.Warn("Could not open file temp/PvPScore.dat: ", ex);
-                    File.Copy("temp/PvPScore.dat", $"temp/PvPScore-error-{DateTime.Now}.dat");
-                }
-            }
-
-            if (string.IsNullOrEmpty(sessionID))
-            {
-                // pick a random session from DB
-                _activeSession = PvpSessionMgr.PickRandomSession();
-                if (_activeSession == null)
-                {
-                    log.Warn("No PvP Sessions in DB, cannot open!");
-                    _isOpen = false;
-                    return false;
-                }
-            }
-            else
-            {
-                _activeSession = PvpSessionMgr.GetAllSessions().First(s => string.Equals(s.SessionID, sessionID));
-                if (_activeSession == null)
-                {
-                    log.Warn($"PvP session {sessionID} could not be found, cannot open!");
-                    _isOpen = false;
-                    return false;
-                }
-            }
-
-            log.Info($"PvpManager: Opened session [{_activeSession.SessionID}] Type={_activeSession.SessionType}, SpawnOpt={_activeSession.SpawnOption}");
-
-            List<GameNPC> padSpawnNpcsGlobal = new List<GameNPC>();
-
-            var zoneStrings = _activeSession.ZoneList.Split(',');
-            foreach (var zStr in zoneStrings)
-            {
-                if (!ushort.TryParse(zStr.Trim(), out ushort zoneId))
-                    continue;
-
-                Zone zone = WorldMgr.GetZone(zoneId);
-                if (zone == null) continue;
-
-                _zones.Add(zone);
-                var npcs = WorldMgr.GetNPCsByGuild("PVP", eRealm.None).Where(n => n.CurrentZone == zone && n.Name.StartsWith("SPAWN", StringComparison.OrdinalIgnoreCase) &&
-                        !n.Name.StartsWith("PADSPAWN", StringComparison.OrdinalIgnoreCase)).ToList();
-
-                _spawnNpcsGlobal.AddRange(npcs);
-
-                // Also see if any are realm-labeled:
-                // e.g. "SPAWN-ALB", "SPAWN-MID", "SPAWN-HIB"
-                foreach (var npc in npcs)
-                {
-                    if (npc.Name.IndexOf("SPAWN-ALB", StringComparison.OrdinalIgnoreCase) >= 0)
-                        _spawnNpcsRealm[eRealm.Albion].Add(npc);
-                    else if (npc.Name.IndexOf("SPAWN-MID", StringComparison.OrdinalIgnoreCase) >= 0)
-                        _spawnNpcsRealm[eRealm.Midgard].Add(npc);
-                    else if (npc.Name.IndexOf("SPAWN-HIB", StringComparison.OrdinalIgnoreCase) >= 0)
-                        _spawnNpcsRealm[eRealm.Hibernia].Add(npc);
-                }
-
-                // Retrieve PADSPAWN NPCs separately (used solely for flag pads).
-                var padNpcs = WorldMgr.GetNPCsByGuild("PVP", eRealm.None)
-                    .Where(n => n.CurrentZone == zone &&
-                                n.Name.StartsWith("PADSPAWN", StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-
-                padSpawnNpcsGlobal.AddRange(padNpcs);
-            }
-
-            // For Flag Capture sessions (SessionType == 2), create a flag pad at each PADSPAWN npc's position.
-            if (_activeSession.SessionType == 2)
-            {
-                foreach (var padSpawnNPC in padSpawnNpcsGlobal)
-                {
-                    var basePad = new GameFlagBasePad
+                    try
                     {
-                        Position = padSpawnNPC.Position,
-                        Model = 2655,
-                        Name = "BaseFlagPad",
-                        FlagID = ++_flagCounter
-                    };
-
-                    basePad.AddToWorld();
-                    _allBasePads.Add(basePad);
+                        sessionID = ParseScores();
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        // fine
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Warn("Could not open file temp/PvPScore.dat: ", ex);
+                        File.Copy("temp/PvPScore.dat", $"temp/PvPScore-error-{DateTime.Now}.dat");
+                    }
                 }
-            }
 
-            if (_activeSession.SessionType == 4)
-            {
-                GameEventMgr.AddHandler(GameLivingEvent.Dying, new DOLEventHandler(OnLivingDying_BringAFriend));
-                GameEventMgr.AddHandler(GameLivingEvent.BringAFriend, new DOLEventHandler(OnBringAFriend));
-            }
-            
-            // If we found zero spawns, the fallback logic in FindSpawnPosition might do random coords.
-            // Or you can log a warning:
-            if (_spawnNpcsGlobal.Count == 0)
-            {
-                log.Warn("No 'SPAWN' NPCs found in the session's zones. We'll fallback to random coords.");
-            }
-
-            if (_activeSession.SessionType == 5)
-            {
-                var reg = WorldMgr.GetRegion(1);
-                if (reg != null)
+                if (string.IsNullOrEmpty(sessionID))
                 {
-                    _territoryOwnershipTimer = new RegionTimer(reg.TimeManager);
-                    _territoryOwnershipTimer.Callback = AwardTerritoryOwnershipPoints;
-                    _territoryOwnershipTimer.Interval = 20_000;
-                    _territoryOwnershipTimer.Start(10_000);
+                    // pick a random session from DB
+                    _activeSession = PvpSessionMgr.PickRandomSession();
+                    if (_activeSession == null)
+                    {
+                        log.Warn("No PvP Sessions in DB, cannot open!");
+                        _isOpen = false;
+                        return false;
+                    }
+                }
+                else
+                {
+                    _activeSession = PvpSessionMgr.GetAllSessions().First(s => string.Equals(s.SessionID, sessionID));
+                    if (_activeSession == null)
+                    {
+                        log.Warn($"PvP session {sessionID} could not be found, cannot open!");
+                        _isOpen = false;
+                        return false;
+                    }
+                }
+
+                log.Info($"PvpManager: Opened session [{_activeSession.SessionID}] Type={_activeSession.SessionType}, SpawnOpt={_activeSession.SpawnOption}");
+
+                List<GameNPC> padSpawnNpcsGlobal = new List<GameNPC>();
+
+                var zoneStrings = _activeSession.ZoneList.Split(',');
+                foreach (var zStr in zoneStrings)
+                {
+                    if (!ushort.TryParse(zStr.Trim(), out ushort zoneId))
+                        continue;
+
+                    Zone zone = WorldMgr.GetZone(zoneId);
+                    if (zone == null) continue;
+
+                    _zones.Add(zone);
+                    var npcs = WorldMgr.GetNPCsByGuild("PVP", eRealm.None).Where(n => n.CurrentZone == zone && n.Name.StartsWith("SPAWN", StringComparison.OrdinalIgnoreCase) &&
+                                                                                     !n.Name.StartsWith("PADSPAWN", StringComparison.OrdinalIgnoreCase)).ToList();
+
+                    _spawnNpcsGlobal.AddRange(npcs);
+
+                    // Also see if any are realm-labeled:
+                    // e.g. "SPAWN-ALB", "SPAWN-MID", "SPAWN-HIB"
+                    foreach (var npc in npcs)
+                    {
+                        if (npc.Name.IndexOf("SPAWN-ALB", StringComparison.OrdinalIgnoreCase) >= 0)
+                            _spawnNpcsRealm[eRealm.Albion].Add(npc);
+                        else if (npc.Name.IndexOf("SPAWN-MID", StringComparison.OrdinalIgnoreCase) >= 0)
+                            _spawnNpcsRealm[eRealm.Midgard].Add(npc);
+                        else if (npc.Name.IndexOf("SPAWN-HIB", StringComparison.OrdinalIgnoreCase) >= 0)
+                            _spawnNpcsRealm[eRealm.Hibernia].Add(npc);
+                    }
+
+                    // Retrieve PADSPAWN NPCs separately (used solely for flag pads).
+                    var padNpcs = WorldMgr.GetNPCsByGuild("PVP", eRealm.None)
+                        .Where(n => n.CurrentZone == zone &&
+                                   n.Name.StartsWith("PADSPAWN", StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+
+                    padSpawnNpcsGlobal.AddRange(padNpcs);
+                }
+
+                // For Flag Capture sessions (SessionType == 2), create a flag pad at each PADSPAWN npc's position.
+                if (_activeSession.SessionType == 2)
+                {
+                    foreach (var padSpawnNPC in padSpawnNpcsGlobal)
+                    {
+                        var basePad = new GameFlagBasePad
+                        {
+                            Position = padSpawnNPC.Position,
+                            Model = 2655,
+                            Name = "BaseFlagPad",
+                            FlagID = ++_flagCounter
+                        };
+
+                        basePad.AddToWorld();
+                        _allBasePads.Add(basePad);
+                    }
+                }
+
+                if (_activeSession.SessionType == 4)
+                {
+                    GameEventMgr.AddHandler(GameLivingEvent.Dying, new DOLEventHandler(OnLivingDying_BringAFriend));
+                    GameEventMgr.AddHandler(GameLivingEvent.BringAFriend, new DOLEventHandler(OnBringAFriend));
+                }
+            
+                // If we found zero spawns, the fallback logic in FindSpawnPosition might do random coords.
+                // Or you can log a warning:
+                if (_spawnNpcsGlobal.Count == 0)
+                {
+                    log.Warn("No 'SPAWN' NPCs found in the session's zones. We'll fallback to random coords.");
+                }
+
+                if (_activeSession.SessionType == 5)
+                {
+                    var reg = WorldMgr.GetRegion(1);
+                    if (reg != null)
+                    {
+                        _territoryOwnershipTimer = new RegionTimer(reg.TimeManager);
+                        _territoryOwnershipTimer.Callback = AwardTerritoryOwnershipPoints;
+                        _territoryOwnershipTimer.Interval = 20_000;
+                        _territoryOwnershipTimer.Start(10_000);
+                    }
                 }
             }
-
             return true;
         }
         
-        private string ParseFile()
+        private string ParseScores()
         {
             using var lines = File.ReadLines("temp/PvPScore.dat").GetEnumerator();
                     
@@ -510,7 +507,28 @@ namespace AmteScripts.Managers
                             ParseGuildEntry(lines, parameters);
                         }
                         break;
+                    
                     case "p":
+                        {
+                            var playerId = parameters[1];
+                            var guildId = parameters[2];
+                            var rankStr = parameters[3];
+                            Guild guild = GuildMgr.GetGuildByName(guildId);
+                            if (guild == null)
+                            {
+                                log.Warn($"Player {playerId} is in unknown PvP guild \"{guildId}\"");
+                                continue;
+                            }
+                            byte rank = byte.Parse(rankStr);
+                            if (rank != null && !_playerGroups!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank)))
+                            {
+                                log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Item1.Name}");
+                                break;
+                            }
+                        }
+                        break;
+                        
+                    case "ps":
                         {
                             var playerScore = ParsePlayer(parameters.Skip(1));
                             if (!string.IsNullOrEmpty(playerScore.PlayerID))
@@ -525,137 +543,147 @@ namespace AmteScripts.Managers
 
         public bool Close()
         {
-            if (!_isOpen)
-                return false;
-
-            _isOpen = false;
-            _isForcedOpen = false;
-
-            log.InfoFormat("PvpManager: Closing session [{0}].", _activeSession?.SessionID);
-
-            if (_activeSession != null && _activeSession.SessionType == 5 && _territoryOwnershipTimer != null)
+            lock (_sessionLock)
             {
-                _territoryOwnershipTimer.Stop();
-                _territoryOwnershipTimer = null;
-            }
+                if (!_isOpen)
+                    return false;
 
-            // Force remove all players still flagged IsInPvP
-            foreach (var client in WorldMgr.GetAllPlayingClients())
-            {
-                var plr = client?.Player;
-                if (plr != null && plr.IsInPvP)
+                _isOpen = false;
+                _isForcedOpen = false;
+
+                log.InfoFormat("PvpManager: Closing session [{0}].", _activeSession?.SessionID);
+
+                if (_activeSession != null && _activeSession.SessionType == 5 && _territoryOwnershipTimer != null)
                 {
-                    RemovePlayer(plr, false);
+                    _territoryOwnershipTimer.Stop();
+                    _territoryOwnershipTimer = null;
                 }
-            }
 
-            foreach (var pad in _allBasePads)
-            {
-                pad.RemoveFlag();
-                pad.RemoveFromWorld();
-            }
-            _allBasePads.Clear();
-
-            // remove all solo areas
-            foreach (var kv in _soloAreas)
-            {
-                var area = kv.Value;
-                if (area != null)
+                // Force remove all players still flagged IsInPvP
+                foreach (var client in WorldMgr.GetAllPlayingClients())
                 {
-                    var region = kv.Key.CurrentRegion;
-                    region?.RemoveArea(area);
-                }
-            }
-            _soloAreas.Clear();
-
-            // remove all group areas
-            foreach (var kv in _groupAreas)
-            {
-                var area = kv.Value;
-                if (area != null)
-                {
-                    var leader = kv.Key.Leader as GamePlayer;
-                    leader?.CurrentRegion?.RemoveArea(area);
-                }
-            }
-            _groupAreas.Clear();
-
-            if (_activeSession != null && _activeSession.SessionType == 4)
-            {
-                GameEventMgr.RemoveHandler(GameLivingEvent.Dying, new DOLEventHandler(OnLivingDying_BringAFriend));
-                GameEventMgr.RemoveHandler(GameLivingEvent.BringAFriend, new DOLEventHandler(OnBringAFriend));
-
-                // For each zone in this session, find all FollowingFriendMob and Reset them
-                var zones = _activeSession.ZoneList.Split(',');
-                foreach (var zStr in zones)
-                {
-                    if (!ushort.TryParse(zStr, out ushort zoneId)) continue;
-                    var z = WorldMgr.GetZone(zoneId);
-                    if (z == null) continue;
-
-                    var allNpcs = WorldMgr.GetNPCsFromRegion(z.ZoneRegion.ID).Where(n => n.CurrentZone == z);
-                    foreach (var npc in allNpcs)
+                    var plr = client?.Player;
+                    if (plr != null && plr.IsInPvP)
                     {
-                        if (npc is FollowingFriendMob ff)
+                        RemovePlayer(plr, false);
+                    }
+                }
+
+                foreach (var pad in _allBasePads)
+                {
+                    pad.RemoveFlag();
+                    pad.RemoveFromWorld();
+                }
+                _allBasePads.Clear();
+
+                // remove all solo areas
+                foreach (var kv in _soloAreas)
+                {
+                    var area = kv.Value;
+                    if (area != null)
+                    {
+                        var region = kv.Key.CurrentRegion;
+                        region?.RemoveArea(area);
+                    }
+                }
+                _soloAreas.Clear();
+
+                // remove all group areas
+                foreach (var kv in _groupAreas)
+                {
+                    var area = kv.Value;
+                    if (area != null)
+                    {
+                        area.ZoneIn?.ZoneRegion?.RemoveArea(area);
+                    }
+                }
+                _groupAreas.Clear();
+
+                if (_activeSession != null && _activeSession.SessionType == 4)
+                {
+                    GameEventMgr.RemoveHandler(GameLivingEvent.Dying, new DOLEventHandler(OnLivingDying_BringAFriend));
+                    GameEventMgr.RemoveHandler(GameLivingEvent.BringAFriend, new DOLEventHandler(OnBringAFriend));
+
+                    // For each zone in this session, find all FollowingFriendMob and Reset them
+                    var zones = _activeSession.ZoneList.Split(',');
+                    foreach (var zStr in zones)
+                    {
+                        if (!ushort.TryParse(zStr, out ushort zoneId)) continue;
+                        var z = WorldMgr.GetZone(zoneId);
+                        if (z == null) continue;
+
+                        var allNpcs = WorldMgr.GetNPCsFromRegion(z.ZoneRegion.ID).Where(n => n.CurrentZone == z);
+                        foreach (var npc in allNpcs)
                         {
-                            ff.ResetFollow();
+                            if (npc is FollowingFriendMob ff)
+                            {
+                                ff.ResetFollow();
+                            }
                         }
                     }
                 }
-            }
 
-            if (_activeSession != null && _activeSession.SessionType == 5)
-            {
-                TerritoryManager.Instance.ReleaseSubTerritoriesInZones(CurrentZones);
-            }
+                if (_activeSession != null && _activeSession.SessionType == 5)
+                {
+                    TerritoryManager.Instance.ReleaseSubTerritoriesInZones(CurrentZones);
+                }
             
-            ResetScores();
-            try
-            {
-                File.Delete("temp/PvPScore.dat");
-            }
-            catch (FileNotFoundException)
-            {
-                // fine
-            }
-            _activeSession = null;
-            _soloQueue.Clear();
-            _groupQueue.Clear();
+                ResetScores();
+                try
+                {
+                    File.Delete("temp/PvPScore.dat");
+                }
+                catch (FileNotFoundException)
+                {
+                    // fine
+                }
+                _activeSession = null;
+                _soloQueue.Clear();
+                _groupQueue.Clear();
 
-            foreach (var value in _allGuilds)
-            {
-                GuildMgr.DeleteGuild(value);
+                foreach (var value in _allGuilds)
+                {
+                    GuildMgr.DeleteGuild(value);
+                }
+                _groupGuilds.Clear();
+                _guildGroups.Clear();
+                _playerGroups.Clear();
+                return true;
             }
-            _groupGuilds.Clear();
-            _guildGroups.Clear();
-            _playerGroups.Clear();
-            return true;
         }
         
         private void SaveScore()
         {
-            if (!Directory.Exists("temp"))
-                Directory.CreateDirectory("temp");
+            lock (_sessionLock)
+            {
+                if (!IsOpen)
+                    return;
+                
+                if (!Directory.Exists("temp"))
+                    Directory.CreateDirectory("temp");
 
-            var options = new FileStreamOptions();
-            options.Mode = FileMode.Create;
-            using StreamWriter file = File.CreateText("temp/PvPScore.dat");
-            file.WriteLine($"{CurrentSession.SessionID};{_isForcedOpen}");
-            file.WriteLine();
-            foreach (var (guild, score) in _groupScores)
-            {
-                file.WriteLine($"g;{guild.Name}");
-                foreach (var groupEntry in score.Scores)
-                {
-                    file.WriteLine(
-                        groupEntry.Value.Rank + ";" + groupEntry.Value.PlayerScore.Serialize()
-                    );
-                }
+                var options = new FileStreamOptions();
+                options.Mode = FileMode.Create;
+                using StreamWriter file = File.CreateText("temp/PvPScore.dat");
+                file.WriteLine($"{CurrentSession.SessionID};{_isForcedOpen}");
                 file.WriteLine();
-            }
-            foreach (var (player, score) in _playerScores)
-            {
-                file.WriteLine("p;" + score.Serialize());
+                foreach (var (guild, score) in _groupScores)
+                {
+                    file.WriteLine($"g;{guild.Name}");
+                    foreach (var groupEntry in score.Scores)
+                    {
+                        file.WriteLine(groupEntry.Value.PlayerScore.Serialize());
+                    }
+                    file.WriteLine();
+                }
+                foreach (var (playerId, (guild, rank)) in _playerGroups)
+                {
+                    file.WriteLine("p;" + playerId + ";" + guild.Name + ";" + rank);
+                }
+                foreach (var (player, score) in _playerScores)
+                {
+                    file.WriteLine("ps;" + score.Serialize());
+                }
             }
         }
 
@@ -664,7 +692,7 @@ namespace AmteScripts.Managers
             if (player == null) return null;
 
             // If solo
-            if (player.Group == null || player.Group.MemberCount <= 1)
+            if (IsSolo(player))
             {
                 if (_soloAreas.TryGetValue(player, out var soloArea))
                     return soloArea;
@@ -673,7 +701,7 @@ namespace AmteScripts.Managers
             else
             {
                 // Group scenario
-                if (player.Group != null && _groupAreas.TryGetValue(player.Group, out var groupArea))
+                if (player.Guild != null && _groupAreas.TryGetValue(player.Guild, out var groupArea))
                 {
                     return groupArea;
                 }
@@ -744,7 +772,7 @@ namespace AmteScripts.Managers
                 {
                     PlayerID = player.InternalID,
                     PlayerName = player.Name,
-                }, DateTime.Now, player.GuildRank.RankLevel);
+                }, DateTime.Now);
                 score = new GroupScore(
                     player.Guild,
                     new PlayerScore() { PlayerID = player.Guild.GuildID, PlayerName = player.Guild.Name},
@@ -761,7 +789,7 @@ namespace AmteScripts.Managers
                 {
                     PlayerID = player.InternalID,
                     PlayerName = player.Name
-                }, DateTime.Now, player.GuildRank.RankLevel);
+                }, DateTime.Now);
                 score.Scores[player.InternalID] = entry;
             }
             return (score, entry);
@@ -824,7 +852,7 @@ namespace AmteScripts.Managers
 
         private bool IsSolo(GamePlayer killer)
         {
-            return (killer.Group == null || killer.Group.MemberCount <= 1);
+            return killer.Guild == null || killer.Group is not { MemberCount: > 1 };
         }
 
         /// <summary>
@@ -1139,11 +1167,10 @@ namespace AmteScripts.Managers
             // Add each member to the ephemeral guild
             foreach (var member in group.GetPlayersInTheGroup())
             {
-                if (member == groupLeader)
-                    pvpGuild.AddPlayer(member, pvpGuild.GetRankByID(0));
-                else
-                    pvpGuild.AddPlayer(member, pvpGuild.GetRankByID(9));
+                var rank = pvpGuild.GetRankByID(member == groupLeader ? 0 : 9);
+                pvpGuild.AddPlayer(member, rank);
 
+                _playerGroups[member.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
                 member.IsInPvP = true;
                 member.Bind(true);
                 member.SaveIntoDatabase();
@@ -1171,14 +1198,15 @@ namespace AmteScripts.Managers
                 _graceTimers.Remove(player.InternalID);
             }
 
-            Group g = player.Group;
-            if (g != null && _groupGuilds.TryGetValue(g, out Guild pvpGuild))
+            Guild pvpGuild = null;
+            if (_playerGroups.TryGetValue(player.InternalID, out var tuple))
             {
+                pvpGuild = tuple.Item1;
                 if (player.Guild == pvpGuild)
                 {
                     pvpGuild.RemovePlayer("PVP", player);
                 }
-                if (disband)
+                if (disband && _guildGroups.TryGetValue(pvpGuild, out var g))
                 {
                     g.RemoveMember(player);
                 }
@@ -1200,6 +1228,8 @@ namespace AmteScripts.Managers
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.PvPTreasureRemoved", totalRemoved), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
+            
+            _playerGroups.Remove(player.InternalID);
             
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (!string.IsNullOrEmpty(record?.PvPSession))
@@ -1226,18 +1256,18 @@ namespace AmteScripts.Managers
                 player.CurrentRegion?.RemoveArea(area);
                 _soloAreas.Remove(player);
             }
-            if (g != null && _groupAreas.TryGetValue(g, out var grpArea))
+            if (pvpGuild != null)
             {
                 // Check if *all* members have left. If so, remove area:
-                if (!g.GetPlayersInTheGroup().Any(m => m.IsInPvP))
+                if (!pvpGuild.GetListOfOnlineMembers().Any(m => m.IsInPvP) && _groupAreas.TryGetValue(pvpGuild, out AbstractArea grpArea))
                 {
                     if (grpArea is PvpCircleArea circle)
                         circle.RemoveAllOwnedObjects();
                     else if (grpArea is PvpSafeArea pvpGroupArea)
                         pvpGroupArea.RemoveAllOwnedObjects();
-
-                    g.Leader?.CurrentRegion?.RemoveArea(grpArea);
-                    _groupAreas.Remove(g);
+                    
+                    grpArea.ZoneIn?.ZoneRegion?.RemoveArea(grpArea);
+                    _groupAreas.Remove(pvpGuild);
                 }
             }
 
@@ -1507,24 +1537,29 @@ namespace AmteScripts.Managers
 
                 pvpGuild.GuildType = Guild.eGuildType.PvPGuild;
                 _groupGuilds[newGroup] = pvpGuild;
-
+                
                 int[] emblemChoices = new int[] { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
                 pvpGuild.Emblem = emblemChoices[Util.Random(emblemChoices.Length - 1)];
                 pvpGuild.SaveIntoDatabase();
 
                 foreach (var p in groupPlayers)
                 {
-                    if (p == randomLeader)
-                        pvpGuild.AddPlayer(p, pvpGuild.GetRankByID(0));
-                    else
-                        pvpGuild.AddPlayer(p, pvpGuild.GetRankByID(9));
+                    DBRank rank = pvpGuild.GetRankByID(p == randomLeader ? 0 : 9); 
+                    
+                    pvpGuild.AddPlayer(p, rank);
+                    _playerGroups[p.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
 
                     p.IsInPvP = true;
                     p.Bind(true);
                     p.SaveIntoDatabase();
                 }
-
+                
                 TeleportEntireGroup(randomLeader);
+
+                if (!_saveTimer.IsAlive)
+                {
+                    _saveTimer.Start(5_000);
+                }
             }
         }
 
@@ -1656,7 +1691,7 @@ namespace AmteScripts.Managers
             }
 
             leader.CurrentRegion.AddArea(areaObject);
-            _groupAreas[group] = areaObject;
+            _groupAreas[pvpGuild] = areaObject;
 
             log.Info("PvpManager: Created a group outpost for " + leader.Name);
 
@@ -1752,13 +1787,12 @@ namespace AmteScripts.Managers
             string familyGuildName = friendMob.GuildName;
             if (!string.IsNullOrEmpty(familyGuildName))
             {
-                bool isSolo = (owner.Group == null || owner.Group.MemberCount <= 1);
                 AbstractArea area = null;
 
-                if (isSolo)
+                if (IsSolo(owner))
                     _soloAreas.TryGetValue(owner, out area);
-                else
-                    _groupAreas.TryGetValue(owner.Group!, out area);
+                else if (owner.Guild != null)
+                    _groupAreas.TryGetValue(owner.Guild, out area);
 
                 if (area is PvpSafeArea safeArea)
                 {
@@ -2144,7 +2178,7 @@ namespace AmteScripts.Managers
             }
         }
 
-        public record GroupScoreEntry(PlayerScore PlayerScore, DateTime TimeJoined, byte? Rank) {}
+        public record GroupScoreEntry(PlayerScore PlayerScore, DateTime TimeJoined) {}
 
         public record GroupScore(Guild Guild, PlayerScore Totals, Dictionary<string, GroupScoreEntry> Scores)
         {

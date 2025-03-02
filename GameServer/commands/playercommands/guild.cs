@@ -280,7 +280,7 @@ namespace DOL.GS.Commands
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildExists"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -347,7 +347,7 @@ namespace DOL.GS.Commands
                             {
                                 ply.GuildName = newguildname;
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -377,7 +377,7 @@ namespace DOL.GS.Commands
                             string guildname = String.Join(" ", args, i + 1, args.Length - i - 1);
 
                             GuildMgr.GetGuildByName(guildname).AddPlayer(WorldMgr.GetClientByPlayerName(playername, true, false).Player, true);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -413,7 +413,7 @@ namespace DOL.GS.Commands
                             }
 
                             GuildMgr.GetGuildByName(guildname).RemovePlayer("gamemaster", WorldMgr.GetClientByPlayerName(playername, true, false).Player);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -689,7 +689,7 @@ namespace DOL.GS.Commands
                             }
                             obj.Out.SendGuildInviteCommand(client.Player, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteRecieved", obj.GetPersonalizedName(client.Player), client.Player.Guild.Name));
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteSent", client.Player.GetPersonalizedName(obj), client.Player.Guild.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -775,7 +775,7 @@ namespace DOL.GS.Commands
                                 GameServer.Database.SaveObject(ch);
                             }
 
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -832,7 +832,7 @@ namespace DOL.GS.Commands
                             else
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPlayersInAcc"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -1098,7 +1098,7 @@ namespace DOL.GS.Commands
                             }
 
 
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
 
                             if (client.Account.PrivLevel > (int)ePrivLevel.Player)
                             {
@@ -1216,7 +1216,7 @@ namespace DOL.GS.Commands
                                             );
                                         }
                                     }
-                                    client.Player.Guild.UpdateGuildWindow();
+                                    client.Player.Guild?.UpdateGuildWindow();
                                 }
                             }
 
@@ -1660,7 +1660,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             if (!client.Player.GuildRank.GcHear)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1676,7 +1676,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage("Remove: " + (rank.Remove ? "y" : "n") + " View: " + (rank.View ? "y" : "n"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 client.Out.SendMessage("Dues: " + (rank.Dues ? "y" : "n") + " Withdraw: " + (rank.Withdraw ? "y" : "n"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             break;
                         }
                     #endregion
@@ -1688,7 +1688,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1697,7 +1697,7 @@ namespace DOL.GS.Commands
                             message = String.Join(" ", args, 2, args.Length - 2);
                             client.Player.Guild.Webpage = message;
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.WebpageSet", client.Player.Guild.Webpage), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             break;
                         }
                     #endregion
@@ -1709,7 +1709,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1718,7 +1718,7 @@ namespace DOL.GS.Commands
                             message = String.Join(" ", args, 2, args.Length - 2);
                             client.Player.Guild.Email = message;
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.EmailSet", client.Player.Guild.Email), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             break;
                         }
                     #endregion
@@ -2288,7 +2288,7 @@ namespace DOL.GS.Commands
                                     client.Out.SendMessage(mesg, eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 }
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -2303,10 +2303,10 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             GCEditCommand(client, args);
                         }
-                        client.Player.Guild.UpdateGuildWindow();
+                        client.Player.Guild?.UpdateGuildWindow();
                         break;
                     #endregion
                     #region Form
@@ -2457,7 +2457,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
                             client.Out.SendGuildLeaveCommand(client.Player, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.ConfirmLeave", client.Player.Guild.Name));
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -2943,7 +2943,7 @@ namespace DOL.GS.Commands
                             {
                                 ply.Out.SendMessage(LanguageMgr.GetTranslation(ply.Client, "Commands.Players.Guild.MadeLeaderOther", newLeader.Name, newLeader.Guild.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -2980,7 +2980,7 @@ namespace DOL.GS.Commands
                             }
                             client.Out.SendEmblemDialogue();
 
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             break;
                         }
                     #endregion
@@ -3069,7 +3069,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildAutoRemoveAcc"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildAutoRemove"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -3092,7 +3092,7 @@ namespace DOL.GS.Commands
                             message = String.Join(" ", args, 2, args.Length - 2);
                             client.Player.Guild.Motd = message;
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.MotdSet"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -3121,7 +3121,7 @@ namespace DOL.GS.Commands
                             client.Player.Guild.alliance.Dballiance.Motd = message;
                             GameServer.Database.SaveObject(client.Player.Guild.alliance.Dballiance);
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.AMotdSet"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -3144,7 +3144,7 @@ namespace DOL.GS.Commands
                             message = String.Join(" ", args, 2, args.Length - 2);
                             client.Player.Guild.Omotd = message;
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.OMotdSet"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -3188,7 +3188,7 @@ namespace DOL.GS.Commands
                             foreach (DBGuild guild in alliance.Dballiance.DBguilds)
                                 if (guild != null)
                                     DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Alliance.Member", i++, guild.GuildName));
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3248,7 +3248,7 @@ namespace DOL.GS.Commands
                             obj.TempProperties.setProperty("allianceinvite", client.Player); //finish that
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Alliance.Invite"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             obj.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Alliance.Invited", client.Player.Guild.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3259,7 +3259,7 @@ namespace DOL.GS.Commands
                     case "aaccept":
                         {
                             AllianceInvite(client.Player, 0x01);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3383,7 +3383,7 @@ namespace DOL.GS.Commands
                                 }
                                 client.Player.Guild.alliance.RemoveGuild(obj.Guild);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3409,7 +3409,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
                             client.Player.Guild.alliance.RemoveGuild(client.Player.Guild);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3434,7 +3434,7 @@ namespace DOL.GS.Commands
                             {
                                 keep.Claim(client.Player);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3479,7 +3479,7 @@ namespace DOL.GS.Commands
                                     }
                                 }
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3537,7 +3537,7 @@ namespace DOL.GS.Commands
                                         ((KeepArea)area).Keep.StartChangeLevel(targetlevel);
                                 }
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                              */
                         }
@@ -3575,7 +3575,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
                             //client.Player.Guild.ClaimedKeep.Release();
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             return;
                         }
                     #endregion
@@ -3592,7 +3592,7 @@ namespace DOL.GS.Commands
                             string note = String.Join(" ", args, 2, args.Length - 2);
                             client.Player.GuildNote = note;
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoteSet", note), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             break;
                         }
                     #endregion
@@ -3650,7 +3650,7 @@ namespace DOL.GS.Commands
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildDues"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -3703,7 +3703,7 @@ namespace DOL.GS.Commands
                                 if (client.Player.Guild.WithdrawGuildBank(client.Player, amount))
                                 {
                                     client.Player.SendTranslatedMessage("Commands.Players.Guild.Withdrawamount", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, Money.GetString(long.Parse(amount.ToString())));
-                                    client.Player.Guild.UpdateGuildWindow();
+                                    client.Player.Guild?.UpdateGuildWindow();
                                     return;
                                 }
                                 else
@@ -3713,7 +3713,7 @@ namespace DOL.GS.Commands
                                 }
 
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -3730,7 +3730,7 @@ namespace DOL.GS.Commands
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.LoginsOff"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild?.UpdateGuildWindow();
                             break;
                         }
                     #endregion
@@ -4144,7 +4144,7 @@ namespace DOL.GS.Commands
                         string message = String.Join(" ", args, 4, args.Length - 4);
                         client.Player.Guild.GetRankByID(number).Title = message;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankTitleSet", number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                        client.Player.Guild.UpdateGuildWindow();
+                        client.Player.Guild?.UpdateGuildWindow();
                     }
                     break;
                 case "ranklevel":
