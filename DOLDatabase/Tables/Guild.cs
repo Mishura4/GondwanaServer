@@ -53,6 +53,7 @@ namespace DOL.Database
         private byte m_bonusType;
         private DateTime m_bonusStartTime;
         private long m_meritPoints;
+        private int m_guildType = 0;
 
         public DBGuild()
         {
@@ -106,6 +107,20 @@ namespace DOL.Database
             set
             {
                 m_guildname = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int GuildType
+        {
+            get
+            {
+                return m_guildType;
+            }
+            set
+            {
+                m_guildType = value;
+                Dirty = true;
             }
         }
 

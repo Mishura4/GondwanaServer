@@ -177,11 +177,11 @@ namespace DOL.GS
         }
 
 
-        public static Guild CreateGuild(eRealm realm, string guildName, GamePlayer creator = null, bool loadedFromScript = false)
+        public static Guild CreateGuild(eRealm realm, string guildName, GamePlayer creator = null, bool loadedFromScript = false, bool quiet = false)
         {
             if (DoesGuildExist(guildName))
             {
-                if (creator != null)
+                if (creator != null && !quiet)
                     creator.Out.SendMessage(guildName + " already exists!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                 return null;
@@ -196,7 +196,7 @@ namespace DOL.GS
                 Guild newguild = new Guild(dbGuild);
                 if (newguild.AddToDatabase() == false)
                 {
-                    if (creator != null)
+                    if (creator != null && !quiet)
                     {
                         creator.Out.SendMessage("Database error, unable to add a new guild!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
@@ -419,10 +419,6 @@ namespace DOL.GS
                 else if (system_ids.Contains(g.GuildID))
                 {
                     g.GuildType = Guild.eGuildType.ServerGuild;
-                }
-                else
-                {
-                    g.GuildType = Guild.eGuildType.PlayerGuild;
                 }
             }
         }

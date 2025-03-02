@@ -188,7 +188,6 @@ namespace DOL.GS
         /// <returns>true if added successfully</returns>
         public virtual bool AddMember(GameLiving living)
         {
-            var player = living as GamePlayer;
             if (!m_groupMembers.FreezeWhile<bool>(l =>
             {
                 if (l.Count >= ServerProperties.Properties.GROUP_MAX_MEMBER || l.Count >= (byte.MaxValue - 1))
@@ -208,14 +207,17 @@ namespace DOL.GS
             // update icons of joined player to everyone in the group
             UpdateMember(living, true, false);
 
-            if (PvpManager.Instance.IsPlayerInQueue(player))
+            if (living is GamePlayer player)
             {
-                PvpManager.Instance.DequeueSolo(player);
-            }
+                if (PvpManager.Instance.IsPlayerInQueue(player))
+                {
+                    PvpManager.Instance.DequeueSolo(player);
+                }
 
-            // update all icons for just joined player
-            if (player != null)
-            {
+                if (player.IsInPvP)
+                    PvpManager.Instance.OnMemberJoinGroup(this, player);
+
+                // update all icons for just joined player
                 player.Out.SendGroupMembersUpdate(true, true);
                 foreach (GamePlayer pl in GetPlayersInTheGroup())
                     pl.Out.SendMessage(string.Format("{0} has joined the group.", pl.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -262,6 +264,9 @@ namespace DOL.GS
             }
             else
                 SendMessageToGroupMembers(string.Format("{0} has left the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            
+            if (player.IsInPvP)
+                PvpManager.Instance.OnMemberLeaveGroup(this, player);
 
             // only one member left?
             if (MemberCount == 1)
@@ -402,7 +407,7 @@ namespace DOL.GS
                 // all went ok
                 UpdateGroupWindow();
                 foreach (GamePlayer pl in GetPlayersInTheGroup())
-                    pl.Out.SendMessage(string.Format("{0} has joined the group.", pl.GetPersonalizedName(Leader)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    pl.Out.SendMessage(string.Format("{0} is now the party leader.", pl.GetPersonalizedName(Leader)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
             return allOk;

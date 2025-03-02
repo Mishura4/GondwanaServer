@@ -204,7 +204,7 @@ namespace DOL.GS
         protected virtual void AddHandlers()
         {
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
-            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.AcceptGroup, new DOLEventHandler(PlayerJoinGroup));
+            GameEventMgr.AddHandler(CarryingPlayer, GroupEvent.MemberJoined, new DOLEventHandler(PlayerJoinGroup));
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerPutAwayBanner));
@@ -215,7 +215,7 @@ namespace DOL.GS
         protected virtual void RemoveHandlers()
         {
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
-            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.AcceptGroup, new DOLEventHandler(PlayerJoinGroup));
+            GameEventMgr.RemoveHandler(CarryingPlayer, GroupEvent.MemberJoined, new DOLEventHandler(PlayerJoinGroup));
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerPutAwayBanner));

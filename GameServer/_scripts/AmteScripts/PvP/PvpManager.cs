@@ -36,6 +36,7 @@ namespace AmteScripts.Managers
         private static readonly TimeSpan _startTime = new TimeSpan(14, 0, 0);
         private static readonly TimeSpan _endTime = _startTime.Add(TimeSpan.FromHours(8));
         private const int _checkInterval = 30_000; // 30 seconds
+        private const int _saveDelay = 5_000;
         private static RegionTimer _timer;
         private RegionTimer _saveTimer;
 
@@ -43,6 +44,8 @@ namespace AmteScripts.Managers
         private bool _isForcedOpen;
         private ushort _currentRegionID;
         private List<Zone> _zones = new();
+
+        private const int _defaultGuildRank = 9;
 
         /// <summary>The chosen session from DB for the day</summary>
         private PvpSession _activeSession;
@@ -70,8 +73,8 @@ namespace AmteScripts.Managers
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
         private Dictionary<Guild, Group> _guildGroups = new Dictionary<Guild, Group>();
         [NotNull] private readonly object _groupsLock = new object();
-        // Ephemeral guilds players should be in, for recovery after a disconnect or server restart
-        private Dictionary<string, Tuple<Guild, byte>> _playerGuilds = new Dictionary<string, Tuple<Guild, byte>>();
+        // Guilds players are still associated with after leaving, until they join another
+        private Dictionary<string, Guild> _playerLeftGuilds = new Dictionary<string, Guild>();
         // Grace timer for PvP players who get linkdead so they don't lose their progress
         private Dictionary<string, RegionTimer> _graceTimers = new();
         private List<Guild> _allGuilds = new();
@@ -189,17 +192,237 @@ namespace AmteScripts.Managers
 
             lock (Instance!._sessionLock)
             {
-                player.IsInPvP = true;
                 if (!Instance.IsOpen || Instance._activeSession?.SessionID != rec.PvPSession)
                 {
-                    Instance.RemovePlayer(player);
+                    Instance._doRemovePlayer(player);
                 }
                 else
                 {
                     if (!Instance.TryRestorePlayer(player))
-                        Instance.RemovePlayer(player);
+                        Instance._doRemovePlayer(player);
                 }
             }
+        }
+
+        public void OnMemberJoinGuild(Guild guild, GamePlayer player)
+        {
+            lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
+            {
+                AddToGuildGroup(guild, player);
+                if (!_saveTimer.IsAlive)
+                    _saveTimer.Start(_saveDelay);
+            }
+        }
+
+        public void OnMemberLeaveGuild(Guild guild, GamePlayer player)
+        {
+            lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
+            {
+                RemoveFromGuildGroup(guild, player);
+                if (!_saveTimer.IsAlive)
+                    _saveTimer.Start(_saveDelay);
+            }
+        }
+
+        public void OnMemberJoinGroup(Group group, GamePlayer player)
+        {
+            lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
+            {
+                AddToGroupGuild(group, player);
+                if (!_saveTimer.IsAlive)
+                    _saveTimer.Start(_saveDelay);
+            }
+        }
+
+        public void OnMemberLeaveGroup(Group group, GamePlayer player)
+        {
+            lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
+            {
+                RemoveFromGroupGuild(group, player);
+                if (!_saveTimer.IsAlive)
+                    _saveTimer.Start(_saveDelay);
+            }
+        }
+
+        private Guild CreateGuild(string guildName, GamePlayer leader = null)
+        {
+            var pvpGuild = GuildMgr.CreateGuild(eRealm.None, guildName, leader, true, true);
+            if (pvpGuild == null)
+            {
+                pvpGuild = GuildMgr.GetGuildByName(guildName);
+                if (pvpGuild == null)
+                {
+                    log.Error($"Failed to create or find PvP guild \"{guildName}\"");
+                    return null;
+                }
+                if (pvpGuild.GuildType != Guild.eGuildType.PvPGuild)
+                {
+                    log.Error($"Guild \"{guildName}\" already exists and is not PvP, aborting");
+                    return null;
+                }
+                log.Warn($"PvP Guild {guildName} already exists, hijacking it");
+            }
+            pvpGuild.GuildType = Guild.eGuildType.PvPGuild;
+            int[] emblemChoices = new int[] { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
+            pvpGuild.Emblem = emblemChoices[Util.Random(emblemChoices.Length - 1)];
+            pvpGuild.SaveIntoDatabase();
+            return pvpGuild;
+        }
+
+        private Guild CreateGuild(GamePlayer leader)
+        {
+            return CreateGuild("[PVP] " + leader.Name + "'s guild", leader);
+        }
+
+        private Guild CreateGuildForGroup(Group group)
+        {
+            var groupLeader = group.Leader;
+            var pvpGuild = CreateGuild(groupLeader);
+            if (pvpGuild == null)
+            {
+                groupLeader.Out.SendMessage(LanguageMgr.GetTranslation(groupLeader.Client.Account.Language, "PvPManager.CannotCreatePvPGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return null;
+            }
+
+            _allGuilds.Add(pvpGuild);
+            _groupGuilds[group] = pvpGuild;
+            _guildGroups[pvpGuild] = group;
+
+            // Add each member to the ephemeral guild
+            foreach (var member in group.GetPlayersInTheGroup())
+            {
+                var rank = pvpGuild.GetRankByID(member == groupLeader ? 0 : _defaultGuildRank);
+                pvpGuild.AddPlayer(member, rank);
+                
+                member.IsInPvP = true;
+                member.Bind(true);
+                member.SaveIntoDatabase();
+            }
+            return pvpGuild;
+        }
+
+        private void AddToGroupGuild(Group group, GamePlayer player)
+        {
+            if (!IsOpen)
+                return;
+            
+            bool isNew = true;
+            Guild guild = null;
+            lock (_groupsLock)
+            {
+                if (_groupGuilds.TryGetValue(group, out guild))
+                {
+                    isNew = false;
+                    if (guild == player.Guild)
+                        return; // Nothing to do
+                }
+                else
+                {
+                    isNew = true;
+                    guild = CreateGuildForGroup(group);
+                    if (guild == null)
+                        return;
+                }
+            }
+
+            if (!isNew)
+            {
+                guild.AddPlayer(player, guild.GetRankByID(_defaultGuildRank), true);
+            }
+            else
+            {
+                group.AddMember(player);
+                if (player.Guild != group.Leader.Guild)
+                {
+                    log.Warn($"Player {player.Name} ({player.InternalID}) was added to group led by {group.Leader} ({group.Leader.InternalID}) but they have different guilds!");
+                }
+                else if (player.GuildRank.RankLevel < group.Leader.GuildRank.RankLevel)
+                {
+                    group.MakeLeader(player);
+                }
+            }
+        }
+
+        private void RemoveFromGroupGuild(Group group, GamePlayer player)
+        {
+            if (!IsOpen)
+                return;
+
+            if (_groupGuilds.TryGetValue(group, out var guild))
+            {
+                if (player.Guild != guild)
+                    return;
+                
+                guild.RemovePlayer(string.Empty, player);
+                _playerLeftGuilds[player.InternalID] = guild;
+            }
+        }
+
+        private void AddToGuildGroup(Guild guild, GamePlayer player)
+        {
+            if (!IsOpen)
+                return;
+            
+            bool isNew = true;
+            Group group = null;
+            lock (_groupsLock)
+            {
+                if (_guildGroups.TryGetValue(guild, out group))
+                {
+                    isNew = false;
+                    if (group.IsInTheGroup(player))
+                        return; // Nothing to do
+                }
+                else
+                {
+                    isNew = true;
+                    if (guild.MemberOnlineCount <= 1)
+                        return;
+                    
+                    group = new Group(player);
+                    _groupGuilds[group] = guild;
+                    _guildGroups[guild] = group;
+                }
+            }
+
+            if (isNew)
+            {
+                GamePlayer leader = player;
+                foreach (var member in guild.GetListOfOnlineMembers())
+                {
+                    group.AddMember(member);
+                    if (member.GuildRank.RankLevel < leader.GuildRank.RankLevel)
+                        leader = member;
+                }
+                if (leader != player)
+                    group.MakeLeader(leader);
+            }
+            else
+            {
+                group.AddMember(player);
+                if (player.Guild != group.Leader.Guild)
+                {
+                    log.Warn($"Player {player.Name} ({player.InternalID}) was added to group led by {group.Leader} ({group.Leader.InternalID}) but they have different guilds!");
+                }
+                else if (player.GuildRank.RankLevel < group.Leader.GuildRank.RankLevel)
+                {
+                    group.MakeLeader(player);
+                }
+            }
+        }
+
+        private void RemoveFromGuildGroup(Guild guild, GamePlayer player)
+        {
+            if (!IsOpen || guild == null)
+                return;
+
+            if (_guildGroups.TryGetValue(guild, out var group))
+            {
+                if (group.IsInTheGroup(player))
+                    group.RemoveMember(player);
+            }
+
+            _playerLeftGuilds[player.InternalID] = guild;
         }
         
         private bool TryRestorePlayer(GamePlayer player)
@@ -215,52 +438,17 @@ namespace AmteScripts.Managers
 
             if (!_zones.Contains(player.CurrentZone))
             {
-                log.Warn($"Player {player.Name} ({player.InternalID}) has PvP data in the current zone, but is not here. This can be due to a crash right after they joined, before they were saved");
+                log.Warn($"Player {player.Name} ({player.InternalID}) has PvP data in this session, but is not in the zone. This can be due to a crash right after they joined, before they were saved. Kicking them out");
                 return false;
             }
 
             Guild myGuild = null;
-            if (AllowsGroups && _playerGuilds.TryGetValue(player.InternalID, out var myData))
+            if (AllowsGroups && player.Guild != null)
             {
-                myGuild = myData.Item1;
-                if (player.Guild != myGuild) // Player was kicked
-                {
-                    myGuild = null;
-                    _playerGuilds.Remove(player.InternalID);
-                }
+                if (player.Guild.GuildType == Guild.eGuildType.PvPGuild)
+                    AddToGuildGroup(player.Guild, player);
                 else
-                {
-                    lock (_groupsLock)
-                    {
-                        if (_guildGroups.TryGetValue(myGuild, out Group group))
-                        {
-                            group.AddMember(player);
-                            if (player.Guild != group.Leader.Guild)
-                            {
-                                log.Warn($"Player {player.Name} ({player.InternalID}) was added to group led by {group.Leader} ({group.Leader.InternalID}) but they have different guilds!");
-                            }
-                            else if (player.GuildRank.RankLevel < group.Leader.GuildRank.RankLevel)
-                            {
-                                group.MakeLeader(player);
-                            }
-                        }
-                        else if (myGuild.MemberOnlineCount > 1)
-                        {
-                            group = new Group(player);
-                            GamePlayer leader = player;
-                            foreach (var member in myGuild.GetListOfOnlineMembers().Where(m => m.IsInPvP))
-                            {
-                                group.AddMember(member);
-                                if (member.GuildRank.RankLevel < leader.GuildRank.RankLevel)
-                                    leader = member;
-                            }
-                            if (leader != player)
-                                group.MakeLeader(leader);
-                            _groupGuilds[group] = myGuild;
-                            _guildGroups[myGuild] = group;
-                        }
-                    }
-                }
+                    log.Warn($"Player {player.Name} ({player.InternalID}) logged into PvP with non-PvP guild {player.Guild.Name} ({player.Guild.GuildID})");
             }
             if (!AllowsSolo && myGuild == null)
             {
@@ -349,15 +537,15 @@ namespace AmteScripts.Managers
             // g;Bob's guild
             // 2ef3beb7-11fc-4b2a-b2e7-4515275423e0=PvP_SoloKills:1=PvP_SoloKillPoints:2
             var guildName = parameters[1];
-            Guild guild = GuildMgr.CreateGuild(eRealm.None, guildName, null, true);
+            Guild guild = null;
+            if (!string.IsNullOrEmpty(guildName))
+            {
+                guild = GuildMgr.GetGuildByName(guildName) ?? CreateGuild(guildName);
+            }
             if (guild == null)
             {
-                guild = GuildMgr.GetGuildByName(guildName);
-                if (guild == null)
-                {
-                    log!.Warn($"Cannot recover PvP scores for guild {guildName}, guild could not be found or created");
-                    return;
-                }
+                log!.Warn($"Cannot recover PvP scores for guild \"{guildName}\", guild could not be found or created");
+                return;
             }
             _allGuilds.Add(guild);
             while (lines.MoveNext() && !string.IsNullOrEmpty(lines.Current))
@@ -546,26 +734,6 @@ namespace AmteScripts.Managers
                             ParseGuildEntry(lines, parameters);
                         }
                         break;
-                    
-                    case "p":
-                        {
-                            var playerId = parameters[1];
-                            var guildId = parameters[2];
-                            var rankStr = parameters[3];
-                            Guild guild = GuildMgr.GetGuildByName(guildId);
-                            if (guild == null)
-                            {
-                                log.Warn($"Player {playerId} is in unknown PvP guild \"{guildId}\"");
-                                continue;
-                            }
-                            byte rank = byte.Parse(rankStr);
-                            if (rank != null && !_playerGuilds!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank)))
-                            {
-                                log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGuilds[playerId]!.Item1.Name}");
-                                break;
-                            }
-                        }
-                        break;
                         
                     case "ps":
                         {
@@ -686,7 +854,6 @@ namespace AmteScripts.Managers
                 }
                 _groupGuilds.Clear();
                 _guildGroups.Clear();
-                _playerGuilds.Clear();
                 return true;
             }
         }
@@ -714,10 +881,6 @@ namespace AmteScripts.Managers
                         file.WriteLine(groupEntry.Value.PlayerScore.Serialize());
                     }
                     file.WriteLine();
-                }
-                foreach (var (playerId, (guild, rank)) in _playerGuilds)
-                {
-                    file.WriteLine("p;" + playerId + ";" + guild.Name + ";" + rank);
                 }
                 foreach (var (player, score) in _playerScores)
                 {
@@ -885,7 +1048,7 @@ namespace AmteScripts.Managers
 
             if (!_saveTimer.IsAlive)
             {
-                _saveTimer.Start(5_000);
+                _saveTimer.Start(_saveDelay);
             }
         }
 
@@ -1144,7 +1307,7 @@ namespace AmteScripts.Managers
 
             if (!_saveTimer.IsAlive)
             {
-                _saveTimer.Start(5_000);
+                _saveTimer.Start(_saveDelay);
             }
 
             return true;
@@ -1175,51 +1338,20 @@ namespace AmteScripts.Managers
                 StoreOldPlayerInfo(member);
             }
 
-            // CREATE or GET the ephemeral guild for this group
-            if (!_groupGuilds.TryGetValue(group, out Guild pvpGuild))
+            Guild pvpGuild;
+            lock (_groupsLock)
             {
-                string guildName = "[PVP] " + groupLeader.Name + "'s guild";
-                
-                pvpGuild = GuildMgr.CreateGuild(eRealm.None, guildName, groupLeader, true);
-                if (pvpGuild == null)
-                {
-                    pvpGuild = GuildMgr.GetGuildByName(guildName);
-                    if (pvpGuild == null)
-                    {
-                        log.Error($"Failed to create or find PvP guild \"{guildName}\"");
-                        groupLeader.Out.SendMessage(LanguageMgr.GetTranslation(groupLeader.Client.Account.Language, "PvPManager.CannotCreatePvPGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        return false;
-                    }
-                    log.Warn($"PvP: Guild {guildName} already exists, hijacking it");
-                }
-
-                pvpGuild.GuildType = Guild.eGuildType.PvPGuild;
-                _allGuilds.Add(pvpGuild);
-                _groupGuilds[group] = pvpGuild;
-                _guildGroups[pvpGuild] = group;
-
-                int[] emblemChoices = new int[] { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
-                pvpGuild.Emblem = emblemChoices[Util.Random(emblemChoices.Length - 1)];
-                pvpGuild.SaveIntoDatabase();
+                if (!_groupGuilds.TryGetValue(group, out pvpGuild))
+                    pvpGuild = CreateGuildForGroup(group);
             }
-
-            // Add each member to the ephemeral guild
-            foreach (var member in group.GetPlayersInTheGroup())
-            {
-                var rank = pvpGuild.GetRankByID(member == groupLeader ? 0 : 9);
-                pvpGuild.AddPlayer(member, rank);
-
-                _playerGuilds[member.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
-                member.IsInPvP = true;
-                member.Bind(true);
-                member.SaveIntoDatabase();
-            }
-
+            if (pvpGuild == null)
+                return false;
+            
             TeleportEntireGroup(groupLeader);
 
             if (!_saveTimer.IsAlive)
             {
-                _saveTimer.Start(5_000);
+                _saveTimer.Start(_saveDelay);
             }
             return true;
         }
@@ -1231,23 +1363,35 @@ namespace AmteScripts.Managers
         {
             if (!player.IsInPvP)
                 return;
+            
+            _doRemovePlayer(player, disband);
+        }
 
+        public void _doRemovePlayer(GamePlayer player, bool disband = true)
+        {
             lock (_graceTimers)
             {
                 _graceTimers.Remove(player.InternalID);
             }
 
             Guild pvpGuild = null;
-            if (_playerGuilds.TryGetValue(player.InternalID, out var tuple))
+            if (player.Guild != null)
             {
-                pvpGuild = tuple.Item1;
-                if (player.Guild == pvpGuild)
+                if (player.Guild.GuildType != Guild.eGuildType.PvPGuild)
                 {
-                    pvpGuild.RemovePlayer("PVP", player);
+                    log.Warn($"Player {player.Name} ({player.InternalID}) being removed from PvP is in non-PvP guild \"{player.Guild.Name}\" ({player.Guild.GuildID})");
                 }
-                if (disband && _guildGroups.TryGetValue(pvpGuild, out var g))
+                else
                 {
-                    g.RemoveMember(player);
+                    lock (_groupsLock)
+                    {
+                        pvpGuild = player.Guild;
+                        player.Guild.RemovePlayer("PVP", player);
+                        if (disband && _guildGroups.TryGetValue(player.Guild, out var g))
+                        {
+                            g.RemoveMember(player);
+                        }
+                    }
                 }
             }
 
@@ -1267,8 +1411,6 @@ namespace AmteScripts.Managers
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.PvPTreasureRemoved", totalRemoved), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
-            
-            _playerGuilds.Remove(player.InternalID);
             
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (!string.IsNullOrEmpty(record?.PvPSession))
@@ -1298,21 +1440,24 @@ namespace AmteScripts.Managers
             if (pvpGuild != null)
             {
                 // Check if *all* members have left. If so, remove area:
-                if (!pvpGuild.GetListOfOnlineMembers().Any(m => m.IsInPvP) && _groupAreas.TryGetValue(pvpGuild, out AbstractArea grpArea))
+                if (!pvpGuild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
                 {
-                    if (grpArea is PvpCircleArea circle)
-                        circle.RemoveAllOwnedObjects();
-                    else if (grpArea is PvpSafeArea pvpGroupArea)
-                        pvpGroupArea.RemoveAllOwnedObjects();
+                    if (_groupAreas.TryGetValue(pvpGuild, out AbstractArea grpArea))
+                    {
+                        if (grpArea is PvpCircleArea circle)
+                            circle.RemoveAllOwnedObjects();
+                        else if (grpArea is PvpSafeArea pvpGroupArea)
+                            pvpGroupArea.RemoveAllOwnedObjects();
                     
-                    grpArea.ZoneIn?.ZoneRegion?.RemoveArea(grpArea);
-                    _groupAreas.Remove(pvpGuild);
+                        grpArea.ZoneIn?.ZoneRegion?.RemoveArea(grpArea);
+                        _groupAreas.Remove(pvpGuild);
+                    }
                 }
             }
 
             if (!_saveTimer.IsAlive)
             {
-                _saveTimer.Start(5_000);
+                _saveTimer.Start(_saveDelay);
             }
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.LeftPvP"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1565,39 +1710,15 @@ namespace AmteScripts.Managers
                     StoreOldPlayerInfo(p);
                 }
 
-                string guildName = randomLeader.Name + "'s guild";
-                var pvpGuild = GuildMgr.CreateGuild(eRealm.None, guildName, randomLeader);
-
+                var pvpGuild = CreateGuildForGroup(newGroup);
                 if (pvpGuild == null)
-                {
-                    randomLeader.Out.SendMessage(LanguageMgr.GetTranslation(randomLeader.Client.Account.Language, "PvPManager.CouldNotCreatePvPGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    continue;
-                }
-
-                pvpGuild.GuildType = Guild.eGuildType.PvPGuild;
-                _groupGuilds[newGroup] = pvpGuild;
-                
-                int[] emblemChoices = new int[] { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
-                pvpGuild.Emblem = emblemChoices[Util.Random(emblemChoices.Length - 1)];
-                pvpGuild.SaveIntoDatabase();
-
-                foreach (var p in groupPlayers)
-                {
-                    DBRank rank = pvpGuild.GetRankByID(p == randomLeader ? 0 : 9); 
-                    
-                    pvpGuild.AddPlayer(p, rank);
-                    _playerGuilds[p.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
-
-                    p.IsInPvP = true;
-                    p.Bind(true);
-                    p.SaveIntoDatabase();
-                }
+                    return;
                 
                 TeleportEntireGroup(randomLeader);
 
                 if (!_saveTimer.IsAlive)
                 {
-                    _saveTimer.Start(5_000);
+                    _saveTimer.Start(_saveDelay);
                 }
             }
         }

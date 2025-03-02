@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using AmteScripts.Managers;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -293,7 +294,11 @@ namespace DOL.GS
             PvPGuild
         }
 
-        public eGuildType GuildType { get; set; }
+        public eGuildType GuildType
+        {
+            get => (eGuildType)m_DBguild.GuildType;
+            set => m_DBguild.GuildType = (int)value;
+        }
 
         public bool IsSystemGuild
         {
@@ -1211,6 +1216,8 @@ namespace DOL.GS
                 addPlayer.Out.SendMessage("Your current rank is " + addPlayer.GuildRank.Title + "!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
                 SendMessageToGuildMembers(addPlayer.Name + " has joined the guild!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
                 addPlayer.Client.Out.SendCharResistsUpdate();
+                if (addPlayer.IsInPvP)
+                    PvpManager.Instance.OnMemberJoinGuild(this, addPlayer);
                 if (IsSystemGuild || force || addPlayer.Client.Account.PrivLevel != 1)
                     return true;
                 m_invite_Players.Add(addPlayer, DateTime.Now);
@@ -1260,12 +1267,17 @@ namespace DOL.GS
                 // Send message to removerClient about successful removal
                 if (removername == member.Name)
                     member.Out.SendMessage("You leave the guild.", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                else if (!string.IsNullOrEmpty(removername))
+                    member.Out.SendMessage(removername + " removed you from " + this.Name + '.', PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
                 else
-                    member.Out.SendMessage(removername + " removed you from " + this.Name, PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
+                    member.Out.SendMessage("You have been removed from " + this.Name + '.', PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
 
                 member.Client.Out.SendCharResistsUpdate();
+                if (member.IsInPvP)
+                    PvpManager.Instance.OnMemberLeaveGuild(this, member);
                 if (IsSystemGuild || remover is { Account.PrivLevel: > 1 })
                     return true;
+                
                 if (!m_leave_Players.ContainsKey(member))
                     m_leave_Players.Add(member, DateTime.Now);
             }
