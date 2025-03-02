@@ -189,9 +189,6 @@ namespace DOL.GS
         public virtual bool AddMember(GameLiving living)
         {
             var player = living as GamePlayer;
-            if (!CheckInviteAllowed(player))
-                return true;
-
             if (!m_groupMembers.FreezeWhile<bool>(l =>
             {
                 if (l.Count >= ServerProperties.Properties.GROUP_MAX_MEMBER || l.Count >= (byte.MaxValue - 1))

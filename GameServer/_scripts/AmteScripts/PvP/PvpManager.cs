@@ -69,8 +69,9 @@ namespace AmteScripts.Managers
         // Key = the group object, Value = the ephemeral guild we created
         private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
         private Dictionary<Guild, Group> _guildGroups = new Dictionary<Guild, Group>();
+        [NotNull] private readonly object _groupsLock = new object();
         // Ephemeral guilds players should be in, for recovery after a disconnect or server restart
-        private Dictionary<string, Tuple<Guild, byte>> _playerGroups = new Dictionary<string, Tuple<Guild, byte>>();
+        private Dictionary<string, Tuple<Guild, byte>> _playerGuilds = new Dictionary<string, Tuple<Guild, byte>>();
         // Grace timer for PvP players who get linkdead so they don't lose their progress
         private Dictionary<string, RegionTimer> _graceTimers = new();
         private List<Guild> _allGuilds = new();
@@ -212,26 +213,58 @@ namespace AmteScripts.Managers
                 }
             }
 
+            if (!_zones.Contains(player.CurrentZone))
+            {
+                log.Warn($"Player {player.Name} ({player.InternalID}) has PvP data in the current zone, but is not here. This can be due to a crash right after they joined, before they were saved");
+                return false;
+            }
+
             Guild myGuild = null;
-            if (AllowsGroups && _playerGroups.TryGetValue(player.InternalID, out var myData))
+            if (AllowsGroups && _playerGuilds.TryGetValue(player.InternalID, out var myData))
             {
                 myGuild = myData.Item1;
-
                 if (player.Guild != myGuild) // Player was kicked
                 {
                     myGuild = null;
-                    _playerGroups.Remove(player.InternalID);
+                    _playerGuilds.Remove(player.InternalID);
+                }
+                else
+                {
+                    lock (_groupsLock)
+                    {
+                        if (_guildGroups.TryGetValue(myGuild, out Group group))
+                        {
+                            group.AddMember(player);
+                            if (player.Guild != group.Leader.Guild)
+                            {
+                                log.Warn($"Player {player.Name} ({player.InternalID}) was added to group led by {group.Leader} ({group.Leader.InternalID}) but they have different guilds!");
+                            }
+                            else if (player.GuildRank.RankLevel < group.Leader.GuildRank.RankLevel)
+                            {
+                                group.MakeLeader(player);
+                            }
+                        }
+                        else if (myGuild.MemberOnlineCount > 1)
+                        {
+                            group = new Group(player);
+                            GamePlayer leader = player;
+                            foreach (var member in myGuild.GetListOfOnlineMembers().Where(m => m.IsInPvP))
+                            {
+                                group.AddMember(member);
+                                if (member.GuildRank.RankLevel < leader.GuildRank.RankLevel)
+                                    leader = member;
+                            }
+                            if (leader != player)
+                                group.MakeLeader(leader);
+                            _groupGuilds[group] = myGuild;
+                            _guildGroups[myGuild] = group;
+                        }
+                    }
                 }
             }
             if (!AllowsSolo && myGuild == null)
             {
                 player.Out.SendMessage("You have been kicked from the PvP group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return false;
-            }
-
-            if (!_zones.Contains(player.CurrentZone))
-            {
-                log.Warn($"Player {player.Name} ({player.InternalID}) has PvP data in the current zone, but is not here. This can be due to a crash right after they joined, before they were saved");
                 return false;
             }
 
@@ -526,9 +559,9 @@ namespace AmteScripts.Managers
                                 continue;
                             }
                             byte rank = byte.Parse(rankStr);
-                            if (rank != null && !_playerGroups!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank)))
+                            if (rank != null && !_playerGuilds!.TryAdd(playerId, new Tuple<Guild, byte>(guild, rank)))
                             {
-                                log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGroups[playerId]!.Item1.Name}");
+                                log!.Warn($"Cannot add player {playerId} to PvP guild {guild.Name}, player is already registered to {_playerGuilds[playerId]!.Item1.Name}");
                                 break;
                             }
                         }
@@ -653,7 +686,7 @@ namespace AmteScripts.Managers
                 }
                 _groupGuilds.Clear();
                 _guildGroups.Clear();
-                _playerGroups.Clear();
+                _playerGuilds.Clear();
                 return true;
             }
         }
@@ -682,7 +715,7 @@ namespace AmteScripts.Managers
                     }
                     file.WriteLine();
                 }
-                foreach (var (playerId, (guild, rank)) in _playerGroups)
+                foreach (var (playerId, (guild, rank)) in _playerGuilds)
                 {
                     file.WriteLine("p;" + playerId + ";" + guild.Name + ";" + rank);
                 }
@@ -1176,7 +1209,7 @@ namespace AmteScripts.Managers
                 var rank = pvpGuild.GetRankByID(member == groupLeader ? 0 : 9);
                 pvpGuild.AddPlayer(member, rank);
 
-                _playerGroups[member.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
+                _playerGuilds[member.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
                 member.IsInPvP = true;
                 member.Bind(true);
                 member.SaveIntoDatabase();
@@ -1205,7 +1238,7 @@ namespace AmteScripts.Managers
             }
 
             Guild pvpGuild = null;
-            if (_playerGroups.TryGetValue(player.InternalID, out var tuple))
+            if (_playerGuilds.TryGetValue(player.InternalID, out var tuple))
             {
                 pvpGuild = tuple.Item1;
                 if (player.Guild == pvpGuild)
@@ -1235,7 +1268,7 @@ namespace AmteScripts.Managers
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.PvPTreasureRemoved", totalRemoved), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
             
-            _playerGroups.Remove(player.InternalID);
+            _playerGuilds.Remove(player.InternalID);
             
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (!string.IsNullOrEmpty(record?.PvPSession))
@@ -1553,7 +1586,7 @@ namespace AmteScripts.Managers
                     DBRank rank = pvpGuild.GetRankByID(p == randomLeader ? 0 : 9); 
                     
                     pvpGuild.AddPlayer(p, rank);
-                    _playerGroups[p.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
+                    _playerGuilds[p.InternalID] = new Tuple<Guild, byte>(pvpGuild, rank.RankLevel);
 
                     p.IsInPvP = true;
                     p.Bind(true);
