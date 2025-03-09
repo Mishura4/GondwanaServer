@@ -1962,15 +1962,21 @@ namespace AmteScripts.Managers
 
         private void AddFollowingFriendToSafeArea(GamePlayer owner, FollowingFriendMob friendMob)
         {
-            // Figure out if this is a solo or a group scenario for scoreboard
-            var scoreRecord = GetIndividualScore(owner);
+            var playerRecord = GetIndividualScore(owner);
+            var groupScore = GetGroupScore(owner.Guild);
+            var groupPlayerScore = groupScore?.GetOrCreateScore(owner);
             float speed = friendMob.MaxSpeed <= 0 ? 1 : friendMob.MaxSpeed;
             float X = 200f / speed;
             float Y = friendMob.AggroMultiplier;
             double rawPoints = (Y <= 1.0f) ? 10.0 * X : 10.0 * X * Y;
             int basePoints = (int)Math.Round(rawPoints);
-
-            scoreRecord.Friends_BroughtFriendsPoints += basePoints;
+            
+            playerRecord.Friends_BroughtFriendsPoints += basePoints;
+            if (groupScore != null)
+            {
+                groupScore.Totals.Friends_BroughtFriendsPoints += basePoints;
+                groupPlayerScore.Friends_BroughtFriendsPoints += basePoints;
+            }
 
             // Family / guild bonus if friendMob.Guild is set
             string familyGuildName = friendMob.GuildName;
@@ -1994,7 +2000,12 @@ namespace AmteScripts.Managers
                     if (newCount >= totalFamInZone)
                     {
                         int finalBonus = GetFamilyBonus(totalFamInZone);
-                        scoreRecord.Friends_BroughtFamilyBonus += finalBonus;
+                        playerRecord.Friends_BroughtFamilyBonus += finalBonus;
+                        if (groupScore != null)
+                        {
+                            groupScore.Totals.Friends_BroughtFamilyBonus += finalBonus;
+                            groupPlayerScore.Friends_BroughtFamilyBonus += finalBonus;
+                        }
                     }
                 }
             }
@@ -2045,27 +2056,58 @@ namespace AmteScripts.Managers
             {
                 killer = gl;
             }
+            
 
             // 1) If friendMob was actively following a player => that player/team loses 2 points
             var followedPlayer = friendMob.PlayerFollow;
-            if (followedPlayer != null && killer is GamePlayer killerPlayer && IsInActivePvpZone(followedPlayer))
+            var killerPlayer = killer as GamePlayer;
+
+            bool isFriendlyKill =
+                (followedPlayer == null || killerPlayer == null) || // No owner or PVE kill
+                (killerPlayer == followedPlayer) || // Self kill
+                (followedPlayer.Guild != null && followedPlayer.Guild == killerPlayer.Guild); // Same guild
+
+            if (isFriendlyKill)
+                return;
+            
+            if (followedPlayer != null && killerPlayer != null && IsInActivePvpZone(followedPlayer))
             {
-                if (killerPlayer != followedPlayer)
+                var followedScore = GetIndividualScore(followedPlayer);
+                var groupScore = GetGroupScore(followedPlayer.Guild);
+                var playerGroupScore = groupScore?.GetOrCreateScore(followedPlayer);
+                var doAdd = (PlayerScore followedScore) =>
                 {
-                    var followedScore = GetIndividualScore(followedPlayer);
                     followedScore.Friends_FriendKilledCount++;
                     followedScore.Friends_FriendKilledPoints += 2; // penalty
+                };
+                doAdd(followedScore);
+                if (groupScore != null)
+                {
+                    doAdd(groupScore.Totals);
+                    doAdd(playerGroupScore);
                 }
             }
 
             // 2) If the *killer* is a player, and the mob was following someone => killer gets +2
-            if (killer is GamePlayer kp && friendMob.PlayerFollow != null && IsInActivePvpZone(kp))
+            if (friendMob.PlayerFollow != null && IsInActivePvpZone(killerPlayer))
             {
-                if (kp != friendMob.PlayerFollow)
+                if (killerPlayer != friendMob.PlayerFollow)
                 {
-                    var killerScore = GetIndividualScore(kp);
-                    killerScore.Friends_KillEnemyFriendCount++;
-                    killerScore.Friends_KillEnemyFriendPoints += 2;
+                    var killerScore = GetIndividualScore(killerPlayer);
+                    var groupScore = GetGroupScore(killerPlayer.Guild);
+                    var playerGroupScore = groupScore?.GetOrCreateScore(killerPlayer);
+                    var doAdd = (PlayerScore score) =>
+                    {
+                        score.Friends_KillEnemyFriendCount++;
+                        score.Friends_KillEnemyFriendPoints += 2;
+                    };
+
+                    doAdd(killerScore);
+                    if (groupScore != null)
+                    {
+                        doAdd(groupScore.Totals);
+                        doAdd(playerGroupScore);
+                    }
                 }
             }
         }
@@ -2410,7 +2452,8 @@ namespace AmteScripts.Managers
                 return Scores.Values.Select(e => e.PlayerScore.GetTotalPoints(sessionType)).Aggregate(0, (a, b) => a + b);
             }
 
-            public PlayerScore GetOrCreateScore(GamePlayer player)
+            [return: NotNull]
+            public PlayerScore GetOrCreateScore([NotNull] GamePlayer player)
             {
                 if (!Scores.TryGetValue(player.InternalID, out var score))
                 {
@@ -2421,7 +2464,7 @@ namespace AmteScripts.Managers
                     });
                     Scores[player.InternalID] = score;
                 }
-                return score.PlayerScore;
+                return score!.PlayerScore!;
             }
 
             public int PlayerCount => Scores.Count;
