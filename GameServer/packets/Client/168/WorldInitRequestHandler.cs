@@ -26,7 +26,7 @@ using log4net;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
-    [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.WorldInitRequest, "Handles world init replies", eClientStatus.PlayerInGame)]
+    [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.WorldInitRequest, "Handles world init replies", eClientStatus.LoggedIn)]
     public class WorldInitRequestHandler : IPacketHandler
     {
         /// <summary>
@@ -36,12 +36,52 @@ namespace DOL.GS.PacketHandler.Client.v168
 
         public void HandlePacket(GameClient client, GSPacketIn packet)
         {
-            if (client?.Player == null)
+            if (client == null)
+                return;
+            
+            // Instantiate 'GamePlayer'. Previous versions are handled in 'CharacterSelectRequestHandler'.
+            if (client.Version >= GameClient.eClientVersion.Version1124)
+                HandlePacket1124(client, packet);
+
+            if (client.ClientState is not GameClient.eClientState.CharScreen and not GameClient.eClientState.Playing)
+                return;
+
+            if (client.Player?.ObjectState is not GameObject.eObjectState.Inactive)
                 return;
 
             client.UdpConfirm = false;
 
             new WorldInitAction(client.Player).Start(1);
+        }
+            
+        static void HandlePacket1124(GameClient client, GSPacketIn packet)
+        {
+            byte charIndex = (byte)packet.ReadByte(); // character account location
+
+            // some funkiness going on below here. Could use some safeguards to ensure a character is loaded correctly
+            if (client.Account.Characters != null && client.ClientState is GameClient.eClientState.CharScreen)
+            {
+                bool charFound = false;
+                string selectedChar = string.Empty;
+                int realmOffset = charIndex - (client.Account.Realm * 10 - 10);
+                int charSlot = client.Account.Realm * 100 + realmOffset;
+
+                for (int i = 0; i < client.Account.Characters.Length; i++)
+                {
+                    if (client.Account.Characters[i] != null && client.Account.Characters[i].AccountSlot == charSlot)
+                    {
+                        charFound = true;
+                        selectedChar = client.Account.Characters[i].Name;
+                        client.LoadPlayer(i);
+                        break;
+                    }
+                }
+
+                if (!charFound)
+                    client.ActiveCharIndex = -1;
+                else
+                    AuditMgr.AddAuditEntry(client, AuditType.Character, AuditSubtype.CharacterLogin, "", selectedChar);
+            }
         }
 
         /// <summary>
@@ -191,6 +231,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                 //check item at world load
                 if (log.IsDebugEnabled)
                     log.DebugFormat("Client {0}({1} PID:{2} OID:{3}) entering Region {4}(ID:{5})", player.Client.Account.Name, player.Name, player.Client.SessionID, player.ObjectID, player.CurrentRegion.Description, player.CurrentRegionID);
+
                 if (player.CurrentRegion.IsRvR)
                     RvrManager.Instance.OnPlayerLogIn(player);
             }
