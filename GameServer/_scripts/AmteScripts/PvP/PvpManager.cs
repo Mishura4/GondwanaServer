@@ -1387,7 +1387,7 @@ namespace AmteScripts.Managers
                     {
                         pvpGuild = player.Guild;
                         player.Guild.RemovePlayer("PVP", player);
-                        if (disband && _guildGroups.TryGetValue(player.Guild, out var g))
+                        if (disband && _guildGroups.TryGetValue(pvpGuild, out var g))
                         {
                             g.RemoveMember(player);
                         }
