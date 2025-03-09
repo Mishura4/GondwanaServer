@@ -392,7 +392,6 @@ namespace DOL.Territories
             if (OwnerGuild == guild)
                 return;
 
-            string key;
             long realmPoints = 0;
 
             if (OwnerGuild == null)

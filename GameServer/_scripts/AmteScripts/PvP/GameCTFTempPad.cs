@@ -59,14 +59,14 @@ namespace AmteScripts.PvP.CTF
             }
             if (OwnerPlayer != null)
             {
-                var score = PvpManager.Instance.GetScoreRecord(OwnerPlayer);
+                var score = PvpManager.Instance.GetIndividualScore(OwnerPlayer);
                 score.Flag_OwnershipPoints += 1;
             }
             else if (OwnerGuild != null)
             {
                 foreach (var p in OwnerGuild.GetListOfOnlineMembers())
                 {
-                    var memScore = PvpManager.Instance.GetScoreRecord(p);
+                    var memScore = PvpManager.Instance.GetIndividualScore(p);
                     memScore.Flag_OwnershipPoints += 1;
                 }
             }
@@ -124,7 +124,7 @@ namespace AmteScripts.PvP.CTF
                     OwnedFlag = staticFlag;
                     StartOwnershipTimer(staticFlag, player);
 
-                    var score = PvpManager.Instance.GetScoreRecord(player);
+                    var score = PvpManager.Instance.GetIndividualScore(player);
                     score.Flag_FlagReturnsCount++;
                     score.Flag_FlagReturnsPoints += 20;
 

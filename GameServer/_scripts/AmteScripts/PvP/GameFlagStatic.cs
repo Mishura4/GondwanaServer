@@ -100,7 +100,7 @@ namespace AmteScripts.PvP.CTF
 
             if (BasePad != null)
             {
-                var score = PvpManager.Instance.GetScoreRecord(player);
+                var score = PvpManager.Instance.GetIndividualScore(player);
                 if (score != null)
                 {
                     score.Flag_FlagReturnsPoints += 4;

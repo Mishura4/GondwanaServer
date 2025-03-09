@@ -709,21 +709,7 @@ namespace DOL.Territories
                 player.Out.SendSoundEffect(9207, player.Position, 0);
                 NewsMgr.CreateNews("GameUtils.Guild.Territory.Capture.Captured", 0, eNewsType.PvE, false, true, player.GuildName, CurrentTerritory.Name);
 
-                if (PvpManager.Instance != null && PvpManager.Instance.IsOpen)
-                {
-                    var session = PvpManager.Instance.CurrentSession;
-                    if (session != null && session.SessionType == 5)
-                    {
-                        if (CurrentTerritory.Type == Territory.eType.Subterritory)
-                        {
-                            var zones = PvpManager.Instance.CurrentZones;
-                            if (zones.Contains(CurrentTerritory.Zone))
-                            {
-                                AwardSubterritoryCapturePoints(player.Guild);
-                            }
-                        }
-                    }
-                }
+                PvpManager.Instance?.AwardTerritoryCapturePoints(CurrentTerritory, player.Guild);
             }
             else
             {
@@ -731,21 +717,6 @@ namespace DOL.Territories
                 player.Out.SendSoundEffect(9207, player.Position, 0);
                 CurrentTerritory.ClaimedTime = lastClaim;
                 CurrentTerritory.SaveIntoDatabase();
-            }
-        }
-
-        private void AwardSubterritoryCapturePoints(Guild capturingGuild)
-        {
-            if (capturingGuild == null) return;
-
-            foreach (var member in capturingGuild.GetListOfOnlineMembers())
-            {
-                if (member.IsInPvP && member.Client != null && member.Client.Player != null)
-                {
-                    var score = PvpManager.Instance.GetScoreRecord(member.Client.Player);
-                    score.Terr_TerritoriesCapturedCount++;
-                    score.Terr_TerritoriesCapturedPoints += 20;
-                }
             }
         }
     }

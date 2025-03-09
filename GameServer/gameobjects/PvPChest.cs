@@ -266,7 +266,7 @@ namespace DOL.GS
             if (sbPlayer == null) return;
             if (!sbPlayer.IsInPvP) return; // chest is unlocked => no scoreboard update
 
-            var score = pm.GetScoreRecord(sbPlayer);
+            var score = pm.GetIndividualScore(sbPlayer);
             if (score == null) return;
 
             int totalPoints = 0;
@@ -341,7 +341,7 @@ namespace DOL.GS
             // The chest owner "loses" x points in .Treasure_StolenTreasuresPoints
             // We'll increment by stolenData.Count * stolenData.PointsPerItem
             // (which is typically 1 item * that item’s points).
-            var victimScore = pm.GetScoreRecord(sbPlayer);
+            var victimScore = pm.GetIndividualScore(sbPlayer);
             if (victimScore == null) return;
 
             victimScore.Treasure_StolenTreasuresPoints += 3;
