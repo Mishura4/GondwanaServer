@@ -852,7 +852,6 @@ namespace DOL.GS
                 }
             }
             
-            PvpManager.Instance.RemovePlayer(this);
             Out.SendPlayerQuit(false);
             Quit(true);
             SaveIntoDatabase();
@@ -1254,6 +1253,9 @@ namespace DOL.GS
 
                 // log quit
                 AuditMgr.AddAuditEntry(Client, AuditType.Character, AuditSubtype.CharacterLogout, "", Name);
+                
+                // Remove from PvP
+                PvpManager.Instance.OnPlayerQuit(this);
 
                 //Cleanup stuff
                 Delete();
@@ -11714,8 +11716,8 @@ namespace DOL.GS
                     log.Error("Player: " + Name + " unknown bind point : (R/X/Y) " + BindPosition.RegionID + "/" + BindPosition.X + "/" + BindPosition.Y);
                 //Kick the player, avoid server freeze
                 Client.Out.SendPlayerQuit(true);
-                SaveIntoDatabase();
                 Quit(true);
+                SaveIntoDatabase();
                 //now ban him
                 if (ServerProperties.Properties.BAN_HACKERS)
                 {

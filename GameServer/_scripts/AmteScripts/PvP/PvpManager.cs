@@ -152,7 +152,7 @@ namespace AmteScripts.Managers
                 _instance.Open(string.Empty, false);
             }
             
-            GameEventMgr.AddHandler(GamePlayerEvent.GameEntered, new DOLEventHandler(OnPlayerLogin));
+            GameEventMgr.AddHandler(GamePlayerEvent.GameEntered, Instance.OnPlayerLogin);
         }
 
         [ScriptUnloadedEvent]
@@ -161,10 +161,10 @@ namespace AmteScripts.Managers
             log.Info("PvpManager: Stopping...");
             _timer?.Stop();
 
-            GameEventMgr.RemoveHandler(GamePlayerEvent.GameEntered, new DOLEventHandler(OnPlayerLogin));
+            GameEventMgr.RemoveHandler(GamePlayerEvent.GameEntered, Instance.OnPlayerLogin);
         }
 
-        private static void OnPlayerLogin(DOLEvent e, object sender, EventArgs args)
+        private void OnPlayerLogin(DOLEvent e, object sender, EventArgs args)
         {
             var player = sender as GamePlayer;
             if (player == null) return;
@@ -190,17 +190,48 @@ namespace AmteScripts.Managers
                 }
             }
 
-            lock (Instance!._sessionLock)
+            lock (_sessionLock)
             {
-                if (!Instance.IsOpen || Instance._activeSession?.SessionID != rec.PvPSession)
+                if (!IsOpen || _activeSession?.SessionID != rec.PvPSession)
                 {
-                    Instance._doRemovePlayer(player);
+                    _doRemovePlayer(player);
                 }
                 else
                 {
-                    if (!Instance.TryRestorePlayer(player))
-                        Instance._doRemovePlayer(player);
+                    if (!TryRestorePlayer(player))
+                        _doRemovePlayer(player);
                 }
+            }
+        }
+
+        public void OnPlayerQuit(GamePlayer player)
+        {
+            if (player?.IsInPvP != true)
+                return;
+
+            if (player.Guild is { GuildType: Guild.eGuildType.PvPGuild })
+            {
+                player.Guild.RemovePlayer("PVP", player);
+            }
+
+            if (player.Group != null)
+            {
+                player.Group.RemoveMember(player);
+            }
+            
+            RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
+            if (record != null)
+            {
+                var dbCharacter = player.DBCharacter;
+                dbCharacter.Region = record.OldRegion;
+                dbCharacter.Xpos = record.OldX;
+                dbCharacter.Ypos = record.OldY;
+                dbCharacter.Zpos = record.OldZ;
+                dbCharacter.BindRegion = record.OldBindRegion;
+                dbCharacter.BindXpos = record.OldBindX;
+                dbCharacter.BindYpos = record.OldBindY;
+                dbCharacter.BindZpos = record.OldBindZ;
+                dbCharacter.BindHeading = record.OldBindHeading;
             }
         }
 
@@ -438,7 +469,6 @@ namespace AmteScripts.Managers
 
             if (!_zones.Contains(player.CurrentZone))
             {
-                log.Warn($"Player {player.Name} ({player.InternalID}) has PvP data in this session, but is not in the zone. This can be due to a crash right after they joined, before they were saved. Kicking them out");
                 return false;
             }
 
@@ -1466,7 +1496,6 @@ namespace AmteScripts.Managers
         private void RemovePlayerDB(GamePlayer player, RvrPlayer record)
         {
             record.ResetCharacter(player);
-            player.MoveTo(Position.Create((ushort)record.OldRegion, record.OldX, record.OldY, record.OldZ, (ushort)record.OldHeading));
 
             // If the player was in a guild before PvP, re-add them.
             if (!string.IsNullOrEmpty(record.GuildID))

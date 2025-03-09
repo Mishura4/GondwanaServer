@@ -95,9 +95,12 @@ namespace DOL.Database
         {
             if (player.ObjectId != PlayerID)
                 return;
+            
             player.GuildID = GuildID;
             player.GuildRank = player.Guild != null ? player.Guild.GetRankByID(GuildRank) : null;
 
+            var pos = Position.Create((ushort)OldRegion, OldX, OldY, OldZ, (ushort)OldHeading);
+            player.MoveTo(pos);
             player.BindPosition = Position.Create((ushort)OldBindRegion, OldBindX, OldBindY, OldBindZ, (ushort)OldBindHeading);
         }
 
@@ -105,6 +108,7 @@ namespace DOL.Database
         {
             if (ch.ObjectId != PlayerID)
                 return;
+            
             ch.GuildID = GuildID;
             ch.GuildRank = (ushort)GuildRank;
 

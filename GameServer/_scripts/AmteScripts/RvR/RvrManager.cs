@@ -885,9 +885,9 @@ namespace AmteScripts.Managers
 
         public void RemovePlayer(GamePlayer player, bool force = false)
         {
-            player.IsInRvR = false;
             if (player.Client.Account.PrivLevel == (uint)ePrivLevel.GM)
                 return;
+            player.IsInRvR = false;
             var rvr = GameServer.Database.SelectObject<RvrPlayer>(r => r.PlayerID == player.InternalID);
             RemovePlayer(player, rvr);
         }
