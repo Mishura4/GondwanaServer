@@ -18,6 +18,7 @@
  */
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System.Linq;
 
 namespace DOL.GS.Commands
 {
@@ -57,13 +58,7 @@ namespace DOL.GS.Commands
 
             if (args.Length >= 2)
             {
-                string msg = "";
-                for (int i = 1; i < args.Length; ++i)
-                {
-                    msg += args[i] + " ";
-                }
-
-                client.Player.Group.SendMessageToGroupMembers(client.Player, msg, eChatType.CT_Group, eChatLoc.CL_ChatWindow);
+                client.Player.Group.SendMessageToGroupMembers(client.Player, string.Join(' ', args.Skip(1)), eChatType.CT_Group, eChatLoc.CL_ChatWindow);
             }
             else
             {
