@@ -2063,14 +2063,14 @@ namespace AmteScripts.Managers
             var killerPlayer = killer as GamePlayer;
 
             bool isFriendlyKill =
-                (followedPlayer == null || killerPlayer == null) || // No owner or PVE kill
+                (followedPlayer == null) || // No owner 
                 (killerPlayer == followedPlayer) || // Self kill
-                (followedPlayer.Guild != null && followedPlayer.Guild == killerPlayer.Guild); // Same guild
+                (followedPlayer.Guild != null && killerPlayer != null && followedPlayer.Guild == killerPlayer.Guild); // Same guild
 
             if (isFriendlyKill)
                 return;
             
-            if (followedPlayer != null && killerPlayer != null && IsInActivePvpZone(followedPlayer))
+            if (followedPlayer != null && IsInActivePvpZone(followedPlayer))
             {
                 var followedScore = GetIndividualScore(followedPlayer);
                 var groupScore = GetGroupScore(followedPlayer.Guild);
