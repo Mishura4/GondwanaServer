@@ -45,12 +45,13 @@ namespace AmteScripts.PvP.CTF
         /// When the carrier is killed or forcibly drops the flag.
         /// We remove from inventory, spawn the static item on the ground.
         /// </summary>
-        public void DropFlagOnGround(GamePlayer carrier, GameLiving killer)
+        public bool DropFlagOnGround(GamePlayer carrier, GameLiving killer)
         {
-            if (carrier == null) return;
+            if (carrier == null) return false;
 
             this.IsRemovalExpected = true;
-            carrier.Inventory.RemoveItem(this);
+            if (!carrier.Inventory.RemoveItem(this))
+                return false;
 
             GameFlagStatic newFlag = FlagReference ?? new GameFlagStatic(null);
             newFlag.Name = this.Name;
@@ -59,12 +60,13 @@ namespace AmteScripts.PvP.CTF
             newFlag.OwnerGuild = null;
 
             var region = carrier.CurrentRegion;
-            newFlag.DropOnGround(
-                carrier.Position.X,
-                carrier.Position.Y,
-                carrier.Position.Z,
-                carrier.Heading,
-                region);
+            if (!newFlag.DropOnGround(
+                    carrier.Position.X,
+                    carrier.Position.Y,
+                    carrier.Position.Z,
+                    carrier.Heading,
+                    region))
+                return false;
 
             // Score: If killer is a player, award kill-carrier points
             if (killer is GamePlayer killerPlayer)
@@ -76,6 +78,7 @@ namespace AmteScripts.PvP.CTF
             {
                 plr.Out.SendSpellEffectAnimation(carrier, newFlag, 7043, 0, false, 0x01);
             }
+            return true;
         }
 
         /// <summary>
@@ -91,7 +94,7 @@ namespace AmteScripts.PvP.CTF
             GameFlagStatic newFlag = FlagReference ?? new GameFlagStatic(null);
             newFlag.Name = this.Name;
             newFlag.Model = (ushort)this.Model;
-            newFlag.OwnerGuild = tempPad.OwnerGuild;
+            newFlag.OwnerGuild = tempPad.OwnerPlayer?.Guild;
             if (newFlag.OwnerGuild != null)
                 newFlag.Emblem = (ushort)newFlag.OwnerGuild.Emblem;
             else

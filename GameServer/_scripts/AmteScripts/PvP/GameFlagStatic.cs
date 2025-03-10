@@ -146,10 +146,12 @@ namespace AmteScripts.PvP.CTF
         /// to spawn this static item at the location of the kill.
         /// If no one picks it up for X seconds, it returns to base.
         /// </summary>
-        public void DropOnGround(int x, int y, int z, ushort heading, Region region)
+        public bool DropOnGround(int x, int y, int z, ushort heading, Region region)
         {
             this.Position = Position.Create(region.ID, x, y, z, heading);
-            this.AddToWorld();
+            if (!this.AddToWorld())
+                return false;
+            
             _isDroppedOnGround = true;
 
             if (_returnTimer != null)
@@ -159,6 +161,7 @@ namespace AmteScripts.PvP.CTF
 
             _returnTimer = new RegionTimer(this, (t) => OnReturnTimerCallback(t));
             _returnTimer.Start(RETURN_TIMEOUT_MS);
+            return true;
         }
 
         private int OnReturnTimerCallback(RegionTimer timer)
@@ -175,14 +178,10 @@ namespace AmteScripts.PvP.CTF
             return 0;
         }
 
-        public void SetOwnership(GamePlayer player, Guild guild)
+        public void SetOwnership(GamePlayer player)
         {
             OwnerPlayer = player;
-            OwnerGuild = guild;
-            if (guild != null)
-                this.Emblem = (ushort)guild.Emblem;
-            else
-                this.Emblem = 0;
+            this.Emblem = (ushort)(player.Guild?.Emblem ?? 0);
         }
 
         public bool IsOwnedBy(GamePlayer p)

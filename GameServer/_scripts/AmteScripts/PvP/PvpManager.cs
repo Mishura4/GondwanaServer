@@ -218,6 +218,8 @@ namespace AmteScripts.Managers
             {
                 player.Group.RemoveMember(player);
             }
+
+            RemoveItemsFromPlayer(player);
             
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (record != null)
@@ -1425,17 +1427,7 @@ namespace AmteScripts.Managers
                 }
             }
 
-            int totalRemoved = 0;
-            for (eInventorySlot slot = eInventorySlot.FirstBackpack; slot <= eInventorySlot.LastBackpack; slot++)
-            {
-                var item = player.Inventory.GetItem(slot);
-                if (item is FlagInventoryItem || item is PvPTreasure)
-                {
-                    int count = item.Count;
-                    if (player.Inventory.RemoveItem(item))
-                        totalRemoved += count;
-                }
-            }
+            int totalRemoved = RemoveItemsFromPlayer(player);
 
             if (totalRemoved > 0)
             {
@@ -1491,6 +1483,36 @@ namespace AmteScripts.Managers
             }
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.LeftPvP"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
+        
+        private int RemoveItemsFromPlayer(GamePlayer player)
+        {
+            int totalRemoved = 0;
+            for (eInventorySlot slot = eInventorySlot.FirstBackpack; slot <= eInventorySlot.LastBackpack; slot++)
+            {
+                var item = player.Inventory.GetItem(slot);
+                if (item is FlagInventoryItem flag)
+                {
+                    int count = item.Count;
+                    if (IsOpen && player.IsInPvP && CurrentSession.SessionType == 2)
+                    {
+                        if (flag.DropFlagOnGround(player, null))
+                            totalRemoved += count;
+                    }
+                    else
+                    {
+                        if (player.Inventory.RemoveItem(flag))
+                            totalRemoved += count;
+                    }
+                }
+                else if (item is PvPTreasure)
+                {
+                    int count = item.Count;
+                    if (player.Inventory.RemoveItem(item))
+                        totalRemoved += count;
+                }
+            }
+            return totalRemoved;
         }
 
         private void RemovePlayerDB(GamePlayer player, RvrPlayer record)
@@ -1811,7 +1833,7 @@ namespace AmteScripts.Managers
 
                     if (staticItem is GameCTFTempPad temppad)
                     {
-                        temppad.SetOwnerSolo(player);
+                        temppad.SetOwner(player);
                     }
                 }
             }
@@ -1897,7 +1919,7 @@ namespace AmteScripts.Managers
 
                     if (staticItem is GameCTFTempPad temppad)
                     {
-                        temppad.SetOwnerGroup(leader, leader.Group);
+                        temppad.SetOwner(leader);
                     }
                 }
             }
@@ -1963,20 +1985,12 @@ namespace AmteScripts.Managers
         private void AddFollowingFriendToSafeArea(GamePlayer owner, FollowingFriendMob friendMob)
         {
             var playerRecord = GetIndividualScore(owner);
-            var groupScore = GetGroupScore(owner.Guild);
-            var groupPlayerScore = groupScore?.GetOrCreateScore(owner);
             float speed = friendMob.MaxSpeed <= 0 ? 1 : friendMob.MaxSpeed;
             float X = 200f / speed;
             float Y = friendMob.AggroMultiplier;
             double rawPoints = (Y <= 1.0f) ? 10.0 * X : 10.0 * X * Y;
             int basePoints = (int)Math.Round(rawPoints);
-            
-            playerRecord.Friends_BroughtFriendsPoints += basePoints;
-            if (groupScore != null)
-            {
-                groupScore.Totals.Friends_BroughtFriendsPoints += basePoints;
-                groupPlayerScore.Friends_BroughtFriendsPoints += basePoints;
-            }
+            int bonus = 0;
 
             // Family / guild bonus if friendMob.Guild is set
             string familyGuildName = friendMob.GuildName;
@@ -1999,16 +2013,27 @@ namespace AmteScripts.Managers
 
                     if (newCount >= totalFamInZone)
                     {
-                        int finalBonus = GetFamilyBonus(totalFamInZone);
-                        playerRecord.Friends_BroughtFamilyBonus += finalBonus;
-                        if (groupScore != null)
-                        {
-                            groupScore.Totals.Friends_BroughtFamilyBonus += finalBonus;
-                            groupPlayerScore.Friends_BroughtFamilyBonus += finalBonus;
-                        }
+                        bonus = GetFamilyBonus(totalFamInZone);
                     }
                 }
             }
+
+            var doAdd = (PlayerScore score) =>
+            {
+                score.Friends_BroughtFriendsPoints += basePoints;
+                score.Friends_BroughtFamilyBonus += bonus;
+            };
+            if (owner.Guild is { GuildType: Guild.eGuildType.PvPGuild })
+            {
+                var groupScore = GetGroupScore(owner.Guild);
+
+                doAdd(groupScore.Totals);
+                foreach (var member in owner.Guild.GetListOfOnlineMembers())
+                {
+                    doAdd(groupScore.GetOrCreateScore(member));
+                }
+            }
+            doAdd(playerRecord);
 
             owner.Out.SendMessage(LanguageMgr.GetTranslation(owner.Client.Account.Language, "PvPManager.BroughtToSafety", friendMob.Name, basePoints), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
         }
@@ -2075,10 +2100,10 @@ namespace AmteScripts.Managers
                 var followedScore = GetIndividualScore(followedPlayer);
                 var groupScore = GetGroupScore(followedPlayer.Guild);
                 var playerGroupScore = groupScore?.GetOrCreateScore(followedPlayer);
-                var doAdd = (PlayerScore followedScore) =>
+                var doAdd = (PlayerScore score) =>
                 {
-                    followedScore.Friends_FriendKilledCount++;
-                    followedScore.Friends_FriendKilledPoints += 2; // penalty
+                    score.Friends_FriendKilledCount++;
+                    score.Friends_FriendKilledPoints += 2; // penalty
                 };
                 doAdd(followedScore);
                 if (groupScore != null)
@@ -2188,6 +2213,18 @@ namespace AmteScripts.Managers
                 return false;
             return zoneIDs.Contains(territory.Zone.ID);
         }
+        #endregion
+        
+        #region CTF methods
+
+        public void AwardCTFOwnershipPoints(GamePlayer carrier)
+        {
+            if (!IsOpen)
+                return;
+            
+            
+        }
+        
         #endregion
 
         #region Old Compatibility Methods
