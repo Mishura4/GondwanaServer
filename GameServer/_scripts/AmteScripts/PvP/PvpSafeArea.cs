@@ -1,4 +1,5 @@
-﻿using DOL.GS;
+﻿using AmteScripts.PvP.CTF;
+using DOL.GS;
 using DOL.GS.Geometry;
 using static DOL.GS.GameObject;
 using System.Collections.Generic;
@@ -89,6 +90,8 @@ namespace AmteScripts.Areas
         private readonly List<GameStaticItem> _ownedStaticItems = new List<GameStaticItem>();
         private readonly Dictionary<string, int> _familyCounts = new Dictionary<string, int>();
 
+        public IReadOnlyList<GameStaticItem> Items => _ownedStaticItems.AsReadOnly();
+        
         public PvpSafeArea(string desc, int x, int y, int z, int radius)
             : base(desc, x, y, z, radius)
         {

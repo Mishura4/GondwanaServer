@@ -164,7 +164,7 @@ namespace AmteScripts.PvP.CTF
             return true;
         }
 
-        private int OnReturnTimerCallback(RegionTimer timer)
+        public bool Reset()
         {
             if (BasePad != null)
             {
@@ -175,6 +175,12 @@ namespace AmteScripts.PvP.CTF
             {
                 RemoveFromWorld();
             }
+            return true;
+        }
+
+        private int OnReturnTimerCallback(RegionTimer timer)
+        {
+            Reset();
             return 0;
         }
 

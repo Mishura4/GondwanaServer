@@ -195,18 +195,13 @@ namespace AmteScripts.Managers
 
             lock (_sessionLock)
             {
-                if (!IsOpen || _activeSession?.SessionID != rec.PvPSession)
+                if (IsOpen && _activeSession?.SessionID == rec.PvPSession)
                 {
-                    _cleanupPlayer(player);
+                    if (TryRestorePlayer(player))
+                        return;
                 }
-                else
-                {
-                    if (!TryRestorePlayer(player))
-                    {
-                        _cleanupPlayer(player);
-                        RestorePlayerData(player, rec);
-                    }
-                }
+                _cleanupPlayer(player);
+                RestorePlayerData(player, rec);
             }
         }
 
