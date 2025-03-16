@@ -24,6 +24,14 @@ namespace DOL.GS.Spells
             if (Caster is GamePlayer casterPlayer)
             {
                 MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "SpellShield.Self.Message"), eChatType.CT_Spell);
+
+                foreach (GamePlayer nearbyPlayer in casterPlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    if (nearbyPlayer != casterPlayer)
+                    {
+                        nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "SpellShield.Others.Message", nearbyPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                }
             }
             SendEffectAnimation(effect.Owner, 0, false, 1);
         }
@@ -42,7 +50,7 @@ namespace DOL.GS.Spells
             }
 
             GameLiving target = ad.Target;
-            if (target.HealthPercent > 15)
+            if (target.HealthPercent > 20)
             {
                 return;
             }
@@ -56,8 +64,8 @@ namespace DOL.GS.Spells
             }
             else if (ad.AttackType == AttackData.eAttackType.DoT)
             {
-                int normalDamage = ((ad.Damage + 1) * 30) / 100;
-                int critDamage = ((ad.CriticalDamage + 1) * 30) / 100;
+                int normalDamage = ((ad.Damage + 1) * 70) / 100;
+                int critDamage = ((ad.CriticalDamage + 1) * 70) / 100;
                 damageAbsorbed = normalDamage + critDamage;
                 ad.Damage -= normalDamage;
                 ad.CriticalDamage -= critDamage;

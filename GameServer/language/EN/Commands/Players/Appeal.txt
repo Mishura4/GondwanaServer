@@ -9,7 +9,7 @@ Commands.Players.Appeal.CurrentStaffAvailable:	There are currently {0} staff ava
 Commands.Players.Appeal.Description:			If you have any issue with other player let us know by submitting an appeal message.
 Commands.Players.Appeal.DoesntHaveAppeal:		That player has already canceled their appeal or doesn't have one.
 Commands.Players.Appeal.DoNotHaveAppeal:		You do not have an appeal to cancel or it has already been closed for you.
-Commands.Players.Appeal.IfYouLogOut:			If you log out with an active appeal it will be saved and automatically reinstated when you log back in.  (Even if you switch characters)
+Commands.Players.Appeal.IfYouLogOut:			If you log out with an active appeal it will be saved and automatically reinstated when you log back in. (Even if you switch characters)
 Commands.Players.Appeal.LoginMessage:			If you need in-game assistance from server staff (such as stuck character) please use /appeal.
 Commands.Players.Appeal.MustBeAssisting:		You need to be assisting an active player with an appeal first.
 Commands.Players.Appeal.NameNotUnique:			Character name is not unique.
@@ -20,15 +20,15 @@ Commands.Players.Appeal.NoLocationToJump:		No location to jump back to.
 Commands.Players.Appeal.NoLongerReceiveMsg:		You will no longer receive Appeal messages for this session.
 Commands.Players.Appeal.NotBeingHelped:			You have to be assisting this player with their appeal before you can release it.
 Commands.Players.Appeal.NowReceiveMsg:			You will now receive Appeal messages again for this session.
-Commands.Players.Appeal.PlayerNotFound:			{0}  is not in the game.
+Commands.Players.Appeal.PlayerNotFound:			{0} is not in the game.
 Commands.Players.Appeal.PleaseBePatient:		Please be patient while we work to address your concern as quickly as possible.
 Commands.Players.Appeal.RandMessage0:			Howdy {0}, thanks for waiting.  How may I help you? 
 Commands.Players.Appeal.RandMessage1:			Hiya {0}, what can I do for you today?
-Commands.Players.Appeal.RandMessage2:			Greetings {0}!  I'm here to assist.  How can I be of service?
+Commands.Players.Appeal.RandMessage2:			Greetings {0}! I'm here to assist.  How can I be of service?
 Commands.Players.Appeal.RandMessage3:			Hi {0}, I understand you need some help, what can I do for you today?
 Commands.Players.Appeal.RandMessage4:			Hello {0}, sorry your having problems, what seems to be the matter?
-Commands.Players.Appeal.StaffChangedStatus:		Staffmember {0} has changed the status of your appeal to {1}.
-Commands.Players.Appeal.StaffClosedYourAppeal:	Staffmember {0} has closed your appeal.
+Commands.Players.Appeal.StaffChangedStatus:		Staff member {0} has changed the status of your appeal to {1}.
+Commands.Players.Appeal.StaffClosedYourAppeal:	Staff member {0} has closed your appeal.
 Commands.Players.Appeal.SystemDisabled:			The appeal system is currently disabled.
 Commands.Players.Appeal.ToCancelYourAppeal:		To cancel your appeal use /checkappeal cancel.
 Commands.Players.Appeal.Usage: 					'/appeal <appeal type> <appeal text>' # Where <appeal type> is one of the following: Harassment, Naming, Conduct, Stuck, Emergency or Other  and <appeal text> is a description of your issue. If you have submitted an appeal, you can check its status by typing '/checkappeal'.

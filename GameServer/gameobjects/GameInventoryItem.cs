@@ -2181,31 +2181,38 @@ namespace DOL.GS
         
         void WriteSpellInfo(IList<string> list, GameClient client, Spell spl, SpellLine line, int charges, int maxCharges)
         {
-            list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.ChargedMagic"));
-            list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.Charges", charges));
-            list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.MaxCharges", maxCharges));
+            if (!this.ClassType.Contains("DOL.GS.DieTriggerSpell"))
+            {
+                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.ChargedMagic"));
+                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.Charges", charges));
+                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.MaxCharges", maxCharges));
+            }
+
             list.Add(" ");
             WritePotionSpellsInfos(list, client, spl, line);
             list.Add(" ");
             long nextPotionAvailTime = client.Player.TempProperties.getProperty<long>("LastPotionItemUsedTick_Type" + spl.SharedTimerGroup);
             // Satyr Update: Individual Reuse-Timers for Pots need a Time looking forward
             // into Future, set with value of "itemtemplate.CanUseEvery" and no longer back into past
-            if (nextPotionAvailTime > client.Player.CurrentRegion.Time)
+            if (!this.ClassType.Contains("DOL.GS.DieTriggerSpell"))
             {
-                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.UseItem3", Util.FormatTime((nextPotionAvailTime - client.Player.CurrentRegion.Time) / 1000)));
-            }
-            else
-            {
-                int minutes = CanUseEvery / 60;
-                int seconds = CanUseEvery % 60;
-
-                if (minutes == 0)
+                if (nextPotionAvailTime > client.Player.CurrentRegion.Time)
                 {
-                    list.Add(String.Format("Can use item every: {0} sec", seconds));
+                    list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.UseItem3", Util.FormatTime((nextPotionAvailTime - client.Player.CurrentRegion.Time) / 1000)));
                 }
                 else
                 {
-                    list.Add(String.Format("Can use item every: {0}:{1:00} min", minutes, seconds));
+                    int minutes = CanUseEvery / 60;
+                    int seconds = CanUseEvery % 60;
+
+                    if (minutes == 0)
+                    {
+                        list.Add(String.Format("Can use item every: {0} sec", seconds));
+                    }
+                    else
+                    {
+                        list.Add(String.Format("Can use item every: {0}:{1:00} min", minutes, seconds));
+                    }
                 }
             }
 
@@ -2213,6 +2220,11 @@ namespace DOL.GS
             {
                 list.Add(" ");
                 list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.NoUseInCombat"));
+            }
+
+            if (this.ClassType.Contains("DOL.GS.DieTriggerSpell"))
+            {
+                list.Add(" LevelRequired: " + LevelRequirement);
             }
         }
 

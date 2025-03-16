@@ -84,12 +84,14 @@ namespace DOL.GS.Commands
                 switch (args[1].ToLower())
                 {
                     case "harassment":
+                    case "harcèlement":
                         {
                             severity = (int)AppealMgr.eSeverity.High;
                             args[1] = "";
                             break;
                         }
                     case "naming":
+                    case "nom":
                         {
                             severity = (int)AppealMgr.eSeverity.Low;
                             args[1] = "";
@@ -97,6 +99,8 @@ namespace DOL.GS.Commands
                         }
                     case "other":
                     case "conduct":
+                    case "autre":
+                    case "conduite":
                         {
                             severity = (int)AppealMgr.eSeverity.Medium;
                             args[1] = "";
@@ -104,6 +108,8 @@ namespace DOL.GS.Commands
                         }
                     case "stuck":
                     case "emergency":
+                    case "bloqué":
+                    case "urgence":
                         {
                             severity = (int)AppealMgr.eSeverity.Critical;
                             args[1] = "";

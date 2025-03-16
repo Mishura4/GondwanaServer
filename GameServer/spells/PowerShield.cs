@@ -32,7 +32,7 @@ namespace DOL.GS.Spells
                 {
                     if (player != casterPlayer)
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerShield.EffectStartOthers", casterPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerShield.EffectStartOthers", player.GetPersonalizedName(casterPlayer)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -53,7 +53,7 @@ namespace DOL.GS.Spells
                 {
                     if (player != casterPlayer)
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerShield.EffectExpiresOthers", casterPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerShield.EffectExpiresOthers", player.GetPersonalizedName(casterPlayer)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -236,7 +236,7 @@ namespace DOL.GS.Spells
                     {
                         if (nearbyPlayer != player && nearbyPlayer != Caster)
                         {
-                            nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "SpellHandler.HealSpell.TargetSelfHealed", player.GetPersonalizedName(player), healedAmount), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                            nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "SpellHandler.HealSpell.TargetSelfHealed", nearbyPlayer.GetPersonalizedName(player), healedAmount), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                         }
                     }
                 }

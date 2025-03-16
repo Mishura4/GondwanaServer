@@ -23,7 +23,7 @@ namespace DOL.GS.Spells
             {
                 if (Caster is GamePlayer player)
                 {
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "CallAreaEffect.CheckBeginCast.NoSelectedTarget"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "TurretsRelease.CheckBeginCast.NoSelectedTarget"), eChatType.CT_SpellResisted);
                 }
                 return false;
             }
@@ -32,7 +32,7 @@ namespace DOL.GS.Spells
             {
                 if (Caster is GamePlayer player)
                 {
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "CallAreaEffect.CheckBeginCast.TargetTooFarAway"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "TurretsRelease.CheckBeginCast.TargetTooFarAway"), eChatType.CT_SpellResisted);
                 }
                 return false;
             }

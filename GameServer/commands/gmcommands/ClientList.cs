@@ -51,7 +51,7 @@ namespace DOL.GS.Commands
                 }
             }
 
-            client.Out.SendCustomTextWindow("[ Playing Client List ]", message);
+            client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.ClientList.Title"), message);
             return;
         }
     }

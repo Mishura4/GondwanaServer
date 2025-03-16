@@ -120,6 +120,8 @@ namespace DOL.GS.RealmAbilities
                      */
                     //if (gsp.Spell.SpellType == "DesperateBowman")//Can't be purged
                     //continue;
+                    gsp.CancelledByPurge = true;
+
                     effects.Add(gsp);
                     removed = true;
                 }
@@ -153,7 +155,7 @@ namespace DOL.GS.RealmAbilities
                 }
             }
             if (removed)
-                player.Stealth(false);
+                player!.Stealth(false);
             return removed;
         }
 

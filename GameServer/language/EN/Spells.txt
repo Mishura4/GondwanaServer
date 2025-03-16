@@ -87,7 +87,7 @@ SpellDescription.Resurrect.MainDescription:			Brings the target back to life, re
 SpellDescription.OffensiveProc.MainDescription:		{0} triggers a secondary spell with a {1}% chance on your melee attacks:
 SpellDescription.DefensiveProc.MainDescription:		{0} triggers a secondary spell with a {1}% chance when you are hit by melee attacks:
 SpellDescription.SpeedEnhancement.MainDescription:	The target's speed is increased to {0}% of normal.
-SpellDescription.SpellShield.MainDescription:		{0} absorbs 100% of spell damage and 65% of DoT effects when the player's health drops to 15% or lower.
+SpellDescription.SpellShield.MainDescription:		{0} absorbs 100% of spell damage and 70% of DoT effects when the player's health drops to 20% or lower.
 SpellDescription.StyleBleeding.MainDescription:		Target takes {0} {1} every {2} seconds.
 SpellDescription.StyleTaunt.Increase:				Taunts the target, increasing your threat against it by {0}.
 SpellDescription.StyleTaunt.Decrease:				Detaunts the target, decreasing your threat against it by -{0}.
@@ -160,6 +160,9 @@ SpellDescription.FocusShell.OnlyInPvPORvR:			This spell can only be used in RvR 
 SpellDescription.Powerless.MainDescription:			Allows you to cast a secondary spell without expending power.
 SpellDescription.Range.MainDescription:				Allows you to cast a secondary spell at {0}% range.
 SpellDescription.Uninterruptable.MainDescription:	Allows you to cast a secondary spell without being interrupted but reduces its effectiveness by {0}%.
+SpellDescription.Agony.ConditionDescription:		The target must be currently inflicted with Dread and Anguish before you can cast this spell.
+SpellDescription.Doom.ConditionDescription:			The target must be currently inflicted with Dread, Anguish and Agony before you can cast this spell.
+SpellDescription.Doom.Expires:						When expires:
 SpellDescription.BuffShear.Str:						Strips the target of any beneficial Strength spell effects.
 SpellDescription.BuffShear.Dex:						Strips the target of any beneficial Dexterity spell effects.
 SpellDescription.BuffShear.Con:						Strips the target of any beneficial Constitution spell effects.
@@ -167,6 +170,7 @@ SpellDescription.BuffShear.Acuity:					Strips the target of any beneficial Acuit
 SpellDescription.BuffShear.StrCon:					Strips the target of any beneficial Strength/Constitution dual spell effects.
 SpellDescription.BuffShear.DexQui:					Strips the target of any beneficial Dexterity/Quickness dual spell effects.
 SpellDescription.BuffShear.Random:					Randomly strips one beneficial spell effect from the target.
+SpellDescription.BuffShear.Ablative:				Strips the target of any ablative barrier.
 SpellDescription.ResistBuff.MainDescription:				Increases the target's resistance to {0} damage by {1}%.
 SpellDescription.BodySpiritEnergyBuff.MainDescription:		Increases the target's resistance to body, spirit, and energy damage by {0}%.
 SpellDescription.HeatColdMatterBuff.MainDescription:		Increases the target's resistance to heat, cold, and matter damage by {0}%.
@@ -202,6 +206,7 @@ SpellDescription.FumbleChanceDebuff.MainDescription:		Increases the target's cha
 SpellDescription.DPSDebuff.MainDescription:					Decreases DPS by {0}%.
 SpellDescription.SkillsDebuff.MainDescription:				Decreases skills by {0}%.
 SpellDescription.Warlock.SecondarySpell:					This is a secondary spell.
+SpellDescription.Warlock.PrimarySpell:						This is a primary spell.
 SpellDescription.AllStatsDebuff.MainDescription:			Decreases all stats of the target by {0}.
 SpellDescription.AllStatsPercentDebuff.MainDescription:		Decreases all stats of the target by {0}%.
 SpellDescription.Morph.MainDescription:						Target has been shapechanged to {0}.

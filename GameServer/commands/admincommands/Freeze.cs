@@ -44,6 +44,7 @@ namespace DOL.GS.Commands
             {
                 try
                 {
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Admin.Freeze.Starting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     delay = Convert.ToInt32(args[1]);
                     new RegionTimer(client.Player, FreezeCallback).Start(1);
                 }

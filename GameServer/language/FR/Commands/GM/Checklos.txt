@@ -1,0 +1,3 @@
+Commands.GM.Checklos.Description:		Vérifier la ligne de vue avec la cible
+Commands.GM.Checklos.Usage:				Usage: /checklos
+Commands.GM.Checklos.NeedTarget:		Vous avez besoin d'une cible pour utiliser cette commande.

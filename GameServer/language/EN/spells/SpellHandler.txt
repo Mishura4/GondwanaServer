@@ -200,7 +200,8 @@ SpellHandler.Chamber.CastsSpell:		{0} casts a spell!
 
 SpellHandler.Lifedrain.Heal:			You steal {0} hit point{1}.
 SpellHandler.Lifedrain.NoAbsorb:		You cannot absorb any more life.
-SpellHandler.PowerDrain.PowerGain:		Your summon channels {0} power to you!
+SpellHandler.PowerDrain.PowerGain:		You drain {0} power from the target!
+SpellHandler.PowerDrain.PowerLoss:		Your power has been drained by {1}. You lose {0}% of power!
 SpellHandler.PowerDrain.NoAbsorb:		You cannot absorb any more power.
 SpellHandler.PowerLock.SpellHit:		{0} siphons {1} power from you.
 SpellHandler.PowerLock.StealSuccess:	You siphon {1} power from {0}!
@@ -213,6 +214,9 @@ SpellHandler.BuffShear.ShearSuccess:		Your spell rips away some of your target's
 SpellHandler.BuffShear.EnhancingMagicRipped:	Some of your enhancing magic has been ripped away by a spell!
 SpellHandler.BuffShear.ConnectionTooStrong:	The target's connection to their enhancement is too strong for you to remove.
 SpellHandler.BuffShear.NoEnhancementFound:	No enhancement of that type found on the target.
+SpellHandler.AblativeShear.ShearSuccess:			Your spell rips away the target's ablative barrier(s).
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Your ablative barrier has been ripped away by a spell!
+SpellHandler.AblativeShear.NoEnhancementFound:		The target does not currently have any ablative barrier.
 
 SpellHandler.Conversion.MagicalAbsorption:	A magical spell absorbs {0} damage(s) of your attack!
 SpellHandler.Conversion.ConvertToHealth:	You convert {0} damage(s) into health.

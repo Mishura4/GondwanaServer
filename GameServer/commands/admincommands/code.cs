@@ -31,18 +31,18 @@ namespace DOL.GS.Commands
         "AdminCommands.Code.Usage")]
     public class DynCodeCommandHandler : AbstractCommandHandler, ICommandHandler
     {
-        private static log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public static void ExecuteCode(GameClient client, string methodBody)
         {
             var compiler = new DOLScriptCompiler();
             var compiledAssembly = compiler.CompileFromText(client, GetCode(methodBody));
 
-            var methodinf = compiledAssembly.GetType("DynCode").GetMethod("DynMethod");
+            var methodinf = compiledAssembly.GetType("DynCode")!.GetMethod("DynMethod");
 
             try
             {
-                methodinf.Invoke(null, new object[] { client.Player == null ? null : client.Player.TargetObject, client.Player });
+                methodinf!.Invoke(null, new object[] { client.Player == null ? null : client.Player.TargetObject, client.Player });
 
                 if (client.Player != null)
                 {

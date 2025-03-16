@@ -23,26 +23,27 @@ using System.Numerics;
 using System.Threading.Tasks;
 using DOL.GS;
 using DOL.GS.Geometry;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
     [CmdAttribute(
         "&checklos",
         ePrivLevel.GM,
-        "Check line of sight with the target",
-        "'/checklos'")]
+        "Commands.GM.Checklos.Description",
+        "Commands.GM.Checklos.Usage")]
     public class CheckLosCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public async void OnCommand(GameClient client, string[] args)
         {
             if (client.Player?.TargetObject == null && client.Player?.GroundTargetPosition == Position.Nowhere)
             {
-                DisplayMessage(client, "You need a target to use this command.");
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Checklos.NeedTarget"));
                 return;
             }
 
             var text = new List<string>();
-            if (client.Player.TargetObject != null)
+            if (client.Player!.TargetObject != null)
             {
                 var target = client.Player.TargetObject;
                 text.Add($"Target: {target.Name} (OID: {target.ObjectID}, distance: {(int)target.Coordinate.DistanceTo(client.Player.Position)})");

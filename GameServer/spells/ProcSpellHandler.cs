@@ -341,7 +341,7 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            ISpellHandler subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
+            ISpellHandler subSpell = ScriptMgr.CreateSpellHandler(m_caster, m_procSpell, m_procSpellLine);
             string subDesc = subSpell != null ? subSpell.GetDelveDescription(delveClient) : $"Spell with ID {Spell.Value} not found";
             string baseDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.OffensiveProc.MainDescription", Spell.Name, (Spell.Frequency / 100));
 
@@ -394,7 +394,7 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)
         {
-            ISpellHandler subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
+            ISpellHandler subSpell = ScriptMgr.CreateSpellHandler(m_caster, m_procSpell, m_procSpellLine);
             string subDesc = subSpell != null ? subSpell.GetDelveDescription(delveClient) : $"Spell with ID {Spell.Value} not found";
             string baseDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DefensiveProc.MainDescription", Spell.Name, (Spell.Frequency / 100));
 

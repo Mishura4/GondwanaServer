@@ -9502,6 +9502,49 @@ namespace DOL.GS
                             return false;
                         }
                     }
+
+                    if (spell.SpellType == "Anguish" || spell.SpellType == "Agony" || spell.SpellType == "Doom")
+                    {
+                        GameLiving castTarget = TargetObject as GameLiving;
+                        if (castTarget == null)
+                        {
+                            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "Spell.CharmSpell.InvalidTarget"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
+
+                        bool hasDread = false;
+                        bool hasAnguish = false;
+                        bool hasAgony = false;
+
+                        foreach (GameSpellEffect eff in castTarget.EffectList)
+                        {
+                            if (eff.SpellHandler != null)
+                            {
+                                string effType = eff.SpellHandler.Spell.SpellType;
+                                if (effType == "Dread") hasDread = true;
+                                if (effType == "Anguish") hasAnguish = true;
+                                if (effType == "Agony") hasAgony = true;
+                            }
+                        }
+
+                        if (spell.SpellType == "Anguish" && !hasDread)
+                        {
+                            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantSpellDirectly"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
+
+                        if (spell.SpellType == "Agony" && (!hasDread || !hasAnguish))
+                        {
+                            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "SpellDescription.Agony.ConditionDescription"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
+
+                        if (spell.SpellType == "Doom" && (!hasDread || !hasAnguish || !hasAgony))
+                        {
+                            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "SpellDescription.Doom.ConditionDescription"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
+                    }
                 }
 
                 lock (m_spellQueueAccessMonitor)

@@ -1,4 +1,5 @@
-SpellReflection.Self.Message:		Vous lancer un sort de réflection sur la cible.
+SpellReflection.Self.Message:		Un bouclier magique réfléchissant les sorts vous entoure.
+SpellReflection.Others.Message:		Un bouclier magique réfléchissant les sorts entoure {0}.
 SpellReflection.Self.Absorb:		Vous absorbez {0} dommages avant de renvoyer le sort.
 SpellReflection.Target.Absorbs:		La cible absorbe {0} dommages avant de renvoyer le sort.
 

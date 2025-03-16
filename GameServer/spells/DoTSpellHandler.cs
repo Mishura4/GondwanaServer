@@ -307,11 +307,31 @@ namespace DOL.GS.Spells
         {
             string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DoT.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType), Spell.Frequency / 1000.0);
 
+            if (Spell.SubSpellID != 0)
+            {
+                Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
+                if (subSpell != null)
+                {
+                    ISpellHandler subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, subSpell, null);
+                    if (subSpellHandler != null)
+                    {
+                        string subspelldesc = subSpellHandler.GetDelveDescription(delveClient);
+                        description += "\n\n" + subspelldesc;
+                    }
+                }
+            }
+
             if (Spell.IsSecondary)
             {
                 string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
                 if (!string.IsNullOrEmpty(secondaryMessage))
                     description += "\n\n" + secondaryMessage;
+            }
+
+            if (Spell.IsPrimary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.PrimarySpell");
+                description += "\n\n" + secondaryMessage;
             }
 
             return description;

@@ -22,6 +22,14 @@ namespace DOL.GS.Spells
             if (Caster is GamePlayer casterPlayer)
             {
                 MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "SpellReflection.Self.Message"), eChatType.CT_Spell);
+
+                foreach (GamePlayer nearbyPlayer in casterPlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    if (nearbyPlayer != casterPlayer)
+                    {
+                        nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "SpellReflection.Others.Message", nearbyPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                }
             }
             SendEffectAnimation(effect.Owner, 0, false, 1);
         }

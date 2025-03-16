@@ -12,7 +12,6 @@ namespace DOL.GS.Spells
     /// <summary>
     /// Use it to call only subspell and dislay additional information in delv info
     /// </summary>
-    [SpellHandler("AvaloniaFake")]
     public class FakeSpellHandler : SpellHandler
     {
         public FakeSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
@@ -32,9 +31,9 @@ namespace DOL.GS.Spells
             while (spell.SubSpellID != 0)
             {
                 spell = SkillBase.GetSpellByID((int)spell.SubSpellID);
-                shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).GetDelveDescription(delveClient) + "\n";
+                shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).GetDelveDescription(delveClient) + "\n\n";
             }
-            return base.GetDelveDescription(delveClient);
+            return shortDescription;
         }
     }
 

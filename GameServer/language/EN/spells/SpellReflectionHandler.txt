@@ -1,4 +1,5 @@
-SpellReflection.Self.Message:		You cast a spell reflect at the target.
+SpellReflection.Self.Message:		A shimmering barrier of spell reflection surrounds you.
+SpellReflection.Others.Message:		A shimmering barrier of spell reflection surrounds {0}.
 SpellReflection.Self.Absorb:		You absorb {0} damages before returning the spell.
 SpellReflection.Target.Absorbs:		The target absorbs {0} damages before returning the spell.
 

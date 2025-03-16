@@ -1856,7 +1856,7 @@ namespace AmteScripts.Managers
                 }
             }
 
-            if (_activeSession.SessionType == 5 || _activeSession.SessionType == 6)
+            if (_activeSession.SessionType == 4 || _activeSession.SessionType == 5)
             {
                 var outpostItems = PvPAreaOutposts.CreateGuildOutpostTemplate01(pos, player, null);
                 foreach (var staticItem in outpostItems)
@@ -1942,7 +1942,7 @@ namespace AmteScripts.Managers
                 }
             }
 
-            if (_activeSession.SessionType == 5 || _activeSession.SessionType == 6)
+            if (_activeSession.SessionType == 4 || _activeSession.SessionType == 5)
             {
                 var outpostItems = PvPAreaOutposts.CreateGuildOutpostTemplate01(pos, leader, null);
                 foreach (var staticItem in outpostItems)
@@ -2193,7 +2193,7 @@ namespace AmteScripts.Managers
             var groupScores = GetGroupScore(guild);
             var doAdd = (PlayerScore score) =>
             {
-                score.Terr_TerritoriesOwnershipPoints += 20;
+                score.Terr_TerritoriesCapturedPoints += 20;
                 score.Terr_TerritoriesCapturedCount++;
             };
             doAdd(groupScores.Totals);
@@ -2607,7 +2607,7 @@ namespace AmteScripts.Managers
                     scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPSoloKills", new Score(ps.Terr_SoloKillsPoints, ps.Terr_SoloKills)));
                     scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPGrpKills", new Score(ps.Terr_GroupKillsPoints, ps.Terr_GroupKills)));
                     scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPTerritoryCaptures", new Score(ps.Terr_TerritoriesCapturedPoints, ps.Terr_TerritoriesCapturedCount)));
-                    scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPOwnership", new Score(ps.Terr_TerritoriesOwnershipPoints, 0)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPOwnership", new Score(ps.Terr_TerritoriesOwnershipPoints, 0, ScoreType.BonusPoints)));
                     break;
 
                 case 6: // Boss Kill

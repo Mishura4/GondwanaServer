@@ -3,6 +3,7 @@ using DOL.GS;
 using DOL.GS.Spells;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -65,16 +66,17 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            string baseDesc = base.GetDelveDescription(delveClient);
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string baseDesc = LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamage.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
             int recastSeconds = Spell.RecastDelay / 1000;
             double endLoss = Spell.Damage * 0.15;
             double powerLoss = Spell.Damage * 0.55;
-            string additionalLossDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.OmniHarm.MainDescription", endLoss, powerLoss);
+            string additionalLossDesc = LanguageMgr.GetTranslation(language, "SpellDescription.OmniHarm.MainDescription", endLoss, powerLoss);
             baseDesc += "\n\n" + additionalLossDesc;
 
             if (Spell.RecastDelay > 0)
             {
-                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                string secondDesc = LanguageMgr.GetTranslation(language, "SpellDescription.Disarm.MainDescription2", recastSeconds);
                 return baseDesc + "\n\n" + secondDesc;
             }
 

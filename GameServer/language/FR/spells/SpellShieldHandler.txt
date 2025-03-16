@@ -1,3 +1,4 @@
-SpellShield.Self.Message:		Vous lancez un Bouclier Magique de Blindage contre les Sorts.
+SpellShield.Self.Message:		Vous lancez un Bouclier Magique de Blindage contre les sorts.
+SpellShield.Others.Message:		{0} est blindé contre les sorts !
 SpellShield.Self.Absorb:		Vous absorbez {0} de dégâts grâce à votre Bouclier Magique.
 SpellShield.Target.Absorbs:		{0} absorbe {1} de dégâts grâce à son Bouclier Magique.

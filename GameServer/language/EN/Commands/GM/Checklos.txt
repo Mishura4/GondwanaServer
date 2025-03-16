@@ -1,0 +1,3 @@
+Commands.GM.Checklos.Description:		Check line of sight with the target
+Commands.GM.Checklos.Usage:				Usage: /checklos
+Commands.GM.Checklos.NeedTarget:		You need a target to use this command.

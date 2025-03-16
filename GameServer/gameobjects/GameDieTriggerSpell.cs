@@ -22,6 +22,13 @@ namespace DOL.GS
         /// </summary>
         public void OnPlayerDie(GamePlayer deadOwner, GameObject killer)
         {
+            if (deadOwner.Level < this.LevelRequirement)
+            {
+                if (log.IsDebugEnabled)
+                    log.DebugFormat("DieTriggerSpell [Id={0}, Name={1}] not triggered; player level {2} < required {3}.", this.Id_nb, this.Name, deadOwner.Level, this.LevelRequirement);
+                return;
+            }
+
             if (SlotPosition < (int)eInventorySlot.FirstBackpack || SlotPosition > (int)eInventorySlot.LastBackpack)
                 return;
 

@@ -47,7 +47,7 @@ namespace DOL.GS.PropertyCalc
                             CastTime = 0,
                             ClientEffect = 15217,
                             Icon = 12031,
-                            Description = "Absorbs 100% of spell damage when the player's health is at 15% or below.",
+                            Description = "Absorbs 100% of spell damage when the player's health is at 20% or below.",
                             Name = "Spell Shield",
                             Power = -5,
                             Range = 0,

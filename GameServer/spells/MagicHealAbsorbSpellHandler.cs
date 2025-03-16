@@ -24,37 +24,32 @@ namespace DOL.GS.Spells
             GameLiving living = effect.Owner;
             GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
 
-            if (Caster is GamePlayer casterPlayer)
+            if (!string.IsNullOrEmpty(Spell.Message1))
+                MessageToLiving(effect.Owner, Spell.GetFormattedMessage1(effect.Owner as GamePlayer), eChatType.CT_Spell);
+
+            foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
-                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "Languages.DBSpells.AFBuffDefAuraYou"), eChatType.CT_Spell);
-
-                foreach (GamePlayer player in casterPlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                {
-                    if (player != casterPlayer)
-                    {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Languages.DBSpells.AFBuffDefAuraTarget", casterPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    }
-                }
+                if (player != effect.Owner && !string.IsNullOrEmpty(Spell.Message2))
+                    player.Out.SendMessage(Spell.GetFormattedMessage2(player, player.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
             }
-
-            SendEffectAnimation(effect.Owner, 0, false, 1);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
+            base.OnEffectExpires(effect, noMessages);
+
             GameLiving living = effect.Owner;
             GameEventMgr.RemoveHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
 
-            if (Caster is GamePlayer casterPlayer)
-            {
-                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "Languages.DBSpells.AFBuffDefAuraYouEnd"), eChatType.CT_SpellExpires);
+            if (!noMessages && !string.IsNullOrEmpty(Spell.Message3))
+                MessageToLiving(effect.Owner, Spell.GetFormattedMessage3(effect.Owner as GamePlayer), eChatType.CT_SpellExpires);
 
-                foreach (GamePlayer player in casterPlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            if (!noMessages && !string.IsNullOrEmpty(Spell.Message4))
+            {
+                foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
-                    if (player != casterPlayer)
-                    {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Languages.DBSpells.AFBuffDefAuraTargetend", casterPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
-                    }
+                    if (player != effect.Owner && !string.IsNullOrEmpty(Spell.Message4))
+                        player.Out.SendMessage(Spell.GetFormattedMessage4(player, player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
                 }
             }
 
@@ -74,12 +69,17 @@ namespace DOL.GS.Spells
 
             bool isApplicableSpell = false;
 
-            if (ad.AttackType == AttackData.eAttackType.Spell)
+            if (ad.AttackType == AttackData.eAttackType.Spell || ad.AttackType == AttackData.eAttackType.DoT)
             {
                 if (ad.SpellHandler != null && ad.SpellHandler.Spell != null)
                 {
                     string spellType = ad.SpellHandler.Spell.SpellType;
-                    if (spellType == "DirectDamage" || spellType == "DamageOverTime" || spellType == "Bolt" || spellType == "Bomber" || spellType == "HereticDamageSpeedDecreaseLOP" || spellType == "HereticDoTLostOnPulse" || spellType == "DirectDamageWithDebuff" || spellType == "Lifedrain" || spellType == "OmniLifedrain")
+                    if (spellType == "DirectDamage" || spellType == "Bolt" || spellType == "Bomber" || spellType == "HereticDamageSpeedDecreaseLOP" || spellType == "HereticDoTLostOnPulse" || spellType == "DirectDamageWithDebuff" || spellType == "Lifedrain" || spellType == "OmniLifedrain")
+                    {
+                        isApplicableSpell = true;
+                    }
+
+                    else if (ad.SpellHandler is DoTSpellHandler)
                     {
                         isApplicableSpell = true;
                     }
@@ -96,7 +96,6 @@ namespace DOL.GS.Spells
             int originalDamage = ad.Damage + ad.CriticalDamage;
 
             int damageToAbsorb = (originalDamage * absorbPercent) / 100;
-            int remainingDamage = originalDamage - damageToAbsorb;
 
             ad.Damage = (ad.Damage * remainingDamagePercent) / 100;
             ad.CriticalDamage = (ad.CriticalDamage * remainingDamagePercent) / 100;
@@ -199,13 +198,14 @@ namespace DOL.GS.Spells
                     {
                         if (target is GamePlayer player)
                         {
-                            string attackerName = ad.Attacker?.GetPersonalizedName(ad.Attacker);
+                            string attackerName = player.GetPersonalizedName(ad.Attacker);
 
                             MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.HealSpell.YouAreHealed", attackerName, healedAmount), eChatType.CT_Spell);
 
                             if (ad.Attacker is GamePlayer attackerPlayer)
                             {
-                                MessageToLiving(attackerPlayer, LanguageMgr.GetTranslation(attackerPlayer.Client, "SpellHandler.HealSpell.TargetDamageToHeal", player.GetPersonalizedName(player), healedAmount), eChatType.CT_Spell);
+                                string targetName = attackerPlayer.GetPersonalizedName(player);
+                                MessageToLiving(attackerPlayer, LanguageMgr.GetTranslation(attackerPlayer.Client, "SpellHandler.HealSpell.TargetDamageToHeal", targetName, healedAmount), eChatType.CT_Spell);
                             }
                         }
                     }

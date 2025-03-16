@@ -87,7 +87,7 @@ SpellDescription.Resurrect.MainDescription:			Ressuscite la cible, lui rendant {
 SpellDescription.OffensiveProc.MainDescription:		{0} déclenche un sort secondaire avec {1}% de chance sur vos attaques de mêlée :
 SpellDescription.DefensiveProc.MainDescription:		{0} déclenche un sort secondaire avec {1}% de chance lorsque vous êtes frappé par des attaques de mêlée :
 SpellDescription.SpeedEnhancement.MainDescription:	La vitesse de la cible est augmentée à {0}% de sa vitesse normale.
-SpellDescription.SpellShield.MainDescription:		{0} absorbe 100% des dégâts magiques et 65% des effets de dégâts répétés sur la durée (DoT) lorsque la santé du joueur descend à 15% ou moins.
+SpellDescription.SpellShield.MainDescription:		{0} absorbe 100% des dégâts magiques et 70% des effets de dégâts répétés sur la durée (DoT) lorsque la santé du joueur descend à 20% ou moins.
 SpellDescription.StyleBleeding.MainDescription:		La cible subit {0} {1} toutes les {2} secondes.
 SpellDescription.StyleTaunt.Increase:				Provoque la cible, augmentant votre niveau de menace contre elle de {0}.
 SpellDescription.StyleTaunt.Decrease:				Réduit la provocation sur la cible, diminuant votre niveau de menace contre elle de -{0}.
@@ -160,6 +160,9 @@ SpellDescription.FocusShell.OnlyInPvPORvR:			Ce sort ne peut être utilisé que 
 SpellDescription.Powerless.MainDescription:			Vous permet d'incanter un sort secondaire sans dépenser de mana.
 SpellDescription.Range.MainDescription:				Vous permet d'incanter un sort secondaire à {0}% de portée.
 SpellDescription.Uninterruptable.MainDescription:	Vous permet d'incanter un sort secondaire sans être interrompu mais réduit son efficacité de {0}%.
+SpellDescription.Agony.ConditionDescription:		La cible doit être sous l'effet de « Dread » et « Anguish » pour lancer ce sort.
+SpellDescription.Doom.ConditionDescription:			La cible doit être sous l'effet de « Dread », « Anguish » et « Agony » pour lancer ce sort.
+SpellDescription.Doom.Expires:						A l'expiration du sort :
 SpellDescription.BuffShear.Str:						Supprime les effets de sort bénéfiques augmentant la Force de la cible.
 SpellDescription.BuffShear.Dex:						Supprime les effets de sort bénéfiques augmentant la Dextérité de la cible.
 SpellDescription.BuffShear.Con:						Supprime les effets de sort bénéfiques augmentant la Constitution de la cible.
@@ -167,6 +170,7 @@ SpellDescription.BuffShear.Acuity:					Supprime les effets de sort bénéfiques 
 SpellDescription.BuffShear.StrCon:					Supprime les effets de sort bénéfiques augmentant la Force/Constitution de la cible.
 SpellDescription.BuffShear.DexQui:					Supprime les effets de sort bénéfiques augmentant la Dextérité/Vivacité de la cible.
 SpellDescription.BuffShear.Random:					Supprime aléatoirement un effet de sort bénéfique de la cible.
+SpellDescription.BuffShear.Ablative:				Supprime tous les boucliers ablatifs présents sur la cible.
 SpellDescription.ResistBuff.MainDescription:				Augmente la résistance de la cible aux {0} de {1}%.
 SpellDescription.BodySpiritEnergyBuff.MainDescription:		Augmente la résistance de la cible aux dégâts de corps, d'esprit et d'énergie de {0}%.
 SpellDescription.HeatColdMatterBuff.MainDescription:		Augmente la résistance de la cible aux dégâts de chaleur, de froid et de matière de {0}%.
@@ -202,6 +206,7 @@ SpellDescription.FumbleChanceDebuff.MainDescription:		Augmente la probabilité q
 SpellDescription.DPSDebuff.MainDescription:					Réduit le DPS de {0}%.
 SpellDescription.SkillsDebuff.MainDescription:				Réduit les compétences de {0}%.
 SpellDescription.Warlock.SecondarySpell:					Ceci est un sort secondaire.
+SpellDescription.Warlock.PrimarySpell:						Ceci est un sort primaire.
 SpellDescription.AllStatsDebuff.MainDescription:			Réduit toutes les stats de la cible de {0}.
 SpellDescription.AllStatsPercentDebuff.MainDescription:		Réduit toutes les stats de la cible de {0}%.
 SpellDescription.Morph.MainDescription:						La cible a été changée en {0}.

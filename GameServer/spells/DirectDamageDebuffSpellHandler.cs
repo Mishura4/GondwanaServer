@@ -271,6 +271,20 @@ namespace DOL.GS.Spells
             int recastSeconds = Spell.RecastDelay / 1000;
             string description = LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamageWithDebuff.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType), LanguageMgr.GetProperty(delveClient, Property1), Spell.Value);
 
+            if (Spell.SubSpellID != 0)
+            {
+                Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
+                if (subSpell != null)
+                {
+                    ISpellHandler subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, subSpell, null);
+                    if (subSpellHandler != null)
+                    {
+                        string subspelldesc = subSpellHandler.GetDelveDescription(delveClient);
+                        description += "\n\n" + subspelldesc;
+                    }
+                }
+            }
+
             if (Spell.IsSecondary)
             {
                 string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");

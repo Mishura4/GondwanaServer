@@ -200,7 +200,8 @@ SpellHandler.Chamber.CastsSpell:		{0} lance un sort !
 
 SpellHandler.Lifedrain.Heal:			Vous volez {0} point{1} de vie.
 SpellHandler.Lifedrain.NoAbsorb:		Vous ne pouvez plus absorber davantage de points de Vie.
-SpellHandler.PowerDrain.PowerGain:		Votre invocation canalise {0} Mana vers vous !
+SpellHandler.PowerDrain.PowerGain:		Votre siphonnez {0} Mana à la cible !
+SpellHandler.PowerDrain.PowerLoss:		{0}% de votre mana a été siphonnée par {1}!
 SpellHandler.PowerDrain.NoAbsorb:		Vous ne pouvez pas absorber davantage de Mana.
 SpellHandler.PowerLock.SpellHit:		{0} vous siphonne {1} Mana.
 SpellHandler.PowerLock.StealSuccess:	Vous siphonnez {1} Mana de {0}!
@@ -213,6 +214,9 @@ SpellHandler.BuffShear.ShearSuccess:		Votre sort arrache une partie de la magie 
 SpellHandler.BuffShear.EnhancingMagicRipped:	Une partie de votre magie d'amélioration a été arrachée par un sort !
 SpellHandler.BuffShear.ConnectionTooStrong:	La connexion de la cible à son amélioration est trop forte pour que vous puissiez la retirer.
 SpellHandler.BuffShear.NoEnhancementFound:	Aucune amélioration de ce type trouvée sur la cible.
+SpellHandler.AblativeShear.ShearSuccess:			Votre sort supprime les boucliers ablatifs de votre cible.
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Votre bouclier ablatif a été supprimé par un sort !
+SpellHandler.AblativeShear.NoEnhancementFound:		La cible ne possède pas de bouclier ablatif.
 
 SpellHandler.Conversion.MagicalAbsorption:	Un sort magique absorbe {0} des dommages de votre attaque !
 SpellHandler.Conversion.ConvertToHealth:	Vous convertissez {0} de dommages en points de Vie.

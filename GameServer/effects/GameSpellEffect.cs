@@ -175,6 +175,8 @@ namespace DOL.GS.Effects
 
         protected GameTimer m_effectTimer;
 
+        public bool CancelledByPurge { get; set; } = false;
+
         #endregion
 
         #region public Getters

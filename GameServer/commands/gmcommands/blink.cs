@@ -46,11 +46,11 @@ namespace DOL.GS.Commands
                     if (Enum.IsDefined(typeof(ePanel), value))
                     {
                         // Give the user some information
-                        client.Out.SendMessage("Start blinking UI part: " + Enum.GetName(typeof(ePanel), value), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Blink.Start", Enum.GetName(typeof(ePanel), value)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                         // If we have a target, send the blink panel to him or make our own UI blink otherwise
-                        if (player.TargetObject != null && player.TargetObject is GamePlayer && (player.TargetObject as GamePlayer).Client.IsPlaying)
-                            (player.TargetObject as GamePlayer).Out.SendBlinkPanel(value);
+                        if (player.TargetObject != null && player.TargetObject is GamePlayer && (player.TargetObject as GamePlayer)!.Client.IsPlaying)
+                            (player.TargetObject as GamePlayer)!.Out.SendBlinkPanel(value);
                         else
                             player.Out.SendBlinkPanel(value);
 

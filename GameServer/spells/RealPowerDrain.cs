@@ -42,7 +42,10 @@ namespace DOL.GS.Spells
             target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -Spell.AmnesiaChance * target.MaxMana / 100);
 
             if (powerGain > 0)
+            {
                 MessageToOwner(LanguageMgr.GetTranslation((owner as GamePlayer)?.Client, "SpellHandler.PowerDrain.PowerGain", powerGain), eChatType.CT_Spell);
+                MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.PowerDrain.PowerLoss", powerGain, target.GetPersonalizedName(m_caster)), eChatType.CT_Spell);
+            }
             else
                 MessageToOwner(LanguageMgr.GetTranslation((owner as GamePlayer)?.Client, "SpellHandler.PowerDrain.NoAbsorb"), eChatType.CT_SpellResisted);
         }

@@ -24,6 +24,7 @@ using DOL.AI.Brain;
 namespace DOL.GS.Spells
 {
     using DOL.GS.Scripts;
+    using DOL.GS.ServerProperties;
     using DOL.Language;
     using Effects;
 
@@ -538,7 +539,36 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.Heal.MainDescription", Spell.Value);
+            string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string description = LanguageMgr.GetTranslation(language, "SpellDescription.Heal.MainDescription", Spell.Value);
+
+            if (Spell.SubSpellID != 0)
+            {
+                Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
+                if (subSpell != null)
+                {
+                    ISpellHandler subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, subSpell, null);
+                    if (subSpellHandler != null)
+                    {
+                        string subspelldesc = subSpellHandler.GetDelveDescription(delveClient);
+                        description += "\n\n" + subspelldesc;
+                    }
+                }
+            }
+
+            if (Spell.IsSecondary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            if (Spell.IsPrimary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.PrimarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            return description;
         }
     }
 }

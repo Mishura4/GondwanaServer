@@ -209,9 +209,29 @@ namespace DOL.GS.Spells
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
             string description = LanguageMgr.GetTranslation(language, "SpellDescription.DirectDamage.MainDescription", Spell.Damage, LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType));
 
+            if (Spell.SubSpellID != 0)
+            {
+                Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
+                if (subSpell != null)
+                {
+                    ISpellHandler subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, subSpell, null);
+                    if (subSpellHandler != null)
+                    {
+                        string subspelldesc = subSpellHandler.GetDelveDescription(delveClient);
+                        description += "\n\n" + subspelldesc;
+                    }
+                }
+            }
+
             if (Spell.IsSecondary)
             {
                 string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            if (Spell.IsPrimary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.PrimarySpell");
                 description += "\n\n" + secondaryMessage;
             }
 
