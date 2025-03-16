@@ -2202,9 +2202,6 @@ namespace AmteScripts.Managers
         
         public void AwardTerritoryCapturePoints(Territory territory, GamePlayer player)
         {
-            if (player.Guild == null)
-                return;
-
             if (CurrentSession is not { SessionType: 5 })
                 return;
 
@@ -2214,14 +2211,17 @@ namespace AmteScripts.Managers
             if (territory.Zone == null || !CurrentZones.Contains(territory.Zone))
                 return;
 
-            var groupScores = GetGroupScore(player.Guild);
             var doAdd = (PlayerScore score) =>
             {
                 score.Terr_TerritoriesCapturedPoints += 20;
                 score.Terr_TerritoriesCapturedCount++;
             };
-            doAdd(groupScores.Totals);
-            doAdd(groupScores.GetOrCreateScore(player));
+            if (player.Guild != null)
+            {
+                var groupScores = GetGroupScore(player.Guild);
+                doAdd(groupScores.Totals);
+                doAdd(groupScores.GetOrCreateScore(player));
+            }
             doAdd(GetIndividualScore(player));
         }
 
@@ -2235,12 +2235,23 @@ namespace AmteScripts.Managers
         
         #region CTF methods
 
-        public void AwardCTFOwnershipPoints(GamePlayer carrier)
+        public void AwardCTFOwnershipPoints(GamePlayer player, int points)
         {
             if (!IsOpen)
                 return;
             
+            var doAdd = (PlayerScore score) =>
+            {
+                score.Flag_OwnershipPoints += points;
+            };
             
+            if (player.Guild != null)
+            {
+                var groupScores = GetGroupScore(player.Guild); 
+                doAdd(groupScores.Totals);
+                doAdd(groupScores.GetOrCreateScore(player));
+            }
+            doAdd(GetIndividualScore(player));
         }
         
         #endregion

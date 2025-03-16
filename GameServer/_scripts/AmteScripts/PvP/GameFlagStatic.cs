@@ -98,12 +98,6 @@ namespace AmteScripts.PvP.CTF
             OwnerGuild = null;
             Emblem = 0;
 
-            if (BasePad != null)
-            {
-                var score = PvpManager.Instance.GetIndividualScore(player);
-                score.Flag_FlagReturnsPoints += 4;
-            }
-
             ushort effectID = (ushort)Util.Random(5811, 5815);
             foreach (GamePlayer plr in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).OfType<GamePlayer>())
             {
