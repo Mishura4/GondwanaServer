@@ -100,11 +100,15 @@ namespace AmteScripts.Managers
                 PvpManager.Instance.KickPlayer(player);
             else
                 PvpManager.Instance.CleanupPlayer(player);
+            
             return 0;
         }
 
         public void PlayerLinkDeath(GamePlayer player)
         {
+            if (!IsOpen)
+                return;
+            
             int gracePeriodMs = 20 * 60 * 1000;
             var timerRegion = WorldMgr.GetRegion(1);
             var timer = new RegionTimer(timerRegion.TimeManager);
@@ -113,6 +117,27 @@ namespace AmteScripts.Managers
             {
                 _graceTimers[player.InternalID] = timer;
             }
+            
+            if (CurrentSession!.SessionType == 2) // CTF
+            {
+                // Remove any FlagInventoryItem items from the player's backpack
+                int totalFlagRemoved = 0;
+                for (eInventorySlot slot = eInventorySlot.FirstBackpack;
+                     slot <= eInventorySlot.LastBackpack;
+                     slot++)
+                {
+                    InventoryItem item = player.Inventory.GetItem(slot);
+                    if (item is FlagInventoryItem flag)
+                    {
+                        int flagCount = flag.Count;
+                        if (flag.DropFlagOnGround(player, null))
+                        {
+                            totalFlagRemoved += flagCount;
+                        }
+                    }
+                }
+            }
+            
             timer.Callback = (t) => LinkdeathPvPGraceCallback(player, t);
             timer.Start(1 + gracePeriodMs);
             if (log.IsInfoEnabled)

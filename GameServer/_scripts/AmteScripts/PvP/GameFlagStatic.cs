@@ -101,10 +101,7 @@ namespace AmteScripts.PvP.CTF
             if (BasePad != null)
             {
                 var score = PvpManager.Instance.GetIndividualScore(player);
-                if (score != null)
-                {
-                    score.Flag_FlagReturnsPoints += 4;
-                }
+                score.Flag_FlagReturnsPoints += 4;
             }
 
             ushort effectID = (ushort)Util.Random(5811, 5815);
@@ -130,7 +127,6 @@ namespace AmteScripts.PvP.CTF
             Emblem = 0;
 
             bool success = PlayerPickupFlag(captor);
-
             if (success)
             {
                 ushort effectID = (ushort)Util.Random(5811, 5815);
