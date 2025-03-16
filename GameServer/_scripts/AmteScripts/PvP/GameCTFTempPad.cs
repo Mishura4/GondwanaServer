@@ -144,7 +144,7 @@ namespace AmteScripts.PvP.CTF
             }
             if (OwnedFlag != null)
             {
-                OwnedFlag.RemoveFromWorld();
+                OwnedFlag.Reset();
                 OwnedFlag = null;
             }
             base.Delete();

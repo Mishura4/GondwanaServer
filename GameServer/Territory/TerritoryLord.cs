@@ -709,7 +709,7 @@ namespace DOL.Territories
                 player.Out.SendSoundEffect(9207, player.Position, 0);
                 NewsMgr.CreateNews("GameUtils.Guild.Territory.Capture.Captured", 0, eNewsType.PvE, false, true, player.GuildName, CurrentTerritory.Name);
 
-                PvpManager.Instance?.AwardTerritoryCapturePoints(CurrentTerritory, player.Guild);
+                PvpManager.Instance?.AwardTerritoryCapturePoints(CurrentTerritory, player);
             }
             else
             {

@@ -2175,9 +2175,9 @@ namespace AmteScripts.Managers
             return 30000;
         }
         
-        public void AwardTerritoryCapturePoints(Territory territory, Guild guild)
+        public void AwardTerritoryCapturePoints(Territory territory, GamePlayer player)
         {
-            if (guild == null)
+            if (player.Guild == null)
                 return;
 
             if (CurrentSession is not { SessionType: 5 })
@@ -2189,21 +2189,15 @@ namespace AmteScripts.Managers
             if (territory.Zone == null || !CurrentZones.Contains(territory.Zone))
                 return;
 
-            var groupScores = GetGroupScore(guild);
+            var groupScores = GetGroupScore(player.Guild);
             var doAdd = (PlayerScore score) =>
             {
                 score.Terr_TerritoriesCapturedPoints += 20;
                 score.Terr_TerritoriesCapturedCount++;
             };
             doAdd(groupScores.Totals);
-            foreach (var member in guild.GetListOfOnlineMembers())
-            {
-                if (member.IsInPvP && member.Client != null && member.Client.Player != null)
-                {
-                    doAdd(groupScores.GetOrCreateScore(member));
-                    doAdd(GetIndividualScore(member.Client.Player));
-                }
-            }
+            doAdd(groupScores.GetOrCreateScore(player));
+            doAdd(GetIndividualScore(player));
         }
 
         private bool IsTerritoryInSessionZones(Territory territory, IEnumerable<ushort> zoneIDs)
