@@ -1943,7 +1943,7 @@ namespace AmteScripts.Managers
 
                     if (staticItem is GameCTFTempPad temppad)
                     {
-                        temppad.SetOwner(leader);
+                        temppad.SetOwner(pvpGuild);
                     }
                 }
             }
@@ -2243,6 +2243,48 @@ namespace AmteScripts.Managers
             var doAdd = (PlayerScore score) =>
             {
                 score.Flag_OwnershipPoints += points;
+            };
+            
+            if (player.Guild != null)
+            {
+                var groupScores = GetGroupScore(player.Guild); 
+                doAdd(groupScores.Totals);
+                doAdd(groupScores.GetOrCreateScore(player));
+            }
+            doAdd(GetIndividualScore(player));
+        }
+
+        public void AwardCTFOwnershipPoints(Guild guild, int points)
+        {
+            if (!IsOpen)
+                return;
+            
+            var doAdd = (PlayerScore score) =>
+            {
+                score.Flag_OwnershipPoints += points;
+            };
+            
+            if (guild != null)
+            {
+                var groupScores = GetGroupScore(guild); 
+                doAdd(groupScores.Totals);
+                foreach (var player in guild.GetListOfOnlineMembers())
+                {
+                    doAdd(groupScores.GetOrCreateScore(player));
+                    doAdd(GetIndividualScore(player));
+                }
+            }
+        }
+
+        public void AwardCTFCapturePoints(GamePlayer player)
+        {
+            if (!IsOpen)
+                return;
+            
+            var doAdd = (PlayerScore score) =>
+            {
+                score.Flag_FlagReturnsCount += 1;
+                score.Flag_FlagReturnsPoints += 20;
             };
             
             if (player.Guild != null)

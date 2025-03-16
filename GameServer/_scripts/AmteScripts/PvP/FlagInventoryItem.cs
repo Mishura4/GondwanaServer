@@ -13,7 +13,6 @@ namespace AmteScripts.PvP.CTF
     {
         public GameFlagStatic FlagReference { get; private set; }
         public bool IsRemovalExpected { get; set; } = false;
-        private RegionTimer _pointsTimer;
         private const int POINT_AWARD_INTERVAL_MS = 20000;
         private const int POINTS_PER_AWARD = 1;
         public FlagInventoryItem() : base() { }
@@ -124,31 +123,7 @@ namespace AmteScripts.PvP.CTF
                 }
             }
 
-            if (_pointsTimer != null)
-                _pointsTimer.Stop();
-
             IsRemovalExpected = false;
-        }
-
-        /// <inheritdoc />
-        public override void OnReceive(GamePlayer player)
-        {
-            base.OnReceive(player);
-
-            if (_pointsTimer != null)
-                _pointsTimer.Stop();
-            
-            _pointsTimer = new RegionTimer(player, AwardPoints);
-            _pointsTimer.Start(AwardPoints(_pointsTimer));
-        }
-
-        private int AwardPoints(RegionTimer callingtimer)
-        {
-            if (m_owner == null || m_owner.IsInPvP == false)
-                return 0;
-            
-            PvpManager.Instance.AwardCTFOwnershipPoints(m_owner, POINTS_PER_AWARD);
-            return POINT_AWARD_INTERVAL_MS;
         }
 
         /// <summary>

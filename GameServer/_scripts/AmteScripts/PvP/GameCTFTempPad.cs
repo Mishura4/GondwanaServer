@@ -12,6 +12,8 @@ namespace AmteScripts.PvP.CTF
     public class GameCTFTempPad : GameStaticItem
     {
         public GamePlayer OwnerPlayer { get; set; }
+        
+        public Guild OwnerGuild { get; set; }
 
         private RegionTimer _ownershipTimer;
         private int _pointsInterval = 20_000;
@@ -59,8 +61,11 @@ namespace AmteScripts.PvP.CTF
 
             if (OwnerPlayer != null)
             {
-                var score = PvpManager.Instance.GetIndividualScore(OwnerPlayer);
-                score.Flag_OwnershipPoints += 1;
+                PvpManager.Instance.AwardCTFOwnershipPoints(OwnerPlayer, 1);
+            }
+            else if (OwnerGuild != null)
+            {
+                PvpManager.Instance.AwardCTFOwnershipPoints(OwnerGuild, 1);
             }
 
             return _pointsInterval;
@@ -116,9 +121,7 @@ namespace AmteScripts.PvP.CTF
                     OwnedFlag = staticFlag;
                     StartOwnershipTimer(staticFlag, player);
 
-                    var score = PvpManager.Instance.GetIndividualScore(player);
-                    score.Flag_FlagReturnsCount++;
-                    score.Flag_FlagReturnsPoints += 20;
+                    PvpManager.Instance.AwardCTFCapturePoints(player);
 
                     player.Out.SendMessage("You have deposited the flag on your outpost!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
@@ -130,7 +133,10 @@ namespace AmteScripts.PvP.CTF
         private bool IsPadOwner(GamePlayer player)
         {
             if (this.OwnerPlayer != null)
-                return (player == this.OwnerPlayer) || (player.Guild != null && player.Guild == this.OwnerPlayer.Guild);
+                return player == this.OwnerPlayer;
+
+            if (this.OwnerGuild != null)
+                return player.Guild == this.OwnerGuild;
             
             return false;
         }
@@ -152,7 +158,14 @@ namespace AmteScripts.PvP.CTF
 
         public void SetOwner(GamePlayer player)
         {
+            this.OwnerGuild = null;
             this.OwnerPlayer = player;
+        }
+
+        public void SetOwner(Guild guild)
+        {
+            this.OwnerPlayer = null;
+            this.OwnerGuild = guild;
         }
 
         public void StopOwnership()
