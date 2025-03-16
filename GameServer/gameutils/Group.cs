@@ -284,7 +284,7 @@ namespace DOL.GS
 
                 if (remaining is GamePlayer gp && PvpManager.Instance.IsOpen && PvpManager.Instance.CurrentSession != null && PvpManager.Instance.CurrentSession.GroupCompoOption == 2)
                 {
-                    PvpManager.Instance.RemovePlayer(gp);
+                    PvpManager.Instance.KickPlayer(gp);
                 }
 
                 return true;

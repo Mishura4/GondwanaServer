@@ -96,7 +96,10 @@ namespace AmteScripts.Managers
             if (log.IsInfoEnabled)
                 log.InfoFormat("PvP grace period expired for linkdead player {0}({1}). Removing from PvP.", player.Name, player.Client.Account.Name);
 
-            PvpManager.Instance.RemovePlayer(player);
+            if (player.ObjectState == GameObject.eObjectState.Active)
+                PvpManager.Instance.KickPlayer(player);
+            else
+                PvpManager.Instance.CleanupPlayer(player);
             return 0;
         }
 
@@ -194,12 +197,15 @@ namespace AmteScripts.Managers
             {
                 if (!IsOpen || _activeSession?.SessionID != rec.PvPSession)
                 {
-                    _doRemovePlayer(player);
+                    _cleanupPlayer(player);
                 }
                 else
                 {
                     if (!TryRestorePlayer(player))
-                        _doRemovePlayer(player);
+                    {
+                        _cleanupPlayer(player);
+                        RestorePlayerData(player, rec);
+                    }
                 }
             }
         }
@@ -208,18 +214,8 @@ namespace AmteScripts.Managers
         {
             if (player?.IsInPvP != true)
                 return;
-
-            if (player.Guild is { GuildType: Guild.eGuildType.PvPGuild })
-            {
-                player.Guild.RemovePlayer("PVP", player);
-            }
-
-            if (player.Group != null)
-            {
-                player.Group.RemoveMember(player);
-            }
-
-            RemoveItemsFromPlayer(player);
+            
+            CleanupPlayer(player);
             
             RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
             if (record != null)
@@ -804,7 +800,7 @@ namespace AmteScripts.Managers
                     var plr = client?.Player;
                     if (plr != null && plr.IsInPvP)
                     {
-                        RemovePlayer(plr, false);
+                        KickPlayer(plr, false);
                     }
                 }
 
@@ -1389,17 +1385,29 @@ namespace AmteScripts.Managers
         }
 
         /// <summary>
-        /// Remove a single player from PvP, restoring them to old location + old guild, etc.
+        /// Remove a single player from PvP. This will NOT restore their location, use this when the player is disconnecting.
         /// </summary>
-        public void RemovePlayer(GamePlayer player, bool disband = true)
+        public void CleanupPlayer(GamePlayer player, bool disband = true)
         {
             if (!player.IsInPvP)
                 return;
             
-            _doRemovePlayer(player, disband);
+            _cleanupPlayer(player, disband);
         }
 
-        public void _doRemovePlayer(GamePlayer player, bool disband = true)
+        /// <summary>
+        /// Remove a single player from PvP, restoring them to old location + old guild, etc. DO NOT use this when disconnecting, as this will teleport them back, effectively cancelling the logout process.
+        /// </summary>
+        public void KickPlayer(GamePlayer player, bool disband = true)
+        {
+            if (!player.IsInPvP)
+                return;
+            
+            _cleanupPlayer(player, disband);
+            RestorePlayerData(player);
+        }
+
+        private void _cleanupPlayer(GamePlayer player, bool disband = true)
         {
             lock (_graceTimers)
             {
@@ -1428,24 +1436,9 @@ namespace AmteScripts.Managers
             }
 
             int totalRemoved = RemoveItemsFromPlayer(player);
-
             if (totalRemoved > 0)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.PvPTreasureRemoved", totalRemoved), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-            }
-            
-            RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
-            if (!string.IsNullOrEmpty(record?.PvPSession))
-            {
-                RemovePlayerDB(player, record);
-                player.IsInPvP = false;
-            }
-            else
-            {
-                // Fallback: move the player to a safe location.
-                var fallbackPos = Position.Create(51, 434303, 493165, 3088, 1069);
-                player.MoveTo(fallbackPos);
-                player.IsInPvP = false;
             }
 
             DequeueSolo(player);
@@ -1515,21 +1508,32 @@ namespace AmteScripts.Managers
             return totalRemoved;
         }
 
-        private void RemovePlayerDB(GamePlayer player, RvrPlayer record)
+        public void RestorePlayerData(GamePlayer player, RvrPlayer? record = null)
         {
-            record.ResetCharacter(player);
-
-            // If the player was in a guild before PvP, re-add them.
-            if (!string.IsNullOrEmpty(record.GuildID))
+            record ??= GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
+            if (!string.IsNullOrEmpty(record?.PvPSession))
             {
-                var oldGuild = GuildMgr.GetGuildByGuildID(record.GuildID);
-                if (oldGuild != null)
-                {
-                    oldGuild.AddPlayer(player, oldGuild.GetRankByID(record.GuildRank), true);
-                }
-            }
+                record.ResetCharacter(player);
 
-            GameServer.Database.DeleteObject(record);
+                // If the player was in a guild before PvP, re-add them.
+                if (!string.IsNullOrEmpty(record.GuildID))
+                {
+                    var oldGuild = GuildMgr.GetGuildByGuildID(record.GuildID);
+                    if (oldGuild != null)
+                    {
+                        oldGuild.AddPlayer(player, oldGuild.GetRankByID(record.GuildRank), true);
+                    }
+                }
+
+                GameServer.Database.DeleteObject(record);
+            }
+            else
+            {
+                // Fallback: move the player to a safe location.
+                var fallbackPos = Position.Create(51, 434303, 493165, 3088, 1069);
+                player.MoveTo(fallbackPos);
+            }
+            player.IsInPvP = false;
         }
 
         /// <summary>

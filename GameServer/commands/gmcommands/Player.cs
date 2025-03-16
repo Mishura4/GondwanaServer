@@ -1626,7 +1626,6 @@ namespace DOL.GS.Commands
                                 return;
                             }
                             
-                            PvpManager.Instance.RemovePlayer(player);
                             player.Client.Out.SendPlayerQuit(true);
                             player.Client.Player.SaveIntoDatabase();
                             player.Client.Player.Quit(true);
@@ -1645,7 +1644,6 @@ namespace DOL.GS.Commands
                                             {
                                                 allplayer.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KickAllPlayers", client.Player.Name, client.Account.PrivLevel), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                                 
-                                                PvpManager.Instance.RemovePlayer(allplayer.Player);
                                                 allplayer.Out.SendPlayerQuit(true);
                                                 allplayer.Player.SaveIntoDatabase();
                                                 allplayer.Player.Quit(true);

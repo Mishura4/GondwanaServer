@@ -198,7 +198,7 @@ namespace DOL.GS.Scripts
 
                 case "Leave PvP":
                     if (player.IsInPvP)
-                        PvpManager.Instance.RemovePlayer(player);
+                        PvpManager.Instance.KickPlayer(player);
                     break;
 
                 case "Partir":
@@ -339,7 +339,7 @@ namespace DOL.GS.Scripts
             {
                 // remove them if was inside
                 if (player.IsInPvP)
-                    PvpManager.Instance.RemovePlayer(player);
+                    PvpManager.Instance.KickPlayer(player);
                 return 0;
             }
 
@@ -356,7 +356,7 @@ namespace DOL.GS.Scripts
             {
                 // otherwise treat it as a solo join or leaving scenario
                 if (player.IsInPvP)
-                    PvpManager.Instance.RemovePlayer(player);
+                    PvpManager.Instance.KickPlayer(player);
                 else
                     PvpManager.Instance.AddPlayer(player);
             }
@@ -413,7 +413,7 @@ namespace DOL.GS.Scripts
             {
                 // remove if was inside
                 if (leader.IsInPvP)
-                    PvpManager.Instance.RemovePlayer(leader);
+                    PvpManager.Instance.KickPlayer(leader);
                 return 0;
             }
 
@@ -434,7 +434,7 @@ namespace DOL.GS.Scripts
             {
                 // fallback => solo or leaving
                 if (leader.IsInPvP)
-                    PvpManager.Instance.RemovePlayer(leader);
+                    PvpManager.Instance.KickPlayer(leader);
                 else
                     PvpManager.Instance.AddPlayer(leader);
             }
