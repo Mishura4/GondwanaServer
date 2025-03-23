@@ -13,12 +13,10 @@ namespace AmteScripts.PvP.CTF
     /// <summary>
     /// Static item version of the flag, placed on the base pad or dropped on ground or in a TempAreaFlagPad.
     /// </summary>
-    public class GameFlagStatic : GameStaticItem
+    public class GameFlagStatic : GamePvPStaticItem
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(GameFlagStatic));
         public GameFlagBasePad BasePad { get; private set; }
-        public GamePlayer OwnerPlayer { get; set; }
-        public Guild OwnerGuild { get; set; }
         public GameCTFTempPad CurrentTempPad { get; set; }
 
         private RegionTimer _returnTimer;
@@ -94,9 +92,7 @@ namespace AmteScripts.PvP.CTF
                 BasePad.NotifyFlagLeft();
             }
 
-            OwnerPlayer = null;
-            OwnerGuild = null;
-            Emblem = 0;
+            SetOwnership(null);
 
             ushort effectID = (ushort)Util.Random(5811, 5815);
             foreach (GamePlayer plr in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).OfType<GamePlayer>())
@@ -115,10 +111,8 @@ namespace AmteScripts.PvP.CTF
                 CurrentTempPad.StopOwnership();
                 CurrentTempPad = null;
             }
-
-            OwnerPlayer = null;
-            OwnerGuild = null;
-            Emblem = 0;
+            
+            SetOwnership(null);
 
             bool success = PlayerPickupFlag(captor);
             if (success)
@@ -172,23 +166,6 @@ namespace AmteScripts.PvP.CTF
         {
             Reset();
             return 0;
-        }
-
-        public void SetOwnership(GamePlayer player)
-        {
-            OwnerPlayer = player;
-            OwnerGuild = player.Guild;
-            this.Emblem = (ushort)(player.Guild?.Emblem ?? 0);
-        }
-
-        public bool IsOwnedBy(GamePlayer p)
-        {
-            return (OwnerPlayer != null && OwnerPlayer == p);
-        }
-
-        public new bool IsOwnedByGuild(Guild g)
-        {
-            return (OwnerGuild != null && OwnerGuild == g);
         }
     }
 }

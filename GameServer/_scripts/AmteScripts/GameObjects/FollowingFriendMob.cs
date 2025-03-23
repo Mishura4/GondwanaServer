@@ -1,3 +1,4 @@
+using AmteScripts.Areas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -372,43 +373,32 @@ namespace DOL.GS.Scripts
             // 1) If BringFriends => ignore DB area, see if the mob is in the player's safe area
             if (isBringFriends)
             {
-                var pvpMan = PvpManager.Instance;
-                if (pvpMan != null)
+                var safeArea = PvpManager.Instance.FindSafeAreaForTarget(playerFollow);
+                if (safeArea != null)
                 {
-                    var safeArea = pvpMan.FindSafeAreaForTarget(playerFollow);
-                    if (safeArea != null)
+                    // Are we physically inside that area boundary already?
+                    bool inside = safeArea.IsContaining(Position.Coordinate, false);
+                    if (inside)
                     {
-                        // Are we physically inside that area boundary already?
-                        bool inside = safeArea.IsContaining(Position.Coordinate, false);
-                        if (inside)
+                        InFinalSafeAreaJourney = true;
+                        StopFollowing();
+                        WaitingInArea = true;
+
+                        playerFollow.Notify(GameLivingEvent.BringAFriend, playerFollow, new BringAFriendArgs(this, entered: true, following: false, finalStage: false));
+
+                        const int walkSpeed = 130;
+
+                        var targetPos = safeArea?.Coordinate;
+                        if (targetPos == null)
                         {
-                            InFinalSafeAreaJourney = true;
-                            StopFollowing();
-                            WaitingInArea = true;
-
-                            playerFollow.Notify(GameLivingEvent.BringAFriend, playerFollow, new BringAFriendArgs(this, entered: true, following: false, finalStage: false));
-
-                            float centerX = 0f, centerY = 0f, centerZ = 0f;
-                            const int walkSpeed = 130;
-
-                            if (safeArea is AmteScripts.Areas.PvpSafeArea pvpSafe)
-                            {
-                                centerX = pvpSafe.X;
-                                centerY = pvpSafe.Y;
-                                centerZ = pvpSafe.Z;
-                            }
-                            else if (safeArea is AmteScripts.Areas.PvpCircleArea pvpCircle)
-                            {
-                                centerX = pvpCircle.X;
-                                centerY = pvpCircle.Y;
-                                centerZ = pvpCircle.Z;
-                            }
-
-                            var targetPos = Coordinate.Create((int)centerX, (int)centerY, (int)centerZ);
-                            double angle = Math.Atan2(targetPos.Y - Position.Y, targetPos.X - Position.X);
+                            // ???
+                        }
+                        else
+                        {
+                            double angle = Math.Atan2(targetPos.Value.Y - Position.Y, targetPos.Value.X - Position.X);
                             targetPos += DOLVector.Create(Angle.Radians(angle), Util.Random(30, 130));
 
-                            WalkTo(targetPos, walkSpeed);
+                            WalkTo(targetPos.Value, walkSpeed);
                             return 0;
                         }
                     }

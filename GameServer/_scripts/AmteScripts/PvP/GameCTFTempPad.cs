@@ -9,12 +9,8 @@ using AmteScripts.Managers;
 
 namespace AmteScripts.PvP.CTF
 {
-    public class GameCTFTempPad : GameStaticItem
+    public class GameCTFTempPad : GamePvPStaticItem
     {
-        public GamePlayer OwnerPlayer { get; set; }
-        
-        public Guild OwnerGuild { get; set; }
-
         private RegionTimer _ownershipTimer;
         private int _pointsInterval = 20_000;
 
@@ -58,14 +54,14 @@ namespace AmteScripts.PvP.CTF
             {
                 return 0;
             }
-
-            if (OwnerPlayer != null)
-            {
-                PvpManager.Instance.AwardCTFOwnershipPoints(OwnerPlayer, 1);
-            }
-            else if (OwnerGuild != null)
+            
+            if (OwnerGuild != null)
             {
                 PvpManager.Instance.AwardCTFOwnershipPoints(OwnerGuild, 1);
+            }
+            else if (OwnerPlayer != null)
+            {
+                PvpManager.Instance.AwardCTFOwnershipPoints(OwnerPlayer, 1);
             }
 
             return _pointsInterval;
@@ -89,7 +85,7 @@ namespace AmteScripts.PvP.CTF
 
         public void TryDropFlagIfCarried(GamePlayer player)
         {
-            if (!IsPadOwner(player)) return;
+            if (!IsOwner(player)) return;
 
             // Search backpack for a FlagInventoryItem
             for (eInventorySlot slot = eInventorySlot.FirstBackpack; slot <= eInventorySlot.LastBackpack; slot++)
@@ -130,17 +126,6 @@ namespace AmteScripts.PvP.CTF
             }
         }
 
-        private bool IsPadOwner(GamePlayer player)
-        {
-            if (this.OwnerPlayer != null)
-                return player == this.OwnerPlayer;
-
-            if (this.OwnerGuild != null)
-                return player.Guild == this.OwnerGuild;
-            
-            return false;
-        }
-
         public override void Delete()
         {
             if (_ownershipTimer != null)
@@ -154,18 +139,6 @@ namespace AmteScripts.PvP.CTF
                 OwnedFlag = null;
             }
             base.Delete();
-        }
-
-        public void SetOwner(GamePlayer player)
-        {
-            this.OwnerGuild = null;
-            this.OwnerPlayer = player;
-        }
-
-        public void SetOwner(Guild guild)
-        {
-            this.OwnerPlayer = null;
-            this.OwnerGuild = guild;
         }
 
         public void StopOwnership()

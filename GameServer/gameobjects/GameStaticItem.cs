@@ -283,32 +283,7 @@ namespace DOL.GS
                 base.Realm = value;
             }
         }
-
-        /// <summary>
-        /// Assigns a guild as the owner of this object.
-        /// </summary>
-        public void SetGuildOwner(Guild guild)
-        {
-            m_ownerGuild = guild;
-        }
-
-        /// <summary>
-        /// Gets the guild that owns this item, if any.
-        /// </summary>
-        public Guild GetGuildOwner()
-        {
-            return m_ownerGuild;
-        }
-
-        /// <summary>
-        /// Does a given guild own me?
-        /// (Optional convenience method)
-        /// </summary>
-        public bool IsOwnedByGuild(Guild guild)
-        {
-            return (m_ownerGuild != null && m_ownerGuild == guild);
-        }
-
+        
         /// <summary>
         /// Saves this Item in the WorldObject DB
         /// </summary>
@@ -505,6 +480,25 @@ namespace DOL.GS
                     if (weak.Target == player) return;
                 m_owners.Add(new WeakRef(player));
             }
+        }
+        /// <summary>
+        /// Remove an owner from this item
+        /// </summary>
+        /// <param name="player">the object that is an owner</param>
+        public bool RemoveOwner(GameObject player)
+        {
+            lock (m_owners)
+            {
+                foreach (WeakReference weak in m_owners)
+                {
+                    if (weak.Target == player)
+                    {
+                        m_owners.Remove(weak);
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         /// <summary>
         /// Tests if a specific gameobject owns this item

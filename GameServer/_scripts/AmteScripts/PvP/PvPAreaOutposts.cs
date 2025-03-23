@@ -67,7 +67,7 @@ namespace AmteScripts.PvP
         /// Returns a list of the newly created items, so you can store them in 
         /// the area that called us, and remove them later.
         /// </summary>
-        public static List<GameStaticItem> CreateTreasureHuntBase(Position center, GamePlayer ownerPlayer, Guild ownerGuild)
+        public static List<GameStaticItem> CreateTreasureHuntBase(Position center, GamePlayer ownerPlayer)
         {
             var createdItems = new List<GameStaticItem>();
             Region region = center.Region;
@@ -75,6 +75,7 @@ namespace AmteScripts.PvP
             if (region == null)
                 return createdItems;
 
+            var ownerGuild = ownerPlayer.Guild;
             foreach (var template in s_treasureHuntBaseTemplates)
             {
                 int finalX = center.X + template.XOffset;
@@ -89,19 +90,11 @@ namespace AmteScripts.PvP
                 item.Name = template.Name;
                 item.Position = Position.Create(center.RegionID, finalX, finalY, finalZ, finalHeading);
                 item.Realm = 0;
+                item.Emblem = ownerGuild?.Emblem ?? 0;
+                if (item is GamePvPStaticItem pvpItem)
+                    pvpItem.SetOwnership(ownerPlayer);
 
                 item.AddToWorld();
-
-                // Now set the ownership:
-                if (ownerGuild != null)
-                {
-                    item.SetGuildOwner(ownerGuild);
-                    item.Emblem = ownerGuild.Emblem;
-                }
-                else if (ownerPlayer != null)
-                {
-                    item.AddOwner(ownerPlayer);
-                }
 
                 createdItems.Add(item);
             }
@@ -117,7 +110,7 @@ namespace AmteScripts.PvP
         /// If you want multiple items (e.g. banners, etc.), just expand the code below.
         /// </summary>
         public static List<GameStaticItem> CreateCaptureFlagOutpostPad(Position center,
-            GamePlayer ownerPlayer, Guild ownerGuild)
+            GamePlayer ownerPlayer)
         {
             var createdItems = new List<GameStaticItem>();
             var region = center.Region;
@@ -138,16 +131,7 @@ namespace AmteScripts.PvP
             tempPad.Realm = 0;
 
             tempPad.AddToWorld();
-
-            if (ownerGuild != null)
-            {
-                tempPad.SetGuildOwner(ownerGuild);
-                tempPad.Emblem = ownerGuild.Emblem;
-            }
-            else if (ownerPlayer != null)
-            {
-                tempPad.AddOwner(ownerPlayer);
-            }
+            tempPad.SetOwnership(ownerPlayer);
 
             createdItems.Add(tempPad);
             return createdItems;
@@ -206,13 +190,14 @@ namespace AmteScripts.PvP
         /// This new type is used when the session type is 5 or 6.
         /// </summary>
         public static List<GameStaticItem> CreateGuildOutpostTemplate01(Position center,
-            GamePlayer ownerPlayer, Guild ownerGuild)
+            GamePlayer ownerPlayer)
         {
             var createdItems = new List<GameStaticItem>();
             Region region = center.Region;
             if (region == null)
                 return createdItems;
 
+            Guild? ownerGuild = ownerPlayer.Guild;
             foreach (var template in s_guildOutpostTemplate01Templates)
             {
                 int finalX = center.X + template.XOffset;
@@ -226,18 +211,10 @@ namespace AmteScripts.PvP
                 item.Name = template.Name;
                 item.Position = Position.Create(center.RegionID, finalX, finalY, finalZ, finalHeading);
                 item.Realm = 0;
+                item.Emblem = ownerGuild?.Emblem ?? 0;
+                if (item is GamePvPStaticItem pvpItem)
+                    pvpItem.SetOwnership(ownerPlayer);
                 item.AddToWorld();
-
-                // Set ownership if provided:
-                if (ownerGuild != null)
-                {
-                    item.SetGuildOwner(ownerGuild);
-                    item.Emblem = ownerGuild.Emblem;
-                }
-                else if (ownerPlayer != null)
-                {
-                    item.AddOwner(ownerPlayer);
-                }
 
                 createdItems.Add(item);
             }

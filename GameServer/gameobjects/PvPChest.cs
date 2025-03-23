@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AmteScripts.Managers; // adjust if your manager namespace is different
+using AmteScripts.Managers;
+using AmteScripts.PvP.CTF; // adjust if your manager namespace is different
 using DOL.Database;
 using DOL.GS;
 using DOL.GS.PacketHandler;
@@ -15,7 +16,7 @@ namespace DOL.GS
     /// is updated for that “owner” player, but if the owner is not in
     /// PvP or no owner is set, it becomes “unlocked” for everyone.
     /// </summary>
-    public class PVPChest : GameStaticItem
+    public class PVPChest : GamePvPStaticItem
     {
         /// <summary>
         /// For storing the item deposits in this chest.
@@ -29,9 +30,6 @@ namespace DOL.GS
         }
 
         // ============ Ownership Info ============
-
-        // If solo chest, we store the single player:
-        private GamePlayer m_ownerPlayer;
 
         // If group chest, we store the group reference and the group leader:
         private Group m_ownerGroup;
@@ -53,27 +51,22 @@ namespace DOL.GS
 
         #region Ownership Setup
 
-        /// <summary>
-        /// Called if you want this chest to belong to a single player (solo).
-        /// </summary>
-        public void SetOwnerSolo(GamePlayer player)
+        /// <inheritdoc />
+        public override void SetOwnership(GamePlayer player)
         {
-            IsGroupChest = false;
-            m_ownerPlayer = player;
-            m_ownerGroup = null;
-            m_ownerGroupLeader = null;
-        }
-
-        /// <summary>
-        /// Called if you want this chest to belong to a group
-        /// and have the scoreboard credited to that group's leader.
-        /// </summary>
-        public void SetOwnerGroup(GamePlayer groupLeader, Group group)
-        {
-            IsGroupChest = true;
-            m_ownerGroupLeader = groupLeader;
-            m_ownerGroup = group;
-            m_ownerPlayer = null;
+            base.SetOwnership(player);
+            if (player.Group != null)
+            {
+                IsGroupChest = true; // TODO: Do we just want to replace this property with `=> m_ownerGroup != null`?
+                m_ownerGroupLeader = player.Group.Leader;
+                m_ownerGroup = player.Group;
+                m_ownerPlayer = null;
+            }
+            else
+            {
+                IsGroupChest = false;
+                m_ownerGroupLeader = null;
+            }
         }
 
         /// <summary>

@@ -4712,14 +4712,7 @@ namespace DOL.GS
 
         public bool IsInSafeArea()
         {
-            foreach (var area in CurrentAreas)
-            {
-                if (area is Area.SafeArea)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return CurrentAreas.Any(a => a is AbstractArea { IsSafeArea: true });
         }
 
         public bool HasAdrenalineBuff()

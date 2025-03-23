@@ -148,7 +148,7 @@ namespace DOL.GS
         /// <summary>
         /// Return the description of this Area
         /// </summary>
-        public string Description
+        public virtual string Description
         {
             get { return m_Description; }
         }

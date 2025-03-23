@@ -466,22 +466,6 @@ namespace DOL.GS
             }
         }
 
-        public class SafeArea : Circle
-        {
-            public SafeArea()
-                : base()
-            {
-                m_safeArea = true;
-            }
-
-            public SafeArea(string desc, int x, int y, int z, int radius)
-                : base
-                (desc, x, y, z, radius)
-            {
-                m_safeArea = true;
-            }
-        }
-
         public class CombatZone : Circle
         {
             public CombatZone()

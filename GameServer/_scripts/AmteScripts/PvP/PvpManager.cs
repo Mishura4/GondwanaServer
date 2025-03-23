@@ -83,8 +83,7 @@ namespace AmteScripts.Managers
         private RegionTimer _territoryOwnershipTimer = null;
 
         #region Singleton
-        private static PvpManager _instance;
-        public static PvpManager Instance => _instance;
+        [NotNull] public static PvpManager Instance { get; } = new PvpManager();
 
         /// <summary>
         /// Called when a PvP linkdead player’s grace period expires.
@@ -149,20 +148,17 @@ namespace AmteScripts.Managers
         {
             log.Info("PvpManager: Loading or Starting...");
 
-            if (_instance == null)
-                _instance = new PvpManager();
-
             // Create the timer in region 1 for the open/close checks
             var region = WorldMgr.GetRegion(1);
             if (region != null)
             {
                 _timer = new RegionTimer(region.TimeManager);
-                _timer.Callback = _instance.TickCheck;
+                _timer.Callback = Instance.TickCheck;
                 _timer.Start(10_000); // start after 10s
-                _instance._saveTimer = new RegionTimer(region.TimeManager);
-                _instance._saveTimer.Callback = _ =>
+                Instance._saveTimer = new RegionTimer(region.TimeManager);
+                Instance._saveTimer.Callback = _ =>
                 {
-                    _instance.SaveScore();
+                    Instance.SaveScore();
                     return 0;
                 };
             }
@@ -177,7 +173,7 @@ namespace AmteScripts.Managers
             if (File.Exists("temp/PvPScore.dat"))
             {
                 // Reopen saved session
-                _instance.Open(string.Empty, false);
+                Instance.Open(string.Empty, false);
             }
             
             GameEventMgr.AddHandler(GamePlayerEvent.GameEntered, Instance.OnPlayerLogin);
@@ -336,6 +332,10 @@ namespace AmteScripts.Managers
             _allGuilds.Add(pvpGuild);
             _groupGuilds[group] = pvpGuild;
             _guildGroups[pvpGuild] = group;
+            if (_soloAreas.Remove(groupLeader, out AbstractArea leaderArea))
+            {
+                _groupAreas.Add(pvpGuild, leaderArea);
+            }
 
             // Add each member to the ephemeral guild
             foreach (var member in group.GetPlayersInTheGroup())
@@ -346,6 +346,14 @@ namespace AmteScripts.Managers
                 member.IsInPvP = true;
                 member.Bind(true);
                 member.SaveIntoDatabase();
+                if (_soloAreas.Remove(member, out AbstractArea memberArea))
+                {
+                    // Remove all solo areas - we've already moved the leader's area into group areas, so it won't be found
+                    if (memberArea != null)
+                    {
+                        _cleanupArea(memberArea);
+                    }
+                }
             }
             return pvpGuild;
         }
@@ -937,7 +945,7 @@ namespace AmteScripts.Managers
             }
         }
 
-        public AbstractArea FindSafeAreaForTarget(GamePlayer player)
+        public PvpTempArea FindSafeAreaForTarget(GamePlayer player)
         {
             if (player == null) return null;
 
@@ -945,7 +953,7 @@ namespace AmteScripts.Managers
             if (IsSolo(player))
             {
                 if (_soloAreas.TryGetValue(player, out var soloArea))
-                    return soloArea;
+                    return soloArea as PvpTempArea;
                 return null;
             }
             else
@@ -953,7 +961,7 @@ namespace AmteScripts.Managers
                 // Group scenario
                 if (player.Guild != null && _groupAreas.TryGetValue(player.Guild, out var groupArea))
                 {
-                    return groupArea;
+                    return groupArea as PvpTempArea;;
                 }
             }
             return null;
@@ -1462,30 +1470,18 @@ namespace AmteScripts.Managers
             }
 
             DequeueSolo(player);
-            if (_soloAreas.TryGetValue(player, out var area))
+            if (_soloAreas.Remove(player, out var area))
             {
-                if (area is PvpCircleArea circle)
-                    circle.RemoveAllOwnedObjects();
-                else if (area is PvpSafeArea pvpArea)
-                    pvpArea.RemoveAllOwnedObjects();
-
-                player.CurrentRegion?.RemoveArea(area);
-                _soloAreas.Remove(player);
+                _cleanupArea(area);
             }
             if (pvpGuild != null)
             {
                 // Check if *all* members have left. If so, remove area:
                 if (!pvpGuild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
                 {
-                    if (_groupAreas.TryGetValue(pvpGuild, out AbstractArea grpArea))
+                    if (_groupAreas.Remove(pvpGuild, out AbstractArea grpArea))
                     {
-                        if (grpArea is PvpCircleArea circle)
-                            circle.RemoveAllOwnedObjects();
-                        else if (grpArea is PvpSafeArea pvpGroupArea)
-                            pvpGroupArea.RemoveAllOwnedObjects();
-                    
-                        grpArea.ZoneIn?.ZoneRegion?.RemoveArea(grpArea);
-                        _groupAreas.Remove(pvpGuild);
+                        _cleanupArea(grpArea);
                     }
                 }
             }
@@ -1498,6 +1494,14 @@ namespace AmteScripts.Managers
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.LeftPvP"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
         
+        private void _cleanupArea(AbstractArea area)
+        {
+            if (area is PvpTempArea pvpArea)
+                pvpArea.RemoveAllOwnedObjects();
+
+            area.ZoneIn.ZoneRegion.RemoveArea(area);
+        }
+
         private int RemoveItemsFromPlayer(GamePlayer player)
         {
             int totalRemoved = 0;
@@ -1818,80 +1822,13 @@ namespace AmteScripts.Managers
             bool isBringFriends = _activeSession.SessionType == 4;
             string areaName = player.Name + "'s Solo Outpost";
 
-            AbstractArea areaObject;
-
-            if (!isBringFriends)
-            {
-                var circleArea = new PvpCircleArea(areaName, pos.X, pos.Y, pos.Z, radius)
-                {
-                    OwnerPlayer = player,
-                    OwnerGuild = null
-                };
-                areaObject = circleArea;
-            }
-            else
-            {
-                var safeArea = new PvpSafeArea(areaName, pos.X, pos.Y, pos.Z, radius)
-                {
-                    OwnerPlayer = player,
-                    OwnerGuild = null
-                };
-                areaObject = safeArea;
-            }
+            AbstractArea areaObject = new PvpTempArea(player, pos.X, pos.Y, pos.Z, radius, isBringFriends);
 
             player.CurrentRegion.AddArea(areaObject);
             _soloAreas[player] = areaObject;
 
             log.Info("PvpManager: Created a solo outpost for " + player.Name);
-
-            if (_activeSession.SessionType == 2)
-            {
-                var outpostPadItems = PvPAreaOutposts.CreateCaptureFlagOutpostPad(pos, player, null);
-
-                foreach (var staticItem in outpostPadItems)
-                {
-                    if (areaObject is PvpCircleArea circle)
-                        circle.AddOwnedObject(staticItem);
-                    else if (areaObject is PvpSafeArea safeArea)
-                        safeArea.AddOwnedObject(staticItem);
-
-                    if (staticItem is GameCTFTempPad temppad)
-                    {
-                        temppad.SetOwner(player);
-                    }
-                }
-            }
-
-            if (_activeSession.SessionType == 3)
-            {
-                var outpostItems = PvPAreaOutposts.CreateTreasureHuntBase(pos, player, null);
-
-                foreach (var staticItem in outpostItems)
-                {
-                    if (areaObject is PvpCircleArea circle)
-                        circle.AddOwnedObject(staticItem);
-                    else if (areaObject is PvpSafeArea safeArea)
-                        safeArea.AddOwnedObject(staticItem);
-
-                    if (staticItem is PVPChest chest)
-                    {
-                        chest.SetOwnerSolo(player);
-                    }
-                }
-            }
-
-            if (_activeSession.SessionType == 4 || _activeSession.SessionType == 5)
-            {
-                var outpostItems = PvPAreaOutposts.CreateGuildOutpostTemplate01(pos, player, null);
-                foreach (var staticItem in outpostItems)
-                {
-                    if (areaObject is PvpCircleArea circle)
-                        circle.AddOwnedObject(staticItem);
-                    else if (areaObject is PvpSafeArea safeArea)
-                        safeArea.AddOwnedObject(staticItem);
-                    // (Optionally, set additional ownership if needed)
-                }
-            }
+            _fillOutpostItems(player, pos, areaObject);
         }
 
         private void CreateSafeAreaForGroup(GamePlayer leader, Position pos, int radius)
@@ -1899,86 +1836,43 @@ namespace AmteScripts.Managers
             if (leader.Group == null) return;
 
             bool isBringFriends = _activeSession.SessionType == 4;
-            string areaName = leader.Name + "'s Group Outpost";
             // Retrieve the ephemeral guild you made for the group
             var group = leader.Group;
             _groupGuilds.TryGetValue(group, out Guild pvpGuild);
-
-            AbstractArea areaObject;
-
-            if (!isBringFriends)
-            {
-                var circleArea = new PvpCircleArea(areaName, pos.X, pos.Y, pos.Z, radius)
-                {
-                    OwnerGuild = pvpGuild,
-                    OwnerPlayer = null
-                };
-                areaObject = circleArea;
-            }
-            else
-            {
-                var safeArea = new PvpSafeArea(areaName, pos.X, pos.Y, pos.Z, radius)
-                {
-                    OwnerGuild = pvpGuild,
-                    OwnerPlayer = null
-                };
-                areaObject = safeArea;
-            }
-
+            AbstractArea areaObject = new PvpTempArea(leader, pos.X, pos.Y, pos.Z, radius, isBringFriends);
             leader.CurrentRegion.AddArea(areaObject);
             _groupAreas[pvpGuild] = areaObject;
+            
+            log.Info("PvpManager: Created a group outpost for " + pvpGuild.Name);
+            _fillOutpostItems(leader, pos, areaObject);
+        }
 
-            log.Info("PvpManager: Created a group outpost for " + leader.Name);
-
-            if (_activeSession.SessionType == 2)
+        private void _fillOutpostItems(GamePlayer leader, Position pos, AbstractArea area)
+        {
+            List<GameStaticItem>? items = _activeSession.SessionType switch
             {
-                var outpostPadItems = PvPAreaOutposts.CreateCaptureFlagOutpostPad(pos, leader, null);
+                2 => PvPAreaOutposts.CreateCaptureFlagOutpostPad(pos, leader),
+                3 => PvPAreaOutposts.CreateTreasureHuntBase(pos, leader),
+                4 or 5 => PvPAreaOutposts.CreateGuildOutpostTemplate01(pos, leader)
+            };
 
-                foreach (var staticItem in outpostPadItems)
+            if (items != null)
+            {
+                foreach (var item in items)
                 {
-                    if (areaObject is PvpCircleArea circle)
-                        circle.AddOwnedObject(staticItem);
-                    else if (areaObject is PvpSafeArea safeArea)
-                        safeArea.AddOwnedObject(staticItem);
-
-                    if (staticItem is GameCTFTempPad temppad)
+                    if (area is PvpTempArea pvpArea)
                     {
-                        temppad.SetOwner(pvpGuild);
+                        pvpArea.AddOwnedObject(item);
                     }
-                }
-            }
 
-            if (_activeSession.SessionType == 3)
-            {
-                var outpostItems = PvPAreaOutposts.CreateTreasureHuntBase(pos, leader, null);
-
-                foreach (var staticItem in outpostItems)
-                {
-                    if (areaObject is PvpCircleArea circle)
-                        circle.AddOwnedObject(staticItem);
-                    else if (areaObject is PvpSafeArea safeArea)
-                        safeArea.AddOwnedObject(staticItem);
-
-                    if (staticItem is PVPChest chest)
+                    if (item is GamePvPStaticItem pvpItem)
                     {
-                        chest.SetOwnerGroup(leader, leader.Group);
+                        pvpItem.SetOwnership(leader);
                     }
-                }
-            }
-
-            if (_activeSession.SessionType == 4 || _activeSession.SessionType == 5)
-            {
-                var outpostItems = PvPAreaOutposts.CreateGuildOutpostTemplate01(pos, leader, null);
-                foreach (var staticItem in outpostItems)
-                {
-                    if (areaObject is PvpCircleArea circle)
-                        circle.AddOwnedObject(staticItem);
-                    else if (areaObject is PvpSafeArea safeArea)
-                        safeArea.AddOwnedObject(staticItem);
-                    // (Optionally, set additional ownership if needed)
                 }
             }
         }
+        
         #endregion
 
         #region BringAFriend Methods & Scores
@@ -2027,7 +1921,7 @@ namespace AmteScripts.Managers
                 else if (owner.Guild != null)
                     _groupAreas.TryGetValue(owner.Guild, out area);
 
-                if (area is PvpSafeArea safeArea)
+                if (area is PvpTempArea safeArea)
                 {
                     int oldCount = safeArea.GetFamilyCount(familyGuildName);
                     int newCount = oldCount + 1;
