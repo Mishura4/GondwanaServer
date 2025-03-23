@@ -105,7 +105,7 @@ namespace AmteScripts.PvP.CTF
                     player.Inventory.RemoveItem(flagInv);
 
                     var staticFlag = new GameFlagStatic(originalPad);
-                    staticFlag.SetOwnership(this.OwnerPlayer);
+                    staticFlag.SetOwnership(player);
                     staticFlag.Name = flagInv.Name;
                     staticFlag.Model = (ushort)flagInv.Model;
 

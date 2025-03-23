@@ -177,6 +177,7 @@ namespace AmteScripts.PvP.CTF
         public void SetOwnership(GamePlayer player)
         {
             OwnerPlayer = player;
+            OwnerGuild = player.Guild;
             this.Emblem = (ushort)(player.Guild?.Emblem ?? 0);
         }
 
