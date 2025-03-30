@@ -14,6 +14,7 @@ PvPManager.JoinedSoloQueue:			Vous avez rejoint la file d'attente solo pour la p
 PvPManager.CouldNotCreatePvPGuild:	Impossible de créer une guilde PvP...
 PvPManager.LeftGroupQueue:			Vous avez quitté la file d'attente de groupe PvP.
 PvPManager.BroughtToSafety:			Vous avez réussi à mettre {0} en sécurité ! (+{1} pts)
+PvPManager.NoSpawn:                 Impossible de rejoindre le PvP : aucun spawn disponible.
 
 PvPManager.Score.Points:                            {0} points
 PvPManager.Score.Pts:                               {0} pts

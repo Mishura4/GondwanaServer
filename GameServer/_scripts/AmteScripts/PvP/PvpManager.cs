@@ -47,38 +47,51 @@ namespace AmteScripts.Managers
 
         private const int _defaultGuildRank = 9;
 
+        private record Spawn(GameNPC? NPC, Position Position)
+        {
+            public Spawn(): this(null, Position.Nowhere) { }
+            public Spawn(GameNPC npc) : this(npc, Position.Nowhere) { }
+            public Spawn(Position pos) : this(null, pos) { }
+        }
+
+        private record Team(GamePlayer OwnerPlayer, Guild OwnerGuild, Spawn Spawn, int Emblem);
+
         /// <summary>The chosen session from DB for the day</summary>
         private PvpSession _activeSession;
         [NotNull] private readonly object _sessionLock = new object();
 
         // Scoreboard
-        private Dictionary<string, PlayerScore> _playerScores = new Dictionary<string, PlayerScore>();
-        private Dictionary<Guild, GroupScore> _groupScores = new Dictionary<Guild, GroupScore>();
+        [NotNull] private readonly Dictionary<string, PlayerScore> _playerScores = new Dictionary<string, PlayerScore>();
+        [NotNull] private readonly Dictionary<Guild, GroupScore> _groupScores = new Dictionary<Guild, GroupScore>();
 
         // Queues
-        private List<GamePlayer> _soloQueue = new List<GamePlayer>();
-        private List<GamePlayer> _groupQueue = new List<GamePlayer>();
+        [NotNull] private readonly List<GamePlayer> _soloQueue = new List<GamePlayer>();
+        [NotNull] private readonly List<GamePlayer> _groupQueue = new List<GamePlayer>();
 
         // For realm-based spawns
-        private Dictionary<eRealm, List<GameNPC>> _spawnNpcsRealm = new Dictionary<eRealm, List<GameNPC>>() { { eRealm.Albion, new List<GameNPC>() }, { eRealm.Midgard, new List<GameNPC>() }, { eRealm.Hibernia, new List<GameNPC>() }, };
+        [NotNull] private readonly Dictionary<eRealm, List<GameNPC>> _spawnNpcsRealm = new Dictionary<eRealm, List<GameNPC>>() { { eRealm.Albion, new List<GameNPC>() }, { eRealm.Midgard, new List<GameNPC>() }, { eRealm.Hibernia, new List<GameNPC>() }, };
         // For random spawns (all spawns in session's zones)
-        private List<GameNPC> _spawnNpcsGlobal = new List<GameNPC>();
+        [NotNull] private readonly List<GameNPC> _spawnNpcsGlobal = new List<GameNPC>();
         // For "RandomLock" so we don't reuse the same spawn
-        private HashSet<GameNPC> _usedSpawns = new HashSet<GameNPC>();
+        [NotNull] private readonly object _spawnsLock = new();
+        [NotNull] private readonly HashSet<GameNPC> _usedSpawns = new HashSet<GameNPC>();
+        // Here we track spawns for players & groups
+        [NotNull] private readonly ReaderWriterDictionary<GamePlayer, Spawn> _playerSpawns = new ReaderWriterDictionary<GamePlayer, Spawn>();
+        [NotNull] private readonly ReaderWriterDictionary<Guild, Spawn> _groupSpawns = new ReaderWriterDictionary<Guild, Spawn>();
         // Here we track solo-based safe areas (player => area)
-        private Dictionary<GamePlayer, AbstractArea> _soloAreas = new Dictionary<GamePlayer, AbstractArea>();
+        [NotNull] private readonly Dictionary<GamePlayer, AbstractArea> _soloAreas = new Dictionary<GamePlayer, AbstractArea>();
         // And group-based safe areas (group => area)
-        private Dictionary<Guild, AbstractArea> _groupAreas = new Dictionary<Guild, AbstractArea>();
+        [NotNull] private readonly Dictionary<Guild, AbstractArea> _groupAreas = new Dictionary<Guild, AbstractArea>();
         // Key = the group object, Value = the ephemeral guild we created
-        private Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
-        private Dictionary<Guild, Group> _guildGroups = new Dictionary<Guild, Group>();
+        [NotNull] private readonly Dictionary<Group, Guild> _groupGuilds = new Dictionary<Group, Guild>();
+        [NotNull] private readonly Dictionary<Guild, Group> _guildGroups = new Dictionary<Guild, Group>();
         [NotNull] private readonly object _groupsLock = new object();
         // Guilds players are still associated with after leaving, until they join another
-        private Dictionary<string, Guild> _playerLeftGuilds = new Dictionary<string, Guild>();
+        [NotNull] private readonly Dictionary<string, Guild> _playerLeftGuilds = new Dictionary<string, Guild>();
         // Grace timer for PvP players who get linkdead so they don't lose their progress
-        private Dictionary<string, RegionTimer> _graceTimers = new();
-        private List<Guild> _allGuilds = new();
-        private List<GameFlagBasePad> _allBasePads = new List<GameFlagBasePad>();
+        [NotNull] private readonly Dictionary<string, RegionTimer> _graceTimers = new();
+        [NotNull] private readonly List<Guild> _allGuilds = new();
+        [NotNull] private readonly List<GameFlagBasePad> _allBasePads = new List<GameFlagBasePad>();
         private int _flagCounter = 0;
         private RegionTimer _territoryOwnershipTimer = null;
 
@@ -638,6 +651,8 @@ namespace AmteScripts.Managers
                 _spawnNpcsRealm[eRealm.Midgard].Clear();
                 _spawnNpcsRealm[eRealm.Hibernia].Clear();
                 _usedSpawns.Clear();
+                _playerSpawns.Clear();
+                _groupSpawns.Clear();
                 _soloAreas.Clear();
                 _groupAreas.Clear();
             
@@ -1357,7 +1372,11 @@ namespace AmteScripts.Managers
             // Store old info, remove guild
             StoreOldPlayerInfo(player);
 
-            TeleportSoloPlayer(player);
+            if (!TeleportSoloPlayer(player))
+            {
+                _cleanupPlayer(player);
+                return false;
+            }
             player.Bind(true);
             player.SaveIntoDatabase();
 
@@ -1401,9 +1420,17 @@ namespace AmteScripts.Managers
                     pvpGuild = CreateGuildForGroup(group);
             }
             if (pvpGuild == null)
+            {
+                _cleanupGroup(group, "PvPManager.CannotCreatePvPGuild", false);
                 return false;
-            
-            TeleportEntireGroup(groupLeader);
+            }
+
+            if (!TeleportEntireGroup(pvpGuild, groupLeader))
+            {
+                // No message, TeleportEntireGroup will do it
+                _cleanupGroup(group, string.Empty, false);
+                return false;
+            }
 
             if (!_saveTimer.IsAlive)
             {
@@ -1433,6 +1460,16 @@ namespace AmteScripts.Managers
             
             _cleanupPlayer(player, disband);
             RestorePlayerData(player);
+        }
+        
+        private void _cleanupGroup([NotNull] Group group, string messageKey = "", bool disband = true)
+        {
+            foreach (GamePlayer player in group.GetPlayersInTheGroup())
+            {
+                if (!string.IsNullOrEmpty(messageKey))
+                    player.SendTranslatedMessage(messageKey);
+                _cleanupPlayer(player, disband);
+            }
         }
 
         private void _cleanupPlayer(GamePlayer player, bool disband = true)
@@ -1474,6 +1511,16 @@ namespace AmteScripts.Managers
             {
                 _cleanupArea(area);
             }
+            lock (_spawnsLock)
+            {
+                if (_playerSpawns.Remove(player, out var spawn) && spawn.NPC != null)
+                {
+                    lock (_usedSpawns)
+                    {
+                        _usedSpawns.Remove(spawn.NPC);
+                    }
+                }
+            }
             if (pvpGuild != null)
             {
                 // Check if *all* members have left. If so, remove area:
@@ -1482,6 +1529,16 @@ namespace AmteScripts.Managers
                     if (_groupAreas.Remove(pvpGuild, out AbstractArea grpArea))
                     {
                         _cleanupArea(grpArea);
+                    }
+                    lock (_spawnsLock)
+                    {
+                        if (_groupSpawns.Remove(pvpGuild, out var spawn) && spawn.NPC != null)
+                        {
+                            lock (_usedSpawns)
+                            {
+                                _usedSpawns.Remove(spawn.NPC);
+                            }
+                        }
                     }
                 }
             }
@@ -1607,64 +1664,84 @@ namespace AmteScripts.Managers
         #endregion
 
         #region Teleport logic
-        private void TeleportSoloPlayer(GamePlayer player)
+        private bool TeleportSoloPlayer(GamePlayer player)
         {
             if (!player.IsInPvP)
                 player.IsInPvP = true;
 
-            Position? spawnPos = FindSpawnPosition(player);
-            if (!spawnPos.HasValue)
+            Spawn spawnPos = FindSpawnPosition(player.Realm);
+            if (spawnPos == null)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.CannotFindSpawn"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
+                return false;
             }
-            player.MoveTo(spawnPos.Value);
+            lock (_spawnsLock)
+            {
+                _playerSpawns[player] = spawnPos;
+            }
+            player.MoveTo(spawnPos.Position);
 
             // if session says create area + randomlock => do it
             if (_activeSession.CreateCustomArea &&
                 _activeSession.SpawnOption.Equals("RandomLock", StringComparison.OrdinalIgnoreCase))
             {
-                CreateSafeAreaForSolo(player, spawnPos.Value, _activeSession.TempAreaRadius);
+                CreateSafeAreaForSolo(player, spawnPos.Position, _activeSession.TempAreaRadius);
             }
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.JoinedPvP", _activeSession.SessionID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
-        private void TeleportEntireGroup(GamePlayer leader)
+        private bool TeleportEntireGroup(Guild pvpGuild, GamePlayer leader)
         {
             var group = leader.Group;
-            if (group == null) return;
+            if (group == null) return false;
 
-            Position? spawnPosLeader = null;
-
+            var spawnPos = FindSpawnPosition(pvpGuild.Realm);
+            if (spawnPos == null)
+            {
+                foreach (GamePlayer player in group.GetPlayersInTheGroup())
+                {
+                    player.SendTranslatedMessage("PvPManager.NoSpawn");
+                }
+                return false;
+            }
+            _groupSpawns[pvpGuild] = spawnPos;
+            float distance = 32;
+            float increment = (float)(2 * Math.PI / group.MemberCount);
+            float baseAngle = (float)(spawnPos.Position.Orientation.InRadians + Math.PI / 2); // 90 degrees from where the spawn npc is facing
+            int i = 0;
+            if (spawnPos.NPC != null)
+                distance /= 2; // Random coordinate is potentially dangerous with clipping, so do this (this will probably solve nothing)
             foreach (var member in group.GetPlayersInTheGroup())
             {
+                Position pos = spawnPos.Position;
+                if (group.MemberCount > 1)
+                {
+                    float cos = (float)Math.Cos(baseAngle + i * increment);
+                    float sin = (float)Math.Sin(baseAngle + i * increment);
+                    pos = spawnPos.Position.With(null, pos.X + (int)(Math.Round(cos * distance)), pos.Y + (int)(Math.Round(sin * distance)));
+                }
+                
                 if (!member.IsInPvP)
                     member.IsInPvP = true;
 
-                var spawnPos = FindSpawnPosition(member);
-                if (spawnPos.HasValue)
-                {
-                    // store the leader's spawn position if we want to place the safe area exactly for him
-                    if (member == leader)
-                        spawnPosLeader = spawnPos;
-
-                    member.MoveTo(spawnPos.Value);
-                }
+                member.MoveTo(pos);
+                ++i;
             }
 
             // Only create one safe area for the entire group (use leader's position)
-            if (spawnPosLeader.HasValue &&
-                _activeSession.CreateCustomArea &&
+            if (_activeSession.CreateCustomArea &&
                 _activeSession.SpawnOption.Equals("RandomLock", StringComparison.OrdinalIgnoreCase))
             {
-                CreateSafeAreaForGroup(leader, spawnPosLeader.Value, _activeSession.TempAreaRadius);
+                CreateSafeAreaForGroup(leader, spawnPos.Position, _activeSession.TempAreaRadius);
             }
 
             leader.Out.SendMessage(LanguageMgr.GetTranslation(leader.Client.Account.Language, "PvPManager.GroupJoinedPvP", _activeSession.SessionID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
-        private Position? FindSpawnPosition(GamePlayer player)
+        private Spawn? FindSpawnPosition(eRealm realm)
         {
             // 1) If we have no session or no spawns loaded => fallback
             if (_activeSession == null)
@@ -1674,36 +1751,37 @@ namespace AmteScripts.Managers
             string spawnOpt = _activeSession.SpawnOption.ToLowerInvariant();
 
             // 2) If "RealmSpawn" => pick from the realm-labeled spawns
-            if (spawnOpt == "realmspawn")
+            if (spawnOpt == "realmspawn" && realm != eRealm.None)
             {
-                var realmSpawns = _spawnNpcsRealm[player.Realm];
+                var realmSpawns = _spawnNpcsRealm[realm];
                 if (realmSpawns != null && realmSpawns.Count > 0)
                 {
                     // pick any spawn from that list at random
                     int idx = Util.Random(realmSpawns.Count - 1);
                     var chosenSpawn = realmSpawns[idx];
-                    return chosenSpawn.Position;
+                    return new Spawn(chosenSpawn, chosenSpawn.Position);
                 }
                 else
                 {
-                    log.Warn($"RealmSpawn: no spawns for realm {player.Realm}, falling back to random coords.");
+                    log.Warn($"RealmSpawn: no spawns for realm {realm}, falling back to random coords.");
                 }
             }
 
             // 3) If "RandomLock" => pick from the global spawns, skipping used ones
             if (spawnOpt == "randomlock")
             {
-                var available = _spawnNpcsGlobal.Where(n => !_usedSpawns.Contains(n)).ToList();
-                if (available.Count > 0)
+                lock (_usedSpawns)
                 {
-                    var chosen = available[Util.Random(available.Count - 1)];
-                    _usedSpawns.Add(chosen);
-                    return chosen.Position;
+                    var available = _spawnNpcsGlobal.Where(n => !_usedSpawns.Contains(n)).ToList();
+                    if (available.Count > 0)
+                    {
+                        var chosen = available[Util.Random(available.Count - 1)];
+                        _usedSpawns.Add(chosen);
+                        return new Spawn(chosen, chosen.Position);
+                    }
                 }
-                else
-                {
+                // else
                     log.Warn("RandomLock: all spawns used. Fallback to random coords.");
-                }
             }
 
             // 4) If "RandomUnlock" => pick from entire _spawnNpcsGlobal randomly
@@ -1712,7 +1790,7 @@ namespace AmteScripts.Managers
                 if (_spawnNpcsGlobal.Count > 0)
                 {
                     var chosen = _spawnNpcsGlobal[Util.Random(_spawnNpcsGlobal.Count - 1)];
-                    return chosen.Position;
+                    return new Spawn(chosen);
                 }
                 else
                 {
@@ -1739,8 +1817,7 @@ namespace AmteScripts.Managers
             int ycoord = zone.Offset.Y + 3000 + Util.Random(1000);
             int zcoord = 3000;
             ushort heading = 2048;
-
-            return Position.Create(zone.ZoneRegion.ID, xcoord, ycoord, zcoord, heading);
+            return new Spawn(Position.Create(zone.ZoneRegion.ID, xcoord, ycoord, zcoord, heading));
         }
         #endregion
 
@@ -1791,9 +1868,16 @@ namespace AmteScripts.Managers
 
                 var pvpGuild = CreateGuildForGroup(newGroup);
                 if (pvpGuild == null)
+                {
+                    _cleanupGroup(newGroup, "PvPManager.CannotCreatePvPGuild", false);
                     return;
-                
-                TeleportEntireGroup(randomLeader);
+                }
+
+                if (!TeleportEntireGroup(pvpGuild, randomLeader))
+                {
+                    _cleanupGroup(newGroup, string.Empty, false);
+                    return;
+                }
 
                 if (!_saveTimer.IsAlive)
                 {

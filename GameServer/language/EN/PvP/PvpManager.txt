@@ -14,6 +14,7 @@ PvPManager.JoinedSoloQueue:			You have joined the solo queue for the next group 
 PvPManager.CouldNotCreatePvPGuild:	Could not create PvP guild...
 PvPManager.LeftGroupQueue:			You have left the PvP group queue.
 PvPManager.BroughtToSafety:			You have successfully brought {0} to safety! (+{1} pts)
+PvPManager.NoSpawn:                 Could not enter PvP at this time: no available spawn location.
 
 PvPManager.Score.Points:            {0} points
 PvPManager.Score.Pts:               {0} pts
