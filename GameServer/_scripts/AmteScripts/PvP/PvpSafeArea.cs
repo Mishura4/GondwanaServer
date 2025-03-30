@@ -30,7 +30,7 @@ namespace AmteScripts.Areas
             OwnerGuild = owner.Guild;
             IsTemporary = true;
             IsPvP = true;
-            CanVol = true;
+            CanVol = !safeArea;
             m_safeArea = safeArea;
         }
 
