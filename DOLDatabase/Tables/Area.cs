@@ -20,6 +20,7 @@ namespace DOL.Database
         private bool m_checkLOS;
         private string m_points;
         private bool m_allowVol;
+        private bool m_safeArea;
         private int realmPoints;
         private bool m_isPvp;
 
@@ -163,6 +164,21 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_allowVol = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool SafeArea
+        {
+            get
+            {
+                return m_safeArea;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_safeArea = value;
             }
         }
 

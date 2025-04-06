@@ -82,7 +82,7 @@ namespace DOL.GS.Commands
                         area.Z = client.Player.Position.Z;
                         area.ObjectId = area.Description;
 
-                        if (args.Length == 8 && bool.TryParse(args[7], out bool canVol))
+                        if (args.Length >= 8 && bool.TryParse(args[7], out bool canVol))
                         {
                             area.AllowVol = canVol;
                         }

@@ -48,6 +48,7 @@ namespace DOL.GS
                     area.LoadFromDatabase(thisArea);
                     area.Sound = thisArea.Sound;
                     area.CanBroadcast = thisArea.CanBroadcast;
+                    area.IsSafeArea = thisArea.SafeArea;
                     area.CheckLOS = thisArea.CheckLOS;
                     Region region = WorldMgr.GetRegion(thisArea.Region);
                     if (region == null)

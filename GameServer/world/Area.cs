@@ -172,6 +172,7 @@ namespace DOL.GS
                 m_Width = area.Radius;
                 m_Height = area.Radius;
                 this.CanVol = area.AllowVol;
+                this.IsSafeArea = area.SafeArea;
                 RealmPoints = area.RealmPoints;
                 this.IsPvP = area.IsPvP;
             }
@@ -283,6 +284,7 @@ namespace DOL.GS
                 m_Radius = area.Radius;
                 m_RadiusRadius = area.Radius * area.Radius;
                 this.CanVol = area.AllowVol;
+                this.IsSafeArea = area.SafeArea;
                 RealmPoints = area.RealmPoints;
                 this.IsPvP = area.IsPvP;
             }
@@ -426,6 +428,7 @@ namespace DOL.GS
                 m_Radius = area.Radius;
                 StringPoints = area.Points;
                 this.CanVol = area.AllowVol;
+                this.IsSafeArea = area.SafeArea;
                 RealmPoints = area.RealmPoints;
                 this.IsPvP = area.IsPvP;
             }

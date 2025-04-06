@@ -284,6 +284,7 @@ namespace DOL.GS
                     newArea.LoadFromDatabase(newDBArea);
                     newArea.Sound = newDBArea.Sound;
                     newArea.CanBroadcast = newDBArea.CanBroadcast;
+                    newArea.IsSafeArea = newDBArea.SafeArea;
                     newArea.CheckLOS = newDBArea.CheckLOS;
                     this.AddArea(newArea);
                     areaCnt++;
