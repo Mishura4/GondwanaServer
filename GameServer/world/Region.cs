@@ -1389,18 +1389,21 @@ namespace DOL.GS
                 }
 
                 int zonePos = 0;
+                Zone zoneIn = null;
                 foreach (Zone zone in Zones)
                 {
                     if (area.IsIntersectingZone(zone))
                     {
                         m_ZoneAreas[zonePos][m_ZoneAreasCount[zonePos]++] = area.ID;
-                        if (area is AbstractArea abstractArea)
-                        {
-                            abstractArea.ZoneIn = zone;
-                        }
+                        zoneIn = zone;
                     }
 
                     zonePos++;
+                }
+                if (area is AbstractArea abstractArea)
+                {
+                    abstractArea.ZoneIn = zoneIn;
+                    abstractArea.Region = this;
                 }
                 return area;
             }

@@ -1,3 +1,4 @@
+using AmteScripts.Managers;
 using System;
 using DOL.GS;
 using DOL.Events;
@@ -64,13 +65,21 @@ namespace DOL.Database
 
         [DataElement(AllowDbNull = false)]
         public string PvPSession { get; set; } = string.Empty;
-
+        [DataElement(AllowDbNull = false)]
+        public string PvPSpawnNPC { get; set; } = string.Empty;
+        [DataElement(AllowDbNull = false)]
+        public int PvPSpawnX { get; set; } = 0;
+        [DataElement(AllowDbNull = false)]
+        public int PvPSpawnY { get; set; } = 0;
+        [DataElement(AllowDbNull = false)]
+        public int PvPSpawnZ { get; set; } = 0;
+        
         public RvrPlayer()
         {
 
         }
 
-        public RvrPlayer(GamePlayer player)
+        public RvrPlayer(GamePlayer player, PvpManager.Spawn? spawn)
         {
             PlayerID = player.InternalID;
             GuildID = player.GuildID ?? "";
@@ -89,6 +98,12 @@ namespace DOL.Database
             OldBindRegion = player.BindPosition.RegionID;
 
             PvPSession = "None";
+
+            var pos = spawn?.Position ?? Position.Nowhere;
+            PvPSpawnNPC = spawn?.NPC?.InternalID ?? string.Empty;
+            PvPSpawnX = pos.X;
+            PvPSpawnY = pos.Y;
+            PvPSpawnZ = pos.Z;
         }
 
         public void ResetCharacter(GamePlayer player)

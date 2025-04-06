@@ -195,7 +195,11 @@ namespace DOL.GS
         /// </summary>
         public bool IsTemporary { get; init; } = false;
 
-        public Zone ZoneIn { get;  set; }
+        public Zone ZoneIn { get; set; }
+        public Region Region
+        {
+            get; set;
+        }
 
         #region Event handling
 

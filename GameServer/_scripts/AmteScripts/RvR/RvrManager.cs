@@ -717,7 +717,7 @@ namespace AmteScripts.Managers
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.GMNotAllowed"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
-            RvrPlayer rvr = new RvrPlayer(player);
+            RvrPlayer rvr = new RvrPlayer(player, null);
             rvr.PvPSession = "RvR";
             GameServer.Database.AddObject(rvr);
 
