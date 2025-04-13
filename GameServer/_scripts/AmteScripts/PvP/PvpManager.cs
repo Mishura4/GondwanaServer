@@ -389,16 +389,31 @@ namespace AmteScripts.Managers
                     return; // Nothing to do
                 
                 guild.AddPlayer(player, guild.GetRankByID(_defaultGuildRank), true);
-                if (_groupSpawns.ContainsKey(guild))
-                    _freeSpawn(player);
+                if (_groupSpawns.TryGetValue(guild, out Spawn spawn))
+                {
+                    _freeSpawn(player); // Remove player solo spawn
+                    UpdatePvPState(player, spawn); // Update PvP DB record for state recovery
+                }
                 if (_groupAreas.ContainsKey(guild))
+                {
+                    // Remove player solo area
                     _cleanupArea(player);
+                }
             }
             else
             {
                 guild = CreateGuildForGroup(group);
                 if (guild == null)
                     return;
+
+                if (_groupSpawns.TryGetValue(guild, out Spawn spawn))
+                {
+                    foreach (var member in group.GetPlayersInTheGroup())
+                    {
+                        // Update PvP DB record for state recovery
+                        UpdatePvPState(member, spawn);
+                    }
+                }
             }
         }
 
@@ -432,6 +447,7 @@ namespace AmteScripts.Managers
                     _playerSpawns[player] = sp;
                     CreateSafeAreaForSolo(player, sp.Position, _activeSession.TempAreaRadius);
                     player.MoveTo(sp.Position);
+                    UpdatePvPState(player, sp); // Update PvP DB record for state recovery
                 }
                 else
                     KickPlayer(player, true);
@@ -458,6 +474,11 @@ namespace AmteScripts.Managers
                 group.AddMember(player);
                 _freeSpawn(player);
                 _cleanupArea(player);
+                if (_groupSpawns.TryGetValue(guild, out Spawn guildSpawn))
+                {
+                    // Update DB record with guild spawn, for state recovery
+                    UpdatePvPState(player, guildSpawn);
+                }
                 if (player.Guild != group.Leader.Guild)
                 {
                     log.Warn($"Player {player.Name} ({player.InternalID}) was added to group led by {group.Leader} ({group.Leader.InternalID}) but they have different guilds!");
@@ -494,6 +515,11 @@ namespace AmteScripts.Managers
                             leader = member;
                         _cleanupArea(member);
                         _freeSpawn(member);
+                        if (spawn != null)
+                        {
+                            // Update DB record with guild spawn, for state recovery
+                            UpdatePvPState(player, spawn);
+                        }
                     }
 
                     if (leader != player)
@@ -530,6 +556,7 @@ namespace AmteScripts.Managers
                         _playerSpawns[player] = sp;
                         CreateSafeAreaForSolo(player, sp.Position, _activeSession.TempAreaRadius);
                         player.MoveTo(sp.Position);
+                        UpdatePvPState(player, sp); // Update PvP DB record for state recovery
                     }
                     else
                         KickPlayer(player, true);
@@ -678,7 +705,7 @@ namespace AmteScripts.Managers
             _playerSpawns[player] = spawn;
             if (CreateAreas)
             {
-                CreateSafeAreaForGroup(player, spawn.Position, _activeSession.TempAreaRadius);
+                CreateSafeAreaForSolo(player, spawn.Position, _activeSession.TempAreaRadius);
             }
             return true;
         }
@@ -1823,6 +1850,31 @@ namespace AmteScripts.Managers
                 player.Guild.RemovePlayer("PVP", player);
 
             player.IsInPvP = true;
+        }
+
+        /// <summary>
+        /// Update player's PvP record on group state change for example while in PvP.
+        /// </summary>
+        private void UpdatePvPState([NotNull] GamePlayer player, [NotNull] Spawn spawn)
+        {
+            if (!player.IsInPvP)
+            {
+                log.WarnFormat("Cannot update {0}'s PvP DB record; player not in PvP", player);
+                return;
+            }
+            RvrPlayer record = GameServer.Database.SelectObject<RvrPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID));
+            if (record == null)
+            {
+                log.WarnFormat("Cannot update {0}'s PvP DB record; no record", player);
+                return;
+            }
+            record.PvPSpawnNPC = spawn.NPC?.InternalID ?? string.Empty;
+            record.PvPSpawnX = spawn.Position.X;
+            record.PvPSpawnY = spawn.Position.Y;
+            record.PvPSpawnZ = spawn.Position.Z;
+            record.Dirty = true;
+
+            GameServer.Database.SaveObject(record);
         }
         #endregion
 
