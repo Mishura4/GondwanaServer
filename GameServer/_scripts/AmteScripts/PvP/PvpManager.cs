@@ -439,6 +439,13 @@ namespace AmteScripts.Managers
             
             if (!guild.RemovePlayer(string.Empty, player))
                 return;
+            
+            // Check if *all* members have left. If so, remove area:
+            if (!guild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
+            {
+                _cleanupArea(guild);
+                _freeSpawn(guild);
+            }
 
             _playerLeftGuilds[player.InternalID] = guild;
             if (AllowsSolo)
@@ -457,13 +464,6 @@ namespace AmteScripts.Managers
             }
             else
                 KickPlayer(player, true);
-            
-            // Check if *all* members have left. If so, remove area:
-            if (!guild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
-            {
-                _cleanupArea(guild);
-                _freeSpawn(guild);
-            }
         }
 
         /// <summary>
@@ -567,6 +567,13 @@ namespace AmteScripts.Managers
                 if (!group.RemoveMember(player))
                     return;
                 
+                // Check if *all* members have left. If so, remove area:
+                if (!guild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
+                {
+                    _cleanupArea(guild);
+                    _freeSpawn(guild);
+                }
+                
                 if (AllowsSolo)
                 {
                     Spawn? sp = FindSpawnPosition(player.Realm);
@@ -586,12 +593,6 @@ namespace AmteScripts.Managers
             }
 
             _playerLeftGuilds[player.InternalID] = guild;
-            // Check if *all* members have left. If so, remove area:
-            if (!guild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
-            {
-                _cleanupArea(guild);
-                _freeSpawn(guild);
-            }
         }
         
         private bool TryRestorePlayer(GamePlayer player, RvrPlayer rec)
@@ -2048,9 +2049,14 @@ namespace AmteScripts.Managers
                 lock (_usedSpawns)
                 {
                     var available = _spawnNpcsGlobal.Values.Where(n => !_usedSpawns.Contains(n)).ToList();
+                    log.Info($"all: {string.Join(',', _spawnNpcsGlobal.Select(n => n.Value.InternalID))}");
+                    log.Info($"used: {string.Join(',', _usedSpawns.Select(n => n.InternalID))}");
+                    log.Info($"available: {string.Join(',', available.Select(n => n.InternalID))}");
                     if (available.Count > 0)
                     {
-                        var chosen = available[Util.Random(available.Count - 1)];
+                        var idx = Util.Random(available.Count - 1);
+                        var chosen = available[idx];
+                        log.Info($"chosen: {chosen.InternalID} ({idx})");
                         _usedSpawns.Add(chosen);
                         return new Spawn(chosen, chosen.Position);
                     }
