@@ -453,22 +453,7 @@ namespace AmteScripts.Managers
             }
 
             _playerLeftGuilds[player.InternalID] = guild;
-            if (AllowsSolo)
-            {
-                Spawn? sp = FindSpawnPosition(player.Realm);
-                if (sp == null)
-                {
-                    player.SendTranslatedMessage("PvPManager.NoSpawn");
-                    KickPlayer(player, true);
-                    return;
-                }
-                _playerSpawns[player] = sp;
-                CreateSafeAreaForSolo(player, sp.Position, _activeSession.TempAreaRadius);
-                player.MoveTo(sp.Position);
-                UpdatePvPState(player, sp); // Update PvP DB record for state recovery
-            }
-            else
-                KickPlayer(player, true);
+            PlayerGroupToSolo(player);
         }
 
         /// <summary>
@@ -569,37 +554,50 @@ namespace AmteScripts.Managers
                 return;
             }
 
-            if (_guildGroups.TryGetValue(guild, out var group))
+            if (!_guildGroups.TryGetValue(guild, out var group))
+                return;
+
+            if (!group.RemoveMember(player))
+                return;
+
+            // Check if *all* members have left. If so, remove area:
+            if (!guild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
             {
-                if (!group.RemoveMember(player))
-                    return;
-                
-                // Check if *all* members have left. If so, remove area:
-                if (!guild.GetListOfOnlineMembers().Any(m => m.IsInPvP))
-                {
-                    _cleanupArea(guild);
-                    _freeSpawn(guild);
-                }
-                
-                if (AllowsSolo)
-                {
-                    Spawn? sp = FindSpawnPosition(player.Realm);
-                    if (sp == null)
-                    {
-                        player.SendTranslatedMessage("PvPManager.NoSpawn");
-                        KickPlayer(player, true);
-                        return;
-                    }
-                    _playerSpawns[player] = sp;
-                    CreateSafeAreaForSolo(player, sp.Position, _activeSession.TempAreaRadius);
-                    player.MoveTo(sp.Position);
-                    UpdatePvPState(player, sp); // Update PvP DB record for state recovery
-                }
-                else
-                    KickPlayer(player, true);
+                _cleanupArea(guild);
+                _freeSpawn(guild);
             }
 
             _playerLeftGuilds[player.InternalID] = guild;
+            PlayerGroupToSolo(player);
+
+        }
+
+        private void PlayerGroupToSolo(GamePlayer player)
+        { 
+            if (AllowsSolo)
+            {
+                Spawn? sp = FindSpawnPosition(player.Realm);
+                if (sp == null)
+                {
+                    player.SendTranslatedMessage("PvPManager.NoSpawn");
+                    KickPlayer(player, true);
+                    return;
+                }
+                _playerSpawns[player] = sp;
+                CreateSafeAreaForSolo(player, sp.Position, _activeSession.TempAreaRadius);
+                UpdatePvPState(player, sp); // Update PvP DB record for state recovery
+                
+                // Remove any owned flags before teleporting to new safe area, or they'll capture the flag instantly
+                int totalRemoved = RemoveItemsFromPlayer(player);
+                if (totalRemoved > 0)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.PvPTreasureRemoved", totalRemoved), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                }
+
+                player.MoveTo(sp.Position);
+            }
+            else
+                KickPlayer(player, true);
         }
         
         private bool TryRestorePlayer(GamePlayer player, RvrPlayer rec)
