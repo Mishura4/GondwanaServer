@@ -30,9 +30,9 @@ namespace AmteScripts.PvP.CTF
         }
 
         /// <inheritdoc />
-        public override bool RemoveFromWorld()
+        public override bool RemoveFromWorld(int respawnSeconds)
         {
-            if (!base.RemoveFromWorld())
+            if (!base.RemoveFromWorld(respawnSeconds))
                 return false;
 
             if (_padArea != null)
