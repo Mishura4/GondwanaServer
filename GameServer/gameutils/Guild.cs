@@ -308,6 +308,8 @@ namespace DOL.GS
             }
         }
 
+        public bool IsPvPGuild => GuildType is eGuildType.PvPGuild;
+
         /// <summary>
         /// Count of territories at which diminishing returns / penalties are suffered
         /// </summary>

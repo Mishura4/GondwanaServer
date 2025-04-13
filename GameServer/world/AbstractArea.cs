@@ -282,7 +282,7 @@ namespace DOL.GS
             {
                 _players.Remove(player);
             }
-            if (m_displayMessage)
+            if (m_displayMessage || player.IsGM)
             {
                 string description = GetDescriptionForPlayer(player);
                 if (!String.IsNullOrEmpty(description))
