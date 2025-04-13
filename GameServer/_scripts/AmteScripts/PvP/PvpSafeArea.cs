@@ -57,6 +57,7 @@ namespace AmteScripts.Areas
             foreach (var item in _ownedStaticItems)
             {
                 item.Emblem = OwnerGuild?.Emblem ?? 0;
+                item.BroadcastUpdate();
                 if (item is GamePvPStaticItem pvpItem)
                     pvpItem.SetOwnership(player);
                 if (previousOwner != null)

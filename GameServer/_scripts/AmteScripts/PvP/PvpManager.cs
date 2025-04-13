@@ -352,6 +352,7 @@ namespace AmteScripts.Managers
             _allGuilds.Add(pvpGuild);
             _groupGuilds[group] = pvpGuild;
             _guildGroups[pvpGuild] = group;
+            
             if (_soloAreas.Remove(groupLeader, out AbstractArea leaderArea))
             {
                 _groupAreas.Swap(pvpGuild, leaderArea);
@@ -373,6 +374,10 @@ namespace AmteScripts.Managers
                 _cleanupArea(member);
                 _freeSpawn(member);
             }
+            
+            if (leaderArea is PvpTempArea pvpArea)
+                pvpArea.SetOwnership(groupLeader);
+
             return pvpGuild;
         }
 
@@ -514,6 +519,8 @@ namespace AmteScripts.Managers
                 if (_soloAreas.Remove(leader, out AbstractArea leaderArea))
                 {
                     _groupAreas.Add(guild, leaderArea);
+                    if (leaderArea is PvpTempArea pvpArea)
+                        pvpArea.SetOwnership(leader);
                 }
                 if (_playerSpawns.TryRemove(leader, out Spawn spawn))
                 {

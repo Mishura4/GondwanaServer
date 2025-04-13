@@ -20,6 +20,18 @@ namespace AmteScripts.PvP.CTF
 
         public GameFlagStatic OwnedFlag { get; private set; }
 
+        /// <inheritdoc />
+        public override int Emblem
+        {
+            get => base.Emblem;
+            set
+            {
+                base.Emblem = value;
+                if (OwnedFlag != null)
+                    OwnedFlag.Emblem = value;
+            }
+        }
+
         public override bool AddToWorld()
         {
             if (!base.AddToWorld()) return false;
@@ -41,6 +53,14 @@ namespace AmteScripts.PvP.CTF
                 _padArea = null;
             }
             return true;
+        }
+
+        /// <inheritdoc />
+        public override void SetOwnership(GamePlayer player)
+        {
+            base.SetOwnership(player);
+            if (OwnedFlag != null)
+                OwnedFlag.SetOwnership(player);
         }
 
         /// <summary>
