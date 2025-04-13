@@ -16,14 +16,30 @@ namespace AmteScripts.PvP.CTF
 
         private RegionTimer _maxPadTimer;
         private const int MAX_TIME_ON_TEMP_PAD = 600_000;
+        private AbstractArea _padArea;
 
         public GameFlagStatic OwnedFlag { get; private set; }
 
         public override bool AddToWorld()
         {
             if (!base.AddToWorld()) return false;
-            var area = new TempPadArea(this, 90);
-            CurrentRegion.AddArea(area);
+            
+            _padArea = new TempPadArea(this, 90);
+            CurrentRegion.AddArea(_padArea);
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool RemoveFromWorld()
+        {
+            if (!base.RemoveFromWorld())
+                return false;
+
+            if (_padArea != null)
+            {
+                CurrentRegion?.RemoveArea(_padArea);
+                _padArea = null;
+            }
             return true;
         }
 
@@ -159,6 +175,7 @@ namespace AmteScripts.PvP.CTF
             : base($"{pad.Name}_Area", pad.Position.X, pad.Position.Y, pad.Position.Z, radius)
         {
             _pad = pad;
+            m_displayMessage = false;
         }
 
         public override void OnPlayerEnter(GamePlayer player)

@@ -265,6 +265,8 @@ namespace DOL.GS
         {
             get { return Client.Out; }
         }
+        
+        public bool IsGM => (Client?.Account?.PrivLevel >= (int)ePrivLevel.GM) == true;
 
         /// <summary>
         /// The character the player is based on
@@ -18007,6 +18009,7 @@ namespace DOL.GS
         public bool StayStealth { get => stayStealth; set => stayStealth = value; }
         public SpellHandler PulseSpell { get => m_pulseSpell; set => m_pulseSpell = value; }
         public ShadowNPC ShadowNPC { get => shadowNPC; set => shadowNPC = value; }
+
         #endregion
 
     }
