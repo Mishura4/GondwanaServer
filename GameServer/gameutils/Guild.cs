@@ -1192,7 +1192,6 @@ namespace DOL.GS
             if (addPlayer == null || addPlayer.Guild != null)
                 return false;
 
-
             if (!force && !IsSystemGuild && m_leave_Players.ContainsKey(addPlayer) && addPlayer.Client.Account.PrivLevel == 1)
             {
                 int time = Properties.RECRUITMENT_TIMER_OPTION - (int)DateTime.Now.Subtract(m_leave_Players[addPlayer]).TotalMinutes;
@@ -1240,6 +1239,9 @@ namespace DOL.GS
         /// <returns>true or false</returns>
         public bool RemovePlayer(string removername, GamePlayer member)
         {
+            if (member?.Guild != this)
+                return false;
+            
             GameClient remover = WorldMgr.GetClientByPlayerName(removername, false, true);
             if (!IsSystemGuild && remover is { Account.PrivLevel: < 2 } && m_invite_Players.ContainsKey(member))
             {

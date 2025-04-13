@@ -428,12 +428,14 @@ namespace AmteScripts.Managers
             if (!IsOpen)
                 return;
 
+            if (player.Guild == null) // No guild; likely we came here through RemoveFromGuildGroup calling group.RemovePlayer
+                return;
+
             if (_groupGuilds.TryGetValue(group, out var guild))
             {
-                if (player.Guild != guild)
+                if (!guild.RemovePlayer(string.Empty, player))
                     return;
-                
-                guild.RemovePlayer(string.Empty, player);
+
                 _playerLeftGuilds[player.InternalID] = guild;
                 if (AllowsSolo)
                 {
@@ -464,6 +466,12 @@ namespace AmteScripts.Managers
         {
             if (!IsOpen)
                 return;
+
+            if (player.Guild != guild)
+            {
+                log.ErrorFormat("{0} called with player.Guild != guild, add the player to the guild first!", MethodBase.GetCurrentMethod());
+                return;
+            }
             
             Group group = null;
             if (_guildGroups.TryGetValue(guild, out group))
@@ -538,29 +546,36 @@ namespace AmteScripts.Managers
             if (!IsOpen || guild == null)
                 return;
 
+            if (player.Group == null) // No group; likely we came here from RemoveFromGroupGuild calling guild.RemoveMember
+                return;
+
+            if (player.Guild != null)
+            {
+                log.ErrorFormat("{0} called with player.Guild != null, remove the player from the guild first!", MethodBase.GetCurrentMethod());
+                return;
+            }
+
             if (_guildGroups.TryGetValue(guild, out var group))
             {
-                if (group.IsInTheGroup(player))
-                    group.RemoveMember(player);
-                else
+                if (!group.RemoveMember(player))
+                    return;
+                
+                if (AllowsSolo)
                 {
-                    if (AllowsSolo)
+                    Spawn? sp = FindSpawnPosition(player.Realm);
+                    if (sp == null)
                     {
-                        Spawn? sp = FindSpawnPosition(player.Realm);
-                        if (sp == null)
-                        {
-                            player.SendTranslatedMessage("PvPManager.NoSpawn");
-                            KickPlayer(player, true);
-                            return;
-                        }
-                        _playerSpawns[player] = sp;
-                        CreateSafeAreaForSolo(player, sp.Position, _activeSession.TempAreaRadius);
-                        player.MoveTo(sp.Position);
-                        UpdatePvPState(player, sp); // Update PvP DB record for state recovery
-                    }
-                    else
+                        player.SendTranslatedMessage("PvPManager.NoSpawn");
                         KickPlayer(player, true);
+                        return;
+                    }
+                    _playerSpawns[player] = sp;
+                    CreateSafeAreaForSolo(player, sp.Position, _activeSession.TempAreaRadius);
+                    player.MoveTo(sp.Position);
+                    UpdatePvPState(player, sp); // Update PvP DB record for state recovery
                 }
+                else
+                    KickPlayer(player, true);
             }
 
             _playerLeftGuilds[player.InternalID] = guild;
@@ -2037,7 +2052,7 @@ namespace AmteScripts.Managers
                 if (_spawnNpcsGlobal.Count > 0)
                 {
                     var chosen = _spawnNpcsGlobal.Values.ElementAt(Util.Random(_spawnNpcsGlobal.Count - 1));
-                    return new Spawn(chosen);
+                    return new Spawn(chosen, chosen.Position);
                 }
                 else
                 {
