@@ -58,6 +58,7 @@ using System.Collections.Immutable;
 using DOL.GS.Geometry;
 using AmteScripts.PvP.CTF;
 using Discord;
+using System.Drawing.Drawing2D;
 
 namespace DOL.GS
 {
@@ -1360,22 +1361,31 @@ namespace DOL.GS
         public virtual int BindAllowInterval { get { return 60000; } }
 
         /// <summary>
+        /// Binds this player to a location
+        /// </summary>
+        /// <param name="forced">if true, can bind anywhere</param>
+        public virtual void Bind(Position pos)
+        {
+            BindPosition = pos;
+            if (DBCharacter != null)
+                GameServer.Database.SaveObject(DBCharacter);
+        }
+
+        /// <summary>
         /// Binds this player to the current location
         /// </summary>
         /// <param name="forced">if true, can bind anywhere</param>
-        public virtual void Bind(bool forced)
+        public void Bind(bool forced)
         {
+            if (forced)
+            {
+                Bind(this.Position);
+                return;
+            }
+            
             if (CurrentRegion.IsInstance)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Bind.CantHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
-            }
-
-            if (forced)
-            {
-                BindPosition = Position;
-                if (DBCharacter != null)
-                    GameServer.Database.SaveObject(DBCharacter);
                 return;
             }
 
@@ -1403,12 +1413,10 @@ namespace DOL.GS
             var bindarea = CurrentAreas.OfType<Area.BindArea>().FirstOrDefault(ar => GameServer.ServerRules.IsAllowedToBind(this, ar.BindPoint));
             if (bindarea != null)
             {
+                Bind(Position);
                 bound = true;
-                BindPosition = Position;
-                if (DBCharacter != null)
-                    GameServer.Database.SaveObject(DBCharacter);
             }
-
+            
             //if we are not bound yet lets check if we are in a house where we can bind
             if (!bound && InHouse && CurrentHouse != null)
             {
@@ -1439,9 +1447,7 @@ namespace DOL.GS
                         int outsideX = (int)(house.Position.X + (0 * Math.Cos(angle) + 500 * Math.Sin(angle)));
                         int outsideY = (int)(house.Position.Y - (500 * Math.Cos(angle) - 0 * Math.Sin(angle)));
                         ushort outsideHeading = (ushort)((houseAngle.InDegrees < 180 ? houseAngle.InDegrees + 180 : houseAngle.InDegrees - 180) / 0.08789);
-                        BindHousePosition = house.OutdoorJumpPosition;
-                        if (DBCharacter != null)
-                            GameServer.Database.SaveObject(DBCharacter);
+                        Bind(house.OutdoorJumpPosition);
                     }
                 }
             }

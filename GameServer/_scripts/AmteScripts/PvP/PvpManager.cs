@@ -54,8 +54,6 @@ namespace AmteScripts.Managers
             public Spawn(Position pos) : this(null, pos) { }
         }
 
-        private record Team(GamePlayer OwnerPlayer, Guild OwnerGuild, Spawn Spawn, int Emblem);
-
         /// <summary>The chosen session from DB for the day</summary>
         private PvpSession _activeSession;
         [NotNull] private readonly object _sessionLock = new object();
@@ -396,6 +394,7 @@ namespace AmteScripts.Managers
             Guild guild = null;
             if (_groupGuilds.TryGetValue(group, out guild))
             {
+                // Guild already exists
                 if (guild == player.Guild)
                     return; // Nothing to do
                 
@@ -404,6 +403,7 @@ namespace AmteScripts.Managers
                 {
                     _freeSpawn(player); // Remove player solo spawn
                     UpdatePvPState(player, spawn); // Update PvP DB record for state recovery
+                    player.Bind(spawn.Position);
                 }
                 if (_groupAreas.ContainsKey(guild))
                 {
@@ -413,6 +413,7 @@ namespace AmteScripts.Managers
             }
             else
             {
+                // Guild needs to be created
                 guild = CreateGuildForGroup(group);
                 if (guild == null)
                     return;
@@ -423,6 +424,7 @@ namespace AmteScripts.Managers
                     {
                         // Update PvP DB record for state recovery
                         UpdatePvPState(member, spawn);
+                        member.Bind(spawn.Position);
                     }
                 }
             }
@@ -476,6 +478,7 @@ namespace AmteScripts.Managers
             Group group = null;
             if (_guildGroups.TryGetValue(guild, out group))
             {
+                // Group already exists
                 if (group.IsInTheGroup(player))
                     return; // Nothing to do
                 
@@ -486,6 +489,7 @@ namespace AmteScripts.Managers
                 {
                     // Update DB record with guild spawn, for state recovery
                     UpdatePvPState(player, guildSpawn);
+                    player.Bind(guildSpawn.Position);
                 }
                 if (player.Guild != group.Leader.Guild)
                 {
@@ -498,6 +502,8 @@ namespace AmteScripts.Managers
             }
             else
             {
+                // Guild needs to be created
+                
                 // There is a race condition here maybe?
                 // If two players log in at the same time, TryGetValue up there can maybe return false in both cases, and this can run twice...
                 GamePlayer leader = player;
@@ -529,6 +535,7 @@ namespace AmteScripts.Managers
                         {
                             // Update DB record with guild spawn, for state recovery
                             UpdatePvPState(player, spawn);
+                            player.Bind(spawn.Position);
                         }
                     }
 
@@ -595,6 +602,7 @@ namespace AmteScripts.Managers
                 }
 
                 player.MoveTo(sp.Position);
+                player.Bind(true);
             }
             else
                 KickPlayer(player, true);
