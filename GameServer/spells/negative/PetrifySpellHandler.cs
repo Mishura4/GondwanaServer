@@ -196,9 +196,9 @@ namespace DOL.GS.Spells
 
             if (living is GamePlayer player)
             {
-                if (player.GuildBanner != null)
+                if (player.ActiveBanner != null)
                 {
-                    player.GuildBanner.ForceBannerDrop();
+                    player.ActiveBanner.Drop(true);
                 }
                 player.Out.SendUpdateMaxSpeed();
             }

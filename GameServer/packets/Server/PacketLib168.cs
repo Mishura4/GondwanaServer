@@ -3774,7 +3774,7 @@ namespace DOL.GS.PacketHandler
             }
         }
 
-        public virtual void SendRvRGuildBanner(GamePlayer player, bool show)
+        public virtual void SendRvRGuildBanner(GamePlayer player, AbstractBanner? banner)
         {
         }
 

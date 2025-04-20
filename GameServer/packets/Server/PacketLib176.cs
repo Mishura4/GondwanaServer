@@ -457,18 +457,16 @@ namespace DOL.GS.PacketHandler
             pak.WriteByte((byte)(item.PlacementMode - 2));
         }
 
-        public override void SendRvRGuildBanner(GamePlayer player, bool show)
+        public override void SendRvRGuildBanner(GamePlayer player, AbstractBanner? banner)
         {
             if (player == null) return;
 
-            //cannot show banners for players that have no guild.
-            if (show && player.Guild == null)
-                return;
             GSTCPPacketOut pak = new GSTCPPacketOut((byte)eServerPackets.VisualEffect);
             pak.WriteShort((ushort)player.ObjectID);
             pak.WriteByte(0xC); // show Banner
-            pak.WriteByte((byte)((show) ? 0 : 1)); // 0-enable, 1-disable
-            int newEmblemBitMask = ((player.Guild.Emblem & 0x010000) << 8) | (player.Guild.Emblem & 0xFFFF);
+            pak.WriteByte((byte)((banner != null) ? 0 : 1)); // 0-enable, 1-disable
+            int emblem = banner?.Emblem ?? 0;
+            int newEmblemBitMask =((emblem & 0x010000) << 8) | (emblem & 0xFFFF);
             pak.WriteInt((uint)newEmblemBitMask);
             SendTCP(pak);
         }
@@ -477,9 +475,9 @@ namespace DOL.GS.PacketHandler
         {
             base.SendPlayerCreate(playerToCreate);
 
-            if (playerToCreate.GuildBanner != null)
+            if (playerToCreate.ActiveBanner != null)
             {
-                playerToCreate.Out.SendRvRGuildBanner(playerToCreate, true);
+                playerToCreate.Out.SendRvRGuildBanner(playerToCreate, playerToCreate.ActiveBanner);
                 playerToCreate.Out.SendPvPGuildBanner(playerToCreate, true);
             }
         }

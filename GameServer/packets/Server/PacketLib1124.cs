@@ -417,9 +417,9 @@ namespace DOL.GS.PacketHandler
 
             SendObjectGuildID(playerToCreate, playerToCreate.Guild); //used for nearest friendly/enemy object buttons and name colors on PvP server
 
-            if (playerToCreate.GuildBanner != null)
+            if (playerToCreate.ActiveBanner != null)
             {
-                SendRvRGuildBanner(playerToCreate, true);
+                SendRvRGuildBanner(playerToCreate, playerToCreate.ActiveBanner);
                 SendPvPGuildBanner(playerToCreate, true);
             }
         }

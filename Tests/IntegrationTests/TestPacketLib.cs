@@ -658,10 +658,10 @@ namespace DOL.Tests
         {
             if (SendHexEffectMethod != null) SendHexEffectMethod(this, player, effect1, effect2, effect3, effect4, effect5);
         }
-        public Action<TestPacketLib, GamePlayer, bool> SendRvRGuildBannerMethod { get; set; }
-        public void SendRvRGuildBanner(GamePlayer player, bool show)
+        public Action<TestPacketLib, GamePlayer, AbstractBanner?> SendRvRGuildBannerMethod { get; set; }
+        public void SendRvRGuildBanner(GamePlayer player, AbstractBanner? banner)
         {
-            if (SendRvRGuildBannerMethod != null) SendRvRGuildBannerMethod(this, player, show);
+            if (SendRvRGuildBannerMethod != null) SendRvRGuildBannerMethod(this, player, banner);
         }
         public Action<TestPacketLib, GamePlayer, bool> SendPvPGuildBannerMethod { get; set; }
         public void SendPvPGuildBanner(GamePlayer player, bool show)

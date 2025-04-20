@@ -177,9 +177,9 @@ namespace DOL.GS.Spells
             living.IsDamned = true;
             if (living is GamePlayer player)
             {
-                if (player.GuildBanner != null)
+                if (player.ActiveBanner != null)
                 {
-                    player.GuildBanner.ForceBannerDrop();
+                    player.ActiveBanner.Drop(true);
                 }
 
                 living.TempProperties.setProperty("OriginalModel", living.Model);

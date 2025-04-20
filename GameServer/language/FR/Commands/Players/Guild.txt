@@ -32,8 +32,9 @@ Commands.Players.Guild.BannerGroupSummoned:	    Quelqu'un dans votre groupe a d�
 Commands.Players.Guild.BannerGuildSummoned:	    Quelqu'un dans votre guilde a déjà invoqué la bannière de guilde.
 Commands.Players.Guild.BannerNoGroup:			    Vous avez besoin d'un groupe pour invoquer une bannière.
 Commands.Players.Guild.BannerNone:			    Votre guilde ne possède pas de bannière de guilde.
+Commands.Players.Guild.BannerAlreadyHave:       Vous portez déjà une bannière.
 Commands.Players.Guild.BannerNotAfford:		    Votre guilde a besoin de {0} points de mérite supplémentaires pour acheter une bannière de guilde !
-Commands.Players.Guild.BannerSummoned.You:		    Vous avez invoqué votre bannière de guilde.
+Commands.Players.Guild.BannerSummoned.You:		    Vous avez invoqué votre bannière de guilde. 
 Commands.Players.Guild.BannerSummoned:				{0} a invoqué la bannière de guilde.
 Commands.Players.Guild.BannerSummonDamned:			Vous êtes damné ! Impossible d'invoquer une bannière de guilde !
 Commands.Players.Guild.BannerUnsummoned.You:		Vous avez retiré votre bannière de guilde.

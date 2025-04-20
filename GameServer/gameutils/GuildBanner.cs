@@ -13,7 +13,45 @@ using System.Linq;
 
 namespace DOL.GS
 {
-    public class GuildBanner
+    public abstract class AbstractBanner
+    {
+        public virtual GamePlayer OwningPlayer
+        {
+            get;
+            set;
+        }
+
+        protected GamePlayer m_carryingPlayer;
+
+        public virtual GamePlayer CarryingPlayer
+        {
+            get => m_carryingPlayer;
+            protected set
+            {
+                if (value == m_carryingPlayer)
+                    return;
+
+                if (m_carryingPlayer != null)
+                    m_carryingPlayer.ActiveBanner = null;
+                m_carryingPlayer = value;
+                if (m_carryingPlayer != null)
+                    m_carryingPlayer.ActiveBanner = this;
+            }
+        }
+        
+        public virtual int Emblem => OwningPlayer?.Guild?.Emblem ?? 0;
+
+        /// <summary>
+        /// Drop the banner.
+        /// </summary>
+        /// <param name="forced">Whether this is an involuntary drop (true) or a voluntary drop (false).</param>
+        public virtual void Drop(bool forced)
+        {
+            CarryingPlayer = null;
+        }
+    }
+    
+    public class GuildBanner : AbstractBanner
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
@@ -39,12 +77,12 @@ namespace DOL.GS
             }
         }
 
-        private GamePlayer m_owningPlayer;
+        protected GamePlayer m_owningPlayer;
 
         /// <summary>
         /// Player who summoned or recovered the banner
         /// </summary>
-        public GamePlayer OwningPlayer
+        public override GamePlayer OwningPlayer
         {
             get => m_owningPlayer;
             set
@@ -69,16 +107,10 @@ namespace DOL.GS
             }
         }
 
-        /// <summary>
-        /// Player currently carrying the banner
-        /// </summary>
-        public GamePlayer CarryingPlayer
-        {
-            get;
-            private set;
-        }
-
         public Guild Guild { get; set; }
+
+        /// <inheritdoc />
+        public override int Emblem => Guild?.Emblem ?? 0;
 
         public string BannerEffectType { get; set; }
 
@@ -103,7 +135,7 @@ namespace DOL.GS
             {
                 foreach (GamePlayer groupPlayer in OwningPlayer.Group.GetPlayersInTheGroup())
                 {
-                    if (groupPlayer.GuildBanner != null)
+                    if (groupPlayer.ActiveBanner != null)
                     {
                         OwningPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                         if (m_timer != null)
@@ -118,7 +150,6 @@ namespace DOL.GS
             else if (!Properties.GUILD_BANNER_ALLOW_SOLO && OwningPlayer.Client.Account.PrivLevel <= (int)ePrivLevel.Player)
             {
                 OwningPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerNoGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                OwningPlayer.GuildBanner = null;
                 if (m_timer != null)
                 {
                     m_timer.Stop();
@@ -138,7 +169,6 @@ namespace DOL.GS
             CarryingPlayer = OwningPlayer;
             CarryingPlayer.Stealth(false);
             AddHandlers();
-            CarryingPlayer.GuildBanner = this;
 
             if (m_timer != null)
             {
@@ -160,7 +190,6 @@ namespace DOL.GS
             if (CarryingPlayer != null)
             {
                 RemoveHandlers();
-                CarryingPlayer.GuildBanner = null;
                 CarryingPlayer = null;
             }
         }
@@ -225,17 +254,18 @@ namespace DOL.GS
 
         protected void PlayerPutAwayBanner(DOLEvent e, object sender, EventArgs args)
         {
-            if (Guild != null)
+            Drop(true);
+        }
+
+        /// <inheritdoc />
+        public override void Drop(bool forced)
+        {
+            if (forced && Guild != null)
             {
                 Guild.ActiveGuildBanner = null;
                 Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
             Stop();
-        }
-
-        public void ForceBannerDrop()
-        {
-            PlayerPutAwayBanner(null, this.CarryingPlayer, EventArgs.Empty);
         }
 
         protected int LeaveGroupCallback(RegionTimer timer)
@@ -267,7 +297,6 @@ namespace DOL.GS
                 {
                     CarryingPlayer.Group?.SendPlayerActionTranslationToGroupMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
                 }
-                CarryingPlayer.GuildBanner = null;
                 CarryingPlayer = null;
             }
             Stop();
@@ -296,15 +325,14 @@ namespace DOL.GS
                 return;
             }
 
-
             if (player.Group.Leader == player)
             {
                 foreach (GamePlayer groupPlayer in OwningPlayer.Group.GetPlayersInTheGroup())
                 {
-                    if (groupPlayer.GuildBanner != null)
+                    if (groupPlayer.ActiveBanner is GuildBanner gBanner)
                     {
                         groupPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                        groupPlayer.GuildBanner.PutAway(false);
+                        gBanner.PutAway(false);
                     }
                 }
             }
@@ -312,7 +340,7 @@ namespace DOL.GS
             {
                 foreach (GamePlayer groupPlayer in OwningPlayer.Group.GetPlayersInTheGroup())
                 {
-                    if (groupPlayer.GuildBanner != null)
+                    if (groupPlayer.ActiveBanner != null)
                     {
                         player.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                         PutAway();

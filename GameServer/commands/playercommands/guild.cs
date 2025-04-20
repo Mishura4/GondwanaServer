@@ -1181,7 +1181,7 @@ namespace DOL.GS.Commands
                             {
                                 foreach (GamePlayer groupPlayer in client.Player.Group.GetPlayersInTheGroup())
                                 {
-                                    if (groupPlayer.GuildBanner != null)
+                                    if (groupPlayer.ActiveBanner != null)
                                     {
                                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerGroupSummoned"), eChatType.CT_Group, eChatLoc.CL_SystemWindow);
                                         return;
@@ -1532,10 +1532,15 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (client.Player.GuildBanner != null) // player is wearing the banner they want to unsummon
+                            if (client.Player.ActiveBanner != null) // player is wearing the banner they want to unsummon
                             {
-                                GuildBanner banner = client.Player.GuildBanner;
-                                banner.Stop();
+                                if (client.Player.ActiveBanner is not GuildBanner banner)
+                                {
+                                    // some other type of banner
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerAlreadyHave"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                                banner.Drop(false);
                                 if (banner.Guild != null)
                                 {
                                     banner.Guild.ActiveGuildBanner = null;

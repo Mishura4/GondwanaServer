@@ -33,6 +33,7 @@ Commands.Players.Guild.BannerGuildSummoned:	    Someone in your guild has alread
 Commands.Players.Guild.BannerNoGroup:			    You need a group to summon a banner.
 Commands.Players.Guild.BannerNone:			    Your guild does not have a guild banner.
 Commands.Players.Guild.BannerNotAfford:		    Your guild need {0} more merit points to buy a guild banner!
+Commands.Players.Guild.BannerAlreadyHave:       You are already carrying a banner.
 Commands.Players.Guild.BannerSummoned.You:		    You have summoned your guild banner.
 Commands.Players.Guild.BannerSummoned:		    {0} has summoned the guild banner.
 Commands.Players.Guild.BannerSummonDamned:			You cannot summon a banner while beeing damned!

@@ -17060,44 +17060,22 @@ namespace DOL.GS
         #endregion
 
         #region GuildBanner
-        protected GuildBanner m_guildBanner = null;
+        protected AbstractBanner m_activeBanner = null;
 
         /// <summary>
         /// Gets/Sets the visibility of the carryable RvrGuildBanner. Wont work if the player has no guild.
         /// </summary>
-        public GuildBanner GuildBanner
+        public AbstractBanner ActiveBanner
         {
-            get { return m_guildBanner; }
+            get { return m_activeBanner; }
             set
             {
-                //cant send guildbanner for players without guild.
-                if (Guild == null)
-                    return;
-
-                m_guildBanner = value;
-
-                if (value != null)
+                m_activeBanner = value;
+                foreach (GamePlayer playerToUpdate in GetPlayersInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
                 {
-                    foreach (GamePlayer playerToUpdate in GetPlayersInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
+                    if (playerToUpdate?.Client.IsPlaying == true)
                     {
-                        if (playerToUpdate == null) continue;
-
-                        if (playerToUpdate != null && playerToUpdate.Client.IsPlaying)
-                        {
-                            playerToUpdate.Out.SendRvRGuildBanner(this, true);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (GamePlayer playerToUpdate in GetPlayersInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
-                    {
-                        if (playerToUpdate == null) continue;
-
-                        if (playerToUpdate != null && playerToUpdate.Client.IsPlaying)
-                        {
-                            playerToUpdate.Out.SendRvRGuildBanner(this, false);
-                        }
+                        playerToUpdate.Out.SendRvRGuildBanner(this, value);
                     }
                 }
             }

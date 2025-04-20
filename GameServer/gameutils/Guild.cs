@@ -1258,6 +1258,10 @@ namespace DOL.GS
             }
             try
             {
+                if (member.ActiveBanner is GuildBanner banner)
+                {
+                    banner.Drop(true);
+                }
                 GuildMgr.RemovePlayerFromAllGuildPlayersList(member);
                 RemoveOnlineMember(member);
                 member.GuildName = "";
