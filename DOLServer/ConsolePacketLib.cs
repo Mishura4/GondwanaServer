@@ -234,7 +234,7 @@ namespace DOLGameServerConsole
         public void CheckLengthHybridSkillsPacket(ref GSTCPPacketOut pak, ref int maxSkills, ref int first) { }
         public void SendNonHybridSpellLines() { }
         public void SendCrash(string str) { }
-        public void SendRvRGuildBanner(GamePlayer player, AbstractBanner? banner) { }
+        public void SendRvRGuildBanner(GamePlayer player, BannerVisual? banner) { }
         public void SendPvPGuildBanner(GamePlayer player, bool show) { }
         public void SendPlayerFreeLevelUpdate() { }
         public void SendRegionColorScheme() { }

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using DOL.GS.Geometry;
 using AmteScripts.PvP.CTF;
+using AmteScripts.Managers;
+using System.Numerics;
 
 namespace AmteScripts.PvP
 {
@@ -90,7 +92,7 @@ namespace AmteScripts.PvP
                 item.Name = template.Name;
                 item.Position = Position.Create(center.RegionID, finalX, finalY, finalZ, finalHeading);
                 item.Realm = 0;
-                item.Emblem = ownerGuild?.Emblem ?? 0;
+                item.Emblem = ownerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
                 if (item is GamePvPStaticItem pvpItem)
                     pvpItem.SetOwnership(ownerPlayer);
 
@@ -211,7 +213,7 @@ namespace AmteScripts.PvP
                 item.Name = template.Name;
                 item.Position = Position.Create(center.RegionID, finalX, finalY, finalZ, finalHeading);
                 item.Realm = 0;
-                item.Emblem = ownerGuild?.Emblem ?? 0;
+                item.Emblem = ownerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
                 if (item is GamePvPStaticItem pvpItem)
                     pvpItem.SetOwnership(ownerPlayer);
                 item.AddToWorld();

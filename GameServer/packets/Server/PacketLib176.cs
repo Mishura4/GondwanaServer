@@ -457,7 +457,7 @@ namespace DOL.GS.PacketHandler
             pak.WriteByte((byte)(item.PlacementMode - 2));
         }
 
-        public override void SendRvRGuildBanner(GamePlayer player, AbstractBanner? banner)
+        public override void SendRvRGuildBanner(GamePlayer player, BannerVisual? banner)
         {
             if (player == null) return;
 

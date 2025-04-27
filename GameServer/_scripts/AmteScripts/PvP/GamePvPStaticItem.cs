@@ -1,4 +1,5 @@
-﻿using DOL.GS;
+﻿using AmteScripts.Managers;
+using DOL.GS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,6 @@ namespace AmteScripts.PvP.CTF
             set
             {
                 m_ownerGuild = value;
-                this.Emblem = value?.Emblem ?? 0;
             }
         }
 
@@ -31,10 +31,20 @@ namespace AmteScripts.PvP.CTF
             set => m_ownerPlayer = value;
         } 
         
-        public virtual void SetOwnership(GamePlayer player)
+        public virtual void SetOwnership(GamePlayer? player)
         {
-            OwnerPlayer = player;
-            OwnerGuild = player?.Guild;
+            if (player != null)
+            {
+                OwnerPlayer = player;
+                OwnerGuild = player.Guild;
+                Emblem = OwnerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
+            }
+            else
+            {
+                OwnerPlayer = null;
+                OwnerGuild = null;
+                Emblem = 0;
+            }
         }
 
         public bool IsOwnedBy(GamePlayer p)

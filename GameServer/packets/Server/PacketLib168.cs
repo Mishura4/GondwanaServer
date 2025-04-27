@@ -909,8 +909,18 @@ namespace DOL.GS.PacketHandler
             }
 
             int oType = 0;
-            if (obj is GamePlayer)
+            if (obj is GamePlayer player)
+            {
                 oType = 2;
+
+                // Send a remove RvR banner, because otherwise it stays on the client if the player reappears after losing the basser
+                // This feels like a weird workaround however, surely there's a better way?
+                if (player.ActiveBanner != null)
+                {
+                    player.Client.Out.SendRvRGuildBanner(player, null);
+                }
+                
+            }
             else if (obj is GameNPC)
                 oType = (((GameLiving)obj).IsAlive ? 1 : 0);
 
@@ -920,7 +930,6 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)oType);
                 SendTCP(pak);
             }
-
         }
 
         public virtual void SendObjectCreate(GameObject obj)
@@ -3071,6 +3080,17 @@ namespace DOL.GS.PacketHandler
 
         public virtual void SendObjectDelete(GameObject obj)
         {
+            if (obj is GamePlayer player)
+            {
+                // Send a remove RvR banner, because otherwise it stays on the client if the player reappears after losing the basser
+                // This feels like a weird workaround however, surely there's a better way?
+                if (player.ActiveBanner != null)
+                {
+                    player.Client.Out.SendRvRGuildBanner(player, null);
+                }
+            }
+            
+            
             // Remove from Cache
             if (m_gameClient.GameObjectUpdateArray.ContainsKey(new Tuple<ushort, ushort>(obj.CurrentRegionID, (ushort)obj.ObjectID)))
             {
@@ -3774,7 +3794,7 @@ namespace DOL.GS.PacketHandler
             }
         }
 
-        public virtual void SendRvRGuildBanner(GamePlayer player, AbstractBanner? banner)
+        public virtual void SendRvRGuildBanner(GamePlayer player, BannerVisual? banner)
         {
         }
 

@@ -1,4 +1,5 @@
-﻿using AmteScripts.PvP.CTF;
+﻿using AmteScripts.Managers;
+using AmteScripts.PvP.CTF;
 using DOL.GS;
 using DOL.GS.Geometry;
 using static DOL.GS.GameObject;
@@ -53,10 +54,10 @@ namespace AmteScripts.Areas
             OwnerGuild = player.Guild;
             var previousOwner = OwnerPlayer;
             OwnerPlayer = player;
-
+            int emblem = OwnerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
             foreach (var item in _ownedStaticItems)
             {
-                item.Emblem = OwnerGuild?.Emblem ?? 0;
+                item.Emblem = emblem;
                 item.BroadcastUpdate();
                 if (item is GamePvPStaticItem pvpItem)
                     pvpItem.SetOwnership(player);

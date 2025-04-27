@@ -9,13 +9,27 @@ using DOL.Database;
 using log4net;
 using DOL.GS.Effects;
 using DOL.GS.ServerProperties;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace DOL.GS
 {
-    public abstract class AbstractBanner
+    public class BannerVisual
     {
+        /// <summary>
+        /// The player that created the banner, used for the emblem.
+        /// May be different from the player CARRYING the banner.
+        /// </summary>
         public virtual GamePlayer OwningPlayer
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Item associated with this banner, if any
+        /// </summary>
+        public GameInventoryItem? Item
         {
             get;
             set;
@@ -23,10 +37,13 @@ namespace DOL.GS
 
         protected GamePlayer m_carryingPlayer;
 
+        /// <summary>
+        /// Player currently carrying the banner, showing the visual 
+        /// </summary>
         public virtual GamePlayer CarryingPlayer
         {
             get => m_carryingPlayer;
-            protected set
+            set
             {
                 if (value == m_carryingPlayer)
                     return;
@@ -38,20 +55,36 @@ namespace DOL.GS
                     m_carryingPlayer.ActiveBanner = this;
             }
         }
-        
-        public virtual int Emblem => OwningPlayer?.Guild?.Emblem ?? 0;
 
+        protected int? m_emblem;
+        
         /// <summary>
-        /// Drop the banner.
+        /// Current emblem for this visual
+        /// Get defaults to Item ?? Guild ?? 0, never null.
+        /// Set overrides this default, can be set to null to reset to default.
         /// </summary>
-        /// <param name="forced">Whether this is an involuntary drop (true) or a voluntary drop (false).</param>
-        public virtual void Drop(bool forced)
+        [NotNull] public virtual int? Emblem
+        {
+            get
+            {
+                if (m_emblem != null)
+                    return m_emblem;
+
+                if (Item?.Emblem is not 0)
+                    return Item?.Emblem;
+
+                return OwningPlayer?.Guild?.Emblem;
+            }
+            set => m_emblem = value;
+        }
+
+        public virtual void PutAway(bool forced = false)
         {
             CarryingPlayer = null;
         }
     }
     
-    public class GuildBanner : AbstractBanner
+    public class GuildBanner : BannerVisual
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
@@ -69,29 +102,31 @@ namespace DOL.GS
 
         public GuildBanner(GamePlayer player)
         {
-            Guild = player.Guild;
             OwningPlayer = player;
+            if (OwningPlayer != null)
+            {
+                Emblem = OwningPlayer.Guild?.Emblem;
+            }
             if (Properties.GUILD_BANNER_DURATION > 0)
             {
                 m_expireTimer = new RegionTimer(OwningPlayer, new RegionTimerCallback(BannerExpireCallback), Properties.GUILD_BANNER_DURATION * 1000);
             }
+            CarryingPlayer = player;
         }
-
-        protected GamePlayer m_owningPlayer;
 
         /// <summary>
         /// Player who summoned or recovered the banner
         /// </summary>
-        public override GamePlayer OwningPlayer
+        public override GamePlayer CarryingPlayer
         {
-            get => m_owningPlayer;
+            get => base.CarryingPlayer;
             set
             {
-                if (CarryingPlayer != null)
+                if (base.CarryingPlayer != null)
                 {
                     throw new InvalidOperationException("Guild banner is already started");
                 }
-                m_owningPlayer = value;
+                base.CarryingPlayer = value;
                 if (value != null)
                 {
                     Start();
@@ -107,10 +142,7 @@ namespace DOL.GS
             }
         }
 
-        public Guild Guild { get; set; }
-
-        /// <inheritdoc />
-        public override int Emblem => Guild?.Emblem ?? 0;
+        public Guild Guild => OwningPlayer.Guild;
 
         public string BannerEffectType { get; set; }
 
@@ -254,18 +286,7 @@ namespace DOL.GS
 
         protected void PlayerPutAwayBanner(DOLEvent e, object sender, EventArgs args)
         {
-            Drop(true);
-        }
-
-        /// <inheritdoc />
-        public override void Drop(bool forced)
-        {
-            if (forced && Guild != null)
-            {
-                Guild.ActiveGuildBanner = null;
-                Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            }
-            Stop();
+            CarryingPlayer = null;
         }
 
         protected int LeaveGroupCallback(RegionTimer timer)
@@ -288,16 +309,12 @@ namespace DOL.GS
             return 0;
         }
 
-        protected void PutAway(bool notifyGroup = true)
+        public override void PutAway(bool forced = false)
         {
             if (CarryingPlayer != null)
             {
                 Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                if (notifyGroup)
-                {
-                    CarryingPlayer.Group?.SendPlayerActionTranslationToGroupMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
-                }
-                CarryingPlayer = null;
+                CarryingPlayer.Group?.SendPlayerActionTranslationToGroupMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
             }
             Stop();
             Guild.ActiveGuildBanner = null;

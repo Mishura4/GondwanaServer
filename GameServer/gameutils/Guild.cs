@@ -1260,7 +1260,7 @@ namespace DOL.GS
             {
                 if (member.ActiveBanner is GuildBanner banner)
                 {
-                    banner.Drop(true);
+                    banner.PutAway(true);
                 }
                 GuildMgr.RemovePlayerFromAllGuildPlayersList(member);
                 RemoveOnlineMember(member);

@@ -164,13 +164,20 @@ namespace DOL.GS
                     GameObject obj = WorldMgr.GetRegion(objKey.Item1).GetObject(objKey.Item2);
                     // We have a Player in cache that is not in vincinity
                     // For updating "out of view" we allow a halved refresh time. 
-                    if (obj is GamePlayer && !players.Contains((GamePlayer)obj) && (nowTicks - objEntry.Value) >= GetPlayertoPlayerUpdateInterval)
+                    if (obj is GamePlayer lostPlayer && !players.Contains(lostPlayer) && (nowTicks - objEntry.Value) >= GetPlayertoPlayerUpdateInterval)
                     {
                         long dummy;
+                        
+                        // Send a remove RvR banner, because otherwise it stays on the client if the player reappears after losing the banner
+                        // This feels like a weird workaround however, surely there's a better way?
+                        if (lostPlayer.ActiveBanner != null)
+                        {
+                            player.Client.Out.SendRvRGuildBanner(lostPlayer, null);
+                        }
 
                         // Update him out of View and delete from cache
-                        if (obj.IsVisibleTo(player) && (((GamePlayer)obj).IsStealthed == false || player.CanDetect((GamePlayer)obj)))
-                            player.Client.Out.SendPlayerForgedPosition((GamePlayer)obj);
+                        if (lostPlayer.IsVisibleTo(player) && (lostPlayer.IsStealthed == false || player.CanDetect(lostPlayer)))
+                            player.Client.Out.SendPlayerForgedPosition(lostPlayer);
 
                         player.Client.GameObjectUpdateArray.TryRemove(objKey, out dummy);
                     }

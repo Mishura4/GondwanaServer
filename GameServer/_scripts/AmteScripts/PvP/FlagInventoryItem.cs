@@ -58,8 +58,7 @@ namespace AmteScripts.PvP.CTF
             GameFlagStatic newFlag = FlagReference ?? new GameFlagStatic(null);
             newFlag.Name = this.Name;
             newFlag.Model = (ushort)this.Model;
-            newFlag.OwnerPlayer = null;
-            newFlag.OwnerGuild = null;
+            newFlag.SetOwnership(null);
 
             var region = carrier.CurrentRegion;
             if (!newFlag.DropOnGround(
@@ -96,11 +95,7 @@ namespace AmteScripts.PvP.CTF
             GameFlagStatic newFlag = FlagReference ?? new GameFlagStatic(null);
             newFlag.Name = this.Name;
             newFlag.Model = (ushort)this.Model;
-            newFlag.OwnerGuild = tempPad.OwnerPlayer?.Guild;
-            if (newFlag.OwnerGuild != null)
-                newFlag.Emblem = (ushort)newFlag.OwnerGuild.Emblem;
-            else
-                newFlag.Emblem = 0;
+            newFlag.SetOwnership(carrier);
 
             newFlag.Position = Position.Create(tempPad.CurrentRegionID, tempPad.Position.X, tempPad.Position.Y, tempPad.Position.Z, tempPad.Heading);
             newFlag.AddToWorld();
@@ -115,6 +110,11 @@ namespace AmteScripts.PvP.CTF
         {
             base.OnLose(player);
 
+            if (player.ActiveBanner?.Item == this)
+            {
+                player.ActiveBanner = null;
+            }
+            
             if (!IsRemovalExpected && PvpManager.Instance.IsOpen)
             {
                 if (FlagReference != null && FlagReference.BasePad != null)

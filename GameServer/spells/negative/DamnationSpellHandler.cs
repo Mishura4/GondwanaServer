@@ -179,7 +179,7 @@ namespace DOL.GS.Spells
             {
                 if (player.ActiveBanner != null)
                 {
-                    player.ActiveBanner.Drop(true);
+                    player.ActiveBanner.PutAway(true);
                 }
 
                 living.TempProperties.setProperty("OriginalModel", living.Model);

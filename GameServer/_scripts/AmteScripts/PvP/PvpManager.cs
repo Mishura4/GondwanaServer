@@ -25,6 +25,9 @@ using static AmteScripts.Managers.PvpManager;
 using static System.Formats.Asn1.AsnWriter;
 using static DOL.GameEvents.GameEvent;
 using Newtonsoft.Json.Linq;
+using System.Collections.Immutable;
+using System.Security.Policy;
+using Zone = DOL.GS.Zone;
 
 namespace AmteScripts.Managers
 {
@@ -39,6 +42,25 @@ namespace AmteScripts.Managers
         private const int _saveDelay = 5_000;
         private static RegionTimer _timer;
         private RegionTimer _saveTimer;
+        private DateTime _startedTime = DateTime.Now;
+        
+        private static readonly int[] _randomEmblems = { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
+
+        public ImmutableArray<int> DefaultEmblems => _randomEmblems.ToImmutableArray();
+
+        public int GetEmblemForPlayer(GamePlayer player)
+        {
+            // Quick hash so that a player always gets the same emblem per session
+            UInt64 hashedValue = 3074457345618258791ul;
+            hashedValue += (ulong)_startedTime.Ticks;
+            for(int i=0; i < player.Name.Length; i++)
+            {
+                hashedValue += player.Name[i];
+                hashedValue *= 3074457345618258799ul;
+            }
+            var idx = ((uint)hashedValue) % _randomEmblems.Length;
+            return _randomEmblems[idx];
+        }
 
         private bool _isOpen;
         private bool _isForcedOpen;
@@ -326,15 +348,15 @@ namespace AmteScripts.Managers
                 log.Warn($"PvP Guild {guildName} already exists, hijacking it");
             }
             pvpGuild.GuildType = Guild.eGuildType.PvPGuild;
-            int[] emblemChoices = new int[] { 5061, 6645, 84471, 6272, 55302, 64792, 111402, 39859, 21509, 123019 };
-            pvpGuild.Emblem = emblemChoices[Util.Random(emblemChoices.Length - 1)];
             pvpGuild.SaveIntoDatabase();
             return pvpGuild;
         }
 
         private Guild CreateGuild(GamePlayer leader)
         {
-            return CreateGuild("[PVP] " + leader.Name + "'s guild", leader);
+            var guild =  CreateGuild("[PVP] " + leader.Name + "'s guild", leader);
+            guild.Emblem = GetEmblemForPlayer(leader);
+            return guild;
         }
 
         private Guild CreateGuildForGroup(Group group)
@@ -417,7 +439,8 @@ namespace AmteScripts.Managers
                 guild = CreateGuildForGroup(group);
                 if (guild == null)
                     return;
-
+                
+                guild.Emblem = GetEmblemForPlayer(player);
                 if (_groupSpawns.TryGetValue(guild, out Spawn spawn))
                 {
                     foreach (var member in group.GetPlayersInTheGroup())
@@ -860,6 +883,7 @@ namespace AmteScripts.Managers
                     return true;
 
                 _isOpen = true;
+                _startedTime = DateTime.Now;
             
                 // Reset scoreboard, queues, oldInfos
                 ResetScores();

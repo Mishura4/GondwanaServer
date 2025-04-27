@@ -1540,7 +1540,7 @@ namespace DOL.GS.Commands
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerAlreadyHave"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
-                                banner.Drop(false);
+                                banner.PutAway(false);
                                 if (banner.Guild != null)
                                 {
                                     banner.Guild.ActiveGuildBanner = null;

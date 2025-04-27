@@ -17060,16 +17060,30 @@ namespace DOL.GS
         #endregion
 
         #region GuildBanner
-        protected AbstractBanner m_activeBanner = null;
+        protected BannerVisual m_activeBanner = null;
 
         /// <summary>
         /// Gets/Sets the visibility of the carryable RvrGuildBanner. Wont work if the player has no guild.
         /// </summary>
-        public AbstractBanner ActiveBanner
+        public BannerVisual ActiveBanner
         {
             get { return m_activeBanner; }
             set
             {
+                if (value != null)
+                {
+                    if (value.CarryingPlayer == null)
+                    {
+                        throw new InvalidOperationException("Do BannerVisual.CarryingPlayer = thisPlayer instead");
+                    }
+                }
+                else
+                {
+                    if (m_activeBanner.CarryingPlayer != this)
+                    {
+                        throw new InvalidOperationException("Do BannerVisual.CarryingPlayer = null instead");
+                    }
+                }
                 m_activeBanner = value;
                 foreach (GamePlayer playerToUpdate in GetPlayersInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
                 {

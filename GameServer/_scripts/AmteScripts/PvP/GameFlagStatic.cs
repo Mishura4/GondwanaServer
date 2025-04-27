@@ -74,34 +74,54 @@ namespace AmteScripts.PvP.CTF
                 return false;
             }
 
-            if (CurrentTempPad != null)
+            try
             {
-                CurrentTempPad.StopOwnership();
-                CurrentTempPad = null;
-            }
+                if (CurrentTempPad != null)
+                {
+                    CurrentTempPad.StopOwnership();
+                    CurrentTempPad = null;
+                }
 
-            RemoveFromWorld();
-            if (_returnTimer != null)
+                RemoveFromWorld();
+                if (_returnTimer != null)
+                {
+                    _returnTimer.Stop();
+                    _returnTimer = null;
+                }
+
+                if (BasePad != null)
+                {
+                    BasePad.NotifyFlagLeft();
+                }
+
+                SetOwnership(null);
+
+                ushort effectID = (ushort)Util.Random(5811, 5815);
+                foreach (GamePlayer plr in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).OfType<GamePlayer>())
+                {
+                    plr.Out.SendSpellEffectAnimation(player, player, effectID, 0, false, 0x01);
+                }
+
+                var banner = new BannerVisual
+                {
+                    OwningPlayer = player,
+                    Item = invFlag,
+                };
+                if (player.IsInPvP)
+                    banner.Emblem = PvpManager.Instance.GetEmblemForPlayer(player);
+                banner.CarryingPlayer = player;
+
+                _isDroppedOnGround = false;
+                return true;
+            }
+            catch (Exception e)
             {
-                _returnTimer.Stop();
-                _returnTimer = null;
+                // Something went wrong, abort & reset
+                player.Inventory.RemoveItem(invFlag);
+                log.Error(e);
+                BasePad.SpawnFlag();
+                return false;
             }
-
-            if (BasePad != null)
-            {
-                BasePad.NotifyFlagLeft();
-            }
-
-            SetOwnership(null);
-
-            ushort effectID = (ushort)Util.Random(5811, 5815);
-            foreach (GamePlayer plr in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).OfType<GamePlayer>())
-            {
-                plr.Out.SendSpellEffectAnimation(player, player, effectID, 0, false, 0x01);
-            }
-
-            _isDroppedOnGround = false;
-            return true;
         }
 
         public void CaptureByEnemy(GamePlayer captor)

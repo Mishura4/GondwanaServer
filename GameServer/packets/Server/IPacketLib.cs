@@ -758,7 +758,7 @@ namespace DOL.GS.PacketHandler
         void SendNPCsQuestEffect(GameNPC npc, eQuestIndicator indicator);
         void SendMasterLevelWindow(byte ml);
         void SendHexEffect(GamePlayer player, byte effect1, byte effect2, byte effect3, byte effect4, byte effect5);
-        void SendRvRGuildBanner(GamePlayer player, AbstractBanner? banner);
+        void SendRvRGuildBanner(GamePlayer player, BannerVisual? banner);
         void SendPvPGuildBanner(GamePlayer player, bool show);
         void SendSiegeWeaponAnimation(GameSiegeWeapon siegeWeapon);
         void SendSiegeWeaponFireAnimation(GameSiegeWeapon siegeWeapon, int timer);
