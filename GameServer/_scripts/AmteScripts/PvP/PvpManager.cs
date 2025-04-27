@@ -53,7 +53,7 @@ namespace AmteScripts.Managers
             // Quick hash so that a player always gets the same emblem per session
             UInt64 hashedValue = 3074457345618258791ul;
             hashedValue += (ulong)_startedTime.Ticks;
-            for(int i=0; i < player.Name.Length; i++)
+            for(int i = 0; i < player.Name.Length; i++)
             {
                 hashedValue += player.Name[i];
                 hashedValue *= 3074457345618258799ul;

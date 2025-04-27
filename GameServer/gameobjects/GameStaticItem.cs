@@ -74,7 +74,11 @@ namespace DOL.GS
             return item;
         }
 
-        private Guild m_ownerGuild;
+        public Guild OwnerGuild
+        {
+            get;
+            set;
+        }
 
         #region Name/Model/GetName/GetExamineMessages
         /// <summary>
@@ -507,22 +511,22 @@ namespace DOL.GS
         /// <returns>true if this object owns this item</returns>
         public bool IsOwner(GameObject testOwner)
         {
+            //No owner ... return true
+            if (m_owners.Count == 0 && OwnerGuild == null) return true;
+
             lock (m_owners)
             {
-                //No owner ... return true
-                if (m_owners.Count == 0) return true;
-
                 foreach (WeakReference weak in m_owners)
                     if (weak.Target == testOwner) return true;
-
-                if (testOwner is GamePlayer gp && m_ownerGuild != null)
-                {
-                    if (gp.Guild == m_ownerGuild)
-                        return true;
-                }
-
-                return false;
             }
+
+            if (OwnerGuild != null && testOwner is GamePlayer gp)
+            {
+                if (gp.Guild == OwnerGuild)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>

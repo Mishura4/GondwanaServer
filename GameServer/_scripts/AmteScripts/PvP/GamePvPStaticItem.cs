@@ -10,27 +10,20 @@ namespace AmteScripts.PvP.CTF
 {
     public class GamePvPStaticItem : GameStaticItem
     {
-        protected Guild? m_ownerGuild = null;
         protected GamePlayer? m_ownerPlayer = null;
-        
-        /// <summary>
-        /// Gets the guild that owns this item, if any.
-        /// </summary>
-        public virtual Guild? OwnerGuild
-        {
-            get => m_ownerGuild;
-            set
-            {
-                m_ownerGuild = value;
-            }
-        }
 
         public virtual GamePlayer? OwnerPlayer
         {
             get => m_ownerPlayer;
-            set => m_ownerPlayer = value;
-        } 
-        
+            set
+            {
+                if (m_ownerPlayer != null)
+                    RemoveOwner(m_ownerPlayer);
+                m_ownerPlayer = value;
+                AddOwner(m_ownerPlayer);
+            }
+        }
+
         public virtual void SetOwnership(GamePlayer? player)
         {
             if (player != null)
