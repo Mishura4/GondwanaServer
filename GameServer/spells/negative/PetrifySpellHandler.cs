@@ -198,7 +198,7 @@ namespace DOL.GS.Spells
             {
                 if (player.ActiveBanner != null)
                 {
-                    player.ActiveBanner.PutAway(true);
+                    player.ActiveBanner.Drop();
                 }
                 player.Out.SendUpdateMaxSpeed();
             }

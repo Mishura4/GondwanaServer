@@ -17070,21 +17070,15 @@ namespace DOL.GS
             get { return m_activeBanner; }
             set
             {
-                if (value != null)
-                {
-                    if (value.CarryingPlayer == null)
-                    {
-                        throw new InvalidOperationException("Do BannerVisual.CarryingPlayer = thisPlayer instead");
-                    }
-                }
-                else
-                {
-                    if (m_activeBanner.CarryingPlayer != this)
-                    {
-                        throw new InvalidOperationException("Do BannerVisual.CarryingPlayer = null instead");
-                    }
-                }
+                if (m_activeBanner == value)
+                    return;
+
+                var prev = m_activeBanner;
                 m_activeBanner = value;
+                if (prev != null)
+                    prev.CarryingPlayer = null;
+                if (value != null)
+                    value.CarryingPlayer = this;
                 foreach (GamePlayer playerToUpdate in GetPlayersInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
                 {
                     if (playerToUpdate?.Client.IsPlaying == true)

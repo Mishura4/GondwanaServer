@@ -102,15 +102,15 @@ namespace AmteScripts.PvP.CTF
                     plr.Out.SendSpellEffectAnimation(player, player, effectID, 0, false, 0x01);
                 }
 
-                var banner = new BannerVisual
+                var banner = new PvPFlagBanner()
                 {
                     OwningPlayer = player,
                     Item = invFlag,
                 };
                 if (player.IsInPvP)
                     banner.Emblem = PvpManager.Instance.GetEmblemForPlayer(player);
-                banner.CarryingPlayer = player;
 
+                player.ActiveBanner = banner;
                 _isDroppedOnGround = false;
 
                 foreach (var area in player.CurrentAreas)

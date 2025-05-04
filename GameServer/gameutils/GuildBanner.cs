@@ -48,11 +48,16 @@ namespace DOL.GS
                 if (value == m_carryingPlayer)
                     return;
 
-                if (m_carryingPlayer != null)
-                    m_carryingPlayer.ActiveBanner = null;
+                var prev = m_carryingPlayer;
                 m_carryingPlayer = value;
-                if (m_carryingPlayer != null)
-                    m_carryingPlayer.ActiveBanner = this;
+                if (prev != null)
+                {
+                    prev.ActiveBanner = null;
+                }
+                if (value != null)
+                {
+                    value.ActiveBanner = this;
+                }
             }
         }
 
@@ -78,9 +83,22 @@ namespace DOL.GS
             set => m_emblem = value;
         }
 
-        public virtual void PutAway(bool forced = false)
+        public virtual void Drop()
+        {
+            var prev = CarryingPlayer;
+            CarryingPlayer = null;
+            if (prev != null)
+                Item?.Drop(prev);
+        }
+
+        public virtual void PutAway()
         {
             CarryingPlayer = null;
+        }
+
+        public virtual void TransferTo(GameObject who, bool forced)
+        {
+            throw new NotImplementedException();
         }
     }
     
@@ -122,22 +140,17 @@ namespace DOL.GS
             get => base.CarryingPlayer;
             set
             {
-                if (base.CarryingPlayer != null)
-                {
-                    throw new InvalidOperationException("Guild banner is already started");
-                }
-                base.CarryingPlayer = value;
                 if (value != null)
                 {
+                    if (base.CarryingPlayer != null)
+                        throw new InvalidOperationException("Guild banner is already started");
+                    base.CarryingPlayer = value;
                     Start();
                 }
                 else
                 {
-                    if (m_timer != null)
-                    {
-                        m_timer.Stop();
-                        m_timer = null;
-                    }
+                    Stop();
+                    Guild.ActiveGuildBanner = null;
                 }
             }
         }
@@ -286,7 +299,7 @@ namespace DOL.GS
 
         protected void PlayerPutAwayBanner(DOLEvent e, object sender, EventArgs args)
         {
-            CarryingPlayer = null;
+            PutAway();
         }
 
         protected int LeaveGroupCallback(RegionTimer timer)
@@ -309,15 +322,14 @@ namespace DOL.GS
             return 0;
         }
 
-        public override void PutAway(bool forced = false)
+        public override void PutAway()
         {
             if (CarryingPlayer != null)
             {
                 Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 CarryingPlayer.Group?.SendPlayerActionTranslationToGroupMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
             }
-            Stop();
-            Guild.ActiveGuildBanner = null;
+            base.PutAway();
         }
 
         protected void PlayerLeaveGroup(DOLEvent e, object sender, EventArgs args)
@@ -349,7 +361,7 @@ namespace DOL.GS
                     if (groupPlayer.ActiveBanner is GuildBanner gBanner)
                     {
                         groupPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                        gBanner.PutAway(false);
+                        gBanner.PutAway();
                     }
                 }
             }
@@ -367,12 +379,21 @@ namespace DOL.GS
             }
         }
 
+        /// <inheritdoc />
+        public override void TransferTo(GameObject who, bool forced)
+        {
+            if (forced)
+                m_item.OnPlayerKilled(who);
+            else
+                base.TransferTo(who, forced);
+        }
+
         protected void PlayerDied(DOLEvent e, object sender, EventArgs args)
         {
             DyingEventArgs arg = args as DyingEventArgs;
             if (arg == null) return;
 
-            m_item.OnPlayerKilled(arg.Killer);
+            TransferTo(arg.Killer, true);
         }
 
         protected ItemTemplate m_guildBannerTemplate;

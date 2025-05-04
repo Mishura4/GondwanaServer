@@ -47,9 +47,10 @@ namespace AmteScripts.PvP.CTF
         /// When the carrier is killed or forcibly drops the flag.
         /// We remove from inventory, spawn the static item on the ground.
         /// </summary>
-        public bool DropFlagOnGround(GamePlayer carrier, GameLiving killer)
+        public bool DropFlagOnGround(GamePlayer carrier, GameLiving? killer)
         {
-            if (carrier == null) return false;
+            if (carrier == null)
+                return false;
 
             this.IsRemovalExpected = true;
             if (!carrier.Inventory.RemoveItem(this))
@@ -72,7 +73,7 @@ namespace AmteScripts.PvP.CTF
             // Score: If killer is a player, award kill-carrier points
             if (killer is GamePlayer killerPlayer)
             {
-                PvpManager.Instance.UpdateScores_FlagCapture(killerPlayer, carrier, wasFlagCarrier: true);
+                PvpManager.Instance.UpdateScores_FlagCarrierKill(killerPlayer, carrier, wasFlagCarrier: true);
             }
 
             foreach (GamePlayer plr in carrier.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).OfType<GamePlayer>())
