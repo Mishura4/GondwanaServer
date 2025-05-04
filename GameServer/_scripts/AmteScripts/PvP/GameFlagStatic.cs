@@ -112,6 +112,15 @@ namespace AmteScripts.PvP.CTF
                 banner.CarryingPlayer = player;
 
                 _isDroppedOnGround = false;
+
+                foreach (var area in player.CurrentAreas)
+                {
+                    if (area is TempPadArea padArea)
+                    {
+                        // Flag picked up in our pad, possible if we just killed a thief
+                        padArea.Pad.TryDropFlagIfCarried(player);
+                    }
+                }
                 return true;
             }
             catch (Exception e)

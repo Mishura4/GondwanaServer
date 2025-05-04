@@ -191,6 +191,8 @@ namespace AmteScripts.PvP.CTF
     {
         private GameCTFTempPad _pad;
 
+        public GameCTFTempPad Pad => _pad;
+
         public TempPadArea(GameCTFTempPad pad, int radius)
             : base($"{pad.Name}_Area", pad.Position.X, pad.Position.Y, pad.Position.Z, radius)
         {
