@@ -913,11 +913,11 @@ namespace DOL.GS.PacketHandler
             {
                 oType = 2;
 
-                // Send a remove RvR banner, because otherwise it stays on the client if the player reappears after losing the basser
+                // Send a remove RvR banner, because otherwise it stays on the client if the player reappears after losing the banner
                 // This feels like a weird workaround however, surely there's a better way?
                 if (player.ActiveBanner != null)
                 {
-                    player.Client.Out.SendRvRGuildBanner(player, null);
+                    SendRvRGuildBanner(player, null);
                 }
                 
             }

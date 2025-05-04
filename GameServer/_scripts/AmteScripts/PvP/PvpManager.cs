@@ -387,7 +387,7 @@ namespace AmteScripts.Managers
             {
                 var rank = pvpGuild.GetRankByID(member == groupLeader ? 0 : _defaultGuildRank);
                 pvpGuild.AddPlayer(member, rank);
-                
+
                 member.IsInPvP = true;
                 member.SaveIntoDatabase();
                 // Remove all solo areas - we've already moved the leader's area & spawn into group storage, so they won't be found
@@ -437,6 +437,7 @@ namespace AmteScripts.Managers
             {
                 // Guild needs to be created
                 guild = CreateGuildForGroup(group);
+                // Guild needs to be created
                 if (guild == null)
                     return;
                 
@@ -497,7 +498,7 @@ namespace AmteScripts.Managers
                 log.ErrorFormat("{0} called with player.Guild != guild, add the player to the guild first!", MethodBase.GetCurrentMethod());
                 return;
             }
-            
+
             Group group = null;
             if (_guildGroups.TryGetValue(guild, out group))
             {
