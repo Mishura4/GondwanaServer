@@ -137,6 +137,37 @@ namespace AmteScripts.Managers
             return 0;
         }
 
+        public static bool CanGroup(GamePlayer source, GamePlayer target, bool quiet = false)
+        {
+            if (!source.IsInPvP && !target.IsInPvP)
+                return true;
+
+            if (!Instance.AllowsGroups)
+            {
+                if (!quiet)
+                {
+                    source.SendTranslatedMessage(
+                        "PvPManager.MaxGroup",
+                        eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                    );
+                }
+                return false;
+            }
+
+            if (Instance.MaxGroupSize >= (source.Group?.MemberCount ?? 1))
+            {
+                if (!quiet)
+                {
+                    source.SendTranslatedMessage(
+                        "PvPManager.MaxGroup",
+                        eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                    );
+                }
+                return false;
+            }
+            return true;
+        }
+
         public void PlayerLinkDeath(GamePlayer player)
         {
             if (!IsOpen)
@@ -841,6 +872,7 @@ namespace AmteScripts.Managers
         public string CurrentSessionId => string.IsNullOrEmpty(CurrentSession?.SessionID) ? "(none)" : CurrentSession.SessionID;
         public bool AllowsGroups => CurrentSession?.GroupCompoOption is 2 or 3;
         public bool AllowsSolo => CurrentSession?.GroupCompoOption is 1 or 3;
+        public int MaxGroupSize => !AllowsGroups ? 1 : CurrentSession?.GroupMaxSize ?? 0;
         #endregion
 
         #region Open/Close
@@ -1465,7 +1497,12 @@ namespace AmteScripts.Managers
             var (groupScore, groupEntry) = GetGroupScoreEntry(killer);
             var fun = (PlayerScore score) =>
             {
-                if (!wasFlagCarrier)
+                if (wasFlagCarrier)
+                {
+                    score.Flag_KillFlagCarrierCount++;
+                    score.Flag_KillFlagCarrierPoints += 6;
+                }
+                else
                 {
                     if (isSolo)
                     {
@@ -1477,11 +1514,6 @@ namespace AmteScripts.Managers
                         score.Flag_GroupKills++;
                         score.Flag_GroupKillsPoints += 2;
                     }
-                }
-                else
-                {
-                    score.Flag_KillFlagCarrierCount++;
-                    score.Flag_KillFlagCarrierPoints += 6;
                 }
             };
             fun(killerScore);

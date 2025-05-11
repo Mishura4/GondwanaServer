@@ -17,6 +17,7 @@
  *
  */
 
+using AmteScripts.Managers;
 using DOL.Events;
 using DOL.GS.Finance;
 using DOL.GS.Housing;
@@ -209,6 +210,10 @@ namespace DOL.GS.PacketHandler.Client.v168
                                     return;
                                 }
                                 if (!GameServer.ServerRules.IsAllowedToGroup(groupLeader, player, false))
+                                {
+                                    return;
+                                }
+                                if (!PvpManager.CanGroup(groupLeader, player, false))
                                 {
                                     return;
                                 }

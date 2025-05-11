@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using AmteScripts.Managers;
+
 namespace DOL.GS.PacketHandler.Client.v168
 {
     [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.InviteToGroup, "Handle Invite to Group Request.", eClientStatus.PlayerInGame)]
@@ -74,7 +76,12 @@ namespace DOL.GS.PacketHandler.Client.v168
 
                 if (!GameServer.ServerRules.IsAllowedToGroup(player, target, false))
                     return;
-
+                
+                if (!PvpManager.CanGroup(player, player, false))
+                {
+                    return;
+                }
+                
                 if (target.Group != null)
                 {
                     ChatUtil.SendSystemMessage(player, "The player is still in a group.");

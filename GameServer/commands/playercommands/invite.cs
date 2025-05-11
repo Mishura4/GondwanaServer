@@ -31,9 +31,6 @@ namespace DOL.GS.Commands
     {
         public void OnCommand(GameClient client, string[] args)
         {
-            if (!CheckInviteAllowed(client.Player))
-                return;
-
             if (client.Player.Group != null && client.Player.Group.Leader != client.Player)
             {
                 client.Out.SendMessage(
@@ -72,10 +69,6 @@ namespace DOL.GS.Commands
                     return;
                 }
                 target = (GamePlayer)client.Player.TargetObject;
-                if (!GameServer.ServerRules.IsAllowedToGroup(client.Player, target, false))
-                {
-                    return;
-                }
             }
             else
             { // Inviting by name
@@ -102,6 +95,16 @@ namespace DOL.GS.Commands
                         eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
+            }
+            
+            if (!PvpManager.CanGroup(client.Player, target, false))
+            {
+                return;
+            }
+            
+            if (!GameServer.ServerRules.IsAllowedToGroup(client.Player, target, false))
+            {
+                return;
             }
 
             if (target.Group != null)
@@ -181,28 +184,6 @@ namespace DOL.GS.Commands
                     client.Player.GetPronoun(1, false)),
                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-        }
-
-        private bool CheckInviteAllowed(GamePlayer player)
-        {
-            if (!player.IsInPvP || !PvpManager.Instance.IsOpen)
-                return true;
-
-            var session = PvpManager.Instance.CurrentSession;
-            if (session == null)
-                return true;
-
-            if (!session.AllowGroupDisbandCreate)
-            {
-                player.Out.SendMessage(
-                    LanguageMgr.GetTranslation(
-                        player.Client.Account.Language,
-                        "Commands.Players.Invite.NotAllowed"),
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                return false;
-            }
-
-            return true;
         }
     }
 }

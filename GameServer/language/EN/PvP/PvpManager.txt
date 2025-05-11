@@ -15,6 +15,8 @@ PvPManager.CouldNotCreatePvPGuild:	Could not create PvP guild...
 PvPManager.LeftGroupQueue:			You have left the PvP group queue.
 PvPManager.BroughtToSafety:			You have successfully brought {0} to safety! (+{1} pts)
 PvPManager.NoSpawn:                 Could not enter PvP at this time: no available spawn location.
+PvPManager.MaxGroup:                Your group is already at the maximum size for this PvP session.
+PvPManager.GroupTooBig:             This PvP session only allows groups of up to {0} players.
 
 PvPManager.Score.Points:            {0} points
 PvPManager.Score.Pts:               {0} pts

@@ -682,6 +682,10 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteNotThis"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
+                            if (!PvpManager.CanGroup(client.Player, obj, false))
+                            {
+                                return;
+                            }
                             if (!GameServer.ServerRules.IsAllowedToJoinGuild(obj, client.Player.Guild))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteNotThis"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
