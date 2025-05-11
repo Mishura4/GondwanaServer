@@ -499,6 +499,10 @@ namespace DOL.GS
         public bool IsDisarmed
         {
             get { return (m_disarmedCount > 0); }
+            set
+            {
+                Interlocked.Add(ref m_disarmedCount, value ? 1 : -1);
+            }
         }
 
         /// <summary>
@@ -518,6 +522,10 @@ namespace DOL.GS
         public bool IsSilenced
         {
             get { return (m_silencedCount > 0); }
+            set
+            {
+                Interlocked.Add(ref m_silencedCount, value ? 1 : -1);
+            }
         }
 
         /// <summary>

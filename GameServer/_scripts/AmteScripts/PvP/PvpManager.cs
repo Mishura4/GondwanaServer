@@ -310,6 +310,11 @@ namespace AmteScripts.Managers
         {
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
+                if (player.ActiveBanner is PvPFlagBanner { Item: FlagInventoryItem flagItem })
+                {
+                    flagItem.OnJoinGroup(player, group);
+                }
+                
                 AddToGroupGuild(group, player);
                 if (!_saveTimer.IsAlive)
                     _saveTimer.Start(_saveDelay);
@@ -318,11 +323,13 @@ namespace AmteScripts.Managers
 
         public void OnMemberLeaveGroup(Group group, GamePlayer player)
         {
-            if (player.Guild == null) // No guild; likely we came here through RemoveFromGuildGroup calling group.RemovePlayer
-                return;
-            
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
+                if (player.ActiveBanner is PvPFlagBanner { Item: FlagInventoryItem flagItem })
+                {
+                    flagItem.OnLeaveGroup(player, group);
+                }
+                
                 RemoveFromGroupGuild(group, player);
                 if (!_saveTimer.IsAlive)
                     _saveTimer.Start(_saveDelay);
@@ -463,6 +470,9 @@ namespace AmteScripts.Managers
         private void RemoveFromGroupGuild(Group group, GamePlayer player)
         {
             if (!IsOpen)
+                return;
+            
+            if (player.Guild == null) // No guild; likely we came here through RemoveFromGuildGroup calling group.RemovePlayer
                 return;
 
             if (!_groupGuilds.TryGetValue(group, out var guild))

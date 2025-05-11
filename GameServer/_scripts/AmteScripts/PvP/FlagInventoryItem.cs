@@ -4,7 +4,10 @@ using DOL.Database;
 using DOL.Language;
 using AmteScripts.PvP.CTF;
 using AmteScripts.Managers;
+using DOL.Events;
+using DOL.GameEvents;
 using DOL.GS.Geometry;
+using System;
 using System.Linq;
 
 namespace AmteScripts.PvP.CTF
@@ -24,6 +27,33 @@ namespace AmteScripts.PvP.CTF
         }
 
         public override bool CanPersist => false;
+
+        private bool _isSilencing = false;
+
+        public bool IsSilencing
+        {
+            get => _isSilencing;
+            set
+            {
+                if (!value && _isSilencing)
+                {
+                    if (m_owner != null)
+                    {
+                        m_owner.IsSilenced = false;
+                        m_owner.IsDisarmed = false;
+                    }
+                }
+                else if (value && !_isSilencing)
+                {
+                    if (m_owner != null)
+                    {
+                        m_owner.IsSilenced = true;
+                        m_owner.IsDisarmed = true;
+                    }
+                }
+                _isSilencing = value;
+            }
+        }
 
         private static ItemTemplate CreateTemplateFromFlag(GameFlagStatic flagStatic)
         {
@@ -104,11 +134,38 @@ namespace AmteScripts.PvP.CTF
             tempPad.StartOwnershipTimer(newFlag, carrier);
         }
 
+        public void OnJoinGroup(GamePlayer player, Group group)
+        {
+            if (player != m_owner)
+                return;
+            
+            IsSilencing = true;
+        }
+        
+        public void OnLeaveGroup(GamePlayer player, Group group)
+        {
+            if (player != m_owner)
+                return;
+            
+            IsSilencing = false;
+        }
+
+        /// <inheritdoc />
+        public override void OnReceive(GamePlayer player)
+        {
+            base.OnReceive(player);
+
+            if (player.Group != null)
+                IsSilencing = true;
+        }
+
         /// <summary>
         /// Called when this item is removed from a player's inventory.
         /// </summary>
         public override void OnLose(GamePlayer player)
         {
+            IsSilencing = false;
+
             base.OnLose(player);
 
             if (player.ActiveBanner?.Item == this)
