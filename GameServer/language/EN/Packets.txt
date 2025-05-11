@@ -241,6 +241,7 @@ DialogResponseHandler.StillInGuild:							You are still in a guild, you'll have 
 DialogResponseHandler.GuildLeaderNotInGuild:				Player doing the invite is not in a guild!
 DialogResponseHandler.GuildInviteDeclined:					{0} declined your invite.
 DialogResponseHandler.NotInGuild:							You are not in a guild.
+DialogResponseHandler.InviteExpired:						This invitation has expired.
 DialogResponseHandler.GuildDeclineQuit:						You decline to quit your guild.
 DialogResponseHandler.StillInGroup:							You are still in a group.
 DialogResponseHandler.CannotJoinGroupInCombat:				You can't join a group while in combat!

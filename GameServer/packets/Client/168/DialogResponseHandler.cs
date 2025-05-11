@@ -139,6 +139,11 @@ namespace DOL.GS.PacketHandler.Client.v168
                                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.StillInGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
+                                if (!PvpManager.CanGroup(guildLeader, player, false))
+                                {
+                                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DialogResponseHandler.InviteExpired"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                                 if (guildLeader.Guild != null)
                                 {
                                     guildLeader.Guild.AddPlayer(player);
