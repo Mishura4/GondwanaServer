@@ -189,7 +189,6 @@ namespace DOL.GS.PacketHandler
                 else
                     npcFlags = npc.Flags;
 
-                npcFlags = 0;
                 if (!npc.IsAtTargetLocation)
                 {
                     speed = npc.CurrentSpeed;
@@ -230,7 +229,6 @@ namespace DOL.GS.PacketHandler
                 if ((npcFlags & GameNPC.eFlags.FLYING) != 0) flags |= 0x20;
                 if ((npcFlags & GameNPC.eFlags.TORCH) != 0) flags |= 0x04;
 
-                flags = 0;
                 pak.WriteByte(flags);
                 pak.WriteByte(0x20); //TODO this is the default maxstick distance
 
@@ -282,8 +280,6 @@ namespace DOL.GS.PacketHandler
                 if (questIndicator == eQuestIndicator.Pending || questIndicator == eQuestIndicator.New) // new? patch 0031
                     flags3 |= 0x20;
 
-                flags3 = 0;
-                flags2 = 0;
                 pak.WriteByte(flags3); // new in 1.71 (region instance ID from StoC_0x20) OR flags 3?
                 pak.WriteShort(0x00); // new in 1.71 unknown
 

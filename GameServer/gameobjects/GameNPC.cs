@@ -2883,7 +2883,6 @@ namespace DOL.GS
         /// <returns>True if the NPC should show quest indicator, false otherwise</returns>
         public virtual eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
-            return eQuestIndicator.None;
             // Available one?
             if (CanShowOneQuest(player))
                 return eQuestIndicator.Available;
