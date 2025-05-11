@@ -142,6 +142,19 @@ namespace AmteScripts.Managers
             if (!source.IsInPvP && !target.IsInPvP)
                 return true;
 
+            if (Instance.CurrentSession?.AllowGroupDisbandCreate != true)
+            {
+                if (!quiet)
+                {
+                    // Commands.Players.Invite.NotAllowed
+                    source.SendTranslatedMessage(
+                        "Commands.Players.Invite.NotAllowed",
+                        eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                    );
+                }
+                return false;
+            }
+
             if (!Instance.AllowsGroups)
             {
                 if (!quiet)
@@ -154,7 +167,7 @@ namespace AmteScripts.Managers
                 return false;
             }
 
-            if (Instance.MaxGroupSize >= (source.Group?.MemberCount ?? 1))
+            if (Instance.MaxGroupSize <= (source.Group?.MemberCount ?? 1))
             {
                 if (!quiet)
                 {
