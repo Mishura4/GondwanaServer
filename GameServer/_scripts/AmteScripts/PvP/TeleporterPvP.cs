@@ -122,6 +122,10 @@ namespace DOL.GS.Scripts
                 if (session.GroupCompoOption == 2 || session.GroupCompoOption == 3)
                 {
                     msg += "\n[Teleport your Group]";
+                    if (session.GroupMaxSize > 0)
+                    {
+                        msg += " (max. " + session.GroupMaxSize + " players)";
+                    }
                 }
 
                 // If groupCompoOption != 1 => we also have a queue for group-based sessions
@@ -266,6 +270,17 @@ namespace DOL.GS.Scripts
             {
                 player.Out.SendMessage("You must be the group leader to do that!",
                     eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return;
+            }
+            
+            var maxSize = (PvpManager.Instance.CurrentSession?.GroupMaxSize ?? 0);
+            if ((player.Group?.MemberCount ?? 1) > maxSize)
+            {
+                player.SendTranslatedMessage(
+                    "PvPManager.GroupTooBig",
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow,
+                    maxSize
+                );
                 return;
             }
 
@@ -418,17 +433,26 @@ namespace DOL.GS.Scripts
             }
 
             // We expect group-only or group-allowed
-            if (session.GroupCompoOption == 2 || session.GroupCompoOption == 3)
+            if (session.GroupCompoOption is 2 or 3)
             {
-                if (leader.Group != null && leader.Group.Leader == leader)
-                {
-                    PvpManager.Instance.AddGroup(leader);
-                }
-                else
+                if (leader.Group == null || leader.Group.Leader != leader)
                 {
                     leader.Out.SendMessage("You are not the group leader or have no group. Cannot join group-based session!",
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return 0;
                 }
+
+                var maxSize = (PvpManager.Instance.CurrentSession?.GroupMaxSize ?? 0);
+                if ((leader.Group?.MemberCount ?? 1) > maxSize)
+                {
+                    leader.SendTranslatedMessage(
+                        "PvPManager.GroupTooBig",
+                        eChatType.CT_Important, eChatLoc.CL_SystemWindow,
+                        maxSize
+                    );
+                    return 0;
+                }
+                PvpManager.Instance.AddGroup(leader);
             }
             else
             {

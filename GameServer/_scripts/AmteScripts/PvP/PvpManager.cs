@@ -167,7 +167,7 @@ namespace AmteScripts.Managers
                 return false;
             }
 
-            if (Instance.MaxGroupSize <= (source.Group?.MemberCount ?? 1))
+            if (Instance.MaxGroupSize > 0 && Instance.MaxGroupSize <= (source.Group?.MemberCount ?? 1))
             {
                 if (!quiet)
                 {
