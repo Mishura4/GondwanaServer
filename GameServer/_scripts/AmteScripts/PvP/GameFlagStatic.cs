@@ -179,14 +179,10 @@ namespace AmteScripts.PvP.CTF
 
         public bool Reset()
         {
+            RemoveFromWorld();
             if (BasePad != null)
             {
-                RemoveFromWorld();
                 BasePad.RespawnFlag();
-            }
-            else
-            {
-                RemoveFromWorld();
             }
             return true;
         }

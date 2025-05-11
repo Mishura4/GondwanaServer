@@ -1671,6 +1671,10 @@ namespace DOL.GS.PacketHandler
                 }
         }
 
+        public virtual void SendMapObjective(int id, Position position)
+        {
+        }
+
         public virtual void SendQuestListUpdate()
         {
             int questIndex = 0;

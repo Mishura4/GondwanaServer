@@ -747,6 +747,7 @@ namespace DOL.GS.PacketHandler
         void SendObjectUpdate(GameObject obj);
         void SendQuestListUpdate();
         void SendQuestUpdate(IQuestPlayerData quest);
+        void SendMapObjective(int id, Position where);
         void SendConcentrationList();
         void SendUpdateCraftingSkills();
         void SendChangeTarget(GameObject newTarget);

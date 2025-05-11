@@ -177,6 +177,7 @@ namespace DOLGameServerConsole
         public void SendObjectCreate(GameObject obj) { }
         public void SendQuestListUpdate() { }
         public void SendQuestUpdate(IQuestPlayerData quest) { }
+        public void SendMapObjective(int id, Position where) { }
         public void SendConcentrationList() { }
         public void SendUpdateCraftingSkills() { }
         public void SendChangeTarget(GameObject newTarget) { }

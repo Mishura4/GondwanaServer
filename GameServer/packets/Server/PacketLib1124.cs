@@ -40,6 +40,7 @@ using DOL.GS.Styles;
 using DOL.MobGroups;
 using log4net;
 using DOL.GameEvents;
+using DOL.GS.Geometry;
 
 
 namespace DOL.GS.PacketHandler
@@ -188,6 +189,7 @@ namespace DOL.GS.PacketHandler
                 else
                     npcFlags = npc.Flags;
 
+                npcFlags = 0;
                 if (!npc.IsAtTargetLocation)
                 {
                     speed = npc.CurrentSpeed;
@@ -228,6 +230,7 @@ namespace DOL.GS.PacketHandler
                 if ((npcFlags & GameNPC.eFlags.FLYING) != 0) flags |= 0x20;
                 if ((npcFlags & GameNPC.eFlags.TORCH) != 0) flags |= 0x04;
 
+                flags = 0;
                 pak.WriteByte(flags);
                 pak.WriteByte(0x20); //TODO this is the default maxstick distance
 
@@ -279,6 +282,8 @@ namespace DOL.GS.PacketHandler
                 if (questIndicator == eQuestIndicator.Pending || questIndicator == eQuestIndicator.New) // new? patch 0031
                     flags3 |= 0x20;
 
+                flags3 = 0;
+                flags2 = 0;
                 pak.WriteByte(flags3); // new in 1.71 (region instance ID from StoC_0x20) OR flags 3?
                 pak.WriteShort(0x00); // new in 1.71 unknown
 
@@ -673,6 +678,39 @@ namespace DOL.GS.PacketHandler
 
                 SendTCP(pak);
 
+            }
+        }
+
+        /// <inheritdoc />
+        public override void SendMapObjective(int id, Position where)
+        {
+            using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.QuestEntry)))
+            {
+                pak.WriteByte((byte)(3));
+
+                pak.WriteByte(0); // name length
+                pak.WriteShort(0); // unknown
+                pak.WriteByte(1); // goals
+                pak.WriteByte(1); // min level
+                // name
+                pak.WritePascalString(string.Empty); // quest description
+                pak.WriteShortLowEndian(0); // goal desc length
+                // desc
+                // pak.WriteShortLowEndian(goal.PointB.ZoneId);
+                // pak.WriteShortLowEndian(goal.PointB.X);
+                // pak.WriteShortLowEndian(goal.PointB.Y);;
+                pak.Fill(0, 6);
+                pak.WriteShortLowEndian(0); // unknown
+                pak.WriteShortLowEndian((ushort)eQuestGoalType.Unknown);
+                pak.WriteShortLowEndian(0); // unknown
+                var pt = new QuestZonePoint(where.Region.GetZone(where.Coordinate), where.Coordinate);
+                pak.WriteShortLowEndian(pt.ZoneId);
+                pak.WriteShortLowEndian((ushort)pt.X);
+                pak.WriteShortLowEndian((ushort)pt.Y);
+                pak.WriteByte(0x01); // status
+                pak.WriteByte(0x00);
+                
+                SendTCP(pak);
             }
         }
 

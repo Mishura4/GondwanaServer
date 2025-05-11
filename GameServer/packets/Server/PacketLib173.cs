@@ -485,6 +485,7 @@ namespace DOL.GS.PacketHandler
             if (m_gameClient.Player == null || npc == null)
                 return;
 
+            return;
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.VisualEffect)))
             {
 

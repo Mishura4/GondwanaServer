@@ -364,7 +364,7 @@ namespace DOL.GS.Quests
             public eQuestGoalStatus Status { get; set; }
             public ItemTemplate QuestItem => Goal.QuestItem;
 
-            public readonly DataQuestJsonGoal Goal;
+            public DataQuestJsonGoal Goal { get; init; }
 
             public GenericDataQuestGoal(DataQuestJsonGoal goal, int progress, eQuestGoalStatus status)
             {

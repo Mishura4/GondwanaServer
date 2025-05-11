@@ -613,6 +613,11 @@ namespace DOL.Tests
         {
             if (SendQuestUpdateMethod != null) SendQuestUpdateMethod(this, quest);
         }
+        public Action<TestPacketLib, int, Position> SendMapObjectiveMethod { get; set; }
+        public void SendMapObjective(int id, Position pos)
+        {
+            if (SendMapObjectiveMethod != null) SendMapObjectiveMethod(this, id, pos);
+        }
         public Action<TestPacketLib> SendConcentrationListMethod { get; set; }
         public void SendConcentrationList()
         {
