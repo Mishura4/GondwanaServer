@@ -3779,7 +3779,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            else if (PvpManager.Instance.CurrentSession == null || PvpManager.Instance.CurrentSession.SessionType != 5)
+                            else if (PvpManager.Instance.CurrentSessionType is not PvpManager.eSessionTypes.TerritoryCapture)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CmdCannotUseHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;

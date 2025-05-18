@@ -344,7 +344,7 @@ namespace DOL.GS.Scripts
             // Decide if we are in "Bring Friends" mode for THIS mob's current zone
             bool isBringFriends = false;
             var currentZone = this.CurrentZone;
-            if (PvpManager.Instance != null && PvpManager.Instance.IsOpen && PvpManager.Instance.CurrentSession != null && PvpManager.Instance.CurrentSession.SessionType == 4 && currentZone != null)
+            if (PvpManager.Instance != null && PvpManager.Instance.IsOpen && PvpManager.Instance.CurrentSession != null && PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.BringAFriend && currentZone != null)
             {
                 // Check if this zone is in the ActiveSession's ZoneList
                 var zoneListStr = PvpManager.Instance.CurrentSession.ZoneList;

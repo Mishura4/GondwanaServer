@@ -9097,7 +9097,7 @@ namespace DOL.GS
                 return;
             }
 
-            if (!PvpManager.Instance.IsOpen || PvpManager.Instance.CurrentSession?.SessionType != 2)
+            if (!PvpManager.Instance.IsOpen || PvpManager.Instance.CurrentSessionType is not PvpManager.eSessionTypes.CaptureTheFlag)
                 return;
 
             var toRemove = new List<FlagInventoryItem>();

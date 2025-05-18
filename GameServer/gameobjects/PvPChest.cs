@@ -42,8 +42,8 @@ namespace DOL.GS
 
         // ============ Chest Data ============
 
-        private List<DepositedItem> m_depositedItems = new List<DepositedItem>();
-
+        private List<DepositedItem> m_depositedItems = new();
+        
         public PVPChest()
         {
             Name = "PvP Chest";
@@ -253,13 +253,13 @@ namespace DOL.GS
         {
             var pm = PvpManager.Instance;
             if (pm == null || !pm.IsOpen) return;
-            if (pm.CurrentSession?.SessionType != 3) return;
+            if (pm.CurrentSessionType is not PvpManager.eSessionTypes.TreasureHunt) return;
 
             var sbPlayer = GetScoreboardPlayer();
             if (sbPlayer == null) return;
             if (!sbPlayer.IsInPvP) return; // chest is unlocked => no scoreboard update
 
-            var score = pm.GetIndividualScore(sbPlayer);
+            var score = pm.EnsureTotalScore(sbPlayer);
             if (score == null) return;
 
             int totalPoints = 0;
@@ -325,7 +325,7 @@ namespace DOL.GS
             // only if we are in open session 3 and the owner is in pvp
             var pm = PvpManager.Instance;
             if (pm == null || !pm.IsOpen) return;
-            if (pm.CurrentSession?.SessionType != 3) return;
+            if (pm.CurrentSessionType is not PvpManager.eSessionTypes.TreasureHunt) return;
 
             var sbPlayer = GetScoreboardPlayer();
             if (sbPlayer == null) return;
@@ -334,7 +334,7 @@ namespace DOL.GS
             // The chest owner "loses" x points in .Treasure_StolenTreasuresPoints
             // We'll increment by stolenData.Count * stolenData.PointsPerItem
             // (which is typically 1 item * that item’s points).
-            var victimScore = pm.GetIndividualScore(sbPlayer);
+            var victimScore = pm.EnsureTotalScore(sbPlayer);
             if (victimScore == null) return;
 
             victimScore.Treasure_StolenTreasuresPoints += 3;
