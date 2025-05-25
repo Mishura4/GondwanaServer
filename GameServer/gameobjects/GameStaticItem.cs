@@ -74,7 +74,7 @@ namespace DOL.GS
             return item;
         }
 
-        public Guild OwnerGuild
+        public Guild? OwnerGuild
         {
             get;
             set;
@@ -504,13 +504,17 @@ namespace DOL.GS
             }
             return false;
         }
+
         /// <summary>
         /// Tests if a specific gameobject owns this item
         /// </summary>
         /// <param name="testOwner">the owner to test for</param>
         /// <returns>true if this object owns this item</returns>
-        public bool IsOwner(GameObject testOwner)
+        public override bool IsOwner(GameLiving testOwner)
         {
+            if (base.IsOwner(testOwner))
+                return true;
+            
             //No owner ... return true
             if (m_owners.Count == 0 && OwnerGuild == null) return true;
 

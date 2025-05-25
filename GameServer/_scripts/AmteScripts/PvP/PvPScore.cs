@@ -1,4 +1,5 @@
-﻿using DOL.GS;
+﻿#nullable enable
+using DOL.GS;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,14 +12,24 @@ using static AmteScripts.Managers.PvpManager;
 
 namespace AmteScripts.PvP
 {
-    public class PvPScore
+    public record PvPScore(bool IsSoloScore)
     {
-        // --- Universal (for all sessions) ---
-        // We'll keep track of the player's name/ID just for clarity
+        public PvPScore(string playerName, string playerID, bool isSoloScore) : this(isSoloScore)
+        {
+            PlayerName = playerName;
+            PlayerID = playerID;
+        }
+        
+        public PvPScore(GamePlayer player, bool isSoloScore) : this(player.Name!, player.InternalID!, isSoloScore)
+        {
+        }
+        
+        public PvPScore(Guild guild) : this(guild.Name!, guild.GuildID!, false)
+        {
+        }
+        
         public string PlayerName { get; set; }
         public string PlayerID { get; set; }
-
-        public bool IsSoloScore { get; init; } = false;
 
         // --- For session type #1: PvP Combat ---
         [DefaultValue(0)]
@@ -236,23 +247,26 @@ namespace AmteScripts.PvP
         }
     }
 
-    public record PvPGroupScore(Guild Guild, PvPScore Totals, Dictionary<string, PvPScore> Scores)
+    public record PvPGroupScore(Guild Guild) : PvPScore(Guild)
     {
-        public int GetTotalPoints(eSessionTypes sessionType)
+        public PvPGroupScore(Guild guild, IEnumerable<PvPScore> players) : this(guild)
         {
-            return Scores.Values.Select(e => e.GetTotalPoints(sessionType)).Aggregate(0, (a, b) => a + b);
+            Scores = new Dictionary<string, PvPScore>(players.Select(p => new KeyValuePair<string, PvPScore>(p.PlayerID, p)));
+        }
+        
+        public PvPGroupScore(Guild guild, IEnumerable<GamePlayer> players) : this(guild, players.Select(p => new PvPScore(p, false)))
+        {
         }
 
-        [return: NotNull]
-        public PvPScore GetOrCreateScore([NotNull] GamePlayer player)
+        public Dictionary<string, PvPScore> Scores { get; init; } = new();
+
+        public PvPScore Totals => this;
+        
+        public PvPScore GetOrCreateScore(GamePlayer player)
         {
             if (!Scores.TryGetValue(player.InternalID, out var score))
             {
-                score = new PvPScore()
-                {
-                    PlayerID = player.InternalID,
-                    PlayerName = player.Name
-                };
+                score = new PvPScore(player, false);
                 Scores[player.InternalID] = score;
             }
             return score!;

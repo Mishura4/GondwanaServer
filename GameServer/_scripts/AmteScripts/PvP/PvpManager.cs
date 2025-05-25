@@ -955,9 +955,9 @@ namespace AmteScripts.Managers
         #region Open/Close
 
         [return: NotNull]
-        private static PvPScore ParsePlayer(IEnumerable<string> parameters)
+        private static PvPScore ParsePlayer(IEnumerable<string> parameters, bool isSolo)
         {
-            PvPScore score = new PvPScore();
+            PvPScore score = new PvPScore(isSolo);
             foreach (var playerScoreInfo in parameters)
             {
                 var playerScore = playerScoreInfo.Split('=');
@@ -1006,7 +1006,7 @@ namespace AmteScripts.Managers
             {
                 var data = lines.Current.Split(';');
                 
-                var entry = ParsePlayer(data);
+                var entry = ParsePlayer(data, false);
                 var playerId = entry.PlayerID;
                 var groupScore = EnsureGroupScore(guild);
                 groupScore.Scores![playerId] = entry;
@@ -1193,13 +1193,15 @@ namespace AmteScripts.Managers
                 {
                     case "g":
                         {
+                            // guild scores
                             ParseGuildEntry(lines, parameters);
                         }
                         break;
                         
                     case "s":
                         {
-                            var playerScore = ParsePlayer(parameters.Skip(1));
+                            // solo scores
+                            var playerScore = ParsePlayer(parameters.Skip(1), true);
                             if (!string.IsNullOrEmpty(playerScore.PlayerID))
                                 _soloScores[playerScore.PlayerID] = playerScore;
                         }
@@ -1207,7 +1209,8 @@ namespace AmteScripts.Managers
                         
                     case "ps":
                         {
-                            var playerScore = ParsePlayer(parameters.Skip(1));
+                            // total scores
+                            var playerScore = ParsePlayer(parameters.Skip(1), false);
                             if (!string.IsNullOrEmpty(playerScore.PlayerID))
                                 _totalScores[playerScore.PlayerID] = playerScore;
                         }
@@ -1427,11 +1430,7 @@ namespace AmteScripts.Managers
 
             if (!_groupScores.TryGetValue(guild, out PvPGroupScore score))
             {
-                score = new PvPGroupScore(
-                    guild,
-                    new PvPScore() { PlayerID = guild.GuildID, PlayerName = guild.Name },
-                    new()
-                );
+                score = new PvPGroupScore(guild);
                 _groupScores[guild] = score;
             }
             return score;
@@ -1445,28 +1444,13 @@ namespace AmteScripts.Managers
             PvPScore entry;
             if (!_groupScores.TryGetValue(player.Guild, out PvPGroupScore score))
             {
-                entry = new PvPScore
-                {
-                    PlayerID = player.InternalID,
-                    PlayerName = player.Name,
-                };
-                score = new PvPGroupScore(
-                    player.Guild,
-                    new PvPScore() { PlayerID = player.Guild.GuildID, PlayerName = player.Guild.Name},
-                    new Dictionary<string, PvPScore>
-                    {
-                        { player.InternalID, entry }
-                    }
-                );
+                entry = new PvPScore(player, false);
+                score = new PvPGroupScore(player.Guild, [entry]);
                 _groupScores[player.Guild] = score;
             }
             else if (!score.Scores.TryGetValue(player.InternalID, out entry))
             {
-                entry = new PvPScore
-                {
-                    PlayerID = player.InternalID,
-                    PlayerName = player.Name
-                };
+                entry = new PvPScore(player, false);
                 score.Scores[player.InternalID] = entry;
             }
             return (score, entry);
@@ -1481,11 +1465,7 @@ namespace AmteScripts.Managers
             string pid = player.InternalID;
             if (!_totalScores.TryGetValue(pid, out PvPScore score))
             {
-                score = new PvPScore()
-                {
-                    PlayerID = pid,
-                    PlayerName = player.Name
-                };
+                score = new PvPScore(player, false);
                 _totalScores[pid] = score;
             }
             return score;
@@ -1500,12 +1480,7 @@ namespace AmteScripts.Managers
             string pid = player.InternalID;
             if (!_soloScores.TryGetValue(pid, out PvPScore score))
             {
-                score = new PvPScore()
-                {
-                    PlayerID = pid,
-                    PlayerName = player.Name,
-                    IsSoloScore = true
-                };
+                score = new PvPScore(player, true);
                 _soloScores[pid] = score;
             }
             return score;
@@ -2436,22 +2411,23 @@ namespace AmteScripts.Managers
             {
                 eSessionTypes.CaptureTheFlag => PvPAreaOutposts.CreateCaptureFlagOutpostPad(pos, leader),
                 eSessionTypes.TreasureHunt => PvPAreaOutposts.CreateTreasureHuntBase(pos, leader),
-                eSessionTypes.BringAFriend or eSessionTypes.TerritoryCapture => PvPAreaOutposts.CreateGuildOutpostTemplate01(pos, leader)
+                eSessionTypes.BringAFriend or eSessionTypes.TerritoryCapture => PvPAreaOutposts.CreateGuildOutpostTemplate01(pos, leader),
+                _ => null
             };
 
-            if (items != null)
-            {
-                foreach (var item in items)
-                {
-                    if (area is PvpTempArea pvpArea)
-                    {
-                        pvpArea.AddOwnedObject(item);
-                    }
+            if (items == null)
+                return;
 
-                    if (item is GamePvPStaticItem pvpItem)
-                    {
-                        pvpItem.SetOwnership(leader);
-                    }
+            foreach (var item in items)
+            {
+                if (area is PvpTempArea pvpArea)
+                {
+                    pvpArea.AddOwnedObject(item);
+                }
+
+                if (item is GamePvPStaticItem pvpItem)
+                {
+                    pvpItem.SetOwnership(leader);
                 }
             }
         }
@@ -2949,7 +2925,7 @@ namespace AmteScripts.Managers
             }
             else
             {
-                return new PvPScore() { PlayerID = viewer.InternalID, PlayerName = viewer.Name };
+                return new PvPScore(viewer, false);
             }
         }
 
@@ -2985,18 +2961,11 @@ namespace AmteScripts.Managers
                 }*/
                 if (_groupScores.TryGetValue(viewer.Guild, out PvPGroupScore groupScore))
                 {
-                    list = new [] { groupScore.Totals };
+                    list = [groupScore];
                 }
                 else
                 {
-                    list = new[]
-                    {
-                        new PvPScore
-                        {
-                            PlayerID = viewer.Guild.GuildID,
-                            PlayerName = viewer.Guild.Name
-                        }
-                    };
+                    list = [new PvPScore(viewer.Guild)];
                 }
             }
             return list;
@@ -3193,7 +3162,7 @@ namespace AmteScripts.Managers
                             lines.Add("");
                             lines.Add($"Current Scoreboard for {viewer.Name}:");
                             if (myScores == null)
-                                myScores = new PvPScore() { PlayerID = viewer.InternalID, PlayerName = viewer.Name };
+                                myScores = new PvPScore(viewer, true);
                             AddLines(lines, MakeScoreboardEntry(myScores), language, shortStats);
                         }
                     }

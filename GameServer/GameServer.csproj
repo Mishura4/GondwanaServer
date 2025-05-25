@@ -21,6 +21,7 @@
     <Company>Dawn of Light Development Team</Company>
     <Product>DAoC Server Side Emulation Package - Dawn of Light</Product>
     <NeutralLanguage>en</NeutralLanguage>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>Full</DebugType>

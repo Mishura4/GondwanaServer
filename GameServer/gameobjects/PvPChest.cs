@@ -1,7 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AmteScripts.Managers;
+using AmteScripts.PvP;
 using AmteScripts.PvP.CTF; // adjust if your manager namespace is different
 using DOL.Database;
 using DOL.GS;
@@ -24,26 +26,30 @@ namespace DOL.GS
         /// </summary>
         public class DepositedItem
         {
-            public string Id_nb { get; set; }
-            public string ItemName { get; set; }
-            public int Count { get; set; }
-            public int PointsPerItem { get; set; }
+            public string Id_nb { get; set; } = string.Empty;
+            public string ItemName { get; set; } = string.Empty;
+            public int Count { get; set; } = 0;
+            public int PointsPerItem { get; set; } = 0;
         }
 
         // ============ Ownership Info ============
 
-        // If group chest, we store the group reference and the group leader:
-        private Group m_ownerGroup;
-        private GamePlayer m_ownerGroupLeader;
-
         /// <summary>
         /// True if we are group-owned, false if solo-owned.
         /// </summary>
-        public bool IsGroupChest { get; private set; }
+        public bool IsGroupChest => OwnerGuild != null;
+
+        public bool Unlocked
+        {
+            get;
+            set;
+        }
 
         // ============ Chest Data ============
 
-        private List<DepositedItem> m_depositedItems = new();
+        private PvPScore? m_score = null;
+
+        private readonly List<DepositedItem> m_depositedItems = new();
 
         public IReadOnlyList<DepositedItem> DepositedItems
         {
@@ -51,61 +57,17 @@ namespace DOL.GS
             {
                 lock (m_depositedItems)
                 {
-                    return DepositedItems.ToImmutableList();
+                    return m_depositedItems.ToImmutableList();
                 }
             }
         }
         
-        public PVPChest()
+        public PVPChest(PvPScore score)
         {
             Name = "PvP Chest";
         }
 
         #region Ownership Setup
-
-        /// <inheritdoc />
-        public override void SetOwnership(GamePlayer player)
-        {
-            base.SetOwnership(player);
-            if (player.Group != null)
-            {
-                IsGroupChest = true; // TODO: Do we just want to replace this property with `=> m_ownerGroup != null`?
-                m_ownerGroupLeader = player.Group.Leader;
-                m_ownerGroup = player.Group;
-                m_ownerPlayer = null;
-            }
-            else
-            {
-                IsGroupChest = false;
-                m_ownerGroupLeader = null;
-            }
-        }
-
-        /// <summary>
-        /// Returns whichever player's scoreboard should be updated
-        /// for deposits/steals: solo owner if not group, or group leader if group.
-        /// 
-        /// WARNING: If the group’s leader changes, we update m_ownerGroupLeader 
-        /// to the new leader automatically. So the scoreboard credit always 
-        /// goes to the current group leader.
-        /// </summary>
-        public GamePlayer GetScoreboardPlayer()
-        {
-            if (!IsGroupChest)
-            {
-                // Solo chest => single player
-                return m_ownerPlayer;
-            }
-            else
-            {
-                // Group chest => check if the group leader changed
-                if (m_ownerGroup != null && m_ownerGroup.Leader is GamePlayer newLeader)
-                {
-                    m_ownerGroupLeader = newLeader;
-                }
-                return m_ownerGroupLeader;
-            }
-        }
 
         /// <summary>
         /// Checks if the 'player' is allowed to deposit into this chest,
@@ -117,35 +79,13 @@ namespace DOL.GS
         /// If the scoreboard owner is NOT in PvP (or is null),
         /// then the chest is effectively open to everyone.
         /// </summary>
-        private bool IsOwnerOrUnlocked(GamePlayer player)
+        /// <inheritdoc />
+        public override bool IsOwner(GameLiving other)
         {
-            var scoreboardOwner = GetScoreboardPlayer();
-            if (scoreboardOwner == null)
-            {
-                // No owner => open chest
-                return true;
-            }
-
-            // If the scoreboard owner is no longer in PvP => chest is unlocked
-            if (!scoreboardOwner.IsInPvP)
-            {
-                return true;
-            }
-
-            // Otherwise, enforce normal ownership
-            if (!IsGroupChest)
-            {
-                // solo => must be exactly scoreboardOwner
-                return (player == scoreboardOwner);
-            }
-            else
-            {
-                // group => check that player is in the same group as scoreboardOwner
-                if (player.Group == null || scoreboardOwner.Group == null)
-                    return false;
-
-                return (player.Group == scoreboardOwner.Group);
-            }
+            if (Unlocked)
+                return true; // unlocked => anyone can deposit
+            
+            return base.IsOwner(other);
         }
 
         #endregion
@@ -157,7 +97,7 @@ namespace DOL.GS
             if (player == null) return false;
 
             // If not the owner or chest unlocked => check
-            if (!IsOwnerOrUnlocked(player))
+            if (!IsOwner(player))
             {
                 player.Out.SendMessage("You do not own this chest!",
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -267,12 +207,7 @@ namespace DOL.GS
             if (pm == null || !pm.IsOpen) return;
             if (pm.CurrentSessionType is not PvpManager.eSessionTypes.TreasureHunt) return;
 
-            var sbPlayer = GetScoreboardPlayer();
-            if (sbPlayer == null) return;
-            if (!sbPlayer.IsInPvP) return; // chest is unlocked => no scoreboard update
-
-            var score = pm.EnsureTotalScore(sbPlayer);
-            if (score == null) return;
+            if (Unlocked || m_score is null) return; // chest is unlocked => no scoreboard update
 
             int totalPoints = 0;
             foreach (var di in m_depositedItems)
@@ -280,8 +215,8 @@ namespace DOL.GS
                 totalPoints += di.Count * di.PointsPerItem;
             }
 
-            sbPlayer.Out.SendMessage($"[Chest Score] Your chest has {totalPoints} total treasure points.",
-                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            //sbPlayer.Out.SendMessage($"[Chest Score] Your chest has {totalPoints} total treasure points.",
+            //    eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         #endregion
@@ -319,7 +254,7 @@ namespace DOL.GS
         /// to their .Treasure_StolenTreasuresPoints, then recalc.
         /// If chest is “unlocked,” it still uses the scoreboardOwner if in PvP.
         /// </summary>
-        public void OnTreasureStolen(GamePlayer stealer, DepositedItem stolenData)
+        public void OnTreasureStolen(GamePlayer stealer, DepositedItem? stolenData)
         {
             // stolenData was returned by StealRandomItem() or some other logic
             if (stolenData == null)
@@ -332,22 +267,16 @@ namespace DOL.GS
             stealer.Out.SendMessage($"You stole a [{stolenData.ItemName}] from the chest!",
                 eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-            // only if we are in open session 3 and the owner is in pvp
+            // only if we are in open session 3 and the chest is locked
             var pm = PvpManager.Instance;
-            if (pm == null || !pm.IsOpen) return;
-            if (pm.CurrentSessionType is not PvpManager.eSessionTypes.TreasureHunt) return;
-
-            var sbPlayer = GetScoreboardPlayer();
-            if (sbPlayer == null) return;
-            if (!sbPlayer.IsInPvP) return;
+            if (!pm.IsOpen || pm.CurrentSessionType is not PvpManager.eSessionTypes.TreasureHunt) return;
+            if (!Unlocked || m_score == null) return;
 
             // The chest owner "loses" x points in .Treasure_StolenTreasuresPoints
             // We'll increment by stolenData.Count * stolenData.PointsPerItem
             // (which is typically 1 item * that item’s points).
-            var victimScore = pm.EnsureTotalScore(sbPlayer);
-            if (victimScore == null) return;
 
-            victimScore.Treasure_StolenTreasuresPoints += 3;
+            m_score.Treasure_StolenTreasuresPoints += 3;
 
             // Recalc the chest's total deposit for them
             RecalcChestScore();
@@ -364,31 +293,21 @@ namespace DOL.GS
         public IList<string> DelveInfo()
         {
             var lines = new List<string>();
-            var sbOwner = GetScoreboardPlayer();
-            bool hasOwner = (sbOwner != null);
 
-            if (!hasOwner)
+            if (m_score is null)
             {
                 lines.Add("");
                 lines.Add("Chest has no scoreboard owner (unlocked).");
                 lines.Add("");
             }
-            else if (!IsGroupChest)
-            {
-                lines.Add("");
-                lines.Add("Owned by a single player: " + sbOwner!.Name);
-                lines.Add(sbOwner.IsInPvP
-                    ? "Owner is in PvP => locked to that owner"
-                    : "Owner is not in PvP => chest is unlocked");
-                lines.Add("");
-            }
             else
             {
                 lines.Add("");
-                lines.Add("Group chest. Leader: " + sbOwner!.Name);
-                lines.Add(sbOwner.IsInPvP
-                    ? "Leader is in PvP => locked to that group"
-                    : "Leader not in PvP => chest is unlocked");
+                if (!IsGroupChest)
+                    lines.Add("Owned by a single player: " + m_score?.PlayerName);
+                else
+                    lines.Add("Group chest. Leader: " + m_score?.PlayerName);
+                lines.Add(Unlocked ? " - Locked" : " - Unlocked");
                 lines.Add("");
             }
 

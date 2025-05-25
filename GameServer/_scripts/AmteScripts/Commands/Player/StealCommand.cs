@@ -268,26 +268,19 @@ namespace DOL.GS.Commands
 
             if (Player.TargetObject is PVPChest chestTarget)
             {
-                var sbOwner = chestTarget.GetScoreboardPlayer();
-                if (sbOwner != null && sbOwner.IsInPvP)
+                if (chestTarget.IsOwner(Player))
                 {
                     if (!chestTarget.IsGroupChest)
                     {
-                        if (Player == sbOwner)
-                        {
-                            Player.Out.SendMessage("You cannot steal from your own locked chest!",
-                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
-                        }
+                        Player.Out.SendMessage("You cannot steal from your own locked chest!",
+                                               eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
                     }
                     else
                     {
-                        if (Player.Group != null && sbOwner.Group != null && Player.Group == sbOwner.Group)
-                        {
-                            Player.Out.SendMessage("You cannot steal from your group's locked chest!",
-                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
-                        }
+                        Player.Out.SendMessage("You cannot steal from your group's locked chest!",
+                                               eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
                     }
                 }
 

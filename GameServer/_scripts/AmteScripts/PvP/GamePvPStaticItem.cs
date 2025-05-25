@@ -10,48 +10,40 @@ namespace AmteScripts.PvP.CTF
 {
     public class GamePvPStaticItem : GameStaticItem
     {
-        protected GamePlayer? m_ownerPlayer = null;
-
-        public virtual GamePlayer? OwnerPlayer
+        /// <inheritdoc />
+        public override GameLiving Owner
         {
-            get => m_ownerPlayer;
+            get => base.Owner;
             set
             {
-                if (m_ownerPlayer != null)
-                    RemoveOwner(m_ownerPlayer);
-                m_ownerPlayer = value;
-                AddOwner(m_ownerPlayer);
+                var owner = base.Owner;
+                if (owner != null)
+                {
+                    RemoveOwner(owner);
+                }
+                owner = value;
+                if (value != null)
+                {
+                    base.Owner = value;
+                    AddOwner(owner);
+                    if (value is GamePlayer player)
+                    {
+                        OwnerGuild = player.Guild;
+                        Emblem = OwnerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
+                    }
+                }
             }
+        }
+
+        public GamePlayer OwnerPlayer
+        {
+            get => Owner as GamePlayer;
+            set => Owner = value;
         }
 
         public virtual void SetOwnership(GamePlayer? player)
         {
-            if (player != null)
-            {
-                OwnerPlayer = player;
-                OwnerGuild = player.Guild;
-                Emblem = OwnerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
-            }
-            else
-            {
-                OwnerPlayer = null;
-                OwnerGuild = null;
-                Emblem = 0;
-            }
-        }
-
-        public bool IsOwnedBy(GamePlayer p)
-        {
-            return IsOwnedByGuild(p.Guild) || (OwnerPlayer != null && OwnerPlayer == p);
-        }
-        
-        /// <summary>
-        /// Does a given guild own me?
-        /// (Optional convenience method)
-        /// </summary>
-        public new bool IsOwnedByGuild(Guild g)
-        {
-            return (OwnerGuild != null && OwnerGuild == g);
+            OwnerPlayer = player!;
         }
     }
 }

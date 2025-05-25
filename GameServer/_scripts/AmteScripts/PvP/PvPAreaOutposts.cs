@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using DOL.GS.Geometry;
 using AmteScripts.PvP.CTF;
 using AmteScripts.Managers;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace AmteScripts.PvP
@@ -72,11 +73,9 @@ namespace AmteScripts.PvP
         public static List<GameStaticItem> CreateTreasureHuntBase(Position center, GamePlayer ownerPlayer)
         {
             var createdItems = new List<GameStaticItem>();
-            Region region = center.Region;
-
-            if (region == null)
+            if (center.Region == null)
                 return createdItems;
-
+            
             var ownerGuild = ownerPlayer.Guild;
             foreach (var template in s_treasureHuntBaseTemplates)
             {
@@ -86,7 +85,7 @@ namespace AmteScripts.PvP
                 ushort finalHeading = (ushort)((center.Orientation.InHeading + template.HeadingOffset) & 0xFFF);
 
                 // Instantiate the item
-                GameStaticItem item = CreateStaticItemFromClassType(template.ClassType);
+                GameStaticItem item = CreateStaticItemFromClassType(ownerPlayer, template.ClassType);
 
                 item.Model = (ushort)template.Model;
                 item.Name = template.Name;
@@ -225,12 +224,19 @@ namespace AmteScripts.PvP
         }
 
         // Helper method to instantiate a GameStaticItem by class name
-        private static GameStaticItem CreateStaticItemFromClassType(string classType)
+        private static GameStaticItem CreateStaticItemFromClassType(GamePlayer player, string classType)
         {
             if (classType.EndsWith("TerritoryBanner"))
                 return new TerritoryBanner();
             else if (classType.EndsWith("PVPChest"))
-                return new PVPChest();
+            {
+                PvPScore score;
+                if (player.Guild != null)
+                    score = PvpManager.Instance.EnsureGroupScore(player.Guild);
+                else
+                    score = PvpManager.Instance.EnsureSoloScore(player);
+                return new PVPChest(score);
+            }
             else
                 return new GameStaticItem(); // fallback
         }
