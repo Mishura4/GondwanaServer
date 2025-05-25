@@ -140,11 +140,11 @@ namespace AmteScripts.Managers
 
         // Scoreboard
         // Total score for each player. DO NOT USE THIS FOR ANYTHING, only for stat display.
-        [NotNull] private readonly Dictionary<string, PlayerScore> _totalScores = new Dictionary<string, PlayerScore>();
+        [NotNull] private readonly Dictionary<string, PvPScore> _totalScores = new Dictionary<string, PvPScore>();
         // Total score earned WHILE SOLO for each player.
-        [NotNull] private readonly Dictionary<string, PlayerScore> _soloScores = new Dictionary<string, PlayerScore>();
+        [NotNull] private readonly Dictionary<string, PvPScore> _soloScores = new Dictionary<string, PvPScore>();
         // Total score earned WHILE GROUPED for each player.
-        [NotNull] private readonly Dictionary<Guild, GroupScore> _groupScores = new Dictionary<Guild, GroupScore>();
+        [NotNull] private readonly Dictionary<Guild, PvPGroupScore> _groupScores = new Dictionary<Guild, PvPGroupScore>();
 
         // Queues
         [NotNull] private readonly List<GamePlayer> _soloQueue = new List<GamePlayer>();
@@ -488,6 +488,7 @@ namespace AmteScripts.Managers
             _allGuilds.Add(pvpGuild);
             _groupGuilds[group] = pvpGuild;
             _guildGroups[pvpGuild] = group;
+            _groupScores.Remove(pvpGuild); // Reset scores if any
             
             if (_soloAreas.Remove(groupLeader.InternalID, out AbstractArea leaderArea))
             {
@@ -954,15 +955,15 @@ namespace AmteScripts.Managers
         #region Open/Close
 
         [return: NotNull]
-        private static PlayerScore ParsePlayer(IEnumerable<string> parameters)
+        private static PvPScore ParsePlayer(IEnumerable<string> parameters)
         {
-            PlayerScore score = new PlayerScore();
+            PvPScore score = new PvPScore();
             foreach (var playerScoreInfo in parameters)
             {
                 var playerScore = playerScoreInfo.Split('=');
                 var playerScoreKey = playerScore[0];
 
-                PropertyInfo p = typeof(PlayerScore).GetProperty(playerScoreKey);
+                PropertyInfo p = typeof(PvPScore).GetProperty(playerScoreKey);
                 if (p == null)
                 {
                     log.Warn($"PvP score \"{playerScoreKey}\" with value \"{playerScore[1]}\" of player {score.PlayerID} is unknown");
@@ -1005,11 +1006,11 @@ namespace AmteScripts.Managers
             {
                 var data = lines.Current.Split(';');
                 
-                var entry = new GroupScoreEntry(ParsePlayer(data));
-                var playerId = entry.PlayerScore.PlayerID;
+                var entry = ParsePlayer(data);
+                var playerId = entry.PlayerID;
                 var groupScore = EnsureGroupScore(guild);
                 groupScore.Scores![playerId] = entry;
-                groupScore.Totals.Add(entry.PlayerScore);
+                groupScore.Totals.Add(entry);
             }
         }
 
@@ -1347,7 +1348,7 @@ namespace AmteScripts.Managers
                     file.WriteLine($"g;{guild.Name}");
                     foreach (var groupEntry in score.Scores)
                     {
-                        file.WriteLine(groupEntry.Value.PlayerScore.Serialize());
+                        file.WriteLine(groupEntry.Value.Serialize());
                     }
                     file.WriteLine();
                 }
@@ -1419,16 +1420,16 @@ namespace AmteScripts.Managers
         }
 
         [return: NotNullIfNotNull(nameof(guild))]
-        public GroupScore EnsureGroupScore(Guild? guild)
+        public PvPGroupScore EnsureGroupScore(Guild? guild)
         {
             if (guild == null)
                 return null;
 
-            if (!_groupScores.TryGetValue(guild, out GroupScore score))
+            if (!_groupScores.TryGetValue(guild, out PvPGroupScore score))
             {
-                score = new GroupScore(
+                score = new PvPGroupScore(
                     guild,
-                    new PlayerScore() { PlayerID = guild.GuildID, PlayerName = guild.Name },
+                    new PvPScore() { PlayerID = guild.GuildID, PlayerName = guild.Name },
                     new()
                 );
                 _groupScores[guild] = score;
@@ -1436,23 +1437,23 @@ namespace AmteScripts.Managers
             return score;
         }
 
-        public (GroupScore score, GroupScoreEntry entry) EnsureGroupScoreEntry(GamePlayer player)
+        public (PvPGroupScore score, PvPScore entry) EnsureGroupScoreEntry(GamePlayer player)
         {
             if (player?.Guild == null)
                 return (null, null);
 
-            GroupScoreEntry entry;
-            if (!_groupScores.TryGetValue(player.Guild, out GroupScore score))
+            PvPScore entry;
+            if (!_groupScores.TryGetValue(player.Guild, out PvPGroupScore score))
             {
-                entry = new GroupScoreEntry(new PlayerScore
+                entry = new PvPScore
                 {
                     PlayerID = player.InternalID,
                     PlayerName = player.Name,
-                });
-                score = new GroupScore(
+                };
+                score = new PvPGroupScore(
                     player.Guild,
-                    new PlayerScore() { PlayerID = player.Guild.GuildID, PlayerName = player.Guild.Name},
-                    new Dictionary<string, GroupScoreEntry>
+                    new PvPScore() { PlayerID = player.Guild.GuildID, PlayerName = player.Guild.Name},
+                    new Dictionary<string, PvPScore>
                     {
                         { player.InternalID, entry }
                     }
@@ -1461,26 +1462,26 @@ namespace AmteScripts.Managers
             }
             else if (!score.Scores.TryGetValue(player.InternalID, out entry))
             {
-                entry = new GroupScoreEntry(new PlayerScore
+                entry = new PvPScore
                 {
                     PlayerID = player.InternalID,
                     PlayerName = player.Name
-                });
+                };
                 score.Scores[player.InternalID] = entry;
             }
             return (score, entry);
         }
         
         [return: NotNullIfNotNull(nameof(player))]
-        public PlayerScore EnsureTotalScore(GamePlayer player)
+        public PvPScore EnsureTotalScore(GamePlayer player)
         {
             if (player == null)
                 return null;
 
             string pid = player.InternalID;
-            if (!_totalScores.TryGetValue(pid, out PlayerScore score))
+            if (!_totalScores.TryGetValue(pid, out PvPScore score))
             {
-                score = new PlayerScore()
+                score = new PvPScore()
                 {
                     PlayerID = pid,
                     PlayerName = player.Name
@@ -1491,15 +1492,15 @@ namespace AmteScripts.Managers
         }
         
         [return: NotNullIfNotNull(nameof(player))]
-        public PlayerScore EnsureSoloScore(GamePlayer player)
+        public PvPScore EnsureSoloScore(GamePlayer player)
         {
             if (player == null)
                 return null;
 
             string pid = player.InternalID;
-            if (!_soloScores.TryGetValue(pid, out PlayerScore score))
+            if (!_soloScores.TryGetValue(pid, out PvPScore score))
             {
-                score = new PlayerScore()
+                score = new PvPScore()
                 {
                     PlayerID = pid,
                     PlayerName = player.Name,
@@ -1566,7 +1567,7 @@ namespace AmteScripts.Managers
             bool rr5bonus = (victim.RealmLevel >= 40);
             bool isSolo = (killer.Group == null || killer.Group.MemberCount <= 1);
             var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PlayerScore score) =>
+            var fun = (PvPScore score) =>
             {
                 if (isSolo)
                 {
@@ -1586,7 +1587,7 @@ namespace AmteScripts.Managers
             fun(killerScore);
             if (groupScore != null)
             {
-                fun(groupEntry.PlayerScore);
+                fun(groupEntry);
                 fun(groupScore.Totals);
             }
             else
@@ -1608,7 +1609,7 @@ namespace AmteScripts.Managers
 
             bool isSolo = IsSolo(killer);
             var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PlayerScore score) =>
+            var fun = (PvPScore score) =>
             {
                 if (wasFlagCarrier)
                 {
@@ -1632,7 +1633,7 @@ namespace AmteScripts.Managers
             fun(killerScore);
             if (groupScore != null)
             {
-                fun(groupEntry.PlayerScore);
+                fun(groupEntry);
                 fun(groupScore.Totals);
             }
             else
@@ -1651,7 +1652,7 @@ namespace AmteScripts.Managers
 
             bool isSolo = IsSolo(killer);
             var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PlayerScore score) =>
+            var fun = (PvPScore score) =>
             {
                 if (isSolo)
                 {
@@ -1667,7 +1668,7 @@ namespace AmteScripts.Managers
             fun(killerScore);
             if (groupScore != null)
             {
-                fun(groupEntry.PlayerScore);
+                fun(groupEntry);
                 fun(groupScore.Totals);
             }
             else
@@ -1686,7 +1687,7 @@ namespace AmteScripts.Managers
 
             bool isSolo = IsSolo(killer);
             var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PlayerScore score) =>
+            var fun = (PvPScore score) =>
             {
                 if (isSolo)
                 {
@@ -1702,7 +1703,7 @@ namespace AmteScripts.Managers
             fun(killerScore);
             if (groupScore != null)
             {
-                fun(groupEntry.PlayerScore);
+                fun(groupEntry);
                 fun(groupScore.Totals);
             }
             else
@@ -1721,7 +1722,7 @@ namespace AmteScripts.Managers
 
             bool isSolo = IsSolo(killer);
             var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PlayerScore score) =>
+            var fun = (PvPScore score) =>
             {
                 if (isSolo)
                 {
@@ -1737,7 +1738,7 @@ namespace AmteScripts.Managers
             fun(killerScore);
             if (groupScore != null)
             {
-                fun(groupEntry.PlayerScore);
+                fun(groupEntry);
                 fun(groupScore.Totals);
             }
             else
@@ -1759,7 +1760,7 @@ namespace AmteScripts.Managers
 
             bool isSolo = IsSolo(killer);
             var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PlayerScore score) =>
+            var fun = (PvPScore score) =>
             {
                 if (isSolo)
                 {
@@ -1779,7 +1780,7 @@ namespace AmteScripts.Managers
             fun(killerScore);
             if (groupScore != null)
             {
-                fun(groupEntry.PlayerScore);
+                fun(groupEntry);
                 fun(groupScore.Totals);
             }
             else
@@ -2518,7 +2519,7 @@ namespace AmteScripts.Managers
                 }
             }
 
-            var doAdd = (PlayerScore score) =>
+            var doAdd = (PvPScore score) =>
             {
                 score.Friends_BroughtFriendsPoints += basePoints;
                 score.Friends_BroughtFamilyBonus += bonus;
@@ -2604,7 +2605,7 @@ namespace AmteScripts.Managers
                 var followedScore = EnsureTotalScore(followedPlayer);
                 var groupScore = EnsureGroupScore(followedPlayer.Guild);
                 var playerGroupScore = groupScore?.GetOrCreateScore(followedPlayer);
-                var doAdd = (PlayerScore score) =>
+                var doAdd = (PvPScore score) =>
                 {
                     score.Friends_FriendKilledCount++;
                     score.Friends_FriendKilledPoints += 2; // penalty
@@ -2629,7 +2630,7 @@ namespace AmteScripts.Managers
                     var killerScore = EnsureTotalScore(killerPlayer);
                     var groupScore = EnsureGroupScore(killerPlayer.Guild);
                     var playerGroupScore = groupScore?.GetOrCreateScore(killerPlayer);
-                    var doAdd = (PlayerScore score) =>
+                    var doAdd = (PvPScore score) =>
                     {
                         score.Friends_KillEnemyFriendCount++;
                         score.Friends_KillEnemyFriendPoints += 2;
@@ -2699,7 +2700,7 @@ namespace AmteScripts.Managers
             if (territory.Zone == null || !CurrentZones.Contains(territory.Zone))
                 return;
 
-            var doAdd = (PlayerScore score) =>
+            var doAdd = (PvPScore score) =>
             {
                 score.Terr_TerritoriesCapturedPoints += 20;
                 score.Terr_TerritoriesCapturedCount++;
@@ -2728,7 +2729,7 @@ namespace AmteScripts.Managers
             if (!IsOpen)
                 return;
             
-            var doAdd = (PlayerScore score) =>
+            var doAdd = (PvPScore score) =>
             {
                 score.Flag_OwnershipPoints += points;
             };
@@ -2751,7 +2752,7 @@ namespace AmteScripts.Managers
             if (!IsOpen)
                 return;
             
-            var doAdd = (PlayerScore score) =>
+            var doAdd = (PvPScore score) =>
             {
                 score.Flag_OwnershipPoints += points;
             };
@@ -2773,7 +2774,7 @@ namespace AmteScripts.Managers
             if (!IsOpen)
                 return;
             
-            var doAdd = (PlayerScore score) =>
+            var doAdd = (PvPScore score) =>
             {
                 score.Flag_FlagReturnsCount += 1;
                 score.Flag_FlagReturnsPoints += 20;
@@ -2815,265 +2816,6 @@ namespace AmteScripts.Managers
             if (living is GamePlayer plr)
                 return plr.IsInPvP;
             return false;
-        }
-        #endregion
-
-        #region PlayerScores
-
-        public class Unsaved : System.Attribute
-        {
-        }
-        
-        public class PlayerScore
-        {
-            // --- Universal (for all sessions) ---
-            // We'll keep track of the player's name/ID just for clarity
-            public string PlayerName { get; set; }
-            public string PlayerID { get; set; }
-
-            public bool IsSoloScore { get; init; } = false;
-
-            // --- For session type #1: PvP Combat ---
-            [DefaultValue(0)]
-            public int PvP_SoloKills { get; set; }
-            [DefaultValue(0)]
-            public int PvP_SoloKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int PvP_GroupKills { get; set; }
-            [DefaultValue(0)]
-            public int PvP_GroupKillsPoints { get; set; }
-
-            // --- For session type #2: Flag Capture ---
-            [DefaultValue(0)]
-            public int Flag_SoloKills { get; set; }
-            [DefaultValue(0)]
-            public int Flag_SoloKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Flag_GroupKills { get; set; }
-            [DefaultValue(0)]
-            public int Flag_GroupKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Flag_KillFlagCarrierCount { get; set; }
-            [DefaultValue(0)]
-            public int Flag_KillFlagCarrierPoints { get; set; }
-            [DefaultValue(0)]
-            public int Flag_FlagReturnsCount { get; set; }
-            [DefaultValue(0)]
-            public int Flag_FlagReturnsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Flag_OwnershipPoints { get; set; }
-
-            // --- For session type #3: Treasure Hunt ---
-            [DefaultValue(0)]
-            public int Treasure_SoloKills { get; set; }
-            [DefaultValue(0)]
-            public int Treasure_SoloKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Treasure_GroupKills { get; set; }
-            [DefaultValue(0)]
-            public int Treasure_GroupKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Treasure_BroughtTreasuresPoints { get; set; }
-            [DefaultValue(0)]
-            public int Treasure_StolenTreasuresPoints { get; set; }
-
-            // --- For session type #4: Bring Friends ---
-            [DefaultValue(0)]
-            public int Friends_SoloKills { get; set; }
-            [DefaultValue(0)]
-            public int Friends_SoloKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Friends_GroupKills { get; set; }
-            [DefaultValue(0)]
-            public int Friends_GroupKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Friends_BroughtFriendsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Friends_BroughtFamilyBonus { get; set; }
-            [DefaultValue(0)]
-            public int Friends_FriendKilledCount { get; set; }
-            [DefaultValue(0)]
-            public int Friends_FriendKilledPoints { get; set; }
-            [DefaultValue(0)]
-            public int Friends_KillEnemyFriendCount { get; set; }
-            [DefaultValue(0)]
-            public int Friends_KillEnemyFriendPoints { get; set; }
-
-            // --- For session type #5: Capture Territories ---
-            [DefaultValue(0)]
-            public int Terr_SoloKills { get; set; }
-            [DefaultValue(0)]
-            public int Terr_SoloKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Terr_GroupKills { get; set; }
-            [DefaultValue(0)]
-            public int Terr_GroupKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Terr_TerritoriesCapturedCount { get; set; }
-            [DefaultValue(0)]
-            public int Terr_TerritoriesCapturedPoints { get; set; }
-            [DefaultValue(0)]
-            public int Terr_TerritoriesOwnershipPoints { get; set; }
-
-            // --- For session type #6: Boss Kill Cooperation ---
-            [DefaultValue(0)]
-            public int Boss_SoloKills { get; set; }
-            [DefaultValue(0)]
-            public int Boss_SoloKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Boss_GroupKills { get; set; }
-            [DefaultValue(0)]
-            public int Boss_GroupKillsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Boss_BossHitsCount { get; set; }
-            [DefaultValue(0)]
-            public int Boss_BossHitsPoints { get; set; }
-            [DefaultValue(0)]
-            public int Boss_BossKillsCount { get; set; }
-            [DefaultValue(0)]
-            public int Boss_BossKillsPoints { get; set; }
-
-            public PlayerScore Add(PlayerScore rhs)
-            {
-                PvP_SoloKills += rhs.PvP_SoloKills;
-                PvP_SoloKillsPoints += rhs.PvP_SoloKillsPoints;
-                PvP_GroupKills += rhs.PvP_GroupKills;
-                PvP_GroupKillsPoints += rhs.PvP_GroupKillsPoints;
-                Flag_SoloKills += rhs.Flag_SoloKills;
-                Flag_SoloKillsPoints += rhs.Flag_SoloKillsPoints;
-                Flag_GroupKills += rhs.Flag_GroupKills;
-                Flag_GroupKillsPoints += rhs.Flag_GroupKillsPoints;
-                Flag_KillFlagCarrierCount += rhs.Flag_KillFlagCarrierCount;
-                Flag_KillFlagCarrierPoints += rhs.Flag_KillFlagCarrierPoints;
-                Flag_FlagReturnsCount += rhs.Flag_FlagReturnsCount;
-                Flag_FlagReturnsPoints += rhs.Flag_FlagReturnsPoints;
-                Flag_OwnershipPoints += rhs.Flag_OwnershipPoints;
-                Treasure_SoloKills += rhs.Treasure_SoloKills;
-                Treasure_SoloKillsPoints += rhs.Treasure_SoloKillsPoints;
-                Treasure_GroupKills += rhs.Treasure_GroupKills;
-                Treasure_GroupKillsPoints += rhs.Treasure_GroupKillsPoints;
-                Treasure_BroughtTreasuresPoints += rhs.Treasure_BroughtTreasuresPoints;
-                Treasure_StolenTreasuresPoints += rhs.Treasure_StolenTreasuresPoints;
-                Friends_SoloKills += rhs.Friends_SoloKills;
-                Friends_SoloKillsPoints += rhs.Friends_SoloKillsPoints;
-                Friends_GroupKills += rhs.Friends_GroupKills;
-                Friends_GroupKillsPoints += rhs.Friends_GroupKillsPoints;
-                Friends_BroughtFriendsPoints += rhs.Friends_BroughtFriendsPoints;
-                Friends_BroughtFamilyBonus += rhs.Friends_BroughtFamilyBonus;
-                Friends_FriendKilledCount += rhs.Friends_FriendKilledCount;
-                Friends_FriendKilledPoints += rhs.Friends_FriendKilledPoints;
-                Friends_KillEnemyFriendCount += rhs.Friends_KillEnemyFriendCount;
-                Friends_KillEnemyFriendPoints += rhs.Friends_KillEnemyFriendPoints;
-                Terr_SoloKills += rhs.Terr_SoloKills;
-                Terr_SoloKillsPoints += rhs.Terr_SoloKillsPoints;
-                Terr_GroupKills += rhs.Terr_GroupKills;
-                Terr_GroupKillsPoints += rhs.Terr_GroupKillsPoints;
-                Terr_TerritoriesCapturedCount += rhs.Terr_TerritoriesCapturedCount;
-                Terr_TerritoriesCapturedPoints += rhs.Terr_TerritoriesCapturedPoints;
-                Terr_TerritoriesOwnershipPoints += rhs.Terr_TerritoriesOwnershipPoints;
-                Boss_SoloKills += rhs.Boss_SoloKills;
-                Boss_SoloKillsPoints += rhs.Boss_SoloKillsPoints;
-                Boss_GroupKills += rhs.Boss_GroupKills;
-                Boss_GroupKillsPoints += rhs.Boss_GroupKillsPoints;
-                Boss_BossHitsCount += rhs.Boss_BossHitsCount;
-                Boss_BossHitsPoints += rhs.Boss_BossHitsPoints;
-                Boss_BossKillsCount += rhs.Boss_BossKillsCount;
-                Boss_BossKillsPoints += rhs.Boss_BossKillsPoints;
-                return this;
-            }
-
-            /// <summary>
-            /// Helper: returns total points for the current session type,
-            /// summing only the relevant fields.
-            /// You can expand this logic to handle any special bonus, etc.
-            /// </summary>
-            public int GetTotalPoints(eSessionTypes sessionType)
-            {
-                switch (sessionType)
-                {
-                    case eSessionTypes.Deathmatch: // PvP Combats
-                        return PvP_SoloKillsPoints + PvP_GroupKillsPoints;
-
-                    case eSessionTypes.CaptureTheFlag: // Flag Capture
-                        return Flag_SoloKillsPoints +
-                               Flag_GroupKillsPoints +
-                               Flag_KillFlagCarrierPoints +
-                               Flag_FlagReturnsPoints +
-                               Flag_OwnershipPoints;
-
-                    case eSessionTypes.TreasureHunt: // Treasure Hunt
-                        return Treasure_SoloKillsPoints +
-                               Treasure_GroupKillsPoints +
-                               Treasure_BroughtTreasuresPoints -
-                               Treasure_StolenTreasuresPoints;
-
-                    case eSessionTypes.BringAFriend: // Bring Friends
-                        return Friends_SoloKillsPoints +
-                               Friends_GroupKillsPoints +
-                               Friends_BroughtFriendsPoints +
-                               Friends_BroughtFamilyBonus -
-                               Friends_FriendKilledPoints +
-                               Friends_KillEnemyFriendPoints;
-
-                    case eSessionTypes.TerritoryCapture: // Capture Territories
-                        return Terr_SoloKillsPoints +
-                               Terr_GroupKillsPoints +
-                               Terr_TerritoriesCapturedPoints +
-                               Terr_TerritoriesOwnershipPoints;
-
-                    case eSessionTypes.BossHunt: // Boss Kill Cooperation
-                        return Boss_SoloKillsPoints +
-                               Boss_GroupKillsPoints +
-                               Boss_BossHitsPoints +
-                               Boss_BossKillsPoints;
-
-                    default:
-                        return 0;
-                }
-            }
-
-            public string Serialize()
-            {
-                var playerScoreType = typeof(PlayerScore);
-                var properties = playerScoreType.GetProperties();
-                return string.Join(
-                    ';', properties
-                        .Where(p =>
-                        {
-                            var filter = (DefaultValueAttribute?)p.GetCustomAttribute(typeof(DefaultValueAttribute));
-                            var value = p.GetValue(this);
-                            return filter == null || (filter.Value == null ? value != null : !filter.Value.Equals(value));
-                        })
-                        .Select(p => p.Name + "=" + p.GetValue(this))
-                );
-            }
-        }
-
-        public record GroupScoreEntry(PlayerScore PlayerScore) {}
-
-        public record GroupScore(Guild Guild, PlayerScore Totals, Dictionary<string, GroupScoreEntry> Scores)
-        {
-            public int GetTotalPoints(eSessionTypes sessionType)
-            {
-                return Scores.Values.Select(e => e.PlayerScore.GetTotalPoints(sessionType)).Aggregate(0, (a, b) => a + b);
-            }
-
-            [return: NotNull]
-            public PlayerScore GetOrCreateScore([NotNull] GamePlayer player)
-            {
-                if (!Scores.TryGetValue(player.InternalID, out var score))
-                {
-                    score = new GroupScoreEntry(new PlayerScore()
-                    {
-                        PlayerID = player.InternalID,
-                        PlayerName = player.Name
-                    });
-                    Scores[player.InternalID] = score;
-                }
-                return score!.PlayerScore!;
-            }
-
-            public int PlayerCount => Scores.Count;
         }
         #endregion
 
@@ -3134,7 +2876,7 @@ namespace AmteScripts.Managers
 
         private record ScoreboardEntry(string Player, int Total, List<ScoreLine> Lines);
 
-        private ScoreboardEntry MakeScoreboardEntry(PlayerScore ps)
+        private ScoreboardEntry MakeScoreboardEntry(PvPScore ps)
         {
             if (!IsOpen)
                 return null;
@@ -3199,7 +2941,7 @@ namespace AmteScripts.Managers
         #region Stats
         
         [return: NotNull]
-        private PlayerScore GetTotalScore(GamePlayer viewer)
+        private PvPScore GetTotalScore(GamePlayer viewer)
         {
             if (_totalScores.TryGetValue(viewer.InternalID, out var myScore))
             {
@@ -3207,14 +2949,14 @@ namespace AmteScripts.Managers
             }
             else
             {
-                return new PlayerScore() { PlayerID = viewer.InternalID, PlayerName = viewer.Name };
+                return new PvPScore() { PlayerID = viewer.InternalID, PlayerName = viewer.Name };
             }
         }
 
         [return: NotNull]
-        private IEnumerable<PlayerScore> GetGroupScore(GamePlayer viewer)
+        private IEnumerable<PvPScore> GetGroupScore(GamePlayer viewer)
         {
-            IEnumerable<PlayerScore> list = Enumerable.Empty<PlayerScore>();
+            IEnumerable<PvPScore> list = Enumerable.Empty<PvPScore>();
             Guild g = viewer.Guild;
             if (g == null)
                 g = _playerLastGuilds.GetValueOrDefault(viewer.InternalID);
@@ -3241,7 +2983,7 @@ namespace AmteScripts.Managers
                             PlayerName = p.Name
                         });
                 }*/
-                if (_groupScores.TryGetValue(viewer.Guild, out GroupScore groupScore))
+                if (_groupScores.TryGetValue(viewer.Guild, out PvPGroupScore groupScore))
                 {
                     list = new [] { groupScore.Totals };
                 }
@@ -3249,7 +2991,7 @@ namespace AmteScripts.Managers
                 {
                     list = new[]
                     {
-                        new PlayerScore
+                        new PvPScore
                         {
                             PlayerID = viewer.Guild.GuildID,
                             PlayerName = viewer.Guild.Name
@@ -3382,8 +3124,8 @@ namespace AmteScripts.Managers
             }
             else
             {
-                IEnumerable<PlayerScore> scores = Enumerable.Empty<PlayerScore>();
-                PlayerScore groupTotal = null;
+                IEnumerable<PvPScore> scores = Enumerable.Empty<PvPScore>();
+                PvPScore groupTotal = null;
                 // We want to sort players by total points descending
                 var sessionType = CurrentSessionType;
                 List<ScoreboardEntry> scoreLines;
@@ -3418,7 +3160,7 @@ namespace AmteScripts.Managers
                 else if (viewer.IsInPvP)
                 {
                     var myScores = _soloScores.GetValueOrDefault(viewer.InternalID);
-                    var ourScores = Enumerable.Empty<PlayerScore>();
+                    var ourScores = Enumerable.Empty<PvPScore>();
                     bool hasGroup = false;
                     if (CurrentSession.GroupCompoOption == 2 || CurrentSession.GroupCompoOption == 3)
                     {
@@ -3451,7 +3193,7 @@ namespace AmteScripts.Managers
                             lines.Add("");
                             lines.Add($"Current Scoreboard for {viewer.Name}:");
                             if (myScores == null)
-                                myScores = new PlayerScore() { PlayerID = viewer.InternalID, PlayerName = viewer.Name };
+                                myScores = new PvPScore() { PlayerID = viewer.InternalID, PlayerName = viewer.Name };
                             AddLines(lines, MakeScoreboardEntry(myScores), language, shortStats);
                         }
                     }

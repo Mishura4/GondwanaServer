@@ -7,6 +7,7 @@ using DOL.Database;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System.Collections.Immutable;
 
 namespace DOL.GS
 {
@@ -43,6 +44,17 @@ namespace DOL.GS
         // ============ Chest Data ============
 
         private List<DepositedItem> m_depositedItems = new();
+
+        public IReadOnlyList<DepositedItem> DepositedItems
+        {
+            get
+            {
+                lock (m_depositedItems)
+                {
+                    return DepositedItems.ToImmutableList();
+                }
+            }
+        }
         
         public PVPChest()
         {
@@ -267,8 +279,6 @@ namespace DOL.GS
             {
                 totalPoints += di.Count * di.PointsPerItem;
             }
-
-            score.Treasure_BroughtTreasuresPoints = totalPoints;
 
             sbPlayer.Out.SendMessage($"[Chest Score] Your chest has {totalPoints} total treasure points.",
                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
