@@ -44,7 +44,7 @@ namespace DOL.GS
             m_dictionary = new Dictionary<TKey, TValue>(capacity);
         }
 
-        public ReaderWriterDictionary(IDictionary<TKey, TValue> collection)
+        public ReaderWriterDictionary(IEnumerable<KeyValuePair<TKey, TValue>> collection)
         {
             m_dictionary = new Dictionary<TKey, TValue>(collection);
         }
@@ -132,6 +132,22 @@ namespace DOL.GS
             try
             {
                 m_dictionary.Add(item);
+            }
+            finally
+            {
+                m_rwLock.ExitWriteLock();
+            }
+        }
+
+        public void Add(IEnumerable<KeyValuePair<TKey, TValue>> items)
+        {
+            m_rwLock.EnterWriteLock();
+            try
+            {
+                foreach (var kv in items)
+                {
+                    m_dictionary.Add(kv);
+                }
             }
             finally
             {
@@ -501,6 +517,32 @@ namespace DOL.GS
             finally
             {
                 m_rwLock.ExitWriteLock();
+            }
+        }
+
+        public void HoldWhile(Action<IReadOnlyDictionary<TKey, TValue>> method)
+        {
+            m_rwLock.EnterReadLock();
+            try
+            {
+                method(m_dictionary.AsReadOnly());
+            }
+            finally
+            {
+                m_rwLock.ExitReadLock();
+            }
+        }
+
+        public N HoldWhile<N>(Func<IReadOnlyDictionary<TKey, TValue>, N> func)
+        {
+            m_rwLock.EnterReadLock();
+            try
+            {
+                return func(m_dictionary.AsReadOnly());
+            }
+            finally
+            {
+                m_rwLock.ExitReadLock();
             }
         }
     }

@@ -74,7 +74,7 @@ namespace DOL.GS
             return item;
         }
 
-        public Guild? OwnerGuild
+        public virtual Guild? OwnerGuild
         {
             get;
             set;

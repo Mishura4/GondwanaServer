@@ -23,44 +23,6 @@ namespace DOL.GS
     /// </summary>
     public class PVPChest : GamePvPStaticItem
     {
-        /// <summary>
-        /// For storing the item deposits in this chest.
-        /// </summary>
-        public record DepositedItem(string Id_nb, int PointsPerItem)
-        {
-            public int Count { get; set; } = 0;
-
-            public string ItemName { get; set; } = string.Empty;
-            
-            public DepositedItem(PvPTreasure treasure) : this(treasure.Id_nb!, treasure.TreasurePoints)
-            {
-                ItemName = treasure.Name!;
-                Count = treasure.Count;
-            }
-
-            public bool IsSameItem(DepositedItem item)
-            {
-                return Equals(Id_nb, item.Id_nb) && Equals(ItemName, item.ItemName) && Equals(PointsPerItem, item.PointsPerItem);
-            }
-
-            public void Merge(DepositedItem item)
-            {
-                Debug.Assert(IsSameItem(item));
-
-                this.Count += item.Count;
-                if (string.IsNullOrEmpty(ItemName))
-                    ItemName = item.ItemName;
-                item.Count = 0;
-            }
-
-            public DepositedItem Split(int count = 1)
-            {
-                count = Math.Max(this.Count, count);
-                this.Count -= count;
-                return this with { Count = count };
-            }
-        }
-
         // ============ Ownership Info ============
 
         /// <summary>
@@ -74,23 +36,64 @@ namespace DOL.GS
             set;
         }
 
+        /// <inheritdoc />
+        public override GameLiving? Owner
+        {
+            get => base.Owner;
+            set
+            {
+                if (value != null)
+                {
+                    base.Owner = value;
+                    if (PvpManager.Instance is { IsOpen: true, CurrentSessionType: PvpManager.eSessionTypes.TreasureHunt } && value is GamePlayer owner)
+                    {
+                        Score = PvpManager.Instance.EnsureSoloScore(owner);
+                    }
+                }
+                else
+                {
+                    base.Owner = null!;
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public override Guild? OwnerGuild
+        {
+            get => base.OwnerGuild;
+            set
+            {
+                if (value != null)
+                {
+                    base.OwnerGuild = value;
+                    if (PvpManager.Instance is { IsOpen: true, CurrentSessionType: PvpManager.eSessionTypes.TreasureHunt })
+                    {
+                        Score = PvpManager.Instance.EnsureGroupScore(value);
+                    }
+                }
+                else
+                {
+                    base.OwnerGuild = null;
+                }
+            }
+        }
+
         // ============ Chest Data ============
 
-        private PvPScore? m_score = null;
+        private PvPScore? Score { get; set; }
+        private ReaderWriterDictionary<string, PvPScore.Item>? ScoreItems => Score?.Treasure_Items;
 
-        private readonly ReaderWriterDictionary<string, DepositedItem> m_depositedItems = new();
-
-        public IReadOnlyDictionary<string, DepositedItem> DepositedItems
+        public IReadOnlyDictionary<string, PvPScore.Item> DepositedItems
         {
             get
             {
-                return m_depositedItems.ToImmutableDictionary();
+                return Score?.Treasure_Items.ToImmutableDictionary() ?? ImmutableDictionary<string, PvPScore.Item>.Empty;
             }
         }
         
         public PVPChest(PvPScore score)
         {
-            m_score = score;
+            Score = score;
             Name = "PvP Chest";
         }
 
@@ -123,7 +126,7 @@ namespace DOL.GS
         {
             if (player == null) return false;
 
-            if (m_score is null)
+            if (Score is null)
             {
                 player.Out.SendMessage("This chest cannot be deposited into!",
                                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -177,18 +180,21 @@ namespace DOL.GS
             }
 
             int depositedCount = 0;
-
-            // For each item in backpack, if it's a PvPTreasure, remove & deposit
-            for (eInventorySlot slot = eInventorySlot.FirstBackpack;
-                 slot <= eInventorySlot.LastBackpack; slot++)
+            // Recheck these in case the session closed inbetween
+            if (ScoreItems is not null && PvpManager.Instance is { IsOpen: true, CurrentSessionType: PvpManager.eSessionTypes.TreasureHunt })
             {
-                InventoryItem item = player.Inventory.GetItem(slot);
-                if (item is PvPTreasure treasure)
+                // For each item in backpack, if it's a PvPTreasure, remove & deposit
+                for (eInventorySlot slot = eInventorySlot.FirstBackpack;
+                     slot <= eInventorySlot.LastBackpack; slot++)
                 {
-                    if (player.Inventory.RemoveItem(item))
+                    InventoryItem item = player.Inventory.GetItem(slot);
+                    if (item is PvPTreasure treasure)
                     {
-                        DepositItem(player, treasure);
-                        depositedCount += treasure.Count;
+                        if (player.Inventory.RemoveItem(item))
+                        {
+                            DepositItem(player, treasure);
+                            depositedCount += treasure.Count;
+                        }
                     }
                 }
             }
@@ -210,28 +216,30 @@ namespace DOL.GS
         #region Internal deposit data + scoreboard
         private int DepositItem(GamePlayer source, PvPTreasure treasure)
         {
-            var toAdd = new DepositedItem(treasure);
-            var (added, item) = m_depositedItems.AddIfNotExists(treasure.Id_nb, toAdd);
+            Debug.Assert(ScoreItems != null);
+            var toAdd = new PvPScore.Item(treasure);
+            var (added, item) = ScoreItems.AddIfNotExists(treasure.Id_nb, toAdd);
             if (!added)
             {
                 item.Merge(toAdd);
             }
 
-            if (m_score is null)
+            if (Score is null)
                 return 0;
 
             var points = item.Count + item.PointsPerItem;
-            m_score.Treasure_BroughtTreasuresPoints += points;
-            if (m_score is PvPGroupScore groupScore)
+            Score.Treasure_BroughtTreasuresPoints += points;
+            if (Score is PvPGroupScore groupScore)
             {
                 groupScore.GetOrCreateScore(source).Treasure_BroughtTreasuresPoints += points;
             }
+            PvpManager.Instance.EnsureTotalScore(source).Treasure_BroughtTreasuresPoints += points;
             return points;
         }
 
         private void SendScore(GamePlayer? playerTo = null)
         {
-            if (m_score is null)
+            if (Score is null)
                 return;
             
             if (playerTo == null)
@@ -250,7 +258,7 @@ namespace DOL.GS
                 return;
             }
 
-            var points = Math.Max(0, m_score.Treasure_BroughtTreasuresPoints - m_score.Treasure_StolenTreasuresPoints);
+            var points = Math.Max(0, Score.Treasure_BroughtTreasuresPoints - Score.Treasure_StolenTreasuresPoints);
             playerTo.Out.SendMessage($"[Chest Score] Your chest has {points} total treasure points.",
                                      eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
@@ -261,14 +269,11 @@ namespace DOL.GS
         /// <summary>
         /// Removes one random item from the chest. If none remain, returns null.
         /// </summary>
-        public DepositedItem? StealRandomItem()
+        public PvPScore.Item? StealRandomItem()
         {
-            if (m_depositedItems.Count == 0)
-                return null;
-            
-            DepositedItem? stolen = null;
+            PvPScore.Item? stolen = null;
             var rnd = new Random();
-            m_depositedItems.FreezeWhile(items =>
+            ScoreItems?.FreezeWhile(items =>
             {
                 if (items.Count == 0)
                     return;
@@ -289,7 +294,7 @@ namespace DOL.GS
         /// to their .Treasure_StolenTreasuresPoints, then recalc.
         /// If chest is “unlocked,” it still uses the scoreboardOwner if in PvP.
         /// </summary>
-        public void OnTreasureStolen(GamePlayer stealer, DepositedItem? stolenData)
+        public void OnTreasureStolen(GamePlayer stealer, PvPScore.Item? stolenData)
         {
             // stolenData was returned by StealRandomItem() or some other logic
             if (stolenData is null)
@@ -305,13 +310,15 @@ namespace DOL.GS
             // only if we are in open session 3 and the chest is locked
             var pm = PvpManager.Instance;
             if (!pm.IsOpen || pm.CurrentSessionType is not PvpManager.eSessionTypes.TreasureHunt) return;
-            if (!Unlocked || m_score == null) return;
+            if (!Unlocked || Score == null) return;
 
             // The chest owner "loses" x points in .Treasure_StolenTreasuresPoints
             // We'll increment by stolenData.Count * stolenData.PointsPerItem
             // (which is typically 1 item * that item’s points).
 
-            m_score.Treasure_StolenTreasuresPoints += 3;
+            Score.Treasure_StolenTreasuresPoints += 3;
+            // TODO: For group scores, choose a random person to add to
+
             SendScore();
         }
 
@@ -327,7 +334,7 @@ namespace DOL.GS
         {
             var lines = new List<string>();
 
-            if (m_score is null)
+            if (Score is null)
             {
                 lines.Add("");
                 lines.Add("Chest has no scoreboard owner (unlocked).");
@@ -337,30 +344,37 @@ namespace DOL.GS
             {
                 lines.Add("");
                 if (!IsGroupChest)
-                    lines.Add("Owned by a single player: " + m_score?.PlayerName);
+                    lines.Add("Owned by a single player: " + Score?.PlayerName);
                 else
-                    lines.Add("Group chest. Leader: " + m_score?.PlayerName);
+                    lines.Add("Group chest. Leader: " + Score?.PlayerName);
                 lines.Add(Unlocked ? " - Locked" : " - Unlocked");
                 lines.Add("");
             }
 
-            lines.Add($"Total distinct item types inside: {m_depositedItems.Count}");
-            if (m_depositedItems.Count == 0)
+            bool? hasItems = ScoreItems?.HoldWhile(items =>
             {
-                lines.Add("  (Chest is empty)");
-            }
-            else
-            {
-                int i = 1;
-                foreach (var entry in m_depositedItems)
+                if (items.Count == 0)
+                    return false;
+                
+                lines.Add($"Total distinct item types inside: {items.Count}");
+                hasItems = true;
+                lines.Add("Items in chest:");
+                foreach (var entry in items)
                 {
+                    int i = 1;
                     var di = entry.Value;
                     var name = string.IsNullOrEmpty(di.ItemName) ? di.Id_nb : di.ItemName;
-                    lines.Add($"{i}. {name} [Id_nb={di.Id_nb}] x{di.Count}, {di.PointsPerItem} pts each");
-                    i++;
+                    lines.Add($"{i}.  {name} [Id_nb={di.Id_nb}] x{di.Count}, {di.PointsPerItem} pts each");
+                    ++i;
                 }
+                return true;
+            });
+            
+            if (hasItems is true)
+            {
+                lines.Add("Total distinct item types inside: 0");
+                lines.Add("Chest is empty.");
             }
-
             return lines;
         }
 

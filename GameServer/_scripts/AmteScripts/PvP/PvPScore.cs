@@ -1,11 +1,14 @@
 ﻿#nullable enable
 using DOL.GS;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using static AmteScripts.Managers.PvpManager;
@@ -62,6 +65,44 @@ namespace AmteScripts.PvP
         public int Flag_OwnershipPoints { get; set; }
 
         // --- For session type #3: Treasure Hunt ---
+        /// <summary>
+        /// For storing the item deposits in this chest.
+        /// </summary>
+        public record Item(string Id_nb, int PointsPerItem)
+        {
+            public int Count { get; set; } = 0;
+
+            public string ItemName { get; set; } = string.Empty;
+            
+            public Item(PvPTreasure treasure) : this(treasure.Id_nb!, treasure.TreasurePoints)
+            {
+                ItemName = treasure.Name!;
+                Count = treasure.Count;
+            }
+
+            public bool IsSameItem(Item item)
+            {
+                return Equals(Id_nb, item.Id_nb) && Equals(ItemName, item.ItemName) && Equals(PointsPerItem, item.PointsPerItem);
+            }
+
+            public void Merge(Item item)
+            {
+                Debug.Assert(IsSameItem(item));
+
+                this.Count += item.Count;
+                if (string.IsNullOrEmpty(ItemName))
+                    ItemName = item.ItemName;
+                item.Count = 0;
+            }
+
+            public Item Split(int count = 1)
+            {
+                count = Math.Max(this.Count, count);
+                this.Count -= count;
+                return this with { Count = count };
+            }
+        }
+
         [DefaultValue(0)]
         public int Treasure_SoloKills { get; set; }
         [DefaultValue(0)]
@@ -70,7 +111,10 @@ namespace AmteScripts.PvP
         public int Treasure_GroupKills { get; set; }
         [DefaultValue(0)]
         public int Treasure_GroupKillsPoints { get; set; }
-        [DefaultValue(0)]
+        
+        [IgnoreDataMember]
+        public ReaderWriterDictionary<string, Item> Treasure_Items { get; init; } = new();
+        
         public int Treasure_BroughtTreasuresPoints { get; set; }
         [DefaultValue(0)]
         public int Treasure_StolenTreasuresPoints { get; set; }
@@ -131,7 +175,33 @@ namespace AmteScripts.PvP
         [DefaultValue(0)]
         public int Boss_BossKillsPoints { get; set; }
 
-        public PvPScore Add(PvPScore rhs)
+        public virtual void TakeItems(PvPScore rhs, bool copy = false)
+        {
+            Treasure_BroughtTreasuresPoints += rhs.Treasure_BroughtTreasuresPoints;
+            Treasure_StolenTreasuresPoints += rhs.Treasure_StolenTreasuresPoints;
+                
+            List<KeyValuePair<string, PvPScore.Item>>? itemScore = null;
+            if (copy)
+            {
+                rhs.Treasure_Items.HoldWhile(items =>
+                {
+                    itemScore = new(items);
+                });
+            }
+            else
+            {
+                rhs.Treasure_Items.FreezeWhile(items =>
+                {
+                    rhs.Treasure_BroughtTreasuresPoints = 0;
+                    rhs.Treasure_StolenTreasuresPoints = 0;
+                    itemScore = new(items);
+                    items.Clear();
+                });
+            }
+            Treasure_Items.Add(itemScore!);
+        }
+
+        public virtual PvPScore Add(PvPScore rhs, bool transferItems = true, bool takeItems = true)
         {
             PvP_SoloKills += rhs.PvP_SoloKills;
             PvP_SoloKillsPoints += rhs.PvP_SoloKillsPoints;
@@ -150,8 +220,10 @@ namespace AmteScripts.PvP
             Treasure_SoloKillsPoints += rhs.Treasure_SoloKillsPoints;
             Treasure_GroupKills += rhs.Treasure_GroupKills;
             Treasure_GroupKillsPoints += rhs.Treasure_GroupKillsPoints;
-            Treasure_BroughtTreasuresPoints += rhs.Treasure_BroughtTreasuresPoints;
-            Treasure_StolenTreasuresPoints += rhs.Treasure_StolenTreasuresPoints;
+            if (transferItems)
+            {
+                TakeItems(rhs, !takeItems);
+            }
             Friends_SoloKills += rhs.Friends_SoloKills;
             Friends_SoloKillsPoints += rhs.Friends_SoloKillsPoints;
             Friends_GroupKills += rhs.Friends_GroupKills;
@@ -238,6 +310,9 @@ namespace AmteScripts.PvP
                 ';', properties
                     .Where(p =>
                     {
+                        if (p.GetCustomAttribute(typeof(IgnoreDataMemberAttribute)) != null)
+                            return false;
+                        
                         var filter = (DefaultValueAttribute?)p.GetCustomAttribute(typeof(DefaultValueAttribute));
                         var value = p.GetValue(this);
                         return filter == null || (filter.Value == null ? value != null : !filter.Value.Equals(value));
@@ -252,6 +327,10 @@ namespace AmteScripts.PvP
         public PvPGroupScore(Guild guild, IEnumerable<PvPScore> players) : this(guild)
         {
             Scores = new Dictionary<string, PvPScore>(players.Select(p => new KeyValuePair<string, PvPScore>(p.PlayerID, p)));
+            foreach (var s in Scores.Values)
+            {
+                Add(s);
+            }
         }
         
         public PvPGroupScore(Guild guild, IEnumerable<GamePlayer> players) : this(guild, players.Select(p => new PvPScore(p, false)))
@@ -274,6 +353,18 @@ namespace AmteScripts.PvP
                 Scores[playerId] = score;
             }
             return score!;
+        }
+
+        /// <inheritdoc />
+        public override PvPScore Add(PvPScore rhs, bool transferItems = true, bool takeItems = true)
+        {
+            base.Add(rhs, transferItems, takeItems);
+            if (!Equals(rhs.PlayerID, PlayerID))
+            {
+                var nested = GetOrCreateScore(rhs.PlayerID);
+                nested.Add(rhs, true, false); // we COPY the item data here; to be retrieved later when disbanding maybe
+            }
+            return this;
         }
 
         public int PlayerCount => Scores.Count;

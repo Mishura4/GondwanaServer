@@ -478,6 +478,12 @@ namespace AmteScripts.Managers
         private Guild CreateGuildForGroup(Group group)
         {
             var groupLeader = group.Leader;
+            if (groupLeader is null)
+            {
+                groupLeader.Out.SendMessage(LanguageMgr.GetTranslation(groupLeader.Client.Account.Language, "PvPManager.CannotCreatePvPGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return null;
+            }
+            
             var pvpGuild = CreateGuild(groupLeader);
             if (pvpGuild == null)
             {
@@ -488,8 +494,9 @@ namespace AmteScripts.Managers
             _allGuilds.Add(pvpGuild);
             _groupGuilds[group] = pvpGuild;
             _guildGroups[pvpGuild] = group;
-            _groupScores.Remove(pvpGuild); // Reset scores if any
-            
+            var groupScore = new PvPGroupScore(pvpGuild);
+            _groupScores[pvpGuild] = groupScore;
+
             if (_soloAreas.Remove(groupLeader.InternalID, out AbstractArea leaderArea))
             {
                 _groupAreas.Swap(pvpGuild, leaderArea);
@@ -507,6 +514,14 @@ namespace AmteScripts.Managers
 
                 member.IsInPvP = true;
                 member.SaveIntoDatabase();
+                
+                // Merge/transfer scores where it makes sense
+                if (_soloScores.TryGetValue(member.InternalID!, out PvPScore value))
+                {
+                    groupScore.GetOrCreateScore(member).TakeItems(value, true); // COPY here, for contribution
+                    groupScore.TakeItems(value); // TAKE here, for the chest
+                }
+                
                 // Remove all solo areas - we've already moved the leader's area & spawn into group storage, so they won't be found
                 _cleanupArea(member);
                 _freeSpawn(member);
@@ -1010,7 +1025,7 @@ namespace AmteScripts.Managers
                 var playerId = entry.PlayerID;
                 var groupScore = EnsureGroupScore(guild);
                 groupScore.Scores![playerId] = entry;
-                groupScore.Totals.Add(entry);
+                groupScore.Add(entry);
             }
         }
 
