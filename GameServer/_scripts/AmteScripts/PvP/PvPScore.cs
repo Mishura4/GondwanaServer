@@ -261,13 +261,17 @@ namespace AmteScripts.PvP
         public Dictionary<string, PvPScore> Scores { get; init; } = new();
 
         public PvPScore Totals => this;
-        
         public PvPScore GetOrCreateScore(GamePlayer player)
         {
-            if (!Scores.TryGetValue(player.InternalID, out var score))
+            return GetOrCreateScore(player.InternalID!);
+        }
+        
+        public PvPScore GetOrCreateScore(string playerId)
+        {
+            if (!Scores.TryGetValue(playerId, out var score))
             {
-                score = new PvPScore(player, false);
-                Scores[player.InternalID] = score;
+                score = new PvPScore(string.Empty, playerId, false);
+                Scores[playerId] = score;
             }
             return score!;
         }

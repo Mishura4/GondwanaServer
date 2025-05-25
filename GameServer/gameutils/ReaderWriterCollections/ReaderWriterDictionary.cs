@@ -57,20 +57,15 @@ namespace DOL.GS
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             m_rwLock.EnterReadLock();
-            IEnumerable<KeyValuePair<TKey, TValue>> copy = null;
             try
             {
-                copy = m_dictionary.ToArray();
+                foreach (var kv in m_dictionary)
+                    yield return kv;
             }
             finally
             {
                 m_rwLock.ExitReadLock();
             }
-
-            if (copy != null)
-                return copy.GetEnumerator();
-
-            return default(IEnumerator<KeyValuePair<TKey, TValue>>);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
