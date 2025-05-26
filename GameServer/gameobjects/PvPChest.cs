@@ -227,7 +227,7 @@ namespace DOL.GS
             if (Score is null)
                 return 0;
 
-            var points = item.Count + item.PointsPerItem;
+            var points = item.Count * item.PointsPerItem;
             Score.Treasure_BroughtTreasuresPoints += points;
             if (Score is PvPGroupScore groupScore)
             {
@@ -370,7 +370,7 @@ namespace DOL.GS
                 return true;
             });
             
-            if (hasItems is true)
+            if (hasItems is not true)
             {
                 lines.Add("Total distinct item types inside: 0");
                 lines.Add("Chest is empty.");
