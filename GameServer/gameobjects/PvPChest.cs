@@ -80,7 +80,7 @@ namespace DOL.GS
 
         // ============ Chest Data ============
 
-        private PvPScore? Score { get; set; }
+        public PvPScore? Score { get; set; }
         private ReaderWriterDictionary<string, PvPScore.Item>? ScoreItems => Score?.Treasure_Items;
 
         public IReadOnlyDictionary<string, PvPScore.Item> DepositedItems
@@ -347,7 +347,7 @@ namespace DOL.GS
                     lines.Add("Owned by a single player: " + Score?.PlayerName);
                 else
                     lines.Add("Group chest. Leader: " + Score?.PlayerName);
-                lines.Add(Unlocked ? " - Locked" : " - Unlocked");
+                lines.Add(Unlocked ? " - Unlocked" : " - Locked");
                 lines.Add("");
             }
 
@@ -356,15 +356,17 @@ namespace DOL.GS
                 if (items.Count == 0)
                     return false;
                 
+                Debug.Assert(Score != null, "ScoreItems != null means Score != null");
+                lines.Add($"Total points: {Score.Treasure_BroughtTreasuresPoints - Score.Treasure_StolenTreasuresPoints} ({Score.Treasure_BroughtTreasuresPoints} brought, {Score.Treasure_StolenTreasuresPoints} stolen)");
                 lines.Add($"Total distinct item types inside: {items.Count}");
                 hasItems = true;
                 lines.Add("Items in chest:");
+                int i = 1;
                 foreach (var entry in items)
                 {
-                    int i = 1;
                     var di = entry.Value;
                     var name = string.IsNullOrEmpty(di.ItemName) ? di.Id_nb : di.ItemName;
-                    lines.Add($"{i}.  {name} [Id_nb={di.Id_nb}] x{di.Count}, {di.PointsPerItem} pts each");
+                    lines.Add($"{i}.  {name} [Id_nb={di.Id_nb}] {di.PointsPerItem}pts x{di.Count} = {di.PointsPerItem * di.Count} total");
                     ++i;
                 }
                 return true;
