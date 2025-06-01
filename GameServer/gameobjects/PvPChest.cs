@@ -91,7 +91,7 @@ namespace DOL.GS
             }
         }
         
-        public PVPChest(PvPScore score)
+        public PVPChest(PvPScore? score = null)
         {
             Score = score;
             Name = "PvP Chest";
