@@ -1,4 +1,5 @@
-﻿using AmteScripts.Managers;
+﻿#nullable enable
+using AmteScripts.Managers;
 using DOL.GS;
 using System;
 using System.Collections.Generic;
@@ -10,32 +11,68 @@ namespace AmteScripts.PvP.CTF
 {
     public class GamePvPStaticItem : GameStaticItem
     {
+        private void SetOwner(GameLiving? newOwner, bool updateEmblem = true)
+        {
+            var prevOwner = base.Owner;
+            if (prevOwner != null)
+            {
+                RemoveOwner(prevOwner);
+            }
+            if (newOwner != null)
+            {
+                base.Owner = newOwner;
+                AddOwner(newOwner);
+            }
+            
+            if (updateEmblem)
+            {
+                if (newOwner is GamePlayer player)
+                {
+                    Emblem = PvpManager.Instance.GetEmblemForPlayer(player);
+                }
+                else
+                {
+                    Emblem = 0;
+                }
+            }
+                
+        }
+        private void SetOwnerGuild(Guild? newOwner, bool updateEmblem = true)
+        {
+            if (newOwner != null)
+            {
+                SetOwner(null, false);
+                base.OwnerGuild = newOwner;
+            }
+            
+            if (updateEmblem)
+            {
+                Emblem = newOwner?.Emblem ?? 0;
+            }
+                
+        }
+        
         /// <inheritdoc />
-        public override GameLiving Owner
+        public override GameLiving? Owner
         {
             get => base.Owner;
             set
             {
-                var owner = base.Owner;
-                if (owner != null)
-                {
-                    RemoveOwner(owner);
-                }
-                owner = value;
-                if (value != null)
-                {
-                    base.Owner = value;
-                    AddOwner(owner);
-                    if (value is GamePlayer player)
-                    {
-                        OwnerGuild = player.Guild;
-                        Emblem = OwnerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
-                    }
-                }
+                SetOwner(value, true);
             }
         }
 
-        public GamePlayer OwnerPlayer
+        /// <inheritdoc />
+        public override Guild? OwnerGuild
+        {
+            get => base.OwnerGuild;
+            set
+            {
+                SetOwnerGuild(value, true);
+            }
+        }
+
+        public GamePlayer? OwnerPlayer
         {
             get => Owner as GamePlayer;
             set => Owner = value;
@@ -43,7 +80,14 @@ namespace AmteScripts.PvP.CTF
 
         public virtual void SetOwnership(GamePlayer? player)
         {
-            OwnerPlayer = player!;
+            if (player?.Guild != null)
+            {
+                SetOwnerGuild(player.Guild);
+            }
+            else
+            {
+                SetOwner(player);
+            }
         }
     }
 }

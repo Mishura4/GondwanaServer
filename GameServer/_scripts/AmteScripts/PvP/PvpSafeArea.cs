@@ -1,4 +1,5 @@
-﻿using AmteScripts.Managers;
+﻿#nullable enable
+using AmteScripts.Managers;
 using AmteScripts.PvP.CTF;
 using DOL.GS;
 using DOL.GS.Geometry;
@@ -13,8 +14,38 @@ namespace AmteScripts.Areas
     /// </summary>
     public class PvpTempArea : Area.Circle
     {
-        public GamePlayer OwnerPlayer { get; set; }
-        public Guild OwnerGuild { get; set; }
+        private GamePlayer? _ownerPlayer;
+        private Guild? _ownerGuild;
+
+        public GamePlayer? OwnerPlayer
+        {
+            get => _ownerPlayer;
+            set
+            {
+                _ownerPlayer = value;
+                m_Description = GetSoloName(value);
+                foreach (var item in _ownedStaticItems)
+                {
+                    item.OwnerGuild = null;
+                    item.Owner = value;
+                }
+            }
+        }
+
+        public Guild? OwnerGuild
+        {
+            get => _ownerGuild;
+            set
+            {
+                _ownerGuild = value;
+                m_Description = GetGuildName(value);
+                foreach (var item in _ownedStaticItems)
+                {
+                    item.Owner = null;
+                    item.OwnerGuild = value;
+                }
+            }
+        }
 
         public int X => Coordinate.X;
         public int Y => Coordinate.Y;
@@ -23,7 +54,12 @@ namespace AmteScripts.Areas
         private readonly List<GameStaticItem> _ownedStaticItems = new List<GameStaticItem>();
         private readonly Dictionary<string, int> _familyCounts = new Dictionary<string, int>();
 
-        private static string GetDefaultName(GamePlayer owner) => owner.Guild == null ? owner.Name + "'s Outpost" : owner.Name + "'s Group Outpost";
+        private static string GetGuildName(Guild? owner) => owner == null ? "Outpost" : owner.Name + "'s Group Outpost";
+
+        private static string GetSoloName(GamePlayer? owner) => owner == null ? "Outpost" : owner.Name + "'s Outpost";
+
+        private static string GetDefaultName(GamePlayer? owner) => owner?.Guild != null ? GetGuildName(owner.Guild) : GetSoloName(owner);
+        
         public PvpTempArea(GamePlayer owner, int x, int y, int z, int radius, bool safeArea)
             : base(GetDefaultName(owner), x, y, z, radius)
         {
@@ -50,19 +86,13 @@ namespace AmteScripts.Areas
 
         public void SetOwnership(GamePlayer player)
         {
-            m_Description = GetDefaultName(player);
-            OwnerGuild = player.Guild;
-            var previousOwner = OwnerPlayer;
-            OwnerPlayer = player;
-            int emblem = OwnerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
-            foreach (var item in _ownedStaticItems)
+            if (player?.Guild != null)
             {
-                item.Emblem = emblem;
-                item.BroadcastUpdate();
-                if (item is GamePvPStaticItem pvpItem)
-                    pvpItem.SetOwnership(player);
-                if (previousOwner != null)
-                    item.RemoveOwner(OwnerPlayer);
+                OwnerGuild = player.Guild;
+            }
+            else
+            {
+                OwnerPlayer = player;
             }
         }
 

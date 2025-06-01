@@ -366,7 +366,7 @@ namespace DOL.GS
                 {
                     var di = entry.Value;
                     var name = string.IsNullOrEmpty(di.ItemName) ? di.Id_nb : di.ItemName;
-                    lines.Add($"{i}.  {name} [Id_nb={di.Id_nb}] {di.PointsPerItem}pts x{di.Count} = {di.PointsPerItem * di.Count} total");
+                    lines.Add($"{i}. {di.Count}x ({name} {di.PointsPerItem}pts [Id_nb={di.Id_nb}]) = {di.PointsPerItem * di.Count}pts total");
                     ++i;
                 }
                 return true;

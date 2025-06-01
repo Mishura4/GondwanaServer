@@ -564,6 +564,19 @@ namespace AmteScripts.Managers
                     // Remove player solo area
                     _cleanupArea(player);
                 }
+
+                if (!_groupScores.TryGetValue(guild, out PvPGroupScore groupScore))
+                {
+                    groupScore = new PvPGroupScore(guild);
+                    _groupScores[guild] = groupScore;
+                }
+                
+                // Merge/transfer scores where it makes sense
+                if (_soloScores.TryGetValue(player.InternalID!, out PvPScore value))
+                {
+                    groupScore!.GetOrCreateScore(player).TakeItems(value, true); // COPY here, for contribution
+                    groupScore.TakeItems(value); // TAKE here, for the chest
+                }
             }
             else
             {
