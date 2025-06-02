@@ -197,6 +197,7 @@ namespace DOL.GS
                         }
                     }
                 }
+                PvpManager.Instance.SaveScores();
             }
 
             if (depositedCount > 0)
@@ -320,6 +321,7 @@ namespace DOL.GS
             // TODO: For group scores, choose a random person to add to
 
             SendScore();
+            PvpManager.Instance.SaveScores();
         }
 
         #endregion

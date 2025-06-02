@@ -301,7 +301,7 @@ namespace AmteScripts.Managers
                 Instance._saveTimer = new RegionTimer(region.TimeManager);
                 Instance._saveTimer.Callback = _ =>
                 {
-                    Instance.SaveScore();
+                    Instance._SaveScore();
                     return 0;
                 };
             }
@@ -397,8 +397,7 @@ namespace AmteScripts.Managers
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
                 AddToGuildGroup(guild, player);
-                if (!_saveTimer.IsAlive)
-                    _saveTimer.Start(_saveDelay);
+                SaveScores();
             }
         }
 
@@ -410,8 +409,7 @@ namespace AmteScripts.Managers
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
                 RemoveFromGuildGroup(guild, player);
-                if (!_saveTimer.IsAlive)
-                    _saveTimer.Start(_saveDelay);
+                SaveScores();
             }
         }
 
@@ -425,8 +423,7 @@ namespace AmteScripts.Managers
                 }
                 
                 AddToGroupGuild(group, player);
-                if (!_saveTimer.IsAlive)
-                    _saveTimer.Start(_saveDelay);
+                SaveScores();
             }
         }
 
@@ -440,9 +437,14 @@ namespace AmteScripts.Managers
                 }
                 
                 RemoveFromGroupGuild(group, player);
-                if (!_saveTimer.IsAlive)
-                    _saveTimer.Start(_saveDelay);
+                SaveScores();
             }
+        }
+
+        public void SaveScores()
+        {
+            if (IsOpen && !_saveTimer.IsAlive)
+                _saveTimer.Start(_saveDelay);
         }
 
         private Guild CreateGuild(string guildName, GamePlayer leader = null)
@@ -982,34 +984,6 @@ namespace AmteScripts.Managers
 
         #region Open/Close
 
-        [return: NotNull]
-        private static PvPScore ParsePlayer(IEnumerable<string> parameters, bool isSolo)
-        {
-            PvPScore score = new PvPScore(isSolo);
-            foreach (var playerScoreInfo in parameters)
-            {
-                var playerScore = playerScoreInfo.Split('=');
-                var playerScoreKey = playerScore[0];
-
-                PropertyInfo p = typeof(PvPScore).GetProperty(playerScoreKey);
-                if (p == null)
-                {
-                    log.Warn($"PvP score \"{playerScoreKey}\" with value \"{playerScore[1]}\" of player {score.PlayerID} is unknown");
-                    continue;
-                }
-
-                try
-                {
-                    p.SetValue(score, Convert.ChangeType(playerScore[1], p.PropertyType));
-                }
-                catch (Exception ex)
-                {
-                    log.Warn($"Cannot set PvP score \"{playerScoreKey}\" to value \"{playerScore[1]}\": {ex}");
-                }
-            }
-            return score; 
-        }
-
         private void ParseGuildEntry(IEnumerator<string> lines, string[] parameters)
         {
             // g;Miuna's guild
@@ -1030,13 +1004,14 @@ namespace AmteScripts.Managers
                 return;
             }
             _allGuilds.Add(guild);
+            var groupScore = EnsureGroupScore(guild);
+            groupScore.Add(PvPScore.Parse(parameters.Skip(2), false));
             while (lines.MoveNext() && !string.IsNullOrEmpty(lines.Current))
             {
                 var data = lines.Current.Split(';');
                 
-                var entry = ParsePlayer(data, false);
+                var entry = PvPScore.Parse(data, false);
                 var playerId = entry.PlayerID;
-                var groupScore = EnsureGroupScore(guild);
                 groupScore.Scores![playerId] = entry;
                 groupScore.Add(entry);
             }
@@ -1074,7 +1049,7 @@ namespace AmteScripts.Managers
                 {
                     try
                     {
-                        sessionID = ParseScores();
+                        sessionID = LoadScores();
                     }
                     catch (FileNotFoundException)
                     {
@@ -1200,7 +1175,7 @@ namespace AmteScripts.Managers
             return true;
         }
         
-        private string ParseScores()
+        private string LoadScores()
         {
             using var lines = File.ReadLines("temp/PvPScore.dat").GetEnumerator();
                     
@@ -1229,7 +1204,7 @@ namespace AmteScripts.Managers
                     case "s":
                         {
                             // solo scores
-                            var playerScore = ParsePlayer(parameters.Skip(1), true);
+                            var playerScore = PvPScore.Parse(parameters.Skip(1), true);
                             if (!string.IsNullOrEmpty(playerScore.PlayerID))
                                 _soloScores[playerScore.PlayerID] = playerScore;
                         }
@@ -1238,7 +1213,7 @@ namespace AmteScripts.Managers
                     case "ps":
                         {
                             // total scores
-                            var playerScore = ParsePlayer(parameters.Skip(1), false);
+                            var playerScore = PvPScore.Parse(parameters.Skip(1), false);
                             if (!string.IsNullOrEmpty(playerScore.PlayerID))
                                 _totalScores[playerScore.PlayerID] = playerScore;
                         }
@@ -1359,38 +1334,49 @@ namespace AmteScripts.Managers
             }
         }
         
-        private void SaveScore()
+        private void _SaveScore()
         {
+            Directory.CreateDirectory("temp");
+
+            Dictionary<Guild, PvPGroupScore> groupScores;
+            Dictionary<string, PvPScore> playerScores;
+            Dictionary<string, PvPScore> totalScores;
+            bool forced;
+
             lock (_sessionLock)
             {
                 if (!IsOpen)
                     return;
-                
-                if (!Directory.Exists("temp"))
-                    Directory.CreateDirectory("temp");
 
-                var options = new FileStreamOptions();
-                options.Mode = FileMode.Create;
-                using StreamWriter file = File.CreateText("temp/PvPScore.dat");
-                file.WriteLine($"{CurrentSession.SessionID};{_isForcedOpen}");
+                groupScores = new(_groupScores.Select(gs => new KeyValuePair<Guild, PvPGroupScore>(gs.Key, new PvPGroupScore(gs.Value))));
+                playerScores = new(_soloScores.Select(kv => new KeyValuePair<string, PvPScore>(kv.Key, kv.Value.Copy())));
+                totalScores = new(_totalScores.Select(kv => new KeyValuePair<string, PvPScore>(kv.Key, kv.Value.Copy())));
+                forced = _isForcedOpen;
+            }
+
+            var options = new FileStreamOptions();
+            options.Mode = FileMode.Create;
+            using StreamWriter file = File.CreateText("temp/PvPScore.dat");
+            file.WriteLine($"{CurrentSession.SessionID};{forced}");
+            file.WriteLine();
+            foreach (var (guild, score) in groupScores)
+            {
+                file.Write($"g;{guild.Name};");
+                file.Write(score.Serialize());
                 file.WriteLine();
-                foreach (var (guild, score) in _groupScores)
+                foreach (var groupEntry in score.Scores)
                 {
-                    file.WriteLine($"g;{guild.Name}");
-                    foreach (var groupEntry in score.Scores)
-                    {
-                        file.WriteLine(groupEntry.Value.Serialize());
-                    }
-                    file.WriteLine();
+                    file.WriteLine(groupEntry.Value.Serialize());
                 }
-                foreach (var (player, score) in _soloScores)
-                {
-                    file.WriteLine("s;" + score.Serialize());
-                }
-                foreach (var (player, score) in _totalScores)
-                {
-                    file.WriteLine("ps;" + score.Serialize());
-                }
+                file.WriteLine();
+            }
+            foreach (var (player, score) in playerScores)
+            {
+                file.WriteLine("s;" + score.Serialize());
+            }
+            foreach (var (player, score) in totalScores)
+            {
+                file.WriteLine("ps;" + score.Serialize());
             }
         }
 
@@ -1543,11 +1529,8 @@ namespace AmteScripts.Managers
                 default:
                     break;
             }
-
-            if (!_saveTimer.IsAlive)
-            {
-                _saveTimer.Start(_saveDelay);
-            }
+            
+            SaveScores();
         }
 
         private bool IsSolo(GamePlayer killer)
@@ -1827,11 +1810,7 @@ namespace AmteScripts.Managers
             }
             player.Bind(true);
             player.SaveIntoDatabase();
-
-            if (!_saveTimer.IsAlive)
-            {
-                _saveTimer.Start(_saveDelay);
-            }
+            SaveScores();
 
             return true;
         }
@@ -1861,11 +1840,7 @@ namespace AmteScripts.Managers
                 _cleanupGroup(group, false);
                 return false;
             }
-
-            if (!_saveTimer.IsAlive)
-            {
-                _saveTimer.Start(_saveDelay);
-            }
+            SaveScores();
             return true;
         }
 
@@ -1946,11 +1921,7 @@ namespace AmteScripts.Managers
                     _freeSpawn(pvpGuild);
                 }
             }
-
-            if (!_saveTimer.IsAlive)
-            {
-                _saveTimer.Start(_saveDelay);
-            }
+            SaveScores();
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPManager.LeftPvP"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
@@ -2383,11 +2354,7 @@ namespace AmteScripts.Managers
                     _cleanupGroup(newGroup, false);
                     return;
                 }
-
-                if (!_saveTimer.IsAlive)
-                {
-                    _saveTimer.Start(_saveDelay);
-                }
+                SaveScores();
             }
         }
 

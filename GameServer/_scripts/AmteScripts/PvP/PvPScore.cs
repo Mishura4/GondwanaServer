@@ -1,12 +1,15 @@
 ﻿#nullable enable
 using DOL.GS;
+using log4net;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -17,6 +20,8 @@ namespace AmteScripts.PvP
 {
     public record PvPScore(bool IsSoloScore)
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+        
         public PvPScore(string playerName, string playerID, bool isSoloScore) : this(isSoloScore)
         {
             PlayerName = playerName;
@@ -26,11 +31,24 @@ namespace AmteScripts.PvP
         public PvPScore(GamePlayer player, bool isSoloScore) : this(player.Name!, player.InternalID!, isSoloScore)
         {
         }
-        
+
         public PvPScore(Guild guild) : this(guild.Name!, guild.GuildID!, false)
         {
         }
-        
+
+        protected IEnumerable<KeyValuePair<string, Item>> CopyItems(PvPScore other)
+        {
+            return Treasure_Items.Select(kv => new KeyValuePair<string, Item>(kv.Key, kv.Value with { }));
+        }
+
+        public PvPScore Copy()
+        {
+            return this with
+            {
+                Treasure_Items = new(CopyItems(this))
+            };
+        }
+
         public string PlayerName { get; set; }
         public string PlayerID { get; set; }
 
@@ -111,10 +129,26 @@ namespace AmteScripts.PvP
         public int Treasure_GroupKills { get; set; }
         [DefaultValue(0)]
         public int Treasure_GroupKillsPoints { get; set; }
-        
+
         [IgnoreDataMember]
         public ReaderWriterDictionary<string, Item> Treasure_Items { get; init; } = new();
-        
+
+        public IEnumerable<Item> Treasure_ItemsSerializer
+        {
+            get => Treasure_Items.Values;
+            set
+            {
+                Treasure_Items.FreezeWhile((dict) =>
+                {
+                    dict.Clear();
+                    foreach (var i in value)
+                    {
+                        dict.Add(i.Id_nb, i);
+                    }
+                });
+            }
+        }
+
         public int Treasure_BroughtTreasuresPoints { get; set; }
         [DefaultValue(0)]
         public int Treasure_StolenTreasuresPoints { get; set; }
@@ -302,23 +336,95 @@ namespace AmteScripts.PvP
             }
         }
 
+        private string Serialize(IEnumerable<Object> list)
+        {
+            var str = string.Join(',', list.Select(o => Serialize(o)));
+            return string.IsNullOrEmpty(str) ? string.Empty : str;
+        }
+
+        private string Serialize(object? obj)
+        {
+            return obj switch
+            {
+                string s => s,
+                IEnumerable enumerable => Serialize(enumerable.Cast<Object>()),
+                Item item => $"{item.Count}:{item.PointsPerItem}:{item.Id_nb}",
+                _ => Convert.ToString(obj) ?? string.Empty
+            };
+        }
+
         public string Serialize()
         {
+            // TODO: Take a StreamWriter as parameter and write directly
             var playerScoreType = typeof(PvPScore);
             var properties = playerScoreType.GetProperties();
             return string.Join(
                 ';', properties
-                    .Where(p =>
+                    .Where(p => p.GetCustomAttribute(typeof(IgnoreDataMemberAttribute)) == null)
+                    .Select(p =>
                     {
-                        if (p.GetCustomAttribute(typeof(IgnoreDataMemberAttribute)) != null)
-                            return false;
+                        object? value = p.GetValue(this);
+
+                        if (value == null || Equals(p.GetCustomAttribute<DefaultValueAttribute>()?.Value, value))
+                            return string.Empty;
                         
-                        var filter = (DefaultValueAttribute?)p.GetCustomAttribute(typeof(DefaultValueAttribute));
-                        var value = p.GetValue(this);
-                        return filter == null || (filter.Value == null ? value != null : !filter.Value.Equals(value));
+                        var str = Serialize(value);
+                        if (string.IsNullOrEmpty(str))
+                            return string.Empty;
+                        
+                        return p.Name + '=' + str;
                     })
-                    .Select(p => p.Name + "=" + p.GetValue(this))
+                    .Where(s => !string.IsNullOrEmpty(s))
             );
+        }
+
+        private static IEnumerable<Item> ParseItems(string str)
+        {
+            foreach (var itemStr in str.Split(','))
+            {
+                var values = itemStr.Split(':');
+                yield return new Item(values[2], int.Parse(values[1])) { Count = int.Parse(values[0]) };
+            }
+        }
+
+        private static object Parse(PropertyInfo prop, string str)
+        {
+            var type = prop.PropertyType;
+            if (prop.Name is nameof(Treasure_ItemsSerializer))
+            {
+                return ParseItems(str);
+            }
+            else
+            {
+                return Convert.ChangeType(str, type);
+            }
+        }
+
+        public static PvPScore Parse(IEnumerable<string> parameters, bool isSolo)
+        {
+            PvPScore score = new PvPScore(isSolo);
+            foreach (var playerScoreInfo in parameters)
+            {
+                var playerScore = playerScoreInfo.Split('=');
+                var playerScoreKey = playerScore[0];
+
+                PropertyInfo? p = typeof(PvPScore).GetProperty(playerScoreKey);
+                if (p == null)
+                {
+                    log.Warn($"PvP score \"{playerScoreKey}\" with value \"{playerScore[1]}\" of player {score.PlayerID} is unknown");
+                    continue;
+                }
+
+                try
+                {
+                    p.SetValue(score, Parse(p, playerScore[1]));
+                }
+                catch (Exception ex)
+                {
+                    log.Warn($"Cannot set PvP score \"{playerScoreKey}\" to value \"{playerScore[1]}\": {ex}");
+                }
+            }
+            return score; 
         }
     }
 
@@ -335,6 +441,13 @@ namespace AmteScripts.PvP
         
         public PvPGroupScore(Guild guild, IEnumerable<GamePlayer> players) : this(guild, players.Select(p => new PvPScore(p, false)))
         {
+        }
+
+        public PvPGroupScore(PvPGroupScore other) : base(other)
+        {
+            Guild = other.Guild;
+            Treasure_Items = new(CopyItems(other));
+            Scores = new(other.Scores.Select(kv => new KeyValuePair<string, PvPScore>(kv.Key, kv.Value.Copy())));
         }
 
         public Dictionary<string, PvPScore> Scores { get; init; } = new();
