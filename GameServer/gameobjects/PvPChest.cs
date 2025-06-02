@@ -90,11 +90,15 @@ namespace DOL.GS
                 return Score?.Treasure_Items.ToImmutableDictionary() ?? ImmutableDictionary<string, PvPScore.Item>.Empty;
             }
         }
+
+        public PVPChest()
+        {
+            Name = "PvP Chest";
+        }
         
-        public PVPChest(PvPScore? score = null)
+        public PVPChest(PvPScore? score) : base()
         {
             Score = score;
-            Name = "PvP Chest";
         }
 
         #region Ownership Setup
