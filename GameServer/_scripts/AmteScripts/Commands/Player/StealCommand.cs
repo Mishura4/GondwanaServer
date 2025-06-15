@@ -82,6 +82,11 @@ namespace DOL.GS.Commands
                 return false;
             }
 
+            if (stealer.Client.Account.PrivLevel < target.Client.Account.PrivLevel)
+            {
+                return false;
+            }
+
             if (stealer.Client.Account.PrivLevel <= 1)
             {
                 if (!stealer.IsStealthed)
