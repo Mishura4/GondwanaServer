@@ -3104,12 +3104,12 @@ namespace AmteScripts.Managers
                 bool shortStats = all;
                 if (all)
                 {
-                    if (CurrentSession.GroupCompoOption == 1 || CurrentSession.GroupCompoOption == 3)
+                    if (CurrentSession.GroupCompoOption is 1 or 3)
                     {
                         // TODO: Don't take solo players if they are part of a group?
                         scores = _soloScores.Values;
                     }
-                    if (CurrentSession.GroupCompoOption == 2 || CurrentSession.GroupCompoOption == 3)
+                    if (CurrentSession.GroupCompoOption is 2 or 3)
                     {
                         scores = scores.Concat(_groupScores.Values.Select(s => s.Totals));
                     }
@@ -3130,7 +3130,6 @@ namespace AmteScripts.Managers
                 }
                 else if (viewer.IsInPvP)
                 {
-                    var myScores = _soloScores.GetValueOrDefault(viewer.InternalID);
                     var ourScores = Enumerable.Empty<PvPScore>();
                     bool hasGroup = false;
                     if (CurrentSession.GroupCompoOption == 2 || CurrentSession.GroupCompoOption == 3)
@@ -3147,27 +3146,18 @@ namespace AmteScripts.Managers
                             AddLines(lines, ps, language, shortStats);
                         }
                     }
-
+                    
+                    var myScores = _soloScores.GetValueOrDefault(viewer.InternalID) ?? new PvPScore(viewer, true);
+                    lines.Add("");
                     if (CurrentSession.AllowGroupDisbandCreate)
                     {
-                        if (hasGroup)
-                        {
-                            if (myScores != null)
-                            {
-                                lines.Add("");
-                                lines.Add(viewer.Name + " (solo):");
-                                AddLines(lines, MakeScoreboardEntry(myScores), language, shortStats);
-                            }
-                        }
-                        else
-                        {
-                            lines.Add("");
-                            lines.Add($"Current Scoreboard for {viewer.Name}:");
-                            if (myScores == null)
-                                myScores = new PvPScore(viewer, true);
-                            AddLines(lines, MakeScoreboardEntry(myScores), language, shortStats);
-                        }
+                        lines.Add(viewer.Name + " (solo):");
                     }
+                    else
+                    {
+                        lines.Add(viewer.Name);
+                    }
+                    AddLines(lines, MakeScoreboardEntry(myScores), language, shortStats);
 
                     lines.Add("");
                     lines.Add("");

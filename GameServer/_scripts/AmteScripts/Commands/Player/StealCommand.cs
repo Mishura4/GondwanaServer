@@ -481,6 +481,7 @@ namespace DOL.GS.Commands
                 }
                 else
                 {
+                    // TODO: Why are we selecting the template here when we have it in stolenData?
                     ItemTemplate template = GameServer.Database.SelectObject<ItemTemplate>(
                         DB.Column("Id_nb").IsEqualTo(stolenData.Id_nb));
                     if (template == null)
@@ -491,7 +492,7 @@ namespace DOL.GS.Commands
                     else
                     {
                         InventoryItem stolenItem = GameInventoryItem.Create(template);
-                        stolenItem.Count = 1;
+                        stolenItem.Count = stolenData.Count;
                         eInventorySlot freeSlot = stealer.Inventory.FindFirstEmptySlot(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
                         if (freeSlot == eInventorySlot.Invalid)
                         {
