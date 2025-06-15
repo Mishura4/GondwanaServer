@@ -1694,10 +1694,16 @@ namespace DOL.GS.ServerProperties
         public static int PLAYER_HEAD_DROP_COOLDOWN_SECONDS;
 
         /// <summary>
-        /// The time in seconds before a player can drop another head after dropping one
+        /// Some bonuses e.g. ToA are normally only available in PVE, this option also allows them in PVP
         /// </summary>
         [ServerProperty("pvp", "enable_live_pveonly_bonuses_pvp", "Whether to allow normally PVE only bonuses in PVP", false)]
         public static bool ENABLE_LIVE_PVEONLY_BONUSES_PVP;
+
+        /// <summary>
+        /// When joining a group in PVP, do we transfer items to the group, or table them for later?
+        /// </summary>
+        [ServerProperty("pvp", "pvpsession_treasure_transfer_items", "Whether to transfer items in treasure hunt PvP when joining a group", false)]
+        public static bool PVSESSSION_TREASURE_TRANSFER_ITEMS;
         #endregion
 
         #region KEEPS

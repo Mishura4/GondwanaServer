@@ -17,6 +17,7 @@ using DOL.GS.Scripts;
 using static DOL.GS.Area;
 using AmteScripts.PvP.CTF;
 using Discord;
+using DOL.GS.ServerProperties;
 using Google.Protobuf.WellKnownTypes;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -518,10 +519,13 @@ namespace AmteScripts.Managers
                 member.SaveIntoDatabase();
                 
                 // Merge/transfer scores where it makes sense
-                if (_soloScores.TryGetValue(member.InternalID!, out PvPScore value))
+                if (Properties.PVSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
                 {
-                    groupScore.GetOrCreateScore(member).TakeItems(value, true); // COPY here, for contribution
-                    groupScore.TakeItems(value); // TAKE here, for the chest
+                    if (_soloScores.TryGetValue(member.InternalID!, out PvPScore value))
+                    {
+                        groupScore!.GetOrCreateScore(member).TakeItems(value, true); // COPY here, for contribution
+                        groupScore.TakeItems(value); // TAKE here, for the chest
+                    }
                 }
                 
                 // Remove all solo areas - we've already moved the leader's area & spawn into group storage, so they won't be found
@@ -574,10 +578,13 @@ namespace AmteScripts.Managers
                 }
                 
                 // Merge/transfer scores where it makes sense
-                if (_soloScores.TryGetValue(player.InternalID!, out PvPScore value))
+                if (Properties.PVSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
                 {
-                    groupScore!.GetOrCreateScore(player).TakeItems(value, true); // COPY here, for contribution
-                    groupScore.TakeItems(value); // TAKE here, for the chest
+                    if (_soloScores.TryGetValue(player.InternalID!, out PvPScore value))
+                    {
+                        groupScore!.GetOrCreateScore(player).TakeItems(value, true); // COPY here, for contribution
+                        groupScore.TakeItems(value); // TAKE here, for the chest
+                    }
                 }
             }
             else
