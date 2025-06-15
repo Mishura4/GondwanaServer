@@ -315,14 +315,15 @@ namespace DOL.GS
             // only if we are in open session 3 and the chest is locked
             var pm = PvpManager.Instance;
             if (!pm.IsOpen || pm.CurrentSessionType is not PvpManager.eSessionTypes.TreasureHunt) return;
-            if (!Unlocked || Score == null) return;
+            if (Unlocked || Score == null) return;
 
             // The chest owner "loses" x points in .Treasure_StolenTreasuresPoints
             // We'll increment by stolenData.Count * stolenData.PointsPerItem
             // (which is typically 1 item * that item’s points).
 
             Score.Treasure_StolenTreasuresPoints += 3;
-            // TODO: For group scores, choose a random person to add to
+            Score.Treasure_BroughtTreasuresPoints = Math.Max(0, Score.Treasure_BroughtTreasuresPoints - stolenData.Points);
+            
 
             SendScore();
             PvpManager.Instance.SaveScores();

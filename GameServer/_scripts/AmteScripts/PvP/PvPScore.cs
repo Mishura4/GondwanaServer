@@ -91,6 +91,8 @@ namespace AmteScripts.PvP
             public int Count { get; set; } = 0;
 
             public string ItemName { get; set; } = string.Empty;
+
+            public int Points => Count * PointsPerItem;
             
             public Item(PvPTreasure treasure) : this(treasure.Id_nb!, treasure.TreasurePoints)
             {
