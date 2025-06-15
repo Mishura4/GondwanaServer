@@ -115,7 +115,7 @@ namespace AmteScripts.PvP
 
             public Item Split(int count = 1)
             {
-                count = Math.Max(this.Count, count);
+                count = Math.Min(this.Count, count);
                 this.Count -= count;
                 return this with { Count = count };
             }
