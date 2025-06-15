@@ -53,17 +53,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                     return;
 
                 GameLiving disbandMember = player;
-
-                if (player.TargetObject != null &&
-                    player.TargetObject is GameLiving &&
-                    (player.TargetObject as GameLiving).Group != null &&
-                    (player.TargetObject as GameLiving).Group == player.Group)
-                    disbandMember = player.TargetObject as GameLiving;
-
-                if (disbandMember != player && player != player.Group.Leader)
-                    return;
-
-                player.Group.RemoveMember(disbandMember);
+                player.Group.MemberDisband(disbandMember);
             }
         }
     }

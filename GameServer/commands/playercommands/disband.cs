@@ -33,9 +33,6 @@ namespace DOL.GS.Commands
     {
         public void OnCommand(GameClient client, string[] args)
         {
-            if (!CheckDisbandAllowed(client.Player))
-                return;
-
             if (client.Player.Group == null)
             {
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NotInGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -44,7 +41,7 @@ namespace DOL.GS.Commands
 
             if (args.Length < 2)//disband myslef
             {
-                client.Player.Group.RemoveMember(client.Player);
+                client.Player.Group.MemberDisband(client.Player);
                 return;
             }
             else//disband by name

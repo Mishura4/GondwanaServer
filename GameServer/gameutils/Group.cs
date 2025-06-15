@@ -228,6 +228,14 @@ namespace DOL.GS
             return true;
         }
 
+        public bool MemberDisband(GameLiving who)
+        {
+            if (who is GamePlayer player && !CheckDisbandAllowed(player))
+                return false;
+
+            return RemoveMember(who);
+        }
+
         /// <summary>
         /// Removes a living from the group
         /// </summary>
