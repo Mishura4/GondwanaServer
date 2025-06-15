@@ -238,17 +238,16 @@ namespace DOL.GS
             get
             {
                 m_rwLock.EnterReadLock();
-                ICollection<TKey> result = default(ICollection<TKey>);
                 try
                 {
+                    ICollection<TKey> result = default(ICollection<TKey>);
                     result = m_dictionary.Keys.ToArray();
+                    return result;
                 }
                 finally
                 {
                     m_rwLock.ExitReadLock();
                 }
-
-                return result;
             }
         }
 
@@ -257,33 +256,33 @@ namespace DOL.GS
             get
             {
                 m_rwLock.EnterReadLock();
-                ICollection<TValue> result = default(ICollection<TValue>);
                 try
                 {
+                    ICollection<TValue> result = default(ICollection<TValue>);
                     result = m_dictionary.Values.ToArray();
+                    return result;
                 }
                 finally
                 {
                     m_rwLock.ExitReadLock();
                 }
-                return result;
             }
         }
 
         public bool ContainsKey(TKey key)
         {
             m_rwLock.EnterReadLock();
-            bool contains = false;
             try
             {
+                bool contains = false;
                 contains = m_dictionary.ContainsKey(key);
+
+                return contains;
             }
             finally
             {
                 m_rwLock.ExitReadLock();
             }
-
-            return contains;
         }
 
         public void Add(TKey key, TValue value)

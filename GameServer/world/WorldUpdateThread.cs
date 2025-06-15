@@ -158,7 +158,7 @@ namespace DOL.GS
             try
             {
                 // Clean Cache
-                foreach (var objEntry in player.Client.GameObjectUpdateArray)
+                foreach (var objEntry in player.Client.GameObjectUpdateArray.ToArray())
                 {
                     var objKey = objEntry.Key;
                     GameObject obj = WorldMgr.GetRegion(objKey.Item1).GetObject(objKey.Item2);
@@ -256,7 +256,7 @@ namespace DOL.GS
             try
             {
                 // Clean Cache
-                foreach (var objEntry in player.Client.GameObjectUpdateArray)
+                foreach (var objEntry in player.Client.GameObjectUpdateArray.ToArray())
                 {
                     var objKey = objEntry.Key;
                     GameObject obj = WorldMgr.GetRegion(objKey.Item1).GetObject(objKey.Item2);
@@ -317,7 +317,7 @@ namespace DOL.GS
             try
             {
                 // Clean Cache
-                foreach (var objEntry in player.Client.GameObjectUpdateArray)
+                foreach (var objEntry in player.Client.GameObjectUpdateArray.ToArray())
                 {
                     var objKey = objEntry.Key;
                     GameObject obj = WorldMgr.GetRegion(objKey.Item1).GetObject(objKey.Item2);
@@ -387,7 +387,7 @@ namespace DOL.GS
             try
             {
                 // Clean Cache
-                foreach (var houseEntry in player.Client.HouseUpdateArray)
+                foreach (var houseEntry in player.Client.HouseUpdateArray.ToArray())
                 {
                     var houseKey = houseEntry.Key;
                     House house = HouseMgr.GetHouse(houseKey.Item1, houseKey.Item2);
