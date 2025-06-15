@@ -31,14 +31,14 @@ namespace DOL.GS.Commands
         public static void ScriptLoaded(DOLEvent e, object sender, EventArgs args)
         {
             GameEventMgr.AddHandler(GamePlayerEvent.Moving,
-                new DOLEventHandler(EventPlayerMove));
+                                    new DOLEventHandler(EventPlayerMove));
         }
 
         [ScriptUnloadedEvent]
         public static void ScriptUnloaded(DOLEvent e, object sender, EventArgs args)
         {
             GameEventMgr.RemoveHandler(GamePlayerEvent.Moving,
-                new DOLEventHandler(EventPlayerMove));
+                                       new DOLEventHandler(EventPlayerMove));
         }
 
         public static void EventPlayerMove(DOLEvent d, object sender, EventArgs e)
@@ -59,7 +59,7 @@ namespace DOL.GS.Commands
                     if (Timer != null)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.Move"),
-                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                               eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
                         Timer.Stop();
 
@@ -82,24 +82,27 @@ namespace DOL.GS.Commands
                 return false;
             }
 
-            if (!stealer.IsStealthed)
+            if (stealer.Client.Account.PrivLevel <= 1)
             {
-                return false;
-            }
+                if (!stealer.IsStealthed)
+                {
+                    return false;
+                }
 
-            if (stealer.GuildID == target.GuildID && stealer.GuildID != string.Empty)
-            {
-                return false;
-            }
+                if (stealer.GuildID == target.GuildID && stealer.GuildID != string.Empty)
+                {
+                    return false;
+                }
 
-            if (stealer.Group != null && stealer.Group.IsInTheGroup(target as GameLiving))
-            {
-                return false;
-            }
+                if (stealer.Group != null && stealer.Group.IsInTheGroup(target as GameLiving))
+                {
+                    return false;
+                }
 
-            if (stealer.Level < 25 || target.Level < 20)
-            {
-                return false;
+                if (stealer.Level < 25 || target.Level < 20)
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -187,66 +190,74 @@ namespace DOL.GS.Commands
         {
             GamePlayer Player = client.Player;
 
-            if (!Player.HasAbility(Abilities.Vol))
+            if (client.Account.PrivLevel <= 1)
             {
-                //Les autres classes n'ont pas à savoir l'existance de ceci.
-                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.UnknownCommand"),
-                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
-            }
+                if (!Player.HasAbility(Abilities.Vol))
+                {
+                    //Les autres classes n'ont pas à savoir l'existance de ceci.
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.UnknownCommand"),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
 
-            if (!Player.IsAllowToVolInThisArea)
-            {
-                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Area"),
-                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
-            }
+                if (!Player.IsAllowToVolInThisArea)
+                {
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Ardea"),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
 
-            if (!Player.IsWithinRadius(Player.TargetObject, WorldMgr.GIVE_ITEM_DISTANCE))
-            {
-                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Distance"),
-                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
+                if (!Player.IsWithinRadius(Player.TargetObject, WorldMgr.GIVE_ITEM_DISTANCE))
+                {
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Distance"),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
             }
 
             if (Player.IsMezzed)
             {
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Hypnotized"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (Player.IsStunned)
             {
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Stunned"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            
+            if (!Player.IsAlive)
+            {
+                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Dead"),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (SpellHandler.FindEffectOnTarget(Player, "Damnation") != null)
             {
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Damned"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
-            }
-            if (Player.PlayerAfkMessage != null)
-            {
-                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.AFK"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
-            }
-            if (!Player.IsAlive)
-            {
-                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Dead"),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
-            if (Player.TempProperties.getProperty<object>(PLAYER_VOL_TIMER, null) != null)
+            if (client.Account.PrivLevel <= 1)
             {
-                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.AlreadyStealing"),
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                return;
+                if (Player.PlayerAfkMessage != null)
+                {
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.AFK"),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+
+                if (Player.TempProperties.getProperty<object>(PLAYER_VOL_TIMER, null) != null)
+                {
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.AlreadyStealing"),
+                                           eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    return;
+                }
             }
 
             var targetPlayer = Player.TargetObject as GamePlayer;
@@ -263,7 +274,7 @@ namespace DOL.GS.Commands
             if (Target == null && args.Length >= 2)
             {
                 Target = WorldMgr.GetClientByPlayerName(args[1],
-                    false, true).Player;
+                                                        false, true).Player;
             }
 
             if (Player.TargetObject is PVPChest chestTarget)
@@ -288,7 +299,7 @@ namespace DOL.GS.Commands
                 if (crochets == null)
                 {
                     Player.Out.SendMessage("You need a Crochets to be able to steal this chest.",
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     Player.Out.SendCloseTimerWindow();
                     Player.TempProperties.removeProperty(PLAYER_VOL_TIMER);
                     return;
@@ -327,7 +338,7 @@ namespace DOL.GS.Commands
                 {
                     long remaining = (VolAbilityHandler.DISABLE_DURATION_PLAYER - playerChangeTime) / 1000;
                     Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Time", remaining.ToString()),
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
             }
@@ -338,7 +349,7 @@ namespace DOL.GS.Commands
 
                 string TargetRealName = Target!.GetName(Target);
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Steal", TargetRealName),
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                       eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 Player.Out.SendTimerWindow(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.StealWindow", TargetRealName), VolTime);
 
                 RegionTimer Timer = new RegionTimer(Player);
@@ -355,7 +366,7 @@ namespace DOL.GS.Commands
             else
             {
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.CantSteal"),
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                       eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
         }
 
@@ -388,13 +399,13 @@ namespace DOL.GS.Commands
             if (result.Status == StealResultStatus.STEALTHLOST)
             {
                 stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.Fail"),
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 stealer.Stealth(false);
             }
             else if (result.Status == StealResultStatus.FAILED)
             {
                 stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.Fail"),
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
             else
             {
@@ -432,7 +443,7 @@ namespace DOL.GS.Commands
             if (!stealer.Inventory.IsSlotsFree(1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
             {
                 stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.FullInventory"),
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 stealer.Out.SendCloseTimerWindow();
                 stealer.TempProperties.removeProperty(PLAYER_VOL_TIMER);
                 return 0;
@@ -461,7 +472,7 @@ namespace DOL.GS.Commands
                 if (stolenData == null)
                 {
                     stealer.Out.SendMessage("You tried to steal the treasure in this chest, but it is empty.",
-                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
@@ -470,7 +481,7 @@ namespace DOL.GS.Commands
                     if (template == null)
                     {
                         stealer.Out.SendMessage("The item template could not be found.",
-                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else
                     {
@@ -480,13 +491,13 @@ namespace DOL.GS.Commands
                         if (freeSlot == eInventorySlot.Invalid)
                         {
                             stealer.Out.SendMessage("You don't have a free inventory slot.",
-                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         else
                         {
                             stealer.Inventory.AddItem(freeSlot, stolenItem);
                             stealer.Out.SendMessage("You successfully got a " + stolenItem.Name + " from the Treasure chest!",
-                                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
                     }
                     chest.OnTreasureStolen(stealer, stolenData);
