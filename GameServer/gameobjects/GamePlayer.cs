@@ -1897,7 +1897,11 @@ namespace DOL.GS
             }
 
             int oldRegion = CurrentRegionID;
-
+            
+            //It is enough if we revive the player on this client only here
+            //because for other players the player will be removed in the MoveTo
+            //method and added back again (if in view) with full health ... so no
+            //revive needed for others...
             if (oldRegion != releasePosition.RegionID)
             {
                 Out.SendPlayerRevive(this);
@@ -1915,10 +1919,6 @@ namespace DOL.GS
                     MoveTo(releasePosition);
                 }
 
-                //It is enough if we revive the player on this client only here
-                //because for other players the player will be removed in the MoveTo
-                //method and added back again (if in view) with full health ... so no
-                //revive needed for others...
                 Out.SendPlayerRevive(this);
                 //			Out.SendUpdatePlayer();
                 Out.SendUpdatePoints();
@@ -2547,7 +2547,7 @@ namespace DOL.GS
         /// </summary>
         public override void StartHealthRegeneration()
         {
-            if (ObjectState != eObjectState.Active) return;
+            if (!IsAlive || ObjectState != eObjectState.Active) return;
             if (m_healthRegenerationTimer.IsAlive) return;
             m_healthRegenerationTimer.Start(m_healthRegenerationPeriod);
         }
@@ -2557,7 +2557,7 @@ namespace DOL.GS
         /// </summary>
         public override void StartPowerRegeneration()
         {
-            if (ObjectState != eObjectState.Active) return;
+            if (!IsAlive || ObjectState != eObjectState.Active) return;
             if (m_powerRegenerationTimer.IsAlive) return;
             m_powerRegenerationTimer.Start(m_powerRegenerationPeriod);
         }
@@ -2567,7 +2567,7 @@ namespace DOL.GS
         /// </summary>
         public override void StartEnduranceRegeneration()
         {
-            if (ObjectState != eObjectState.Active) return;
+            if (!IsAlive || ObjectState != eObjectState.Active) return;
             if (m_enduRegenerationTimer.IsAlive) return;
             m_enduRegenerationTimer.Start(m_enduranceRegenerationPeriod);
         }
@@ -11591,6 +11591,7 @@ namespace DOL.GS
                 GameEventMgr.Notify(GamePlayerEvent.RegionChanging, this);
                 if (!RemoveFromWorld())
                     return false;
+                
                 //notify event
                 if (CurrentRegion != null)
                 {

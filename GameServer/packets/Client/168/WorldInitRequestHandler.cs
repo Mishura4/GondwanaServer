@@ -187,12 +187,16 @@ namespace DOL.GS.PacketHandler.Client.v168
                 // this is bind stuff
                 // make sure that players doesnt start dead when coming in
                 // thats important since if client moves the player it requests player creation
+                bool revived = false;
                 if (player.Health <= 0)
                 {
                     player.Health = player.MaxHealth;
+                    revived = true; // We need to send object ID before we do revive
                 }
 
                 player.Out.SendPlayerPositionAndObjectID();
+                if (revived)
+                    player.Out.SendPlayerRevive(player); // Send revive packet, or the client gets stuck in "can't move" state
                 player.Out.SendEncumberance(); // Send only max encumberance without used
                 player.Out.SendUpdateMaxSpeed();
                 //TODO 0xDD - Conc Buffs // 0 0 0 0
