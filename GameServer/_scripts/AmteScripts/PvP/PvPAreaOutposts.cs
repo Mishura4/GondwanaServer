@@ -6,13 +6,25 @@ using System.Collections.Generic;
 using DOL.GS.Geometry;
 using AmteScripts.PvP.CTF;
 using AmteScripts.Managers;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace AmteScripts.PvP
 {
     public static class PvPAreaOutposts
     {
+        private static TempObjectTemplate s_chestTemplate =>
+            new TempObjectTemplate
+            {
+                ClassType = "DOL.GS.PVPChest",
+                Name = "PvP Chest",
+                Model = 1596,
+                Offset = Vector.Create(0, -90, 0),
+                Angle = Angle.Zero
+            };
+        
         /// <summary>
         /// For the "TreasureHuntBase" set, we define 3 offsets from the center
         /// plus the class type, model, etc.
@@ -27,42 +39,31 @@ namespace AmteScripts.PvP
         /// 
         /// We'll store them in a simple struct:
         /// </summary>
-        private static readonly List<TempObjectTemplate> s_treasureHuntBaseTemplates = new List<TempObjectTemplate>()
-        {
+        private static ReadOnlyCollection<TempObjectTemplate> s_treasureHuntBaseTemplates => new(
+        [
+            // Chest
+            s_chestTemplate,
+    
             // Banner #1
             new TempObjectTemplate
             {
                 ClassType = "DOL.GS.TerritoryBanner",
                 Name      = "PvP Banner",
                 Model     = 3223,
-                XOffset   = 116,
-                YOffset   = -71,
-                ZOffset   = 0,
-                HeadingOffset = -32,
+                Offset    = s_chestTemplate.Offset + Vector.Create(x: -75),
+                Angle     = s_chestTemplate.Angle,
             },
+            
             // Banner #2
             new TempObjectTemplate
             {
                 ClassType = "DOL.GS.TerritoryBanner",
                 Name      = "PvP Banner",
                 Model     = 3223,
-                XOffset   = 0,
-                YOffset   = -132,
-                ZOffset   = 0,
-                HeadingOffset = -11,
+                Offset    = s_chestTemplate.Offset + Vector.Create(x: 75),
+                Angle     = s_chestTemplate.Angle,
             },
-            // Chest
-            new TempObjectTemplate
-            {
-                ClassType = "DOL.GS.PVPChest",
-                Name      = "PvP Chest",
-                Model     = 1596,
-                XOffset   = 36,
-                YOffset   = -71,
-                ZOffset   = 0,
-                HeadingOffset = -26,
-            },
-        };
+        ]);
 
         /// <summary>
         /// Creates the "TreasureHuntBase" objects at the given center,
@@ -79,17 +80,17 @@ namespace AmteScripts.PvP
             var ownerGuild = ownerPlayer.Guild;
             foreach (var template in s_treasureHuntBaseTemplates)
             {
-                int finalX = center.X + template.XOffset;
-                int finalY = center.Y + template.YOffset;
-                int finalZ = center.Z + template.ZOffset;
-                ushort finalHeading = (ushort)((center.Orientation.InHeading + template.HeadingOffset) & 0xFFF);
-
                 // Instantiate the item
                 GameStaticItem item = CreateStaticItemFromClassType(ownerPlayer, template.ClassType);
 
                 item.Model = (ushort)template.Model;
                 item.Name = template.Name;
-                item.Position = Position.Create(center.RegionID, finalX, finalY, finalZ, finalHeading);
+                var offset = template.Offset.RotatedClockwise(center.Orientation);
+                item.Position = center with
+                {
+                    Coordinate = center.Coordinate + offset,
+                    Orientation = center.Orientation + template.Angle
+                };
                 item.Realm = 0;
                 item.Emblem = ownerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
                 if (item is GamePvPStaticItem pvpItem)
@@ -138,52 +139,47 @@ namespace AmteScripts.PvP
             return createdItems;
         }
 
-        private static readonly List<TempObjectTemplate> s_guildOutpostTemplate01Templates = new List<TempObjectTemplate>()
-        {
+        private static TempObjectTemplate s_tentTemplate =>
+            new TempObjectTemplate
+            {
+                ClassType = "DOL.GS.GameStaticItem",
+                Name = "Tent",
+                Model = 1600,
+                Offset = Vector.Create(-267, -15, 69),
+                Angle = Angle.Degrees(33)
+            };
+
+        private static ReadOnlyCollection<TempObjectTemplate> s_guildOutpostTemplate01Templates => new(
+        [
+            s_tentTemplate,
+            
             new TempObjectTemplate
             {
                 ClassType = "DOL.GS.TerritoryBanner",
-                Name      = "PvP Banner",
-                Model     = 3223,
-                XOffset   = -96,
-                YOffset   = -136,
-                ZOffset   = 77,
-                HeadingOffset = 26,
+                Name = "PvP Banner",
+                Model = 3223,
+                Offset = Vector.Create(-96, -136, 77),
+                Angle = Angle.Degrees(-90),
             },
 
             new TempObjectTemplate
             {
                 ClassType = "DOL.GS.TerritoryBanner",
-                Name      = "PvP Banner",
-                Model     = 3223,
-                XOffset   = -120,
-                YOffset   = 113,
-                ZOffset   = 81,
-                HeadingOffset = 31,
+                Name = "PvP Banner",
+                Model = 3223,
+                Offset = Vector.Create(-96, 136, 81),
+                Angle = Angle.Degrees(-90),
             },
 
             new TempObjectTemplate
             {
                 ClassType = "DOL.GS.GameStaticItem",
-                Name      = "Campfire",
-                Model     = 3460,
-                XOffset   = -72,
-                YOffset   = -6,
-                ZOffset   = 72,
-                HeadingOffset = 0,
+                Name = "Campfire",
+                Model = 3460,
+                Offset = Vector.Create(-72, -6, 72),
+                Angle = Angle.Zero,
             },
-
-            new TempObjectTemplate
-            {
-                ClassType = "DOL.GS.GameStaticItem",
-                Name      = "Tent",
-                Model     = 1600,
-                XOffset   = -267,
-                YOffset   = -15,
-                ZOffset   = 69,
-                HeadingOffset = -31,
-            },
-        };
+        ]);
 
         /// <summary>
         /// Creates the "Guild Outpost Template 01" objects at the given center,
@@ -201,16 +197,16 @@ namespace AmteScripts.PvP
             Guild? ownerGuild = ownerPlayer.Guild;
             foreach (var template in s_guildOutpostTemplate01Templates)
             {
-                int finalX = center.X + template.XOffset;
-                int finalY = center.Y + template.YOffset;
-                int finalZ = center.Z + template.ZOffset;
-                ushort finalHeading = (ushort)((center.Orientation.InHeading + template.HeadingOffset) & 0xFFF);
-
                 // Instantiate the static item
                 GameStaticItem item = new GameStaticItem();
                 item.Model = (ushort)template.Model;
                 item.Name = template.Name;
-                item.Position = Position.Create(center.RegionID, finalX, finalY, finalZ, finalHeading);
+                var offset = template.Offset.RotatedClockwise(center.Orientation);
+                item.Position = center with
+                {
+                    Coordinate = center.Coordinate + offset,
+                    Orientation = center.Orientation + template.Angle
+                };
                 item.Realm = 0;
                 item.Emblem = ownerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
                 if (item is GamePvPStaticItem pvpItem)
@@ -244,15 +240,8 @@ namespace AmteScripts.PvP
         /// <summary>
         /// A small struct describing the offset from the center and the class model info.
         /// </summary>
-        private struct TempObjectTemplate
+        private record struct TempObjectTemplate(string ClassType, string Name, int Model, Vector Offset, Angle Angle)
         {
-            public string ClassType;
-            public string Name;
-            public int Model;
-            public int XOffset;
-            public int YOffset;
-            public int ZOffset;
-            public int HeadingOffset;
         }
     }
 }

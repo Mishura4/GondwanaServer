@@ -54,6 +54,20 @@ public struct Position
     public static Position operator -(Position a, Vector b)
         => a.With(coordinate: a.Coordinate - b);
 
+    public static Position operator +(Position a, Position b)
+        => a with
+        {
+            Coordinate = a.Coordinate + Vector.Create(b.X, b.Y, b.Z),
+            Orientation = a.Orientation + b.Orientation
+        };
+
+    public static Position operator -(Position a, Position b)
+        => a with
+        {
+            Coordinate = a.Coordinate - Vector.Create(b.X, b.Y, b.Z),
+            Orientation = a.Orientation - b.Orientation
+        };
+
     public static bool operator ==(Position a, Position b)
         => a.Equals(b);
 
