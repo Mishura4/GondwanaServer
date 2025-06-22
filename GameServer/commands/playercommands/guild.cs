@@ -315,37 +315,77 @@ namespace DOL.GS.Commands
                     // --------------------------------------------------------------------------------
                     case "rename":
                         {
-                            if (!client.Player.IsInPvP)
+                            Guild myguild;
+                            string oldguildname;
+                            string newguildname;
+                            
+                            if (args.Length > 3) // GMRename
                             {
-                                if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
+                                if (client.Account.PrivLevel < (uint)ePrivLevel.GM)
                                     return;
-                            }
 
-                            if (args.Length < 5)
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRename"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
-                            }
-                            int i;
-                            for (i = 2; i < args.Length; i++)
-                            {
-                                if (args[i] == "to")
-                                    break;
-                            }
+                                if (args.Length < 5)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRename"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                                
+                                int i;
+                                for (i = 2; i < args.Length; i++)
+                                {
+                                    if (args[i] == "to")
+                                        break;
+                                }
 
-                            string oldguildname = String.Join(" ", args, 2, i - 2);
-                            string newguildname = String.Join(" ", args, i + 1, args.Length - i - 1);
-                            if (!GuildMgr.DoesGuildExist(oldguildname))
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                oldguildname = String.Join(" ", args, 2, i - 2);
+                                newguildname = String.Join(" ", args, i + 1, args.Length - i - 1);
+                                myguild = GuildMgr.GetGuildByName(oldguildname);
+                                if (!GuildMgr.DoesGuildExist(oldguildname))
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
-                            Guild myguild = GuildMgr.GetGuildByName(oldguildname);
+                            else
+                            {
+                                if (args.Length < 3 || string.IsNullOrEmpty(args[2]))
+                                {
+                                    if (client.Account.PrivLevel >= (uint)ePrivLevel.GM)
+                                        client.SendTranslation("Commands.Players.Guild.Help.GuildGMRename");
+                                    client.SendTranslation("Commands.Players.Guild.Help.GuildRename");
+                                    return;
+                                }
+
+                                if (!client.Player.IsInPvP)
+                                {
+                                    client.SendTranslation("Commands.Players.Guild.NotInPvp", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                myguild = client.Player.Guild;
+                                if (myguild == null)
+                                {
+                                    client.SendTranslation("Commands.Players.Guild.NoGuild", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (client.Player.GuildRank.RankLevel != 0)
+                                {
+                                    client.SendTranslation("Commands.Players.Guild.NoPermissions", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                newguildname = args[2]!;
+                                if (myguild.IsPvPGuild)
+                                    newguildname = "[PVP] " + newguildname;
+                            }
+                            oldguildname = myguild.Name;
                             myguild.Name = newguildname;
                             GuildMgr.AddGuild(myguild);
                             foreach (GamePlayer ply in myguild.GetListOfOnlineMembers())
                             {
                                 ply.GuildName = newguildname;
+                                ply.Client.SendTranslation("Commands.Players.Guild.Renamed", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, oldguildname, newguildname);
                             }
                             client.Player.Guild?.UpdateGuildWindow();
                         }
@@ -3993,7 +4033,7 @@ namespace DOL.GS.Commands
                 {
                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildUsage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildInfo"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRename"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildRename"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildLeader"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildWho"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildList"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);

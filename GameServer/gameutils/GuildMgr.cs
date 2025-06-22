@@ -135,7 +135,7 @@ namespace DOL.GS
                 if (!m_guilds.Contains(guild.Name))
                 {
                     m_guilds.Add(guild.Name, guild);
-                    m_guildids.Add(guild.GuildID, guild.Name);
+                    m_guildids[guild.GuildID] = guild.Name;
                     guild.ID = ++m_lastID;
                     return true;
                 }

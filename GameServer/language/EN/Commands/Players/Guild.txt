@@ -150,6 +150,7 @@ Commands.Players.Guild.Help.GuildGMRename:		'/gc rename <previous name> to <new 
 Commands.Players.Guild.Help.GuildGMRealmPoints:	'/gc realmpoints <set|add|remove> <amount> <guild name>' # Change the amount of realm points a guild has.
 Commands.Players.Guild.Help.GuildGMMeritPoints:		'/gc meritpoints <set|add|remove> <amount> <guild name>' # Change the amount of merit points a guild has.
 Commands.Players.Guild.Help.GuildGMBountyPoints:	'/gc bountypoints <set|add|remove> <amount> <guild name>' # Change the amount of bounty points a guild has.
+Commands.Players.Guild.Help.GuildRename:		'/gc rename <new name>' # Rename your guild to <new name>.
 Commands.Players.Guild.Help.GuildInfo:			'/gc info' # Displays all informations related to this guild.
 Commands.Players.Guild.Help.GuildInvite:			'/gc invite <player's name>' # Invite a player to join the guild.
 Commands.Players.Guild.Help.JailRelease:			'/gc jailrelease <player's name>' # Pay for a player to be released from jail from the guild bank funds.
@@ -217,6 +218,9 @@ Commands.Players.Guild.Buff.Activate.Tension:	Are you sure you want to activate 
 Commands.Players.Guild.Buff.Activate.Coin:		Are you sure you want to activate a Coin guild buff for {0} merit points?
 Commands.Players.Guild.Buff.NotImplemented:     This buff has not been implemented
 Commands.Players.Guild.MotdSet:					You change the guild's Message of th Day.
+Commands.Players.Guild.NotInPvP:				You must be in a PvP session to do this!
+Commands.Players.Guild.NoGuild:					You are not in a guild.
+Commands.Players.Guild.NoPermissions:			You do not have the permission to do that.
 Commands.Players.Guild.NoKeep:					You currently do not have a keep to use this command.
 Commands.Players.Guild.NoPlayerSelected:		Select a player.
 Commands.Players.Guild.NoPlayersInAcc:			There is no player from the requested account in your guild.
@@ -226,6 +230,7 @@ Commands.Players.Guild.NoPlayerWithName:        There is no player with the name
 Commands.Players.Guild.NotInYourGuild:			This player is not in the guild.
 Commands.Players.Guild.NotMember:				You must be in a guild to use this command.
 Commands.Players.Guild.SystemGuild:				You cannot use this command in this guild.
+Commands.Players.Guild.Renamed:					{0} was renamed to {1}!
 Commands.Players.Guild.CmdCannotUseHere:		You cannot use this command here.
 Commands.Players.Guild.OMotdSet:				The officers' message is now updated.
 Commands.Players.Guild.PlayerNotFound:			This player is not online or is in another realm.
