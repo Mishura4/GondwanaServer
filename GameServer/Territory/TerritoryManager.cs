@@ -17,6 +17,7 @@ using Microsoft.CodeAnalysis.Operations;
 using SQLitePCL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -37,14 +38,13 @@ namespace DOL.Territories
 
         public static TerritoryManager Instance => instance ?? (instance = new TerritoryManager());
 
-        public List<Territory> Territories
+        [NotNull] public List<Territory> Territories
         {
             get;
-        }
+        } = new List<Territory>();
 
         private TerritoryManager()
         {
-            Territories = new List<Territory>();
             m_TerritoriesAttacked = new Dictionary<Timer, Territory>();
         }
 
@@ -261,6 +261,18 @@ namespace DOL.Territories
             };
         }
 
+        public IEnumerable<Territory> GetContextualTerritories(GamePlayer player, bool subterritories = false)
+        {
+            IEnumerable<Territory> all = Territories;
+            all = all.Where(t => (t.Type is Territory.eType.Subterritory) == subterritories);
+            if (player.IsInPvP && PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture)
+            {
+                var zones = PvpManager.Instance.CurrentZones.Select(z => z.ID).ToArray();
+                all = all.Where(t => zones.Contains(t.Zone?.ID ?? 0));
+            }
+            return all;
+        }
+
         public IList<string> GetTerritoriesInformations(GamePlayer player)
         {
             List<string> infos = new List<string>();
@@ -269,8 +281,9 @@ namespace DOL.Territories
             string language = player.Client?.Account?.Language ?? Properties.SERV_LANGUAGE;
             string neutral = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoryNeutral");
             string expiresIn = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryExpiresIn");
-
-            foreach (var territory in this.Territories.Where(t => t.Type != Territory.eType.Subterritory))
+            bool listSubs = player.IsInPvP && PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture;
+            
+            foreach (var territory in GetContextualTerritories(player, listSubs))
             {
                 string line = territory.Name + " / " + territory.Zone.Description;
 
@@ -376,21 +389,7 @@ namespace DOL.Territories
             string neutral = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryNeutral");
             string expiresIn = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryExpiresIn");
 
-            var allSubs = this.Territories.Where(t => t.Type == Territory.eType.Subterritory);
-            bool inPvpZone = (PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture && PvpManager.Instance.IsInActivePvpZone(player));
-
-            IEnumerable<Territory> filtered;
-            if (inPvpZone)
-            {
-                var zones = PvpManager.Instance!.CurrentZones;
-                filtered = allSubs.Where(t => zones.Contains(t.Zone));
-            }
-            else
-            {
-                filtered = allSubs;
-            }
-
-            foreach (var territory in filtered)
+            foreach (var territory in GetContextualTerritories(player, true))
             {
                 string line = territory.Name + " / " + territory.Zone.Description;
 
