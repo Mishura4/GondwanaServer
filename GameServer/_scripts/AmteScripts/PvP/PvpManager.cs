@@ -28,6 +28,8 @@ using static DOL.GameEvents.GameEvent;
 using Newtonsoft.Json.Linq;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using System.Security.Policy;
 using Zone = DOL.GS.Zone;
 
@@ -519,7 +521,7 @@ namespace AmteScripts.Managers
                 member.SaveIntoDatabase();
                 
                 // Merge/transfer scores where it makes sense
-                if (Properties.PVSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
+                if (Properties.PVPSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
                 {
                     if (_soloScores.TryGetValue(member.InternalID!, out PvPScore value))
                     {
@@ -578,7 +580,7 @@ namespace AmteScripts.Managers
                 }
                 
                 // Merge/transfer scores where it makes sense
-                if (Properties.PVSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
+                if (Properties.PVPSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
                 {
                     if (_soloScores.TryGetValue(player.InternalID!, out PvPScore value))
                     {
@@ -1523,34 +1525,130 @@ namespace AmteScripts.Managers
             return score;
         }
 
+        public void HandleGroupKill(GamePlayer killer, GamePlayer victim, int points)
+        {
+            bool doSoloScores = Properties.PVPSESSION_GROUPKILLS_SOLOSCORES;
+            PvPScore score = EnsureTotalScore(killer);
+            score.PvP_GroupKills += 1;
+            score.PvP_GroupKillsPoints += points;
+                
+            if (doSoloScores)
+            {
+                score = EnsureSoloScore(killer);
+                score.PvP_GroupKills += 1;
+                score.PvP_GroupKillsPoints += points;
+            }
+
+            var (groupScore, entry) = EnsureGroupScoreEntry(killer);
+            if (groupScore != null)
+            {
+                groupScore.Totals.PvP_GroupKills += 1;
+                groupScore.Totals.PvP_GroupKillsPoints += points;
+                entry.PvP_GroupKills += 1;
+                entry.PvP_GroupKillsPoints += points;
+            }
+            
+            /*
+            foreach (var member in killer.Group.GetMembersInTheGroup().OfType<GamePlayer>())
+            {
+                if (member == killer)
+                    continue;
+                    
+                if (member.IsWithinRadius(victim, WorldMgr.MAX_EXPFORKILL_DISTANCE))
+                {
+                    score = EnsureTotalScore(member);
+                    score.PvP_GroupKills += 1;
+                    score.PvP_GroupKillsPoints += points;
+                        
+                    if (doSoloScores)
+                    {
+                        score = EnsureSoloScore(member);
+                        score.PvP_GroupKills += 1;
+                        score.PvP_GroupKillsPoints += points;
+                    }
+
+                    if (groupScore != null)
+                    {
+                        entry = groupScore.GetOrCreateScore(member);
+                        entry.PvP_GroupKills += 1;
+                        entry.PvP_GroupKillsPoints += points;
+                    }
+                }
+            }
+            */
+        }
+
+        private void AwardScore(GamePlayer pl, Action<PvPScore> fun, bool forceSolo = false)
+        {
+            var score = EnsureTotalScore(pl);
+            
+            fun(score);
+            var (groupScore, playerEntry) = EnsureGroupScoreEntry(pl);
+            if (groupScore != null)
+            {
+                fun(groupScore.Totals);
+                fun(playerEntry);
+            }
+            if (groupScore == null || forceSolo)
+            {
+                score = EnsureSoloScore(pl);
+                fun(score);
+            }
+        }
+        
+        public void AwardCTFCarrierKill(GamePlayer killerPlayer, GamePlayer carrier)
+        {
+            AwardScore(killerPlayer, (score =>
+            {
+                score.Flag_KillFlagCarrierCount++;
+                score.Flag_KillFlagCarrierPoints += 6;
+            }));
+        }
+
         public void HandlePlayerKill(GamePlayer killer, GamePlayer victim)
         {
             if (!_isOpen || _activeSession == null) return;
 
             if (!killer.IsInPvP || !victim.IsInPvP) return;
-
+            
+            // check if victim is RR5 or more
+            bool rr5bonus = (victim.RealmLevel >= 40);
+            bool isSolo = killer.Group is not { MemberCount: > 1 };
+            int points = 0;
             switch (CurrentSessionType)
             {
                 case eSessionTypes.Deathmatch:
-                    UpdateScores_PvPCombat(killer, victim);
+                    points = isSolo ? 10 : 5;
+                    if (rr5bonus) points = (int)(points * 1.30);
                     break;
+                
                 case eSessionTypes.CaptureTheFlag:
-                    UpdateScores_FlagCarrierKill(killer, victim, wasFlagCarrier: false);
-                    break;
                 case eSessionTypes.TreasureHunt:
-                    UpdateScores_TreasureHunt(killer, victim);
-                    break;
                 case eSessionTypes.BringAFriend:
-                    UpdateScores_BringFriends(killer, victim);
-                    break;
                 case eSessionTypes.TerritoryCapture:
-                    UpdateScores_CaptureTerritories(killer, victim);
-                    break;
-                case eSessionTypes.BossHunt:
-                    UpdateScores_BossKillCoop(killer, victim);
-                    break;
                 default:
+                    points = isSolo ? 4 : 2;
                     break;
+                    
+                case eSessionTypes.BossHunt:
+                    points = isSolo ? 30 : 15;
+                    if (rr5bonus) points = (int)(points * 1.30);
+                    break;
+            }
+
+            PvPScore score;
+            if (!isSolo)
+            {
+                HandleGroupKill(killer, victim, points);
+            }
+            else
+            {
+                score = EnsureTotalScore(killer);
+                score.PvP_SoloKills += 1;
+                score.PvP_SoloKillsPoints += points;
+                score = EnsureSoloScore(killer);
+                score.PvP_SoloKills += 1;
+                score.PvP_SoloKillsPoints += points;
             }
             
             SaveScores();
@@ -1559,243 +1657,6 @@ namespace AmteScripts.Managers
         private bool IsSolo(GamePlayer killer)
         {
             return killer.Guild == null || killer.Group is not { MemberCount: > 1 };
-        }
-
-        /// <summary>
-        /// "PvP Combat" (SessionType=1).
-        /// Scoring rules:
-        /// - Solo kill => 10 pts (+30% if victim is RR5+)
-        /// - Group kill => 5 pts (+30% if victim is RR5+)
-        /// </summary>
-        private void UpdateScores_PvPCombat(GamePlayer killer, GamePlayer victim)
-        {
-            var killerScore = EnsureTotalScore(killer);
-            if (killerScore == null) return;
-
-            // check if victim is RR5 or more
-            bool rr5bonus = (victim.RealmLevel >= 40);
-            bool isSolo = (killer.Group == null || killer.Group.MemberCount <= 1);
-            var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PvPScore score) =>
-            {
-                if (isSolo)
-                {
-                    score.PvP_SoloKills++;
-                    int basePts = 10;
-                    if (rr5bonus) basePts = (int)(basePts * 1.30);
-                    score.PvP_SoloKillsPoints += basePts;
-                }
-                else
-                {
-                    score.PvP_GroupKills++;
-                    int basePts = 5;
-                    if (rr5bonus) basePts = (int)(basePts * 1.30);
-                    score.PvP_GroupKillsPoints += basePts;
-                }
-            };
-            fun(killerScore);
-            if (groupScore != null)
-            {
-                fun(groupEntry);
-                fun(groupScore.Totals);
-            }
-            else
-            {
-                fun(EnsureSoloScore(killer));
-            }
-        }
-
-        /// <summary>
-        /// "Flag Capture" (SessionType=2).
-        /// In reality, you'd also handle separate events for "bring flag to outpost",
-        /// "flag ownership tick", etc...
-        /// + special points if the victim was carrying the flag.
-        /// </summary>
-        public void UpdateScores_FlagCarrierKill(GamePlayer killer, GamePlayer victim, bool wasFlagCarrier)
-        {
-            var killerScore = EnsureTotalScore(killer);
-            if (killerScore == null) return;
-
-            bool isSolo = IsSolo(killer);
-            var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PvPScore score) =>
-            {
-                if (wasFlagCarrier)
-                {
-                    score.Flag_KillFlagCarrierCount++;
-                    score.Flag_KillFlagCarrierPoints += 6;
-                }
-                else
-                {
-                    if (isSolo)
-                    {
-                        score.Flag_SoloKills++;
-                        score.Flag_SoloKillsPoints += 4;
-                    }
-                    else
-                    {
-                        score.Flag_GroupKills++;
-                        score.Flag_GroupKillsPoints += 2;
-                    }
-                }
-            };
-            fun(killerScore);
-            if (groupScore != null)
-            {
-                fun(groupEntry);
-                fun(groupScore.Totals);
-            }
-            else
-            {
-                fun(EnsureSoloScore(killer));
-            }
-        }
-        
-        /// <summary>
-        /// "Treasure Hunt" (SessionType=3).
-        /// </summary>
-        private void UpdateScores_TreasureHunt(GamePlayer killer, GamePlayer victim)
-        {
-            var killerScore = EnsureTotalScore(killer);
-            if (killerScore == null) return;
-
-            bool isSolo = IsSolo(killer);
-            var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PvPScore score) =>
-            {
-                if (isSolo)
-                {
-                    score.Treasure_SoloKills++;
-                    score.Treasure_SoloKillsPoints += 4;
-                }
-                else
-                {
-                    score.Treasure_GroupKills++;
-                    score.Treasure_GroupKillsPoints += 2;
-                }
-            };
-            fun(killerScore);
-            if (groupScore != null)
-            {
-                fun(groupEntry);
-                fun(groupScore.Totals);
-            }
-            else
-            {
-                fun(EnsureSoloScore(killer));
-            }
-        }
-
-        /// <summary>
-        /// "Bring Friends" (SessionType=4).
-        /// </summary>
-        private void UpdateScores_BringFriends(GamePlayer killer, GamePlayer victim)
-        {
-            var killerScore = EnsureTotalScore(killer);
-            if (killerScore == null) return;
-
-            bool isSolo = IsSolo(killer);
-            var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PvPScore score) =>
-            {
-                if (isSolo)
-                {
-                    score.Friends_SoloKills++;
-                    score.Friends_SoloKillsPoints += 4;
-                }
-                else
-                {
-                    score.Friends_GroupKills++;
-                    score.Friends_GroupKillsPoints += 2;
-                }
-            };
-            fun(killerScore);
-            if (groupScore != null)
-            {
-                fun(groupEntry);
-                fun(groupScore.Totals);
-            }
-            else
-            {
-                fun(EnsureSoloScore(killer));
-            }
-        }
-
-        /// <summary>
-        /// "Capture Territories" (SessionType=5).
-        /// </summary>
-        private void UpdateScores_CaptureTerritories(GamePlayer killer, GamePlayer victim)
-        {
-            var killerScore = EnsureTotalScore(killer);
-            if (killerScore == null) return;
-
-            bool isSolo = IsSolo(killer);
-            var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PvPScore score) =>
-            {
-                if (isSolo)
-                {
-                    score.Terr_SoloKills++;
-                    score.Terr_SoloKillsPoints += 4;
-                }
-                else
-                {
-                    score.Terr_GroupKills++;
-                    score.Terr_GroupKillsPoints += 2;
-                }
-            };
-            fun(killerScore);
-            if (groupScore != null)
-            {
-                fun(groupEntry);
-                fun(groupScore.Totals);
-            }
-            else
-            {
-                fun(EnsureSoloScore(killer));
-            }
-        }
-
-        /// <summary>
-        /// "Boss Kill Cooperation" (SessionType=6).
-        /// </summary>
-        private void UpdateScores_BossKillCoop(GamePlayer killer, GamePlayer victim)
-        {
-            var killerScore = EnsureTotalScore(killer);
-            if (killerScore == null) return;
-
-            // check if victim is RR5 or more
-            bool rr5bonus = (victim.RealmLevel >= 40);
-
-            bool isSolo = IsSolo(killer);
-            var (groupScore, groupEntry) = EnsureGroupScoreEntry(killer);
-            var fun = (PvPScore score) =>
-            {
-                if (isSolo)
-                {
-                    score.Boss_SoloKills++;
-                    int basePts = 30;
-                    if (rr5bonus) basePts = (int)(basePts * 1.30);
-                    score.Boss_SoloKillsPoints += basePts;
-                }
-                else
-                {
-                    score.Boss_GroupKills++;
-                    int basePts = 15;
-                    if (rr5bonus) basePts = (int)(basePts * 1.30);
-                    score.Boss_GroupKillsPoints += basePts;
-                }
-            };
-            fun(killerScore);
-            if (groupScore != null)
-            {
-                fun(groupEntry);
-                fun(groupScore.Totals);
-            }
-            else
-            {
-                fun(EnsureSoloScore(killer));
-            }
         }
         #endregion
 
@@ -2885,23 +2746,23 @@ namespace AmteScripts.Managers
                     break;
 
                 case eSessionTypes.CaptureTheFlag: // Flag Capture
-                    scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPSoloKills", new Score(ps.Flag_SoloKillsPoints, ps.Flag_SoloKills)));
-                    scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPGrpKills", new Score(ps.Flag_GroupKillsPoints, ps.Flag_GroupKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPSoloKills", new Score(ps.PvP_SoloKillsPoints, ps.PvP_SoloKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPGrpKills", new Score(ps.PvP_GroupKillsPoints, ps.PvP_GroupKills)));
                     scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPFlagCarrierKillBonus", new Score(ps.Flag_KillFlagCarrierPoints, ps.Flag_KillFlagCarrierCount)));
                     scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPFlagsCaptured", new Score(ps.Flag_FlagReturnsPoints, ps.Flag_FlagReturnsCount)));
                     scoreLines.Add(new ScoreLine("PvP.Score.FlagPvPOwnership", new Score(ps.Flag_OwnershipPoints, 0, ScoreType.BonusPoints)));
                     break;
 
                 case eSessionTypes.TreasureHunt: // Treasure Hunt
-                    scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPSoloKills", new Score(ps.Treasure_SoloKillsPoints, ps.Treasure_SoloKills)));
-                    scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPGrpKills", new Score(ps.Treasure_GroupKillsPoints, ps.Treasure_GroupKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPSoloKills", new Score(ps.PvP_SoloKillsPoints, ps.PvP_SoloKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPGrpKills", new Score(ps.PvP_GroupKillsPoints, ps.PvP_GroupKills)));
                     scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPTreasurePoints", new Score(ps.Treasure_BroughtTreasuresPoints, 0, ScoreType.BonusPoints)));
                     scoreLines.Add(new ScoreLine("PvP.Score.TreasurePvPStolenItemPenalty", new Score(ps.Treasure_StolenTreasuresPoints, 0, ScoreType.MalusPoints)));
                     break;
 
                 case eSessionTypes.BringAFriend: // Bring Friends
-                    scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPSoloKills", new Score(ps.Friends_SoloKillsPoints, ps.Friends_SoloKills)));
-                    scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPGrpKills", new Score(ps.Friends_GroupKillsPoints, ps.Friends_GroupKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPSoloKills", new Score(ps.PvP_SoloKillsPoints, ps.PvP_SoloKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPGrpKills", new Score(ps.PvP_GroupKillsPoints, ps.PvP_GroupKills)));
                     scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPBroughtFriends", new Score(ps.Friends_BroughtFriendsPoints, 0, ScoreType.BonusPoints)));
                     scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPFamilyBonus", new Score(ps.Friends_BroughtFamilyBonus, 0, ScoreType.BonusPoints)));
                     scoreLines.Add(new ScoreLine("PvP.Score.FriendsPvPLostFriends", new Score(ps.Friends_FriendKilledPoints, ps.Friends_FriendKilledCount)));
@@ -2909,15 +2770,15 @@ namespace AmteScripts.Managers
                     break;
 
                 case eSessionTypes.TerritoryCapture: // Capture Territories
-                    scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPSoloKills", new Score(ps.Terr_SoloKillsPoints, ps.Terr_SoloKills)));
-                    scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPGrpKills", new Score(ps.Terr_GroupKillsPoints, ps.Terr_GroupKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPSoloKills", new Score(ps.PvP_SoloKillsPoints, ps.PvP_SoloKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPGrpKills", new Score(ps.PvP_GroupKillsPoints, ps.PvP_GroupKills)));
                     scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPTerritoryCaptures", new Score(ps.Terr_TerritoriesCapturedPoints, ps.Terr_TerritoriesCapturedCount)));
                     scoreLines.Add(new ScoreLine("PvP.Score.CTTPvPOwnership", new Score(ps.Terr_TerritoriesOwnershipPoints, 0, ScoreType.BonusPoints)));
                     break;
 
                 case eSessionTypes.BossHunt: // Boss Kill
-                    scoreLines.Add(new ScoreLine("PvP.Score.BossPvPSoloBossKills", new Score(ps.Boss_SoloKillsPoints, ps.Boss_SoloKills)));
-                    scoreLines.Add(new ScoreLine("PvP.Score.BossPvPGroupBossKills", new Score(ps.Boss_GroupKillsPoints, ps.Boss_GroupKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.BossPvPSoloBossKills", new Score(ps.PvP_SoloKillsPoints, ps.PvP_SoloKills)));
+                    scoreLines.Add(new ScoreLine("PvP.Score.BossPvPGroupBossKills", new Score(ps.PvP_GroupKillsPoints, ps.PvP_GroupKills)));
                     scoreLines.Add(new ScoreLine("PvP.Score.BossPvPBossHits", new Score(ps.Boss_BossHitsPoints, ps.Boss_BossHitsCount)));
                     scoreLines.Add(new ScoreLine("PvP.Score.BossPvPBossKills", new Score(ps.Boss_BossKillsPoints, ps.Boss_BossKillsCount)));
                     break;

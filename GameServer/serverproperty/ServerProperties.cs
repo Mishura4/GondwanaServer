@@ -1703,7 +1703,13 @@ namespace DOL.GS.ServerProperties
         /// When joining a group in PVP, do we transfer items to the group, or table them for later?
         /// </summary>
         [ServerProperty("pvp", "pvpsession_treasure_transfer_items", "Whether to transfer items in treasure hunt PvP when joining a group", false)]
-        public static bool PVSESSSION_TREASURE_TRANSFER_ITEMS;
+        public static bool PVPSESSSION_TREASURE_TRANSFER_ITEMS;
+
+        /// <summary>
+        /// In PVP, do we count group kills in solo scores?
+        /// </summary>
+        [ServerProperty("pvp", "pvpsession_groupkills_soloscores", "Whether to count group kills in solo scores in PvP", true)]
+        public static bool PVPSESSION_GROUPKILLS_SOLOSCORES;
         #endregion
 
         #region KEEPS

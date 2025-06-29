@@ -103,7 +103,7 @@ namespace AmteScripts.PvP.CTF
             // Score: If killer is a player, award kill-carrier points
             if (killer is GamePlayer killerPlayer)
             {
-                PvpManager.Instance.UpdateScores_FlagCarrierKill(killerPlayer, carrier, wasFlagCarrier: true);
+                PvpManager.Instance.AwardCTFCarrierKill(killerPlayer, carrier);
             }
 
             foreach (GamePlayer plr in carrier.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).OfType<GamePlayer>())
