@@ -313,7 +313,7 @@ namespace DOL.Territories
             // ---- Guild Territories Info ----
             infos.Add(string.Empty);
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.GuildInfo"));
-            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.MaxTerritories", player.Guild.MaxTerritories, player.Guild.TerritoryCount));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.MaxTerritories", player.Guild?.MaxTerritories ?? 0, player.Guild?.TerritoryCount ?? 0));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyRent", CalculateGuildTerritoryTax(player.Guild)));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * Properties.DAILY_MERIT_POINTS));
             string timeBeforeRent;
@@ -503,7 +503,7 @@ namespace DOL.Territories
             };
         }
 
-        public int CalculateGuildTerritoryTax(Guild guild)
+        public int CalculateGuildTerritoryTax(Guild? guild)
         {
             if (guild == null || guild.Territories?.Any() != true)
                 return 0;
