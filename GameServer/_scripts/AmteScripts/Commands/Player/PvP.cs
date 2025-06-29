@@ -60,8 +60,17 @@ namespace DOL.GS.Commands
                             DisplayMessage(client, msg);
                             return;
                         }
-                        
-                        bool success = PvpManager.Instance.Open(sessionID, true);
+
+                        bool success = false;
+                        try
+                        {
+                            success = PvpManager.Instance.Open(sessionID, true);
+                        }
+                        catch
+                        {
+                            client.SendTranslation("Commands.GM.PvP.PvPNotOpened");
+                            throw;
+                        }
                         if (success)
                         {
                             var msg = LanguageMgr.GetTranslation(

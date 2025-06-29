@@ -35,7 +35,7 @@ namespace AmteScripts.Managers
 {
     public class PvpManager
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+        [NotNull] private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType!)!;
 
         public enum eSessionTypes
         {
@@ -136,7 +136,7 @@ namespace AmteScripts.Managers
         }
 
         /// <summary>The chosen session from DB for the day</summary>
-        private PvpSession _activeSession;
+        private PvpSession? _activeSession;
         [NotNull] private readonly object _sessionLock = new object();
 
         // Scoreboard
@@ -1031,9 +1031,6 @@ namespace AmteScripts.Managers
                 _isForcedOpen = force;
                 if (_isOpen)
                     return true;
-
-                _isOpen = true;
-                _startedTime = DateTime.Now;
             
                 // Reset scoreboard, queues, oldInfos
                 ResetScores();
@@ -1051,44 +1048,63 @@ namespace AmteScripts.Managers
                 _groupSpawns.Clear();
                 _soloAreas.Clear();
                 _groupAreas.Clear();
-            
-                if (string.IsNullOrEmpty(sessionID))
-                {
-                    try
-                    {
-                        sessionID = LoadScores();
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        // fine
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Warn("Could not open file temp/PvPScore.dat: ", ex);
-                        File.Copy("temp/PvPScore.dat", $"temp/PvPScore-error-{DateTime.Now}.dat");
-                    }
-                }
 
-                if (string.IsNullOrEmpty(sessionID))
+                try
                 {
-                    // pick a random session from DB
-                    _activeSession = PvpSessionMgr.PickRandomSession();
-                    if (_activeSession == null)
+                    if (string.IsNullOrEmpty(sessionID))
                     {
-                        log.Warn("No PvP Sessions in DB, cannot open!");
-                        _isOpen = false;
-                        return false;
+                        try
+                        {
+                            sessionID = LoadScores();
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            // fine
+                        }
+                        catch (Exception ex)
+                        {
+                            try
+                            {
+                                log.Error("Could not open file temp/PvPScore.dat: ", ex);
+                                File.Copy("temp/PvPScore.dat", $"temp/PvPScore-error-{DateTime.Now:yy-MM-dd.hh-mm-ss}.dat");
+                            }
+                            catch (Exception ex2)
+                            {
+                                log.Error("Could not backup temp/PvPScore.dat after error: ", ex2);
+                            }
+                        }
                     }
+
+                    if (string.IsNullOrEmpty(sessionID))
+                    {
+                        // pick a random session from DB
+                        _activeSession = PvpSessionMgr.PickRandomSession();
+                        if (_activeSession == null)
+                        {
+                            log.Warn("No PvP Sessions in DB, cannot open!");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        _activeSession = PvpSessionMgr.GetAllSessions().First(s => string.Equals(s.SessionID, sessionID));
+                        if (_activeSession == null)
+                        {
+                            log.Warn($"PvP session {sessionID} could not be found, cannot open!");
+                            _isOpen = false;
+                            return false;
+                        }
+                    }
+
+                    _isOpen = true;
+                    _startedTime = DateTime.Now;
                 }
-                else
+                catch (Exception ex)
                 {
-                    _activeSession = PvpSessionMgr.GetAllSessions().First(s => string.Equals(s.SessionID, sessionID));
-                    if (_activeSession == null)
-                    {
-                        log.Warn($"PvP session {sessionID} could not be found, cannot open!");
-                        _isOpen = false;
-                        return false;
-                    }
+                    log.Error($"Cannot open open session \"{sessionID}\": {ex}");
+                    _isOpen = false;
+                    _activeSession = null;
+                    throw;
                 }
 
                 log.Info($"PvpManager: Opened session [{_activeSession.SessionID}] Type={CurrentSessionType}, SpawnOpt={_activeSession.SpawnOption}");
