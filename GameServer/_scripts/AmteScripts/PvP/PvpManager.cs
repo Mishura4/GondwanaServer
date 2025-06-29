@@ -1066,11 +1066,11 @@ namespace AmteScripts.Managers
                             try
                             {
                                 log.Error("Could not open file temp/PvPScore.dat: ", ex);
-                                File.Copy("temp/PvPScore.dat", $"temp/PvPScore-error-{DateTime.Now:yy-MM-dd.hh-mm-ss}.dat");
+                                File.Move("temp/PvPScore.dat", $"temp/PvPScore-error-{DateTime.Now:yy-MM-dd.hh-mm-ss}.dat");
                             }
                             catch (Exception ex2)
                             {
-                                log.Error("Could not backup temp/PvPScore.dat after error: ", ex2);
+                                log.Error("Could not move temp/PvPScore.dat after error: ", ex2);
                             }
                         }
                     }
