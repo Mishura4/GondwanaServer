@@ -3814,14 +3814,17 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Subterritories.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            else if (client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild && !client.Player.IsInPvP)
+                            if (client.Player.IsInPvP)
+                            {
+                                if (PvpManager.Instance.CurrentSessionType is not PvpManager.eSessionTypes.TerritoryCapture)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CmdCannotUseHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                            }
+                            else if (client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
-                            }
-                            else if (PvpManager.Instance.CurrentSessionType is not PvpManager.eSessionTypes.TerritoryCapture)
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CmdCannotUseHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                         }
