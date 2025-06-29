@@ -377,26 +377,17 @@ namespace DOL.Territories
             string expiresIn = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryExpiresIn");
 
             var allSubs = this.Territories.Where(t => t.Type == Territory.eType.Subterritory);
-            bool inPvpZone = (PvpManager.Instance != null && PvpManager.Instance.IsOpen && PvpManager.Instance.IsInActivePvpZone(player) && PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture);
+            bool inPvpZone = (PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture && PvpManager.Instance.IsInActivePvpZone(player));
 
             IEnumerable<Territory> filtered;
             if (inPvpZone)
             {
                 var zones = PvpManager.Instance!.CurrentZones;
-                filtered = allSubs.IntersectBy(zones, t => t.Zone);
+                filtered = allSubs.Where(t => zones.Contains(t.Zone));
             }
             else
             {
-                if (PvpManager.Instance != null && PvpManager.Instance.CurrentSession != null
-                    && PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture)
-                {
-                    var zones = PvpManager.Instance!.CurrentZones;
-                    filtered = allSubs.IntersectBy(zones, t => t.Zone);
-                }
-                else
-                {
-                    filtered = allSubs;
-                }
+                filtered = allSubs;
             }
 
             foreach (var territory in filtered)

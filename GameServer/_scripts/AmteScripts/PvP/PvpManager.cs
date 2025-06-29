@@ -185,7 +185,7 @@ namespace AmteScripts.Managers
 
         private bool CreateAreas => _activeSession is { CreateCustomArea: true } && _isUniqueSpawns();
         
-        public eSessionTypes CurrentSessionType { get => (eSessionTypes)(_activeSession?.SessionType ?? 0); }
+        public eSessionTypes CurrentSessionType { get => IsOpen ? (eSessionTypes)(_activeSession?.SessionType ?? 0) : eSessionTypes.None; }
 
         /// <summary>
         /// Called when a PvP linkdead player’s grace period expires.
@@ -521,7 +521,7 @@ namespace AmteScripts.Managers
                 member.SaveIntoDatabase();
                 
                 // Merge/transfer scores where it makes sense
-                if (Properties.PVPSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
+                if (Properties.PVPSESSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
                 {
                     if (_soloScores.TryGetValue(member.InternalID!, out PvPScore value))
                     {
@@ -580,7 +580,7 @@ namespace AmteScripts.Managers
                 }
                 
                 // Merge/transfer scores where it makes sense
-                if (Properties.PVPSESSSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
+                if (Properties.PVPSESSION_TREASURE_TRANSFER_ITEMS && CurrentSessionType is eSessionTypes.TreasureHunt)
                 {
                     if (_soloScores.TryGetValue(player.InternalID!, out PvPScore value))
                     {
