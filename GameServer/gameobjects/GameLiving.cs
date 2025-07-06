@@ -4339,57 +4339,6 @@ namespace DOL.GS
 
             Health -= damageAmount + criticalAmount;
 
-
-            if (this is GamePlayer)
-            {
-                double triggerSpellValue = TempProperties.getProperty<double>("TriggerSpell", 0);
-                int spellLevel = TempProperties.getProperty("TriggerSpellLevel", 0);
-                if (triggerSpellValue > 0)
-                {
-                    if (100 * Health / MaxHealth < triggerSpellValue)
-                    {
-                        int triggerSubSpell = TempProperties.getProperty("TriggerSubSpell", 0);
-                        if (triggerSubSpell > 0)
-                        {
-                            DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(triggerSubSpell));
-                            if (dbspell != null)
-                            {
-                                Spell spell = new Spell(dbspell, spellLevel);
-                                ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
-
-                                //cancel current trigger effect
-                                foreach (IGameEffect fx in EffectList)
-                                {
-                                    if (!(fx is GameSpellEffect))
-                                        continue;
-                                    GameSpellEffect effect = (GameSpellEffect)fx;
-                                    if (fx is GameSpellAndImmunityEffect && ((GameSpellAndImmunityEffect)fx).ImmunityState)
-                                        continue; // ignore immunity effects
-
-                                    if (effect.SpellHandler.Spell != null && (effect.SpellHandler.Spell.SpellType == "TriggerBuff") && (effect.SpellHandler.Spell.SubSpellID == triggerSubSpell))
-                                    {
-                                        effect.Cancel(false);
-                                    }
-                                }
-
-                                dd.IgnoreDamageCap = true;
-                                if (spell.Target.ToLower() == "self")
-                                    dd.StartSpell(this);
-                                else if (source is GameLiving)
-                                    dd.StartSpell((GameLiving)source);
-                                TempProperties.removeProperty("TriggerSpell");
-                                TempProperties.removeProperty("TriggerSubSpell");
-                                TempProperties.removeProperty("TriggerSpellLevel");
-                            }
-                        }
-                        else
-                        {
-                            log.Warn("A triggerSpell haven't subspell id ! Plz check in DB");
-                        }
-                    }
-                }
-            }
-
             Stealth(false);
 
             if (!IsAlive)

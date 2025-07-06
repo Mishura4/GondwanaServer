@@ -210,6 +210,8 @@ namespace DOL.GS.Spells
             get { return Spell.AllowCoexisting; }
         }
 
+        public bool CastSubSpellsWithSpell { get; protected set; } = true;
+
 
         /// <summary>
         /// The CastingCompleteEvent
@@ -2595,6 +2597,9 @@ namespace DOL.GS.Spells
         /// <param name="target"></param>
         public virtual bool CastSubSpells(GameLiving target)
         {
+            if (target is null)
+                target = Caster;
+            
             List<int> subSpellList = new List<int>();
             if (m_spell.SubSpellID > 0)
                 subSpellList.Add(m_spell.SubSpellID);
@@ -2603,24 +2608,32 @@ namespace DOL.GS.Spells
             foreach (int spellID in subSpellList.Union(m_spell.MultipleSubSpells))
             {
                 Spell spell = SkillBase.GetSpellByID(spellID);
-                //we need subspell ID to be 0, we don't want spells linking off the subspell
-                if (target != null && spell != null)
+                if (spell == null)
                 {
-                    // We have to scale pet subspells when cast
-                    if (Caster is GamePet pet && !(Caster is NecromancerPet))
-                        pet.ScalePetSpell(spell);
+                    log.ErrorFormat(
+                        "Spell {0} has subspell {1} which does not exist. Check DB and/or reload spells",
+                        m_spell.ID, spellID
+                    );
+                    continue;
+                }
 
-                    ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(m_caster, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
-                    spellhandler.Parent = this;
-                    if (m_spell.SubSpellDelay > 0)
-                    {
-                        success = true;
-                        new SubSpellTimer(Caster, spellhandler, target).Start(m_spell.SubSpellDelay * 1000);
-                    }
-                    else
-                    {
-                        success = success || spellhandler.StartSpell(target);
-                    }
+                //we need subspell ID to be 0, we don't want spells linking off the subspell
+                //TODO (Mishura): this comment ^ appears to be leftover from code that was removed
+                
+                // We have to scale pet subspells when cast
+                if (Caster is GamePet pet && !(Caster is NecromancerPet))
+                    pet.ScalePetSpell(spell);
+
+                ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(m_caster, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+                spellhandler.Parent = this;
+                if (m_spell.SubSpellDelay > 0)
+                {
+                    success = true;
+                    new SubSpellTimer(Caster, spellhandler, target).Start(m_spell.SubSpellDelay * 1000);
+                }
+                else
+                {
+                    success = success || spellhandler.StartSpell(target);
                 }
             }
             return success;
@@ -2755,7 +2768,10 @@ namespace DOL.GS.Spells
                 success = ApplyEffectOnTarget(null, 1) || success;
             }
 
-            success = CastSubSpells(target) || success;
+            if (CastSubSpellsWithSpell)
+            {
+                success = CastSubSpells(target) || success;
+            }
             return success;
         }
         

@@ -517,7 +517,7 @@ namespace DOL.GS.Effects
         /// Cancels the effect
         /// </summary>
         /// <param name="playerCanceled">true if canceled by the player</param>
-        /// <param name="force"></param>
+        /// <param name="force">true to also remove immunity states</param>
         public virtual void Cancel(bool playerCanceled, bool force = false)
         {
             bool wasImmunity = false;
