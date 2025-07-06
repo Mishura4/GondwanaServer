@@ -265,10 +265,20 @@ namespace DOL.Territories
         {
             IEnumerable<Territory> all = Territories;
             all = all.Where(t => (t.Type is Territory.eType.Subterritory) == subterritories);
-            if (player.IsInPvP && PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture)
+            if (player.IsInPvP)
             {
-                var zones = PvpManager.Instance.CurrentZones.Select(z => z.ID).ToArray();
-                all = all.Where(t => zones.Contains(t.Zone?.ID ?? 0));
+                if (PvpManager.Instance.CurrentSessionType is PvpManager.eSessionTypes.TerritoryCapture)
+                {
+                    var zones = PvpManager.Instance.CurrentZones.Select(z => z.ID).ToArray();
+                    all = all.Where(t => zones.Contains(t.Zone?.ID ?? 0));
+                }
+                else
+                    all = []; // Don't show any in other sessions
+            }
+            else
+            {
+                // TODO: Should we cache this somewhere else? Maybe in Territory?
+                all = all.Where(t => t.Zone != null && !PvpSessionMgr.AllZones.Contains(t.Zone.ID));
             }
             return all;
         }
