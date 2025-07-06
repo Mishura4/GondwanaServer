@@ -23,6 +23,7 @@ using DOL.GS.PlayerTitles;
 using log4net;
 using DOL.GS.Housing;
 using DOL.GS.PropertyCalc;
+using System.Linq;
 
 namespace DOL.GS.PacketHandler
 {
@@ -206,7 +207,7 @@ namespace DOL.GS.PacketHandler
                 return;
 
             eStat[] updateStats =
-            {
+            [
                 eStat.STR,
                 eStat.DEX,
                 eStat.CON,
@@ -215,65 +216,53 @@ namespace DOL.GS.PacketHandler
                 eStat.PIE,
                 eStat.EMP,
                 eStat.CHR,
-            };
+            ];
 
-            int[] baseStats = new int[updateStats.Length];
+            var baseStats = new int[updateStats.Length];
+            var itemStats = new int[updateStats.Length];
+            var itemCaps = new int[updateStats.Length];
+            var buffStats = new int[updateStats.Length];
+            var abilityStats = new int[updateStats.Length];
+
+            foreach (var (stat, i) in updateStats.Select((stat, i) => (stat, i)))
+            {
+                var prop = (eProperty)stat;
+                baseStats[i] = player.GetBaseStat(stat);
+                itemStats[i] = player.GetModifiedFromItems(prop);
+                itemCaps[i] = (byte)StatCalculator.GetItemBonusCap(player, (eProperty)updateStats[i]);
+                
+                int acuityItemBonus = 0;
+                if (player.CharacterClass.ClassType != eClassType.PureTank && (int)updateStats[i] == (int)player.CharacterClass.ManaStat)
+                {
+                    if (player.CharacterClass.ID != (int)eCharacterClass.Scout && player.CharacterClass.ID != (int)eCharacterClass.Hunter && player.CharacterClass.ID != (int)eCharacterClass.Ranger)
+                    {
+                        acuityItemBonus = player.AbilityBonus[(int)eProperty.Acuity];
+                    }
+                }
+                abilityStats[i] = player.AbilityBonus[(int)updateStats[i]] + acuityItemBonus;
+                buffStats[i] = player.GetModified(prop) - (baseStats[i] + itemStats[i] + abilityStats[i]);
+
+                if (stat is eStat.CON)
+                    baseStats[i] -= player.TotalConstitutionLostAtDeath;
+            }
 
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.StatsUpdate)))
             {
 
                 // base
-                for (int i = 0; i < updateStats.Length; i++)
-                {
-                    baseStats[i] = player.GetBaseStat(updateStats[i]);
-
-                    if (updateStats[i] == eStat.CON)
-                        baseStats[i] -= player.TotalConstitutionLostAtDeath;
-
-                    pak.WriteShort((ushort)baseStats[i]);
-                }
-
+                baseStats.Foreach(s => pak.WriteShort((ushort)s));
+                pak.WriteShort(0);
+                
+                buffStats.Foreach(s => pak.WriteShort((ushort)s));
+                pak.WriteShort(0);
+                
+                itemStats.Foreach(s => pak.WriteShort((ushort)s));
                 pak.WriteShort(0);
 
-                // buffs/debuffs only; remove base, item bonus, RA bonus, class bonus
-                for (int i = 0; i < updateStats.Length; i++)
-                {
-                    var value = (ushort)player.GetModifiedFromBuffs((eProperty)updateStats[i]);
-                    pak.WriteShort(value);
-                }
-
-                pak.WriteShort(0);
-
-                // item bonuses
-                for (int i = 0; i < updateStats.Length; i++)
-                {
-                    pak.WriteShort((ushort)(player.GetModifiedFromItems((eProperty)updateStats[i])));
-                }
-
-                pak.WriteShort(0);
-
-                // item caps
-                for (int i = 0; i < updateStats.Length; i++)
-                {
-                    pak.WriteByte((byte)StatCalculator.GetItemBonusCap(player, (eProperty)updateStats[i]));
-                }
-
+                itemCaps.Foreach(s => pak.WriteByte((byte)s));
                 pak.WriteByte(0);
-
-                // RA bonuses
-                for (int i = 0; i < updateStats.Length; i++)
-                {
-                    int acuityItemBonus = 0;
-                    if (player.CharacterClass.ClassType != eClassType.PureTank && (int)updateStats[i] == (int)player.CharacterClass.ManaStat)
-                    {
-                        if (player.CharacterClass.ID != (int)eCharacterClass.Scout && player.CharacterClass.ID != (int)eCharacterClass.Hunter && player.CharacterClass.ID != (int)eCharacterClass.Ranger)
-                        {
-                            acuityItemBonus = player.AbilityBonus[(int)eProperty.Acuity];
-                        }
-                    }
-                    pak.WriteByte((byte)(m_gameClient.Player.AbilityBonus[(int)updateStats[i]] + acuityItemBonus));
-                }
-
+                
+                abilityStats.Foreach(s => pak.WriteByte((byte)s));
                 pak.WriteByte(0);
 
                 //Why don't we and mythic use this class bonus byte?
@@ -308,48 +297,30 @@ namespace DOL.GS.PacketHandler
                 eResist.Energy,
             };
 
-            int[] racial = new int[updateResists.Length];
-            int[] caps = new int[updateResists.Length];
-
-            for (int i = 0; i < updateResists.Length; i++)
+            var racial = new int[updateResists.Length];
+            var items = new int[updateResists.Length];
+            var caps = new int[updateResists.Length];
+            var buffs = new int[updateResists.Length];
+            var secondary = new int[updateResists.Length];
+            
+            foreach (var (stat, i) in updateResists.Select((stat, i) => (stat, i)))
             {
-                caps[i] = ResistCalculator.GetItemBonusCap(m_gameClient.Player, (eProperty)updateResists[i]);
+                var prop = (eProperty)stat;
+                racial[i] = SkillBase.GetRaceResist(m_gameClient.Player.Race, stat, m_gameClient.Player);
+                caps[i] = ResistCalculator.GetItemBonusCap(m_gameClient.Player, prop);
+                items[i] = m_gameClient.Player.ItemBonus[(int)prop];
+                secondary[i] = m_gameClient.Player.SpecBuffBonusCategory[(int)prop] + m_gameClient.Player.AbilityBonus[(int)prop];
+                buffs[i] = m_gameClient.Player.GetModified(prop) - (racial[i] - items[i] - secondary[i]);
             }
 
 
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.StatsUpdate)))
             {
-
-                // base resists
-                for (int i = 0; i < updateResists.Length; i++)
-                {
-                    racial[i] = SkillBase.GetRaceResist(m_gameClient.Player.Race, updateResists[i], m_gameClient.Player);
-                    pak.WriteShort((ushort)(racial[i]));
-                }
-
-                // buffs/debuffs only
-                for (int i = 0; i < updateResists.Length; i++)
-                {
-                    pak.WriteShort((ushort)m_gameClient.Player.GetModifiedFromBuffs((eProperty)updateResists[i]));
-                }
-
-                // item bonuses
-                for (int i = 0; i < updateResists.Length; i++)
-                {
-                    pak.WriteShort((ushort)(m_gameClient.Player.ItemBonus[(int)updateResists[i]]));
-                }
-
-                // item caps
-                for (int i = 0; i < updateResists.Length; i++)
-                {
-                    pak.WriteByte((byte)(caps[i]));
-                }
-
-                // Secondary resists
-                for (int i = 0; i < updateResists.Length; i++)
-                {
-                    pak.WriteByte((byte)(m_gameClient.Player.SpecBuffBonusCategory[(int)updateResists[i]] + m_gameClient.Player.AbilityBonus[(int)updateResists[i]]));
-                }
+                racial.Foreach(s => pak.WriteShort((ushort)s));
+                buffs.Foreach(s => pak.WriteShort((ushort)s));
+                items.Foreach(s => pak.WriteShort((ushort)s));
+                caps.Foreach(s => pak.WriteByte((byte)s));
+                secondary.Foreach(s => pak.WriteByte((byte)s));
 
                 pak.WriteByte(0xFF); // FF if resists packet
                 pak.WriteByte(0);

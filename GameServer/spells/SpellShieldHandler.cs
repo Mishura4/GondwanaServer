@@ -53,6 +53,7 @@ namespace DOL.GS.Spells
             {
                 return;
             }
+
             int damageAbsorbed = 0;
             int critAbsorbed = 0;
             if (ad.AttackType == AttackData.eAttackType.Spell)
@@ -65,12 +66,12 @@ namespace DOL.GS.Spells
                 damageAbsorbed = ((ad.Damage + 1) * 70) / 100;
                 critAbsorbed = ((ad.CriticalDamage + 1) * 70) / 100;
             }
-            
+
             if (damageAbsorbed == 0 && critAbsorbed == 0)
             {
                 return;
             }
-            
+
             ad.Damage -= damageAbsorbed;
             ad.CriticalDamage -= critAbsorbed;
 
