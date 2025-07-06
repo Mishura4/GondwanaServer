@@ -36,6 +36,12 @@ namespace DOL.GS.Spells
         {
             if (target is IllusionPet)
                 return false;
+
+            if (target.IsStealthed)
+            {
+                ErrorTranslationToCaster("SpellHandler.TargetIsStealthed");
+                return false;
+            }
             
             return base.ApplyEffectOnTarget(target, effectiveness);
         }

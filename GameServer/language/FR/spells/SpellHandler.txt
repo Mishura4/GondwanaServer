@@ -64,6 +64,7 @@ SpellHandler.BuffNoEffectOnVampiir:		Votre sort d'augmentation n'a aucun effet s
 SpellHandler.BuffNoEffectOnYou:			Ce sort d'augmentation n'a aucun effet sur vous !
 SpellHandler.AlreadyHasEffect:			Vous avez déjà cet effet !
 SpellHandler.AlreadyHasThisEffect:		{0} a déjà cet effet
+SpellHandler.TargetIsStealthed:         Ce sort ne peut pas être utilisé sur une cible camouflée!
 SpellHandler.DefaultDescription:		{0} a une valeur de {1} et une valeur de dégâts de {2}.
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Votre familier n'est pas en vue.

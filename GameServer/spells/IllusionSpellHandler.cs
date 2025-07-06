@@ -284,6 +284,12 @@ namespace DOL.GS.Spells
             {
                 return false;
             }
+
+            if (FindStaticEffectOnTarget(target, typeof(NecromancerShadeEffect)) != null)
+            {
+                ErrorTranslationToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetInvalid"), eChatType.CT_System);
+                return false;
+            }
             
             return base.ApplyEffectOnTarget(target, 1.0);
         }

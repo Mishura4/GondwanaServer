@@ -3482,6 +3482,17 @@ namespace DOL.GS.Spells
             }
         }
 
+        public void ErrorTranslationToCaster(string key, eChatType type = eChatType.CT_SpellResisted, params object[] args)
+        {
+            if (Spell.Radius > 0 || Spell.Target is "ground") 
+                return; // Don't send errors for AOEs
+
+            if (Parent is null)
+                return; // Don't send errors for subspells
+            
+            MessageTranslationToCaster(key, type, args);
+        }
+
         /// <summary>
         /// sends a message to a living
         /// </summary>
