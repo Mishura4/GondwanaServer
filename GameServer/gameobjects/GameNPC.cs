@@ -4486,6 +4486,12 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Can this mob ever give a reward? NOTE: This does NOT mean the mob WILL give a reward, there are other conditions
+        /// However a value of false will prevent rewards under any circumstance
+        /// </summary>
+        public bool m_worthReward = true;
+
+        /// <summary>
         /// Tests if this MOB should give XP and loot based on the XPGainers
         /// </summary>
         /// <returns>true if it should deal XP and give loot</returns>
@@ -4493,8 +4499,12 @@ namespace DOL.GS
         {
             get
             {
+                if (!m_worthReward)
+                    return false;
+                
                 if (CurrentRegion == null || CurrentRegion.Time - CHARMED_NOEXP_TIMEOUT < TempProperties.getProperty<long>(CHARMED_TICK_PROP))
                     return false;
+                
                 if (Brain is IControlledBrain)
                     return false;
 
@@ -4518,9 +4528,7 @@ namespace DOL.GS
                 }
                 return true;
             }
-            set
-            {
-            }
+            set => m_worthReward = value;
         }
 
         protected void ControlledNPC_Release()

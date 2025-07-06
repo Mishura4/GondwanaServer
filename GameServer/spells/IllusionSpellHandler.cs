@@ -256,6 +256,7 @@ namespace DOL.GS.Spells
             var pet = new IllusionPet(target, mode);
             pet.Owner = Caster;
             pet.Level = target.Level;
+            pet.IsWorthReward = false;
 
             pet.Inventory = npcInventory;
             pet.Styles = styles;
