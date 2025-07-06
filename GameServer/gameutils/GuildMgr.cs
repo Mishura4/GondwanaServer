@@ -562,7 +562,7 @@ namespace DOL.GS
             {
                 lock (m_guilds.SyncRoot)
                 {
-                    foreach (Guild g in m_guilds.Values)
+                    foreach (Guild g in m_guildids.Values)
                     {
                         g.SaveIntoDatabase();
                     }
