@@ -38,41 +38,41 @@ namespace DOL.GS.Spells
 
         private void EventHandler(DOLEvent e, object sender, EventArgs arguments)
         {
-            if (!(arguments is AttackedByEnemyEventArgs args))
-            {
-                return;
-            }
-            AttackData ad = args.AttackData;
-
-            if (ad.AttackType is not AttackData.eAttackType.Spell and not AttackData.eAttackType.DoT)
+            if (arguments is not AttackedByEnemyEventArgs { AttackData: { AttackType: AttackData.eAttackType.Spell or AttackData.eAttackType.DoT } ad })
             {
                 return;
             }
 
-            GameLiving target = ad.Target;
-            if (target.HealthPercent > 20)
+            if (sender is not GameLiving target)
             {
                 return;
             }
-
+            
+            var newHealth = target.Health - ad.Damage - ad.CriticalDamage;
+            if (newHealth > (int)(((double)target.MaxHealth * 20) / 100))
+            {
+                return;
+            }
             int damageAbsorbed = 0;
+            int critAbsorbed = 0;
             if (ad.AttackType == AttackData.eAttackType.Spell)
             {
-                damageAbsorbed = ad.Damage + ad.CriticalDamage;
-                ad.Damage = 0;
-                ad.CriticalDamage = 0;
+                damageAbsorbed = ad.Damage;
+                critAbsorbed = ad.CriticalDamage;
             }
             else if (ad.AttackType == AttackData.eAttackType.DoT)
             {
-                int normalDamage = ((ad.Damage + 1) * 70) / 100;
-                int critDamage = ((ad.CriticalDamage + 1) * 70) / 100;
-                damageAbsorbed = normalDamage + critDamage;
-                ad.Damage -= normalDamage;
-                ad.CriticalDamage -= critDamage;
+                damageAbsorbed = ((ad.Damage + 1) * 70) / 100;
+                critAbsorbed = ((ad.CriticalDamage + 1) * 70) / 100;
             }
             
-            if (damageAbsorbed == 0)
+            if (damageAbsorbed == 0 && critAbsorbed == 0)
+            {
                 return;
+            }
+            
+            ad.Damage -= damageAbsorbed;
+            ad.CriticalDamage -= critAbsorbed;
 
             if (target is GamePlayer player)
             {
