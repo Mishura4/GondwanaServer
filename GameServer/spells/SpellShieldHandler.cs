@@ -48,23 +48,53 @@ namespace DOL.GS.Spells
                 return;
             }
             
-            var newHealth = target.Health - ad.Damage - ad.CriticalDamage;
-            if (newHealth > (int)(((double)target.MaxHealth * 20) / 100))
+            var activationPct = Spell.Value;
+            if (activationPct == 0)
+                activationPct = 20;
+            // https://docs.google.com/spreadsheets/d/1W2hvD5f3WKrISxz7yZimg5Tiu1OW_YZJ3Se43GLOxcc/edit?usp=sharing
+            var totalDamage = ad.Damage + ad.CriticalDamage;
+            var newHealth = target.Health - totalDamage;
+            var activationThreshold = (int)(((double)target.MaxHealth * activationPct) / 100);
+            if (newHealth > activationThreshold)
             {
                 return;
             }
 
+            var maxAbsorb = activationThreshold;
+            int diff = activationThreshold - newHealth;
+            int toAbsorb;
+            // https://docs.google.com/spreadsheets/d/1W2hvD5f3WKrISxz7yZimg5Tiu1OW_YZJ3Se43GLOxcc/edit?gid=0#gid=0
+            switch (Spell.LifeDrainReturn)
+            {
+                case < 0:
+                    // Absorb the entire spell, leave with max Spell.LifeDrainReturn% hp
+                    maxAbsorb = (int)(((double)target.MaxHealth * Spell.LifeDrainReturn) / 100);
+                    goto case 0;
+                case 0:
+                    toAbsorb = Math.Max(0, maxAbsorb - newHealth);
+                    break;
+ 
+                case > 0:
+                    // Absorb Spell.LifeDrainReturn% hp, up to activation threshold
+                    maxAbsorb = (int)(((double)target.MaxHealth * Spell.LifeDrainReturn) / 100);
+                    toAbsorb = Math.Min(maxAbsorb, diff);
+                    break;
+            }
             int damageAbsorbed = 0;
             int critAbsorbed = 0;
             if (ad.AttackType == AttackData.eAttackType.Spell)
             {
-                damageAbsorbed = ad.Damage;
-                critAbsorbed = ad.CriticalDamage;
+                damageAbsorbed = Math.Min(toAbsorb, ad.Damage);
+                toAbsorb -= damageAbsorbed;
+                critAbsorbed = Math.Min(toAbsorb, ad.CriticalDamage);
+                toAbsorb -= critAbsorbed;
             }
             else if (ad.AttackType == AttackData.eAttackType.DoT)
             {
-                damageAbsorbed = ((ad.Damage + 1) * 70) / 100;
-                critAbsorbed = ((ad.CriticalDamage + 1) * 70) / 100;
+                damageAbsorbed = Math.Min(toAbsorb, ((ad.Damage + 1) * 70) / 100);
+                toAbsorb -= damageAbsorbed;
+                critAbsorbed = Math.Min(toAbsorb, ((ad.CriticalDamage + 1) * 70) / 100);
+                toAbsorb -= critAbsorbed;
             }
 
             if (damageAbsorbed == 0 && critAbsorbed == 0)
