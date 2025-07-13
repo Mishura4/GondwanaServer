@@ -310,7 +310,7 @@ namespace DOL.GS.PacketHandler
                 caps[i] = ResistCalculator.GetItemBonusCap(m_gameClient.Player, prop);
                 items[i] = m_gameClient.Player.ItemBonus[(int)prop];
                 secondary[i] = m_gameClient.Player.SpecBuffBonusCategory[(int)prop] + m_gameClient.Player.AbilityBonus[(int)prop];
-                buffs[i] = m_gameClient.Player.GetModified(prop) - (racial[i] - items[i] - secondary[i]);
+                buffs[i] = m_gameClient.Player.GetModified(prop) - (racial[i] + items[i] + secondary[i]);
             }
 
 
