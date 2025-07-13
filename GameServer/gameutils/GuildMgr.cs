@@ -135,7 +135,7 @@ namespace DOL.GS
                 if (!m_guilds.Contains(guild.Name))
                 {
                     m_guilds.Add(guild.Name, guild);
-                    m_guildids[guild.GuildID] = guild.Name;
+                    m_guildids[guild.GuildID] = guild;
                     guild.ID = ++m_lastID;
                     return true;
                 }
@@ -446,13 +446,8 @@ namespace DOL.GS
 
             lock (m_guildids.SyncRoot)
             {
-                var id = m_guildids[guildid];
-                if (id == null) return null;
-
-                lock (m_guilds.SyncRoot)
-                {
-                    return (Guild)m_guilds[id];
-                }
+                var guild = (Guild?)m_guildids[guildid];
+                return guild;
             }
         }
 
@@ -562,7 +557,7 @@ namespace DOL.GS
             {
                 lock (m_guilds.SyncRoot)
                 {
-                    foreach (Guild g in m_guilds.Values)
+                    foreach (Guild g in m_guildids.Values)
                     {
                         g.SaveIntoDatabase();
                     }
