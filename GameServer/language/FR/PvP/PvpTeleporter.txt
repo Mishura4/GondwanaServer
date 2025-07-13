@@ -1,10 +1,23 @@
 
-TeleporterPvP.Busy:                        Je suis occupé pour le moment !
-TeleporterPvP.CannotHelpPart1:             Bonjour {0}, je ne peux rien faire pour vous pour le moment !
-TeleporterPvP.CannotHelpPart2:             Revenez plus tard !
-TeleporterPvP.ChickenOutPart1:             Pff, tu es trop une poule mouillée pour rester ?!
-TeleporterPvP.ChickenOutPart2:             [Partir]
-TeleporterPvP.SendToCombat:                Bonjour {0}, je peux vous envoyer au combat ! Prêt ?!
-TeleporterPvP.InCombat:                    Vous ne pouvez pas être téléporté en étant en combat !
-TeleporterPvP.Leave:                       Partir
-TeleporterPvP.Ready:                       Prêt
+TeleporterPvP.Busy:						Je suis occupé pour le moment !
+TeleporterPvP.CannotHelpPart1:			Bonjour {0}, je ne peux rien faire pour vous pour le moment !
+TeleporterPvP.CannotHelpPart2:			Revenez plus tard !
+TeleporterPvP.ChickenOutPart1:			Pff, tu es trop une poule mouillée pour rester ?!
+TeleporterPvP.ChickenOutPart2:			[Partir]
+TeleporterPvP.SendToCombat:				Bonjour {0}, je peux vous envoyer au combat ! Prêt ?!
+TeleporterPvP.InCombat:					Vous ne pouvez pas être téléporté en étant en combat !
+TeleporterPvP.Leave:					Partir
+TeleporterPvP.Ready:					Prêt
+TeleporterPvP.NoSessionActive:			Le PvP n'est pas ouvert pour le moment ; aucune session n'est active.
+TeleporterPvP.TeleportAsSolo:			[Se téléporter seul au combat]
+TeleporterPvP.TeleportYourGroup:		[Envoyer votre groupe au combat]
+TeleporterPvP.GroupMaxSize:				(max. {0} joueurs)
+TeleporterPvP.JoinWaitingQueue:			[Rejoindre la file d'attente]
+TeleporterPvP.LeaveWaitingQueue:		[Quitter la file d'attente]
+TeleporterPvP.InvalidChoice:			Choix invalide : {0}
+TeleporterPvP.NoActiveSession:			Aucune session PvP n'est active actuellement !
+TeleporterPvP.SoloOnlyNoGroup:			Cette session n'accepte que les guerriers solitaires, pas de groupe autorisé !
+TeleporterPvP.NotInGroup:				Vous n'êtes pas dans un groupe !
+TeleporterPvP.MustBeGroupLeader:		Vous devez être le chef du groupe pour cela !
+TeleporterPvP.SoloOnlyNoQueue:			Seuls les combattants solitaires sont conviés, aucune file d'attente pour les groupes !
+TeleporterPvP.NotLeaderOrNoGroup:		Vous n'êtes pas chef de groupe ou n'avez pas de groupe. L'accès à cette session vous est interdit !

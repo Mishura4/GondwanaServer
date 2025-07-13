@@ -1,0 +1,11 @@
+
+PvPChest.CannotDeposit:			This chest cannot be deposited into!
+PvPChest.NotOwner:			You do not own this chest!
+PvPChest.NoTreasure:			You have no treasure to deposit!
+PvPChest.ConfirmDeposit:		Deposit all treasure items from your backpack into this PvP Chest?
+PvPChest.DepositCancelled:		Deposit cancelled.
+PvPChest.DepositedItems:		You have deposited {0} treasure item(s).
+PvPChest.NoItemsDeposited:		No treasure items were deposited.
+PvPChest.ChestScore:			[Chest Score] Your chest has {0} total treasure points.
+PvPChest.ChestEmpty:			You tried to steal, but the chest is empty!
+PvPChest.StoleItem:			You stole a [{0}] from the chest!

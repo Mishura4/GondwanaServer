@@ -4,6 +4,7 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOL.GS.Spells;
 using System;
+using static System.Collections.Specialized.BitVector32;
 
 namespace DOL.GS.Scripts
 {
@@ -46,7 +47,7 @@ namespace DOL.GS.Scripts
             // If PvP is closed or level < 20, only accept certain keywords
             if (!PvpManager.Instance.IsOpen || player.Level < 20)
             {
-                if (!string.Equals(str, "Partir", StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(str, "Partir", StringComparison.OrdinalIgnoreCase) && !string.Equals(str, "Leave", StringComparison.OrdinalIgnoreCase))
                 {
                     // Show the "cannot help you" messages
                     player.Out.SendMessage(
@@ -85,17 +86,10 @@ namespace DOL.GS.Scripts
 
             if (player.IsInPvP)
             {
-                // The old "chicken out" approach
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
                     "TeleporterPvP.ChickenOutPart1"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
                     "TeleporterPvP.ChickenOutPart2"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-
-                // Show bracket to leave PvP
-                string msgInPvp = LanguageMgr.GetTranslation(player.Client.Account.Language,
-                    "TeleporterPvP.AlreadyInPvp", player.Name)
-                    + "\n\n[Leave PvP]";
-                player.Out.SendMessage(msgInPvp, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
             else
             {
@@ -104,8 +98,8 @@ namespace DOL.GS.Scripts
                 if (!PvpManager.Instance.IsOpen || session == null)
                 {
                     // No session open
-                    player.Out.SendMessage("PvP is not currently open; no session is active.",
-                        eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                        "TeleporterPvP.NoSessionActive"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     return true;
                 }
 
@@ -116,15 +110,18 @@ namespace DOL.GS.Scripts
 
                 if (session.GroupCompoOption == 1 || session.GroupCompoOption == 3)
                 {
-                    msg += "\n[Teleport as Solo]";
+                    msg += "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,
+                        "TeleporterPvP.TeleportAsSolo");
                 }
 
                 if (session.GroupCompoOption == 2 || session.GroupCompoOption == 3)
                 {
-                    msg += "\n[Teleport your Group]";
+                    msg += "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,
+                        "TeleporterPvP.TeleportYourGroup");
                     if (session.GroupMaxSize > 0)
                     {
-                        msg += " (max. " + session.GroupMaxSize + " players)";
+                        msg += " " + LanguageMgr.GetTranslation(player.Client.Account.Language,
+                            "TeleporterPvP.GroupMaxSize", session.GroupMaxSize);
                     }
                 }
 
@@ -135,9 +132,11 @@ namespace DOL.GS.Scripts
                     {
                         bool isInQueue = PvpManager.Instance.IsPlayerInQueue(player);
                         if (!isInQueue)
-                            msg += "\n[Join Waiting Queue]";
+                            msg += "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,
+                                "TeleporterPvP.JoinWaitingQueue");
                         else
-                            msg += "\n[Leave Waiting Queue]";
+                            msg += "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,
+                                "TeleporterPvP.LeaveWaitingQueue");
                     }
                 }
 
@@ -179,39 +178,48 @@ namespace DOL.GS.Scripts
         /// </summary>
         public void OnChoiceClicked(GamePlayer player, string choice)
         {
+            var session = PvpManager.Instance.CurrentSession;
             if (_BaseSay(player, choice))
                 return;
 
             switch (choice)
             {
                 case "Teleport as Solo":
+                case "Se téléporter seul au combat":
                     _HandleSolo(player);
                     break;
 
                 case "Teleport your Group":
+                case "Envoyer votre groupe au combat":
                     _HandleGroup(player);
                     break;
 
                 case "Join Waiting Queue":
+                case "Rejoindre la file d'attente":
                     _HandleQueue(player);
                     break;
 
                 case "Leave Waiting Queue":
+                case "Quitter la file d'attente":
                     _HandleLeaveQueue(player);
                     break;
 
-                case "Leave PvP":
-                    if (player.IsInPvP)
-                        PvpManager.Instance.KickPlayer(player);
-                    break;
-
                 case "Partir":
-                    _HandleSolo(player);
+                case "Leave":
+                    if (session.GroupCompoOption == 2)
+                    {
+                        if (player.IsInPvP)
+                            PvpManager.Instance.KickPlayer(player);
+                    }
+                    else
+                    {
+                        _HandleSolo(player);
+                    }
                     break;
 
                 default:
-                    player.Out.SendMessage("Invalid choice: " + choice,
-                        eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                        "TeleporterPvP.InvalidChoice", choice), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
             }
         }
@@ -224,15 +232,8 @@ namespace DOL.GS.Scripts
             var session = PvpManager.Instance.CurrentSession;
             if (session == null || !PvpManager.Instance.IsOpen)
             {
-                player.Out.SendMessage("No current PvP session is active!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return;
-            }
-
-            // If the session is group-only (2), forbid
-            if (session.GroupCompoOption == 2)
-            {
-                player.Out.SendMessage("This PvP session only allows group entry.",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.NoActiveSession"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
 
@@ -249,27 +250,28 @@ namespace DOL.GS.Scripts
             var session = PvpManager.Instance.CurrentSession;
             if (session == null || !PvpManager.Instance.IsOpen)
             {
-                player.Out.SendMessage("No current PvP session is active!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.NoActiveSession"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
 
             if (session.GroupCompoOption == 1)
             {
-                player.Out.SendMessage("This session is solo-only, cannot bring a group!",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.SoloOnlyNoGroup"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
 
             if (player.Group == null)
             {
-                player.Out.SendMessage("You are not in a group!",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.NotInGroup"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
             if (player.Group.Leader != player)
             {
-                player.Out.SendMessage("You must be the group leader to do that!",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.MustBeGroupLeader"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
             
@@ -296,15 +298,15 @@ namespace DOL.GS.Scripts
             var session = PvpManager.Instance.CurrentSession;
             if (session == null || !PvpManager.Instance.IsOpen)
             {
-                player.Out.SendMessage("No current PvP session is active!",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.NoActiveSession"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
 
             if (session.GroupCompoOption == 1)
             {
-                player.Out.SendMessage("This session is solo-only, there's no group queue to join!",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.SoloOnlyNoQueue"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
 
@@ -364,8 +366,8 @@ namespace DOL.GS.Scripts
                 if (player.Group != null && player.Group.Leader == player)
                     PvpManager.Instance.AddGroup(player);
                 else
-                    player.Out.SendMessage("You are not the group leader or have no group. Cannot join group-based session!",
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                        "TeleporterPvP.NotLeaderOrNoGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
             else
             {
@@ -437,8 +439,8 @@ namespace DOL.GS.Scripts
             {
                 if (leader.Group == null || leader.Group.Leader != leader)
                 {
-                    leader.Out.SendMessage("You are not the group leader or have no group. Cannot join group-based session!",
-                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    leader.Out.SendMessage(LanguageMgr.GetTranslation(leader.Client.Account.Language,
+                        "TeleporterPvP.NotLeaderOrNoGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return 0;
                 }
 

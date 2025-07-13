@@ -249,6 +249,12 @@ SpellHandler.EnduranceHeal.TargetHealed:	You restore {0} for {1} endurance point
 SpellHandler.EnduranceHeal.TargetRestored:	Your endurance was restored by {0} for {1} points.
 SpellHandler.EnduranceHeal.TargetTooHigh:	You cannot cast an endurance heal the target has above 90% endurance!
 SpellHandler.HealthToEndurance.TransferLife:	You transfer {0} life to Endurance!
+SpellHandler.HealthToEndurance.InsufficientHealth:	Your health is too low! you cannot cast this spell!
+SpellHandler.HealthToEndurance.Diseased:	You are diseased! Life transfer to endurance is less efficient!
+SpellHandler.HealthToEndurance.DamnedNoEffect:	You are damned! Life transfer to endurance fails!
+SpellHandler.HealthToEndurance.DamnedPartialEffect: You are damned! Life transfer to endurance is less efficient!
+SpellHandler.HealthToEndurance.HealthLost:	You transfer {0}% of your health to endurance!
+SpellHandler.HealthToEndurance.EnduranceGained:	You gain {0}% endurance!
 
 SpellHandler.FocusShell.NoPets:			This spell may not be cast on pets!
 SpellHandler.FocusShell.SameRealm:		This spell only works on members of your realm!

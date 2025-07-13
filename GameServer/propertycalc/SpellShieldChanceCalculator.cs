@@ -52,6 +52,7 @@ namespace DOL.GS.PropertyCalc
                             Power = -5,
                             Range = 0,
                             Damage = 0,
+                            Value = 15,
                             DamageType = (int)eDamageType.Natural,
                             SpellID = SpellID,
                             Target = "self",

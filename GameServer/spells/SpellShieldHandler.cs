@@ -126,7 +126,10 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             int recastSeconds = Spell.RecastDelay / 1000;
-            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpellShield.MainDescription", Spell.Name);
+            var activationPct = Spell.Value;
+            if (activationPct == 0)
+                activationPct = 20;
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpellShield.MainDescription", Spell.Name, activationPct);
 
             if (Spell.RecastDelay > 0)
             {

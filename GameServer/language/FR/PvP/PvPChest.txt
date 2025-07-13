@@ -1,0 +1,12 @@
+
+PvPChest.CannotDeposit:			Vous ne pouvez déposer de trésors dans ce coffre !
+PvPChest.NotOwner:			Vous ne possédez pas ce coffre !
+PvPChest.NoTreasure:			Votre sac ne contient aucun trésor à déposer !
+PvPChest.ConfirmDeposit:		Déposer tous les trésors de votre sac dans ce coffre PvP ?
+PvPChest.DepositCancelled:		Dépôt annulé.
+PvPChest.DepositedItems:		Vous avez déposé {0} trésor(s).
+PvPChest.NoItemsDeposited:		Aucun trésor n'a été déposé.
+PvPChest.ChestScore:			[Score du coffre] Votre coffre a {0} points de trésor au total.
+PvPChest.ChestEmpty:			Vous avez tenté de voler, mais le coffre est vide !
+PvPChest.StoleItem:			Vous avez dérobé un [{0}] du coffre !
+

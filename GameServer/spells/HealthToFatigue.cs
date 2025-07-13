@@ -17,43 +17,105 @@
  *
  */
 using System;
-using System.Collections;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
-using DOL.GS.SkillHandler;
 using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-    /// <summary>
-    /// Damage Over Time spell handler
-    /// </summary>
-    [SpellHandlerAttribute("HealthToEndurance")]
+    [SpellHandler("HealthToEndurance")]
     public class HealthToEndurance : SpellHandler
     {
 
+        public HealthToEndurance(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
         public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            if (m_caster.Endurance == m_caster.MaxEndurance)
+            // Check if caster has enough endurance room
+            if (m_caster.Endurance >= m_caster.MaxEndurance)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.EnduranceHeal.CasterFull"), eChatType.CT_Spell);
+                return false;
+            }
+
+            // Calculate health cost (Spell.Value as percentage of MaxHealth)
+            int healthCost = CalculateHealthCost();
+            if (m_caster.Health < healthCost)
+            {
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.InsufficientHealth"), eChatType.CT_Spell);
                 return false;
             }
 
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        /// <summary>
-        /// Execute damage over time spell
-        /// </summary>
-        /// <param name="target"></param>
         public override void FinishSpellCast(GameLiving target)
         {
             base.FinishSpellCast(target);
 
-            GiveEndurance(m_caster, (int)m_spell.Value);
+            // Calculate health cost and endurance gain
+            int healthCost = CalculateHealthCost();
+            int enduranceGain = CalculateEnduranceGain();
+
+            // Apply disease/debuff effects (similar to OmniHeal)
+            double effectiveness = 1.0;
+            if (m_caster.IsDiseased)
+            {
+                effectiveness = 0.25; // 25% effectiveness if diseased
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.Diseased"), eChatType.CT_SpellResisted);
+            }
+
+            // Check for Damnation effect
+            var damnationEff = FindEffectOnTarget(m_caster, "Damnation");
+            if (damnationEff != null)
+            {
+                int harmValue = m_caster.TempProperties.getProperty<int>("DamnationValue", 0);
+                if (harmValue > 0)
+                {
+                    effectiveness = 0; // No effect if damned
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.DamnedNoEffect"), eChatType.CT_Spell);
+                    return;
+                }
+                else if (harmValue < 0)
+                {
+                    effectiveness = Math.Abs(harmValue) / 100.0; // Partial effect
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.DamnedPartialEffect"), eChatType.CT_SpellResisted);
+                }
+            }
+
+            // Deduct health
+            int healthLost = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, -healthCost);
+            if (healthLost < 0)
+            {
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.HealthLost", Math.Abs(healthLost)), eChatType.CT_Spell);
+            }
+
+            // Apply endurance gain
+            if (effectiveness > 0)
+            {
+                int adjustedEndurance = (int)(enduranceGain * effectiveness);
+                int enduranceGained = m_caster.ChangeEndurance(m_caster, GameLiving.eEnduranceChangeType.Spell, adjustedEndurance);
+                if (enduranceGained > 0)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.EnduranceGained", enduranceGained), eChatType.CT_Spell);
+                }
+            }
+
             OnEffectExpires(null, true);
+        }
+
+        private int CalculateHealthCost()
+        {
+            double healthPercent = Math.Abs(m_spell.LifeDrainReturn);
+            return (int)(m_caster.MaxHealth * (healthPercent / 100.0));
+        }
+
+        private int CalculateEnduranceGain()
+        {
+            double endurancePercent = Math.Abs(m_spell.Value);
+            int enduranceGain = (int)(m_caster.MaxEndurance * (endurancePercent / 100.0));
+            return Math.Min(enduranceGain, m_caster.MaxEndurance - m_caster.Endurance);
         }
 
         public override int CalculateEnduranceCost()
@@ -61,22 +123,10 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        protected virtual void GiveEndurance(GameLiving target, int amount)
-        {
-            if (target.Endurance >= amount)
-                amount = target.MaxEndurance - target.Endurance;
-
-            target.ChangeEndurance(target, GameLiving.eEnduranceChangeType.Spell, amount);
-            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.TransferLife", amount), eChatType.CT_Spell);
-        }
-
-        // constructor
-        public HealthToEndurance(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-
         public override string GetDelveDescription(GameClient delveClient)
         {
             int recastSeconds = Spell.RecastDelay / 1000;
-            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.HealthToFatigue.MainDescription", Spell.Value);
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.HealthToFatigue.MainDescription", Spell.LifeDrainReturn, Spell.Value);
 
             if (Spell.RecastDelay > 0)
             {

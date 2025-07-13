@@ -29,3 +29,14 @@ Commands.Players.Vol.NothingToSteal: 		There is nothing to steal on this player!
 Commands.Players.Vol.FullBag: 				Your bags are full, you can't steal anything!
 Commands.Players.Vol.StealItem: 			You just stole {0} to {1}!
 Commands.Players.Vol.BeStealedItem: 		{0} stole you {1}!
+Commands.Players.Vol.OwnChest: 			You cannot steal from your own locked chest!
+Commands.Players.Vol.GroupChest: 		You cannot steal from your group's locked chest!
+Commands.Players.Vol.NeedCrochets: 		You need a Crochets to be able to steal this chest.
+Commands.Players.Vol.PickLock: 			You attempt to pick the chest's lock...
+Commands.Players.Vol.StealChestWindow: 		Stealing Treasure...
+Commands.Players.Vol.ErrorUseCrochets:		Error consuming the Crochets.
+Commands.Players.Vol.ChestStealFailed: 		You failed your steal attempt on this chest, you are empty handed.
+Commands.Players.Vol.ChestEmpty: 		You tried to steal the treasure in this chest, but it is empty.
+Commands.Players.Vol.ItemTemplateNotFound: 	The item template could not be found.
+Commands.Players.Vol.NoFreeSlot: 		You don't have a free inventory slot.
+Commands.Players.Vol.StealChestSuccess: 	You successfully got a {0} from the Treasure chest!

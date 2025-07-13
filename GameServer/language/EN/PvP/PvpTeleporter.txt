@@ -8,3 +8,16 @@ TeleporterPvP.SendToCombat:				Hello {0}, I can send you to the fight! Ready?!
 TeleporterPvP.InCombat:					You cannot be teleported while in combat!
 TeleporterPvP.Leave:					Leave
 TeleporterPvP.Ready:					Ready
+TeleporterPvP.NoSessionActive:			PvP is not currently open; no session is active.
+TeleporterPvP.TeleportAsSolo:			[Teleport as Solo]
+TeleporterPvP.TeleportYourGroup:		[Teleport your Group]
+TeleporterPvP.GroupMaxSize:				(max. {0} players)
+TeleporterPvP.JoinWaitingQueue:			[Join Waiting Queue]
+TeleporterPvP.LeaveWaitingQueue:		[Leave Waiting Queue]
+TeleporterPvP.InvalidChoice:			Invalid choice: {0}
+TeleporterPvP.NoActiveSession:			No current PvP session is active!
+TeleporterPvP.SoloOnlyNoGroup:			This session is solo-only, cannot bring a group!
+TeleporterPvP.NotInGroup:				You are not in a group!
+TeleporterPvP.MustBeGroupLeader:		You must be the group leader to do that!
+TeleporterPvP.SoloOnlyNoQueue:			This session is solo-only, there's no group queue to join!
+TeleporterPvP.NotLeaderOrNoGroup:		You are not the group leader or have no group. Cannot join group-based session!

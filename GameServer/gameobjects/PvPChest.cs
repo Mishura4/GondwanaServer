@@ -132,16 +132,16 @@ namespace DOL.GS
 
             if (Score is null)
             {
-                player.Out.SendMessage("This chest cannot be deposited into!",
-                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "PvPChest.CannotDeposit"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             // If not the owner or chest unlocked => check
             if (!IsOwner(player))
             {
-                player.Out.SendMessage("You do not own this chest!",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "PvPChest.NotOwner"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -159,15 +159,15 @@ namespace DOL.GS
             }
             if (!hasTreasure)
             {
-                player.Out.SendMessage("You have no treasure to deposit!",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "PvPChest.NoTreasure"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             // Confirm deposit
             player.TempProperties.setProperty("PVPChest_Interact", this);
             player.Out.SendCustomDialog(
-                "Deposit ALL treasure items from your backpack into this PvP Chest?",
+                LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPChest.ConfirmDeposit"),
                 new CustomDialogResponse(DepositResponseCallback)
             );
             return true;
@@ -178,8 +178,8 @@ namespace DOL.GS
             player.TempProperties.removeProperty("PVPChest_Interact");
             if (response != 0x01)
             {
-                player.Out.SendMessage("Deposit cancelled.",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "PvPChest.DepositCancelled"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -206,13 +206,13 @@ namespace DOL.GS
 
             if (depositedCount > 0)
             {
-                player.Out.SendMessage($"You have deposited {depositedCount} treasure item(s).", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPChest.DepositedItems", depositedCount), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 SendScore();
             }
             else
             {
-                player.Out.SendMessage("No treasure items were deposited.",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "PvPChest.NoItemsDeposited"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }
 
@@ -251,7 +251,7 @@ namespace DOL.GS
             {
                 if (IsGroupChest)
                 {
-                    foreach (GamePlayer player in OwnerGuild.GetListOfOnlineMembers())
+                    foreach (GamePlayer player in OwnerGuild!.GetListOfOnlineMembers())
                     {
                         SendScore(player);
                     }
@@ -264,8 +264,8 @@ namespace DOL.GS
             }
 
             var points = Math.Max(0, Score.Treasure_BroughtTreasuresPoints - Score.Treasure_StolenTreasuresPoints);
-            playerTo.Out.SendMessage($"[Chest Score] Your chest has {points} total treasure points.",
-                                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            playerTo.Out.SendMessage(LanguageMgr.GetTranslation(playerTo.Client.Account.Language,
+                "PvPChest.ChestScore", points), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
         #endregion
 
@@ -304,13 +304,13 @@ namespace DOL.GS
             // stolenData was returned by StealRandomItem() or some other logic
             if (stolenData is null)
             {
-                stealer.Out.SendMessage("You tried to steal, but the chest is empty!",
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language,
+                    "PvPChest.ChestEmpty"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return;
             }
 
-            stealer.Out.SendMessage($"You stole a [{stolenData.ItemName}] from the chest!",
-                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language,
+                "PvPChest.StoleItem", stolenData.ItemName), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
             // only if we are in open session 3 and the chest is locked
             var pm = PvpManager.Instance;

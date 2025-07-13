@@ -6,6 +6,7 @@ using DOL.GS.Geometry;
 using DOL.Database;
 using AmteScripts.Areas;
 using AmteScripts.Managers;
+using DOL.Language;
 
 namespace AmteScripts.PvP.CTF
 {
@@ -155,7 +156,8 @@ namespace AmteScripts.PvP.CTF
 
                     PvpManager.Instance.AwardCTFCapturePoints(player);
 
-                    player.Out.SendMessage("You have deposited the flag on your outpost!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.DepositedFlag"),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                     return;
                 }

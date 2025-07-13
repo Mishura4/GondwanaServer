@@ -200,3 +200,15 @@ Languages.DBSpells.StrConBuffYouEnd:		Your strength and health returns to normal
 Languages.DBSpells.StrConBuffTargetEnd:		{0}'s extra strength and health fades.
 Languages.DBSpells.BodyResistDebuffYouStart:	You feel more vulnerable to physical magic!
 Languages.DBSpells.BodyResistDebuffTargetStart:	{0} seems vulnerable to physical magic!
+Languages.DBSpells.DreadYou:			You are dreading the end!
+Languages.DBSpells.DreadTarget:			{0} is dreading the end!
+Languages.DBSpells.AnguishYou:			The anguish is too much for you!
+Languages.DBSpells.AnguishTarget:		The anguish is too much for {0}!
+Languages.DBSpells.AgonyYou:			Agony consumes you!
+Languages.DBSpells.AgonyTarget:			Agony consumes {0}!
+Languages.DBSpells.DoomYou:			Doom is near for you
+Languages.DBSpells.DoomTarget:			Doom is near for {0}
+Languages.DBSpells.DoomEndYou:			You are doomed!
+Languages.DBSpells.DoomEndTarget:		{0} is doomed!
+Languages.DBSpells.NoLongerSufferYou:		You are no longer suffering
+Languages.DBSpells.NoLongerSufferTarget:	{0} is no longer suffering

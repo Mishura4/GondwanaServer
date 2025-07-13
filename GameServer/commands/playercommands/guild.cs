@@ -342,7 +342,7 @@ namespace DOL.GS.Commands
                                 myguild = GuildMgr.GetGuildByName(oldguildname);
                                 if (!GuildMgr.DoesGuildExist(oldguildname))
                                 {
-                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
                             }
@@ -358,7 +358,7 @@ namespace DOL.GS.Commands
 
                                 if (!client.Player.IsInPvP)
                                 {
-                                    client.SendTranslation("Commands.Players.Guild.NotInPvp", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    client.SendTranslation("Commands.Players.Guild.NotInPvP", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
 
@@ -386,6 +386,7 @@ namespace DOL.GS.Commands
                             {
                                 ply.GuildName = newguildname;
                                 ply.Client.SendTranslation("Commands.Players.Guild.Renamed", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, oldguildname, newguildname);
+                                ply.Out.SendUpdatePlayer();
                             }
                             client.Player.Guild?.UpdateGuildWindow();
                         }
@@ -448,7 +449,7 @@ namespace DOL.GS.Commands
 
                             if (!GuildMgr.DoesGuildExist(guildname))
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 

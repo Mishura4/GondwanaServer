@@ -207,7 +207,7 @@ namespace DOL.GS.Commands
 
                 if (!Player.IsAllowToVolInThisArea)
                 {
-                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Ardea"),
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Area"),
                                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
@@ -288,14 +288,14 @@ namespace DOL.GS.Commands
                 {
                     if (!chestTarget.IsGroupChest)
                     {
-                        Player.Out.SendMessage("You cannot steal from your own locked chest!",
-                                               eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.OwnChest"),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
                     else
                     {
-                        Player.Out.SendMessage("You cannot steal from your group's locked chest!",
-                                               eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.GroupChest"),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
                 }
@@ -303,8 +303,8 @@ namespace DOL.GS.Commands
                 InventoryItem crochets = Player.Inventory.GetFirstItemByID("oneuse_vang_crochets", eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
                 if (crochets == null)
                 {
-                    Player.Out.SendMessage("You need a Crochets to be able to steal this chest.",
-                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.NeedCrochets"),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     Player.Out.SendCloseTimerWindow();
                     Player.TempProperties.removeProperty(PLAYER_VOL_TIMER);
                     return;
@@ -320,8 +320,9 @@ namespace DOL.GS.Commands
                 }
 
                 int volTime = Util.Random(MIN_VOL_TIME, MAX_VOL_TIME);
-                Player.Out.SendMessage("You attempt to pick the chest's lock...", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                Player.Out.SendTimerWindow("Stealing Treasure...", volTime);
+                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.PickLock"),
+                                   eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                Player.Out.SendTimerWindow(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.StealChestWindow"), volTime);
 
                 RegionTimer Timer = new RegionTimer(Player);
                 Timer.Callback = new RegionTimerCallback(VolTargetChest);
@@ -456,7 +457,7 @@ namespace DOL.GS.Commands
 
             if (!stealer.Inventory.RemoveCountFromStack(crochets, 1))
             {
-                stealer.Out.SendMessage("Error consuming the Crochets.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.ErrorUseCrochets"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 stealer.Out.SendCloseTimerWindow();
                 stealer.TempProperties.removeProperty(PLAYER_VOL_TIMER);
                 return 0;
@@ -469,15 +470,16 @@ namespace DOL.GS.Commands
             int roll = rand.Next(1, 101);
             if (roll > totalChance)
             {
-                stealer.Out.SendMessage("You failed your steal attempt on this chest, you are empty handed.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.ChestStealFailed"),
+                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
             else
             {
                 var stolenData = chest.StealRandomItem();
                 if (stolenData == null)
                 {
-                    stealer.Out.SendMessage("You tried to steal the treasure in this chest, but it is empty.",
-                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.ChestEmpty"),
+                                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
@@ -486,8 +488,8 @@ namespace DOL.GS.Commands
                         DB.Column("Id_nb").IsEqualTo(stolenData.Id_nb));
                     if (template == null)
                     {
-                        stealer.Out.SendMessage("The item template could not be found.",
-                                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.ItemTemplateNotFound"),
+                                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else
                     {
@@ -496,14 +498,14 @@ namespace DOL.GS.Commands
                         eInventorySlot freeSlot = stealer.Inventory.FindFirstEmptySlot(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
                         if (freeSlot == eInventorySlot.Invalid)
                         {
-                            stealer.Out.SendMessage("You don't have a free inventory slot.",
-                                                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.NoFreeSlot"),
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
                         else
                         {
                             stealer.Inventory.AddItem(freeSlot, stolenItem);
-                            stealer.Out.SendMessage("You successfully got a " + stolenItem.Name + " from the Treasure chest!",
-                                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealChestSuccess", stolenItem.Name),
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
                     }
                     chest.OnTreasureStolen(stealer, stolenData);

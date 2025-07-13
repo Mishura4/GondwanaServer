@@ -23,6 +23,7 @@ using System.Reflection;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
+using DOL.GS.Spells;
 using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
@@ -1329,6 +1330,43 @@ namespace DOL.AI.Brain
             return casted;
         }
 
+        protected bool SelectCureTarget(Spell spell, IEnumerable<string> spellTypes, out GameObject target)
+        {
+            target = null;
+
+            // Check self
+            if (HasNegativeEffect(Body, spellTypes))
+            {
+                target = Body;
+                return true;
+            }
+
+            // Check pet
+            if (Body.ControlledBrain != null && Body.ControlledBrain.Body != null
+                && HasNegativeEffect(Body.ControlledBrain.Body, spellTypes)
+                && Body.GetDistanceTo(Body.ControlledBrain.Body) <= spell.Range
+                && spell.Target.ToLower() != "self")
+            {
+                target = Body.ControlledBrain.Body;
+                return true;
+            }
+
+            // Check realm (friendly NPCs)
+            if (spell.Target.ToLower() == "realm")
+            {
+                foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)Math.Max(spell.Radius, spell.Range)))
+                {
+                    if (Body.IsFriend(npc) && Util.Chance(60) && HasNegativeEffect(npc, spellTypes))
+                    {
+                        target = npc;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Checks defensive spells.  Handles buffs, heals, etc.
         /// </summary>
@@ -1441,51 +1479,47 @@ namespace DOL.AI.Brain
 
                 #region Disease Cure/Poison Cure/Summon
                 case "CUREDISEASE":
-                    if (Body.IsDiseased)
                     {
-                        Body.TargetObject = Body;
+                        if (SelectCureTarget(spell, CureSpellConstants.CureDiseaseSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
                         break;
                     }
-                    if (Body.ControlledBrain != null && Body.ControlledBrain.Body != null && Body.ControlledBrain.Body.IsDiseased
-                        && Body.GetDistanceTo(Body.ControlledBrain.Body) <= spell.Range && spell.Target.ToLower() != "self")
-                    {
-                        Body.TargetObject = Body.ControlledBrain.Body;
-                        break;
-                    }
-                    if (spell.Target.ToLower() == "realm")
-                    {
-                        foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)Math.Max(spell.Radius, spell.Range)))
-                        {
-                            if (Body.IsFriend(npc) && Util.Chance(60) && npc.IsDiseased)
-                            {
-                                Body.TargetObject = npc;
-                                break;
-                            }
-                        }
-                    }
-                    break;
                 case "CUREPOISON":
-                    if (LivingIsPoisoned(Body))
                     {
-                        Body.TargetObject = Body;
+                        if (SelectCureTarget(spell, CureSpellConstants.CurePoisonSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
                         break;
                     }
-                    if (Body.ControlledBrain != null && Body.ControlledBrain.Body != null && LivingIsPoisoned(Body.ControlledBrain.Body)
-                        && Body.GetDistanceTo(Body.ControlledBrain.Body) <= spell.Range && spell.Target.ToLower() != "self")
+                case "CURENEARSIGHT":
                     {
-                        Body.TargetObject = Body.ControlledBrain.Body;
+                        if (SelectCureTarget(spell, CureSpellConstants.CureNearsightSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
                         break;
                     }
-                    if (spell.Target.ToLower() == "realm")
+                case "CUREMEZZ":
                     {
-                        foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)Math.Max(spell.Radius, spell.Range)))
-                            if (Body.IsFriend(npc) && Util.Chance(60) && LivingIsPoisoned(npc))
-                            {
-                                Body.TargetObject = npc;
-                                break;
-                            }
+                        if (SelectCureTarget(spell, CureSpellConstants.CureMezzSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
                     }
-                    break;
+                case "ARAWNCURE":
+                    {
+                        if (SelectCureTarget(spell, CureSpellConstants.ArawnCureSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "UNPETRIFY":
+                    {
+                        if (SelectCureTarget(spell, CureSpellConstants.CurePetrifySpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "CUREALL":
+                    {
+                        if (SelectCureTarget(spell, CureSpellConstants.CureAllSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
                 case "SUMMON":
                     Body.TargetObject = Body;
                     break;
@@ -1772,18 +1806,14 @@ namespace DOL.AI.Brain
             return false;
         }
 
-        protected bool LivingIsPoisoned(GameLiving target)
+        protected bool HasNegativeEffect(GameLiving target, IEnumerable<string> spellTypes)
         {
+            if (target == null) return false;
+
             foreach (IGameEffect effect in target.EffectList)
             {
-                //If the effect we are checking is not a gamespelleffect keep going
-                if (effect is GameSpellEffect == false)
-                    continue;
-
-                GameSpellEffect speffect = effect as GameSpellEffect;
-
-                // if this is a DOT then target is poisoned
-                if (speffect!.Spell.SpellType == "DamageOverTime")
+                if (effect is not GameSpellEffect speffect) continue;
+                if (spellTypes.Contains(speffect.Spell.SpellType))
                     return true;
             }
 

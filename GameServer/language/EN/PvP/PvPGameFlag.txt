@@ -1,0 +1,7 @@
+
+PvPGameFlag.AlreadyOwnFlag:		You already own this flag; you cannot pick it up again!
+PvPGameFlag.GroupOwnsFlag:		Your group already owns this flag; you cannot pick it up again!
+PvPGameFlag.CannotPickupDead:		You can't pick up the flag while dead.
+PvPGameFlag.CannotPickupStealthed:	You can't pick up the flag while stealthed!
+PvPGameFlag.InventoryFull:		Your inventory is full!
+PvPGameFlag.DepositedFlag:		You have deposited the flag on your outpost!

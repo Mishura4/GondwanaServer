@@ -200,3 +200,15 @@ Languages.DBSpells.StrConBuffYouEnd:		Vous retrouvez votre vigueur et votre forc
 Languages.DBSpells.StrConBuffTargetEnd:		La force et la santé accrues de {0} s'estompent.
 Languages.DBSpells.BodyResistDebuffYouStart:	Vous vous sentez plus vulnérable à la magie physique !
 Languages.DBSpells.BodyResistDebuffTargetStart:	{0} semble vulnérable à la magie physique !
+Languages.DBSpells.DreadYou:			Tu tremble devant l'inéluctable !
+Languages.DBSpells.DreadTarget:			{0} tremble devant l'inéluctable !
+Languages.DBSpells.AnguishYou:			L'angoisse t'accable !
+Languages.DBSpells.AnguishTarget:		L'angoisse accable {0} !
+Languages.DBSpells.AgonyYou:			L'agonie te dévore !
+Languages.DBSpells.AgonyTarget:			L'agonie consume {0} !
+Languages.DBSpells.DoomYou:			Ton sort est scellé !
+Languages.DBSpells.DoomTarget:			Le sort de {0} est scellé !
+Languages.DBSpells.DoomEndYou:			Tu es condamné !
+Languages.DBSpells.DoomEndTarget:		{0} est condamné !
+Languages.DBSpells.NoLongerSufferYou:		Le tourment t'a quitté !
+Languages.DBSpells.NoLongerSufferTarget:	Le tourment a quitté {0} !

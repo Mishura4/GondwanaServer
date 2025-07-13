@@ -7,6 +7,7 @@ using DOL.GS.Geometry;
 using log4net;
 using AmteScripts.Managers;
 using System.Linq;
+using DOL.Language;
 
 namespace AmteScripts.PvP.CTF
 {
@@ -34,12 +35,14 @@ namespace AmteScripts.PvP.CTF
 
             if (OwnerPlayer == player)
             {
-                player.Out.SendMessage("You already own this flag; you cannot pick it up again!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.AlreadyOwnFlag"),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
             if (OwnerGuild != null && player.Guild != null && OwnerGuild == player.Guild)
             {
-                player.Out.SendMessage("Your group already owns this flag; you cannot pick it up again!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.GroupOwnsFlag"),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -57,20 +60,23 @@ namespace AmteScripts.PvP.CTF
         {
             if (!player.IsAlive)
             {
-                player.Out.SendMessage("You can't pick up the flag while dead.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.CannotPickupDead"),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             if (player.IsStealthed)
             {
-                player.Out.SendMessage("You can't pick up the flag while stealthed!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.CannotPickupStealthed"),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             var invFlag = new FlagInventoryItem(this);
             if (!player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, invFlag))
             {
-                player.Out.SendMessage("Your inventory is full!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.InventoryFull"),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 

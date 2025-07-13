@@ -249,6 +249,12 @@ SpellHandler.EnduranceHeal.TargetHealed:	Vous restaurez {0} pour {1} points d'en
 SpellHandler.EnduranceHeal.TargetRestored:	Votre endurance a été restaurée de {1} points par {0}.
 SpellHandler.EnduranceHeal.TargetTooHigh:	Vous ne pouvez pas lancer une guérison d'endurance si la cible a plus de 90% de sa jauge d'endurance remplie !
 SpellHandler.HealthToEndurance.TransferLife:	Vous transférez {0} point(s) de vie en endurance !
+SpellHandler.HealthToEndurance.InsufficientHealth:	Vos santé est insuffisante pour effectuer ce sort !
+SpellHandler.HealthToEndurance.Diseased:	Vous êtes malade ! La conversion de vos points de vie en endurance est réduite !
+SpellHandler.HealthToEndurance.DamnedNoEffect:	Vous êtes damné ! La conversion de vos points de vie en endurance échoue !
+SpellHandler.HealthToEndurance.DamnedPartialEffect: Vous êtes damné ! La conversion de vos points de vie en endurance est réduite !
+SpellHandler.HealthToEndurance.HealthLost:	Vous transférez {0}% de vos point(s) de vie en endurance !
+SpellHandler.HealthToEndurance.EnduranceGained:	Vous regagnez {0}% d'endurance !
 
 SpellHandler.FocusShell.NoPets:			Ce sort ne peut pas être lancé sur les familiers !
 SpellHandler.FocusShell.SameRealm:		Ce sort ne fonctionne que sur les membres de votre royaume !

@@ -482,6 +482,42 @@ namespace DOL.AI.Brain
             return casted || Body.IsCasting;
         }
 
+        protected bool SelectToCureTarget(Spell spell, IEnumerable<string> spellTypes, out GameObject target)
+        {
+            target = null;
+
+            // Cure owner
+            GameLiving owner = Owner;
+            if (HasNegativeEffect(owner, spellTypes))
+            {
+                target = owner;
+                return true;
+            }
+
+            // Cure self
+            if (HasNegativeEffect(Body, spellTypes))
+            {
+                target = Body;
+                return true;
+            }
+
+            // Cure group members
+            GamePlayer player = Body.GetPlayerOwner();
+            if (player?.Group != null)
+            {
+                foreach (GamePlayer p in player.Group.GetPlayersInTheGroup())
+                {
+                    if (HasNegativeEffect(p, spellTypes) && GameMath.IsWithinRadius(Body, p, spell.Range))
+                    {
+                        target = p;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Checks the Positive Spells.  Handles buffs, heals, etc.
         /// </summary>
@@ -638,69 +674,48 @@ namespace DOL.AI.Brain
 
                 #region Disease Cure/Poison Cure/Summon
                 case "CUREDISEASE":
-                    //Cure owner
-                    owner = Owner;
-                    if (owner.IsDiseased)
                     {
-                        Body.TargetObject = owner;
+                        if (SelectToCureTarget(spell, CureSpellConstants.CureDiseaseSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
                         break;
                     }
-
-                    //Cure self
-                    if (Body.IsDiseased)
-                    {
-                        Body.TargetObject = Body;
-                        break;
-                    }
-
-                    // Cure group members
-
-                    player = Body.GetPlayerOwner();
-
-                    if (player.Group != null)
-                    {
-                        foreach (GamePlayer p in player.Group.GetPlayersInTheGroup())
-                        {
-                            if (p.IsDiseased && GameMath.IsWithinRadius(Body, p, spell.Range))
-                            {
-                                Body.TargetObject = p;
-                                break;
-                            }
-                        }
-                    }
-                    break;
                 case "CUREPOISON":
-                    //Cure owner
-                    owner = Owner;
-                    if (LivingIsPoisoned(owner))
                     {
-                        Body.TargetObject = owner;
+                        if (SelectToCureTarget(spell, CureSpellConstants.CurePoisonSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "CURENEARSIGHT":
+                    {
+                        if (SelectToCureTarget(spell, CureSpellConstants.CureNearsightSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "CUREMEZZ":
+                    {
+                        if (SelectToCureTarget(spell, CureSpellConstants.CureMezzSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "ARAWNCURE":
+                    {
+                        if (SelectToCureTarget(spell, CureSpellConstants.ArawnCureSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "UNPETRIFY":
+                    {
+                        if (SelectToCureTarget(spell, CureSpellConstants.CurePetrifySpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "CUREALL":
+                    {
+                        if (SelectToCureTarget(spell, CureSpellConstants.CureAllSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
                         break;
                     }
 
-                    //Cure self
-                    if (LivingIsPoisoned(Body))
-                    {
-                        Body.TargetObject = Body;
-                        break;
-                    }
-
-                    // Cure group members
-
-                    player = Body.GetPlayerOwner();
-
-                    if (player.Group != null)
-                    {
-                        foreach (GamePlayer p in player.Group.GetPlayersInTheGroup())
-                        {
-                            if (LivingIsPoisoned(p) && GameMath.IsWithinRadius(Body, p, spell.Range))
-                            {
-                                Body.TargetObject = p;
-                                break;
-                            }
-                        }
-                    }
-                    break;
                 case "SUMMON":
                     Body.TargetObject = Body;
                     break;

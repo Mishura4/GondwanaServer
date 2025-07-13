@@ -87,7 +87,7 @@ SpellDescription.Resurrect.MainDescription:			Brings the target back to life, re
 SpellDescription.OffensiveProc.MainDescription:		{0} triggers a secondary spell with a {1}% chance on your melee attacks:
 SpellDescription.DefensiveProc.MainDescription:		{0} triggers a secondary spell with a {1}% chance when you are hit by melee attacks:
 SpellDescription.SpeedEnhancement.MainDescription:	The target's speed is increased to {0}% of normal.
-SpellDescription.SpellShield.MainDescription:		{0} absorbs 100% of spell damage and 70% of DoT effects when the player's health drops to 20% or lower.
+SpellDescription.SpellShield.MainDescription:		{0} absorbs 100% of spell damage and 70% of DoT effects when the player's health drops to {1}% or lower.
 SpellDescription.StyleBleeding.MainDescription:		Target takes {0} {1} every {2} seconds.
 SpellDescription.StyleTaunt.Increase:				Taunts the target, increasing your threat against it by {0}.
 SpellDescription.StyleTaunt.Decrease:				Detaunts the target, decreasing your threat against it by -{0}.
@@ -151,7 +151,7 @@ SpellDescription.Bump.MainDescriptionCone:			Enemies in a cone before the caster
 SpellDescription.Conversion.MainDescription:		{0}% of any damage done to you is converted into health, endurance, and mana.
 SpellDescription.MagicConversion.MainDescription:	{0}% of any spell damage done to you is converted into health, endurance, and mana.
 SpellDescription.Fury.MainDescription:				Gives a {0}% chance to deflect crowd control spells, and increases all magical resists by {0}%.
-SpellDescription.HealthToFatigue.MainDescription:	Target regains {0}% of lost endurance.
+SpellDescription.HealthToFatigue.MainDescription:	Target uses {0}% of health points and regains {1}% of lost endurance.
 SpellDescription.Chamber.MainDescription:			Allows you to preload a chamber containing a primary spell and a secondary spell which can be instantly unloaded upon your target.
 SpellDescription.Chamber.CanContainBolts:			Can contain bolts.
 SpellDescription.Chamber.CannotContainBolts:		Cannot contain bolts.

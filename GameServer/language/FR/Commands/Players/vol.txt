@@ -29,3 +29,14 @@ Commands.Players.Vol.NothingToSteal: 		Il n'y avait rien à voler !
 Commands.Players.Vol.FullBag: 				Vous avez vos sacs pleins, impossible de voler quoi que ce soit !
 Commands.Players.Vol.StealItem: 			Vous avez volé {0} à {1} !
 Commands.Players.Vol.BeStealedItem: 		{0} vous a volé {1} !
+Commands.Players.Vol.OwnChest: 			Vous ne pouvez pas voler votre propre coffre verrouillé !
+Commands.Players.Vol.GroupChest: 		Vous ne pouvez pas voler le coffre verrouillé de votre groupe !
+Commands.Players.Vol.NeedCrochets: 		Vous avez besoin de Crochets pour voler ce coffre.
+Commands.Players.Vol.PickLock: 			Vous tentez de crocheter la serrure du coffre...
+Commands.Players.Vol.StealChestWindow: 		Pillage du coffre...
+Commands.Players.Vol.ErrorUseCrochets:		Erreur lors de l'utilisation du Crochet.
+Commands.Players.Vol.ChestStealFailed: 		Vous avez échoué à voler ce coffre, vous repartez les mains vides.
+Commands.Players.Vol.ChestEmpty: 		Vous avez tenté de voler le trésor de ce coffre, mais celui-ci est vide !
+Commands.Players.Vol.ItemTemplateNotFound: 	Le modèle de l’objet n’a pas pu être trouvé.
+Commands.Players.Vol.NoFreeSlot: 		Vous n’avez pas de place libre dans votre inventaire.
+Commands.Players.Vol.StealChestSuccess: 	Vous avez dérobé un {0} du coffre au trésor !
