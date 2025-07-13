@@ -42,7 +42,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("PBAEHeal")]
     public class PBAEHealHandler : MasterlevelHandling
     {
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             switch (Spell.DamageType)
             {
@@ -56,7 +56,7 @@ namespace DOL.GS.Spells
                     break;
             }
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool OnDirectEffect(GameLiving target, double effectiveness)
@@ -277,10 +277,10 @@ namespace DOL.GS.Spells
         /// <summary>
         /// called after normal spell cast is completed and effect has to be started
         /// </summary>
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool HasPositiveEffect

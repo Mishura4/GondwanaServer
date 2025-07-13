@@ -32,10 +32,10 @@ namespace DOL.GS.Spells
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)

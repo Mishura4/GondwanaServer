@@ -34,10 +34,11 @@ namespace DOL.GS.Spells
         /// Execute unmake crystal seed spell
         /// </summary>
         /// <param name="target"></param>
-        public override void FinishSpellCast(GameLiving target)
+        /// <param name="force"></param>
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         /// <summary>
@@ -93,10 +94,11 @@ namespace DOL.GS.Spells
         /// Execute Acient Transmuter summon spell
         /// </summary>
         /// <param name="target"></param>
-        public override void FinishSpellCast(GameLiving target)
+        /// <param name="force"></param>
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
         public override void OnEffectStart(GameSpellEffect effect)
         {
@@ -159,9 +161,9 @@ namespace DOL.GS.Spells
         // constructor
         public Port(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool OnDirectEffect(GameLiving target, double effectiveness)
@@ -546,9 +548,9 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool OnDirectEffect(GameLiving target, double effectiveness)

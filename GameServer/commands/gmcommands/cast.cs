@@ -136,7 +136,8 @@ namespace DOL.GS.Commands
                                     if (spell.Target == "pet")
                                         spellHandler.SendEffectAnimation(target, 0, false, 1);
                                 }
-                                if (spellHandler.StartSpell(target, true))
+                                spellHandler.FinishSpellCast(target, true);
+                                if (spellHandler.Status == SpellHandler.eStatus.Success)
                                 {
                                     if (spell.Pulse != 0)
                                         client.Player.PulseSpell = spellHandler;

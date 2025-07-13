@@ -252,7 +252,8 @@ namespace DOL.GS.Spells
         /// Fire bolt
         /// </summary>
         /// <param name="target"></param>
-        public override void FinishSpellCast(GameLiving target)
+        /// <param name="force"></param>
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
 

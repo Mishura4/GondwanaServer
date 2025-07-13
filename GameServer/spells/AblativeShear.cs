@@ -24,10 +24,10 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Deducts the power cost after the normal cast completes
         /// </summary>
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         /// <summary>

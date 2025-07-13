@@ -19,10 +19,10 @@ namespace DOL.GS.Spells
         public MLEndudrain(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
 
@@ -98,10 +98,10 @@ namespace DOL.GS.Spells
     {
         public MLManadrain(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool OnDirectEffect(GameLiving target, double effectiveness)
@@ -184,7 +184,7 @@ namespace DOL.GS.Spells
             return false;
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (m_spell.SubSpellID > 0)
             {
@@ -195,7 +195,7 @@ namespace DOL.GS.Spells
                     spellhandler.StartSpell(Caster);
                 }
             }
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -587,9 +587,9 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
 
             //we need to make sure the spell is only disabled if the attack was a success
             int isDisabled = Caster.TempProperties.getProperty<int>(DISABLE);

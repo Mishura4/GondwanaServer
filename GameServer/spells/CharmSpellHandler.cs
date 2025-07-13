@@ -55,10 +55,10 @@ namespace DOL.GS.Spells
             Reptile = 8,
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             Caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         protected override bool ExecuteSpell(GameLiving target, bool force = false)

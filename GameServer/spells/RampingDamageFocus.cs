@@ -45,11 +45,11 @@ namespace DOL.GS.Spells
             snareSubSpell = Spell.Value > 0 ? CreateSnare() : null;
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_currentTarget = target;
             Caster.Mana -= (PowerCost(target) + Spell.PulsePower);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
             OnDirectEffect(target, CurrentEffectiveness);
         }
 

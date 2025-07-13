@@ -76,7 +76,7 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             GamePlayer player = Caster as GamePlayer;
 

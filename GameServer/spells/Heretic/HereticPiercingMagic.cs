@@ -12,9 +12,9 @@ namespace DOL.GS.Spells
     {
         protected GameLiving focustarget = null;
         protected ArrayList m_focusTargets = null;
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
             focustarget = target;
         }
         public override void OnEffectStart(GameSpellEffect effect)

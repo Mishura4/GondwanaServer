@@ -46,10 +46,11 @@ namespace DOL.GS.Spells
         /// called when spell effect has to be started and applied to targets
         /// </summary>
         /// <param name="target"></param>
-        public override void FinishSpellCast(GameLiving target)
+        /// <param name="force"></param>
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override void OnEffectPulse(GameSpellEffect effect)

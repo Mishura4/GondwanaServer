@@ -57,7 +57,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// called after normal spell cast is completed and effect has to be started
         /// </summary>
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             foreach (GamePlayer player in m_caster.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
@@ -67,7 +67,7 @@ namespace DOL.GS.Spells
 
             m_caster.Mana -= PowerCost(target);
 
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
 
             if (m_pet == null)
                 return;

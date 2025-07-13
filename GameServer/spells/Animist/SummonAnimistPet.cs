@@ -54,7 +54,7 @@ namespace DOL.GS.Spells
 
             return base.CheckBeginCast(selectedTarget, quiet);
         }
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (Caster.GroundTargetPosition == Position.Nowhere)
             {
@@ -84,7 +84,7 @@ namespace DOL.GS.Spells
                 return;
             }
 
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)

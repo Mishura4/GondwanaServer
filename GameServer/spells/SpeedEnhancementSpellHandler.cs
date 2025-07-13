@@ -30,10 +30,10 @@ namespace DOL.GS.Spells
     [SpellHandler("SpeedEnhancement")]
     public class SpeedEnhancementSpellHandler : SpellHandler
     {
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             Caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)

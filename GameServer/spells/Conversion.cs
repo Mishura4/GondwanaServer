@@ -32,10 +32,10 @@ namespace DOL.GS.Spells
     {
         public const string ConvertDamage = "Conversion";
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

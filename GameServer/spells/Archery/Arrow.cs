@@ -46,7 +46,8 @@ namespace DOL.GS.Spells
         /// Fire arrow
         /// </summary>
         /// <param name="target"></param>
-        public override void FinishSpellCast(GameLiving target)
+        /// <param name="force"></param>
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Endurance -= CalculateEnduranceCost();
             //if ((target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent) && Spell.SpellType != "SiegeArrow")
@@ -54,7 +55,7 @@ namespace DOL.GS.Spells
             //    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.NoEffectOnTarget", target.Name), eChatType.CT_SpellResisted);
             //    return;
             //}
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
 

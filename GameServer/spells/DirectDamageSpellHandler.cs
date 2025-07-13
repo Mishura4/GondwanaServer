@@ -36,14 +36,14 @@ namespace DOL.GS.Spells
 
         private bool m_castFailed = false;
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (!m_castFailed)
             {
                 m_caster.Mana -= PowerCost(target);
             }
 
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         private const string LOSEFFECTIVENESS = "LOS Effectivness";

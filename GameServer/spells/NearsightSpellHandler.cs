@@ -192,10 +192,10 @@ namespace DOL.GS.Spells
     [SpellHandler("NearsightReduction")]
     public class NearsightReductionSpellHandler : SpellHandler
     {
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public NearsightReductionSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }

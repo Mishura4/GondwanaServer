@@ -30,7 +30,7 @@ namespace DOL.GS.Spells
     [SpellHandler("Bolt")]
     public class BoltSpellHandler : SpellHandler
     {
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
             if ((target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent) && Spell.SpellType != "SiegeArrow")
@@ -38,7 +38,7 @@ namespace DOL.GS.Spells
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.NoEffectOnTarget", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         #region LOS Checks for Keeps

@@ -17,10 +17,10 @@ namespace DOL.GS.Spells
         protected int m_pulsedamage = 0;
         //    protected int m_pulsecount = -1;
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             BeginEffect();
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override double GetLevelModFactor()

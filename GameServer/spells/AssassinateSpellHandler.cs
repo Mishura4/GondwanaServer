@@ -44,9 +44,9 @@ namespace DOL.GS.Spells
             InterruptCasting();
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
 
             GameEventMgr.RemoveHandler(Caster, GameLivingEvent.Moving, new DOLEventHandler(EventManager));
             GameEventMgr.RemoveHandler(Caster, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventManager));

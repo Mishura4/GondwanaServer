@@ -51,11 +51,11 @@ namespace DOL.GS.Spells
             if (UninterruptableSpell != null) { MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Warlock.MustFinishCastingUninterruptable"), eChatType.CT_System); return false; }
             return true;
         }
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             Caster.TempProperties.setProperty(WARLOCK_UNINTERRUPTABLE_SPELL, Spell);
 
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
 
 
         }

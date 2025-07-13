@@ -40,10 +40,10 @@ namespace DOL.GS.Spells
         
         /// <inheritdoc />
         public override bool HasPositiveEffect => false;
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         /// <inheritdoc />

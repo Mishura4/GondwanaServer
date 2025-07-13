@@ -57,7 +57,7 @@ namespace DOL.GS.Spells
         // constructor
         public PBAEDamage(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
             //For Banelord ML 8, it drains Life from the Caster
@@ -71,7 +71,7 @@ namespace DOL.GS.Spells
 
                 m_caster.Health -= chealth;
             }
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool OnDirectEffect(GameLiving target, double effectiveness)
@@ -161,10 +161,10 @@ namespace DOL.GS.Spells
         {
             return true;
         }
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
         public override int CalculateSpellResistChance(GameLiving target)
         {
@@ -341,10 +341,10 @@ namespace DOL.GS.Spells
     [SpellHandler("UnrresistableNonImunityStun")]
     public class UnrresistableNonImunityStun : MasterlevelHandling
     {
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
@@ -505,10 +505,10 @@ namespace DOL.GS.Spells
     [SpellHandler("EffectivenessDebuff")]
     public class EffectivenessDeBuff : MasterlevelHandling
     {
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

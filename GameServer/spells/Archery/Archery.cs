@@ -262,7 +262,7 @@ namespace DOL.GS.Spells
             return spellDamage;
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (target == null && Spell.Target.ToLower() != "area") return;
             if (Caster == null) return;
@@ -297,7 +297,7 @@ namespace DOL.GS.Spells
                 }
             }
 
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override int CalculateCastingTime()

@@ -56,14 +56,14 @@ namespace DOL.GS.Spells
             bolt.Start(1 + ticksToTarget);
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.NoEffectOnKeepComponent"), eChatType.CT_SpellResisted);
                 return;
             }
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         protected class BoltOnTargetAction : RegionAction

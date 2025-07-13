@@ -1272,11 +1272,11 @@ namespace DOL.GS.Spells
         /// Execute create item spell
         /// </summary>
         /// <param name="target"></param>
-        /// 
-        public override void FinishSpellCast(GameLiving target)
+        /// <param name="force"></param>
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool HasPositiveEffect

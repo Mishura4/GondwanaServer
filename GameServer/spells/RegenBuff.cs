@@ -92,7 +92,7 @@ namespace DOL.GS.Spells
 
         private ListDictionary m_concEffects;
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (Spell.Concentration > 0)
             {
@@ -101,7 +101,7 @@ namespace DOL.GS.Spells
                 rangeCheck.Interval = RANGE_CHECK_INTERVAL;
                 rangeCheck.Start(RANGE_CHECK_INTERVAL);
             }
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         protected override bool ExecuteSpell(GameLiving target, bool force = false)

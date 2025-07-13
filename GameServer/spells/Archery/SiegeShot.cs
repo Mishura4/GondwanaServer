@@ -41,7 +41,7 @@ namespace DOL.GS.Spells
             return false;
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (!(target is GameKeepComponent || target is Keeps.GameKeepDoor))
             {
@@ -52,7 +52,7 @@ namespace DOL.GS.Spells
             target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
             Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
 
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override void SendSpellMessages()

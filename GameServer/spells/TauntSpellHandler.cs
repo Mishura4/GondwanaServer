@@ -26,10 +26,10 @@ namespace DOL.GS.Spells
     [SpellHandler("Taunt")]
     public class TauntSpellHandler : SpellHandler
     {
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             Caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override bool OnDirectEffect(GameLiving target, double effectiveness)

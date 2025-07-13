@@ -26,9 +26,9 @@ namespace DOL.GS.Spells
     {
         private const ushort SECONDEFFECT = 2086;
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
             foreach (GamePlayer player in Caster.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 player.Out.SendSpellCastAnimation(Caster, SECONDEFFECT, 20);
         }

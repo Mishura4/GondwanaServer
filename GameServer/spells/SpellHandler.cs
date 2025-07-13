@@ -1921,6 +1921,9 @@ namespace DOL.GS.Spells
         /// <param name="success">spell success?</param>
         public virtual void SendHitAnimation(GameObject target, ushort boltDuration, bool noSound, byte success)
         {
+            var effect = m_spell.ClientHitEffect;
+            if (effect == 0)
+                effect = m_spell.ClientEffect;
             if (m_spell.ClientHitEffect == 0)
                 return;
             
@@ -1979,7 +1982,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// called after normal spell cast is completed and effect has to be started
         /// </summary>
-        public virtual void FinishSpellCast(GameLiving target)
+        public virtual void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (Caster is GamePlayer playerCaster)
             {
@@ -2027,7 +2030,7 @@ namespace DOL.GS.Spells
                 if (m_spell.Target == "pet")
                     SendEffectAnimation(target, 0, false, 1);
             }
-            if (StartSpell(target)) // and action
+            if (StartSpell(target, force)) // and action
             {
                 if (m_ability != null)
                     m_caster.DisableSkill(m_ability.Ability, (m_spell.RecastDelay == 0 ? 3000 : m_spell.RecastDelay));

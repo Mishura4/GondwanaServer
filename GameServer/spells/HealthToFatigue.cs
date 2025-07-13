@@ -50,9 +50,9 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
 
             // Calculate health cost and endurance gain
             int healthCost = CalculateHealthCost();
@@ -75,6 +75,7 @@ namespace DOL.GS.Spells
                 {
                     effectiveness = 0; // No effect if damned
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.DamnedNoEffect"), eChatType.CT_Spell);
+                    SendSpellResistAnimation(Caster);
                     return;
                 }
                 else if (harmValue < 0)
@@ -102,6 +103,7 @@ namespace DOL.GS.Spells
                 }
             }
 
+            SendEffectAnimation(Caster, 0, false, 1);
             OnEffectExpires(null, true);
         }
 

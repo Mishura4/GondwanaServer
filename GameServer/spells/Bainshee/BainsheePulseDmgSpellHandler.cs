@@ -40,7 +40,8 @@ namespace DOL.GS.Spells
         /// Execute direct damage spell
         /// </summary>
         /// <param name="target"></param>
-        public override void FinishSpellCast(GameLiving target)
+        /// <param name="force"></param>
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             if (Spell.Pulse != 0)
             {
@@ -48,7 +49,7 @@ namespace DOL.GS.Spells
                 GameEventMgr.AddHandler(Caster, GamePlayerEvent.Dying, new DOLEventHandler(EventAction));
             }
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
         public override bool CancelPulsingSpell(GameLiving living, string spellType)
         {

@@ -27,10 +27,10 @@ namespace DOL.GS.Spells
     public class VampiirStealthDetection : SpellHandler
     {
         public VampiirStealthDetection(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-        public override void FinishSpellCast(GameLiving target)
+        public override void FinishSpellCast(GameLiving target, bool force = false)
         {
             m_caster.Mana -= PowerCost(target);
-            base.FinishSpellCast(target);
+            base.FinishSpellCast(target, force);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
