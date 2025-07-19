@@ -210,7 +210,7 @@ namespace DOL.GS.Effects
         #region effect
         public override void Start(GameLiving m_owner)
         {
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             base.Start(m_owner);
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Body] += effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Cold] += effValue;
@@ -223,7 +223,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Body] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Cold] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Energy] -= effValue;
@@ -279,7 +279,7 @@ namespace DOL.GS.Effects
         public override void Start(GameLiving target)
         {
             base.Start(target);
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Crush] += effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Slash] += effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Thrust] += effValue;
@@ -288,7 +288,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Crush] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Slash] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Thrust] -= effValue;
@@ -338,7 +338,7 @@ namespace DOL.GS.Effects
         public override void Start(GameLiving target)
         {
             base.Start(target);
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDuration] += effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDuration] += effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.StunDuration] += effValue;
@@ -347,7 +347,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDuration] -= effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDuration] -= effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.StunDuration] -= effValue;
@@ -435,7 +435,7 @@ namespace DOL.GS.Effects
         #region effect
         public override void Start(GameLiving m_owner)
         {
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             base.Start(m_owner);
             m_owner.BuffBonusCategory4[(int)eProperty.CastingSpeed] += effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.ArcherySpeed] += effValue;
@@ -445,7 +445,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            int effValue = (int)(Value);
+            int effValue = (int)(Math.Round(Value));
             m_owner.BuffBonusCategory4[(int)eProperty.CastingSpeed] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.ArcherySpeed] -= effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] -= effValue;
