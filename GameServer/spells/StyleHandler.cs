@@ -16,20 +16,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.PacketHandler.Client.v168;
 using DOL.GS.Styles;
 using DOL.Language;
+using log4net;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace DOL.GS.Spells
 {
     [SpellHandlerAttribute("StyleHandler")]
     public class StyleHandler : SpellHandler
     {
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
+
         public Style Style { get; protected set; }
         
         public StyleHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
@@ -58,6 +61,11 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
+            if (Style == null)
+            {
+                log.WarnFormat("Style {0} for StyleHandler by {1} ({2}) was not found!", (int)Spell.Value, Caster.Name, Caster.InternalID);
+                return false;
+            }
             return StyleProcessor.CanUseStyle(Caster, selectedTarget, Style, Caster.AttackWeapon);
         }
 

@@ -44,7 +44,7 @@ namespace DOL.GS.Scripts
 
         private GamePlayer? m_playerFollow;
         
-        public GamePlayer PlayerFollow
+        public GamePlayer? PlayerFollow
         {
             get => m_playerFollow;
             set
@@ -158,7 +158,7 @@ namespace DOL.GS.Scripts
             {
                 var playerList = player.Group?.GetMembers().OfType<GamePlayer>().ToArray() ?? [player];
                 var memberCount = playerList.Count();
-                var limit = 4 - Math.Min((sbyte)3, memberCount);
+                var limit = Math.Max(1, 4 - memberCount);
                 var numFriends = playerList.Sum(p => p.FollowingFriendCount);
                 if (numFriends >= limit)
                 {
@@ -183,6 +183,13 @@ namespace DOL.GS.Scripts
             }
             SetOwnBrain(brain);
             return true;
+        }
+
+        /// <inheritdoc />
+        public override bool RemoveFromWorld()
+        {
+            PlayerFollow = null;
+            return base.RemoveFromWorld();
         }
 
         #region DB
