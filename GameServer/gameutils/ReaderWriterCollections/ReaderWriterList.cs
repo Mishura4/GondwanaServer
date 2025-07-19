@@ -49,28 +49,20 @@ namespace DOL.GS
         }
 
         #region Implementation of IEnumerable
-        /// <summary>
-        /// Returns an Enumerator on a Snapshot Collection
-        /// </summary>
-        /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
             m_rwLock.EnterReadLock();
-            IEnumerable<T> newList = null;
             try
             {
-                newList = m_list.ToArray();
+                foreach (T value in m_list)
+                {
+                    yield return value;
+                }
             }
             finally
             {
                 m_rwLock.ExitReadLock();
             }
-
-            if (newList != null)
-                return newList.GetEnumerator();
-
-            return default(IEnumerator<T>);
-
         }
 
         IEnumerator IEnumerable.GetEnumerator()

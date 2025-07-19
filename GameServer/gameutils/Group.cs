@@ -181,6 +181,11 @@ namespace DOL.GS
             return m_groupMembers.OfType<GamePlayer>().ToArray();
         }
 
+        public IEnumerable<GameObject> GetMembers()
+        {
+            return m_groupMembers;
+        }
+
         /// <summary>
         /// Adds a living to the group
         /// </summary>

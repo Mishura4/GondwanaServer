@@ -46,7 +46,7 @@ namespace DOL.GS.Spells
             {
                 Spell spellToCast = ad.SpellHandler.Spell.Copy();
                 SpellLine line = ad.SpellHandler.SpellLine;
-                if (ad.SpellHandler.Parent != null && ad.SpellHandler.Parent is BomberSpellHandler bomber)
+                if (ad.SpellHandler.Parent is BomberSpellHandler bomber)
                 {
                     spellToCast = bomber.Spell.Copy();
                     line = bomber.SpellLine;
@@ -112,7 +112,7 @@ namespace DOL.GS.Spells
                 {
                     pl.Out.SendSpellEffectAnimation(ad.Target, ad.Target, ClientEffect, 0, false, 1);
                 }
-                if (!Util.Chance((int)Spell.Value))
+                if (Spell.Value < 100 && !Util.Chance((int)Spell.Value))
                     return;
                 ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(ad.Target, spellToCast, line);
                 if (spellhandler is BomberSpellHandler bomberspell)

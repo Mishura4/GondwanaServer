@@ -248,7 +248,6 @@ namespace DOL.GS.PacketHandler
 
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.StatsUpdate)))
             {
-
                 // base
                 baseStats.Foreach(s => pak.WriteShort((ushort)s));
                 pak.WriteShort(0);

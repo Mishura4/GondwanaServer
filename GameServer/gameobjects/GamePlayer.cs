@@ -18002,6 +18002,11 @@ namespace DOL.GS
         public bool StayStealth { get => stayStealth; set => stayStealth = value; }
         public SpellHandler PulseSpell { get => m_pulseSpell; set => m_pulseSpell = value; }
         public ShadowNPC ShadowNPC { get => shadowNPC; set => shadowNPC = value; }
+        public sbyte FollowingFriendCount
+        {
+            get;
+            set;
+        } = 0;
 
         #endregion
 

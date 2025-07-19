@@ -224,7 +224,7 @@ namespace DOL.GS.Scripts
 
         public void Follow(GameObject obj)
         {
-            if (!(obj is GameNPC npc))
+            if (obj is not GameNPC npc)
             {
                 return;
             }

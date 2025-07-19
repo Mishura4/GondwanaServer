@@ -3,3 +3,4 @@ TextNPC.ExchangeNotInOwnedTerritory:	I have no reason to trade this item with yo
 TextNPC.InventoryFullItemGround:	Your inventory is full, the item has been dropped on the ground.
 TextNPC.YouMustGive:			You have to give {0} {1}.
 TextNPC.YouNeedToExchange:		{0} is needed to exchange this item.
+TextNPC.TooManyFollowers:       Looks like you're busy right now! Come back later.

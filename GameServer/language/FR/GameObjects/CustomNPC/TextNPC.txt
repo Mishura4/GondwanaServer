@@ -3,3 +3,4 @@ TextNPC.ExchangeNotInOwnedTerritory:	Je n'ai aucune raison d'échanger cet objet
 TextNPC.InventoryFullItemGround:	Votre inventaire est plein, l'objet est déposé au sol.
 TextNPC.YouMustGive:			Vous devez donner {0} {1}.
 TextNPC.YouNeedToExchange:		Vous avez besoin de {0} pour échanger cet objet.
+TextNPC.TooManyFollowers:       Vous avez l'air occupé! Revenez plus tard.

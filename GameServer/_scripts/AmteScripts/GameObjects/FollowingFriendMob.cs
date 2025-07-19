@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Timers;
 using AmteScripts.Managers;
+using Discord;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
@@ -41,7 +42,20 @@ namespace DOL.GS.Scripts
 
         public Timer ResetTimer { get; set; }
 
-        public GamePlayer PlayerFollow { get; set; }
+        private GamePlayer? m_playerFollow;
+        
+        public GamePlayer PlayerFollow
+        {
+            get => m_playerFollow;
+            set
+            {
+                if (m_playerFollow != null)
+                    m_playerFollow.FollowingFriendCount--;
+                m_playerFollow = value;
+                if (value != null)
+                    value.FollowingFriendCount++;
+            }
+        }
 
         public TextNPCPolicy GetTextNPCPolicy(GameLiving target = null)
         {
@@ -118,8 +132,14 @@ namespace DOL.GS.Scripts
             {
                 if (TextNPCIdle != null && TextNPCIdle.WhisperReceive(player, str) == false)
                     return false;
+
                 if (ResponsesFollow != null && ResponsesFollow.TryGetValue(str.ToLower(), out var followEntry))
                 {
+                    if (!ShouldFollow(player, false))
+                    {
+                        return true;
+                    }
+                    
                     if (followEntry != null)
                     {
                         string text = string.Format(followEntry, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
@@ -128,9 +148,28 @@ namespace DOL.GS.Scripts
                     Follow(player);
                 }
             }
-            return true;
+            return 
+                true;
         }
         
+        public bool ShouldFollow(GamePlayer player, bool quiet)
+        {
+            if (player.IsInPvP)
+            {
+                var playerList = player.Group?.GetMembers().OfType<GamePlayer>().ToArray() ?? [player];
+                var memberCount = playerList.Count();
+                var limit = 4 - Math.Min((sbyte)3, memberCount);
+                var numFriends = playerList.Sum(p => p.FollowingFriendCount);
+                if (numFriends >= limit)
+                {
+                    if (!quiet)
+                        player.SendTranslatedMessage("TextNPC.TooManyFollowers", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public override bool AddToWorld()
         {
             WaitingInArea = false;
@@ -613,6 +652,11 @@ namespace DOL.AI.Brain
                 var players = Body.GetPlayersInRadius(followingMob.FollowingFromRadius);
                 foreach (GamePlayer player in players)
                 {
+                    if (!followingMob.ShouldFollow(player, true))
+                    {
+                        continue;
+                    }
+                    
                     Follow(player);
                     break;
                 }
