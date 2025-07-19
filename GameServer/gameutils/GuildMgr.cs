@@ -164,6 +164,25 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Removes a guild from the manager
+        /// </summary>
+        /// <param name="guild">the guild</param>
+        /// <returns></returns>
+        public static bool RenameGuild(Guild guild, string newName)
+        {
+            if (guild == null)
+                return false;
+
+            lock (m_guilds.SyncRoot)
+            {
+                m_guilds.Remove(guild.Name);
+                guild.Name = newName;
+                m_guilds.Add(guild.Name, guild);
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Checks if a guild with guildName exists
         /// </summary>
         /// <param name="guildName">The guild to check</param>

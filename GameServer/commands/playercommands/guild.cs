@@ -380,8 +380,7 @@ namespace DOL.GS.Commands
                                     newguildname = "[PVP] " + newguildname;
                             }
                             oldguildname = myguild.Name;
-                            myguild.Name = newguildname;
-                            GuildMgr.AddGuild(myguild);
+                            GuildMgr.RenameGuild(myguild, newguildname);
                             foreach (GamePlayer ply in myguild.GetListOfOnlineMembers())
                             {
                                 ply.GuildName = newguildname;
@@ -389,6 +388,7 @@ namespace DOL.GS.Commands
                                 ply.Out.SendUpdatePlayer();
                             }
                             client.Player.Guild?.UpdateGuildWindow();
+                            myguild.SaveIntoDatabase();
                         }
                         break;
                     #endregion

@@ -94,9 +94,8 @@ namespace DOL.Database
         }
 
         /// <summary>
-        /// Name of the Guild.  This is readonly after initial creation.
+        /// Name of the Guild.
         /// </summary>
-        [ReadOnly]
         [DataElement(AllowDbNull = true, Index = true)]
         public string GuildName
         {
@@ -107,6 +106,7 @@ namespace DOL.Database
             set
             {
                 m_guildname = value;
+                Dirty = true;
             }
         }
 

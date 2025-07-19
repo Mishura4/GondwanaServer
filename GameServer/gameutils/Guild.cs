@@ -893,7 +893,6 @@ namespace DOL.GS
             set
             {
                 m_DBguild.GuildName = value;
-                this.SaveIntoDatabase();
             }
         }
 
