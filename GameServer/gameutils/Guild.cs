@@ -893,6 +893,14 @@ namespace DOL.GS
             set
             {
                 m_DBguild.GuildName = value;
+                if (IsPvPGuild)
+                    PvpManager.Instance.OnGuildRename(this);
+                foreach (var t in Territories)
+                {
+                    t.Mobs.ForEach(m => m.GuildName = value);
+                    if (t.Boss != null)
+                        t.Boss.GuildName = value;
+                }
             }
         }
 

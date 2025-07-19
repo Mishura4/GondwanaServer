@@ -449,6 +449,15 @@ namespace AmteScripts.Managers
             if (IsOpen && !_saveTimer.IsAlive)
                 _saveTimer.Start(_saveDelay);
         }
+        
+        public void OnGuildRename(Guild guild)
+        {
+            if (!_groupAreas.TryGetValue(guild, out AbstractArea area))
+                return;
+
+            if (area is PvpTempArea pvpArea)
+                pvpArea.OwnerGuild = guild; // Refresh names
+        }
 
         private Guild CreateGuild(string guildName, GamePlayer leader = null)
         {
