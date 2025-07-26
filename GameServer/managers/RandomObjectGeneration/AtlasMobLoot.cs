@@ -251,7 +251,7 @@ namespace DOL.GS
                     classesForRealm.Add(eCharacterClass.Infiltrator);
                     classesForRealm.Add(eCharacterClass.Mercenary);
                     classesForRealm.Add(eCharacterClass.Necromancer);
-                    classesForRealm.Add(eCharacterClass.WraithSummonerAlb);
+                    classesForRealm.Add(eCharacterClass.Occultist);
                     classesForRealm.Add(eCharacterClass.Paladin);
                     classesForRealm.Add(eCharacterClass.Reaver);
                     classesForRealm.Add(eCharacterClass.Scout);

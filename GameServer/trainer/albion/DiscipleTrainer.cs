@@ -98,15 +98,15 @@ namespace DOL.GS.Trainer
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.Necromancer.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
-                case "WraithSummoner":
+                case "Occultist":
                 case "Conjurateur des Ombres":
                     if (player!.Race == (int)eRace.Briton || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Avalonian)
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.WraithSummoner.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.Occultist.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.WraithSummoner.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.Occultist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "practice staff":

@@ -22,15 +22,15 @@ using System.Collections.Generic;
 
 namespace DOL.GS.PlayerClass
 {
-    [CharacterClass((int)eCharacterClass.WraithSummonerAlb, "WraithSummoner", "Disciple")]
-    public class ClassWraithSummonerAlb : CharacterClassWraithSummoner
+    [CharacterClass((int)eCharacterClass.Occultist, "Occultist", "Disciple")]
+    public class ClassOccultist : CharacterClassOccultist
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
              PlayerRace.Avalonian, PlayerRace.Briton, PlayerRace.Inconnu, PlayerRace.Saracen,
         };
 
-        public ClassWraithSummonerAlb()
+        public ClassOccultist()
             : base()
         {
             m_profession = "PlayerClass.Profession.TempleofShadows";

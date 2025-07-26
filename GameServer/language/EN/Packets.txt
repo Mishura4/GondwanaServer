@@ -252,5 +252,21 @@ DialogResponseHandler.DepositInLockbox:						You deposit {0} in the lockbox.
 DialogResponseHandler.LockboxHasMoneyWeeklyPayment:			The lockbox now has {0} in it. The weekly payment is {1}.
 DialogResponseHandler.HousePrepaidForPayments:				The house is now prepaid for the next {0} payments.
 
+# /InviteToGroupHandler
+InviteToGroupHandler.InvalidTarget:							You have not selected a valid player as your target.
+InviteToGroupHandler.NotLeader:								You are not the leader of your group.
+InviteToGroupHandler.GroupFull:								The group is full.
+InviteToGroupHandler.TargetInGroup:							The player is still in a group.
+InviteToGroupHandler.Invited:								You have invited {0} to join your group.
+InviteToGroupHandler.InvitePrompt1:							{0} has invited you to join {1} group.
+InviteToGroupHandler.InvitePrompt2:							Do you wish to join?
+InviteToGroupHandler.InviteNotification:					{0} has invited you to join {1} group.
+
+# /PlayerAttackRequestHandler
+PlayerAttackRequestHandler.CantEnterMelee:					You can't enter melee combat mode with a fired weapon!
+
+# /PlayerDismountRequestHandler
+PlayerDismountRequestHandler.NoRidingSteed:					You are not riding any steed!
+
 # /EmblemDialogReponseHandler
 EmblemDialogReponseHandler.EmblemAlreadyInUse:				This emblem is already in use by another guild, please choose another!

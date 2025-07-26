@@ -266,6 +266,8 @@ GameObjects.GamePlayer.PickupObject.YourLootShare:			Your share of the loot is {
 GameObjects.GamePlayer.PickupObject.GuildDueTax:			{0} has been deposited to the guild's bank account as taxed income.
 GameObjects.GamePlayer.PickupObject.CannotDepositHere:		{0} cannot be dropped here!
 GameObjects.GamePlayer.PickupObject.WaitToPickup:			You must wait another {0} seconds to pick up {1}!
+GameObjects.GamePlayer.PickupObject.HeadPickedUp:			You have claimed the head of {0} as your trophy!
+GameObjects.GamePlayer.PickupObject.HeadInventoryFull:		You could not recover the head of {0}, your inventory is full!
 
 GameObjects.GamePlayer.Pray.AlreadyPraying:					You are already praying!	
 GameObjects.GamePlayer.Pray.Begin:							You begin your prayers!
@@ -473,10 +475,10 @@ GameObjects.GamePlayer.Wanted:                              {0} is now wanted fo
 GameObjects.GamePlayer.Jailed:                              {0} has been put in jail by {1}.
 GameObjects.GamePlayer.Jailed.Unknown:                      {0} has been put in jail by the guards.
 GameObjects.GamePlayer.Released:                            {0} has been released from jail.
+
 GameObjects.GamePlayer.RvR:                                 - Total players killed : {0} -
 GameObjects.GamePlayer.RvR.Champion:                        - Total players killed : {0} - Champion of the day : {1} ( {2} enemy players killed )
 GameObjects.GamePlayer.RvR.Control:                         The Rvr {1} is under the control of {0}!
-
 GameObjects.GamePlayer.RvR.Open.Claimable:              Do you want to [seize control] of the keep?
 GameObjects.GamePlayer.RvR.Open.UnClaimble:             You must wait {0} seconds before beeing able to claim control of the keep.
 GameObjects.GamePlayer.RvR.Closed:                      Keep capture is temporarily unavailable.
@@ -486,6 +488,7 @@ GameObjects.GamePlayer.RvR.Interrupt:                   You have been interrupte
 GameObjects.GamePlayer.RvR.Too.Far:                     You have strayed too far.
 GameObjects.GamePlayer.RvR.Capture.Timer:               Keep capture
 GameObjects.GamePlayer.RvR.Capture.Start:               {0} begins to take control of the keep!
+GameObjects.GamePlayer.PvP.DieDropItem:					You have dropped {0} of your treasure item(s) upon dying!
 
 GameObjects.GamePlayer.Champion.LevelUp:				You have gained one Champion level!
 GameObjects.GamePlayer.Champion.NeedToBeChampion:		You must be a Champion to use this inventory.

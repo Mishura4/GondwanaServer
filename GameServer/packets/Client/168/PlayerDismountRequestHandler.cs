@@ -17,6 +17,8 @@
  *
  */
 
+using DOL.Language;
+
 namespace DOL.GS.PacketHandler.Client.v168
 {
     [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.PlayerDismountRequest, "Handles Player Dismount Request.", eClientStatus.PlayerInGame)]
@@ -49,7 +51,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
                 if (!player.IsRiding)
                 {
-                    ChatUtil.SendSystemMessage(player, "You are not riding any steed!");
+                    ChatUtil.SendSystemMessage(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerDismountRequestHandler.NoRidingSteed"));
                     return;
                 }
 

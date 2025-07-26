@@ -112,16 +112,16 @@ PlayerClass.Necromancer.GetTitle.15:	Summoner
 PlayerClass.Necromancer.GetTitle.10:	Servant of Arawn
 PlayerClass.Necromancer.GetTitle.5:		Apprentice Necromancer
 
-PlayerClass.WraithSummonerAlb.GetTitle.50:	Supreme Wraithlord
-PlayerClass.WraithSummonerAlb.GetTitle.45:	Dark Ascendant
-PlayerClass.WraithSummonerAlb.GetTitle.40:	Keeper of Wraiths
-PlayerClass.WraithSummonerAlb.GetTitle.35:	Phantomlord
-PlayerClass.WraithSummonerAlb.GetTitle.30:	Master of Phantasms
-PlayerClass.WraithSummonerAlb.GetTitle.25:	Void Harvester
-PlayerClass.WraithSummonerAlb.GetTitle.20:	Adept of Phantoms
-PlayerClass.WraithSummonerAlb.GetTitle.15:	Conjurer of Shadows
-PlayerClass.WraithSummonerAlb.GetTitle.10:	Wraith Adept
-PlayerClass.WraithSummonerAlb.GetTitle.5:	Initiate of Shadows
+PlayerClass.Occultist.GetTitle.50:	Supreme Wraithlord
+PlayerClass.Occultist.GetTitle.45:	Dark Ascendant
+PlayerClass.Occultist.GetTitle.40:	Keeper of Wraiths
+PlayerClass.Occultist.GetTitle.35:	Phantomlord
+PlayerClass.Occultist.GetTitle.30:	Master of Phantasms
+PlayerClass.Occultist.GetTitle.25:	Void Harvester
+PlayerClass.Occultist.GetTitle.20:	Adept of Phantoms
+PlayerClass.Occultist.GetTitle.15:	Conjurer of Shadows
+PlayerClass.Occultist.GetTitle.10:	Wraith Adept
+PlayerClass.Occultist.GetTitle.5:	Initiate of Shadows
 
 PlayerClass.Paladin.GetTitle.50:	Templar
 PlayerClass.Paladin.GetTitle.45:	Champion

@@ -17,6 +17,8 @@
  *
  */
 
+using DOL.Language;
+
 namespace DOL.GS.PacketHandler.Client.v168
 {
     [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.PlayerAttackRequest, "Handles Player Attack Request", eClientStatus.PlayerInGame)]
@@ -68,8 +70,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                 if (player.ActiveWeaponSlot == GameLiving.eActiveWeaponSlot.Distance)
                 {
                     if (m_userAction)
-                        player.Out.SendMessage("You can't enter melee combat mode with a fired weapon!", eChatType.CT_YouHit,
-                                               eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerAttackRequestHandler.CantEnterMelee"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                     return;
                 }
 

@@ -224,11 +224,10 @@ namespace DOL.GS
 
                 // update all icons for just joined player
                 player.Out.SendGroupMembersUpdate(true, true);
-                foreach (GamePlayer pl in GetPlayersInTheGroup())
-                    pl.Out.SendMessage(string.Format("{0} has joined the group.", pl.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                SendTranslatedMessageToGroupMembers("GameUtils.Group.PlayerJoined", eChatType.CT_System, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(player));
             }
             else
-                SendMessageToGroupMembers(string.Format("{0} has joined the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                SendTranslatedMessageToGroupMembers("GameUtils.Group.LivingJoined", eChatType.CT_System, eChatLoc.CL_SystemWindow, living.Name);
             GameEventMgr.Notify(GroupEvent.MemberJoined, this, new MemberJoinedEventArgs(living));
             return true;
         }
@@ -270,15 +269,14 @@ namespace DOL.GS
 
             if (player != null)
             {
-                player.Out.SendMessage("You leave your group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Group.YouLeft"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Notify(GamePlayerEvent.LeaveGroup, player, new LeaveGroupEventArgs(this));
-                foreach (GamePlayer pl in GetPlayersInTheGroup())
-                    pl.Out.SendMessage(string.Format("{0} has left the group.", pl.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                SendTranslatedMessageToGroupMembers("GameUtils.Group.PlayerLeft", eChatType.CT_System, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(player));
             }
             else
-                SendMessageToGroupMembers(string.Format("{0} has left the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            
-            if (player.IsInPvP)
+                SendTranslatedMessageToGroupMembers("GameUtils.Group.LivingLeft", eChatType.CT_System, eChatLoc.CL_SystemWindow, living.Name);
+
+            if (player!.IsInPvP)
                 PvpManager.Instance.OnMemberLeaveGroup(this, player);
 
             // only one member left?
@@ -290,7 +288,7 @@ namespace DOL.GS
 
                 if (remaining is GamePlayer remainingPlayer)
                 {
-                    remainingPlayer.Out.SendMessage("Your group has been automatically disbanded because you are the only member remaining.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    remainingPlayer.Out.SendMessage(LanguageMgr.GetTranslation(remainingPlayer.Client.Account.Language, "GameUtils.Group.DisbandedLastMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
 
                 DisbandGroup();
@@ -311,8 +309,7 @@ namespace DOL.GS
                 if (newLeader != null)
                 {
                     LivingLeader = newLeader;
-                    foreach (GamePlayer pl in GetPlayersInTheGroup())
-                        pl.Out.SendMessage(string.Format("{0} has joined the group.", pl.GetPersonalizedName(Leader)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    SendTranslatedMessageToGroupMembers("GameUtils.Group.NewLeader", eChatType.CT_System, eChatLoc.CL_SystemWindow, newLeader.GetPersonalizedName(Leader));
                 }
                 else
                 {
@@ -364,9 +361,7 @@ namespace DOL.GS
 
             if (!session.AllowGroupDisbandCreate)
             {
-                player.Out.SendMessage(
-                    "Creating or joining groups is not allowed in this PvP session.",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Group.NoGroupCreationInSession"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -384,9 +379,7 @@ namespace DOL.GS
 
             if (!session.AllowGroupDisbandCreate)
             {
-                player.Out.SendMessage(
-                    "You cannot disband a group in this PvP session.",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Group.NoGroupDisbandInSession"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -419,8 +412,7 @@ namespace DOL.GS
             {
                 // all went ok
                 UpdateGroupWindow();
-                foreach (GamePlayer pl in GetPlayersInTheGroup())
-                    pl.Out.SendMessage(string.Format("{0} is now the party leader.", pl.GetPersonalizedName(Leader)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                SendTranslatedMessageToGroupMembers("GameUtils.Group.LeaderChanged", eChatType.CT_System, eChatLoc.CL_SystemWindow, Leader.GetPersonalizedName(Leader));
             }
 
             return allOk;

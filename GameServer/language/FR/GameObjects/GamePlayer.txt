@@ -266,6 +266,8 @@ GameObjects.GamePlayer.PickupObject.YourLootShare:			votre part du butin est de 
 GameObjects.GamePlayer.PickupObject.GuildDueTax:			Votre taxe de {0} va dans la caisse de guilde.
 GameObjects.GamePlayer.PickupObject.CannotDepositHere:		{0} ne peut pas être déposé ici !
 GameObjects.GamePlayer.PickupObject.WaitToPickup:			Vous devez attendre encore {0} secondes pour ramasser {1} !
+GameObjects.GamePlayer.PickupObject.HeadPickedUp:			Vous avez récupéré la tête de {0}.
+GameObjects.GamePlayer.PickupObject.HeadInventoryFull:		Vous n'avez pas pu récupérer la tête de {0}, votre inventaire est plein!
 
 GameObjects.GamePlayer.Pray.AlreadyPraying:				Vous priez déjà.
 GameObjects.GamePlayer.Pray.Begin:						Vous commencez vos prières.
@@ -473,10 +475,10 @@ GameObjects.GamePlayer.Wanted:                              {0} est maintenant r
 GameObjects.GamePlayer.Jailed:                              {0} a été mis en prison par {1}.
 GameObjects.GamePlayer.Jailed.Unknown:                      {0} a été mis en prison par les gardes.
 GameObjects.GamePlayer.Released:                            {0} a été relâché(e) de prison.
+
 GameObjects.GamePlayer.RvR:                                 - Nombre total de joueurs tués : {0} -
 GameObjects.GamePlayer.RvR.Champion:                        - Nombre total de joueurs tués : {0} - Champion du jour : {1} ( {2} attaquants ennemis tués )
 GameObjects.GamePlayer.RvR.Control:                         Le Rvr {1} est sous le contrôle de {0} !
-
 GameObjects.GamePlayer.RvR.Open.Claimable:              Voulez vous [prendre le contrôle] du fort?
 GameObjects.GamePlayer.RvR.Open.UnClaimble:             Vous devez attendre {0} secondes avant de pouvoir pretendre au contrôle du fort.
 GameObjects.GamePlayer.RvR.Closed:                      La prise de fort est momentanément indisponible.
@@ -486,6 +488,7 @@ GameObjects.GamePlayer.RvR.Interrupt:                   Vous avez été interrom
 GameObjects.GamePlayer.RvR.Too.Far:                     Vous vous êtes trop éloigné.
 GameObjects.GamePlayer.RvR.Capture.Timer:               Prise du fort
 GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort !
+GameObjects.GamePlayer.PvP.DieDropItem:					Votre trépas a dispersé {0} de vos trésors !
 
 GameObjects.GamePlayer.Champion.LevelUp:				Vous avez gagné un niveau de Champion supplémentaire !
 GameObjects.GamePlayer.Champion.NeedToBeChampion:		Vous devez être un Champion pour utiliser cet inventaire.

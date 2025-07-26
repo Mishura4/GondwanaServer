@@ -1,0 +1,11 @@
+
+GameUtils.Group.PlayerJoined:			{0} has joined the group.
+GameUtils.Group.LivingJoined:			{0} has joined the group.
+GameUtils.Group.YouLeft:			You leave your group.
+GameUtils.Group.PlayerLeft:			{0} has left the group.
+GameUtils.Group.LivingLeft:			{0} has left the group.
+GameUtils.Group.DisbandedLastMember:		Your group has been automatically disbanded because you are the only member remaining.
+GameUtils.Group.NewLeader:			{0} is now the group leader.
+GameUtils.Group.NoGroupCreationInSession:	Creating or joining groups is not allowed in this PvP session.
+GameUtils.Group.NoGroupDisbandInSession:	You cannot disband a group in this PvP session.
+GameUtils.Group.LeaderChanged:			{0} is now the party leader.

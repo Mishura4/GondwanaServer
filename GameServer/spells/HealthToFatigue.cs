@@ -89,7 +89,7 @@ namespace DOL.GS.Spells
             int healthLost = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, -healthCost);
             if (healthLost < 0)
             {
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.HealthLost", Math.Abs(healthLost)), eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealthToEndurance.HealthLost", Math.Abs(m_spell.LifeDrainReturn)), eChatType.CT_Spell);
             }
 
             // Apply endurance gain

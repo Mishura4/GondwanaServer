@@ -1180,7 +1180,7 @@ namespace DOL.GS
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:
                 case eCharacterClass.Necromancer:
-                case eCharacterClass.WraithSummonerAlb:
+                case eCharacterClass.Occultist:
                 case eCharacterClass.Eldritch:
                 case eCharacterClass.Enchanter:
                 case eCharacterClass.Mentalist:
@@ -1514,7 +1514,7 @@ namespace DOL.GS
                         )
                         return true;
                     return false;
-                case eCharacterClass.WraithSummonerAlb:
+                case eCharacterClass.Occultist:
                     if (property == eProperty.Skill_Tormentshaper ||
                         property == eProperty.Skill_Wraithsight ||
                         property == eProperty.Skill_Void_Acolyte ||
@@ -2130,7 +2130,7 @@ namespace DOL.GS
                 case eProperty.Skill_Void_Acolyte:
                 case eProperty.Skill_Wraithsight:
                 case eProperty.Skill_Tormentshaper:
-                    if (charClass != eCharacterClass.WraithSummonerAlb) { return false; }
+                    if (charClass != eCharacterClass.Occultist) { return false; }
                     goto case eProperty.Skill_Witchcraft;
 
                 case eProperty.Skill_Summoning:
@@ -2553,7 +2553,7 @@ namespace DOL.GS
                         if (charClass != eCharacterClass.Cabalist && //albion
                             charClass != eCharacterClass.Cleric &&
                             charClass != eCharacterClass.Necromancer &&
-                            charClass != eCharacterClass.WraithSummonerAlb &&
+                            charClass != eCharacterClass.Occultist &&
                             charClass != eCharacterClass.Sorcerer &&
                             charClass != eCharacterClass.Theurgist &&
                             charClass != eCharacterClass.Wizard &&
@@ -2825,7 +2825,7 @@ namespace DOL.GS
                 case eProperty.Skill_Void_Acolyte:
                 case eProperty.Skill_Wraithsight:
                 case eProperty.Skill_Tormentshaper:
-                    if (charClass != eCharacterClass.WraithSummonerAlb) { return false; }
+                    if (charClass != eCharacterClass.Occultist) { return false; }
                     goto case eProperty.Skill_Witchcraft;
 
                 case eProperty.Skill_Summoning:
@@ -3577,7 +3577,7 @@ namespace DOL.GS
                         if (charClass != eCharacterClass.Cabalist && //albion
                             charClass != eCharacterClass.Cleric &&
                             charClass != eCharacterClass.Necromancer &&
-                            charClass != eCharacterClass.WraithSummonerAlb &&
+                            charClass != eCharacterClass.Occultist &&
                             charClass != eCharacterClass.Sorcerer &&
                             charClass != eCharacterClass.Theurgist &&
                             charClass != eCharacterClass.Wizard &&
@@ -3751,7 +3751,7 @@ namespace DOL.GS
                 case eProperty.Skill_Void_Acolyte:
                 case eProperty.Skill_Wraithsight:
                 case eProperty.Skill_Tormentshaper:
-                    if (charClass != eCharacterClass.WraithSummonerAlb) { return false; }
+                    if (charClass != eCharacterClass.Occultist) { return false; }
                     goto case eProperty.Skill_Witchcraft;
 
                 case eProperty.Skill_Summoning:
@@ -4335,7 +4335,7 @@ namespace DOL.GS
                         if (charClass != eCharacterClass.Cabalist && //albion
                             charClass != eCharacterClass.Cleric &&
                             charClass != eCharacterClass.Necromancer &&
-                            charClass != eCharacterClass.WraithSummonerAlb &&
+                            charClass != eCharacterClass.Occultist &&
                             charClass != eCharacterClass.Sorcerer &&
                             charClass != eCharacterClass.Theurgist &&
                             charClass != eCharacterClass.Wizard &&
@@ -5755,7 +5755,7 @@ namespace DOL.GS
                 //staff classes
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Necromancer:
-                case eCharacterClass.WraithSummonerAlb:
+                case eCharacterClass.Occultist:
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:
@@ -5876,7 +5876,7 @@ namespace DOL.GS
                 //staff classes
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Necromancer:
-                case eCharacterClass.WraithSummonerAlb:
+                case eCharacterClass.Occultist:
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:

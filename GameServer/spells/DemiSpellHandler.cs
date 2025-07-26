@@ -47,7 +47,7 @@ namespace DOL.GS.Spells
 
             var ResistChanceFactor = 2.6;
             bool isGhostOrUndead = (target is GameNPC npc && (npc.Flags.HasFlag(GameNPC.eFlags.GHOST) || npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead || SpellHandler.FindEffectOnTarget(npc, "Damnation") != null));
-            bool isSpecialClass = (target is GamePlayer player && (player.CharacterClass is ClassNecromancer || player.CharacterClass is ClassWraithSummonerAlb || player.CharacterClass is ClassBainshee || player.CharacterClass is ClassVampiir || SpellHandler.FindEffectOnTarget(player, "Damnation") != null));
+            bool isSpecialClass = (target is GamePlayer player && (player.CharacterClass is ClassNecromancer || player.CharacterClass is ClassOccultist || player.CharacterClass is ClassBainshee || player.CharacterClass is ClassVampiir || SpellHandler.FindEffectOnTarget(player, "Damnation") != null));
             bool isBoss = target is GameNPC gameNPC && gameNPC.IsBoss;
 
             if (isGhostOrUndead || isSpecialClass || isBoss)

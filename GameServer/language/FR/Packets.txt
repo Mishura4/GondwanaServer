@@ -236,5 +236,21 @@ DialogResponseHandler.DepositInLockbox:						Vous déposez {0} dans la boîte de
 DialogResponseHandler.LockboxHasMoneyWeeklyPayment:			La boîte de dépôt contient maintenant {0}. Le paiement hebdomadaire est de {1}.
 DialogResponseHandler.HousePrepaidForPayments:				La maison est maintenant prépayée pour les {0} prochains paiements.
 
+# /InviteToGroupHandler
+InviteToGroupHandler.InvalidTarget:							Vous devez choisir un joueur valide comme cible.
+InviteToGroupHandler.NotLeader:								Vous n'êtes pas le chef de votre groupe.
+InviteToGroupHandler.GroupFull:								Le groupe est déjà complet.
+InviteToGroupHandler.TargetInGroup:							Ce joueur fait déjà partie d'un groupe.
+InviteToGroupHandler.Invited:								Vous avez invité {0} à rejoindre votre groupe.
+InviteToGroupHandler.InvitePrompt1:							{0} vous a invité à rejoindre son groupe.
+InviteToGroupHandler.InvitePrompt2:							Acceptez-vous ?
+InviteToGroupHandler.InviteNotification:					{0} vous a invité à rejoindre son groupe.
+
+# /PlayerAttackRequestHandler
+PlayerAttackRequestHandler.CantEnterMelee:					Vous ne pouvez pas combattre au corps-à-corps avec une arme à feu activée !
+
+# /PlayerDismountRequestHandler
+PlayerDismountRequestHandler.NoRidingSteed:					Vous n'êtes pas sur une monture !
+
 # /EmblemDialogReponseHandler
 EmblemDialogReponseHandler.EmblemAlreadyInUse:				Cet emblème est déjà utilisé par une autre guilde, veuillez en choisir un autre !

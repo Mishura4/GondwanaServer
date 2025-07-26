@@ -847,11 +847,11 @@ namespace DOL.GS
 
         public const string Archery = "Archery";
 
-        public const string Tormentshaper = "Tormentshaper"; //Wraithsummoner
+        public const string Tormentshaper = "Tormentshaper"; //Occultist
 
-        public const string Wraithsight = "Wraithsight"; //Wraithsummoner
+        public const string Wraithsight = "Wraithsight"; //Occultist
 
-        public const string Void_Acolyte = "Void Acolyte"; //Wraithsummoner
+        public const string Void_Acolyte = "Void Acolyte"; //Occultist
 
         ///<summary>
         /// The new Beastcraft line for Hunters

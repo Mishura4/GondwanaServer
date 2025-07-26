@@ -104,7 +104,7 @@ namespace DOL.GS
             {
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Necromancer:
-                case eCharacterClass.WraithSummonerAlb:
+                case eCharacterClass.Occultist:
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:
@@ -397,7 +397,7 @@ namespace DOL.GS
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Necromancer:
-                case eCharacterClass.WraithSummonerAlb:
+                case eCharacterClass.Occultist:
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Acolyte:
                 case eCharacterClass.Spiritmaster:

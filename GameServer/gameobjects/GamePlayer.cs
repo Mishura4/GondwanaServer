@@ -8641,45 +8641,40 @@ namespace DOL.GS
 
             if (killer is GamePlayer killerPlayer && killer != this)
             {
+                bool canAwardTaskPoints = !killerPlayer.IsInSafeArea() && !killerPlayer.IsPlayerGreyCon(this);
+
                 GameSpellEffect damnationEffect = SpellHandler.FindEffectOnTarget(killerPlayer, "Damnation");
                 bool targetIsNotDamned = SpellHandler.FindEffectOnTarget(this, "Damnation") == null;
 
-                if (!IsInRvR && !IsInPvP && Reputation < 0 && !IsInPvPArea() && !killerPlayer.IsInSafeArea())
+                void UpdateKillTaskProgress()
                 {
-                    if (!killerPlayer.IsPlayerGreyCon(this))
-                    {
-                        TaskManager.UpdateTaskProgress(killerPlayer, "OutlawPlayersSentToJail", 1);
-                    }
-                }
-                else if (this.CurrentRegion.IsRvR || this.IsInPvP || IsInPvPArea())
-                {
-                    if (!killerPlayer.IsInSafeArea())
-                    {
-                        if (!killerPlayer.IsPlayerGreyCon(this))
-                        {
-                            if (killerPlayer.Group != null)
-                            {
-                                TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersGroup", 1);
-                            }
-                            else
-                            {
-                                TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
-                            }
-
-                            if (killerPlayer.IsInPvP)
-                            {
-                                PvpManager.Instance.HandlePlayerKill(killerPlayer, this);
-                            }
-                        }
-                    }
+                    string task = killerPlayer.Group != null ? "KillEnemyPlayersGroup" : "KillEnemyPlayersAlone";
+                    TaskManager.UpdateTaskProgress(killerPlayer, task, 1);
                 }
 
-                if (killerPlayer.HasAdrenalineBuff())
+                if (!IsInRvR && !IsInPvP && !IsInPvPArea() && Reputation < 0 && canAwardTaskPoints)
                 {
-                    if (!killerPlayer.IsPlayerGreyCon(this))
+                    TaskManager.UpdateTaskProgress(killerPlayer, "OutlawPlayersSentToJail", 1);
+                }
+
+                if ((this.CurrentRegion.IsRvR || IsInPvPArea()) && canAwardTaskPoints)
+                {
+                    UpdateKillTaskProgress();
+                }
+
+                if (this.IsInPvP && canAwardTaskPoints)
+                {
+                    if (Properties.PVP_ALLOW_TASKSPOINTS)
                     {
-                        TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
+                        UpdateKillTaskProgress();
                     }
+
+                    PvpManager.Instance.HandlePlayerKill(killerPlayer, this);
+                }
+
+                if (killerPlayer.HasAdrenalineBuff() && canAwardTaskPoints)
+                {
+                    TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
                 }
 
                 killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", killerPlayer.GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
@@ -9085,7 +9080,7 @@ namespace DOL.GS
 
             if (droppedSoFar > 0)
             {
-                Out.SendMessage($"You have dropped {droppedSoFar} of your treasure item(s) upon dying!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PvP.DieDropItem", droppedSoFar), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
         }
 
@@ -9160,9 +9155,9 @@ namespace DOL.GS
                 GameServer.Database.AddObject(iu);
                 m_lastHeadDropTime = now;
                 if (killer.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(iu)))
-                    killer.SendMessage("Vous avez récupéré la tête de " + Name + ".", eChatType.CT_Loot);
+                    killer.SendMessage(LanguageMgr.GetTranslation(killer.Client.Account.Language, "GameObjects.GamePlayer.PickupObject.HeadPickedUp", Name), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                 else
-                    killer.SendMessage("Vous n'avez pas pu récupérer la tête de " + Name + ", votre inventaire est plein!", eChatType.CT_Loot);
+                    killer.SendMessage(LanguageMgr.GetTranslation(killer.Client.Account.Language, "GameObjects.GamePlayer.PickupObject.HeadInventoryFull", Name), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
             }
         }
 

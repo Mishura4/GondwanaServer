@@ -84,7 +84,7 @@ PlayerClass.Name.Warden:			Warden
 PlayerClass.Name.Warlock:			Warlock
 PlayerClass.Name.Warrior:			Warrior
 PlayerClass.Name.Wizard:			Wizard
-PlayerClass.Name.WraithSummonerAlb:		WraithSummoner
+PlayerClass.Name.Occultist:			Occultist
 PlayerClass.Name.WraithSummonerHib:		WraithSummoner
 PlayerClass.Name.WraithSummonerMid:		WraithSummoner
 

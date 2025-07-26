@@ -27,12 +27,12 @@ namespace DOL.GS.Trainer
     /// Necromancer trainer.
     /// </summary>
     /// <author>Aredhel</author>
-    [NPCGuildScript("WraithSummoner Trainer", eRealm.Albion)]
-    public class WraithSummonerTrainer : GameTrainer
+    [NPCGuildScript("Occultist Trainer", eRealm.Albion)]
+    public class OccultistTrainer : GameTrainer
     {
         public override eCharacterClass TrainedClass
         {
-            get { return eCharacterClass.WraithSummonerAlb; }
+            get { return eCharacterClass.Occultist; }
         }
 
         public const string WEAPON_ID = "necromancer_item";
@@ -41,7 +41,7 @@ namespace DOL.GS.Trainer
         public const string ARMOR_ID3 = "robe_of_the_summoner_alb";
         public const string ARMOR_ID4 = "adepts_robe_alb";
 
-        public WraithSummonerTrainer()
+        public OccultistTrainer()
             : base() { }
 
         /// <summary>
@@ -56,14 +56,14 @@ namespace DOL.GS.Trainer
             // check if class matches.
             if (player.CharacterClass.ID == (int)TrainedClass)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WraithSummonerTrainer.Interact.Text3", this.Name, player.GetName(0, false)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "OccultistTrainer.Interact.Text3", this.Name, player.GetName(0, false)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                 OfferTraining(player);
             }
             else
             {
                 if (CanPromotePlayer(player))
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WraithSummonerTrainer.Interact.Text1", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "OccultistTrainer.Interact.Text1", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     if (!player.IsLevelRespecUsed)
                     {
                         OfferRespecialize(player);
@@ -92,7 +92,7 @@ namespace DOL.GS.Trainer
                 case "Temple des Ombres":
                     if (CanPromotePlayer(player))
                     {
-                        PromotePlayer(player, (int)eCharacterClass.WraithSummonerAlb, LanguageMgr.GetTranslation(player!.Client.Account.Language, "WraithSummonerTrainer.Interact.Text4", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Occultist, LanguageMgr.GetTranslation(player!.Client.Account.Language, "OccultistTrainer.Interact.Text4", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NecromancerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);

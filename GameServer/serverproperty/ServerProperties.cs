@@ -1710,6 +1710,12 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("pvp", "pvpsession_groupkills_soloscores", "Whether to count group kills in solo scores in PvP", true)]
         public static bool PVPSESSION_GROUPKILLS_SOLOSCORES;
+
+        /// <summary>
+        /// Allow task points for kills in PvP mode
+        /// </summary>
+        [ServerProperty("pvp", "pvp_allow_taskspoints", "Whether players receive task points (KillEnemyPlayersGroup or KillEnemyPlayersAlone) for kills in PvP mode", true)]
+        public static bool PVP_ALLOW_TASKSPOINTS;
         #endregion
 
         #region KEEPS

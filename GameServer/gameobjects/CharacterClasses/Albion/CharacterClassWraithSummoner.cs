@@ -32,7 +32,7 @@ namespace DOL.GS
     /// <summary>
     /// The necromancer character class.
     /// </summary>
-    public class CharacterClassWraithSummoner : ClassDisciple
+    public class CharacterClassOccultist : ClassDisciple
     {
 
     }

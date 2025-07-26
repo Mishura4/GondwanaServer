@@ -237,6 +237,7 @@ namespace DOL.GS.Scripts
                 return;
             }
 
+            PvpManager.Instance.DequeueSolo(player);
             _TeleportSolo(player);
         }
 
@@ -284,6 +285,11 @@ namespace DOL.GS.Scripts
                     maxSize
                 );
                 return;
+            }
+
+            foreach (var member in player.Group!.GetPlayersInTheGroup())
+            {
+                PvpManager.Instance.DequeueSolo(member);
             }
 
             _TeleportGroup(player);

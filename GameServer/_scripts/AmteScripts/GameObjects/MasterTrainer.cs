@@ -765,17 +765,17 @@ namespace DOL.GS.Trainer
                                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.Necromancer.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                                 return true;
                             }
-                        case "wraithsummoner":
+                        case "occultist":
                         case "conjurateur des ombres":
                             if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Avalonian)
                             {
-                                messageKey = "DiscipleTrainer.WraithSummoner.Explain";
-                                playerLastClassOffers[player] = "wraithsummoner";
+                                messageKey = "DiscipleTrainer.Occultist.Explain";
+                                playerLastClassOffers[player] = "occultist";
                                 break;
                             }
                             else
                             {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.WraithSummoner.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.Occultist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                                 return true;
                             }
                     }
@@ -1869,8 +1869,8 @@ namespace DOL.GS.Trainer
                             player.ReceiveItem(this, NECRARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
-                        case "wraithsummoner":
-                            PromotePlayer(player, (int)eCharacterClass.WraithSummonerAlb, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon2", this.Name), null);
+                        case "occultist":
+                            PromotePlayer(player, (int)eCharacterClass.Occultist, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon2", this.Name), null);
                             player.ReceiveItem(this, ALBWEAPON_ID13, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NecromancerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                             player.ReceiveItem(this, NECRARMOR_ID1, eInventoryActionType.Other);
@@ -2859,7 +2859,7 @@ namespace DOL.GS.Trainer
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ScoutTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     addGift(SCOUARMOR_ID2, player);
                 }
-                if (item.Id_nb == NECRARMOR_ID1 && (player.CharacterClass.ID == (int)eCharacterClass.Necromancer || player.CharacterClass.ID == (int)eCharacterClass.WraithSummonerAlb))
+                if (item.Id_nb == NECRARMOR_ID1 && (player.CharacterClass.ID == (int)eCharacterClass.Necromancer || player.CharacterClass.ID == (int)eCharacterClass.Occultist))
                 {
                     player.Inventory.RemoveCountFromStack(item, 1);
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NecromancerTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);

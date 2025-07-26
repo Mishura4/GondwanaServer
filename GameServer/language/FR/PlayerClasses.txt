@@ -85,7 +85,7 @@ PlayerClass.Name.Warden:			Sentinelle
 PlayerClass.Name.Warlock:			Helhaxa
 PlayerClass.Name.Warrior:			Guerrier
 PlayerClass.Name.Wizard:			Thaumaturge
-PlayerClass.Name.WraithSummonerAlb:		Conjurateur des Ombres
+PlayerClass.Name.Occultist:			Conjurateur des Ombres
 PlayerClass.Name.WraithSummonerHib:		Conjurateur des Ombres
 PlayerClass.Name.WraithSummonerMid:		Conjurateur des Ombres
 
