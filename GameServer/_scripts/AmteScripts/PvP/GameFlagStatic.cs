@@ -114,7 +114,7 @@ namespace AmteScripts.PvP.CTF
                     Item = invFlag,
                 };
                 if (player.IsInPvP)
-                    banner.Emblem = PvpManager.Instance.GetEmblemForPlayer(player);
+                    banner.Emblem = player.Guild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
 
                 player.ActiveBanner = banner;
                 _isDroppedOnGround = false;
