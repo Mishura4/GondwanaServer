@@ -2082,7 +2082,7 @@ namespace DOL.GS
 
         public void Relocate()
         {
-            foreach (var zone in m_zones)
+            foreach (var zone in m_zones.ToArray())
             {
                 zone.Relocate(null);
             }
