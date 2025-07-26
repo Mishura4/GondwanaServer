@@ -977,7 +977,7 @@ namespace DOL.GS.Commands
                                 }
                                     if (client.Player.Guild.HasGuildBanner)
                                 {
-                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InfoBanner", client.Player.Guild.GuildBannerStatus(client.Player)), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InfoBanner", client.Player.Guild.GuildBannerStatus()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 }
                                 else if (client.Player.Guild.GuildLevel >= 7)
                                 {
@@ -1050,7 +1050,7 @@ namespace DOL.GS.Commands
                                             mes += ',' + client.Player.Guild.MeritPoints.ToString(); // Guild Merit Points
                                             mes += ',' + housenum.ToString(); // Guild houseLot ?
                                             mes += ',' + (client.Player.Guild.MemberOnlineCount + 1).ToString(); // online Guild member ?
-                                            mes += ',' + client.Player.Guild.GuildBannerStatus(client.Player); //"Banner available for purchase", "Missing banner buying permissions"
+                                            mes += ',' + client.Player.Guild.GuildBannerStatus(); //"Banner available for purchase", "Missing banner buying permissions"
                                             mes += ",\"" + client.Player.Guild.Motd + '\"'; // Guild Motd
                                             mes += ",\"" + client.Player.Guild.Omotd + '\"'; // Guild oMotd
                                             client.Out.SendMessage(mes, eChatType.CT_SocialInterface, eChatLoc.CL_SystemWindow);
@@ -1234,35 +1234,29 @@ namespace DOL.GS.Commands
                                 }
                             }
 
-                            GuildBannerEffect bannerEffect = GuildBannerEffect.CreateEffectOfClass(client.Player, client.Player);
-
-                            if (bannerEffect != null)
+                            if (GameServer.ServerRules.IsAllowedToSummonBanner(client.Player, false))
                             {
-                                if (GameServer.ServerRules.IsAllowedToSummonBanner(client.Player, false))
-                                {
-                                    client.Player.Guild.ActiveGuildBanner = new GuildBanner(client.Player);
-                                    client.Player.Guild.ActiveGuildBanner.BannerItem.Status = GuildBannerItem.eStatus.Active;
-                                    client.Player.Guild.ActiveGuildBanner.BannerEffectType = bannerEffect.GetType().Name;
+                                var banner = new GuildBanner(client.Player);
+                                banner.CarryingPlayer = client.Player;
 
-                                    foreach (GamePlayer player in client.Player.Guild.GetListOfOnlineMembers())
+                                foreach (GamePlayer player in client.Player.Guild.GetListOfOnlineMembers())
+                                {
+                                    if (player == client.Player)
                                     {
-                                        if (player == client.Player)
-                                        {
-                                            player.Out.SendMessage(
-                                                LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned.You", client.Player.Name),
-                                                eChatType.CT_Guild, eChatLoc.CL_SystemWindow
-                                            );
-                                        }
-                                        else
-                                        {
-                                            player.Out.SendMessage(
-                                                LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned", client.Player.Name),
-                                                eChatType.CT_Guild, eChatLoc.CL_SystemWindow
-                                            );
-                                        }
+                                        player.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned.You", client.Player.Name),
+                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                        );
                                     }
-                                    client.Player.Guild?.UpdateGuildWindow();
+                                    else
+                                    {
+                                        player.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned", client.Player.Name),
+                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                        );
+                                    }
                                 }
+                                client.Player.Guild?.UpdateGuildWindow();
                             }
 
                             break;
@@ -1638,7 +1632,6 @@ namespace DOL.GS.Commands
                                         {
                                             log.WarnFormat("Player {0} is unsummoning bugged banner {1}", client.Player.Name, banner.BannerItem.Id_nb);
                                         }
-                                        banner.Guild.ActiveGuildBanner = null;
                                         banner.Stop();
                                         foreach (GamePlayer player in banner.Guild.GetListOfOnlineMembers())
                                         {

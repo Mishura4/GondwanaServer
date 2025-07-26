@@ -1,16 +1,17 @@
 using DOL.AI.Brain;
-using System;
-using System.Reflection;
-using System.Collections;
+using DOL.Database;
 using DOL.Events;
 using DOL.GS;
-using DOL.GS.PacketHandler;
-using DOL.Database;
-using log4net;
 using DOL.GS.Effects;
+using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
+using log4net;
+using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 
 namespace DOL.GS
 {
@@ -20,7 +21,7 @@ namespace DOL.GS
         /// The player that created the banner, used for the emblem.
         /// May be different from the player CARRYING the banner.
         /// </summary>
-        public virtual GamePlayer OwningPlayer
+        public GamePlayer OwningPlayer
         {
             get;
             set;
@@ -117,19 +118,18 @@ namespace DOL.GS
         private RegionTimer m_expireTimer;
 
         private GuildBannerItem m_item;
-
+        
         public GuildBanner(GamePlayer player)
         {
             OwningPlayer = player;
-            if (OwningPlayer != null)
-            {
-                Emblem = OwningPlayer.Guild?.Emblem;
-            }
+            GuildBannerItem item = new GuildBannerItem(GuildBannerTemplate);
+
+            item.Banner = this;
+            BannerItem = item;
             if (Properties.GUILD_BANNER_DURATION > 0)
             {
-                m_expireTimer = new RegionTimer(OwningPlayer, new RegionTimerCallback(BannerExpireCallback), Properties.GUILD_BANNER_DURATION * 1000);
+                m_expireTimer = new RegionTimer(player, new RegionTimerCallback(BannerExpireCallback), Properties.GUILD_BANNER_DURATION * 1000);
             }
-            CarryingPlayer = player;
         }
 
         /// <summary>
@@ -142,101 +142,95 @@ namespace DOL.GS
             {
                 if (value != null)
                 {
-                    if (base.CarryingPlayer != null)
-                        throw new InvalidOperationException("Guild banner is already started");
-                    base.CarryingPlayer = value;
-                    Start();
+                    if (value == CarryingPlayer)
+                        return;
+
+                    if (!CanStart(value))
+                        return;
+
+                    Start(value);
                 }
                 else
                 {
-                    Stop();
-                    Guild.ActiveGuildBanner = null;
+                    DoStop();
                 }
             }
         }
 
         public Guild Guild => OwningPlayer.Guild;
 
-        public string BannerEffectType { get; set; }
-
         public GuildBannerItem BannerItem
         {
-            get { return m_item; }
+            get => m_item;
+            private set
+            {
+                m_item = value;
+                m_item.Emblem = Guild?.Emblem ?? 0;
+            }
         }
 
-        protected bool Start()
+        private void Start(GamePlayer carrier)
         {
-            if (OwningPlayer == null)
+            base.CarryingPlayer = carrier;
+            if (Guild != null)
+                Guild.ActiveGuildBanner = this;
+            AddHandlers();
+                    
+            m_timer?.Stop();
+            m_timer = new RegionTimer(CarryingPlayer, new RegionTimerCallback(TimerTick));
+            m_timer.Start(1);
+        }
+
+        protected bool CanStart(GamePlayer player)
+        {
+            if (player == null)
             {
-                if (m_timer != null)
-                {
-                    m_timer.Stop();
-                    m_timer = null;
-                }
                 return false;
             }
 
-            if (OwningPlayer.Group != null)
+            if (player.Group != null)
             {
                 foreach (GamePlayer groupPlayer in OwningPlayer.Group.GetPlayersInTheGroup())
                 {
                     if (groupPlayer.ActiveBanner != null)
                     {
-                        OwningPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                        if (m_timer != null)
-                        {
-                            m_timer.Stop();
-                            m_timer = null;
-                        }
+                        player.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                 }
             }
             else if (!Properties.GUILD_BANNER_ALLOW_SOLO && OwningPlayer.Client.Account.PrivLevel <= (int)ePrivLevel.Player)
             {
-                OwningPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerNoGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                if (m_timer != null)
-                {
-                    m_timer.Stop();
-                    m_timer = null;
-                }
+                player.SendTranslatedMessage("GameUtils.Guild.Banner.BannerNoGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                 return false;
             }
-
-            if (m_item == null)
-            {
-                GuildBannerItem item = new GuildBannerItem(GuildBannerTemplate);
-
-                item.Banner = this;
-                m_item = item;
-            }
-
-            CarryingPlayer = OwningPlayer;
-            CarryingPlayer.Stealth(false);
-            AddHandlers();
-
-            if (m_timer != null)
-            {
-                m_timer.Stop();
-            }
-
-            m_timer = new RegionTimer(CarryingPlayer, new RegionTimerCallback(TimerTick));
-            m_timer.Start(1);
+            
             return true;
         }
 
-        public void Stop()
+        protected void DoStop()
         {
             if (m_timer != null)
             {
                 m_timer.Stop();
                 m_timer = null;
             }
+            
             if (CarryingPlayer != null)
             {
                 RemoveHandlers();
-                CarryingPlayer = null;
+                base.CarryingPlayer = null;
             }
+
+            if (Guild != null)
+            {
+                Guild.ActiveGuildBanner = null;
+            }
+        }
+
+        public void Stop()
+        {
+            CarryingPlayer = null;
         }
 
         private void ApplyBannerEffect(GamePlayer player)
@@ -262,7 +256,11 @@ namespace DOL.GS
                 }
                 else
                 {
-                    foreach (GamePlayer player in CarryingPlayer.Group.GetPlayersInTheGroup().Where(p => p.Guild != Guild && p is { ObjectState: GameObject.eObjectState.Active, IsAlive: true } && p.GetDistanceSquaredTo(CarryingPlayer) < 1500 * 1500))
+                    var groupMembers = CarryingPlayer.Group.GetPlayersInTheGroup()
+                        .Where(p => p.Guild != Guild
+                                   && p is { ObjectState: GameObject.eObjectState.Active, IsAlive: true }
+                                   && p.GetDistanceSquaredTo(CarryingPlayer) < 1500 * 1500);
+                    foreach (GamePlayer player in groupMembers)
                     {
                         ApplyBannerEffect(player);
                     }

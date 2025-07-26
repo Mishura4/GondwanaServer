@@ -25,6 +25,7 @@ using DOL.Events;
 using DOL.Language;
 using DOL.GS.PacketHandler;
 using DOL.Database;
+using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.Spells;
 using log4net;

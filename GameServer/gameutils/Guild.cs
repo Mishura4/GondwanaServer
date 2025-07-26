@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using DOL.Database;
+using DOL.GS.Effects;
 using DOL.Language;
 using DOL.GS.Keeps;
 using log4net;
@@ -1752,32 +1753,33 @@ namespace DOL.GS
         }
 
         private string bannerStatus;
-        public string GuildBannerStatus(GamePlayer player)
+        public string GuildBannerStatus()
         {
-            if (player.Guild == null)
+            if (ActiveGuildBanner != null)
             {
-                return "None";
-            }
-
-            if (player.Guild.HasGuildBanner)
-            {
-                if (player.Guild.ActiveGuildBanner != null)
+                var bannerItem = ActiveGuildBanner.BannerItem;
+                if (bannerItem == null)
                 {
-                    var bannerItem = player.Guild.ActiveGuildBanner.BannerItem;
-                    if (bannerItem.Status == GuildBannerItem.eStatus.Active)
-                    {
-                        string bannerType = player.Guild.ActiveGuildBanner.BannerEffectType.Replace("Effect", "");
-                        return $"Summoned - {bannerType}";
-                    }
-                    else if (bannerItem.Status == GuildBannerItem.eStatus.Dropped)
-                    {
-                        return "Dropped";
-                    }
+                    log.WarnFormat("Guild {0} ({1}) has an active guild banner with no item!", Name, GuildID);
+                    return "Unknown (server error)";
                 }
-                return "Not Summoned";
+                
+                if (bannerItem.Status == GuildBannerItem.eStatus.Active && ActiveGuildBanner.CarryingPlayer != null)
+                {
+                    string bannerType = string.Empty;
+                    var effectType = GuildBannerEffect.GetEffectTypeForClass(ActiveGuildBanner.CarryingPlayer);
+                    if (effectType != null)
+                        return $"Summoned - {bannerType.Replace("Effect", string.Empty)}";
+                    else
+                        return "Summoned";
+                }
+                else if (bannerItem.Status == GuildBannerItem.eStatus.Dropped)
+                {
+                    return "Dropped";
+                }
             }
 
-            return "None";
+            return HasGuildBanner ? "Not Summoned" : "None";
         }
 
         public void UpdateMember(GamePlayer player)
@@ -1801,7 +1803,7 @@ namespace DOL.GS
             mes += ',' + player.Guild.MeritPoints.ToString(); // Guild Merit Points
             mes += ',' + housenum.ToString(); // Guild houseLot ?
             mes += ',' + (player.Guild.MemberOnlineCount + 1).ToString(); // online Guild member ?
-            mes += ',' + player.Guild.GuildBannerStatus(player); //"Banner available for purchase", "Missing banner buying permissions"
+            mes += ',' + player.Guild.GuildBannerStatus(); //"Banner available for purchase", "Missing banner buying permissions"
             mes += ",\"" + player.Guild.Motd + '\"'; // Guild Motd
             mes += ",\"" + player.Guild.Omotd + '\"'; // Guild oMotd
             player.Out.SendMessage(mes, eChatType.CT_SocialInterface, eChatLoc.CL_SystemWindow);

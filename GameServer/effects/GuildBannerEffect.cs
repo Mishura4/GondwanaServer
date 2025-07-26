@@ -52,6 +52,66 @@ namespace DOL.GS.Effects
             }
         }
 
+        public static Type GetEffectTypeForClass(GamePlayer carrier)
+        {
+            switch ((eCharacterClass)carrier.CharacterClass.ID)
+            {
+                case eCharacterClass.Wizard:
+                case eCharacterClass.Theurgist:
+                case eCharacterClass.Sorcerer:
+                case eCharacterClass.Cabalist:
+                case eCharacterClass.Spiritmaster:
+                case eCharacterClass.Bonedancer:
+                case eCharacterClass.Runemaster:
+                case eCharacterClass.Warlock:
+                case eCharacterClass.Animist:
+                case eCharacterClass.Eldritch:
+                case eCharacterClass.Enchanter:
+                case eCharacterClass.Mentalist:
+                    return typeof(BannerOfWardingEffect);
+                case eCharacterClass.Armsman:
+                case eCharacterClass.Mercenary:
+                case eCharacterClass.Reaver:
+                case eCharacterClass.Paladin:
+                case eCharacterClass.Warrior:
+                case eCharacterClass.Berserker:
+                case eCharacterClass.Savage:
+                case eCharacterClass.Hero:
+                case eCharacterClass.Champion:
+                case eCharacterClass.Vampiir:
+                    return typeof(BannerOfShieldingEffect);
+                case eCharacterClass.Necromancer:
+                case eCharacterClass.Occultist:
+                case eCharacterClass.Friar:
+                case eCharacterClass.Infiltrator:
+                case eCharacterClass.Scout:
+                case eCharacterClass.Shadowblade:
+                case eCharacterClass.Hunter:
+                case eCharacterClass.Valkyrie:
+                case eCharacterClass.Thane:
+                case eCharacterClass.Ranger:
+                case eCharacterClass.Nightshade:
+                case eCharacterClass.Valewalker:
+                case eCharacterClass.Warden:
+                    return typeof(BannerOfFreedomEffect);
+                case eCharacterClass.Cleric:
+                case eCharacterClass.Heretic:
+                case eCharacterClass.Minstrel:
+                case eCharacterClass.Healer:
+                case eCharacterClass.Shaman:
+                case eCharacterClass.Skald:
+                case eCharacterClass.Druid:
+                case eCharacterClass.Bard:
+                case eCharacterClass.Bainshee:
+                    if (carrier.IsInRvR)
+                        return typeof(BannerOfBesiegingEffect);
+                    else
+                        return typeof(BannerOfHasteEffect);
+                default:
+                    return null;
+            }
+        }
+
         /// <summary>
         /// Starts the matching GuildBannerEffect with type (by carrierCharacterClass) and effectiveness
         /// </summary>
@@ -59,7 +119,6 @@ namespace DOL.GS.Effects
         /// <param name="target"></param>
         public static GuildBannerEffect CreateEffectOfClass(GamePlayer carrier, GamePlayer target)
         {
-
             //calculate effectiveness to target
             double effectiveness = 0;
             if (carrier == target) effectiveness = 1;
@@ -81,64 +140,10 @@ namespace DOL.GS.Effects
                 }
             }
 
-            #region Get new classdependend effect
-            switch ((eCharacterClass)carrier.CharacterClass.ID)
-            {
-                case eCharacterClass.Wizard:
-                case eCharacterClass.Theurgist:
-                case eCharacterClass.Sorcerer:
-                case eCharacterClass.Cabalist:
-                case eCharacterClass.Spiritmaster:
-                case eCharacterClass.Bonedancer:
-                case eCharacterClass.Runemaster:
-                case eCharacterClass.Warlock:
-                case eCharacterClass.Animist:
-                case eCharacterClass.Eldritch:
-                case eCharacterClass.Enchanter:
-                case eCharacterClass.Mentalist:
-                    return new BannerOfWardingEffect(effectiveness);
-                case eCharacterClass.Armsman:
-                case eCharacterClass.Mercenary:
-                case eCharacterClass.Reaver:
-                case eCharacterClass.Paladin:
-                case eCharacterClass.Warrior:
-                case eCharacterClass.Berserker:
-                case eCharacterClass.Savage:
-                case eCharacterClass.Hero:
-                case eCharacterClass.Champion:
-                case eCharacterClass.Vampiir:
-                    return new BannerOfShieldingEffect(effectiveness);
-                case eCharacterClass.Necromancer:
-                case eCharacterClass.Occultist:
-                case eCharacterClass.Friar:
-                case eCharacterClass.Infiltrator:
-                case eCharacterClass.Scout:
-                case eCharacterClass.Shadowblade:
-                case eCharacterClass.Hunter:
-                case eCharacterClass.Valkyrie:
-                case eCharacterClass.Thane:
-                case eCharacterClass.Ranger:
-                case eCharacterClass.Nightshade:
-                case eCharacterClass.Valewalker:
-                case eCharacterClass.Warden:
-                    return new BannerOfFreedomEffect(effectiveness);
-                case eCharacterClass.Cleric:
-                case eCharacterClass.Heretic:
-                case eCharacterClass.Minstrel:
-                case eCharacterClass.Healer:
-                case eCharacterClass.Shaman:
-                case eCharacterClass.Skald:
-                case eCharacterClass.Druid:
-                case eCharacterClass.Bard:
-                case eCharacterClass.Bainshee:
-                    if (carrier.IsInRvR)
-                        return new BannerOfBesiegingEffect(effectiveness);
-                    else
-                        return new BannerOfHasteEffect(effectiveness);
-                default: return null;
-                    #endregion
-            }
-
+            var type = GetEffectTypeForClass(carrier);
+            if (type != null)
+                return (GuildBannerEffect)Activator.CreateInstance(type, [effectiveness]);
+            return null;
         }
 
         #region Properties
