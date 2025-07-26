@@ -18,9 +18,9 @@ namespace AmteScripts.PvP.CTF
             {
                 RemoveOwner(prevOwner);
             }
+            base.Owner = newOwner;
             if (newOwner != null)
             {
-                base.Owner = newOwner;
                 AddOwner(newOwner);
             }
             
@@ -78,15 +78,15 @@ namespace AmteScripts.PvP.CTF
             set => Owner = value;
         }
 
-        public virtual void SetOwnership(GamePlayer? player)
+        public virtual void SetOwnership(GamePlayer? player, bool updateEmblem = true)
         {
             if (player?.Guild != null)
             {
-                SetOwnerGuild(player.Guild);
+                SetOwnerGuild(player.Guild, updateEmblem);
             }
             else
             {
-                SetOwner(player);
+                SetOwner(player, updateEmblem);
             }
         }
     }

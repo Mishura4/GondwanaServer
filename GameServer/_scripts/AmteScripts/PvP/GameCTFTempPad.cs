@@ -57,11 +57,11 @@ namespace AmteScripts.PvP.CTF
         }
 
         /// <inheritdoc />
-        public override void SetOwnership(GamePlayer player)
+        public override void SetOwnership(GamePlayer player, bool updateEmblem = true)
         {
-            base.SetOwnership(player);
+            base.SetOwnership(player, updateEmblem);
             if (OwnedFlag != null)
-                OwnedFlag.SetOwnership(player);
+                OwnedFlag.SetOwnership(player, updateEmblem);
         }
 
         /// <summary>

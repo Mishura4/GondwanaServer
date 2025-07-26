@@ -100,7 +100,7 @@ namespace AmteScripts.PvP.CTF
                     BasePad.NotifyFlagLeft();
                 }
 
-                SetOwnership(null);
+                SetOwnership(player);
 
                 ushort effectID = (ushort)Util.Random(5811, 5815);
                 foreach (GamePlayer plr in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).OfType<GamePlayer>())
@@ -171,8 +171,8 @@ namespace AmteScripts.PvP.CTF
             if (!this.AddToWorld())
                 return false;
             
+            SetOwnership(null, false);
             _isDroppedOnGround = true;
-
             if (_returnTimer != null)
             {
                 _returnTimer.Stop();

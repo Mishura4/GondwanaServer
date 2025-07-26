@@ -89,8 +89,7 @@ namespace AmteScripts.PvP.CTF
             GameFlagStatic newFlag = FlagReference ?? new GameFlagStatic(null);
             newFlag.Name = this.Name;
             newFlag.Model = (ushort)this.Model;
-            newFlag.SetOwnership(null);
-
+            
             var region = carrier.CurrentRegion;
             if (!newFlag.DropOnGround(
                     carrier.Position.X,
