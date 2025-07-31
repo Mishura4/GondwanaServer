@@ -21,3 +21,4 @@ TeleporterPvP.NotInGroup:				You are not in a group!
 TeleporterPvP.MustBeGroupLeader:		You must be the group leader to do that!
 TeleporterPvP.SoloOnlyNoQueue:			This session is solo-only, there's no group queue to join!
 TeleporterPvP.NotLeaderOrNoGroup:		You are not the group leader or have no group. Cannot join group-based session!
+TeleporterPvP.MustLeaveGroupForSolo:	You must leave your group first to participate as a solo fighter!

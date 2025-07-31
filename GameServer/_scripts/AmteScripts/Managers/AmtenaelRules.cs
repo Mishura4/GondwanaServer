@@ -495,7 +495,7 @@ namespace DOL.GS.ServerRules
                 return true;
 
             //allow confused mobs to attack same realm
-            if (attacker is GameNPC && (attacker as GameNPC).IsConfused && attacker.Realm == defender.Realm)
+            if (attacker is GameNPC && (attacker as GameNPC)!.IsConfused && attacker.Realm == defender.Realm)
                 return true;
 
             // "friendly" NPCs can't attack "friendly" players
@@ -980,7 +980,7 @@ namespace DOL.GS.ServerRules
                         var territory = RvrManager.Instance.GetRvRTerritory(killerPlayer.CurrentRegionID);
                         if (territory != null)
                         {
-                            if (territory.IsOwnedBy(killedPlayer))
+                            if (territory.IsOwnedBy(killerPlayer))
                             {
                                 int bonus = 0;
                                 //Is Player inside the Territory Area?
@@ -994,7 +994,7 @@ namespace DOL.GS.ServerRules
                                     //otherwise give small bonus
                                     bonus = Properties.RvR_OUTSIDE_AREA_RP_BONUS;
                                 }
-                                killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "ServerRules.AmtenaelRules.RPBonusKeepCapture", bonus), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "ServerRules.AmtenaelRules.RPBonusKeepCapture", bonus), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                                 realmPoints += realmPoints * bonus / 100;
                             }
                         }
@@ -1059,7 +1059,7 @@ namespace DOL.GS.ServerRules
                     if (keep != null)
                     {
                         byte bonus = 0;
-                        if (keep.Guild != null && keep.Guild == (living as GamePlayer).Guild)
+                        if (keep.Guild != null && keep.Guild == (living as GamePlayer)!.Guild)
                             bonus = 20;
                         else if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_Normal &&
                                  keep.Realm == living.Realm)
@@ -1156,6 +1156,6 @@ namespace DOL.GS.ServerRules
             }
         }
 
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
     }
 }

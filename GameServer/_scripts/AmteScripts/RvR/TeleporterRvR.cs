@@ -11,13 +11,24 @@ namespace DOL.GS.Scripts
     {
         private bool _isBusy;
 
-        private string[] rvrs = new string[]
+        private string[] rvrs => new string[]
         {
             "RvR Débutant (Lv 20-28) : Lion's Den",
             "RvR Standard (Lv 29-37) : Hills of Claret",
             "RvR Expert (Lv 38-45) : Molvik",
-            "RvR Master (Lv 46-50) : Thidranki"
+            $"RvR Master (Lv 46-50) : {GetMasterMapName()}"
         };
+
+        private string GetMasterMapName()
+        {
+            switch (RvrManager.Instance.CurrentMasterMap)
+            {
+                case "Master01": return "Braemar";
+                case "Master02": return "Wilton";
+                case "Master03": return "Thidranki";
+                default: return "Thidranki";
+            }
+        }
 
         public override bool AddToWorld()
         {

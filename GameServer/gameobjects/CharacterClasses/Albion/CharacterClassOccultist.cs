@@ -30,7 +30,7 @@ using DOL.GS.PlayerClass;
 namespace DOL.GS
 {
     /// <summary>
-    /// The necromancer character class.
+    /// The occultist character class.
     /// </summary>
     public class CharacterClassOccultist : ClassDisciple
     {

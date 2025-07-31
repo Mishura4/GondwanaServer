@@ -237,6 +237,13 @@ namespace DOL.GS.Scripts
                 return;
             }
 
+            if (player.Group != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "TeleporterPvP.MustLeaveGroupForSolo"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
             PvpManager.Instance.DequeueSolo(player);
             _TeleportSolo(player);
         }

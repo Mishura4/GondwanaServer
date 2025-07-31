@@ -1,5 +1,5 @@
 RvrManager.Score.Title:		--- Fin du RvR ---
-RvrManager.Score.NoWinner:	Vainqueur: Aucun - Pas assez de joueur ayant participe !
+RvrManager.Score.NoWinner:	Vainqueur: Aucun - Pas assez de joueur ayant participé !
 RvrManager.Score.Winner:	Vainqueur
 
 RvRManager.GMNotAllowed:			Casse-toi connard de GM !
@@ -8,7 +8,7 @@ RvRManager.WinnerBonuses:			Votre royaume a remporté la dernière session RvR e
 RvRManager.BonusGold:				- Bonus en or lorsque vous tuez des monstres : 5%
 RvRManager.BonusExperience:			- Bonus d'expérience lorsque vous tuez des monstres : 10%
 RvRManager.BonusRealmPoints:		- Bonus de points de royaume lorsque vous tuez des joueurs et des gardes de territoires : 5%
-RvRManager.LoserNoBonuses:			Votre royaume a perdu la dernière session RvR et ne bénéficie d'aucun bonus.
+RvRManager.LoserNoBonuses:			Votre royaume n'a pas remporté la dernière session RvR et ne bénéficie d'aucun bonus.
 RvRManager.Statistics:				- Statistiques du RvR :
 RvRManager.HoldingTime:				- Temps de détention du fort :
 RvRManager.TotalScores:				- Scores totaux du RvR de la journée :

@@ -40,9 +40,13 @@ namespace AmteScripts.Managers
         const string RvRExpertHIB = "RvR-Expert-HIB";
         const string RvRExpertMID = "RvR-Expert-MID";
 
-        const string RvRMasterALB = "RvR-Master-ALB";
-        const string RvRMasterHIB = "RvR-Master-HIB";
-        const string RvRMasterMID = "RvR-Master-MID";
+        private static readonly string[] MasterMapPrefixes = new string[] { "Master01", "Master02", "Master03" };
+        private static readonly string[] RvRMasterSpawns = new string[]
+        {
+            "RvR-Master01-ALB", "RvR-Master01-HIB", "RvR-Master01-MID",
+            "RvR-Master02-ALB", "RvR-Master02-HIB", "RvR-Master02-MID",
+            "RvR-Master03-ALB", "RvR-Master03-HIB", "RvR-Master03-MID"
+        };
 
         //const string RvRDivineALB = "RvR-Divine-ALB";
         //const string RvRDivineHIB = "RvR-Divine-HIB";
@@ -56,12 +60,17 @@ namespace AmteScripts.Managers
         private Dictionary<ushort, IList<string>> RvrStats = new Dictionary<ushort, IList<string>>();
         private Dictionary<string, int> Scores = new Dictionary<string, int>();
         private Dictionary<GamePlayer, short> kills = new Dictionary<GamePlayer, short>();
+        private Dictionary<string, Dictionary<eRealm, TimeSpan>> holdingTimesByZone = new Dictionary<string, Dictionary<eRealm, TimeSpan>>();
         private int checkScore = 0;
         private int checkNumberOfPlayer = 0;
         private string winnerName = "";
         private DateTime RvRBonusDate = DateTime.Now.Date;
 
+        private string _currentMasterMap = null;
+        public string CurrentMasterMap => _currentMasterMap;
+
         #region Static part
+        private static readonly Random _rng = new Random();
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private static RvrManager _instance;
@@ -94,7 +103,7 @@ namespace AmteScripts.Managers
 
         private bool _isOpen;
         private bool _isForcedOpen;
-        private IEnumerable<ushort> _regions;
+        private IEnumerable<ushort> _regions = Enumerable.Empty<ushort>();
 
         private readonly Guild _albion;
         private readonly Guild _midgard;
@@ -134,7 +143,7 @@ namespace AmteScripts.Managers
         }
 
         /// <summary>
-        /// &lt;regionID, Tuple&lt;TPs, spawnAlb, spawnMid, spawnHib&gt;&gt;
+        /// Key: spawn/map name (e.g., "RvR-Debutant-ALB", "RvR-Master01-MID")
         /// </summary>
         private readonly Dictionary<string, RvRMap> _maps = new Dictionary<string, RvRMap>();
 
@@ -156,6 +165,19 @@ namespace AmteScripts.Managers
             _midgard.SaveIntoDatabase();
             _hibernia.SaveIntoDatabase();
             InitMapsAndTerritories();
+
+            foreach (var mapKey in _maps.Keys)
+            {
+                if (!holdingTimesByZone.ContainsKey(mapKey))
+                {
+                    holdingTimesByZone[mapKey] = new Dictionary<eRealm, TimeSpan>
+                    {
+                        { eRealm.Albion, TimeSpan.Zero },
+                        { eRealm.Midgard, TimeSpan.Zero },
+                        { eRealm.Hibernia, TimeSpan.Zero }
+                    };
+                }
+            }
         }
 
         public void OnControlChange(string lordId, Guild guild)
@@ -188,12 +210,7 @@ namespace AmteScripts.Managers
         {
             var map = this._maps.Values.FirstOrDefault(v => v.RvRTerritory != null && v.Position.RegionID.Equals(regionId));
 
-            if (map == null)
-            {
-                return null;
-            }
-
-            return map.RvRTerritory;
+            return map?.RvRTerritory;
         }
 
         public IEnumerable<ushort> InitMapsAndTerritories()
@@ -205,7 +222,7 @@ namespace AmteScripts.Managers
             var RvRDebutants = npcs.Where(n => n.Name.StartsWith("RvR-Novice"));
             var RvRStandards = npcs.Where(n => n.Name.StartsWith("RvR-Debutant"));
             var RvRExperts = npcs.Where(n => n.Name.StartsWith("RvR-Expert"));
-            var RvRMasters = npcs.Where(n => n.Name.StartsWith("RvR-Master"));
+            var RvRMasters = npcs.Where(n => RvRMasterSpawns.Contains(n.Name));
             //var RvRDivines = npcs.Where(n => n.Name.StartsWith("RvR-Divine"));
 
             if (RvRDebutants == null || RvRStandards == null || RvRExperts == null || RvRMasters == null)
@@ -306,24 +323,9 @@ namespace AmteScripts.Managers
 
             RvRMasters.Foreach(master =>
             {
-                string name = null;
-                var map = this.BuildRvRMap(master);
-
-                if (map == null) {  /*Skip Null Map*/ return; }
-
-                if (master.Name.EndsWith("HIB"))
-                {
-                    name = RvRMasterHIB;
-                }
-                else if (master.Name.EndsWith("ALB"))
-                {
-                    name = RvRMasterALB;
-                }
-                else if (master.Name.EndsWith("MID"))
-                {
-                    name = RvRMasterMID;
-                }
-                _maps.Add(name!, map);
+                var map = BuildRvRMap(master);
+                if (map == null) return;
+                _maps[master.Name] = map;
             });
 
             //RvRDivines.Foreach(divine =>
@@ -349,7 +351,7 @@ namespace AmteScripts.Managers
             //});
 
             _regions = _maps.Values.GroupBy(v => v.Position.RegionID).Select(v => v.Key).OrderBy(v => v);
-            _regions.Foreach(r => this.RvrStats.Add(r, new string[] { }));
+            _regions.Foreach(r => this.RvrStats[r] = new string[] { });
 
             return from m in _maps select m.Value.Position.RegionID;
         }
@@ -368,6 +370,7 @@ namespace AmteScripts.Managers
                 }
 
                 var areaName = string.IsNullOrEmpty(lord.GuildName) ? initNpc.Name : lord.GuildName;
+                //var areaName = "";
                 var area = new Area.Circle(areaName, lord.Position.X, lord.Position.Y, lord.Position.Z, RVR_RADIUS);
                 rvrTerritory = new RvRTerritory(lord.CurrentZone, new List<IArea> { area }, area.Description, lord, area.Coordinate, lord.CurrentRegionID, null);
             }
@@ -392,10 +395,10 @@ namespace AmteScripts.Managers
                 }
                 RemovePlayer(player, rvr);
             }
-            
-            if (!string.IsNullOrEmpty(rvr.PvPSession))
+
+            if (!string.IsNullOrEmpty(rvr!.PvPSession))
                 return;
-            
+
             if (!string.IsNullOrEmpty(rvr.GuildID))
             {
                 Guild guild = GuildMgr.GetGuildByGuildID(rvr.GuildID);
@@ -415,14 +418,32 @@ namespace AmteScripts.Managers
             }
         }
 
+        private DateTime lastHoldingUpdate = DateTime.Now;
+
         private int _CheckRvr(RegionTimer callingtimer)
         {
             Console.WriteLine("Check RVR");
             DateTime currentTime = DateTime.Now;
+            var elapsed = currentTime - lastHoldingUpdate;
+            lastHoldingUpdate = currentTime;
+
+            if (_isOpen)
+            {
+                foreach (var kv in ActiveMaps())
+                {
+                    var zoneKey = kv.Key;
+                    var map = kv.Value;
+                    if (map.RvRTerritory != null && map.RvRTerritory.OwnerGuild != null)
+                    {
+                        holdingTimesByZone[zoneKey][map.RvRTerritory.OwnerGuild.Realm] += elapsed;
+                    }
+                }
+            }
+
             if (!_isOpen)
             {
                 _regions.Foreach(id => WorldMgr.GetClientsOfRegion(id).Foreach(p => RemovePlayer(p, false)));
-                if (DateTime.Now >= _startTime && DateTime.Now < _endTime)
+                if (currentTime >= _startTime && currentTime < _endTime)
                     Open(false);
             }
             else
@@ -466,18 +487,15 @@ namespace AmteScripts.Managers
 
                     if (checkNumberOfPlayer < 5)
                     {
-                        _maps.ForEach((map) =>
+                        ActiveMaps().ForEach(map =>
                         {
-                            if (map.Value.RvRTerritory != null && !string.IsNullOrEmpty(map.Value.RvRTerritory.Boss.GuildName) && Scores.ContainsKey(map.Value.RvRTerritory.Boss.GuildName))
+                            var terr = map.Value.RvRTerritory;
+                            if (terr != null && !string.IsNullOrEmpty(terr.Boss.GuildName) && Scores.ContainsKey(terr.Boss.GuildName))
                             {
-                                if (map.Key.Contains("Debutant"))
-                                    Scores[map.Value.RvRTerritory.Boss.GuildName]++;
-                                else if (map.Key.Contains("Standard"))
-                                    Scores[map.Value.RvRTerritory.Boss.GuildName] += 2;
-                                else if (map.Key.Contains("Expert"))
-                                    Scores[map.Value.RvRTerritory.Boss.GuildName] += 3;
-                                else if (map.Key.Contains("Master"))
-                                    Scores[map.Value.RvRTerritory.Boss.GuildName] += 4;
+                                if (map.Key.Contains("Debutant")) Scores[terr.Boss.GuildName] += 1;
+                                else if (map.Key.Contains("Standard")) Scores[terr.Boss.GuildName] += 2;
+                                else if (map.Key.Contains("Expert")) Scores[terr.Boss.GuildName] += 3;
+                                else if (map.Key.Contains("Master")) Scores[terr.Boss.GuildName] += 4;
                             }
                         });
                     }
@@ -490,6 +508,7 @@ namespace AmteScripts.Managers
             {
                 ClearRvRBonus();
                 RvRBonusDate = currentTime.Date;
+                _currentMasterMap = null;
             }
 
             if (currentTime > _endTime)
@@ -507,8 +526,33 @@ namespace AmteScripts.Managers
         {
             if (!Directory.Exists("temp"))
                 Directory.CreateDirectory("temp");
-            if (string.IsNullOrEmpty(winnerName)) File.WriteAllText("temp/RvRScore.dat", string.Format("{0}\n{1}\n{2}\n{3}", DateTime.Now.ToBinary(), Scores[ALBION], Scores[HIBERNIA], Scores[MIDGARD]));
-            else File.WriteAllText("temp/RvRScore.dat", string.Format("{0}\n{1}\n{2}\n{3}\n{4}", DateTime.Now.ToBinary(), Scores[ALBION], Scores[HIBERNIA], Scores[MIDGARD], winnerName));
+            var lines = new string[]
+            {
+                DateTime.Now.ToString("o"),
+                Scores.TryGetValue(ALBION, out var a) ? a.ToString() : "0",
+                Scores.TryGetValue(HIBERNIA, out var h) ? h.ToString() : "0",
+                Scores.TryGetValue(MIDGARD, out var m) ? m.ToString() : "0",
+                winnerName ?? string.Empty,
+                _currentMasterMap ?? string.Empty
+            };
+            File.WriteAllLines("temp/RvRScore.dat", lines);
+        }
+
+        private string ReadLastMasterMapFromFile()
+        {
+            try
+            {
+                var path = "temp/RvRScore.dat";
+                if (!File.Exists(path)) return null;
+                var lines = File.ReadAllLines(path);
+                if (lines.Length >= 6)
+                {
+                    var val = (lines[5] ?? string.Empty).Trim();
+                    return string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+            }
+            catch { /* ignore */ }
+            return null;
         }
 
         private void ClearRvRBonus()
@@ -546,44 +590,88 @@ namespace AmteScripts.Managers
             _midgard.HasGuildBanner = false;
             _hibernia.HasGuildBanner = false;
 
-            // Count score
-            Scores = new Dictionary<string, int>();
-            if (File.Exists("temp/RvRScore.dat"))
-            {
-                var lines = File.ReadAllText("temp/RvRScore.dat").Split('\n');
-                DateTime dateOfSave;
-                if (lines.Length > 4 && DateTime.TryParse(lines[0], out dateOfSave) && dateOfSave > DateTime.Today)
-                {
-                    Scores.Add(ALBION, int.Parse(lines[1]));
-                    Scores.Add(HIBERNIA, int.Parse(lines[2]));
-                    Scores.Add(MIDGARD, int.Parse(lines[3]));
-                    if (lines.Length == 5)
-                        winnerName = lines[4];
-                }
-                else
-                {
-                    Scores.Add(ALBION, 0);
-                    Scores.Add(HIBERNIA, 0);
-                    Scores.Add(MIDGARD, 0);
-                }
-            }
-            else
-            {
-                Scores.Add(ALBION, 0);
-                Scores.Add(HIBERNIA, 0);
-                Scores.Add(MIDGARD, 0);
-            }
+            foreach (var zoneDict in holdingTimesByZone.Values)
+                foreach (var realm in zoneDict.Keys.ToList())
+                    zoneDict[realm] = TimeSpan.Zero;
+
+            Scores[ALBION] = 0;
+            Scores[HIBERNIA] = 0;
+            Scores[MIDGARD] = 0;
+            winnerName = string.Empty;
+
+            string previousPick = _currentMasterMap ?? ReadLastMasterMapFromFile();
+            SelectRandomMasterMap(avoidSame: true, previous: previousPick);
+
+            SaveScore();
+            RebuildActiveRegions();
 
             kills = new Dictionary<GamePlayer, short>();
 
-            this._maps.Where(m => m.Value.RvRTerritory != null).Foreach(m =>
+            ActiveMaps().Foreach(m =>
             {
-                ((LordRvR)m.Value.RvRTerritory.Boss).StartRvR();
-                m.Value.RvRTerritory.Reset();
-                m.Value.RvRTerritory.ToggleBanner(false);
+                if (m.Value.RvRTerritory != null)
+                {
+                    ((LordRvR)m.Value.RvRTerritory.Boss).StartRvR();
+                    m.Value.RvRTerritory.Reset();
+                    m.Value.RvRTerritory.ToggleBanner(false);
+                }
             });
 
+            log.Info($"RvRManager: Opened with Master map = {_currentMasterMap} (force={force})");
             return true;
+        }
+
+        private void SelectRandomMasterMap(bool avoidSame = false, string previous = null)
+        {
+            string old = previous ?? _currentMasterMap;
+            string pick;
+
+            if (avoidSame && old != null && MasterMapPrefixes.Length > 1)
+            {
+                do
+                {
+                    pick = MasterMapPrefixes[_rng.Next(MasterMapPrefixes.Length)];
+                }
+                while (pick == old);
+            }
+            else
+            {
+                pick = MasterMapPrefixes[_rng.Next(MasterMapPrefixes.Length)];
+            }
+
+            _currentMasterMap = pick;
+            log.Info($"RvRManager: Selected Master map: {_currentMasterMap}");
+        }
+
+        private void RebuildActiveRegions()
+        {
+            _regions = ActiveMaps()
+                .Select(kv => kv.Value.Position.RegionID)
+                .Distinct()
+                .OrderBy(id => id)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Enumerates only the maps that are active for scoring/territory today:
+        /// - Debutant / Standard / Expert (always on)
+        /// - Master: only the selected prefix (Master01/02/03)
+        /// </summary>
+        private IEnumerable<KeyValuePair<string, RvRMap>> ActiveMaps()
+        {
+            foreach (var kv in _maps)
+            {
+                if (kv.Key.Contains("RvR-Debutant-") || kv.Key.Contains("RvR-Standard-") || kv.Key.Contains("RvR-Expert-"))
+                    yield return kv;
+            }
+
+            if (!string.IsNullOrEmpty(_currentMasterMap))
+            {
+                string prefix = $"RvR-{_currentMasterMap}-";
+                foreach (var kv in _maps)
+                    if (kv.Key.StartsWith(prefix))
+                        yield return kv;
+            }
         }
 
         public bool Close()
@@ -592,6 +680,10 @@ namespace AmteScripts.Managers
                 return false;
             _isOpen = false;
             _isForcedOpen = false;
+
+            foreach (var zoneDict in holdingTimesByZone.Values)
+                foreach (var realm in zoneDict.Keys.ToList())
+                    zoneDict[realm] = TimeSpan.Zero;
 
             string messageScore = GetMessageScore();
             WorldMgr.GetAllPlayingClients().Foreach((c) =>
@@ -605,7 +697,7 @@ namespace AmteScripts.Managers
                 c.Out.SendMessage(message, eChatType.CT_Help, eChatLoc.CL_SystemWindow);
             });
 
-            this._maps.Select(m => m.Value).Where(m => m.RvRTerritory != null).Foreach(m =>
+            ActiveMaps().Select(m => m.Value).Where(m => m.RvRTerritory != null).Foreach(m =>
             {
                 ((LordRvR)m.RvRTerritory.Boss).StopRvR();
                 m.RvRTerritory.Reset();
@@ -806,11 +898,11 @@ namespace AmteScripts.Managers
                 }
                 else if (player.Level >= 46)
                 {
-                    key = "RvR-Master-" + realm;
-                    if (!_maps.ContainsKey(key))
-                    {
-                        throw new KeyNotFoundException(key);
-                    }
+                    if (string.IsNullOrEmpty(_currentMasterMap))
+                        SelectRandomMasterMap();
+
+                    key = $"RvR-{_currentMasterMap}-{realm}";
+                    if (!_maps.ContainsKey(key)) throw new KeyNotFoundException(key);
                 }
                 //else if (player.Level >= 50 && player.IsRenaissance)
                 //{
@@ -915,78 +1007,116 @@ namespace AmteScripts.Managers
         {
             var statList = new List<string>();
 
-            if (!_isOpen && WinnerRealm == player.Realm)
+            if (!_isOpen)
             {
-                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.WinnerBonuses"));
-                statList.Add("");
-                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusGold"));
-                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusExperience"));
-                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusRealmPoints"));
-                return statList;
-            }
-            else if (!_isOpen && WinnerRealm != player.Realm)
-            {
-                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.LoserNoBonuses"));
+                if (WinnerRealm == player.Realm)
+                {
+                    statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.WinnerBonuses"));
+                    statList.Add("");
+                    statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusGold"));
+                    statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusExperience"));
+                    statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusRealmPoints"));
+                }
+                else
+                {
+                    statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.LoserNoBonuses"));
+                }
                 return statList;
             }
 
-            if (DateTime.Now.Subtract(_statLastCacheUpdate) >= new TimeSpan(0, 0, 30))
+            // Scores at the top
+            statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.TotalScores"));
+            statList.Add($"Albion: {Scores[ALBION]} points");
+            statList.Add($"Midgard: {Scores[MIDGARD]} points");
+            statList.Add($"Hibernia: {Scores[HIBERNIA]} points");
+            statList.Add("");
+
+            // Current Champion
+            statList.Add("--------------------------------------------------------------");
+            statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.CurrentChampion") + GetCurrentChampion(player.Client.Account.Language));
+            statList.Add("--------------------------------------------------------------");
+            statList.Add("");
+
+            // Update statistics every 30 seconds
+            if (DateTime.Now.Subtract(_statLastCacheUpdate) >= TimeSpan.FromSeconds(30))
             {
                 _statLastCacheUpdate = DateTime.Now;
-                var clients = WorldMgr.GetClientsOfRegion(player.CurrentRegionID);
-                var albCount = clients.Where(c => c.Player.Realm == eRealm.Albion).Count();
-                var midCount = clients.Where(c => c.Player.Realm == eRealm.Midgard).Count();
-                var hibCount = clients.Where(c => c.Player.Realm == eRealm.Hibernia).Count();
+                _statCache.Clear();
 
-                long prAlb = clients.Where(c => c.Player.Realm == eRealm.Albion).Sum(c => c.Player.Guild.RealmPoints);
-                long prHib = clients.Where(c => c.Player.Realm == eRealm.Hibernia).Sum(c => c.Player.Guild.RealmPoints);
-                long prMid = clients.Where(c => c.Player.Realm == eRealm.Midgard).Sum(c => c.Player.Guild.RealmPoints);
+                var zones = new List<string> { "Debutant", "Standard", "Expert" };
+                if (!string.IsNullOrEmpty(_currentMasterMap))
+                    zones.Add(_currentMasterMap);
 
-                var maps = this._maps.Values.Where(m => m.RvRTerritory != null && m.Position.RegionID.Equals(player.CurrentRegionID));
-
-                if (maps != null)
+                foreach (var zone in zones)
                 {
-                    var lords = maps.Select(r => (LordRvR)r.RvRTerritory.Boss).ToList();
-
-                    if (lords != null)
+                    string zoneDisplayName = zone switch
                     {
-                        this.RvrStats[player.CurrentRegionID] = new List<string>
+                        "Debutant" => "Debutant (lv 20 to 28)",
+                        "Standard" => "Standard (lv 29 to 37)",
+                        "Expert" => "Expert (lv 38 to 45)",
+                        _ => $"Master (lv 46 to 50)"
+                    };
+
+                    _statCache.Add($"------------ RvR {zoneDisplayName} ------------");
+
+                    foreach (var realm in new[] { eRealm.Albion, eRealm.Midgard, eRealm.Hibernia })
+                    {
+                        string realmShort = realm switch
                         {
-                            LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Statistics"),
-                            " - Albion: ",
-                            (_isOpen ? albCount : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
-                            (_isOpen ? prAlb : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
-                            " - Midgard: ",
-                            (_isOpen ? midCount : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
-                            (_isOpen ? prMid : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
-                            " - Hibernia: ",
-                            (_isOpen ? hibCount : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
-                            (_isOpen ? prHib : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
-                            "",
-                            " - Total: ",
-                            (IsOpen ? clients.Count : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
-                            (IsOpen ? prAlb + prMid + prHib : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
-                            "",
-                            string.Join("\n", lords.Select(l => l.GetScores(player.Client.Account.Language))),
-                            LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.TotalScores"),
-                            "Albion: " + Scores[ALBION] + " points",
-                            "Midgard: " + Scores[MIDGARD] + " points",
-                            "Hibernia: " + Scores[HIBERNIA] + " points",
-                            "",
-                            LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.CurrentChampion") + GetCurrentChampion(player.Client.Account.Language)
+                            eRealm.Albion => "ALB",
+                            eRealm.Midgard => "MID",
+                            eRealm.Hibernia => "HIB",
+                            _ => "UNK"
                         };
 
-                        if (player.Client.Account.PrivLevel > 1)
+                        string zoneKey = $"RvR-{zone}-{realmShort}";
+
+                        if (!_maps.ContainsKey(zoneKey))
                         {
-                            statList.Add("");
-                            statList.Add("");
-                            statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Status") + (_isOpen ? "ouvert" : "fermé") + ".");
-                            statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.UpdateFrequency"));
+                            _statCache.Add($" - {GlobalConstants.RealmToName(realm)}: No data available");
+                            continue;
                         }
+
+                        var regionId = _maps[zoneKey].Position.RegionID;
+                        var clients = WorldMgr.GetClientsOfRegion(regionId).Where(c => c.Player.Realm == realm);
+
+                        _statCache.Add($" - {GlobalConstants.RealmToName(realm)}: {clients.Count()} {LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players")}, {clients.Sum(c => c.Player.Guild?.RealmPoints ?? 0)} {LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints")}");
                     }
+
+                    _statCache.Add("");
+                    _statCache.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.HoldingTime"));
+
+                    foreach (var realm in new[] { eRealm.Albion, eRealm.Midgard, eRealm.Hibernia })
+                    {
+                        string realmShort = realm switch
+                        {
+                            eRealm.Albion => "ALB",
+                            eRealm.Midgard => "MID",
+                            eRealm.Hibernia => "HIB",
+                            _ => "UNK"
+                        };
+
+                        var zoneKey = $"RvR-{zone}-{realmShort}";
+                        TimeSpan holdingTime = holdingTimesByZone.ContainsKey(zoneKey) ? holdingTimesByZone[zoneKey][realm] : TimeSpan.Zero;
+                        _statCache.Add($"   {GlobalConstants.RealmToName(realm)}: {Math.Round(holdingTime.TotalSeconds, 1)} seconds");
+                    }
+
+                    _statCache.Add("");
                 }
             }
-            return this.RvrStats[player.CurrentRegionID];
+
+            statList.AddRange(_statCache);
+
+            // Admin/GM Infos
+            if (player.Client.Account.PrivLevel > 1)
+            {
+                statList.Add("");
+                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Status") + (_isOpen ? " ouvert" : " fermé") + ".");
+                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.UpdateFrequency"));
+                statList.Add($"Current Master Map: {_currentMasterMap}");
+            }
+
+            return statList;
         }
 
         private string GetCurrentChampion(string language)

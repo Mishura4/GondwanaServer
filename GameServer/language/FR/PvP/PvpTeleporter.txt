@@ -21,3 +21,5 @@ TeleporterPvP.NotInGroup:				Vous n'êtes pas dans un groupe !
 TeleporterPvP.MustBeGroupLeader:		Vous devez être le chef du groupe pour cela !
 TeleporterPvP.SoloOnlyNoQueue:			Seuls les combattants solitaires sont conviés, aucune file d'attente pour les groupes !
 TeleporterPvP.NotLeaderOrNoGroup:		Vous n'êtes pas chef de groupe ou n'avez pas de groupe. L'accès à cette session vous est interdit !
+TeleporterPvP.MustLeaveGroupForSolo:		Vous devez d'abord quitter votre groupe pour participer en tant que combattant solo !
+
