@@ -179,7 +179,7 @@ namespace AmteScripts.Managers
         [NotNull] private readonly Dictionary<Guild, Group> _guildGroups = new Dictionary<Guild, Group>();
         [NotNull] private readonly object _groupsLock = new object();
         // Grace timer for PvP players who get linkdead so they don't lose their progress
-        [NotNull] private readonly Dictionary<string, RegionTimer> _graceTimers = new();
+        [NotNull] private readonly ReaderWriterDictionary<string, RegionTimer> _graceTimers = new();
         [NotNull] private readonly List<Guild> _allGuilds = new();
         [NotNull] private readonly List<GameFlagBasePad> _allBasePads = new List<GameFlagBasePad>();
         // Keep track of last guild of each player for scores to protect from griefing
@@ -204,6 +204,8 @@ namespace AmteScripts.Managers
         {
             if (log.IsInfoEnabled)
                 log.InfoFormat("PvP grace period expired for linkdead player {0}({1}). Removing from PvP.", player.Name, player.Client.Account.Name);
+
+            _graceTimers.Remove(player.InternalID);
 
             if (player.ObjectState == GameObject.eObjectState.Active)
                 PvpManager.Instance.KickPlayer(player);
@@ -266,10 +268,7 @@ namespace AmteScripts.Managers
             var timerRegion = WorldMgr.GetRegion(1);
             var timer = new RegionTimer(timerRegion.TimeManager);
 
-            lock (_graceTimers)
-            {
-                _graceTimers[player.InternalID] = timer;
-            }
+            _graceTimers[player.InternalID] = timer;
             
             if (CurrentSessionType is eSessionTypes.CaptureTheFlag)
             {
@@ -383,6 +382,25 @@ namespace AmteScripts.Managers
         public void OnPlayerQuit(GamePlayer player)
         {
             if (player?.IsInPvP != true)
+                return;
+
+            bool ignore = false;
+            _graceTimers.FreezeWhile((d) =>
+            {
+                if (d.TryGetValue(player.InternalID, out RegionTimer timer))
+                {
+                    if (timer.IsAlive)
+                    {
+                        ignore = true;
+                    }
+                    else
+                    {
+                        d.Remove(player.InternalID);
+                    }
+                }
+            });
+            
+            if (ignore)
                 return;
             
             CleanupPlayer(player);
@@ -810,13 +828,10 @@ namespace AmteScripts.Managers
         {
             bool wasLinkDead = false;
             RegionTimer graceTimer;
-            lock (_graceTimers)
+            if (_graceTimers.Remove(player.InternalID, out graceTimer))
             {
-                if (_graceTimers.Remove(player.InternalID, out graceTimer))
-                {
-                    wasLinkDead = true;
-                    graceTimer.Stop();
-                }
+                wasLinkDead = true;
+                graceTimer.Stop();
             }
 
             if (!_zones.Contains(player.CurrentZone))
@@ -860,7 +875,7 @@ namespace AmteScripts.Managers
                     if (spawn == null)
                     {
                         player.SendTranslatedMessage("PvPManager.NoSpawn");
-                        return false;   
+                        return false;
                     }
                     
                     _groupSpawns[player.Guild] = spawn;
@@ -1778,10 +1793,7 @@ namespace AmteScripts.Managers
 
         private void _cleanupPlayer(GamePlayer player, bool disband = true)
         {
-            lock (_graceTimers)
-            {
-                _graceTimers.Remove(player.InternalID);
-            }
+            _graceTimers.Remove(player.InternalID);
 
             Guild pvpGuild = null;
             if (player.Guild != null)

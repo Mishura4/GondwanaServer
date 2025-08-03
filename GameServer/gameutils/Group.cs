@@ -193,23 +193,59 @@ namespace DOL.GS
         /// <returns>true if added successfully</returns>
         public virtual bool AddMember(GameLiving living)
         {
-            if (!m_groupMembers.FreezeWhile<bool>(l =>
+            bool added = m_groupMembers.FreezeWhile<bool>(l =>
             {
-                if (l.Count >= ServerProperties.Properties.GROUP_MAX_MEMBER || l.Count >= (byte.MaxValue - 1))
+                GamePlayer existing = null;
+                int count = 0;
+                if (living is GamePlayer)
+                {
+                    foreach (GameLiving member in l)
+                    {
+                        if (living == member)
+                            return false;
+
+                        ++count;
+                        if (member is GamePlayer { Client.ClientState: GameClient.eClientState.Linkdead or GameClient.eClientState.Disconnected } player && player.InternalID == living.InternalID)
+                        {
+                            existing = player;
+                            --count;
+                        }
+                    }
+                }
+                else
+                {
+                    if (l.Contains(living))
+                        return false;
+
+                    count = l.Count;
+                }
+
+                if (count >= ServerProperties.Properties.GROUP_MAX_MEMBER || count >= (byte.MaxValue - 1))
                     return false;
 
-                if (l.Contains(living))
-                    return false;
+                var index = (byte)(l.Count);
+                if (existing is not null)
+                {
+                    index = existing.GroupIndex;
+                    l[existing.GroupIndex] = living;
+                    existing.Group = null;
+                    existing.GroupIndex = 0xFF;
+                }
+                else
+                {
+                    l.Add(living);
+                }
 
-                l.Add(living);
                 living.Group = this;
-                living.GroupIndex = (byte)(l.Count - 1);
+                living.GroupIndex = index;
                 return true;
-            }))
+            });
+            
+            if (!added)
                 return false;
 
-            UpdateGroupWindow();
             // update icons of joined player to everyone in the group
+            UpdateGroupWindow();
             UpdateMember(living, true, false);
 
             if (living is GamePlayer player)
@@ -416,6 +452,11 @@ namespace DOL.GS
             }
 
             return allOk;
+        }
+
+        public void OnLinkDeath(GamePlayer player)
+        {
+            UpdateMember(player, false, false);
         }
         #endregion
 

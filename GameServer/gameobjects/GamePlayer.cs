@@ -998,7 +998,7 @@ namespace DOL.GS
 
             //Notify other group members of this linkdead
             if (Group != null)
-                Group.UpdateMember(this, false, false);
+                Group.OnLinkDeath(this);
 
             CheckIfNearEnemyKeepAndAddToRvRLinkDeathListIfNecessary();
 
@@ -1047,8 +1047,11 @@ namespace DOL.GS
                 reputationRecoveryTimer = null;
             }
 
-            if (Group != null)
-                Group.RemoveMember(this);
+            if (!IsInPvP) // For PvP, this is handled elsewhere
+            {
+                if (Group != null)
+                    Group.RemoveMember(this);
+            }
 
             BattleGroup mybattlegroup = (BattleGroup)this.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
             if (mybattlegroup != null)
@@ -11524,10 +11527,6 @@ namespace DOL.GS
             // do some Cleanup
             CleanupOnDisconnect();
 
-            if (Group != null)
-            {
-                Group.RemoveMember(this);
-            }
             BattleGroup mybattlegroup = (BattleGroup)this.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
             if (mybattlegroup != null)
             {
