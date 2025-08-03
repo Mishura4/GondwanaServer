@@ -1693,52 +1693,7 @@ namespace DOL.GS
             // check if we are around borders of a zone
             Zone startingZone = GetZone(center);
 
-            if (startingZone != null)
-            {
-                ArrayList res = startingZone.GetObjectsInRadius(type, center, radius, new ArrayList(), ignoreZ);
-
-                uint sqRadius = (uint)radius * radius;
-
-                foreach (var currentZone in m_zones)
-                {
-                    if ((currentZone != startingZone)
-                        && (currentZone.TotalNumberOfObjects > 0)
-                        && CheckShortestDistance(currentZone, center, sqRadius))
-                    {
-                        res = currentZone.GetObjectsInRadius(type, center, radius, res, ignoreZ);
-                    }
-                }
-
-                //Return required enumerator
-                IEnumerable tmp = null;
-                if (withDistance)
-                {
-                    switch (type)
-                    {
-                        case Zone.eGameObjectType.ITEM:
-                            tmp = new ItemDistanceEnumerator(center, res);
-                            break;
-                        case Zone.eGameObjectType.NPC:
-                            tmp = new NPCDistanceEnumerator(center, res);
-                            break;
-                        case Zone.eGameObjectType.PLAYER:
-                            tmp = new PlayerDistanceEnumerator(center, res);
-                            break;
-                        case Zone.eGameObjectType.DOOR:
-                            tmp = new DoorDistanceEnumerator(center, res);
-                            break;
-                        default:
-                            tmp = new EmptyEnumerator();
-                            break;
-                    }
-                }
-                else
-                {
-                    tmp = new ObjectEnumerator(res);
-                }
-                return tmp;
-            }
-            else
+            if (startingZone == null)
             {
                 if (log.IsDebugEnabled)
                 {
@@ -1746,6 +1701,47 @@ namespace DOL.GS
                 }
                 return new EmptyEnumerator();
             }
+            
+            ArrayList res = startingZone.GetObjectsInRadius(type, center, radius, new ArrayList(), ignoreZ);
+
+            uint sqRadius = (uint)radius * radius;
+
+            // TODO: this seems incredibly inefficient? why does m_zones need to be locked for this?
+            //        Or more specifically, why is there a risk that another thread modifies the zones?
+            var zones = m_zones.Where(z => z != startingZone && z.TotalNumberOfObjects > 0 && CheckShortestDistance(z, center, sqRadius)).ToArray();
+            foreach (var currentZone in zones)
+            {
+                res = currentZone.GetObjectsInRadius(type, center, radius, res, ignoreZ);
+            }
+
+            //Return required enumerator
+            IEnumerable tmp = null;
+            if (withDistance)
+            {
+                switch (type)
+                {
+                    case Zone.eGameObjectType.ITEM:
+                        tmp = new ItemDistanceEnumerator(center, res);
+                        break;
+                    case Zone.eGameObjectType.NPC:
+                        tmp = new NPCDistanceEnumerator(center, res);
+                        break;
+                    case Zone.eGameObjectType.PLAYER:
+                        tmp = new PlayerDistanceEnumerator(center, res);
+                        break;
+                    case Zone.eGameObjectType.DOOR:
+                        tmp = new DoorDistanceEnumerator(center, res);
+                        break;
+                    default:
+                        tmp = new EmptyEnumerator();
+                        break;
+                }
+            }
+            else
+            {
+                tmp = new ObjectEnumerator(res);
+            }
+            return tmp;
         }
 
 
