@@ -4,6 +4,7 @@ using DOL.GS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,40 +15,33 @@ namespace AmteScripts.PvP.CTF
         private void SetOwner(GameLiving? newOwner, bool updateEmblem = true)
         {
             var prevOwner = base.Owner;
-            if (prevOwner != null)
+            int newEmblem = 0;
+            if (newOwner != prevOwner)
             {
-                RemoveOwner(prevOwner);
-            }
-            base.Owner = newOwner;
-            if (newOwner != null)
-            {
-                AddOwner(newOwner);
-            }
-            
-            if (updateEmblem)
-            {
-                if (newOwner is GamePlayer player)
+                if (prevOwner != null)
                 {
-                    Emblem = PvpManager.Instance.GetEmblemForPlayer(player);
+                    RemoveOwner(prevOwner);
+                }
+                base.Owner = newOwner;
+                if (newOwner != null)
+                {
+                    AddOwner(newOwner);
                 }
                 else
                 {
-                    Emblem = 0;
+                    base.OwnerGuild = null;
                 }
             }
-                
-        }
-        private void SetOwnerGuild(Guild? newOwner, bool updateEmblem = true)
-        {
-            if (newOwner != null)
+            
+            if (newOwner is GamePlayer playerOwner)
             {
-                SetOwner(null, false);
-                base.OwnerGuild = newOwner;
+                base.OwnerGuild = playerOwner.Guild;
+                newEmblem = PvpManager.Instance.GetEmblemForPlayer(playerOwner);
             }
             
             if (updateEmblem)
             {
-                Emblem = newOwner?.Emblem ?? 0;
+                Emblem = newEmblem;
             }
                 
         }
@@ -62,16 +56,6 @@ namespace AmteScripts.PvP.CTF
             }
         }
 
-        /// <inheritdoc />
-        public override Guild? OwnerGuild
-        {
-            get => base.OwnerGuild;
-            set
-            {
-                SetOwnerGuild(value, true);
-            }
-        }
-
         public GamePlayer? OwnerPlayer
         {
             get => Owner as GamePlayer;
@@ -80,14 +64,7 @@ namespace AmteScripts.PvP.CTF
 
         public virtual void SetOwnership(GamePlayer? player, bool updateEmblem = true)
         {
-            if (player?.Guild != null)
-            {
-                SetOwnerGuild(player.Guild, updateEmblem);
-            }
-            else
-            {
-                SetOwner(player, updateEmblem);
-            }
+            SetOwner(player, updateEmblem);
         }
     }
 }

@@ -106,8 +106,9 @@ namespace DOL.GS
             get { return m_Emblem; }
             set
             {
+                int prev = m_Emblem;
                 m_Emblem = value;
-                if (ObjectState == eObjectState.Active)
+                if (ObjectState == eObjectState.Active && prev != m_Emblem)
                 {
                     foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                         player.Out.SendObjectCreate(this);

@@ -41,7 +41,6 @@ namespace AmteScripts.Areas
                 m_Description = GetGuildName(value);
                 foreach (var item in _ownedStaticItems)
                 {
-                    item.Owner = null;
                     item.OwnerGuild = value;
                 }
             }

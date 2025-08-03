@@ -65,6 +65,14 @@ namespace AmteScripts.Managers
 
         public int GetEmblemForPlayer(GamePlayer player)
         {
+            if (player.Guild != null)
+                return player.Guild.Emblem;
+
+            return GetPlayerSoloEmblem(player);
+        }
+
+        public int GetPlayerSoloEmblem(GamePlayer player)
+        {
             // Quick hash so that a player always gets the same emblem per session
             UInt64 hashedValue = 3074457345618258791ul;
             hashedValue += (ulong)_startedTime.Ticks;
@@ -485,7 +493,7 @@ namespace AmteScripts.Managers
         private Guild CreateGuild(GamePlayer leader)
         {
             var guild =  CreateGuild("[PVP] " + leader.Name + "'s guild", leader);
-            guild.Emblem = GetEmblemForPlayer(leader);
+            guild.Emblem = GetPlayerSoloEmblem(leader);
             return guild;
         }
 
@@ -606,7 +614,7 @@ namespace AmteScripts.Managers
                 if (guild == null)
                     return;
                 
-                guild.Emblem = GetEmblemForPlayer(player);
+                guild.Emblem = GetPlayerSoloEmblem(player);
                 if (_groupSpawns.TryGetValue(guild, out Spawn spawn))
                 {
                     foreach (var member in group.GetPlayersInTheGroup())

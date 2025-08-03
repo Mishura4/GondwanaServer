@@ -33,27 +33,30 @@ namespace AmteScripts.PvP.CTF
         {
             if (!base.Interact(player)) return false;
 
+
+            if (CurrentTempPad == null)
+            {
+                // Presumed neutral, i.e. on base pad or ground
+                return PlayerPickupFlag(player);
+            }
+            
             if (OwnerPlayer == player)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.AlreadyOwnFlag"),
                                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
-            if (OwnerGuild != null && player.Guild != null && OwnerGuild == player.Guild)
+            if (IsOwner(player))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PvPGameFlag.GroupOwnsFlag"),
                                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
-
-            if (OwnerPlayer != null && OwnerPlayer != player)
+            else
             {
                 CaptureByEnemy(player);
                 return true;
             }
-
-            // Else, it's presumably on base pad or on ground => pick up
-            return PlayerPickupFlag(player);
         }
 
         public bool PlayerPickupFlag(GamePlayer player)
@@ -114,7 +117,7 @@ namespace AmteScripts.PvP.CTF
                     Item = invFlag,
                 };
                 if (player.IsInPvP)
-                    banner.Emblem = player.Guild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(player);
+                    banner.Emblem = PvpManager.Instance.GetEmblemForPlayer(player);
 
                 player.ActiveBanner = banner;
                 _isDroppedOnGround = false;

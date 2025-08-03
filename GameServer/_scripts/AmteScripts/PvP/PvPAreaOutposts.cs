@@ -92,7 +92,7 @@ namespace AmteScripts.PvP
                     Orientation = center.Orientation + template.Angle
                 };
                 item.Realm = 0;
-                item.Emblem = ownerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
+                item.Emblem = PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
                 if (item is GamePvPStaticItem pvpItem)
                     pvpItem.SetOwnership(ownerPlayer);
 
@@ -208,7 +208,7 @@ namespace AmteScripts.PvP
                     Orientation = center.Orientation + template.Angle
                 };
                 item.Realm = 0;
-                item.Emblem = ownerGuild?.Emblem ?? PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
+                item.Emblem = PvpManager.Instance.GetEmblemForPlayer(ownerPlayer);
                 if (item is GamePvPStaticItem pvpItem)
                     pvpItem.SetOwnership(ownerPlayer);
                 item.AddToWorld();
