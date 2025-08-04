@@ -25,6 +25,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.Events;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS
 {
@@ -37,7 +38,7 @@ namespace DOL.GS
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private static Dictionary<string, Artifact> m_artifacts = new();
         private static Dictionary<string, List<ArtifactXItem>> m_artifactVersions = new();
@@ -557,7 +558,7 @@ namespace DOL.GS
 
             if (questType == null)
             {
-                questType = Assembly.GetAssembly(typeof(GameServer)).GetType(questTypeString);
+                questType = Assembly.GetAssembly(typeof(GameServer))!.GetType(questTypeString);
             }
 
             return questType;
@@ -836,15 +837,11 @@ namespace DOL.GS
                 return null;
             }
 
-            WorldInventoryItem scroll = WorldInventoryItem.CreateUniqueFromTemplate("artifact_scroll");
-            if (scroll == null)
-            {
-                return null;
-            }
-
+            WorldInventoryItem scroll = null;
             string scrollTitle = null;
             int scrollModel = 499;
             short gold = 4;
+
             switch (pageNumbers)
             {
                 case Book.Page1:
@@ -880,12 +877,25 @@ namespace DOL.GS
                     break;
             }
 
+            if (pageNumbers == Book.AllPages && !Properties.CREATE_ARTIFACTBOOK_ASUNIQUE)
+            {
+                scroll = WorldInventoryItem.CreateFromTemplate(scrollTitle);
+            }
+            else
+            {
+                scroll = WorldInventoryItem.CreateUniqueFromTemplate("artifact_scroll");
+            }
+
+            if (scroll == null)
+            {
+                return null;
+            }
+
             scroll.Name = scrollTitle;
             scroll.Item.Name = scrollTitle;
             scroll.Model = (ushort)scrollModel;
             scroll.Item.Model = (ushort)scrollModel;
 
-            // Correct for possible errors in generic scroll template (artifact_scroll)
             scroll.Item.Price = Money.GetMoney(0, 0, gold, 0, 0);
             scroll.Item.IsDropable = true;
             scroll.Item.IsPickable = true;

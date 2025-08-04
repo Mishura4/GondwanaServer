@@ -2197,6 +2197,12 @@ namespace DOL.GS.ServerProperties
         public static double SPELL_HITCHANCE_DAMAGE_REDUCTION_MULTIPLIER;
 
         /// <summary>
+        /// Whether the book created after combining artifact scrolls is generated as a uniqueitem or not
+        /// </summary>
+        [ServerProperty("pve", "create_artifactbook_asunique", "Whether the book created after combining artifact scrolls is generated as a uniqueitem or not", true)]
+        public static bool CREATE_ARTIFACTBOOK_ASUNIQUE;
+
+        /// <summary>
         /// TOA Artifact XP rate
         /// </summary>
         [ServerProperty("pve", "artifact_xp_rate", "Adjust the rate at which all artifacts gain xp.  Higher numbers mean slower XP gain. XP / this = result", 350)]

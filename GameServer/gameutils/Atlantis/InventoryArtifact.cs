@@ -36,7 +36,7 @@ namespace DOL.GS
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private string m_artifactID;
         private int m_artifactLevel;
@@ -66,7 +66,7 @@ namespace DOL.GS
                 // Clear all bonuses except the base (L0) bonuses.
                 if (m_levelRequirements[(int)bonusID] > 0)
                 {
-                    Template.SetBonusType(bonusID, 0);
+                    Template!.SetBonusType(bonusID, 0);
                     Template.SetBonusAmount(bonusID, 0);
                 }
             }
