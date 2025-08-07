@@ -575,6 +575,10 @@ namespace DOL.GS
                         {
                             gameSpec = GetNewSpecializationInstance(spec.KeyName, spec.Implementation, spec.Name, spec.Icon, spec.SpecializationID);
                         }
+                        else if (spec.KeyName == Specs.Witchcraft) // Add condition for Witchcraft
+                        {
+                            gameSpec = new LiveSpellHybridSpecialization(spec.KeyName, spec.Name, spec.Icon, spec.SpecializationID);
+                        }
                         else
                         {
                             gameSpec = new Specialization(spec.KeyName, spec.Name, spec.Icon, spec.SpecializationID);
