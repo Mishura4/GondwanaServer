@@ -805,8 +805,8 @@ namespace DOL.GS
             return ht;
         }
 
-        protected static Hashtable[] m_gs_guilds = new Hashtable[(int)eRealm._Last + 1];
-        protected static Hashtable[] m_script_guilds = new Hashtable[(int)eRealm._Last + 1];
+        protected static Hashtable[] m_gs_guilds = new Hashtable[Constants.ALL_REALMS.Count];
+        protected static Hashtable[] m_script_guilds = new Hashtable[Constants.ALL_REALMS.Count];
 
         /// <summary>
         /// searches for a npc guild script

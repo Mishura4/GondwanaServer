@@ -111,12 +111,12 @@ namespace DOL.GS
 
                 eRealm realm = mob.CurrentZone.Realm;
 
-                if (realm < eRealm._FirstPlayerRealm || realm > eRealm._LastPlayerRealm)
-                    realm = (eRealm)Util.Random((int)eRealm._FirstPlayerRealm, (int)eRealm._LastPlayerRealm);
+                if (realm < Constants.FIRST_PLAYER_REALM || realm > Constants.LAST_PLAYER_REALM)
+                    realm = (eRealm)Util.Random((int)Constants.FIRST_PLAYER_REALM, (int)Constants.LAST_PLAYER_REALM);
 
                 switch (realm)
                 {
-                    case eRealm.Albion:
+                    case Constants.FIRST_PLAYER_REALM:
                         {
                             int index = Math.Min(m_itemTemplatesAlb.Length - 1, mob.Level / LEVEL_RANGE);
                             itemTemplates = m_itemTemplatesAlb[index];

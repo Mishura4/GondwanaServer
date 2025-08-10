@@ -16,12 +16,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System;
-using System.Collections.Generic;
 using DOL.Database;
 using DOL.Language;
 using log4net;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DOL.GS
 {
@@ -31,17 +33,9 @@ namespace DOL.GS
     public enum eRealm : byte
     {
         /// <summary>
-        /// First realm number, for use in all arrays
-        /// </summary>
-        _First = 0,
-        /// <summary>
         /// No specific realm
         /// </summary>
         None = 0,
-        /// <summary>
-        /// First player realm number, for use in all arrays
-        /// </summary>
-        _FirstPlayerRealm = 1,
         /// <summary>
         /// Albion Realm
         /// </summary>
@@ -54,15 +48,6 @@ namespace DOL.GS
         /// Hibernia Realm
         /// </summary>
         Hibernia = 3,
-        /// <summary>
-        /// Last player realm number, for use in all arrays
-        /// </summary>
-        _LastPlayerRealm = 3,
-
-        /// <summary>
-        /// LastRealmNumber to allow dynamic allocation of realm specific arrays.
-        /// </summary>
-        _Last = 3,
 
         /// <summary>
         /// DoorRealmNumber to allow dynamic allocation of realm specific arrays.
@@ -2419,6 +2404,16 @@ namespace DOL.GS
 
     public static class Constants
     {
-        public static int USE_AUTOVALUES = -1;
+        public const int USE_AUTOVALUES = -1;
+        public const eRealm FIRST_REALM = eRealm.None;
+        public const eRealm LAST_REALM = eRealm.Hibernia;
+        public const eRealm FIRST_PLAYER_REALM = eRealm.Albion;
+        public const eRealm LAST_PLAYER_REALM = eRealm.Hibernia;
+        
+        private static readonly eRealm[] _all_realms = Enumerable.Range((int)FIRST_REALM, (LAST_REALM + 1) - FIRST_REALM).Select(i => (eRealm)i).ToArray();
+        private static readonly eRealm[] _player_realms = Enumerable.Range((int)FIRST_PLAYER_REALM, (LAST_PLAYER_REALM + 1) - FIRST_PLAYER_REALM).Select(i => (eRealm)i).ToArray();
+        
+        public static ReadOnlyCollection<eRealm> ALL_REALMS => _all_realms.AsReadOnly();
+        public static ReadOnlyCollection<eRealm> PLAYER_REALMS => _player_realms.AsReadOnly();
     }
 }

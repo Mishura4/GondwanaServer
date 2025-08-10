@@ -733,7 +733,7 @@ namespace DOL.GS.PacketHandler.Client.v168
             bool valid = true;
             try
             {
-                if ((eRealm)ch.Realm < eRealm._FirstPlayerRealm || (eRealm)ch.Realm > eRealm._LastPlayerRealm)
+                if (!Constants.PLAYER_REALMS.Contains((eRealm)ch.Realm))
                 {
                     if (log.IsWarnEnabled)
                         log.WarnFormat("Wrong realm: {0} on character creation from Account: {1}", ch.Realm, ch.AccountName);

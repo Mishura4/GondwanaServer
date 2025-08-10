@@ -98,7 +98,7 @@ namespace DOL.GS.PacketHandler
 
         public override void SendCharacterOverview(eRealm realm)
         {
-            if (realm < eRealm._FirstPlayerRealm || realm > eRealm._LastPlayerRealm)
+            if (realm < Constants.FIRST_PLAYER_REALM || realm > Constants.LAST_PLAYER_REALM)
                 throw new Exception($"CharacterOverview requested for unknown realm {realm}");
 
             int firstSlot = (byte) realm * 100;

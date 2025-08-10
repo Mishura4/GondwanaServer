@@ -3291,9 +3291,9 @@ namespace DOL.GS.Commands
                 else if (args.Length == 3)
                 {
                     // Reload the mob(s)
-                    for (eRealm i = eRealm._First; i <= eRealm._Last; i++)
+                    foreach (var realm in Constants.ALL_REALMS)
                     {
-                        mobs.Add(WorldMgr.GetObjectsByName(args[2], i, typeof(GameNPC)));
+                        mobs.Add(WorldMgr.GetObjectsByName(args[2], realm, typeof(GameNPC)));
                     }
                 }
                 else

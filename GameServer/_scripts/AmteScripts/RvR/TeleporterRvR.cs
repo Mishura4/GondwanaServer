@@ -23,9 +23,9 @@ namespace DOL.GS.Scripts
         {
             switch (RvrManager.Instance.CurrentMasterMap)
             {
-                case "Master01": return "Braemar";
-                case "Master02": return "Wilton";
-                case "Master03": return "Thidranki";
+                case RvrManager.MapType.Master01: return "Braemar";
+                case RvrManager.MapType.Master02: return "Wilton";
+                case RvrManager.MapType.Master03: return "Thidranki";
                 default: return "Thidranki";
             }
         }

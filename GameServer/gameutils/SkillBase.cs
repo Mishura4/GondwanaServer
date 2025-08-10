@@ -2133,10 +2133,10 @@ namespace DOL.GS
         public static int GetArmorResist(InventoryItem armor, eDamageType damageType)
         {
             if (armor == null) return 0;
-            int realm = armor.Template.Realm - (int)eRealm._First;
+            int realm = armor.Template.Realm - (int)Constants.FIRST_REALM;
             int armorType = armor.Template.Object_Type - (int)eObjectType._FirstArmor;
             int damage = damageType - eDamageType._FirstResist;
-            if (realm < 0 || realm > eRealm._LastPlayerRealm - eRealm._First) return 0;
+            if (realm < 0 || realm > Constants.LAST_REALM - Constants.FIRST_REALM) return 0;
             if (armorType < 0 || armorType > eObjectType._LastArmor - eObjectType._FirstArmor) return 0;
             if (damage < 0 || damage > eDamageType._LastResist - eDamageType._FirstResist) return 0;
 
@@ -2199,12 +2199,12 @@ namespace DOL.GS
 
         private static void WriteMeleeResists(eRealm realm, eObjectType armorType, int slash, int crush, int thrust)
         {
-            if (realm < eRealm._First || realm > eRealm._LastPlayerRealm)
+            if (realm < Constants.FIRST_REALM || realm > Constants.LAST_PLAYER_REALM)
                 throw new ArgumentOutOfRangeException("realm", realm, "Realm should be between _First and _LastPlayerRealm.");
             if (armorType < eObjectType._FirstArmor || armorType > eObjectType._LastArmor)
                 throw new ArgumentOutOfRangeException("armorType", armorType, "Armor type should be between _FirstArmor and _LastArmor");
 
-            int off = (realm - eRealm._First) << (DAMAGETYPE_BITCOUNT + ARMORTYPE_BITCOUNT);
+            int off = (realm - Constants.FIRST_REALM) << (DAMAGETYPE_BITCOUNT + ARMORTYPE_BITCOUNT);
             off |= (armorType - eObjectType._FirstArmor) << DAMAGETYPE_BITCOUNT;
             m_armorResists[off + (eDamageType.Slash - eDamageType._FirstResist)] = slash;
             m_armorResists[off + (eDamageType.Crush - eDamageType._FirstResist)] = crush;
@@ -2213,12 +2213,12 @@ namespace DOL.GS
 
         private static void WriteMagicResists(eRealm realm, eObjectType armorType, int heat, int cold, int matter, int energy)
         {
-            if (realm < eRealm._First || realm > eRealm._LastPlayerRealm)
+            if (realm < Constants.FIRST_REALM || realm > Constants.LAST_PLAYER_REALM)
                 throw new ArgumentOutOfRangeException("realm", realm, "Realm should be between _First and _LastPlayerRealm.");
             if (armorType < eObjectType._FirstArmor || armorType > eObjectType._LastArmor)
                 throw new ArgumentOutOfRangeException("armorType", armorType, "Armor type should be between _FirstArmor and _LastArmor");
 
-            int off = (realm - eRealm._First) << (DAMAGETYPE_BITCOUNT + ARMORTYPE_BITCOUNT);
+            int off = (realm - Constants.FIRST_REALM) << (DAMAGETYPE_BITCOUNT + ARMORTYPE_BITCOUNT);
             off |= (armorType - eObjectType._FirstArmor) << DAMAGETYPE_BITCOUNT;
             m_armorResists[off + (eDamageType.Heat - eDamageType._FirstResist)] = heat;
             m_armorResists[off + (eDamageType.Cold - eDamageType._FirstResist)] = cold;
