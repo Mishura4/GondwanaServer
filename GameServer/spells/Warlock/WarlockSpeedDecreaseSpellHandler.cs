@@ -43,6 +43,12 @@ namespace DOL.GS.Spells
             return 0;
         }
 
+        /// <inheritdoc />
+        public override bool HasPositiveOrSpeedEffect()
+        {
+            return true;
+        }
+
         // constructor
         public WarlockSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
