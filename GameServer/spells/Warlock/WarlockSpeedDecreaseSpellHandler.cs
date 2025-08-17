@@ -16,11 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System;
-using DOL.GS;
-using DOL.GS.PacketHandler;
-using DOL.GS.Effects;
 using DOL.Events;
+using DOL.GS;
+using DOL.GS.Effects;
+using DOL.GS.PacketHandler;
+using DOL.Language;
+using System;
 
 namespace DOL.GS.Spells
 {
@@ -28,10 +29,50 @@ namespace DOL.GS.Spells
     /// Spell handler for speed decreasing spells
     /// </summary>
     [SpellHandler("WarlockSpeedDecrease")]
-    public class WarlockSpeedDecreaseSpellHandler : UnbreakableSpeedDecreaseSpellHandler
+    public class WarlockSpeedDecreaseSpellHandler : AbstractMorphSpellHandler
     {
+        /// <inheritdoc />
+        public override ushort GetModelFor(GameLiving living)
+        {
+            if (living.Realm == eRealm.Albion)
+                return 581;
+            else if (living.Realm == eRealm.Midgard)
+                return 574;
+            else if (living.Realm == eRealm.Hibernia)
+                return 594;
+            return 0;
+        }
 
-        private ushort m_playerModel;
+        // constructor
+        public WarlockSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+            Priority = 1;
+        }
+
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
+            {
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                return false;
+            }
+            
+            if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
+            {
+                (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            
+            if (target.EffectList.GetOfType<ChargeEffect>() != null)
+            {
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                return false;
+            }
+            
+            return base.ApplyEffectOnTarget(target, effectiveness);
+        }
+
         /// <summary>
         /// When an applied effect starts
         /// duration spells only
@@ -39,49 +80,149 @@ namespace DOL.GS.Spells
         /// <param name="effect"></param>
         public override void OnEffectStart(GameSpellEffect effect)
         {
-            base.OnEffectStart(effect);
+            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, effect, 1.0 - Spell.Value * 0.01);
 
-            if (effect.Owner is GamePlayer)
+            SendUpdates(effect.Owner);
+
+            string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
+            GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+            if (ownerPlayer != null)
             {
-                m_playerModel = effect.Owner.Model;
-                if (effect.Owner.Realm == eRealm.Albion)
-                    effect.Owner.Model = 581;
-                else if (effect.Owner.Realm == eRealm.Midgard)
-                    effect.Owner.Model = 574;
-                else if (effect.Owner.Realm == eRealm.Hibernia)
-                    effect.Owner.Model = 594;
-
-                SendEffectAnimation(effect.Owner, 12126, 0, false, 1);
-                //GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.Dying, new DOLEventHandler(OnAttacked));
-                //GameEventMgr.AddHandler(effect.Owner, GamePlayerEvent.Linkdeath, new DOLEventHandler(OnAttacked));
-                //GameEventMgr.AddHandler(effect.Owner, GamePlayerEvent.Quit, new DOLEventHandler(OnAttacked));
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : Spell.GetFormattedMessage1(ownerPlayer);
+                MessageToLiving(effect.Owner, message1, eChatType.CT_Spell);
             }
-            //GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttacked));
+            else
+            {
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message1, effect.Owner.GetName(0, false));
+                MessageToLiving(effect.Owner, message1, eChatType.CT_Spell);
+            }
+
+            foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+            {
+                if (!(effect.Owner == player))
+                {
+                    string personalizedTargetName = player.GetPersonalizedName(effect.Owner);
+
+                    string message2 = string.IsNullOrEmpty(Spell.Message2) ? string.Empty : Spell.GetFormattedMessage2(player, personalizedTargetName);
+                    player.MessageFromArea(effect.Owner, message2, eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                }
+            }
+
+            var timer = new UnbreakableSpeedDecreaseSpellHandler.RestoreSpeedTimer(effect);
+            effect.Owner.TempProperties.setProperty(effect, timer);
+            timer.Interval = 650;
+            timer.Start(1 + (effect.Duration >> 1));
+
+            effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            base.OnEffectStart(effect);
         }
 
-        /// <summary>
-        /// When an applied effect expires.
-        /// Duration spells only.
-        /// </summary>
-        /// <param name="effect">The expired effect</param>
-        /// <param name="noMessages">true, when no messages should be sent to player and surrounding</param>
-        /// <returns>immunity duration in milliseconds</returns>
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-            //GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttacked));
-            if (effect.Owner is GamePlayer)
+            base.OnEffectExpires(effect, noMessages);
+            GameTimer timer = (GameTimer)effect.Owner.TempProperties.getProperty<object>(effect, null);
+            effect.Owner.TempProperties.removeProperty(effect);
+            if (timer != null) timer.Stop();
+
+            effect.Owner.BuffBonusMultCategory1.Remove((int)eProperty.MaxSpeed, effect);
+
+            SendUpdates(effect.Owner);
+
+            if (!noMessages)
             {
-                effect.Owner.Model = m_playerModel;
-                //GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.Dying, new DOLEventHandler(OnAttacked));
-                //GameEventMgr.RemoveHandler(effect.Owner, GamePlayerEvent.Linkdeath, new DOLEventHandler(OnAttacked));
-                //GameEventMgr.RemoveHandler(effect.Owner, GamePlayerEvent.Quit, new DOLEventHandler(OnAttacked));
+                string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+                if (ownerPlayer != null)
+                {
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : Spell.GetFormattedMessage3(ownerPlayer);
+                    MessageToLiving(effect.Owner, message3, eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message3, effect.Owner.GetName(0, false));
+                    MessageToLiving(effect.Owner, message3, eChatType.CT_SpellExpires);
+                }
+
+                foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (!(effect.Owner == player))
+                    {
+                        string personalizedTargetName = player.GetPersonalizedName(effect.Owner);
+
+                        string message4 = string.IsNullOrEmpty(Spell.Message4) ? string.Empty : Spell.GetFormattedMessage4(player, personalizedTargetName);
+                        player.MessageFromArea(effect.Owner, message4, eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                    }
+                }
             }
-            return base.OnEffectExpires(effect, noMessages);
+
+            base.OnEffectExpires(effect, noMessages);
+            return 60000;
         }
 
-        // constructor
-        public WarlockSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
+            double duration = base.CalculateEffectDuration(target, effectiveness);
+            duration *= target.GetModified(eProperty.MythicalCrowdDuration) * 0.01;
+            duration *= target.GetModified(eProperty.SpeedDecreaseDuration) * 0.01;
+
+            if (duration < 1)
+                duration = 1;
+            else if (duration > (Spell.Duration * 4))
+                duration = (Spell.Duration * 4);
+            return (int)duration;
+        }
+
+        protected static void SendUpdates(GameLiving owner)
+        {
+            if (owner.IsMezzed || owner.IsStunned)
+                return;
+
+            owner.UpdateMaxSpeed();
+        }
+
+        /// <inheritdoc cref="UnbreakableSpeedDecreaseSpellHandler.GetDelveDescription"/>
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string description;
+
+            if (Spell.Value >= 99)
+            {
+                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.Rooted");
+            }
+            else
+            {
+                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.MainDescription", Spell.Value);
+            }
+
+            if (Spell.SubSpellID != 0)
+            {
+                Spell subSpell = SkillBase.GetSpellByID((int)Spell.SubSpellID);
+                if (subSpell != null)
+                {
+                    ISpellHandler subSpellHandler = ScriptMgr.CreateSpellHandler(m_caster, subSpell, null);
+                    if (subSpellHandler != null)
+                    {
+                        string subspelldesc = subSpellHandler.GetDelveDescription(delveClient);
+                        description += "\n\n" + subspelldesc;
+                    }
+                }
+            }
+
+            if (Spell.IsSecondary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.SecondarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            if (Spell.IsPrimary)
+            {
+                string secondaryMessage = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Warlock.PrimarySpell");
+                description += "\n\n" + secondaryMessage;
+            }
+
+            return description;
         }
     }
 }

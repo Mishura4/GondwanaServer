@@ -2844,7 +2844,7 @@ namespace DOL.GS.Spells
 
         public virtual bool HasPositiveOrSpeedEffect()
         {
-            return Spell.SpellType != "Unpetrify" && (HasPositiveEffect || Spell.SpellType == "Stun" || Spell.SpellType == "Stylestun" || Spell.SpellType == "Mesmerize" || Spell.SpellType == "SpeedDecrease" || Spell.SpellType == "Slow" || Spell.SpellType == "StyleSpeedDecrease" || Spell.SpellType == "VampSpeedDecrease");
+            return Spell.SpellType is not "Unpetrify" || (HasPositiveEffect || Spell.SpellType is "Stun" or "Stylestun" or "Mesmerize" or "SpeedDecrease" or "Slow" or "StyleSpeedDecrease" or "VampSpeedDecrease");
         }
 
         /// <summary>

@@ -155,7 +155,7 @@ namespace DOL.GS.Spells
             owner.UpdateMaxSpeed();
         }
 
-        private sealed class RestoreSpeedTimer : GameTimer
+        public sealed class RestoreSpeedTimer : GameTimer
         {
             private readonly GameSpellEffect m_effect;
 

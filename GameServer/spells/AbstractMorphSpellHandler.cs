@@ -106,6 +106,7 @@ namespace DOL.GS.Spells
         {
             GameSpellEffect bestEffect = null;
             ushort bestModel = 0;
+
             foreach (var otherEffect in effect.Owner.FindEffectsOnTarget(typeof(AbstractMorphSpellHandler)))
             {
                 if (otherEffect == effect)
@@ -126,6 +127,7 @@ namespace DOL.GS.Spells
                     bestModel = model;
                 }
             }
+
             if (bestModel == 0)
             {
                 if (effect.Owner is GamePlayer playerOwner)
@@ -137,6 +139,7 @@ namespace DOL.GS.Spells
                     bestModel = livingOwner.ModelDb;
                 }
             }
+
             if (bestModel != 0 && bestModel != effect.Owner.Model)
             {
                 effect.Owner.Model = bestModel;
