@@ -179,12 +179,15 @@ namespace DOL.GS
     {
         protected bool m_isBaseLine;
         protected string m_spec;
+        protected int m_maxSpellVersions;
 
-        public SpellLine(string keyname, string name, string spec, bool baseline)
+        public SpellLine(string keyname, string name, string spec, bool baseline, int maxSpellVersions = -1)
             : base(keyname, name, 0, 0, 1, 0)
         {
             m_isBaseLine = baseline;
             m_spec = spec;
+            m_maxSpellVersions = maxSpellVersions;
+
         }
 
         public string Spec
@@ -195,6 +198,11 @@ namespace DOL.GS
         public bool IsBaseLine
         {
             get { return m_isBaseLine; }
+        }
+
+        public int MaxSpellVersions
+        {
+            get { return m_maxSpellVersions; }
         }
 
         public override eSkillPage SkillType

@@ -33,6 +33,7 @@ namespace DOL.Database
         protected string m_spec = "unknown";
         protected bool m_isBaseLine = true;
         protected int m_classIDHint;
+        protected int m_maxSpellVersions;
 
         public DBSpellLine()
         {
@@ -97,6 +98,20 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_spec = value;
+            }
+        }
+
+        /// <summary>
+        /// Max count of versions available for a same spell in specializations that support it
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public int MaxSpellVersions
+        {
+            get => m_maxSpellVersions;
+            set
+            {
+                Dirty = true;
+                m_maxSpellVersions = value;
             }
         }
 

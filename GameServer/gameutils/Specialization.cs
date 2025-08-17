@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Database;
+using DOL.GS.Styles;
+using log4net.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using DOL.Database;
-using DOL.GS.Styles;
 
 namespace DOL.GS
 {
@@ -236,7 +236,17 @@ namespace DOL.GS
         /// <returns></returns>
         public virtual IDictionary<SpellLine, List<Skill>> PretendLinesSpellsForLiving(GameLiving living, int step)
         {
-            return GetLinesSpellsForLiving(living, step);
+            IDictionary<SpellLine, List<Skill>> dict = new Dictionary<SpellLine, List<Skill>>();
+            foreach (SpellLine sl in GetSpellLinesForLiving(living, step))
+            {
+                var spells = SkillBase.GetSpellList(sl.KeyName)
+                    .Where(item => item.Level <= sl.Level)
+                    .OrderBy(item => item.Level)
+                    .ThenBy(item => item.ID).Cast<Skill>().ToList();
+                dict.Add(sl, spells);
+            }
+
+            return dict;
         }
 
         /// <summary>
@@ -250,16 +260,91 @@ namespace DOL.GS
         protected virtual IDictionary<SpellLine, List<Skill>> GetLinesSpellsForLiving(GameLiving living, int level)
         {
             IDictionary<SpellLine, List<Skill>> dict = new Dictionary<SpellLine, List<Skill>>();
-
             foreach (SpellLine sl in GetSpellLinesForLiving(living, level))
             {
-                dict.Add(sl, SkillBase.GetSpellList(sl.KeyName)
-                         .Where(item => item.Level <= sl.Level)
-                         .OrderBy(item => item.Level)
-                         .ThenBy(item => item.ID).Cast<Skill>().ToList());
+                dict.Add(sl, SelectSkills(sl, living));
             }
 
             return dict;
+        }
+
+        /// <summary>
+        /// Get skills from the skill line & filter them
+        /// Base method filters by spell line level
+        /// </summary>
+        /// <param name="sl">Skill line to get skills from</param>
+        /// <param name="living">Living to filter for</param>
+        /// <returns></returns>
+        protected virtual List<Skill> SelectSkills(SpellLine sl, GameLiving living)
+        {
+            var lineMaxVersions = AllowMultipleSpellVersions(sl, living);
+            if (lineMaxVersions <= 0)
+            {
+                return SkillBase.GetSpellList(sl.KeyName)
+                    .Where(item => item.Level <= sl.Level)
+                    .OrderBy(item => item.Level)
+                    .ThenBy(item => item.ID).Cast<Skill>().ToList();
+            }
+            else
+            {
+                // An hybrid dictionary is composed of a spellline "base"
+                // SpecLine and Baseline are mixed in spellline named "base"
+                // baseline are displayed first (improvement are easier this way)
+                // specline are displayed secondly (ordered in appareance order)
+                // some class/spelline are allowed to display the "2 -best" spell
+                // this is hardcoded in AllowMultipleSpellVersions...
+                IEnumerable<Spell> allSpells = SkillBase.GetSpellList(sl.KeyName).Where(item => item.Level <= sl.Level);
+
+                IEnumerable<IEnumerable<Spell>> spellsGroupedByType =
+                    allSpells.Where(item => item.Group == 0)
+                        .GroupBy(item => new { item.SpellType, item.Target, item.IsAoE, item.IsInstantCast, item.HasSubSpell })
+                        .Select(group => group.OrderByDescending(it => it.Level).Take(lineMaxVersions));
+
+                IEnumerable<IEnumerable<Spell>> spellsGroupedByGroupId =
+                    allSpells.Where(item => item.Group != 0)
+                        .GroupBy(item => item.Group)
+                        .Select(group => group.OrderByDescending(it => it.Level).Take(lineMaxVersions));
+
+                // sort by reverse level for multiple version
+                List<Skill> spellsFilteredByGroup =
+                    spellsGroupedByGroupId
+                        .SelectMany(el => el)
+                        .Union(spellsGroupedByType.SelectMany(el => el))
+                        .Where(item => item != null) // TODO: baseline ordering?
+                        .OrderByDescending(item => item.Level)
+                        .Cast<Skill>()
+                        .ToList();
+                
+                return spellsFilteredByGroup;
+            }
+        }
+
+        /// <summary>		
+        /// Should we allow multiple versions of each spell type in this spell line
+        /// Used for hybrid classes
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        protected virtual int AllowMultipleSpellVersions(SpellLine line, GameLiving living)
+        {
+            if (living is GamePlayer player)
+            {
+                switch (line.Spec)
+                {
+                    case Specs.Enhancement:
+                        if ((line.IsBaseLine || player.CharacterClass.ID == (int)eCharacterClass.Cleric) && player.CharacterClass.ID != (int)eCharacterClass.Heretic)
+                            return 2;
+                        break;
+
+                    case Specs.Nurture:
+                        if (line.IsBaseLine || player.CharacterClass.ID == (int)eCharacterClass.Druid)
+                            return 2;
+                        break;
+                }
+                
+            }
+
+            return line.MaxSpellVersions;
         }
 
         /// <summary>
@@ -445,5 +530,4 @@ namespace DOL.GS
             return Math.Max(0, (int)living.Level);
         }
     }
-
 }

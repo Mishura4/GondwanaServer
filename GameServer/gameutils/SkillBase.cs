@@ -215,7 +215,7 @@ namespace DOL.GS
                     {
                         try
                         {
-                            m_spellLineIndex.Add(line.KeyName, new SpellLine(line.KeyName, line.Name, line.Spec, line.IsBaseLine));
+                            m_spellLineIndex.Add(line.KeyName, new SpellLine(line.KeyName, line.Name, line.Spec, line.IsBaseLine, line.MaxSpellVersions));
                         }
                         catch (Exception e)
                         {
@@ -574,10 +574,6 @@ namespace DOL.GS
                         if (Util.IsEmpty(spec.Implementation, true) == false)
                         {
                             gameSpec = GetNewSpecializationInstance(spec.KeyName, spec.Implementation, spec.Name, spec.Icon, spec.SpecializationID);
-                        }
-                        else if (spec.KeyName == Specs.Witchcraft) // Add condition for Witchcraft
-                        {
-                            gameSpec = new LiveSpellHybridSpecialization(spec.KeyName, spec.Name, spec.Icon, spec.SpecializationID);
                         }
                         else
                         {
@@ -1330,16 +1326,16 @@ namespace DOL.GS
 
 
             /*
-			 * http://www.camelotherald.com/more/1036.shtml
-			 * "- ALL melee weapon skills - This bonus will increase your
-			 * skill in many weapon types. This bonus does not increase shield,
-			 * parry, archery skills, or dual wield skills (hand to hand is the
-			 * exception, as this skill is also the main weapon skill associated
-			 * with hand to hand weapons, and not just the off-hand skill). If
-			 * your item has "All melee weapon skills: +3" and your character
-			 * can train in hammer, axe and sword, your item should give you
-			 * a +3 increase to all three."
-			 */
+             * http://www.camelotherald.com/more/1036.shtml
+             * "- ALL melee weapon skills - This bonus will increase your
+             * skill in many weapon types. This bonus does not increase shield,
+             * parry, archery skills, or dual wield skills (hand to hand is the
+             * exception, as this skill is also the main weapon skill associated
+             * with hand to hand weapons, and not just the off-hand skill). If
+             * your item has "All melee weapon skills: +3" and your character
+             * can train in hammer, axe and sword, your item should give you
+             * a +3 increase to all three."
+             */
 
             #region Melee Skills
 
@@ -2860,13 +2856,14 @@ namespace DOL.GS
             m_syncLockUpdates.EnterReadLock();
             try
             {
-                if (m_specsByName.ContainsKey(keyname))
+                if (m_specsByName.TryGetValue(keyname, out var value))
                 {
-                    spec = GetNewSpecializationInstance(keyname, m_specsByName[keyname]);
+                    spec = GetNewSpecializationInstance(keyname, value);
                 }
                 else if (!create)
                 {
                     log.Error("Missing Spec: " + keyname);
+                    return null;
                 }
             }
             finally
