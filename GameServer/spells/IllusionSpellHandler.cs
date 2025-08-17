@@ -127,8 +127,8 @@ namespace DOL.GS.Spells
                     npcInventory.AddNPCEquipment(slot, item.Model, item.Color, item.Effect, item.Extension);
                 }
             }
-            npcInventory.CloseTemplate();
 
+            npcInventory.CloseTemplate();
             var styles = PlayerCloner.GetStyles(target);
             var spells = PlayerCloner.GetSpells(target);
 
@@ -192,7 +192,9 @@ namespace DOL.GS.Spells
                     }
                     break;
             }
+
             bool hasLOS = LosCheckMgr.HasDataFor(target.CurrentRegion);
+            bool enableTeleport = !target.CurrentRegion.IsDungeon && hasLOS;
             Util.Shuffle(offsets);
             Coordinate masterCoord = target.Coordinate + offsets[numPets];
             for (int i = 0; i < numPets; i++)
@@ -207,7 +209,7 @@ namespace DOL.GS.Spells
                 Coordinate coord = target.Coordinate + offset;
                 var walkOffset = coord - masterCoord;
                 (pet.Brain as IllusionPetBrain).SetOffset(walkOffset.X, walkOffset.Y);
-                if (hasLOS) // Check LOS for initial placements & teleport, but then walk to the planned offset
+                if (enableTeleport) // Check LOS for initial placements & teleport, but then walk to the planned offset
                 {
                     RaycastStats stats = new();
                     float dist = LosCheckMgr.GetCollisionDistance(target.CurrentRegion, target.Coordinate, coord, ref stats);
@@ -223,11 +225,12 @@ namespace DOL.GS.Spells
                 {
                     pet.Position = target.Position;
                 }
-                offsets[i] = walkOffset;
 
+                offsets[i] = walkOffset;
                 illusionPets.Add(pet);
             }
-            if (hasLOS)
+
+            if (enableTeleport)
             {
                 target.MoveTo(target.Position + offsets[numPets]);
             }
@@ -235,12 +238,14 @@ namespace DOL.GS.Spells
             {
                 masterCoord = target.Coordinate;
             }
+
             for (int i = 0; i < numPets; ++i)
             {
                 var living = illusionPets[i];
                 living.AddToWorld();
                 living.PathTo(masterCoord + offsets[i], target.MaxSpeed);
             }
+
             foreach (GamePlayer player in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
                 player.Out.SendSpellEffectAnimation(target, target, 7202, 0, false, 1);
