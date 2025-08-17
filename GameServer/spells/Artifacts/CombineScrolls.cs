@@ -105,7 +105,6 @@ namespace DOL.GS.Spells
             var backpack = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
 
             ArrayList removeItems = new ArrayList();
-            removeItems.Add(useItem);
             bool combinesToBook = false;
             foreach (InventoryItem item in backpack)
             {
@@ -128,10 +127,10 @@ namespace DOL.GS.Spells
             player.Out.SendSpellEffectAnimation(player, player, 1, 0, false, 1);
 
             Artifact artifact = ArtifactMgr.GetArtifact(combinedScroll.Item);
-
             if (artifact == null)
             {
                 log.Warn($"Missing artifact for item '{combinedScroll.Name}'");
+                return false;
             }
             else
             {
@@ -150,8 +149,12 @@ namespace DOL.GS.Spells
                     player.Inventory.RemoveItem(item);
                     InventoryLogging.LogInventoryAction(player, null, eInventoryActionType.Quest, item.Template, item.Count);
                 }
+                return true;
             }
-            return true;
+            else
+            {
+                return false;
+            }
         }
     }
 }

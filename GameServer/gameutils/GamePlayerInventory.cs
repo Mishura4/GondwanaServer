@@ -515,7 +515,7 @@ namespace DOL.GS
             if (item != null && item.OwnerID != m_player.InternalID)
             {
                 if (Log.IsErrorEnabled)
-                    Log.Error("Item owner not equals inventory owner.\n\n" + Environment.StackTrace);
+                    Log.Error($"Item owner not equals inventory owner (Item {item.Template}; Owner \"{item.OwnerID}\"; Player {Player.Name} ({Player.InternalID})).\n\n" + Environment.StackTrace);
 
                 return false;
             }
