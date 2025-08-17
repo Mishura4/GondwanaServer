@@ -2835,6 +2835,7 @@ namespace DOL.GS.Commands
             target.RemoveAllSpecs();
             target.RemoveAllSpellLines();
             target.RemoveAllStyles();
+            target.RemoveAllAbilities();
 
             //reset before, and after changing the class.
             target.Reset();
@@ -2844,7 +2845,8 @@ namespace DOL.GS.Commands
             //this is just for additional updates
             //that add all the new class changes.
             target.OnLevelUp(0);
-
+            target.RefreshUsableSkills(true);
+            
             target.Out.SendUpdatePlayer();
             target.Out.SendUpdatePlayerSkills();
             target.Out.SendUpdatePoints();

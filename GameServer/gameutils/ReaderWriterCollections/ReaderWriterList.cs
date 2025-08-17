@@ -403,6 +403,21 @@ namespace DOL.GS
             }
         }
 
+        public void FreezeWhile(Func<IEnumerable<T>, List<T>> method)
+        {
+            m_rwLock.EnterWriteLock();
+            try
+            {
+                var newList = method(m_list);
+                m_list.Clear();
+                m_list.AddRange(newList);
+            }
+            finally
+            {
+                m_rwLock.ExitWriteLock();
+            }
+        }
+
         public N FreezeWhile<N>(Func<List<T>, N> func)
         {
             m_rwLock.EnterWriteLock();

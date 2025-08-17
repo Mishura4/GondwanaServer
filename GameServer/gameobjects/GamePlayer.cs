@@ -4218,62 +4218,71 @@ namespace DOL.GS
                     return results;
 
             }
-
+            
             // lock during all update, even if replace only take place at end...
             m_usableListSpells.FreezeWhile(innerList =>
             {
-
-                List<Tuple<SpellLine, List<Skill>>> finalbase = new List<Tuple<SpellLine, List<Skill>>>();
-                List<Tuple<SpellLine, List<Skill>>> finalspec = new List<Tuple<SpellLine, List<Skill>>>();
-
-                // Add Lists spells ordered.
-                foreach (Specialization spec in GetSpecList().Where(item => !item.HybridSpellList))
-                {
-                    var spells = spec.GetLinesSpellsForLiving(this);
-
-                    foreach (SpellLine sl in spec.GetSpellLinesForLiving(this))
-                    {
-                        List<Tuple<SpellLine, List<Skill>>> working;
-                        if (sl.IsBaseLine)
-                        {
-                            working = finalbase;
-                        }
-                        else
-                        {
-                            working = finalspec;
-                        }
-
-                        List<Skill> sps = new List<Skill>();
-                        SpellLine key = spells.Keys.FirstOrDefault(el => el.KeyName == sl.KeyName);
-
-                        if (key != null && spells.ContainsKey(key))
-                        {
-                            foreach (Skill sp in spells[key])
-                            {
-                                sps.Add(sp);
-                            }
-                        }
-
-                        working.Add(new Tuple<SpellLine, List<Skill>>(sl, sps));
-                    }
-                }
-
-                // Linq isn't used, we need to keep order ! (SelectMany, GroupBy, ToDictionary can't be used !)
-                innerList.Clear();
-                foreach (var tp in finalbase)
-                {
-                    innerList.Add(tp);
-                    results.Add(tp);
-                }
-
-                foreach (var tp in finalspec)
-                {
-                    innerList.Add(tp);
-                    results.Add(tp);
-                }
+                RefreshUsableListSpells(results);
+                return results;
             });
-
             return results;
+        }
+
+        public void RefreshUsableListSpells()
+        {
+            var list = new List<Tuple<SpellLine, List<Skill>>>();
+            // lock during all update, even if replace only take place at end...
+            m_usableListSpells.FreezeWhile(innerList =>
+            {
+                RefreshUsableListSpells(innerList);
+            });
+        }
+
+        private List<Tuple<SpellLine, List<Skill>>> RefreshUsableListSpells(List<Tuple<SpellLine, List<Skill>>>? list)
+        {
+            List<Tuple<SpellLine, List<Skill>>> finalbase = new List<Tuple<SpellLine, List<Skill>>>();
+            List<Tuple<SpellLine, List<Skill>>> finalspec = new List<Tuple<SpellLine, List<Skill>>>();
+
+            // Add Lists spells ordered.
+            foreach (Specialization spec in GetSpecList().Where(item => !item.HybridSpellList))
+            {
+                var spells = spec.GetLinesSpellsForLiving(this);
+
+                foreach (SpellLine sl in spec.GetSpellLinesForLiving(this))
+                {
+                    List<Tuple<SpellLine, List<Skill>>> working;
+                    if (sl.IsBaseLine)
+                    {
+                        working = finalbase;
+                    }
+                    else
+                    {
+                        working = finalspec;
+                    }
+
+                    List<Skill> sps = new List<Skill>();
+                    SpellLine key = spells.Keys.FirstOrDefault(el => el.KeyName == sl.KeyName);
+
+                    if (key != null && spells.ContainsKey(key))
+                    {
+                        foreach (Skill sp in spells[key])
+                        {
+                            sps.Add(sp);
+                        }
+                    }
+
+                    working.Add(new Tuple<SpellLine, List<Skill>>(sl, sps));
+                }
+            }
+
+            // Linq isn't used, we need to keep order ! (SelectMany, GroupBy, ToDictionary can't be used !)
+            if (list is null)
+                list = new();
+            else
+                list.Clear();
+            list.AddRange(finalbase);
+            list.AddRange(finalspec);
+            return list;
         }
 
         /// <summary>
@@ -4300,150 +4309,165 @@ namespace DOL.GS
             // need to lock for all update.
             m_usableSkills.FreezeWhile(innerList =>
             {
-
-                IList<Specialization> specs = GetSpecList();
-                List<Tuple<Skill, Skill>> copylist = new List<Tuple<Skill, Skill>>(innerList);
-
-                // Add Spec
-                foreach (Specialization spec in specs.Where(item => item.Trainable))
-                {
-                    int index = innerList.FindIndex(e => (e.Item1 is Specialization) && ((Specialization)e.Item1).KeyName == spec.KeyName);
-
-                    if (index < 0)
-                    {
-                        // Specs must be appended to spec list
-                        innerList.Insert(innerList.Count(e => e.Item1 is Specialization), new Tuple<Skill, Skill>(spec, spec));
-                    }
-                    else
-                    {
-                        copylist.Remove(innerList[index]);
-                        // Replace...
-                        innerList[index] = new Tuple<Skill, Skill>(spec, spec);
-                    }
-                }
-
-                // Add Abilities (Realm ability should be a custom spec)
-                // Abilities order should be saved to db and loaded each time								
-                foreach (Specialization spec in specs)
-                {
-                    List<Ability> abilities = spec.GetAbilitiesForLiving(this);
-                    foreach (var ab in innerList)
-                    {
-                        if (ab.Item1 is Ability && !abilities.Contains(ab.Item1))
-                        {
-                            abilities.Add((Ability)ab.Item1);
-                        }
-                    }
-                    foreach (Ability abv in abilities)
-                    {
-                        // We need the Instantiated Ability Object for Displaying Correctly According to Player "Activation" Method (if Available)
-                        Ability ab = GetAbility(abv.KeyName);
-
-                        if (ab == null)
-                            ab = abv;
-
-                        int index = innerList.FindIndex(k => (k.Item1 is Ability) && ((Ability)k.Item1).KeyName == ab.KeyName);
-                        if (index < 0)
-                        {
-                            // add
-                            innerList.Add(new Tuple<Skill, Skill>(ab, spec));
-                        }
-                        else
-                        {
-                            copylist.Remove(innerList[index]);
-                            // replace
-                            innerList[index] = new Tuple<Skill, Skill>(ab, spec);
-                        }
-                    }
-                }
-
-                // Add Hybrid spell
-                foreach (Specialization spec in specs.Where(item => item.HybridSpellList))
-                {
-                    int index = -1;
-                    foreach (KeyValuePair<SpellLine, List<Skill>> sl in spec.GetLinesSpellsForLiving(this))
-                    {
-                        foreach (Spell sp in sl.Value.Where(it => (it is Spell) && !((Spell)it).NeedInstrument).Cast<Spell>())
-                        {
-                            if (index < innerList.Count)
-                                index = innerList.FindIndex(index + 1, e => ((e.Item2 is SpellLine) && ((SpellLine)e.Item2).Spec == sl.Key.Spec) && (e.Item1 is Spell) && !((Spell)e.Item1).NeedInstrument);
-
-                            if (index < 0 || index >= innerList.Count)
-                            {
-                                // add
-                                innerList.Add(new Tuple<Skill, Skill>(sp, sl.Key));
-                                // disable replace
-                                index = innerList.Count;
-                            }
-                            else
-                            {
-                                copylist.Remove(innerList[index]);
-                                // replace
-                                innerList[index] = new Tuple<Skill, Skill>(sp, sl.Key);
-                            }
-                        }
-                    }
-                }
-
-                // Add Songs
-                int songIndex = -1;
-                foreach (Specialization spec in specs.Where(item => item.HybridSpellList))
-                {
-                    foreach (KeyValuePair<SpellLine, List<Skill>> sl in spec.GetLinesSpellsForLiving(this))
-                    {
-                        foreach (Spell sp in sl.Value.Where(it => (it is Spell) && ((Spell)it).NeedInstrument).Cast<Spell>())
-                        {
-                            if (songIndex < innerList.Count)
-                                songIndex = innerList.FindIndex(songIndex + 1, e => (e.Item1 is Spell) && ((Spell)e.Item1).NeedInstrument);
-
-                            if (songIndex < 0 || songIndex >= innerList.Count)
-                            {
-                                // add
-                                innerList.Add(new Tuple<Skill, Skill>(sp, sl.Key));
-                                // disable replace
-                                songIndex = innerList.Count;
-                            }
-                            else
-                            {
-                                copylist.Remove(innerList[songIndex]);
-                                // replace
-                                innerList[songIndex] = new Tuple<Skill, Skill>(sp, sl.Key);
-                            }
-                        }
-                    }
-                }
-
-                // Add Styles
-                foreach (Specialization spec in specs)
-                {
-                    foreach (Style st in spec.GetStylesForLiving(this))
-                    {
-                        int index = innerList.FindIndex(e => (e.Item1 is Style) && e.Item1.ID == st.ID);
-                        if (index < 0)
-                        {
-                            // add
-                            innerList.Add(new Tuple<Skill, Skill>(st, spec));
-                        }
-                        else
-                        {
-                            copylist.Remove(innerList[index]);
-                            // replace
-                            innerList[index] = new Tuple<Skill, Skill>(st, spec);
-                        }
-                    }
-                }
-
-                // clean all not re-enabled skills
-                foreach (Tuple<Skill, Skill> item in copylist)
-                {
-                    innerList.Remove(item);
-                }
-
-                foreach (Tuple<Skill, Skill> el in innerList)
-                    results.Add(el);
+                RefreshUsableSkills(innerList);
             });
 
             return results;
+        }
+
+        public void RefreshUsableSkills(bool reset = false)
+        {
+            m_usableSkills.FreezeWhile(innerList =>
+            {
+                if (reset)
+                    innerList.Clear();
+                RefreshUsableSkills(innerList);
+            });
+        }
+
+        private List<Tuple<Skill, Skill>> RefreshUsableSkills(List<Tuple<Skill, Skill>>? list)
+        {
+            IList<Specialization> specs = GetSpecList();
+            if (list is null)
+                list = new();
+            List<Tuple<Skill, Skill>> copylist = new(list);
+
+            // Add Spec
+            foreach (Specialization spec in specs.Where(item => item.Trainable))
+            {
+                int index = list.FindIndex(e => (e.Item1 is Specialization) && ((Specialization)e.Item1).KeyName == spec.KeyName);
+
+                if (index < 0)
+                {
+                    // Specs must be appended to spec list
+                    list.Insert(list.Count(e => e.Item1 is Specialization), new Tuple<Skill, Skill>(spec, spec));
+                }
+                else
+                {
+                    copylist.Remove(list[index]);
+                    // Replace...
+                    list[index] = new Tuple<Skill, Skill>(spec, spec);
+                }
+            }
+
+            // Add Abilities (Realm ability should be a custom spec)
+            // Abilities order should be saved to db and loaded each time								
+            foreach (Specialization spec in specs)
+            {
+                List<Ability> abilities = spec.GetAbilitiesForLiving(this);
+                foreach (var ab in list)
+                {
+                    if (ab.Item1 is Ability && !abilities.Contains(ab.Item1))
+                    {
+                        abilities.Add((Ability)ab.Item1);
+                    }
+                }
+                foreach (Ability abv in abilities)
+                {
+                    // We need the Instantiated Ability Object for Displaying Correctly According to Player "Activation" Method (if Available)
+                    Ability ab = GetAbility(abv.KeyName);
+
+                    if (ab == null)
+                        ab = abv;
+
+                    int index = list.FindIndex(k => (k.Item1 is Ability) && ((Ability)k.Item1).KeyName == ab.KeyName);
+                    if (index < 0)
+                    {
+                        // add
+                        list.Add(new Tuple<Skill, Skill>(ab, spec));
+                    }
+                    else
+                    {
+                        copylist.Remove(list[index]);
+                        // replace
+                        list[index] = new Tuple<Skill, Skill>(ab, spec);
+                    }
+                }
+            }
+
+            // Add Hybrid spell
+            foreach (Specialization spec in specs.Where(item => item.HybridSpellList))
+            {
+                int index = -1;
+                foreach (KeyValuePair<SpellLine, List<Skill>> sl in spec.GetLinesSpellsForLiving(this))
+                {
+                    foreach (Spell sp in sl.Value.Where(it => (it is Spell) && !((Spell)it).NeedInstrument).Cast<Spell>())
+                    {
+                        if (index < list.Count)
+                            index = list.FindIndex(index + 1, e => ((e.Item2 is SpellLine) && ((SpellLine)e.Item2).Spec == sl.Key.Spec) && (e.Item1 is Spell) && !((Spell)e.Item1).NeedInstrument);
+
+                        if (index < 0 || index >= list.Count)
+                        {
+                            // add
+                            list.Add(new Tuple<Skill, Skill>(sp, sl.Key));
+                            // disable replace
+                            index = list.Count;
+                        }
+                        else
+                        {
+                            copylist.Remove(list[index]);
+                            // replace
+                            list[index] = new Tuple<Skill, Skill>(sp, sl.Key);
+                        }
+                    }
+                }
+            }
+
+            // Add Songs
+            int songIndex = -1;
+            foreach (Specialization spec in specs.Where(item => item.HybridSpellList))
+            {
+                foreach (KeyValuePair<SpellLine, List<Skill>> sl in spec.GetLinesSpellsForLiving(this))
+                {
+                    foreach (Spell sp in sl.Value.Where(it => (it is Spell) && ((Spell)it).NeedInstrument).Cast<Spell>())
+                    {
+                        if (songIndex < list.Count)
+                            songIndex = list.FindIndex(songIndex + 1, e => (e.Item1 is Spell) && ((Spell)e.Item1).NeedInstrument);
+
+                        if (songIndex < 0 || songIndex >= list.Count)
+                        {
+                            // add
+                            list.Add(new Tuple<Skill, Skill>(sp, sl.Key));
+                            // disable replace
+                            songIndex = list.Count;
+                        }
+                        else
+                        {
+                            copylist.Remove(list[songIndex]);
+                            // replace
+                            list[songIndex] = new Tuple<Skill, Skill>(sp, sl.Key);
+                        }
+                    }
+                }
+            }
+
+            // Add Styles
+            foreach (Specialization spec in specs)
+            {
+                foreach (Style st in spec.GetStylesForLiving(this))
+                {
+                    int index = list.FindIndex(e => (e.Item1 is Style) && e.Item1.ID == st.ID);
+                    if (index < 0)
+                    {
+                        // add
+                        list.Add(new Tuple<Skill, Skill>(st, spec));
+                    }
+                    else
+                    {
+                        copylist.Remove(list[index]);
+                        // replace
+                        list[index] = new Tuple<Skill, Skill>(st, spec);
+                    }
+                }
+            }
+
+            // clean all not re-enabled skills
+            foreach (Tuple<Skill, Skill> item in copylist)
+            {
+                list.Remove(item);
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -12370,7 +12394,7 @@ namespace DOL.GS
         {
             if (state == IsSprinting)
                 return state;
-
+            
             if (state)
             {
                 // can't start sprinting with 10 endurance on 1.68 server
