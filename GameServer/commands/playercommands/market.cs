@@ -58,41 +58,58 @@ namespace DOL.GS.Commands
                 #region Open
                 case "open":
                     {
-                        if (client.Player.HasAbility(DOL.GS.Abilities.Trading))
+                        if (!client.Player.HasAbility(DOL.GS.Abilities.Trading))
                         {
-                            //check if player is in safearea
-                            bool isInsafeArea = false;
-                            if (client.Player.CurrentAreas.Count > 0)
-                            {
-                                foreach (AbstractArea area in client.Player.CurrentAreas)
-                                {
-                                    if (area.IsSafeArea)
-                                    {
-                                        isInsafeArea = true;
-                                        break;
-                                    }
-                                }
-                            }
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.No.Ability"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                            break;
+                        }
 
-                            if (!isInsafeArea)
+                        bool inHousing = client.Player.CurrentRegionID == ServerRules.AmtenaelRules.HousingRegionID;
+                        bool inPvP = client.Player.IsInPvP;
+                        bool inRvR = client.Player.IsInRvR;
+                        bool inBG = false;
+                        foreach (var keep in GameServer.KeepManager.GetKeepsOfRegion(client.Player.CurrentRegionID))
+                        {
+                            if (keep.DBKeep.BaseLevel < 50)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.No.SafeArea"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                inBG = true;
                                 break;
                             }
+                        }
 
-                            if (client.Player.TemporaryConsignmentMerchant == null || client.Player.TemporaryConsignmentMerchant.ObjectState == GameObject.eObjectState.Deleted)
+                        if (inHousing || inPvP || inRvR || inBG)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployHere"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                            break;
+                        }
+
+                        bool isInSafeArea = false;
+                        if (client.Player.CurrentAreas.Count > 0)
+                        {
+                            foreach (AbstractArea area in client.Player.CurrentAreas)
                             {
-                                client.Player.Out.SendDialogBox(eDialogCode.OpenMarket, (ushort)client.Player.ObjectID, 0, 0, 0, eDialogType.YesNo, false,
-                                 LanguageMgr.GetTranslation(client, "Commands.Players.Market.Confirm.Open"));
+                                if (area.IsSafeArea)
+                                {
+                                    isInSafeArea = true;
+                                    break;
+                                }
                             }
-                            else
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Already.Created"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                            }
+                        }
+
+                        if (!isInSafeArea)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.No.SafeArea"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+
+                        if (client.Player.TemporaryConsignmentMerchant == null || client.Player.TemporaryConsignmentMerchant.ObjectState == GameObject.eObjectState.Deleted)
+                        {
+                            client.Player.Out.SendDialogBox(eDialogCode.OpenMarket, (ushort)client.Player.ObjectID, 0, 0, 0, eDialogType.YesNo, false,
+                                LanguageMgr.GetTranslation(client, "Commands.Players.Market.Confirm.Open"));
                         }
                         else
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.No.Ability"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Already.Created"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         }
 
                         break;

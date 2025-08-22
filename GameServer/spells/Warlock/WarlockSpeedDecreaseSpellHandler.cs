@@ -31,6 +31,8 @@ namespace DOL.GS.Spells
     [SpellHandler("WarlockSpeedDecrease")]
     public class WarlockSpeedDecreaseSpellHandler : AbstractMorphSpellHandler
     {
+        private const string WARLOCK_PRE_EFFECTIVENESS_KEY = "Warlock_PreEffectivenessDebuff";
+
         /// <inheritdoc />
         public override ushort GetModelFor(GameLiving living)
         {
@@ -121,6 +123,37 @@ namespace DOL.GS.Spells
             timer.Start(1 + (effect.Duration >> 1));
 
             effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+
+            // Optional Effectiveness debuff (Vampiir-style)
+            // Use Spell.LifeDrainReturn as percentage to reduce Effectiveness by, if > 0.
+            if (Spell.LifeDrainReturn > 0 && effect.Owner is GamePlayer effPlayer)
+            {
+                bool vampAlreadyActive = SpellHandler.FindEffectOnTarget(effPlayer, "VampiirEffectivenessDeBuff") != null;
+
+                object existingSave = effPlayer.TempProperties.getProperty<object>(WARLOCK_PRE_EFFECTIVENESS_KEY, null);
+
+                if (!vampAlreadyActive && existingSave == null)
+                {
+                    double prev = effPlayer.Effectiveness;
+                    effPlayer.TempProperties.setProperty(WARLOCK_PRE_EFFECTIVENESS_KEY, prev);
+
+                    double pct = Spell.LifeDrainReturn;
+                    double reduced = prev - (pct * prev) / 100.0;
+                    effPlayer.Effectiveness = reduced > 0 ? reduced : 0;
+
+                    effPlayer.Out.SendUpdateWeaponAndArmorStats();
+                    effPlayer.Out.SendStatusUpdate();
+                }
+            }
+
+            // Optional Silence for the same duration (AmnesiaChance == 1)
+            if (Spell.AmnesiaChance == 1 && effect.Owner is GamePlayer)
+            {
+                effect.Owner.SilencedCount++;
+                effect.Owner.StopCurrentSpellcast();
+                effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            }
+
             base.OnEffectStart(effect);
         }
 
@@ -163,6 +196,25 @@ namespace DOL.GS.Spells
                 }
             }
 
+            // --- Restore Effectiveness if we changed it here ---
+            if (Spell.LifeDrainReturn > 0 && effect.Owner is GamePlayer effPlayer)
+            {
+                object prevObj = effPlayer.TempProperties.getProperty<object>(WARLOCK_PRE_EFFECTIVENESS_KEY, null);
+                if (prevObj is double prev)
+                {
+                    effPlayer.Effectiveness = prev;
+                    effPlayer.TempProperties.removeProperty(WARLOCK_PRE_EFFECTIVENESS_KEY);
+                    effPlayer.Out.SendUpdateWeaponAndArmorStats();
+                    effPlayer.Out.SendStatusUpdate();
+                }
+            }
+
+            // --- Remove Silence if applied ---
+            if (Spell.AmnesiaChance == 1 && effect.Owner is GamePlayer)
+            {
+                effect.Owner.SilencedCount--;
+            }
+
             base.OnEffectExpires(effect, noMessages);
             return 60000;
         }
@@ -193,13 +245,33 @@ namespace DOL.GS.Spells
         {
             string description;
 
-            if (Spell.Value >= 99)
+            if (Spell.Value > 0)
             {
-                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.Rooted");
+                if (Spell.Value >= 99)
+                    description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.Rooted");
+                else
+                    description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.MainDescription", Spell.Value);
             }
             else
             {
-                description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpeedDecrease.MainDescription", Spell.Value);
+                description = string.Empty;
+            }
+
+            if (Spell.LifeDrainReturn > 0)
+            {
+                string frogtext = LanguageMgr.GetTranslation(delveClient, "SpellDescription.WarlockSpeedDecrease.Frog");
+                string vampMain = LanguageMgr.GetTranslation(delveClient, "SpellDescription.VampiirEffectivenessDeBuff.MainDescription", (int)Spell.LifeDrainReturn);
+                string vampExtra = LanguageMgr.GetTranslation(delveClient, "SpellDescription.VampiirEffectivenessDeBuff.CombatCastable");
+
+                description += "\n\n" + frogtext + "\n\n" + vampMain + "\n\n" + vampExtra;
+            }
+
+            if (Spell.AmnesiaChance == 1)
+            {
+                int durationSeconds = Spell.Duration / 1000;
+                string silenceMain = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Silence.MainDescription", durationSeconds);
+
+                description += "\n\n" + silenceMain;
             }
 
             if (Spell.SubSpellID != 0)

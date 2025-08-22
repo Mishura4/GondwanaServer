@@ -32,12 +32,13 @@ namespace DOL.AI.Brain
 {
     public class TheurgistPetBrain : StandardMobBrain, IControlledBrain
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private GameLiving m_target;
         private bool m_melee = false;
         private bool m_active = true;
         private readonly GameLiving m_owner;
+        private bool IsUnderFearServant => Body?.TempProperties?.getProperty<bool>("FEAR_SERVANT_ACTIVE", false) ?? false;
 
         public TheurgistPetBrain(GameLiving owner)
         {
@@ -55,12 +56,26 @@ namespace DOL.AI.Brain
 
         public override int ThinkInterval { get { return 1500; } }
 
-        public override void Think() { AttackMostWanted(); }
+        public override void Think()
+        {
+            if (IsUnderFearServant)
+            {
+                if (Body.IsCasting) Body.StopCurrentSpellcast();
+                Body.StopAttack();
+                Body.TargetObject = null;
+                return;
+            }
+
+            AttackMostWanted();
+        }
 
         public void SetAggressionState(eAggressionState state) { }
 
         public override void Notify(DOLEvent e, object sender, EventArgs args)
         {
+            if (IsUnderFearServant) return;
+            base.Notify(e, sender, args);
+
             if (!IsActive || m_melee || !m_active) return;
 
             if (args as AttackFinishedEventArgs != null)
@@ -82,7 +97,7 @@ namespace DOL.AI.Brain
 
         protected override void AttackMostWanted()
         {
-            if (!IsActive || !m_active) return;
+            if (!IsActive || !m_active || IsUnderFearServant) return;
             if (m_target == null) m_target = (GameLiving)Body.TempProperties.getProperty<object>("target", null);
 
             if (m_target == null || !m_target.IsAlive)
@@ -101,6 +116,8 @@ namespace DOL.AI.Brain
 
         public override bool CheckSpells(eCheckSpellType type)
         {
+            if (IsUnderFearServant) return false;
+
             if (Body == null || Body.Spells == null || Body.Spells.Count < 1 || m_melee)
                 return false;
 

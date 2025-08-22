@@ -28,6 +28,7 @@ namespace DOL.AI.Brain
         public const string HAS_PET = "HasNoveltyPet";
 
         private readonly GameLiving m_owner;
+        private bool IsUnderFearServant => Body?.TempProperties?.getProperty<bool>("FEAR_SERVANT_ACTIVE", false) ?? false;
 
         public NoveltyPetBrain(GamePlayer owner)
             : base()
@@ -48,6 +49,9 @@ namespace DOL.AI.Brain
 
         public override void Think()
         {
+            if (IsUnderFearServant)
+                return;
+
             if (Owner == null ||
                 Owner.IsAlive == false ||
                 ((GamePlayer)Owner).Client.ClientState != GameClient.eClientState.Playing ||

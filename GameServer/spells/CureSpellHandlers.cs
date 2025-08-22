@@ -13,6 +13,7 @@ namespace DOL.GS.Spells
         public static readonly List<string> CureNearsightSpellTypes = new List<string> { "Nearsight", "Silence" };
         public static readonly List<string> CureMezzSpellTypes = new List<string> { "Mesmerize" };
         public static readonly List<string> CurePetrifySpellTypes = new List<string> { "Petrify" };
+        public static readonly List<string> MaidenKissSpellTypes = new List<string> { "WarlockSpeedDecrease" };
         public static readonly List<string> ArawnCureSpellTypes = new List<string>
         {
             "DamageOverTime",
@@ -29,7 +30,8 @@ namespace DOL.GS.Spells
             "Disease",
             "StyleBleeding",
             "Mesmerize",
-            "Petrify"
+            "Petrify",
+            "WarlockSpeedDecrease"
         };
     }
 
@@ -111,6 +113,25 @@ namespace DOL.GS.Spells
             : base(caster, spell, line)
         {
             m_spellTypesToRemove = CureSpellConstants.ArawnCureSpellTypes;
+        }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.ArawnCure.MainDescription");
+        }
+    }
+
+    [SpellHandler("MaidenKiss")]
+    public class MaidenKissSpellHandler : RemoveSpellEffectHandler
+    {
+        public MaidenKissSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
+        {
+            m_spellTypesToRemove = CureSpellConstants.MaidenKissSpellTypes;
+        }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MaidenKiss.MainDescription");
         }
     }
 

@@ -25,9 +25,11 @@ namespace DOL.AI.Brain
 {
     public abstract class BDPetBrain : ControlledNpcBrain
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         protected const int BASEFORMATIONDIST = 50;
+
+        private bool IsPetUnderFearServant => Body?.TempProperties?.getProperty<bool>("FEAR_SERVANT_ACTIVE", false) ?? false;
 
         public BDPetBrain(GameLiving Owner) : base(Owner)
         {
@@ -80,6 +82,11 @@ namespace DOL.AI.Brain
         /// <returns>true if stopped</returns>
         public override bool Stop()
         {
+            if (IsPetUnderFearServant)
+            {
+                return base.Stop();
+            }
+
             if (!base.Stop()) return false;
 
             GameEventMgr.Notify(GameLivingEvent.PetReleased, Body);
@@ -91,6 +98,9 @@ namespace DOL.AI.Brain
         /// </summary>
         public override void FollowOwner()
         {
+            if (IsPetUnderFearServant)
+                return;
+
             Body.StopAttack();
             Body.Follow(Owner, MIN_OWNER_FOLLOW_DIST, MAX_OWNER_FOLLOW_DIST);
         }
@@ -177,6 +187,9 @@ namespace DOL.AI.Brain
         /// <param name="target"></param>
         protected override void OnFollowLostTarget(GameObject target)
         {
+            if (IsPetUnderFearServant)
+                return;
+
             if (target == Owner)
             {
                 GameEventMgr.Notify(GameLivingEvent.PetReleased, Body);
@@ -198,6 +211,14 @@ namespace DOL.AI.Brain
         /// </summary>
         public override void Think()
         {
+            if (IsPetUnderFearServant)
+            {
+                if (Body.IsCasting) Body.StopCurrentSpellcast();
+                Body.StopAttack();
+                Body.StopFollowing();
+                return;
+            }
+
             GamePlayer playerowner = Body.GetPlayerOwner();
             if (playerowner != null && (GameTimer.GetTickCount() - playerowner.Client.GameObjectUpdateArray[new Tuple<ushort, ushort>(Body.CurrentRegionID, (ushort)Body.ObjectID)]) > ThinkInterval)
             {

@@ -35,6 +35,15 @@ namespace DOL.GS.Spells
         /// </summary>
         private readonly ReaderWriterDictionary<GameNPC, FearBrain> m_NPCFearBrains = new ReaderWriterDictionary<GameNPC, FearBrain>();
 
+        private static bool HasEffect(GameLiving target, string spellType)
+            => SpellHandler.FindEffectOnTarget(target, spellType) != null;
+
+        /// <summary>
+        /// Is the NPC currently charmed or befriended?
+        /// </summary>
+        private static bool IsCharmedOrFriend(GameNPC npc)
+            => HasEffect(npc, "Charm") || HasEffect(npc, "BeFriend") || (npc.Brain is FriendBrain);
+
         /// <summary>
         /// Consume Power on Spell Start
         /// </summary>
@@ -63,6 +72,18 @@ namespace DOL.GS.Spells
         {
             var npcTarget = target as GameNPC;
             if (npcTarget == null) return false;
+
+            if (npcTarget.Brain is ControlledNpcBrain && !IsCharmedOrFriend(npcTarget) && npcTarget.Brain is not FollowingFriendMobBrain && npcTarget.Brain is not IllusionPetBrain)
+            {
+                return false;
+            }
+
+            if (npcTarget.Brain is IllusionPetBrain)
+            {
+                if (npcTarget.IsAlive)
+                    npcTarget.Die(m_caster);
+                return true;
+            }
 
             if (npcTarget.Level > Spell.Value)
             {

@@ -39,7 +39,7 @@ namespace DOL.AI.Brain
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public NecromancerPetBrain(GameLiving owner)
             : base(owner)
@@ -90,7 +90,7 @@ namespace DOL.AI.Brain
                 {
                     if (Body.TargetObject is GamePlayer)
                     {
-                        if (Body.IsAttacking && (Body.TargetObject as GamePlayer).IsStealthed)
+                        if (Body.IsAttacking && (Body.TargetObject as GamePlayer)!.IsStealthed)
                         {
                             Body.StopAttack();
                             FollowOwner();
@@ -119,7 +119,7 @@ namespace DOL.AI.Brain
 
                 if (SpellsQueued)
                 {
-                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language, "AI.Brain.Necromancer.CastSpellAfterAction", Body.Name), eChatType.CT_System);
+                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language, "AI.Brain.Necromancer.CastSpellAfterAction", Body.Name), eChatType.CT_System);
                     hadQueuedSpells = true;
                 }
 
@@ -167,24 +167,24 @@ namespace DOL.AI.Brain
             else if (e == GameLivingEvent.CastFailed)
             {
                 // Tell owner why cast has failed.
-                switch ((args as CastFailedEventArgs).Reason)
+                switch ((args as CastFailedEventArgs)!.Reason)
                 {
                     case CastFailedEventArgs.Reasons.TargetTooFarAway:
 
-                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language,
                             "AI.Brain.Necromancer.ServantFarAwayToCast"), eChatType.CT_SpellResisted);
                         break;
 
                     case CastFailedEventArgs.Reasons.TargetNotInView:
 
-                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language,
                             "AI.Brain.Necromancer.PetCantSeeTarget", Body.Name), eChatType.CT_SpellResisted);
                         break;
 
                     case CastFailedEventArgs.Reasons.NotEnoughPower:
 
                         RemoveSpellFromQueue();
-                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language,
                             "AI.Brain.Necromancer.NoPower", Body.Name), eChatType.CT_SpellResisted);
 
                         break;
@@ -195,7 +195,7 @@ namespace DOL.AI.Brain
                 // The spell will cast.
 
                 PetSpellEventArgs spellArgs = args as PetSpellEventArgs;
-                GameLiving target = spellArgs.Target;
+                GameLiving target = spellArgs!.Target;
                 SpellLine spellLine = spellArgs.SpellLine;
 
                 if (spellArgs != null && spellArgs.Spell != null)
@@ -205,10 +205,10 @@ namespace DOL.AI.Brain
                 // This message is for spells from the spell queue only, so suppress
                 // it for insta cast buffs coming from the pet itself.
 
-                if (spellLine.Name != (Body as NecromancerPet).PetInstaSpellLine)
+                if (spellLine.Name != (Body as NecromancerPet)!.PetInstaSpellLine)
                 {
                     Owner.Notify(GameLivingEvent.CastStarting, Body, new CastingEventArgs(Body.CurrentSpellHandler));
-                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language, "AI.Brain.Necromancer.PetCastingSpell", Body.Name), eChatType.CT_System);
+                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language, "AI.Brain.Necromancer.PetCastingSpell", Body.Name), eChatType.CT_System);
                 }
 
                 // If pet is casting an offensive spell and is not set to
@@ -216,25 +216,25 @@ namespace DOL.AI.Brain
                 // no attack directive from the owner it will start an attack
                 // after the cast has finished.
 
-                if (target != Body && spellArgs.Spell.Target == "enemy")
+                if (target != Body && spellArgs!.Spell!.Target == "enemy")
                 {
                     if (target != null)
                     {
                         if (!Body.AttackState && AggressionState != eAggressionState.Passive)
                         {
-                            (Body as NecromancerPet).DrawWeapon();
+                            (Body as NecromancerPet)!.DrawWeapon();
                             AddToAggroList(target, 1);
                         }
                     }
                 }
             }
             else if (e == GameNPCEvent.SwitchedTarget && sender == Body.TargetObject &&
-                sender is GameNPC && !(sender as GameNPC).IsCrowdControlled)
+                sender is GameNPC && !(sender as GameNPC)!.IsCrowdControlled)
             {
                 // Target has started attacking someone else.
 
                 if (Body.EffectList.GetOfType<TauntEffect>() != null)
-                    (Body as NecromancerPet).Taunt();
+                    (Body as NecromancerPet)!.Taunt();
             }
             else if (e == GameNPCEvent.AttackFinished)
             {
@@ -245,21 +245,21 @@ namespace DOL.AI.Brain
                 // Pet past its tether, update effect icon (remaining time) and send 
                 // warnings to owner at t = 10 seconds and t = 5 seconds.
 
-                int secondsRemaining = (args as TetherEventArgs).Seconds;
+                int secondsRemaining = (args as TetherEventArgs)!.Seconds;
                 SetTetherTimer(secondsRemaining);
 
                 if (secondsRemaining == 10)
-                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language,
                         "AI.Brain.Necromancer.PetTooFarBeLostSecIm", secondsRemaining), eChatType.CT_System);
                 else if (secondsRemaining == 5)
-                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language,
                         "AI.Brain.Necromancer.PetTooFarBeLostSec", secondsRemaining), eChatType.CT_System);
             }
             else if (e == GameNPCEvent.PetLost)
             {
                 // Pet despawn is imminent, notify owner.
 
-                MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language,
                     "AI.Brain.Necromancer.HaveLostBondToPet"), eChatType.CT_System);
             }
         }
@@ -281,7 +281,7 @@ namespace DOL.AI.Brain
                 int effectsCount = 1;
                 if (Owner is GamePlayer)
                 {
-                    (Owner as GamePlayer).Out.SendUpdateIcons(effectList, ref effectsCount);
+                    (Owner as GamePlayer)!.Out.SendUpdateIcons(effectList, ref effectsCount);
                 }
             }
         }
@@ -443,7 +443,7 @@ namespace DOL.AI.Brain
             lock (m_spellQueue)
             {
                 if (m_spellQueue.Count >= 2)
-                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client.Account.Language,
                         "AI.Brain.Necromancer.SpellNoLongerInQueue",
                         (m_spellQueue.Dequeue()).Spell.Name, Body.Name),
                         eChatType.CT_Spell);
@@ -470,7 +470,7 @@ namespace DOL.AI.Brain
             {
                 if (m_tetherTimer != null)
                     m_tetherTimer.Stop();
-                (Body as NecromancerPet).CutTether();
+                (Body as NecromancerPet)!.CutTether();
                 return;
             }
 

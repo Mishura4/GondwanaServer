@@ -221,8 +221,13 @@ SpellDescription.SavageEnduranceHeal.MainDescription:	You regain {0} endurance a
 SpellDescription.Archery.SingleTarget:					Deals {0} {1} to the target.
 SpellDescription.Archery.AreaTarget:					Deals {0} {1} to the target and its surroundings.
 SpellDescription.Archery.SecondaryEffectiveness:		The shot's effectiveness is increased by {0}%.
-SpellDescription.Fear.SingleTarget:						Frightens away the targeted enemy. Cannot affect enemies above level {0}.
-SpellDescription.Fear.AreaTarget:						A point-blank area of effect fear that frightens away enemies within {1} units of the caster. Cannot affect enemies above level {0}.
+SpellDescription.WarlockSpeedDecrease.Frog:				The target is shapeshifted into a Frog!
+SpellDescription.MaidenKiss.MainDescription:			Cure the target from "Frog" status.
+SpellDescription.ArawnCure.MainDescription:				Cure the target from "Poison", "Disease", Resurrection Sickness" status.
+SpellDescription.Fear.SingleTarget:						Frightens away the targeted enemy monster. Cannot affect player's pets or enemies above level {0}.
+SpellDescription.Fear.AreaTarget:						A point-blank area of effect fear that frightens away enemy monsters within {1} units of the caster. Cannot affect player's pets or enemies above level {0}.
+SpellDescription.FearServant.SingleTarget:						Frightens away the targeted enemy's pet(s). Cannot affect enemy's pets above level {0}.
+SpellDescription.FearServant.AreaTarget:						A point-blank area of effect fear that frightens away enemy's pet(s) within {1} units of the caster. Cannot affect enemy's pets above level {0}.
 SpellDescription.BainsheePulseDmg.MainDescription:		Target takes {0} {1}.
 SpellDescription.BainsheePulseDmg.AreaDescription:		The spell affects all enemies in the immediate radius of the caster.
 SpellDescription.BainsheePulseDmg.SecondaryDescription:	Casting the chant again while it is running cancels it. The spell effect drops if the caster moves.

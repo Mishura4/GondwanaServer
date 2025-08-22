@@ -8,3 +8,4 @@ Commands.Players.Market.No.SafeArea:		Vous devez être dans une zone sécurisée
 Commands.Players.Market.Confirm.Open:		Déployez votre marché ici ?
 Commands.Players.Market.Confirm.Close:		Voulez-vous vraiment remballer boutique maintenant ?
 Commands.Players.Market.Closed:		        Vous êtes trop loin! Votre marché a été fermé.
+Commands.Players.Market.Cant.DeployHere:	Vous ne pouvez pas déployer votre marché dans cette zone !

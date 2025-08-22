@@ -89,6 +89,11 @@ namespace DOL.AI.Brain
         private bool checkAbility;
 
         /// <summary>
+        /// True while the pet is under FearServant (flag set by FearServantSpellHandler/PetFearBrain).
+        /// </summary>
+        private bool IsPetUnderFearServant => Body?.TempProperties?.getProperty<bool>("FEAR_SERVANT_ACTIVE", false) ?? false;
+
+        /// <summary>
         /// Checks if this NPC is a permanent/charmed or timed pet
         /// </summary>
         public bool IsMainPet
@@ -164,6 +169,15 @@ namespace DOL.AI.Brain
         /// <param name="target"></param>
         public virtual void Attack(GameObject target)
         {
+            if (IsPetUnderFearServant)
+            {
+                Body.StopAttack();
+                Body.StopCurrentSpellcast();
+                Body.StopFollowing();
+                m_orderAttackTarget = null;
+                return;
+            }
+
             if (AggressionState == eAggressionState.Passive)
             {
                 AggressionState = eAggressionState.Defensive;
@@ -182,6 +196,12 @@ namespace DOL.AI.Brain
         /// <param name="target"></param>
         public virtual void Follow(GameObject target)
         {
+            if (IsPetUnderFearServant)
+            {
+                Body.StopFollowing();
+                return;
+            }
+
             WalkState = eWalkState.Follow;
             Body.Follow(target, MIN_OWNER_FOLLOW_DIST, MAX_OWNER_FOLLOW_DIST);
         }
@@ -191,6 +211,12 @@ namespace DOL.AI.Brain
         /// </summary>
         public virtual void Stay()
         {
+            if (IsPetUnderFearServant)
+            {
+                Body.StopFollowing();
+                return;
+            }
+
             m_temp = Body.Coordinate;
             WalkState = eWalkState.Stay;
             Body.StopFollowing();
@@ -201,6 +227,12 @@ namespace DOL.AI.Brain
         /// </summary>
         public virtual void ComeHere()
         {
+            if (IsPetUnderFearServant)
+            {
+                Body.StopFollowing();
+                return;
+            }
+
             m_temp = Body.Coordinate;
             WalkState = eWalkState.ComeHere;
             Body.StopFollowing();
@@ -213,6 +245,12 @@ namespace DOL.AI.Brain
         /// <param name="target"></param>
         public virtual void Goto(GameObject target)
         {
+            if (IsPetUnderFearServant)
+            {
+                Body.StopFollowing();
+                return;
+            }
+
             m_temp = Body.Coordinate;
             WalkState = eWalkState.GoTarget;
             Body.StopFollowing();
@@ -221,6 +259,11 @@ namespace DOL.AI.Brain
 
         public virtual void SetAggressionState(eAggressionState state)
         {
+            if (IsPetUnderFearServant)
+            {
+                return;
+            }
+
             AggressionState = state;
             UpdatePetWindow();
         }
@@ -300,6 +343,13 @@ namespace DOL.AI.Brain
         /// <returns>true if stopped</returns>
         public override bool Stop()
         {
+            if (IsPetUnderFearServant)
+            {
+                if (!base.Stop()) return false;
+                GameEventMgr.RemoveHandler(Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnOwnerAttacked));
+                return true;
+            }
+
             if (!base.Stop()) return false;
             GameEventMgr.RemoveHandler(Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnOwnerAttacked));
 
@@ -317,6 +367,15 @@ namespace DOL.AI.Brain
             long lastUpdate = 0;
             if (playerowner != null && !playerowner.Client.GameObjectUpdateArray.TryGetValue(new Tuple<ushort, ushort>(Body.CurrentRegionID, (ushort)Body.ObjectID), out lastUpdate))
                 lastUpdate = 0;
+
+            if (IsPetUnderFearServant)
+            {
+                if (Body.AttackState) Body.StopAttack();
+                if (Body.IsCasting) Body.StopCurrentSpellcast();
+                Body.TargetObject = null;
+                Body.StopFollowing();
+                return;
+            }
 
             // Load abilities on first Think cycle.
             if (!checkAbility)
@@ -875,6 +934,11 @@ namespace DOL.AI.Brain
         /// <param name="target"></param>
         protected override void OnFollowLostTarget(GameObject target)
         {
+            if (IsPetUnderFearServant)
+            {
+                return;
+            }
+
             if (target == Owner)
             {
                 GameEventMgr.Notify(GameLivingEvent.PetReleased, Body);
@@ -1074,6 +1138,9 @@ namespace DOL.AI.Brain
         /// <param name="arguments"></param>
         protected virtual void OnOwnerAttacked(DOLEvent e, object sender, EventArgs arguments)
         {
+            if (IsPetUnderFearServant)
+                return;
+
             // theurgist pets don't help their owner
             //edit for BD - possibly add support for Theurgist GameNPCs
             if (Owner is GamePlayer && ((GamePlayer)Owner).CharacterClass.ID == (int)eCharacterClass.Theurgist)
