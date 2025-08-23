@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using DOL.GS.Effects;
 using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
@@ -77,6 +78,12 @@ namespace DOL.GS
                     GetName(0, false, player.Client.Account.Language, this)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
+            if (TryCureSpecialWarlockSpeedDecrease(player))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Healer.Interact.Text4",
+                    GetName(0, false, player.Client.Account.Language, this)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+
             if (player.TotalConstitutionLostAtDeath > 0)
             {
                 int oneConCost = GamePlayer.prcRestore[player.Level < GamePlayer.prcRestore.Length ? player.Level : GamePlayer.prcRestore.Length - 1];
@@ -89,6 +96,41 @@ namespace DOL.GS
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Healer.Interact.Text3"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
             return true;
+        }
+
+        /// <summary>
+        /// Finds and cancels WarlockSpeedDecrease effects ONLY if they are the
+        /// "special" versions that applied Vampiir-style Effectiveness debuff and/or Silence.
+        /// </summary>
+        private static bool TryCureSpecialWarlockSpeedDecrease(GamePlayer player)
+        {
+            if (player == null) return false;
+
+            List<GameSpellEffect> toCancel = new List<GameSpellEffect>();
+
+            foreach (IGameEffect eff in player.EffectList)
+            {
+                GameSpellEffect gse = eff as GameSpellEffect;
+                if (gse == null) continue;
+
+                Spell s = gse.Spell;
+                if (s == null) continue;
+
+                if (!string.Equals(s.SpellType, "WarlockSpeedDecrease", StringComparison.Ordinal))
+                    continue;
+
+                if ((s.LifeDrainReturn > 0) || (s.AmnesiaChance == 1))
+                    toCancel.Add(gse);
+            }
+
+            bool cured = false;
+            foreach (var gse in toCancel)
+            {
+                gse.Cancel(false);
+                cured = true;
+            }
+
+            return cured;
         }
 
         protected void HealerDialogResponse(GamePlayer player, byte response)

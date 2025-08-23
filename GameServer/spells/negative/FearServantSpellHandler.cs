@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,46 +10,45 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-    /// <summary>
-    /// Fear for SERVANTS (player pets / controlled NPCs / charmed mobs).
-    /// Regular free NPCs are NOT valid targets.
-    /// Illusion pets die on hit.
-    /// While active, a PetFearBrain is layered to make the pet flee the caster and ignore owner commands.
-    /// </summary>
     [SpellHandler("FearServant")]
     public class FearServantSpellHandler : SpellHandler
     {
-        private readonly ReaderWriterDictionary<GameNPC, PetFearBrain> _petFearBrains = new ReaderWriterDictionary<GameNPC, PetFearBrain>();
+        private readonly ReaderWriterDictionary<GameNPC, PetFearBrain> _petFearBrains = new();
+        private readonly ReaderWriterDictionary<GameNPC, FearBrain> _npcFearBrains = new();
 
         private const string PET_FEAR_FLAG = "FEAR_SERVANT_ACTIVE";
+        private const string USE_PET_BRAIN = "FEAR_SERVANT_USE_PET_BRAIN";
 
         private static bool HasEffect(GameLiving target, string spellType)
             => SpellHandler.FindEffectOnTarget(target, spellType) != null;
 
-        /// <summary>
-        /// Is the NPC currently charmed or befriended?
-        /// </summary>
         private static bool IsCharmedOrFriend(GameNPC npc)
             => HasEffect(npc, "Charm") || HasEffect(npc, "BeFriend") || (npc.Brain is FriendBrain);
 
+        private static bool IsFollowingFriend(GameNPC npc) => npc.Brain is FollowingFriendMobBrain;
+
+        private static bool IsTurret(GameNPC npc) => npc.Brain is TurretBrain;
+
         /// <summary>
         /// True if this NPC is a valid "servant" (player-owned/controlled) target.
+        /// (What FearServant used to affect before.)
         /// </summary>
-        private static bool IsEligiblePetTarget(GameNPC npc)
+        private static bool IsEligibleServant(GameNPC npc)
         {
+            if (npc.Brain is IllusionPetBrain) return true;
+            if (IsTurret(npc)) return true;
+
             if (npc.Brain is ControlledNpcBrain) return true;
             if (npc.Brain is TheurgistPetBrain) return true;
             if (npc.Brain is NoveltyPetBrain) return true;
 
-            // Charmed followers (friend/following brains or status)
-            if (npc.Brain is FollowingFriendMobBrain) return true;
             if (IsCharmedOrFriend(npc)) return true;
-
-            // Illusion pets are also "servants" for this spell; they�ll be killed on hit.
-            if (npc.Brain is IllusionPetBrain) return true;
+            if (IsFollowingFriend(npc)) return true;
 
             return false;
         }
+
+        public FearServantSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override void FinishSpellCast(GameLiving target, bool force = false)
         {
@@ -58,38 +57,75 @@ namespace DOL.GS.Spells
         }
 
         /// <summary>
-        /// Only target NPCs that are actually pets/controlled/charmed/illusion.
+        /// If AmnesiaChance == 0 → ONLY servants (previous behavior).
+        /// If AmnesiaChance > 0 → ANY GameNPC (regular mobs too).
         /// </summary>
         public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
+            bool amnesiaMode = Spell.AmnesiaChance > 0;
+
             return base.SelectTargets(castTarget, force)
-                       .Where(t => t is GameNPC npc && IsEligiblePetTarget(npc))
+                       .Where(t =>
+                       {
+                           var npc = t as GameNPC;
+                           if (npc == null) return false;
+
+                           return amnesiaMode
+                               ? true
+                               : IsEligibleServant(npc);
+                       })
                        .ToList();
         }
 
-        /// <summary>
-        /// Apply: kill illusion pets; otherwise attach PetFearBrain if level check passes.
-        /// </summary>
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            var npcTarget = target as GameNPC;
-            if (npcTarget == null) return false;
+            var npc = target as GameNPC;
+            if (npc == null) return false;
 
-            if (!IsEligiblePetTarget(npcTarget))
-                return false;
-
-            if (npcTarget.Brain is IllusionPetBrain || npcTarget.Brain is TurretBrain)
+            if (npc.Brain is IllusionPetBrain || IsTurret(npc))
             {
-                if (npcTarget.IsAlive)
-                    npcTarget.Die(m_caster);
+                if (npc.IsAlive)
+                    npc.Die(m_caster);
                 return true;
             }
 
-            // Let "regular controlled pet" through as well (the condition you asked to reuse)
-            //   regular controlled pet = ControlledNpcBrain AND not charmed/followingfriend/illusion
-            // We also allow charmed followers through (FollowingFriend/Friend/Charm effects).
-            // Resist by level like Fear
-            if (npcTarget.Level > Spell.Value)
+            bool amnesiaMode = Spell.AmnesiaChance > 0;
+
+            if (!amnesiaMode)
+            {
+                if (!IsEligibleServant(npc))
+                    return false;
+
+                if (npc.Level > Spell.Value)
+                {
+                    OnSpellResisted(target);
+                    return true;
+                }
+
+                npc.TempProperties.setProperty(USE_PET_BRAIN, true);
+                return base.ApplyEffectOnTarget(target, effectiveness);
+            }
+
+            if (IsCharmedOrFriend(npc) || IsFollowingFriend(npc))
+            {
+                TryCancelCharmOrBefriend(npc);
+                TryReleaseOwnership(npc);
+                npc.StopFollowing();
+                npc.TempProperties.setProperty(USE_PET_BRAIN, false); // treat as normal NPC fear
+            }
+
+            else if (npc.Brain is ControlledNpcBrain || npc.Brain is TheurgistPetBrain || npc.Brain is NoveltyPetBrain)
+            {
+                npc.TempProperties.setProperty(USE_PET_BRAIN, true);
+            }
+
+            else
+            {
+                npc.TempProperties.setProperty(USE_PET_BRAIN, false);
+            }
+
+            // level resist (applies to all non-instant-kill cases)
+            if (npc.Level > Spell.Value)
             {
                 OnSpellResisted(target);
                 return true;
@@ -98,45 +134,55 @@ namespace DOL.GS.Spells
             return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
-        /// <summary>
-        /// On start: set a temp-flag so command methods can ignore owner orders;
-        /// add a PetFearBrain that specifically flees from the caster.
-        /// </summary>
         public override void OnEffectStart(GameSpellEffect effect)
         {
-            var npcTarget = effect.Owner as GameNPC;
-            if (npcTarget == null) return;
+            var npc = effect.Owner as GameNPC;
+            if (npc == null) { base.OnEffectStart(effect); return; }
 
-            npcTarget.TempProperties.setProperty(PET_FEAR_FLAG, true);
+            bool usePetBrain = npc.TempProperties.getProperty<bool>(USE_PET_BRAIN, false);
 
-            // layer a caster-aware fear brain
-            var fearBrain = new PetFearBrain(m_caster);
-            _petFearBrains.AddOrReplace(npcTarget, fearBrain);
-
-            npcTarget.AddBrain(fearBrain);
-            fearBrain.Think();
+            if (usePetBrain)
+            {
+                npc.TempProperties.setProperty(PET_FEAR_FLAG, true);
+                var petBrain = new PetFearBrain(m_caster);
+                _petFearBrains.AddOrReplace(npc, petBrain);
+                npc.AddBrain(petBrain);
+                petBrain.Think();
+            }
+            else
+            {
+                var fearBrain = new FearBrain();
+                _npcFearBrains.AddOrReplace(npc, fearBrain);
+                npc.AddBrain(fearBrain);
+                fearBrain.Think();
+            }
 
             base.OnEffectStart(effect);
         }
 
-        /// <summary>
-        /// On expire: remove the PetFearBrain and clear flag.
-        /// </summary>
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-            var npcTarget = effect.Owner as GameNPC;
+            var npc = effect.Owner as GameNPC;
 
-            if (npcTarget != null && _petFearBrains.TryRemove(npcTarget, out var fearBrain))
+            if (npc != null)
             {
-                // let the brain clean itself (clear flags, stop fleeing)
-                fearBrain.RemoveEffect();
-                npcTarget.RemoveBrain(fearBrain);
+                if (_petFearBrains.TryRemove(npc, out var petBrain))
+                {
+                    petBrain.RemoveEffect();
+                    npc.RemoveBrain(petBrain);
+                    npc.TempProperties.removeProperty(PET_FEAR_FLAG);
+                }
+                else if (_npcFearBrains.TryRemove(npc, out var fearBrain))
+                {
+                    fearBrain.RemoveEffect();
+                    npc.RemoveBrain(fearBrain);
+                }
+
+                npc.TempProperties.removeProperty(USE_PET_BRAIN);
+
+                if (npc.Brain == null)
+                    npc.AddBrain(new StandardMobBrain());
             }
-
-            npcTarget?.TempProperties.removeProperty(PET_FEAR_FLAG);
-
-            if (npcTarget != null && npcTarget.Brain == null)
-                npcTarget.AddBrain(new StandardMobBrain());
 
             return base.OnEffectExpires(effect, noMessages);
         }
@@ -148,26 +194,58 @@ namespace DOL.GS.Spells
             StartSpellResistLastAttackTimer(target);
         }
 
-        public FearServantSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        private static void TryCancelCharmOrBefriend(GameNPC npc)
+        {
+            (SpellHandler.FindEffectOnTarget(npc, "Charm") as GameSpellEffect)?.Cancel(false);
+            (SpellHandler.FindEffectOnTarget(npc, "BeFriend") as GameSpellEffect)?.Cancel(false);
+        }
+
+        private static void TryReleaseOwnership(GameNPC npc)
+        {
+            if (npc.Owner != null)
+            {
+                DOL.Events.GameEventMgr.Notify(DOL.Events.GameLivingEvent.PetReleased, npc);
+                npc.Owner = null;
+            }
+        }
 
         public override string GetDelveDescription(GameClient delveClient)
         {
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
             int recastSeconds = Spell.RecastDelay / 1000;
 
-            string mainDesc;
-            if (Spell.Radius > 0)
-                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.FearServant.AreaTarget", Spell.Value, Spell.Radius);
+            string main;
+
+            if (Spell.AmnesiaChance > 0)
+            {
+                if (Spell.Radius > 0)
+                {
+                    main = LanguageMgr.GetTranslation(language, "SpellDescription.FearServant.AreaTarget", Spell.Value, Spell.Radius);
+                }
+                else
+                {
+                    main = LanguageMgr.GetTranslation(language, "SpellDescription.FearServant.SingleTarget", Spell.Value);
+                }
+            }
             else
-                mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.FearServant.SingleTarget", Spell.Value);
+            {
+                if (Spell.Radius > 0)
+                {
+                    main = LanguageMgr.GetTranslation(language, "SpellDescription.FearServant.AreaTarget&Npc", Spell.Value, Spell.Radius);
+                }
+                else
+                {
+                    main = LanguageMgr.GetTranslation(language, "SpellDescription.FearServant.SingleTarget&Npc", Spell.Value);
+                }
+            }
 
             if (Spell.RecastDelay > 0)
             {
                 string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                return mainDesc + "\n\n" + secondDesc;
+                return main + "\n\n" + secondDesc;
             }
 
-            return mainDesc;
+            return main;
         }
     }
 }

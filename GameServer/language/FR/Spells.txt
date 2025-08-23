@@ -226,8 +226,10 @@ SpellDescription.MaidenKiss.MainDescription:			Guérit la cible du statut "Greno
 SpellDescription.ArawnCure.MainDescription:				Guérit la cible du statut "Poison", "Maladie", Maladie de la résurrection".
 SpellDescription.Fear.SingleTarget:						Effraie l'ennemi ciblé. N'affecte pas les "familiers" ni les ennemis de niveau supérieur à {0}.
 SpellDescription.Fear.AreaTarget:						Un sort de terreur de zone centré sur le lanceur, effrayant les monstres ennemis dans un rayon de {1} unités. N'affecte pas les "familiers" ni les ennemis de niveau supérieur à {0}.
-SpellDescription.FearServant.SingleTarget:						Effraie le "familier" de l'ennemi ciblé. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
-SpellDescription.FearServant.AreaTarget:						Un sort de terreur de zone centré sur le lanceur, effrayant les "familiers" ennemis dans un rayon de {1} unités. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.SingleTarget:				Effraie le "familier" de l'ennemi ciblé. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.AreaTarget:				Un sort de terreur de zone centré sur le lanceur, effrayant les "familiers" ennemis dans un rayon de {1} unités. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.SingleTarget&Npc:			Effraie l'ennemi ciblé. N'affecte pas les ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.AreaTarget&Npc:			Un sort de terreur de zone centré sur le lanceur, effrayant les ennemis dans un rayon de {1} unités. N'affecte pas les ennemis de niveau supérieur à {0}.
 SpellDescription.BainsheePulseDmg.MainDescription:		La cible subit {0} {1}.
 SpellDescription.BainsheePulseDmg.AreaDescription:		Le sort affecte tous les ennemis dans le rayon immédiat du lanceur du sort.
 SpellDescription.BainsheePulseDmg.SecondaryDescription:	Lancer à nouveau l'incantation pendant son effet l'annule. Elle se dissipe si le lanceur du sort se déplace.

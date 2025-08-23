@@ -226,8 +226,10 @@ SpellDescription.MaidenKiss.MainDescription:			Cure the target from "Frog" statu
 SpellDescription.ArawnCure.MainDescription:				Cure the target from "Poison", "Disease", Resurrection Sickness" status.
 SpellDescription.Fear.SingleTarget:						Frightens away the targeted enemy monster. Cannot affect player's pets or enemies above level {0}.
 SpellDescription.Fear.AreaTarget:						A point-blank area of effect fear that frightens away enemy monsters within {1} units of the caster. Cannot affect player's pets or enemies above level {0}.
-SpellDescription.FearServant.SingleTarget:						Frightens away the targeted enemy's pet(s). Cannot affect enemy's pets above level {0}.
-SpellDescription.FearServant.AreaTarget:						A point-blank area of effect fear that frightens away enemy's pet(s) within {1} units of the caster. Cannot affect enemy's pets above level {0}.
+SpellDescription.FearServant.SingleTarget:				Frightens away the targeted enemy's pet(s). Cannot affect enemy's pets above level {0}.
+SpellDescription.FearServant.AreaTarget:				A point-blank area of effect fear that frightens away enemy's pet(s) within {1} units of the caster. Cannot affect enemy's pets above level {0}.
+SpellDescription.FearServant.SingleTarget&Npc:			Frightens away the targeted enemies. Cannot affect enemies above level {0}.
+SpellDescription.FearServant.AreaTarget&Npc:			A point-blank area of effect fear that frightens away enemies within {1} units of the caster. Cannot affect enemies above level {0}.
 SpellDescription.BainsheePulseDmg.MainDescription:		Target takes {0} {1}.
 SpellDescription.BainsheePulseDmg.AreaDescription:		The spell affects all enemies in the immediate radius of the caster.
 SpellDescription.BainsheePulseDmg.SecondaryDescription:	Casting the chant again while it is running cancels it. The spell effect drops if the caster moves.

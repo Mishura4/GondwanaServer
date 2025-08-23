@@ -6,3 +6,4 @@ Healer.HealerDialogResponse.Text4:	Vous avez besoin de {0} pour restaurer {1} po
 Healer.Interact.Text1:			    {0} guérit vote mal de résurrection.
 Healer.Interact.Text2:			    Cela vous coûtera {0} pour restaurer vos points de constitution. Acceptez-vous?
 Healer.Interact.Text3:			    Vous êtes déjà guéri. Faites attention à vous !
+Healer.Interact.Text4:				{0} utilise "Baiser de la Vierge" pour dissiper votre enchantement "grenouille".
