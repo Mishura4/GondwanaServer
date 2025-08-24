@@ -4220,17 +4220,15 @@ namespace DOL.GS
             }
             
             // lock during all update, even if replace only take place at end...
-            m_usableListSpells.FreezeWhile(innerList =>
+            results = m_usableListSpells.FreezeWhile(innerList =>
             {
-                RefreshUsableListSpells(results);
-                return results;
+                return RefreshUsableListSpells(innerList);
             });
             return results;
         }
 
         public void RefreshUsableListSpells()
         {
-            var list = new List<Tuple<SpellLine, List<Skill>>>();
             // lock during all update, even if replace only take place at end...
             m_usableListSpells.FreezeWhile(innerList =>
             {
@@ -4297,7 +4295,6 @@ namespace DOL.GS
 
             if (!update)
             {
-
                 if (m_usableSkills.Count > 0)
                     results = new List<Tuple<Skill, Skill>>(m_usableSkills);
 
@@ -4307,9 +4304,9 @@ namespace DOL.GS
             }
 
             // need to lock for all update.
-            m_usableSkills.FreezeWhile(innerList =>
+            results = m_usableSkills.FreezeWhile(innerList =>
             {
-                RefreshUsableSkills(innerList);
+                return RefreshUsableSkills(innerList);
             });
 
             return results;
