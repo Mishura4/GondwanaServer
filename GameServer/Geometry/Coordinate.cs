@@ -1,3 +1,5 @@
+using System;
+
 namespace DOL.GS.Geometry;
 
 public struct Coordinate
@@ -39,9 +41,9 @@ public struct Coordinate
         => DistanceToSquared(pos.Coordinate, ignoreZ);
 
     public bool IsWithinDistance(Coordinate other, double distance, bool ignoreZ = false)
-        => DistanceToSquared(other, ignoreZ) <= distance * distance;
+        => distance is Double.PositiveInfinity || DistanceToSquared(other, ignoreZ) <= distance * distance;
     public bool IsWithinDistance(Position other, double distance, bool ignoreZ = false)
-        => DistanceToSquared(other.Coordinate, ignoreZ) <= distance * distance;
+        => distance is Double.PositiveInfinity || DistanceToSquared(other.Coordinate, ignoreZ) <= distance * distance;
 
     public Angle GetOrientationTo(Coordinate loc)
         => (loc - this).Orientation;

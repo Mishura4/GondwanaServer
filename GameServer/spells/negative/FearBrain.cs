@@ -19,6 +19,9 @@
 using System;
 using DOL.GS;
 using DOL.GS.Geometry;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DOL.AI.Brain
 {
@@ -34,10 +37,8 @@ namespace DOL.AI.Brain
                 return 3000;
             }
         }
-
-        public bool CapFleeDistance { get; set; } = true;
         
-        public const int MAX_DISTANCE_TO_SPAWN = (int)(WorldMgr.VISIBILITY_DISTANCE * 1.5);
+        public int NoticeRange { get; set; }
 
         private int m_timeWithoutPlayers;
 
@@ -57,28 +58,85 @@ namespace DOL.AI.Brain
         /// </summary>
         public override void Think()
         {
+            GamePlayer closestPlayer = null;
             var range = Math.Max(AggroRange, 750);
             foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)(range * 1.25)))
             {
                 if (IsPlayerIgnored(player))
                     continue;
-                
-                m_timeWithoutPlayers = 0;
-                if (Body.IsReturningHome || GameMath.IsWithinRadius(player.Coordinate, Body.Coordinate, range))
+
+                if (closestPlayer is null)
                 {
-                    Body.CancelWalkToSpawn();
-                    CalculateFleeTarget(player);
-                    return;
+                    closestPlayer = player;
                 }
+                else
+                {
+                    var distPrev = closestPlayer.GetDistanceSquaredTo(Body);
+                    var distNew = player.GetDistanceSquaredTo(Body);
+                    closestPlayer = distPrev > distNew ? closestPlayer : player;
+                }
+                m_timeWithoutPlayers = 0;
             }
             
-            m_timeWithoutPlayers += ThinkInterval;
-            if (m_timeWithoutPlayers >= 30000)
-            {
+            if (closestPlayer == null)
+                m_timeWithoutPlayers += ThinkInterval;
+            else
                 m_timeWithoutPlayers = 0;
-                if (!Body.IsReturningHome && !Body.Coordinate.IsWithinDistance(Body.SpawnPosition, GameNPC.CONST_WALKTOTOLERANCE))
+
+            if (Body.IsIncapacitated || Body.IsTurningDisabled)
+                return;
+
+            if (closestPlayer != null)
+            {
+                if (GameMath.IsWithinRadius(closestPlayer.Coordinate, Body.Coordinate, range))
                 {
-                    Body.WalkToSpawn();
+                    Body.CancelWalkToSpawn();
+                    CalculateFleeTarget(closestPlayer);
+                    return;
+                }
+                else if (Body.IsReturningHome)
+                {
+                    Body.StopMoving();
+                    Body.TurnTo(closestPlayer); // :eyes:
+                }
+                return;
+            }
+
+            if (Body.IsMoving || Body.InCombat)
+                return;
+
+            if (!Body.Coordinate.IsWithinDistance(Body.SpawnPosition, Body.RoamingRange + GameNPC.CONST_WALKTOTOLERANCE))
+            {
+                if (m_timeWithoutPlayers >= 30000)
+                {
+                    m_timeWithoutPlayers = 0;
+                    if (!Body.Coordinate.IsWithinDistance(Body.SpawnPosition, Math.Max(Body.RoamingRange, GameNPC.CONST_WALKTOTOLERANCE)))
+                    {
+                        Body.WalkToSpawn();
+                        return;
+                    }
+                }
+                else
+                {
+                    Body.TurnTo(Body.SpawnPosition.Coordinate);
+                }
+            }
+            else
+            {
+                //If this NPC can randomly walk around, we allow it to walk around
+                if (CanRandomWalk && !Body.IsRoaming && Util.Chance(DOL.GS.ServerProperties.Properties.GAMENPC_RANDOMWALK_CHANCE))
+                {
+                    var target = GetRandomWalkTarget();
+                    if (Util.IsNearDistance(target, Body.Coordinate, GameNPC.CONST_WALKTOTOLERANCE))
+                    {
+                        Body.TurnTo(target);
+                    }
+                    else
+                    {
+                        Body.PathTo(target, 50);
+                    }
+
+                    Body.FireAmbientSentence(GameNPC.eAmbientTrigger.roaming);
                 }
             }
         }
@@ -94,10 +152,10 @@ namespace DOL.AI.Brain
             Body.StopFollowing();
             Body.StopAttack();
             var destination = (Body.Position + Vector.Create(targetAngle, length: 300)).TurnedAround();
-            if (CapFleeDistance && !destination.Coordinate.IsWithinDistance(Body.SpawnPosition, MAX_DISTANCE_TO_SPAWN))
+            if (Body.MaxDistance > 0 && !destination.Coordinate.IsWithinDistance(Body.SpawnPosition, Body.MaxDistance))
             {
                 var angleToSpawn = Body.SpawnPosition.Coordinate.GetOrientationTo(destination.Coordinate);
-                var adjustedCoordinates = Body.SpawnPosition.Coordinate + Vector.Create(angleToSpawn, MAX_DISTANCE_TO_SPAWN);
+                var adjustedCoordinates = Body.SpawnPosition.Coordinate + Vector.Create(angleToSpawn, Body.MaxDistance);
                 destination = destination.With(adjustedCoordinates).With(adjustedCoordinates.GetOrientationTo(target.Coordinate));
             }
             Body.PathTo(destination.Coordinate, Body.MaxSpeed);
