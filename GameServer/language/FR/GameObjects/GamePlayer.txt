@@ -427,18 +427,21 @@ GameObjects.GamePlayer.UseSlot.CantFire:				Vous ne pouvez pas lancer ou utilise
 GameObjects.GamePlayer.UseSlot.CantMountCombat:			Vous êtes en combat, et ne pouvez pas appeler votre monture.
 GameObjects.GamePlayer.UseSlot.CantMountHere:			Vous ne pouvez pas invoquer de monture ici !
 GameObjects.GamePlayer.UseSlot.CantCallMountRVR:		Vous ne pouvez pas invoquer de monture ici !
-GameObjects.GamePlayer.UseSlot.CantMountInDungeon:		Vous ne pouvez pas invoquer dans un donjon !
-GameObjects.GamePlayer.UseSlot.CantMountMoving:			Vous ne pouvez pas monter sur un cheval lorsque vous bougez.
-GameObjects.GamePlayer.UseSlot.CantMountStealthed:		Vous ne pouvez pas monter sur un cheval si vous êtes en furtivité.
+GameObjects.GamePlayer.UseSlot.CantMountInDungeon:		Vous ne pouvez pas invoquer de monture dans un donjon !
+GameObjects.GamePlayer.UseSlot.CantMountMoving:			Vous ne pouvez pas monter à cheval lorsque vous bougez.
+GameObjects.GamePlayer.UseSlot.CantMountStealthed:		Vous ne pouvez pas monter à cheval si vous êtes en furtivité.
+GameObjects.GamePlayer.UseSlot.CantMountDamned:			Vous ne pouvez pas monter à cheval en étant damné·e!
+GameObjects.GamePlayer.UseSlot.CantMountPetrified:		Vous ne pouvez pas monter à cheval en étant pétrifié·e!
+GameObjects.GamePlayer.UseSlot.CantMountFrog:			Vous ne pouvez pas monter à cheval en étant sous l'effet d'un enchantement "Grenouille"!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:		Vous ne pouvez pas monter sur votre cheval, vous êtes mort·e.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:	Vous ne pouvez pas utiliser cette monture en portant une Relique !
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:			Vous ne voyez pas votre cible.
-GameObjects.GamePlayer.UseSlot.CantSummonRvR:			Vous ne pouvez pas utiliser cette monture dans une zone RvR.
+GameObjects.GamePlayer.UseSlot.CantSummonRvR:			Vous ne pouvez pas invoquer de monture dans une zone RvR.
 GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:	    Vous ne pouvez pas utiliser cet objet directement dans votre sac à dos. Equipez-le avant.
 GameObjects.GamePlayer.UseSlot.CantUseInCombat:			Vous ne pouvez pas utiliser cet objet en combat.
 GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:		Vous ne pouvez pas utiliser cet objet en étant assis !
-GameObjects.GamePlayer.UseSlot.CantUseHere:			Vous ne pouvez pas utiliser cela ici !
-GameObjects.GamePlayer.UseSlot.IllegalSourceObject:		Objet source incorrect. Readied {0}.
+GameObjects.GamePlayer.UseSlot.CantUseHere:				Vous ne pouvez pas utiliser cela ici !
+GameObjects.GamePlayer.UseSlot.IllegalSourceObject:		Objet source invalide. {0} est prêt !
 GameObjects.GamePlayer.UseSlot.MustDismountBefore:		Vous devez d'abord descendre de votre cheval.
 GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload:	Vous ne tirerez ou ne rechargerez plus automatiquement.
 GameObjects.GamePlayer.UseSlot.NotEnouthPower:			Vous n'êtes pas assez puissant·e pour utiliser le sortilège de cet objet.

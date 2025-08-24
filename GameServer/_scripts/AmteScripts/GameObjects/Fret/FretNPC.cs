@@ -9,13 +9,14 @@ using DOL.GS.PacketHandler;
 using log4net;
 using DOL.AI.Brain;
 using DOL.GS.Finance;
+using DOL.GS.Spells;
 using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
     public class FretNPC : GameNPC
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public const string REPERTOIRE = "./logs/fret/"; //Répertoire des logs
         public const int MaxItem = 30;
@@ -104,12 +105,12 @@ namespace DOL.GS.Scripts
             int id;
             if (int.TryParse(str, out id))
             {
-                var ItemsFret = GameServer.Database.SelectObjects<DBFret>(f => f.ToPlayer == player.InternalID);
+                var ItemsFret = GameServer.Database.SelectObjects<DBFret>(f => f.ToPlayer == player!.InternalID);
                 string msg;
                 try
                 {
                     DBFret item = ItemsFret[id - 1];
-                    if (player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(item)))
+                    if (player!.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(item)))
                     {
                         GameServer.Database.DeleteObject(item);
                         if (item.Template is ItemUnique)
@@ -124,13 +125,13 @@ namespace DOL.GS.Scripts
                     msg = "Un problème est survenu, recommencez la manipulation pour récupérer votre objet.";
                 }
 
-                player.Out.SendMessage(msg, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player!.Out.SendMessage(msg, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
             #endregion
             #region Envoi du colis
             else if (str == "Envoyer le colis" || str == "Send the package") 
             {
-                if (TempItems.ContainsKey(player.InternalID))
+                if (TempItems.ContainsKey(player!.InternalID))
                 {
                     InteractPlayer IP = TempItems[player.InternalID];
                     player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendConfirm") + Money.GetString(IP.Price) + " ?",
@@ -141,7 +142,7 @@ namespace DOL.GS.Scripts
             }
             #endregion
             #region Réglage du destinataire
-            else if (TempItems.ContainsKey(player.InternalID) && str.Split(' ').Length == 1)
+            else if (TempItems.ContainsKey(player!.InternalID) && str.Split(' ').Length == 1)
             {
                 //On récupére le joueur existant à ce nom:
                 DOLCharacters ch = GameServer.Database.SelectObject<DOLCharacters>(c => c.Name == str);
@@ -171,10 +172,21 @@ namespace DOL.GS.Scripts
             if (!item.IsTradable || item.IsDeleted) return false;
             GamePlayer player = source as GamePlayer;
 
-            if (player.Reputation < 0)
+            if (player!.Reputation < 0)
             {
                 TurnTo(player, 5000);
-                player.Out.SendMessage("Je ne reçois rien de la part des hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Outlaw"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                return false;
+            }
+
+            if (SpellHandler.FindEffectOnTarget(player, "Petrify") != null)
+            {
+                return false;
+            }
+
+            if (player.IsDamned)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Damned"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                 return false;
             }
 

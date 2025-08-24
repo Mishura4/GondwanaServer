@@ -1181,6 +1181,24 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
+                            if (SpellHandler.FindEffectOnTarget(client.Player, "Petrify") != null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerSummonPetrified"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (SpellHandler.FindEffectOnTarget(client.Player, "WarlockSpeedDecrease") != null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerSummonFrog"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (JailMgr.IsPrisoner(client.Player))
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerSummonJailed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
                             if (client.Account.PrivLevel <= 1 && client.Player.Guild.GuildType != Guild.eGuildType.RvRGuild && client.Player.Guild.GuildType != Guild.eGuildType.PvPGuild)
                             {
                                 if (client.Player.Guild.IsSystemGuild)

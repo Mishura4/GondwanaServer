@@ -36,7 +36,10 @@ Commands.Players.Guild.BannerNotAfford:		    Your guild need {0} more merit poin
 Commands.Players.Guild.BannerAlreadyHave:       You are already carrying a banner.
 Commands.Players.Guild.BannerSummoned.You:		    You have summoned your guild banner.
 Commands.Players.Guild.BannerSummoned:		    {0} has summoned the guild banner.
-Commands.Players.Guild.BannerSummonDamned:			You cannot summon a banner while beeing damned!
+Commands.Players.Guild.BannerSummonDamned:			You cannot summon your guild banner while beeing damned!
+Commands.Players.Guild.BannerSummonPetrified:		You cannot summon your guild banner while beeing petrified!
+Commands.Players.Guild.BannerSummonFrog:			You cannot summon your guild banner while beeing under a "Frog" enchantment.
+Commands.Players.Guild.BannerSummonJailed:			You cannot summon your guild banner while beeing imprisoned.
 Commands.Players.Guild.BannerUnsummoned.You:		You have put away your guild banner.
 Commands.Players.Guild.BannerUnsummoned:			{0} has put away the guild banner.
 Commands.Players.Guild.BannerUnsummoned.You.Forced:	{0} has removed your guild banner.

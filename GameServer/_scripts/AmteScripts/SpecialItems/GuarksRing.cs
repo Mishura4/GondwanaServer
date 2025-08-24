@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using AmteScripts.Managers;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.GS.Spells;
 using DOL.Language;
 
 namespace DOL.GS.Scripts
@@ -299,22 +301,47 @@ namespace DOL.GS.Scripts
         {
             if (player.InCombat)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageCombat"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
-            if (RvrManager.Instance.IsInRvr(player)) //UXU TODO  || PvpManager.Instance.IsIn(player))
+            if (RvrManager.Instance.IsInRvr(player) || player.IsInPvP || player.CurrentRegion.IsDungeon)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageHere"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return false;
             }
-            if (JailMgr.IsPrisoner(player))
+            if (player.CurrentRegionID == ServerRules.AmtenaelRules.HousingRegionID)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageJailed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingCannotUseHere"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return false;
             }
-            if (player.IsRiding)
+            if (JailMgr.IsPrisoner(player))
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageMounted"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageJailed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (player.IsRiding || player.IsOnHorse)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageMounted"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (player.IsStealthed)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageStealthed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (SpellHandler.FindEffectOnTarget(player, "Petrify") != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsagePetrified"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (player.IsDamned)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease") != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageFrog"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
             return true;

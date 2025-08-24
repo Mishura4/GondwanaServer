@@ -28,6 +28,7 @@ using log4net;
 using System.Linq;
 using DOL.GS.Finance;
 using DOL.GS.Geometry;
+using DOL.GS.Spells;
 
 namespace DOL.GS
 {
@@ -128,7 +129,24 @@ namespace DOL.GS
 
                 if (player.Reputation < 0)
                 {
-                    player.Out.SendMessage("Je ne reçois rien de la part des hors-la-loi", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Outlaw"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                    return false;
+                }
+
+                if (SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease") != null)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Frog"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                    return false;
+                }
+
+                if (SpellHandler.FindEffectOnTarget(player, "Petrify") != null)
+                {
+                    return false;
+                }
+
+                if (player.IsDamned)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Damned"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                     return false;
                 }
 

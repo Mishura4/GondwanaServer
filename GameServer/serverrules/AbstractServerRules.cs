@@ -36,6 +36,7 @@ using DOL.GS.PacketHandler.Client.v168;
 using DOL.GS.PlayerTitles;
 using DOL.GS.Scripts;
 using DOL.GS.ServerProperties;
+using DOL.GS.Spells;
 using DOL.Language;
 using DOL.Territories;
 using log4net;
@@ -733,6 +734,9 @@ namespace DOL.GS.ServerRules
             if (living.InCombat) return "GameObjects.GamePlayer.UseSlot.CantMountCombat";
             if (living.IsSitting) return "GameObjects.GamePlayer.UseSlot.CantCallMountSeated";
             if (living.IsStealthed) return "GameObjects.GamePlayer.UseSlot.CantMountStealthed";
+            if (living.IsDamned) return "GameObjects.GamePlayer.UseSlot.CantMountDamned";
+            if (SpellHandler.FindEffectOnTarget(living, "WarlockSpeedDecrease") != null) return "GameObjects.GamePlayer.UseSlot.CantMountFrog";
+            if (SpellHandler.FindEffectOnTarget(living, "Petrify") != null) return "GameObjects.GamePlayer.UseSlot.CantMountPetrified";
 
             // You are carrying a relic ? You can't use a mount !
             if (player != null && GameRelic.IsPlayerCarryingRelic(player))

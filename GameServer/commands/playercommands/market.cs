@@ -25,6 +25,9 @@ using DOL.GS;
 using DOL.GS.ServerProperties;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.GS.Scripts;
+using System.Numerics;
+using DOL.GS.Spells;
 
 namespace DOL.GS.Commands
 {
@@ -67,6 +70,7 @@ namespace DOL.GS.Commands
                         bool inHousing = client.Player.CurrentRegionID == ServerRules.AmtenaelRules.HousingRegionID;
                         bool inPvP = client.Player.IsInPvP;
                         bool inRvR = client.Player.IsInRvR;
+                        bool inDungeon = client.Player.CurrentRegion.IsDungeon;
                         bool inBG = false;
                         foreach (var keep in GameServer.KeepManager.GetKeepsOfRegion(client.Player.CurrentRegionID))
                         {
@@ -79,7 +83,42 @@ namespace DOL.GS.Commands
 
                         if (inHousing || inPvP || inRvR || inBG)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployHere"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+                        if (inDungeon)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployDungeon"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+                        if (JailMgr.IsPrisoner(client.Player))
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployJailed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+                        if (client.Player.IsRiding || client.Player.IsOnHorse)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployMounted"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+                        if (client.Player.InCombat)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+                        if (client.Player.IsDamned)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+                        if (SpellHandler.FindEffectOnTarget(client.Player, "Petrify") != null)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployPetrify"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+                        if (SpellHandler.FindEffectOnTarget(client.Player, "WarlockSpeedDecrease") != null)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployFrog"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
 
@@ -109,7 +148,7 @@ namespace DOL.GS.Commands
                         }
                         else
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Already.Created"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Already.Deployed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
 
                         break;

@@ -17,8 +17,12 @@ Items.Specialitems.GuarkRingTPFailed:				Celestial magic has failed, unknown des
 Items.Specialitems.GuarkRingTPNone:					No request has been made, your destination is unknown.
 Items.Specialitems.GuarkRingUsageCombat:			You can't use celestial magic while in combat!
 Items.Specialitems.GuarkRingUsageHere:				Celestial magic does not exist in this place.
-Items.Specialitems.GuarkRingUsageJailed:			You can't use celestial magic while beeing jailed!
+Items.Specialitems.GuarkRingUsageJailed:			You can't use celestial magic while beeing imprisoned!
 Items.Specialitems.GuarkRingUsageMounted:			You can't use celestial magic from a mount!
+Items.Specialitems.GuarkRingUsageStealthed:			You can't use celestial magic while you're in stealth.
+Items.Specialitems.GuarkRingUsagePetrified:			You can't use celestial magic while you're petrified!
+Items.Specialitems.GuarkRingUsageDamned:			You can't use celestial magic while you're damned!
+Items.Specialitems.GuarkRingUsageFrog:				You can't use celestial magic while you're under a "Frog" enchantment!
 Items.Specialitems.GuarkRingCannotUseHere:			You can't use this item here.
 Items.Specialitems.GuarkRingDoNotMove:				You must remain at the same place to use this item.
 Items.Specialitems.GuarkRingWaitBeforeUse:			You've been in combat recently, so you have to wait to be able to use this item again.
