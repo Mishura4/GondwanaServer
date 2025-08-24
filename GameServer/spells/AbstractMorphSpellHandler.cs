@@ -89,15 +89,6 @@ namespace DOL.GS.Spells
             if (model != 0)
             {
                 effect.Owner.Model = model;
-                effect.Owner.BroadcastUpdate();
-                if (effect.Owner is GamePlayer ownerPlayer)
-                {
-                    ownerPlayer.Out.SendUpdatePlayer();
-                    if (ownerPlayer.Group != null)
-                    {
-                        ownerPlayer.Group.UpdateMember(ownerPlayer, false, false);
-                    }
-                }
             }
         }
 
@@ -143,15 +134,6 @@ namespace DOL.GS.Spells
             if (bestModel != 0 && bestModel != effect.Owner.Model)
             {
                 effect.Owner.Model = bestModel;
-                effect.Owner.BroadcastUpdate();
-                if (effect.Owner is GamePlayer ownerPlayer)
-                {
-                    ownerPlayer.Out.SendUpdatePlayer();
-                    if (ownerPlayer.Group != null)
-                    {
-                        ownerPlayer.Group.UpdateMember(ownerPlayer, false, false);
-                    }
-                }
             }
             return base.OnEffectExpires(effect, noMessages);
         }
