@@ -9420,6 +9420,7 @@ namespace DOL.GS
             {
                 if (sHandler.Status != SpellHandler.eStatus.Success)
                     return;
+
                 useItem = spellItem;
             }
 

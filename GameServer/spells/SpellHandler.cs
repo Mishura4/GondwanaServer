@@ -84,7 +84,8 @@ namespace DOL.GS.Spells
             Interrupted,
             Casting,
             Failure,
-            Success
+            Success, // Consume items
+            Pass // Success, but does not consume items, i.e. cancelling pulse
         }
 
         public eStatus Status { get; protected set; }
@@ -493,6 +494,7 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.CancelEffect"), eChatType.CT_Spell);
                 else
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.StopPlayingSong"), eChatType.CT_Spell);
+                Status = eStatus.Pass;
             }
             else if (GameServer.ServerRules.IsAllowedToCastSpell(Caster, m_spellTarget, Spell, m_spellLine))
             {
@@ -2029,7 +2031,9 @@ namespace DOL.GS.Spells
                     SendEffectAnimation(Caster, 0, false, 1);
                 if (m_spell.Target == "pet")
                     SendEffectAnimation(target, 0, false, 1);
+                Status = eStatus.Success; // Pulse always succeeds
             }
+            
             if (StartSpell(target, force)) // and action
             {
                 if (m_ability != null)
@@ -2666,6 +2670,8 @@ namespace DOL.GS.Spells
             bool result = ExecuteSpell(target, force);
             if (Status == eStatus.Ready)
                 Status = result ? eStatus.Success : eStatus.Failure;
+            else
+                result = Status is eStatus.Success or eStatus.Pass;
             return result;
         }
         

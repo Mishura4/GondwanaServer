@@ -947,7 +947,7 @@ namespace DOL.AI.Brain
             }
             else if (e == GameLivingEvent.EnemyKilled)
             {
-                if (args is EnemyKilledEventArgs eArgs)
+                if (args is EnemyKilledEventArgs eArgs && eArgs.Target != Body)
                 {
                     // transfer all controlled target aggro to the owner
                     if (eArgs.Target is GameNPC && eArgs.Target.GetLivingOwner() is {} owner)
@@ -957,7 +957,9 @@ namespace DOL.AI.Brain
                     }
 
                     Body.Attackers.Remove(eArgs.Target);
-                    AttackMostWanted();
+                    
+                    if (eArgs.Target == Body.TargetObject)
+                        AttackMostWanted();
                 }
                 return;
             }
