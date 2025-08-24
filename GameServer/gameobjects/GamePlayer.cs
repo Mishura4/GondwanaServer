@@ -3737,11 +3737,21 @@ namespace DOL.GS
 
         #endregion Abilities
 
-        public virtual void RemoveAllAbilities()
+        public virtual void RemoveAllAbilities(bool removePermanentAbilities = false)
         {
             lock (m_lockAbilities)
             {
+                IEnumerable<KeyValuePair<string, Ability>> keep;
+                if (removePermanentAbilities)
+                    keep = [];
+                else
+                    keep = m_abilities.Where(a => a.Value.IsPermanent).ToList();
+                
                 m_abilities.Clear();
+                foreach (var (key, value) in keep)
+                {
+                    m_abilities.Add(key, value);
+                }
             }
         }
 
@@ -4359,6 +4369,7 @@ namespace DOL.GS
                         abilities.Add((Ability)ab.Item1);
                     }
                 }
+                
                 foreach (Ability abv in abilities)
                 {
                     // We need the Instantiated Ability Object for Displaying Correctly According to Player "Activation" Method (if Available)
@@ -4379,6 +4390,32 @@ namespace DOL.GS
                         // replace
                         list[index] = new Tuple<Skill, Skill>(ab, spec);
                     }
+                }
+            }
+
+            // Add non-spec abilities
+            var getAbilities = () =>
+            {
+                lock (m_abilities)
+                    return m_abilities.ToList();
+            };
+            foreach (var (key, ability) in getAbilities())
+            {
+                int index = list.FindIndex(k => (k.Item1 is Ability) && ((Ability)k.Item1).KeyName == key);
+                Skill spec = SkillBase.GetSpecialization(ability.Spec);
+                if (spec is null)
+                    spec = ability;
+                
+                if (index < 0)
+                {
+                    // add
+                    list.Add(new Tuple<Skill, Skill>(ability, spec));
+                }
+                else
+                {
+                    copylist.Remove(list[index]);
+                    // replace
+                    list[index] = new Tuple<Skill, Skill>(ability, spec);
                 }
             }
 

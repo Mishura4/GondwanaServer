@@ -2528,7 +2528,7 @@ namespace DOL.GS
             if (log.IsWarnEnabled)
                 log.Warn("Ability '" + keyname + "' unknown");
 
-            return new Ability(keyname, "?" + keyname, "", 0, 0, level, 0);
+            return new Ability(keyname, "?" + keyname, "", 0, 0, level, 0, false);
         }
 
         /// <summary>
@@ -2856,11 +2856,13 @@ namespace DOL.GS
             m_syncLockUpdates.EnterReadLock();
             try
             {
-                if (m_specsByName.TryGetValue(keyname, out var value))
+                if (m_specsByName.TryGetValue(keyname, out var value) && value != null)
                 {
                     spec = GetNewSpecializationInstance(keyname, value);
+                    if (spec != null)
+                        return spec;
                 }
-                else if (!create)
+                if (!create)
                 {
                     log.Error("Missing Spec: " + keyname);
                     return null;
@@ -2870,9 +2872,6 @@ namespace DOL.GS
             {
                 m_syncLockUpdates.ExitReadLock();
             }
-
-            if (spec!.KeyName == keyname)
-                return spec;
 
             if (create)
             {

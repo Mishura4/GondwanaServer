@@ -57,6 +57,7 @@ namespace DOL.GS
         protected string m_serializedNames;
         protected string m_description;
         protected int m_speclevel;
+        protected bool m_isPermanent;
 
         protected GameLiving m_activeLiving = null;
 
@@ -67,27 +68,28 @@ namespace DOL.GS
         }
 
         public Ability(DBAbility dba, int level)
-            : this(dba.KeyName, dba.Name, dba.Description, dba.AbilityID, (ushort)dba.IconID, level, dba.InternalID)
+            : this(dba.KeyName, dba.Name, dba.Description, dba.AbilityID, (ushort)dba.IconID, level, dba.InternalID, dba.IsPermanent)
         {
         }
 
         public Ability(DBAbility dba, int level, string spec, int speclevel)
-            : this(dba.KeyName, dba.Name, dba.Description, dba.AbilityID, (ushort)dba.IconID, level, spec, speclevel, dba.InternalID)
+            : this(dba.KeyName, dba.Name, dba.Description, dba.AbilityID, (ushort)dba.IconID, level, spec, speclevel, dba.InternalID, dba.IsPermanent)
         {
         }
 
-        public Ability(string keyname, string displayname, string description, int id, ushort icon, int level, int internalID)
-            : this(keyname, displayname, description, id, icon, level, "", 0, internalID)
+        public Ability(string keyname, string displayname, string description, int id, ushort icon, int level, int internalID, bool permanent)
+            : this(keyname, displayname, description, id, icon, level, "", 0, internalID, permanent)
         {
         }
 
-        public Ability(string keyname, string displayname, string description, int id, ushort icon, int level, string spec, int speclevel, int internalID)
+        public Ability(string keyname, string displayname, string description, int id, ushort icon, int level, string spec, int speclevel, int internalID, bool isPermanent)
             : base(keyname, displayname, id, icon, level, internalID)
         {
             m_spec = spec;
             m_speclevel = speclevel;
             m_serializedNames = displayname;
             m_description = description;
+            m_isPermanent = isPermanent;
             UpdateCurrentName();
         }
 
@@ -251,6 +253,12 @@ namespace DOL.GS
 
                 return list;
             }
+        }
+
+        public bool IsPermanent
+        {
+            get => m_isPermanent;
+            set => m_isPermanent = value;
         }
 
         public override eSkillPage SkillType

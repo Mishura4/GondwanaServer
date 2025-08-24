@@ -111,6 +111,7 @@ namespace DOL.Database
         protected string m_name = "unknown";
         protected string m_description = "no description";
         protected string m_implementation = null;
+        protected bool m_isPermanent = false;
 
         /// <summary>
         /// Create ability
@@ -206,12 +207,26 @@ namespace DOL.Database
         [DataElement(AllowDbNull = true, Varchar = 255)]
         public string Implementation
         {
-            get { return m_implementation; }
-            set
-            {
-                Dirty = true;
-                m_implementation = value;
-            }
+	        get { return m_implementation; }
+	        set
+	        {
+		        Dirty = true;
+		        m_implementation = value;
+	        }
+        }
+
+        /// <summary>
+        /// Ability is not removed with player reset
+        /// </summary>
+        [DataElement(AllowDbNull = false, Varchar = 255)]
+        public bool IsPermanent
+        {
+	        get { return m_isPermanent; }
+	        set
+	        {
+		        Dirty = true;
+		        m_isPermanent = value;
+	        }
         }
     }
 }
