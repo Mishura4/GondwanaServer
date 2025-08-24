@@ -37,16 +37,35 @@ namespace DOL.AI.Brain
 
         private int m_timeWithoutPlayers;
 
+        public bool IsPlayerIgnored(GamePlayer player)
+        {
+            if (!player.IsVisibleTo(Body))
+                return true;
+
+            if (!player.IsAlive)
+                return true;
+
+            return false;
+        }
+
         /// <summary>
         /// Flee from Players on Brain Think
         /// </summary>
         public override void Think()
         {
-            foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
+            var range = Math.Max(AggroRange, 750);
+            foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)(range * 1.25)))
             {
-                CalculateFleeTarget(player);
+                if (IsPlayerIgnored(player))
+                    continue;
+                
                 m_timeWithoutPlayers = 0;
-                break;
+                if (Body.IsReturningHome || GameMath.IsWithinRadius(player.Coordinate, Body.Coordinate, range))
+                {
+                    Body.CancelWalkToSpawn();
+                    CalculateFleeTarget(player);
+                    return;
+                }
             }
             
             m_timeWithoutPlayers += ThinkInterval;
