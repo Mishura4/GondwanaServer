@@ -1517,29 +1517,29 @@ namespace DOL.GS
         /// </summary>
         /// <param name="destination"></param>
         /// <param name="speed"></param>
-        public virtual void WalkTo(Coordinate destination, short speed)
+        public virtual bool WalkTo(Coordinate destination, short speed)
         {
             if (IsTurningDisabled)
-                return;
+                return false;
 
             if (speed > MaxSpeed)
                 speed = MaxSpeed;
 
             if (speed <= 0)
-                return;
+                return false;
 
             Motion = Motion.Create(Position, destination, speed);
-
             if ((int)Motion.RemainingDistance == 0)
             {
                 _OnArrivedAtTarget();
-                return;
+                return true;
             }
             
             CancelWalkToTimer();
 
             Notify(GameNPCEvent.WalkTo, this, new WalkToEventArgs(destination, speed));
             StartArriveAtTargetAction((int)(Motion.RemainingDistance * 1000 / speed));
+            return true;
         }
 
         private void StartArriveAtTargetAction(int requiredTicks)
@@ -1609,12 +1609,11 @@ namespace DOL.GS
         /// <param name="dest"></param>
         /// <param name="speed"></param>
         /// <returns>true if a path was found</returns>
-        public void PathTo(Coordinate destination, short speed)
+        public bool PathTo(Coordinate destination, short speed)
         {
             if (!PathCalculator.ShouldPath(this, destination))
             {
-                WalkTo(destination, speed);
-                return;
+                return WalkTo(destination, speed);
             }
 
             // Initialize pathing if possible and required
@@ -1622,8 +1621,7 @@ namespace DOL.GS
             {
                 if (!PathCalculator.IsSupported(this))
                 {
-                    WalkTo(destination, speed);
-                    return;
+                    return WalkTo(destination, speed);
                 }
                 // TODO: Only make this check once on spawn since it internally calls .CurrentZone + hashtable lookup?
                 PathCalculator = new PathCalculator(this);
@@ -1640,36 +1638,35 @@ namespace DOL.GS
             // Directly walk towards the target (or call the customly provided action)
             if (nextMotionTarget.Equals(Coordinate.Nowhere))
             {
-                WalkTo(destination, speed);
-                return;
+                return WalkTo(destination, speed);
             }
 
             // Do the actual pathing bit: Walk towards the next pathing node
-            WalkTo(nextMotionTarget, speed, npc => npc.PathTo(destination, speed));
+            return WalkTo(nextMotionTarget, speed, npc => npc.PathTo(destination, speed));
         }
         
-        private void WalkTo(Coordinate destination, short speed, Action<GameNPC> goToNextNodeCallback)
+        private bool WalkTo(Coordinate destination, short speed, Action<GameNPC> goToNextNodeCallback)
         {
             if (IsTurningDisabled)
-                return;
+                return false;
 
             if (speed > MaxSpeed)
                 speed = MaxSpeed;
 
             if (speed <= 0)
-                return;
+                return false;
 
             Motion = Geometry.Motion.Create(Position, destination, speed);
-
             if ((int)Motion.RemainingDistance == 0)
             {
                 goToNextNodeCallback(this);
-                return;
+                return true;
             }
 
             CancelWalkToTimer();
 
             StartArriveAtTargetAction((int)(Motion.RemainingDistance * 1000 / speed), goToNextNodeCallback);
+            return true;
         }
 
 

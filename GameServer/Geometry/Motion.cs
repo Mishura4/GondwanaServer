@@ -13,11 +13,11 @@ public class Motion
     public short Speed { get; init; } = 0;
 
     public Position CurrentPosition
-        => GetPositonAfter(Environment.TickCount - StartTimeInMilliSeconds);
+        => GetPositionAfter(Environment.TickCount - StartTimeInMilliSeconds);
     public double FullDistance => Destination.DistanceTo(Start, ignoreZ: true);
     public double RemainingDistance => Destination.DistanceTo(CurrentPosition, ignoreZ: true);
 
-    public Position GetPositonAfter(int elapsedTimeInMilliSeconds)
+    public Position GetPositionAfter(int elapsedTimeInMilliSeconds)
     {
         if (Speed == 0 || Start.Coordinate == Destination) return Start;
 

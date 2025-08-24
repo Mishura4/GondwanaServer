@@ -27,6 +27,22 @@ public struct Coordinate
         else return (loc - this).Length;
     }
 
+    public double DistanceToSquared(Coordinate loc, bool ignoreZ = false)
+    {
+        if (Equals(Nowhere) || loc.Equals(Nowhere)) return double.PositiveInfinity;
+
+        if (ignoreZ) return (loc - this).Length2DSquared;
+        else return (loc - this).LengthSquared;
+    }
+
+    public double DistanceToSquared(Position pos, bool ignoreZ = false)
+        => DistanceToSquared(pos.Coordinate, ignoreZ);
+
+    public bool IsWithinDistance(Coordinate other, double distance, bool ignoreZ = false)
+        => DistanceToSquared(other, ignoreZ) <= distance * distance;
+    public bool IsWithinDistance(Position other, double distance, bool ignoreZ = false)
+        => DistanceToSquared(other.Coordinate, ignoreZ) <= distance * distance;
+
     public Angle GetOrientationTo(Coordinate loc)
         => (loc - this).Orientation;
 
