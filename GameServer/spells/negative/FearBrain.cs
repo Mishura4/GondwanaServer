@@ -35,6 +35,10 @@ namespace DOL.AI.Brain
             }
         }
 
+        public bool CapFleeDistance { get; set; } = true;
+        
+        public const int MAX_DISTANCE_TO_SPAWN = (int)(WorldMgr.VISIBILITY_DISTANCE * 1.5);
+
         private int m_timeWithoutPlayers;
 
         public bool IsPlayerIgnored(GamePlayer player)
@@ -89,7 +93,13 @@ namespace DOL.AI.Brain
 
             Body.StopFollowing();
             Body.StopAttack();
-            var destination = Body.Position + Vector.Create(targetAngle, length: 300);
+            var destination = (Body.Position + Vector.Create(targetAngle, length: 300)).TurnedAround();
+            if (CapFleeDistance && !destination.Coordinate.IsWithinDistance(Body.SpawnPosition, MAX_DISTANCE_TO_SPAWN))
+            {
+                var angleToSpawn = Body.SpawnPosition.Coordinate.GetOrientationTo(destination.Coordinate);
+                var adjustedCoordinates = Body.SpawnPosition.Coordinate + Vector.Create(angleToSpawn, MAX_DISTANCE_TO_SPAWN);
+                destination = destination.With(adjustedCoordinates).With(adjustedCoordinates.GetOrientationTo(target.Coordinate));
+            }
             Body.PathTo(destination.Coordinate, Body.MaxSpeed);
         }
 

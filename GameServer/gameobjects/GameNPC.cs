@@ -1577,7 +1577,6 @@ namespace DOL.GS
             if (Brain is StandardMobBrain brain && brain.HasAggro)
                 brain.ClearAggroList();
 
-
             TargetObject = null;
             if (Brain is IControlledBrain)
                 return;

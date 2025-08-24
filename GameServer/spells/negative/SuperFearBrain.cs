@@ -34,11 +34,17 @@ namespace DOL.AI.Brain
         {
             var targetAngle = Body.Coordinate.GetOrientationTo(target.Coordinate) + Angle.Degrees(180);
             var speed = (short)(Body.MaxSpeed * 1.3); // 130% speed
-            var fleePoint = Body.Coordinate + Vector.Create(targetAngle, speed * 3); // Flee for 3 seconds
-            var point = PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, fleePoint, 128, 128, 256);
+            var destination = Body.Coordinate + Vector.Create(targetAngle, speed * 3); // Flee for 3 seconds
+            if (CapFleeDistance && !destination.IsWithinDistance(Body.SpawnPosition, MAX_DISTANCE_TO_SPAWN))
+            {
+                var angleToSpawn = Body.SpawnPosition.Coordinate.GetOrientationTo(destination);
+                destination = Body.SpawnPosition.Coordinate + Vector.Create(angleToSpawn, MAX_DISTANCE_TO_SPAWN);
+            }
+            
+            var point = PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, destination, 128, 128, 256);
             Body.StopFollowing();
             Body.StopAttack();
-            Body.PathTo(point.HasValue ? Coordinate.Create(point.Value) : fleePoint, Body.MaxSpeed);
+            Body.PathTo(point.HasValue ? Coordinate.Create(point.Value) : destination, Body.MaxSpeed);
             if (Body.Motion.Destination.IsWithinDistance(Body.Motion.CurrentPosition, 0.5, true))
             {
                 return;
