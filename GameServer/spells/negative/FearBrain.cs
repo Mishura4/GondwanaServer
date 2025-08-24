@@ -35,6 +35,8 @@ namespace DOL.AI.Brain
             }
         }
 
+        private int m_timeWithoutPlayers;
+
         /// <summary>
         /// Flee from Players on Brain Think
         /// </summary>
@@ -43,7 +45,18 @@ namespace DOL.AI.Brain
             foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
             {
                 CalculateFleeTarget(player);
+                m_timeWithoutPlayers = 0;
                 break;
+            }
+            
+            m_timeWithoutPlayers += ThinkInterval;
+            if (m_timeWithoutPlayers >= 30000)
+            {
+                m_timeWithoutPlayers = 0;
+                if (!Body.IsReturningHome && !Body.Coordinate.IsWithinDistance(Body.SpawnPosition, GameNPC.CONST_WALKTOTOLERANCE))
+                {
+                    Body.WalkToSpawn();
+                }
             }
         }
 
