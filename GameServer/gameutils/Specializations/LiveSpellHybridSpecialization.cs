@@ -42,17 +42,6 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// For Trainer Hybrid Skills aren't summarized !
-        /// </summary>
-        /// <param name="living"></param>
-        /// <param name="step"></param>
-        /// <returns></returns>
-        public override IDictionary<SpellLine, List<Skill>> PretendLinesSpellsForLiving(GameLiving living, int step)
-        {
-            return base.GetLinesSpellsForLiving(living, step);
-        }
-
-        /// <summary>
         /// Get Summarized "Hybrid" Spell Dictionary
         /// List Caster use basic Specialization Getter...
         /// This would have pretty much no reason to be used by GameLiving... (Maybe as a shortcut to force them to use their best spells...)
