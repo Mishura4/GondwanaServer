@@ -129,6 +129,25 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove = CureSpellConstants.MaidenKissSpellTypes;
         }
 
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            var wsd = SpellHandler.FindEffectOnTarget(target, "WarlockSpeedDecrease");
+            if (wsd == null)
+            {
+                return true;
+            }
+
+            // Only cure if the morph is FROG (ResurrectMana == 0).
+            int morphType = wsd.Spell?.ResurrectMana ?? 0;
+            if (morphType == 0)
+            {
+                wsd.Cancel(false);
+                return true;
+            }
+
+            return true;
+        }
+
         public override string GetDelveDescription(GameClient delveClient)
         {
             return LanguageMgr.GetTranslation(delveClient, "SpellDescription.MaidenKiss.MainDescription");

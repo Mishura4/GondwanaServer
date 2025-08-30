@@ -133,6 +133,7 @@ namespace DOL.GS
 
                 if (SpellHandler.FindEffectOnTarget(player, "Petrify") != null || SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease") != null)
                 {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.EmbarkNotAllowed"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                     return false;
                 }
 

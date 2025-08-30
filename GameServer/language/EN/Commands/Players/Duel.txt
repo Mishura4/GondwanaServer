@@ -1,12 +1,16 @@
 Commands.Players.Duel.ChallengesYou:			{0} challenges you for a duel! '/duel accept' to accept, '/duel decline' to refuse.
 Commands.Players.Duel.ConsideringDuel:			You are not challenged for a duel.
 Commands.Players.Duel.Description:				Starts a duel with another player.
-Commands.Players.Duel.DuelOptions:				'/duel <challenge|decline|cancel|surrender|accept> # Duel options
+Commands.Players.Duel.DuelOptions:				'/duel <challenge|decline|cancel|surrender|accept> # Duel options
 Commands.Players.Duel.EnemyRealm:				You cannot challenge a member of an enemy realm.
 Commands.Players.Duel.NeedTarget:				You have to target someone want to defy!
 Commands.Players.Duel.NotInDuel:				You are currently not in a duel!
 Commands.Players.Duel.PlayerVsPlayer:			{0} surrenders to {1}!
 Commands.Players.Duel.SafeZone:					You are in a secure area and you cannot fight here!
+Commands.Players.Duel.TargetSafeZone:			{0} is in a secure area and you cannot fight there!
+Commands.Players.Duel.InHousing:				Dueling is not allowed in housing zones!
+Commands.Players.Duel.InPvP&RvR:				Dueling is not allowed in PvP or RvR zones!
+Commands.Players.Duel.InDungeon:				Dueling is not allowed inside a dungeon!
 Commands.Players.Duel.TargetAccept:				{0} accepts the duel. The fight can begin!
 Commands.Players.Duel.TargetAlreadyChallenging:	{0} has already challenged someone to a duel.
 Commands.Players.Duel.TargetAlreadyConsidering:	{0} is already challenged by someone else.
@@ -30,3 +34,22 @@ Commands.Players.Duel.YouInCombat:				You are currently fighting.
 Commands.Players.Duel.YouInDuel:				You are already in a duel.
 Commands.Players.Duel.YouInGroup:				You are in a group.
 Commands.Players.Duel.YouSurrender:				You surrender to {0}!
+Commands.Players.Duel.Dialog.InvitePrompt1:		{0} challenges you to a duel!
+Commands.Players.Duel.Dialog.InvitePrompt2:		Do you accept?
+Commands.Players.Duel.RematchCooldown:			You must wait {0} before challenging {1} again.
+Commands.Players.Duel.PvPImmunitySelf:			You can't duel until your PvP invulnerability timer wears off!
+Commands.Players.Duel.PvPImmunityTarget:		{0} is temporarily immune to PvP attacks and can't start a duel yet!
+Commands.Players.Duel.MountedSelf:				You cannot start a duel while mounted!
+Commands.Players.Duel.MountedTarget:			{0} is mounted and can't start a duel.
+Commands.Players.Duel.JailedSelf:				You cannot start a duel while in jail!
+Commands.Players.Duel.JailedTarget:				{0} is in jail and can't start a duel here!
+Commands.Players.Duel.StunnedSelf:				You cannot start a duel while stunned.
+Commands.Players.Duel.StunnedTarget:			{0} is stunned and can't start a duel.
+Commands.Players.Duel.DeadSelf:					You can’t duel while you're dead!
+Commands.Players.Duel.DeadTarget:				{0} is dead and unable to duel!
+Commands.Players.Duel.Linkdead:					You cannot start a duel while you or your target is disconnecting or linkdead.
+Commands.Players.Duel.AFKSelf:					You cannot start a duel while AFK.
+Commands.Players.Duel.AFKTarget:				{0} is AFK and can't start a duel yet.
+Commands.Players.Duel.WarlockMorphSelf:			You cannot start a duel while under the "{0}" enchantment!
+Commands.Players.Duel.WarlockMorphTarget:		{0} is under the "{1}" enchantment and can’t start a duel!
+Commands.Players.Duel.DistanceTooFar:			Duel cancelled: you are too far apart.

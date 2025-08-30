@@ -119,7 +119,7 @@ PlayerClass.Occultist.GetTitle.35:	Maître des Esprits
 PlayerClass.Occultist.GetTitle.30:	Maître des Illusions
 PlayerClass.Occultist.GetTitle.25:	Moissonneur du Néant
 PlayerClass.Occultist.GetTitle.20:	Initié des Esprits
-PlayerClass.Occultist.GetTitle.15:	Invocateur d’Ombres
+PlayerClass.Occultist.GetTitle.15:	Invocateur d'Ombres
 PlayerClass.Occultist.GetTitle.10:	Apprenti Spectral
 PlayerClass.Occultist.GetTitle.5:	Initié des Ombres
 

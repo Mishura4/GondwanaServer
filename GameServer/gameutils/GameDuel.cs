@@ -32,6 +32,8 @@ namespace DOL.GS
     /// </summary>
     public class GameDuel
     {
+        private RegionTimer _distanceTimer;
+
         /// <summary>
         /// Duel Initiator
         /// </summary>
@@ -48,6 +50,8 @@ namespace DOL.GS
         public bool Started { get { return m_started; } protected set { m_started = value; } }
         protected volatile bool m_started;
 
+        internal const string REMATCH_KEY_PREFIX = "DuelRematchUntil:";
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -60,53 +64,117 @@ namespace DOL.GS
             Started = false;
         }
 
-        /// <summary>
-        /// Start Duel if is not running.
-        /// </summary>
-        public virtual void Start()
+        private static void ApplyPairCooldown(GamePlayer a, GamePlayer b)
         {
-            if (Started)
-                return;
+            int cool = ServerProperties.Properties.DUEL_REMATCH_COOLDOWN_SECONDS;
+            if (cool <= 0 || a == null || b == null) return;
 
-            Started = true;
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            long until = now + cool;
 
-            Target.DuelStart(Starter);
-            GameEventMgr.AddHandler(Starter, GamePlayerEvent.Quit, new DOLEventHandler(DuelOnPlayerQuit));
-            GameEventMgr.AddHandler(Starter, GamePlayerEvent.Linkdeath, new DOLEventHandler(DuelOnPlayerQuit));
-            GameEventMgr.AddHandler(Starter, GamePlayerEvent.RegionChanged, new DOLEventHandler(DuelOnPlayerQuit));
-            GameEventMgr.AddHandler(Starter, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(DuelOnAttack));
-            GameEventMgr.AddHandler(Starter, GameLivingEvent.AttackFinished, new DOLEventHandler(DuelOnAttack));
+            lock (a.TempProperties)
+                a.TempProperties.setProperty(REMATCH_KEY_PREFIX + b.InternalID, until);
+            lock (b.TempProperties)
+                b.TempProperties.setProperty(REMATCH_KEY_PREFIX + a.InternalID, until);
         }
 
         /// <summary>
-        /// Stops the duel if it is running
+        /// Start Duel if is not running.
         /// </summary>
-        public virtual void Stop()
+        public void Start()
         {
-            if (!Started)
-                return;
+            if (Started) return;
+            Started = true;
 
-            Started = false;
-            Target.DuelStop();
+            Target.DuelStart(Starter);
 
-            var target = Target;
-            Target = null;
+            // Track both players
+            Wire(Starter);
+            Wire(Target);
 
-            foreach (GameSpellEffect effect in Starter.EffectList.GetAllOfType<GameSpellEffect>())
+            _distanceTimer = new RegionTimer(Starter)
             {
-                if (effect.SpellHandler.Caster == target && !effect.SpellHandler.HasPositiveEffect)
-                    effect.Cancel(false);
+                Callback = DistanceWatchdog
+            };
+            _distanceTimer.Start(3000);
+        }
+
+        public void Stop()
+        {
+            if (!Started) return;
+            Started = false;
+
+            // Snapshot and null Target AFTER we’re done with cleanup
+            var a = Starter;
+            var b = Target;
+
+            // Clear duel state on target player first (keeps legacy behavior)
+            b?.DuelStop();
+
+            // Cancel hostile effects both ways
+            if (a != null && b != null)
+            {
+                foreach (GameSpellEffect effect in a.EffectList.GetAllOfType<GameSpellEffect>())
+                    if (effect.SpellHandler.Caster == b && !effect.SpellHandler.HasPositiveEffect)
+                        effect.Cancel(false);
+
+                foreach (GameSpellEffect effect in b.EffectList.GetAllOfType<GameSpellEffect>())
+                    if (effect.SpellHandler.Caster == a && !effect.SpellHandler.HasPositiveEffect)
+                        effect.Cancel(false);
             }
 
-            GameEventMgr.RemoveHandler(Starter, GamePlayerEvent.Quit, new DOLEventHandler(DuelOnPlayerQuit));
-            GameEventMgr.RemoveHandler(Starter, GamePlayerEvent.Linkdeath, new DOLEventHandler(DuelOnPlayerQuit));
-            GameEventMgr.RemoveHandler(Starter, GamePlayerEvent.RegionChanged, new DOLEventHandler(DuelOnPlayerQuit));
-            GameEventMgr.RemoveHandler(Starter, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(DuelOnAttack));
-            GameEventMgr.RemoveHandler(Starter, GameLivingEvent.AttackFinished, new DOLEventHandler(DuelOnAttack));
+            Unwire(Starter);
+            Unwire(Target);
 
             Starter.XPGainers.Clear();
+            if (b != null) b.XPGainers.Clear();
 
-            Starter.Out.SendMessage(LanguageMgr.GetTranslation(Starter.Client, "GameObjects.GamePlayer.DuelStop.DuelEnds"), eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+            if (_distanceTimer != null) { _distanceTimer.Stop(); _distanceTimer = null; }
+
+            Target = null;
+            Starter.Out.SendMessage(LanguageMgr.GetTranslation(Starter.Client, "GameObjects.GamePlayer.DuelStop.DuelEnds"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
+
+        protected virtual void Wire(GamePlayer p)
+        {
+            if (p == null) return;
+            GameEventMgr.AddHandler(p, GamePlayerEvent.Quit, DuelOnPlayerQuit);
+            GameEventMgr.AddHandler(p, GamePlayerEvent.Linkdeath, DuelOnPlayerQuit);
+            GameEventMgr.AddHandler(p, GamePlayerEvent.RegionChanged, DuelOnPlayerQuit);
+            GameEventMgr.AddHandler(p, GameLivingEvent.AttackedByEnemy, DuelOnAttack);
+            GameEventMgr.AddHandler(p, GameLivingEvent.AttackFinished, DuelOnAttack);
+            GameEventMgr.AddHandler(p, GameLivingEvent.Dying, DuelOnDeath);
+        }
+
+        protected virtual void Unwire(GamePlayer p)
+        {
+            if (p == null) return;
+            GameEventMgr.RemoveHandler(p, GamePlayerEvent.Quit, DuelOnPlayerQuit);
+            GameEventMgr.RemoveHandler(p, GamePlayerEvent.Linkdeath, DuelOnPlayerQuit);
+            GameEventMgr.RemoveHandler(p, GamePlayerEvent.RegionChanged, DuelOnPlayerQuit);
+            GameEventMgr.RemoveHandler(p, GameLivingEvent.AttackedByEnemy, DuelOnAttack);
+            GameEventMgr.RemoveHandler(p, GameLivingEvent.AttackFinished, DuelOnAttack);
+            GameEventMgr.RemoveHandler(p, GameLivingEvent.Dying, DuelOnDeath);
+        }
+
+        private int DistanceWatchdog(RegionTimer _)
+        {
+            try
+            {
+                if (!Started || Starter == null || Target == null) return 0;
+                if (Starter.ObjectState != GameObject.eObjectState.Active || Target.ObjectState != GameObject.eObjectState.Active) { Stop(); return 0; }
+                if (Starter.CurrentRegion != Target.CurrentRegion) { Stop(); return 0; }
+
+                if (!Starter.IsWithinRadius(Target, WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    Starter.Out.SendMessage(LanguageMgr.GetTranslation(Starter.Client, "Commands.Players.Duel.DistanceTooFar"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    Target.Out.SendMessage(LanguageMgr.GetTranslation(Target.Client, "Commands.Players.Duel.DistanceTooFar"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    Stop();
+                    return 0;
+                }
+                return 3000;
+            }
+            catch { return 3000; }
         }
 
         /// <summary>
@@ -117,34 +185,88 @@ namespace DOL.GS
         /// <param name="arguments"></param>
         protected virtual void DuelOnAttack(DOLEvent e, object sender, EventArgs arguments)
         {
-            AttackData ad = null;
-            GameLiving target = null;
-            var afea = arguments as AttackFinishedEventArgs;
-            var abeea = arguments as AttackedByEnemyEventArgs;
+            if (!Started || Starter == null || Target == null) return;
 
-            if (afea != null)
+            // Who fired this event (attacker for AttackFinished, victim for AttackedByEnemy, but we use controller-owner anyway)
+            var meLiving = sender as GameLiving;
+            if (meLiving == null) return;
+            meLiving = meLiving.GetController();
+
+            var me = meLiving as GamePlayer;
+            if (me == null) return;
+
+            // The two duelists (controller/owners)
+            var a = (GameLiving)Starter;
+            var b = (GameLiving)Target;
+            a = a.GetController();
+            b = b.GetController();
+
+            AttackData ad = null;
+            GameLiving attacker = null;
+            GameLiving victim = null;
+
+            // Normalize attacker/victim for both event types
+            if (arguments is AttackFinishedEventArgs afea)
             {
                 ad = afea.AttackData;
-                target = ad.Target;
+                attacker = ad?.Attacker?.GetController();
+                victim = ad?.Target?.GetController();
             }
-            else if (abeea != null)
+            else if (arguments is AttackedByEnemyEventArgs abeea)
             {
                 ad = abeea.AttackData;
-                target = ad.Attacker;
+                attacker = ad?.Attacker?.GetController();
+                victim = meLiving; // this event is raised on the victim
             }
 
-            if (ad == null)
+            if (ad == null || attacker == null || victim == null) return;
+
+            // If either duelist is grouped (or joins one), cancel to avoid outside help
+            if ((Starter.Group != null) || (Target.Group != null))
+            {
+                Stop();
                 return;
+            }
 
-            // check pets owner for my and enemy attacks
-            target = target.GetController();
+            bool attackerIsDuelist = ReferenceEquals(attacker, a) || ReferenceEquals(attacker, b);
+            bool victimIsDuelist = ReferenceEquals(victim, a) || ReferenceEquals(victim, b);
 
-            // Duel should end if players join group and trys to attack
-            if (ad.Attacker.Group != null && ad.Attacker.Group.IsInTheGroup(target))
-                Stop();
+            // Allow attacks ONLY if they are strictly between the two duelists
+            if (attackerIsDuelist && victimIsDuelist)
+            {
+                // Legit duel hit in either direction -> keep going
+                return;
+            }
 
-            if (ad.IsHit && target != Target)
-                Stop();
+            // A duelist hit someone else OR a third party attacked a duelist -> cancel duel
+            // If you want to require an actual landed hit to cancel, uncomment the next line:
+            // if (!ad.IsHit) return;
+            Stop();
+        }
+
+        protected virtual void DuelOnDeath(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (!Started || Starter == null || Target == null) return;
+            if (sender is not GameLiving dead) return;
+
+            var deadCtrl = dead.GetController();
+            var a = ((GameLiving)Starter).GetController();
+            var b = ((GameLiving)Target).GetController();
+
+            if (deadCtrl != a && deadCtrl != b) return;
+
+            bool killedByOtherDuelist = false;
+
+            if (arguments is DyingEventArgs dea && dea.Killer is GameLiving killer)
+            {
+                var killerCtrl = killer.GetController();
+                killedByOtherDuelist = (killerCtrl == a && deadCtrl == b) || (killerCtrl == b && deadCtrl == a);
+            }
+
+            if (killedByOtherDuelist)
+                ApplyPairCooldown(Starter, Target);
+
+            Stop();
         }
 
         /// <summary>

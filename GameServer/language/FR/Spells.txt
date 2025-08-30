@@ -273,14 +273,14 @@ SpellDescription.Spymaster.Loockout.MainDescription2:			La cible du guetteur doi
 SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Rune qui inflige des dégâts majeurs aux engins de siège lors de sa détonation.
 SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		La rune inflige {0} dégâts à son activation.
 SpellDescription.Spymaster.EssenceFlare.MainDescription:		Applique un poison qui plonge les ennemis dans un état de somnolence pendant 15 secondes.
-SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Cache votre groupe sous un camouflage. Se déplacer, incanter ou chanter rompt l’effet pour les membres non furtifs.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Cache votre groupe sous un camouflage. Se déplacer, incanter ou chanter rompt l'effet pour les membres non furtifs.
 SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Draine {0} endurance aux ennemis environnants.
 SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Accorde un bonus de dégâts de {0}% contre les équipements de siège et les structures de fort.
 SpellDescription.Battlemaster.MLManadrain.MainDescription:		Draine {0} mana des ennemis environnants.
 SpellDescription.Battlemaster.Grapple.MainDescription1:			Effet à courte portée ciblant un ennemi, le restreignant pendant {0} secondes et annulant tous les effets.
 SpellDescription.Battlemaster.Grapple.MainDescription2:			Immobilise la cible, l'empêchant de bouger ou d'utiliser des attaques de mêlée, mais elle peut encore lancer des sorts et des chants pendant 10 secondes.
 SpellDescription.Battlemaster.Grapple.MainDescription3:			La cible immobilisée ne peut pas être attaquée en mêlée.
-SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	Accorde {0}% de chance de déclencher des dégâts d’essence bonus lors des attaques au corps-à-corps.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	Accorde {0}% de chance de déclencher des dégâts d'essence bonus lors des attaques au corps-à-corps.
 SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		Une attaque à distance utilisant les formules de dégâts de mêlée.
 SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Les attaques de mêlée sont désactivées pendant 10 secondes après ce sort.
 SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Réduit la résistance des ennemis proches aux dégâts d'essence de {0}%.
@@ -289,12 +289,12 @@ SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Protège un all
 SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	La protection reste active uniquement si la cible protégée reste immobile.
 SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Réduit l'agilité de la cible de {0}%.
 SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:		Réduit la vitesse d'incantation des ennemis de {0}%.
-SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Réduit la mana, la santé et la fatigue des ennemis dans la zone d’effet de {0}%.
-SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Réduit la mana, la santé et la fatigue des ennemis dans la zone d’effet de {0}%, mais vous coûte {1}% de votre propre santé.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Réduit la mana, la santé et la fatigue des ennemis dans la zone d'effet de {0}%.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Réduit la mana, la santé et la fatigue des ennemis dans la zone d'effet de {0}%, mais vous coûte {1}% de votre propre santé.
 SpellDescription.Banelord.Oppression.MainDescription:			Réduit l'encombrement maximum des ennemis proches de {0}%.
 SpellDescription.Banelord.FatDebuff.MainDescription:			Augmente la dépense d'endurance des attaques ennemies de {0}%.
 SpellDescription.Banelord.MissHit.MainDescription:				Réduit de {0}% les chances des ennemis proches d'atteindre leurs cibles.
-SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Snare de zone affectant la vitesse des ennemis de {0}% tout en étourdissant l’utilisateur.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Snare de zone affectant la vitesse des ennemis de {0}% tout en étourdissant l'utilisateur.
 SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:		La cible est étourdie pendant {0} secondes et ne peut effectuer aucune action.
 SpellDescription.Banelord.ToHitBuff.MainDescription:			Effet de zone augmentant de {0}% la chance pour les alliés de toucher leurs ennemis.
 SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Effet de zone réduisant l'efficacité des ennemis pour déterminer la variance des dégâts de sorts et de mêlée de {0}%.
@@ -306,7 +306,7 @@ SpellDescription.Perfector.FOP.MainDescription1:				Crée une sphère aux pieds 
 SpellDescription.Perfector.FOP.MainDescription2:				Les alliés ayant combattu en PvE au cours des 10 dernières secondes ne sont pas affectés par la sphère.
 SpellDescription.Perfector.FOR.MainDescription:					Rune qui réduit de {0}% l'impact des sorts de contrôle sur les alliés à proximité.
 SpellDescription.Perfector.SickHeal.MainDescription:			Permet à la cible de récupérer des effets liés à la résurrection.
-SpellDescription.Perfector.FOD.MainDescription:					Rune protectrice qui draine {0}% de mana des ennemis se trouvant dans son rayon d’action.
+SpellDescription.Perfector.FOD.MainDescription:					Rune protectrice qui draine {0}% de mana des ennemis se trouvant dans son rayon d'action.
 SpellDescription.Perfector.PoT.MainDescription:					Effet de régénération continue augmentant de {0}% la mana offerte à chaque tic.
 SpellDescription.Perfector.CCResist.MainDescription:			Augmente votre résistance aux effets de contrôle de {0} secondes.
 SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Effet de zone régénérant {0}% de leur maximum la santé, la mana et l'endurance des alliés proches. 
@@ -379,6 +379,20 @@ CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	humanoïde, animale
 IllusionSpell.Arrangement.Random:		aléatoirement
 IllusionSpell.Arrangement.Circle:		en cercle
 IllusionSpell.Arrangement.Line:			en ligne
+
+#WarlockSpeedDecrease SpellHandler Appearances
+WarlockSpeedDecrease.Appearance.Frog:			Grenouille
+WarlockSpeedDecrease.Appearance.Worm:			Ver
+WarlockSpeedDecrease.Appearance.Lizard:			Lézard
+WarlockSpeedDecrease.Appearance.Wisp:			Lumière mystique
+WarlockSpeedDecrease.Appearance.Fairy:			Fée
+WarlockSpeedDecrease.Appearance.Scarab:			Scarabée
+WarlockSpeedDecrease.Appearance.Spider:			Araignée
+WarlockSpeedDecrease.Appearance.Cyclop:			Cyclope
+WarlockSpeedDecrease.Appearance.Mantis:			Mante religieuse
+WarlockSpeedDecrease.Appearance.Flame:			Feu follet
+WarlockSpeedDecrease.Appearance.Bird:			Hirondelle
+WarlockSpeedDecrease.Appearance.Simulacrum:		Simulacre
 
 # DamageAddAndShield
 DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} vous touche pour {1} points de dommage additionels !

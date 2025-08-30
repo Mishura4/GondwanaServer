@@ -22,7 +22,6 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.GS.ServerProperties;
 using DOL.Database;
-using DOL.GS.PacketHandler;
 using DOLDatabase.Tables;
 using DOL.Language;
 using System.Linq;
@@ -145,6 +144,7 @@ namespace DOL.GS.Commands
             }
             messages.Add(FormatTaskStatus(player, "OutlawPlayersSentToJail", taskData.OutlawPlayersSentToJail));
             messages.Add(FormatTaskStatus(player, "EnemiesKilledInAdrenalineMode", taskData.EnemiesKilledInAdrenalineMode));
+            messages.Add(FormatTaskStatus(player, "EnemyKilledInDuel", taskData.EnemyKilledInDuel));
             messages.Add(FormatTaskStatus(player, "QuestsCompleted", taskData.QuestsCompleted));
             messages.Add("");
             messages.Add("");
@@ -159,15 +159,20 @@ namespace DOL.GS.Commands
 
         private string FormatTaskStatus(GamePlayer player, string taskName, string taskData)
         {
+            // Default & sanitize
+            if (string.IsNullOrWhiteSpace(taskData)) taskData = "0|0";
             var parts = taskData.Split('|');
-            var level = int.Parse(parts[0]);
-            var currentProgress = int.Parse(parts[1]);
+
+            int level = 0, currentProgress = 0;
+            if (parts.Length > 0 && !int.TryParse(parts[0], out level)) level = 0;
+            if (parts.Length > 1 && !int.TryParse(parts[1], out currentProgress)) currentProgress = 0;
+
             var maxLevel = TaskManager.GetMaxLevel(taskName);
             string language = player.Client.Account.Language;
+
             if (level >= maxLevel)
-            {
                 return $"+ {LanguageMgr.GetTranslation(language, $"Tasks.{taskName.Replace(" ", "")}")} ({LanguageMgr.GetTranslation(language, "Tasks.MaxLevelReached")})";
-            }
+
             var maxProgress = TaskManager.GetNextLevelThreshold(player, taskName, level);
             return $"+ {LanguageMgr.GetTranslation(language, $"Tasks.{taskName.Replace(" ", "")}")} ({LanguageMgr.GetTranslation(language, "Tasks.Level", level)}) : {currentProgress}/{maxProgress}";
         }

@@ -133,9 +133,14 @@ namespace DOL.GS
                     return false;
                 }
 
-                if (SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease") != null)
+                var wsd = SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease");
+                if (wsd != null)
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Frog"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                    int rm = wsd.Spell?.ResurrectMana ?? 0;
+                    string appearancetype = LanguageMgr.GetWarlockMorphAppearance(player.Client.Account.Language, rm);
+
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Morphed", appearancetype), eChatType.CT_System, eChatLoc.CL_ChatWindow);
+
                     return false;
                 }
 

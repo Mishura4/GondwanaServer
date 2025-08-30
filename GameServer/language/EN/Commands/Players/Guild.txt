@@ -38,7 +38,7 @@ Commands.Players.Guild.BannerSummoned.You:		    You have summoned your guild ban
 Commands.Players.Guild.BannerSummoned:		    {0} has summoned the guild banner.
 Commands.Players.Guild.BannerSummonDamned:			You cannot summon your guild banner while beeing damned!
 Commands.Players.Guild.BannerSummonPetrified:		You cannot summon your guild banner while beeing petrified!
-Commands.Players.Guild.BannerSummonFrog:			You cannot summon your guild banner while beeing under a "Frog" enchantment.
+Commands.Players.Guild.BannerSummonMorphed:			You cannot summon your guild banner while beeing under a "{0}" enchantment.
 Commands.Players.Guild.BannerSummonJailed:			You cannot summon your guild banner while beeing imprisoned.
 Commands.Players.Guild.BannerUnsummoned.You:		You have put away your guild banner.
 Commands.Players.Guild.BannerUnsummoned:			{0} has put away the guild banner.

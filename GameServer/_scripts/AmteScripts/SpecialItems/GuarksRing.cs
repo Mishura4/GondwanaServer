@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using AmteScripts.Managers;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.Language;
@@ -280,8 +281,10 @@ namespace DOL.GS.Scripts
                     }
 
                     ushort oldRegion = player.CurrentRegionID;
-                    player.MoveTo(lieu.Region, lieu.X, lieu.Y, lieu.Z, lieu.Heading);
-                    if (lieu.Region == oldRegion)
+                    var dest = Position.Create(regionID: lieu.Region, x: lieu.X, y: lieu.Y, z: lieu.Z, heading: lieu.Heading);
+                    player.MoveTo(dest);
+
+                    if (dest.RegionID == oldRegion)
                         new RegionTimer(player, EffectCallback, 500);
                     else
                         GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, EnterWorld);
@@ -339,9 +342,14 @@ namespace DOL.GS.Scripts
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
-            if (SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease") != null)
+            var wsd = SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease");
+            if (wsd != null)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageFrog"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                int rm = wsd.Spell?.ResurrectMana ?? 0;
+                string appearancetype = LanguageMgr.GetWarlockMorphAppearance(player.Client.Account.Language, rm);
+
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageMorphed", appearancetype), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
                 return false;
             }
             return true;

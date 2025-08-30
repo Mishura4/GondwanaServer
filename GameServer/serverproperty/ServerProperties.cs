@@ -1716,6 +1716,15 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("pvp", "pvp_allow_taskspoints", "Whether players receive task points (KillEnemyPlayersGroup or KillEnemyPlayersAlone) for kills in PvP mode", true)]
         public static bool PVP_ALLOW_TASKSPOINTS;
+
+        /// <summary>
+        /// Cooldown (in seconds) applied to BOTH players of a duel pair after a duel that ended with a kill.
+        /// Cancels/surrenders/too-far/interference do NOT set this cooldown. Set to 0 to disable.
+        /// </summary>
+        [ServerProperty("duel", "duel_rematch_cooldown_seconds",
+            "Cooldown in seconds before the same two players can duel again after a duel ended by a kill (win/loss). Surrenders/cancels do not trigger.", 200)]
+        public static int DUEL_REMATCH_COOLDOWN_SECONDS;
+
         #endregion
 
         #region KEEPS

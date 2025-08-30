@@ -62,18 +62,19 @@ namespace DOL.GS
             if (!Properties.ENABLE_TASK_SYSTEM)
                 return;
 
-            string playerName = player.Name;
-            TaskXPlayer taskData = player.TaskXPlayer;
+            var taskData = player.TaskXPlayer ?? EnsureTaskData(player);
 
-            if (taskData == null)
-            {
-                taskData = EnsureTaskData(player);
-            }
+            var prop = taskData.GetType().GetProperty(taskName);
+            if (prop == null) { player?.Out?.SendMessage($"[TaskManager] Unknown task '{taskName}'.", eChatType.CT_System, eChatLoc.CL_SystemWindow); return; }
 
-            var taskValue = taskData.GetType().GetProperty(taskName)!.GetValue(taskData)!.ToString();
-            var parts = taskValue!.Split('|');
-            var level = int.Parse(parts[0]);
-            var currentProgress = int.Parse(parts[1]);
+            string raw = Convert.ToString(prop.GetValue(taskData)) ?? "0|0";
+            if (!raw.Contains("|")) raw = "0|0";
+
+            var parts = raw.Split('|');
+            int level = 0, currentProgress = 0;
+            if (parts.Length > 0 && !int.TryParse(parts[0], out level)) level = 0;
+            if (parts.Length > 1 && !int.TryParse(parts[1], out currentProgress)) currentProgress = 0;
+
             var maxLevel = GetMaxLevel(taskName);
             var nextLevelThreshold = GetNextLevelThreshold(player, taskName, level);
 
@@ -124,6 +125,9 @@ namespace DOL.GS
                 case "EnemiesKilledInAdrenalineMode":
                     taskData.EnemiesKilledInAdrenalineModeStats++;
                     break;
+                case "EnemyKilledInDuel":
+                    taskData.EnemyKilledInDuelStats++;
+                    break;
                 case "QuestsCompleted":
                     taskData.QuestsCompletedStats++;
                     break;
@@ -163,6 +167,7 @@ namespace DOL.GS
                     "SuccessfulPvPThefts" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SuccessfulPvPTheftsSpecialToken", level),
                     "OutlawPlayersSentToJail" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.OutlawPlayersSentToJailSpecialToken", level),
                     "EnemiesKilledInAdrenalineMode" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.EnemiesKilledInAdrenalineModeSpecialToken", level),
+                    "EnemyKilledInDuel" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.EnemyKilledInDuelSpecialToken", level),
                     "QuestsCompleted" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.QuestsCompletedSpecialToken", level),
                     _ => string.Empty
                 };
@@ -201,6 +206,7 @@ namespace DOL.GS
                 "SuccessfulPvPThefts" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SuccessfulPvPTheftsLog", (levelUp ? nextLevelThreshold : currentProgress), nextLevelThreshold),
                 "OutlawPlayersSentToJail" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.OutlawPlayersSentToJailLog", (levelUp ? nextLevelThreshold : currentProgress), nextLevelThreshold),
                 "EnemiesKilledInAdrenalineMode" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.EnemiesKilledInAdrenalineModeLog", (levelUp ? nextLevelThreshold : currentProgress), nextLevelThreshold),
+                "EnemyKilledInDuel" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.EnemyKilledInDuelLog", (levelUp ? nextLevelThreshold : currentProgress), nextLevelThreshold),
                 "QuestsCompleted" => LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.QuestsCompletedLog", (levelUp ? nextLevelThreshold : currentProgress), nextLevelThreshold),
                 _ => string.Empty
             };
@@ -219,6 +225,7 @@ namespace DOL.GS
                 "SuccessfulPvPThefts" => $"TaskToken_Thief_lv{level}",
                 "OutlawPlayersSentToJail" => $"TaskToken_Bounty_Hunter_lv{level}",
                 "EnemiesKilledInAdrenalineMode" => $"TaskToken_Wrath_lv{level}",
+                "EnemyKilledInDuel" => $"TaskToken_Duelist_lv{level}",
                 "QuestsCompleted" => $"TaskToken_Adventurer_lv{level}",
                 "TurnInPvPGvGTaskToken" => $"TaskToken_PvPGvG_lv{level}",
                 "TurnInPvETaskToken" => $"TaskToken_PvE_lv{level}",
@@ -253,10 +260,16 @@ namespace DOL.GS
             if (!Properties.ENABLE_TASK_SYSTEM)
                 return;
 
-            var tokenValue = taskData.GetType().GetProperty(tokenName)!.GetValue(taskData)!.ToString();
-            var parts = tokenValue!.Split('|');
-            var level = int.Parse(parts[0]);
-            var currentProgress = int.Parse(parts[1]);
+            var prop = taskData.GetType().GetProperty(tokenName);
+            if (prop == null) return;
+
+            string raw = Convert.ToString(prop.GetValue(taskData)) ?? "0|0";
+            if (!raw.Contains("|")) raw = "0|0";
+
+            var parts = raw.Split('|');
+            int level = 0, currentProgress = 0;
+            if (parts.Length > 0 && !int.TryParse(parts[0], out level)) level = 0;
+            if (parts.Length > 1 && !int.TryParse(parts[1], out currentProgress)) currentProgress = 0;
 
             currentProgress += points;
             if (level < TaskManager.GetMaxLevel(tokenName) && currentProgress >= GetNextLevelThreshold(player, tokenName, level))
@@ -602,6 +615,15 @@ namespace DOL.GS
                     2 => 60,
                     3 => 85,
                     4 => 120,
+                    _ => int.MaxValue
+                },
+                "EnemyKilledInDuel" => level switch
+                {
+                    0 => 40,
+                    1 => 60,
+                    2 => 100,
+                    3 => 150,
+                    4 => 200,
                     _ => int.MaxValue
                 },
                 "QuestsCompleted" => level switch

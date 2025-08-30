@@ -22,7 +22,7 @@ Items.Specialitems.GuarkRingUsageMounted:			Vous ne pouvez pas utiliser la magie
 Items.Specialitems.GuarkRingUsageStealthed:			Vous ne pouvez pas utiliser la magie céleste tout en étant furtif.
 Items.Specialitems.GuarkRingUsagePetrified:			Vous ne pouvez pas utiliser la magie céleste en étant pétrifié·e!
 Items.Specialitems.GuarkRingUsageDamned:			Vous ne pouvez pas utiliser la magie céleste en étant damné·e!
-Items.Specialitems.GuarkRingUsageFrog:				Vous ne pouvez pas utiliser la magie céleste en étant sous l'effet d'un enchantement "Grenouille"!
+Items.Specialitems.GuarkRingUsageMorphed:				Vous ne pouvez pas utiliser la magie céleste en étant sous l'effet d'un enchantement "{0}"!
 Items.Specialitems.GuarkRingCannotUseHere:			Vous ne pouvez pas utiliser cet objet ici.
 Items.Specialitems.GuarkRingDoNotMove:				Vous devez rester sur place pour utiliser cet objet.
 Items.Specialitems.GuarkRingWaitBeforeUse:			Vous avez été en combat récemment, vous devez patienter pour utiliser cet objet.

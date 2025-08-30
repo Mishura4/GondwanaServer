@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
 using AmteScripts.Managers;
@@ -15,7 +16,20 @@ namespace DOL.GS.GameEvents
 {
     public static class DeathLog
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+        private static readonly ConcurrentDictionary<string, long> _lastProcessed = new();
+
+        private static bool IsLikelyDuplicate(GamePlayer killer, GamePlayer victim, int windowMs = 1500)
+        {
+            string key = killer.InternalID + "|" + victim.InternalID;
+            long now = victim.CurrentRegion?.Time ?? Environment.TickCount64;
+
+            if (_lastProcessed.TryGetValue(key, out var prev) && (now - prev) >= 0 && (now - prev) < windowMs)
+                return true;
+
+            _lastProcessed[key] = now;
+            return false;
+        }
 
         [ScriptLoadedEvent]
         public static void OnScriptCompiled(DOLEvent e, object sender, EventArgs args)
@@ -31,6 +45,10 @@ namespace DOL.GS.GameEvents
             GameEventMgr.RemoveHandler(GameLivingEvent.Dying, new DOLEventHandler(LivingKillEnnemy));
         }
 
+        private static bool IsDuelKill(GamePlayer killer, GamePlayer victim)
+        {
+            return (killer != null && killer.DuelTarget == victim) || (victim != null && victim.DuelTarget == killer);
+        }
 
         public static void LivingKillEnnemy(DOLEvent e, object sender, EventArgs args)
         {
@@ -41,6 +59,12 @@ namespace DOL.GS.GameEvents
             {
                 if (killer is GamePlayer playerKiller)
                 {
+                    if (IsDuelKill(playerKiller, playerVictim))
+                    {
+                        // Ignore kills on Duels
+                        return;
+                    }
+
                     if (playerVictim.Reputation < 0)
                     {
                         // Ignore kills on Outlaws
@@ -65,7 +89,13 @@ namespace DOL.GS.GameEvents
                         return;
                     }
 
-                    if (DeathCheck.Instance.IsChainKiller(playerKiller, playerVictim))
+                    if (IsLikelyDuplicate(playerKiller, playerVictim))
+                        return;
+
+                    bool autoReport = DeathCheck.Instance.IsChainKiller(playerKiller, playerVictim);
+                    GameServer.Database.AddObject(new DBDeathLog(playerVictim, playerKiller, autoReport));
+
+                    if (autoReport)
                     {
                         // Automatically report player
                         --playerKiller.Reputation;

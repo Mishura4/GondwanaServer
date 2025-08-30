@@ -380,6 +380,20 @@ IllusionSpell.Arrangement.Random:		randomly
 IllusionSpell.Arrangement.Circle:		in a circle
 IllusionSpell.Arrangement.Line:			in a line
 
+#WarlockSpeedDecrease SpellHandler Appearances
+WarlockSpeedDecrease.Appearance.Frog:			Frog
+WarlockSpeedDecrease.Appearance.Worm:			Worm
+WarlockSpeedDecrease.Appearance.Lizard:			Lizard
+WarlockSpeedDecrease.Appearance.Wisp:			Wisp
+WarlockSpeedDecrease.Appearance.Fairy:			Fairy
+WarlockSpeedDecrease.Appearance.Scarab:			Scarabée
+WarlockSpeedDecrease.Appearance.Spider:			Spider
+WarlockSpeedDecrease.Appearance.Cyclop:			Cyclop
+WarlockSpeedDecrease.Appearance.Mantis:			Mantis
+WarlockSpeedDecrease.Appearance.Flame:			Flame
+WarlockSpeedDecrease.Appearance.Bird:			Bird
+WarlockSpeedDecrease.Appearance.Simulacrum:		Simulacrum
+
 # DamageAddAndShield
 DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} does {1} extra damage(s) to you!
 DamageAddAndShield.EventHandlerDA.YouHitExtra:		You hit {0} for {1} extra damage(s)!

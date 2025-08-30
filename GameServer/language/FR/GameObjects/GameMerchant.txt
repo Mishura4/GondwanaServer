@@ -19,9 +19,10 @@ GameMerchant.OnPlayerSell.GivesYou:				{0} vous donne {1} pour {2}.
 GameMerchant.OnPlayerSell.IsntInterested:		{0} n'est pas interessé·e par {1}.
 GameMerchant.OnPlayerSell.TooFarAway:			{0} est trop loin !
 GameMerchant.OnPlayerWithdraw:		           	Vous retirez {0} de votre marchand.
-GameMerchant.OnPlayerInteract.Outlaw:			Je n’attends rien de valable d’un gredin tel que toi !
-GameMerchant.OnPlayerInteract.Frog:				En tant que grenouille, grimper sur un cheval risque d'être assez délicat !
-GameMerchant.OnPlayerInteract.Damned:			Ne t’approche pas, créature damnée !
+GameMerchant.OnPlayerInteract.Outlaw:			Je n'attends rien de valable d’un gredin tel que toi !
+GameMerchant.OnPlayerInteract.Morphed:			En tant que {0}, grimper sur un cheval risque d'être assez délicat !
+GameMerchant.OnPlayerInteract.Damned:			Ne t'approche pas, créature damnée !
+GameMerchant.OnPlayerInteract.EmbarkNotAllowed:	Je ne peux pas vous laisser embarquer pour le moment !
 
 # GameTerritoryMerchant
 GameMerchant.Interact.Territory.NotSameGuild:	Je n'ai rien à vous vendre !

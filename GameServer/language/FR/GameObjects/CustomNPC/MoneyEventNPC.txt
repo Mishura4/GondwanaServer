@@ -9,5 +9,5 @@ MoneyEventNPC.NeedMoreResource3TextDefault:		Salutations ! Il me faudrait {0}, a
 MoneyEventNPC.NeedMoreResource4TextDefault:		Salutations ! Il me faudrait {0}, ainsi que {2} {3}, {4} {5}, {6} {7}, et {8} {9} pour lancer mon événement ! Actuellement, je n'ai que {1}, {10} {3}, {11} {5}, {12} {7}, et {13} {9}. Je compte sur toi !
 MoneyEventNPC.MoneyRequirementsReached:			Le compte est bon ! Nous avons pu réunir les fonds nécessaires !
 MoneyEventNPC.ResourceRequirementsReached:		Nous avons pu réunir le nombre de {0} nécessaires. Merci !
-MoneyEventNPC.NoNeedMoreMoney:					Nous avons déjà assez d’argent, merci !
-MoneyEventNPC.NoNeedMoreResources:				Je n’ai pas besoin de plus de {0}, merci.
+MoneyEventNPC.NoNeedMoreMoney:					Nous avons déjà assez d'argent, merci !
+MoneyEventNPC.NoNeedMoreResources:				Je n'ai pas besoin de plus de {0}, merci.

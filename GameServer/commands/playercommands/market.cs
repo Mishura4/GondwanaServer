@@ -71,17 +71,8 @@ namespace DOL.GS.Commands
                         bool inPvP = client.Player.IsInPvP;
                         bool inRvR = client.Player.IsInRvR;
                         bool inDungeon = client.Player.CurrentRegion.IsDungeon;
-                        bool inBG = false;
-                        foreach (var keep in GameServer.KeepManager.GetKeepsOfRegion(client.Player.CurrentRegionID))
-                        {
-                            if (keep.DBKeep.BaseLevel < 50)
-                            {
-                                inBG = true;
-                                break;
-                            }
-                        }
 
-                        if (inHousing || inPvP || inRvR || inBG)
+                        if (inHousing || inPvP || inRvR)
                         {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
@@ -116,9 +107,14 @@ namespace DOL.GS.Commands
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployPetrify"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        if (SpellHandler.FindEffectOnTarget(client.Player, "WarlockSpeedDecrease") != null)
+                        var wsd = SpellHandler.FindEffectOnTarget(client.Player, "WarlockSpeedDecrease");
+                        if (wsd != null)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployFrog"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            int rm = wsd.Spell?.ResurrectMana ?? 0;
+                            string appearancetype = LanguageMgr.GetWarlockMorphAppearance(client.Account.Language, rm);
+
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.Cant.DeployMorphed", appearancetype), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
                             break;
                         }
 

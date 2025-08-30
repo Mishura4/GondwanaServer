@@ -1,7 +1,7 @@
 # JAILMGR
 GameJail.ReputNeg01:			Fugitif Hors-la-loi
 GameJail.ReputNeg02:			Brigand
-GameJail.ReputNeg03:			Lieutenant de l’Ombre
+GameJail.ReputNeg03:			Lieutenant de l'Ombre
 GameJail.ReputNeg04:			Machinateur
 GameJail.ReputNeg05:			Souverain du Crime
 GameJail.JailedRP:			Vous avez été mis en prison pour vos actes par {0}. Votre caution s'élève à {1} Or. Pour sortir, demandez à quelqu'un de payer votre caution à Stronghold, le gardien de la prison. Vous pouvez également demander de l'aide à votre guilde avec la commande "/gc jailrelease".

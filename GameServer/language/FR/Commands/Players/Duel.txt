@@ -7,6 +7,10 @@ Commands.Players.Duel.NeedTarget:				Vous devez cibler quelqu'un pour le défier
 Commands.Players.Duel.NotInDuel:				Vous n'êtes pas en duel !
 Commands.Players.Duel.PlayerVsPlayer:			{0} se rend à {1} !
 Commands.Players.Duel.SafeZone:					Vous êtes dans une zone sécurisée et ne pouvez vous battre en duel ici !
+Commands.Players.Duel.TargetSafeZone:			{0} est dans une zone sécurisée et ne peut pas se battre en duel ici !
+Commands.Players.Duel.InHousing:				Les duels ne sont pas autorisés dans les zones résidentielles !
+Commands.Players.Duel.InPvP&RvR:				Les duels ne sont pas autorisés dans les zones RvR/PvP !
+Commands.Players.Duel.InDungeon:				Les duels ne sont pas autorisés dans les donjons !
 Commands.Players.Duel.TargetAccept:				{0} accepte le duel. Le combat peut commencer !
 Commands.Players.Duel.TargetAlreadyChallenging:	{0} a déjà défié quelqu'un en duel.
 Commands.Players.Duel.TargetAlreadyConsidering:	{0} est déjà défié·e par quelqu'un d'autre.
@@ -30,3 +34,22 @@ Commands.Players.Duel.YouInCombat:				Vous êtes en combat.
 Commands.Players.Duel.YouInDuel:				Vous êtes déjà en duel.
 Commands.Players.Duel.YouInGroup:				Vous êtes dans un groupe.
 Commands.Players.Duel.YouSurrender:				Vous vous rendez à {0} !
+Commands.Players.Duel.Dialog.InvitePrompt1:		{0} vous défie en duel !
+Commands.Players.Duel.Dialog.InvitePrompt2:		Acceptez-vous ?
+Commands.Players.Duel.RematchCooldown:			Vous devez attendre {0} avant de défier {1} à nouveau.
+Commands.Players.Duel.PvPImmunitySelf:			Vous devez attendre la fin de votre immunité PvP pour commencer un duel !
+Commands.Players.Duel.PvPImmunityTarget:		{0} est temporairement immunisé aux attaques PvP et ne peut pas encore commencer un duel !
+Commands.Players.Duel.MountedSelf:				Vous ne pouvez pas commencer un duel en étant à cheval !
+Commands.Players.Duel.MountedTarget:			{0} est à cheval et ne peut pas commencer un duel.
+Commands.Players.Duel.JailedSelf:				Vous ne pouvez pas défier en duel pendant que vous êtes emprisonné !
+Commands.Players.Duel.JailedTarget:				{0} est en prison et ne peut pas commencer un duel ici !
+Commands.Players.Duel.StunnedSelf:				Vous ne pouvez pas commencer un duel en étant étourdi.
+Commands.Players.Duel.StunnedTarget:			{0} est étourdi et incapable de participer à un duel.
+Commands.Players.Duel.DeadSelf:					Vous ne pouvez pas commencer un duel en étant mort·e.
+Commands.Players.Duel.DeadTarget:				{0} est mort·e et incapable de participer à un duel.
+Commands.Players.Duel.Linkdead:					Vous ne pouvez pas défier en duel si vous ou votre cible êtes en linkdead ou en train de quitter.
+Commands.Players.Duel.AFKSelf:					Vous ne pouvez pas défier en duel pendant que vous êtes AFK.
+Commands.Players.Duel.AFKTarget:				{0} est AFK et incapable de participer à un duel maintenant.
+Commands.Players.Duel.WarlockMorphSelf:			Vous ne pouvez pas commencer un duel sous l'enchantement "{0}" !
+Commands.Players.Duel.WarlockMorphTarget:		{0} est affecté par l'enchantement "{1}" et ne peut pas participer à un duel !
+Commands.Players.Duel.DistanceTooFar:			Duel annulé : vous êtes trop loin l'un de l'autre.

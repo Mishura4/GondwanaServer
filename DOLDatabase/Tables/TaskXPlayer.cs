@@ -43,6 +43,7 @@ namespace DOL.Database
         private string m_successfulPvPThefts = "0|0";
         private string m_outlawPlayersSentToJail = "0|0";
         private string m_enemiesKilledInAdrenalineMode = "0|0";
+        private string m_enemyKilledInDuel = "0|0";
         private string m_questsCompleted = "0|0";
         private int m_killEnemyPlayersGroupStats;
         private int m_killEnemyPlayersAloneStats;
@@ -59,6 +60,7 @@ namespace DOL.Database
         private int m_successfulPvPTheftsStats;
         private int m_outlawPlayersSentToJailStats;
         private int m_enemiesKilledInAdrenalineModeStats;
+        private int m_enemyKilledInDuelStats;
         private int m_questsCompletedStats;
 
         [DataElement(AllowDbNull = false, Unique = true)]
@@ -425,6 +427,17 @@ namespace DOL.Database
         }
 
         [DataElement(AllowDbNull = false)]
+        public string EnemyKilledInDuel
+        {
+            get { return m_enemyKilledInDuel; }
+            set
+            {
+                Dirty = true;
+                m_enemyKilledInDuel = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
         public string QuestsCompleted
         {
             get { return m_questsCompleted; }
@@ -597,6 +610,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_enemiesKilledInAdrenalineModeStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int EnemyKilledInDuelStats
+        {
+            get { return m_enemyKilledInDuelStats; }
+            set
+            {
+                Dirty = true;
+                m_enemyKilledInDuelStats = value;
             }
         }
 

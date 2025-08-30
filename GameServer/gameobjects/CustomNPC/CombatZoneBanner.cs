@@ -17,6 +17,7 @@ namespace DOL.GS
         public Guild OwningGuild { get; private set; }
 
         public AbstractArea CombatArea { get; private set; }
+        public List<CombatZoneMiniBanner> MiniBanners { get; } = new List<CombatZoneMiniBanner>();
 
         public CombatZoneBanner()
             : base()
@@ -44,6 +45,20 @@ namespace DOL.GS
 
         public override void Delete()
         {
+            if (MiniBanners != null)
+            {
+                foreach (var mini in MiniBanners)
+                {
+                    try
+                    {
+                        mini.RemoveFromWorld(0);
+                        mini.ObjectState = eObjectState.Deleted;
+                    }
+                    catch { /* ignore */ }
+                }
+                MiniBanners.Clear();
+            }
+
             Notify(GameObjectEvent.Delete, this);
             RemoveFromWorld(0); // will not respawn
             ObjectState = eObjectState.Deleted;

@@ -728,6 +728,50 @@ namespace DOL.Language
             }
         }
 
+        public static string GetWarlockMorphAppearance(string language, int morphType)
+        {
+            // 0=frog, 1=worm, 2=lizard, 3=wisp, 4=fairy, 5=flame
+            string key = morphType switch
+            {
+                1 => "WarlockSpeedDecrease.Appearance.Worm",
+                2 => "WarlockSpeedDecrease.Appearance.Lizard",
+                3 => "WarlockSpeedDecrease.Appearance.Wisp",
+                4 => "WarlockSpeedDecrease.Appearance.Fairy",
+                5 => "WarlockSpeedDecrease.Appearance.Scarab",
+                6 => "WarlockSpeedDecrease.Appearance.Scarab",
+                7 => "WarlockSpeedDecrease.Appearance.Spider",
+                8 => "WarlockSpeedDecrease.Appearance.Cyclop",
+                9 => "WarlockSpeedDecrease.Appearance.Mantis",
+                10 => "WarlockSpeedDecrease.Appearance.Flame",
+                11 => "WarlockSpeedDecrease.Appearance.Bird",
+                12 => "WarlockSpeedDecrease.Appearance.Simulacrum",
+                _ => "WarlockSpeedDecrease.Appearance.Frog",
+            };
+
+            if (!TryGetTranslation(out string translation, language, key))
+            {
+                // Fallbacks include the article so they fit “…into {0}…”
+                translation = morphType switch
+                {
+                    1 => "Worm",
+                    2 => "Lizard",
+                    3 => "Wisp",
+                    4 => "Fairy",
+                    5 => "Scarab",
+                    6 => "Scarab",
+                    7 => "Spider",
+                    8 => "Cyclop",
+                    9 => "Mantis",
+                    10 => "Flame",
+                    11 => "Bird",
+                    12 => "Simulacrum",
+                    _ => "Frog",
+                };
+            }
+
+            return translation;
+        }
+
         public static string GetDamageOfType(GameClient client, eDamageType type)
         {
             return GetDamageOfType(client?.Account?.Language ?? Properties.SERV_LANGUAGE, type);
@@ -752,7 +796,17 @@ namespace DOL.Language
         {
             return GetProperty(player?.Client, prop);
         }
-        
+
+        public static string GetWarlockMorphAppearance(GameClient client, int morphType)
+        {
+            return GetWarlockMorphAppearance(client?.Account?.Language ?? DefaultLanguage, morphType);
+        }
+
+        public static string GetWarlockMorphAppearance(GamePlayer player, int morphType)
+        {
+            return GetWarlockMorphAppearance(player?.Client, morphType);
+        }
+
         public static string GetCardinalDirection(string languageID, Angle direction)
         {
             var clockwiseDirectionIndexBeginningFromSouth = ((direction.InHeading + 256) % 4096) / 512;

@@ -119,7 +119,7 @@ namespace DOL.GS
                 if (!string.Equals(s.SpellType, "WarlockSpeedDecrease", StringComparison.Ordinal))
                     continue;
 
-                if ((s.LifeDrainReturn > 0) || (s.AmnesiaChance == 1))
+                if (s.ResurrectMana == 0 && ((s.LifeDrainReturn > 0) || (s.AmnesiaChance > 0)))
                     toCancel.Add(gse);
             }
 

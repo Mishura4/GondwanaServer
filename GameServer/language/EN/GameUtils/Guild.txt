@@ -13,9 +13,9 @@ GameUtils.Guild.MiscInfos04:		The /gc combatzone command allows a guild member w
 GameUtils.Guild.MiscInfos05:		By using the /gc jailrelease command, a guild member of rank 3 or above can release another member of the same guild from jail, using funds from the guild's bank.
 GameUtils.Guild.MiscInfos06:		The commands /gc buybanner and /gc summon allows a guild member to summon and utilize banners which are intended to be rally points on the battlefield. These banners, which can be purchased through the social interface window, provide various beneficial effects to nearby guild members and groupmates.
 GameUtils.Guild.MiscInfos07:		- All Guild buff Bonuses are now improved by 50%, however the use of a guild buff now cost 2000 Guild Merit points instead of 1000.
-GameUtils.Guild.MiscInfos08:		- Guild banner’s beneficial effects are now improved by 15% for the banner’s carrier and surrounding players.
+GameUtils.Guild.MiscInfos08:		- Guild banner's beneficial effects are now improved by 15% for the banner's carrier and surrounding players.
 GameUtils.Guild.MiscInfos09:		- All Guild buff Bonuses are now improved by 100%, however the use of a guild buff now cost 3000 Guild Merit points instead of 1000 originally.
-GameUtils.Guild.MiscInfos10:		- Guild banner’s beneficial effects are now improved by 30% for the banner’s carrier and surrounding players.
+GameUtils.Guild.MiscInfos10:		- Guild banner's beneficial effects are now improved by 30% for the banner's carrier and surrounding players.
 
 GameUtils.Guild.Territory.TerritoryExpired:             Your control over the territory {0} has ended!
 GameUtils.Guild.Territory.Lord.NoGuild:                 I have nothing to say to you. Come back when you are part of a guild.

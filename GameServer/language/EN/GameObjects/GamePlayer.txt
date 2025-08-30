@@ -295,6 +295,7 @@ GameObjects.GamePlayer.Quit.RecentlyInCombat:			You were recently in combat and 
 GameObjects.GamePlayer.Quit.YouWillQuit1:				You will quit after sitting for {0} seconds...	
 GameObjects.GamePlayer.Quit.YouWillQuit2:				You will quit after sitting for {0} seconds. Type '/stand' or move if you don't want to quit.	
 GameObjects.GamePlayer.Quit.CanTQuitDamned:				You cannot quit, you're damned.
+GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease:	You cannot quit while beeing under a '{0}' enchantment.
 GameObjects.GamePlayer.Quit.CanTQuitStunned:			You cannot quit, you're stunned.
 GameObjects.GamePlayer.Quit.CanTQuitMezzed:				You cannot quit, you're mezzed.
 

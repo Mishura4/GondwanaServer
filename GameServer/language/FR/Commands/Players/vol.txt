@@ -37,6 +37,6 @@ Commands.Players.Vol.StealChestWindow: 		Pillage du coffre...
 Commands.Players.Vol.ErrorUseCrochets:		Erreur lors de l'utilisation du Crochet.
 Commands.Players.Vol.ChestStealFailed: 		Vous avez échoué à voler ce coffre, vous repartez les mains vides.
 Commands.Players.Vol.ChestEmpty: 		Vous avez tenté de voler le trésor de ce coffre, mais celui-ci est vide !
-Commands.Players.Vol.ItemTemplateNotFound: 	Le modèle de l’objet n’a pas pu être trouvé.
-Commands.Players.Vol.NoFreeSlot: 		Vous n’avez pas de place libre dans votre inventaire.
+Commands.Players.Vol.ItemTemplateNotFound: 	Le modèle de l'objet n'a pas pu être trouvé.
+Commands.Players.Vol.NoFreeSlot: 		Vous n'avez pas de place libre dans votre inventaire.
 Commands.Players.Vol.StealChestSuccess: 	Vous avez dérobé un {0} du coffre au trésor !

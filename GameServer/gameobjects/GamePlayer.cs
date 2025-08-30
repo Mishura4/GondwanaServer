@@ -1179,6 +1179,7 @@ namespace DOL.GS
         /// <param name="forced">true if Quit can not be prevented!</param>
         public virtual bool Quit(bool forced)
         {
+            var wsd = SpellHandler.FindEffectOnTarget(this, "WarlockSpeedDecrease");
             if (!forced)
             {
                 if (!IsAlive)
@@ -1223,6 +1224,15 @@ namespace DOL.GS
                 if (IsMezzed)
                 {
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CanTQuitMezzed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
+                if (wsd != null)
+                {
+                    int rm = wsd.Spell?.ResurrectMana ?? 0;
+                    string appearancetype = LanguageMgr.GetWarlockMorphAppearance(Client.Account.Language, rm);
+
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease", appearancetype), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
 
@@ -8609,7 +8619,18 @@ namespace DOL.GS
 
         public bool HasAdrenalineBuff()
         {
-            return EffectList.GetOfType<AdrenalineSpellEffect>() != null;
+            if (EffectList.GetOfType<AdrenalineSpellEffect>() != null) return true;
+            if (EffectList.GetOfType<AdrenalineMageSpellEffect>() != null) return true;
+            if (EffectList.GetOfType<AdrenalineStealthSpellEffect>() != null) return true;
+
+            foreach (var eff in EffectList)
+            {
+                if (eff is GameSpellEffect gse &&
+                    gse.SpellHandler is AdrenalineSpellHandler)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -8638,6 +8659,7 @@ namespace DOL.GS
             string publicMessage;
             ushort messageDistance = WorldMgr.DEATH_MESSAGE_DISTANCE;
             m_releaseType = eReleaseType.Normal;
+            bool deathWasDuel = false;
 
             string location = "";
             if (CurrentAreas.Count > 0 && (CurrentAreas[0] is Area.BindArea) == false)
@@ -8663,6 +8685,7 @@ namespace DOL.GS
                 if (DuelTarget == killer)
                 {
                     m_releaseType = eReleaseType.Duel;
+                    deathWasDuel = true;
                     messageDistance = WorldMgr.YELL_DISTANCE;
                     publicMessage = "GameObjects.GamePlayer.Die.DuelDefeated";
                 }
@@ -8684,7 +8707,7 @@ namespace DOL.GS
 
             eChatType messageType;
             if (m_releaseType == eReleaseType.Duel)
-                messageType = eChatType.CT_Emote;
+                messageType = eChatType.CT_Skill;
             else if (killer == null)
             {
                 messageType = eChatType.CT_PlayerDied;
@@ -8736,6 +8759,12 @@ namespace DOL.GS
                 if (killerPlayer.HasAdrenalineBuff() && canAwardTaskPoints)
                 {
                     TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
+                }
+
+                if (canAwardTaskPoints && deathWasDuel)
+                {
+                    TaskManager.UpdateTaskProgress(killerPlayer, "EnemyKilledInDuel", 1);
+                    TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
                 }
 
                 killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", killerPlayer.GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
@@ -9011,15 +9040,8 @@ namespace DOL.GS
                 {
                     if (!(this == player))
                     {
-                        player.MessageFromArea(this, player.GetPersonalizedName(killer) + LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious"
-                            ), eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                        player.MessageFromArea(this, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Die.DuelWinner", player.GetPersonalizedName(killer)), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                     }
-                }
-
-                foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
-                {
-                    string message = string.Format(player.GetPersonalizedName(killer) + "GameObjects.GamePlayer.Die.DuelWinner");
-                    player.MessageFromArea(killer, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
                 }
             }
 

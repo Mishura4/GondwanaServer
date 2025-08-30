@@ -33,8 +33,8 @@ namespace DOL.AI.Brain
         protected override void CalculateFleeTarget(GameLiving target)
         {
             var targetAngle = Body.Coordinate.GetOrientationTo(target.Coordinate) + Angle.Degrees(180);
-            var speed = (short)(Body.MaxSpeed * 1.3); // 130% speed
-            var destination = Body.Coordinate + Vector.Create(targetAngle, speed * 3); // Flee for 3 seconds
+            var speed = (short)(Body.MaxSpeed * 1.5); // 150% speed
+            var destination = Body.Coordinate + Vector.Create(targetAngle, speed * 3.5); // Flee for 3.5 seconds
             if (Body.MaxDistance > 0 && !destination.IsWithinDistance(Body.SpawnPosition, Body.MaxDistance))
             {
                 var angleToSpawn = Body.SpawnPosition.Coordinate.GetOrientationTo(destination);
@@ -50,7 +50,7 @@ namespace DOL.AI.Brain
                 return;
             }
             
-            Body.CurrentSpeed = (short)(Body.MaxSpeed * 1.3);
+            Body.CurrentSpeed = (short)(Body.MaxSpeed * 1.5);
         }
 
         /// <inheritdoc />
@@ -58,7 +58,7 @@ namespace DOL.AI.Brain
         {
             base.SetBody(npc);
         
-            npc.AbilityBonus[eProperty.MaxSpeed] += 30;
+            npc.AbilityBonus[eProperty.MaxSpeed] += 50;
         }
 
         //on removal of the brain set speed to normal

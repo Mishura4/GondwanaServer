@@ -16,4 +16,4 @@ Commands.Players.Market.Cant.DeployMounted:	Vous ne pouvez pas établir votre ma
 Commands.Players.Market.Cant.DeployCombat:	Vous ne pouvez pas établir votre marché en combat !
 Commands.Players.Market.Cant.DeployDamned:	Vous ne pouvez pas établir votre marché tant que vous êtes sous une malédiction !
 Commands.Players.Market.Cant.DeployPetrify:	Vous ne pouvez pas déployer votre marché en étant pétrifié !
-Commands.Players.Market.Cant.DeployFrog:	Vous ne pouvez pas déployer votre marché sous l'enchantement "Grenouille" !
+Commands.Players.Market.Cant.DeployMorphed:	Vous ne pouvez pas déployer votre marché sous l'enchantement "{0}" !

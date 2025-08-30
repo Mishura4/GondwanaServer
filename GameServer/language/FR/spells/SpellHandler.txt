@@ -120,7 +120,7 @@ SpellHandler.HealSpell.TargetDamageToHeal:		Vous soignez {0} de {1} points de vi
 SpellHandler.HealSpell.YouAreHealed:		Vous êtes soigné par {0} pour {1} points de vie.
 SpellHandler.HealSpell.CriticalHeal:		Vous réalisez un soin critique et récupérez {0} points de vie supplémentaires !
 SpellHandler.HealSpell.EfficientHealingBuff:	Votre buff de guérison efficace vous apporte {0} points de soin supplémentaires !
-SpellHandler.HealSpell.EfficientEnduranceBuff:	Votre buff d’endurance efficace vous apporte {0} points d’endurance supplémentaires lors du soin !
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Votre buff d'endurance efficace vous apporte {0} points d'endurance supplémentaires lors du soin !
 SpellHandler.HealSpell.TargetDamnedDamaged:		Vous êtes damné ! Le sort de guérison vous inflige {0} dommages au lieu de vous soigner !
 SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	Le sort de guérison est moins efficace car vous etes damné !
 SpellHandler.HealSpell.DamnedNoHeal:		Le sort de guérison ne vous affecte pas car vous etes damné !
@@ -281,7 +281,7 @@ SpellHandler.PowerShield.EffectStart:			Une magie ancienne accroît votre essenc
 SpellHandler.PowerShield.EffectStartOthers:		Une magie ancienne accroît l'essence vitale de {0}.
 SpellHandler.PowerShield.EffectExpires:			Votre bouclier magique s'est dissipé !
 SpellHandler.PowerShield.EffectExpiresOthers:	Le bouclier magique de {0} s'est dissipé !
-SpellHandler.PowerShield.InsufficientMana:		Votre réserve de mana est insuffisante pour activer l’effet de soin de votre bouclier.
+SpellHandler.PowerShield.InsufficientMana:		Votre réserve de mana est insuffisante pour activer l'effet de soin de votre bouclier.
 SpellHandler.DebuffImmunity.Refreshed:			Votre protection contre les sorts d'affaiblissement a été renouvelée.
 SpellHandler.DebuffImmunity.Start:				Votre protection contre les sorts d'affaiblissements est accrue pour la durée du sort !
 SpellHandler.DebuffImmunity.GainImmunity:		Vous bénéficiez d'une immunité contre les sorts d'affaiblissements, augmentant vos chances de résistance de {0}%.

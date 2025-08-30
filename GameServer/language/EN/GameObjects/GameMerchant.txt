@@ -20,8 +20,9 @@ GameMerchant.OnPlayerSell.IsntInterested:		{0} isn't interested in {1}.
 GameMerchant.OnPlayerSell.TooFarAway:			{0} is too far away!
 GameMerchant.OnPlayerWithdraw:		            You withdraw {0} from your merchant.
 GameMerchant.OnPlayerInteract.Outlaw:			I expect nothing worthwhile from a scoundrel like you!
-GameMerchant.OnPlayerInteract.Frog:				Oh, as a frog, you can’t quite hop onto a horse just yet!
+GameMerchant.OnPlayerInteract.Morphed:			Oh, as a {0}, you can't quite hop onto a horse just yet!
 GameMerchant.OnPlayerInteract.Damned:			Stay away, you damned ghoul!
+GameMerchant.OnPlayerInteract.EmbarkNotAllowed:	I can't let you embark for now!
 
 # GameTerritoryMerchant
 GameMerchant.Interact.Territory.NotSameGuild:		I have nothing to sell you !

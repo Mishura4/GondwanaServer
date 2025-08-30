@@ -287,7 +287,7 @@ GameObjects.GamePlayer.Pronoun.Male.Possessive:			son
 GameObjects.GamePlayer.Pronoun.Male.Subjective:			il
 
 GameObjects.GamePlayer.Quit.CantQuitCrafting:			Vous ne pouvez pas quitter pendant une fabrication.
-GameObjects.GamePlayer.Quit.CantQuitDead:				Vous ne pouvez pas quitter suite à votre mort soudaine !  Tapez '/release' pour ressusciter.
+GameObjects.GamePlayer.Quit.CantQuitDead:				Vous ne pouvez pas quitter suite à votre mort soudaine !  Tapez '/release' pour ressusciter.
 GameObjects.GamePlayer.Quit.CantQuitInInstance:			Vous ne pouvez pas quitter lorsque vous êtes dans une instance !
 GameObjects.GamePlayer.Quit.CantQuitMount:				Vous ne pouvez pas quitter tout en étant à cheval.
 GameObjects.GamePlayer.Quit.RecentlyInCombat:			Vous étiez récemment en combat, vous devez attendre plus longtemps pour quitter.
@@ -295,6 +295,7 @@ GameObjects.GamePlayer.Quit.CantQuitStanding:			Vous devez être immobile pour q
 GameObjects.GamePlayer.Quit.YouWillQuit1:				Vous allez quitter le jeu au bout de {0} secondes.	
 GameObjects.GamePlayer.Quit.YouWillQuit2:				Vous allez quitter le jeu au bout de {0} secondes.  Tapez '/stand' ou deplacez-vous pour annuler la procédure.
 GameObjects.GamePlayer.Quit.CanTQuitDamned:				Vous ne pouvez pas quitter, vous êtes damné(e).
+GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease:	Vous ne pouvez pas quitter tant que vous êtes sous l'enchantement "{0}".
 GameObjects.GamePlayer.Quit.CanTQuitStunned:			Vous ne pouvez pas quitter, vous êtes immobilisé(e) par un sort.
 GameObjects.GamePlayer.Quit.CanTQuitMezzed:				Vous ne pouvez pas quitter, vous dormez.
 

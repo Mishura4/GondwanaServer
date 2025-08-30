@@ -60,12 +60,12 @@ HousingPlaceItemHandler.PutMoney:				Vous déposez de l'argent sur le compte de 
 
 # /Housing LotMarker
 Housing.LotMarker.TargetLotNumber:				Vous ciblez le terrain numéro {0}.
-Housing.LotMarker.ItCanBeBoughtFor:				Il est disponible à l’achat pour {0}.
+Housing.LotMarker.ItCanBeBoughtFor:				Il est disponible à l'achat pour {0}.
 Housing.LotMarker.ItIsOwnedBy:					Cette parcelle appartient à {0}.
 Housing.LotMarker.YouAlreadyOwnAHouse:			Vous possédez déjà une maison !
 Housing.LotMarker.DoYouWantToBuyThisLot1:		Voulez-vous acheter ce terrain ?
 Housing.LotMarker.DoYouWantToBuyThisLot2:		Son coût est de {0}.
-Housing.LotMarker.YouDoNotOwnThisLot:			Vous n’êtes pas propriétaire de cette parcelle !
+Housing.LotMarker.YouDoNotOwnThisLot:			Vous n'êtes pas propriétaire de cette parcelle !
 Housing.LotMarker.YouAlreadyOwnAnotherLotOrHouse:	Vous possédez déjà un terrain ou une maison (Numéro {0}).
 Housing.LotMarker.YouJustBoughtThisLotFor:		Vous venez d'acheter ce terrain pour {0}.
 Housing.LotMarker.YouDontHaveEnoughMoney:		Vos fonds sont insuffisants !

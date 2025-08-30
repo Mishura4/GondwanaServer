@@ -38,6 +38,7 @@ Tasks.ItemsSoldToPlayers: Transactions via le marché
 Tasks.SuccessfulPvPThefts: Vols réussis de joueurs
 Tasks.OutlawPlayersSentToJail: Neutralisez des Hors-la-loi
 Tasks.EnemiesKilledInAdrenalineMode: Ennemis tués en Adrénaline
+Tasks.EnemyKilledInDuel: Victoires en duel
 Tasks.QuestsCompleted: Quêtes terminées
 Tasks.MaxLevelReached: Niveau max
 Tasks.Level: Niveau {0}
@@ -56,6 +57,7 @@ Tasks.ItemsSoldToPlayersLog: Transactions via le marché : {0}/{1}
 Tasks.SuccessfulPvPTheftsLog: Vols réussis de joueurs : {0}/{1}
 Tasks.OutlawPlayersSentToJailLog: Neutralisez des Hors-la-loi : {0}/{1}
 Tasks.EnemiesKilledInAdrenalineModeLog: Ennemis tués en Adrénaline : {0}/{1}
+Tasks.EnemyKilledInDuelLog: Duels gagnés : {0}/{1}
 Tasks.QuestsCompletedLog: Quêtes terminées : {0}/{1}
 Tasks.TurnInPvPGvGTaskTokenMessage: Tâche : Vous obtenez un jeton de tâche PvP/RvR/GvG - niveau {0}
 Tasks.TurnInPvETaskTokenMessage: Tâche : Vous obtenez un jeton de tâche PvE - niveau {0}
@@ -65,4 +67,5 @@ Tasks.ItemsSoldToPlayersSpecialToken: Tâche : Vous obtenez un jeton spécial 'M
 Tasks.SuccessfulPvPTheftsSpecialToken: Tâche : Vous obtenez un jeton spécial 'Voleur' - niveau {0}
 Tasks.OutlawPlayersSentToJailSpecialToken: Tâche : Vous obtenez un jeton spécial 'Chasseur de Prime' - niveau {0}
 Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Tâche : Vous obtenez un jeton spécial 'Fièvre de Combat' - niveau {0}
+Tasks.EnemyKilledInDuelSpecialToken:	Task: Vous avez remporté un jeton de duelliste - level {0}
 Tasks.QuestsCompletedSpecialToken: Tâche : Vous obtenez un jeton spécial 'Aventurier' - niveau {0}

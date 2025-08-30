@@ -1187,10 +1187,15 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (SpellHandler.FindEffectOnTarget(client.Player, "WarlockSpeedDecrease") != null)
+                            var wsd = SpellHandler.FindEffectOnTarget(client.Player, "WarlockSpeedDecrease");
+                            if (wsd != null)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerSummonFrog"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                int rm = wsd.Spell?.ResurrectMana ?? 0;
+                                string appearancetype = LanguageMgr.GetWarlockMorphAppearance(client.Account.Language, rm);
+
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerSummonMorphed", appearancetype), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                                break;
                             }
 
                             if (JailMgr.IsPrisoner(client.Player))

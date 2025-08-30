@@ -16,4 +16,4 @@ Commands.Players.Market.Cant.DeployMounted:	You cannot set up your market while 
 Commands.Players.Market.Cant.DeployCombat:	You cannot set up your market while in combat!
 Commands.Players.Market.Cant.DeployDamned:	You cannot set up your market while damned!
 Commands.Players.Market.Cant.DeployPetrify:	You cannot set up your market while petrified!
-Commands.Players.Market.Cant.DeployFrog:	You cannot set up your market while under the "Frog" enchantment!
+Commands.Players.Market.Cant.DeployMorphed:	You cannot set up your market while under the "{0}" enchantment!

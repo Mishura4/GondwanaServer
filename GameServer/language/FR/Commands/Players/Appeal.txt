@@ -2,7 +2,7 @@ Commands.Players.Appeal.AlreadyActiveAppeal:	Vous avez déjà un appel en cours,
 Commands.Players.Appeal.AppealSubmitted:		Votre appel a été soumis avec succès... utilisez /checkappeal pour vérifier son statut.
 Commands.Players.Appeal.BeingHelped:			Ce joueur est déjà en train de recevoir de l'aide.
 Commands.Players.Appeal.CanceledYourAppeal:		Vous avez annulé votre appel.
-Commands.Players.Appeal.CantCancelWhile:		Impossible d’annuler votre appel pendant qu’un membre du staff vous aide.
+Commands.Players.Appeal.CantCancelWhile:		Impossible d'annuler votre appel pendant qu'un membre du staff vous aide.
 Commands.Players.Appeal.CantFindAppeal:			Aucun appel trouvé pour ce joueur hors ligne. Vérifiez l'orthographe de son nom.
 Commands.Players.Appeal.CriticalMessage:		Les appels critiques peuvent nécessiter une attention urgente !
 Commands.Players.Appeal.CurrentStaffAvailable:	Il y a actuellement {0} membres du staff disponibles et {1} appels en attente.

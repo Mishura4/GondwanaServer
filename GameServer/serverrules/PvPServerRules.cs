@@ -520,6 +520,7 @@ namespace DOL.GS.ServerRules
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SuccessfulPvPThefts") + ": " + player.TaskXPlayer.SuccessfulPvPTheftsStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.OutlawPlayersSentToJail") + ": " + player.TaskXPlayer.OutlawPlayersSentToJailStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.EnemiesKilledInAdrenalineMode") + ": " + player.TaskXPlayer.EnemiesKilledInAdrenalineModeStats.ToString("F0"));
+                    stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.EnemyKilledInDuel") + ": " + player.TaskXPlayer.EnemyKilledInDuelStats.ToString("F0"));
                     stat.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.QuestsCompleted") + ": " + player.TaskXPlayer.QuestsCompletedStats.ToString("F0"));
                 }
             }

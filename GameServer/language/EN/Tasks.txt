@@ -38,6 +38,7 @@ Tasks.ItemsSoldToPlayers: Successful Market Trades
 Tasks.SuccessfulPvPThefts: Successful Player thefts
 Tasks.OutlawPlayersSentToJail: Kill Outlaw Players
 Tasks.EnemiesKilledInAdrenalineMode: Enemies killed in Adrenaline
+Tasks.EnemyKilledInDuel: Duel Victories
 Tasks.QuestsCompleted: Quests completed
 Tasks.MaxLevelReached: Max level
 Tasks.Level: Level {0}
@@ -56,6 +57,7 @@ Tasks.ItemsSoldToPlayersLog: Successful Market Trades: {0}/{1}
 Tasks.SuccessfulPvPTheftsLog: Successful Player thefts: {0}/{1}
 Tasks.OutlawPlayersSentToJailLog: Kill Outlaw Players: {0}/{1}
 Tasks.EnemiesKilledInAdrenalineModeLog: Enemies killed in Adrenaline: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Duel victories: {0}/{1}
 Tasks.QuestsCompletedLog: Quests completed: {0}/{1}
 Tasks.TurnInPvPGvGTaskTokenMessage: Task: You get a PvP/RvR/GvG Task completion token - level {0}
 Tasks.TurnInPvETaskTokenMessage: Task: You get a PvE Task completion token - level {0}
@@ -65,4 +67,5 @@ Tasks.ItemsSoldToPlayersSpecialToken: Task: You get a 'Trader' Special token - l
 Tasks.SuccessfulPvPTheftsSpecialToken: Task: You get a 'Thief' Special token - level {0}
 Tasks.OutlawPlayersSentToJailSpecialToken: Task: You get a 'Bounty Hunter' Special token - level {0}
 Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Task: You get a 'Wrath' Special token - level {0}
+Tasks.EnemyKilledInDuelSpecialToken:	Task: You earned a Duelist Token - level {0}
 Tasks.QuestsCompletedSpecialToken: Task: You get an 'Adventurer' Special token - level {0}

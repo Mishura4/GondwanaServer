@@ -16,10 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.AI.Brain;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 
@@ -34,15 +36,69 @@ namespace DOL.GS.Spells
         private const string WARLOCK_PRE_EFFECTIVENESS_KEY = "Warlock_PreEffectivenessDebuff";
 
         /// <inheritdoc />
+        private struct RealmTriplet
+        {
+            public readonly ushort Alb, Mid, Hib;
+            public RealmTriplet(ushort alb, ushort mid, ushort hib) { Alb = alb; Mid = mid; Hib = hib; }
+        }
+
+        private static class MorphModels
+        {
+            public static readonly RealmTriplet Frog = new RealmTriplet(581, 574, 594);
+            public static readonly RealmTriplet Worm = new RealmTriplet(458, 454, 457);
+            public static readonly RealmTriplet Lizard = new RealmTriplet(400, 398, 399);
+            public static readonly RealmTriplet Wisp = new RealmTriplet(966, 966, 966);
+            public static readonly RealmTriplet Fairy = new RealmTriplet(633, 632, 630);
+            public static readonly RealmTriplet Scarab1 = new RealmTriplet(669, 670, 668);
+            public static readonly RealmTriplet Scarab2 = new RealmTriplet(1201, 1200, 1202);
+            public static readonly RealmTriplet Spider = new RealmTriplet(129, 1597, 131);
+            public static readonly RealmTriplet Cyclop = new RealmTriplet(122, 121, 120);
+            public static readonly RealmTriplet Mantis = new RealmTriplet(686, 684, 685);
+            public static readonly RealmTriplet Flame = new RealmTriplet(908, 907, 909);
+            public static readonly RealmTriplet Bird = new RealmTriplet(2354, 2353, 2352);
+            public static readonly RealmTriplet Simulacrum = new RealmTriplet(242, 243, 244);
+        }
+
+        private static RealmTriplet GetTripletByMorphType(int morphType)
+        {
+            return morphType switch
+            {
+                1 => MorphModels.Worm,
+                2 => MorphModels.Lizard,
+                3 => MorphModels.Wisp,
+                4 => MorphModels.Fairy,
+                5 => MorphModels.Scarab1,
+                6 => MorphModels.Scarab2,
+                7 => MorphModels.Spider,
+                8 => MorphModels.Cyclop,
+                9 => MorphModels.Mantis,
+                10 => MorphModels.Flame,
+                11 => MorphModels.Bird,
+                12 => MorphModels.Simulacrum,
+                _ => MorphModels.Frog, // default: frog
+            };
+        }
+
+        private static ushort SelectRealmModel(eRealm realm, RealmTriplet t)
+        {
+            return realm switch
+            {
+                eRealm.Albion => t.Alb,
+                eRealm.Midgard => t.Mid,
+                eRealm.Hibernia => t.Hib,
+                _ => (ushort)0
+            };
+        }
+
         public override ushort GetModelFor(GameLiving living)
         {
-            if (living.Realm == eRealm.Albion)
-                return 581;
-            else if (living.Realm == eRealm.Midgard)
-                return 574;
-            else if (living.Realm == eRealm.Hibernia)
-                return 594;
-            return 0;
+            RealmTriplet triplet = GetTripletByMorphType(Spell.ResurrectMana);
+            ushort model = SelectRealmModel(living.Realm, triplet);
+
+            if (model == 0)
+                model = SelectRealmModel(living.Realm, MorphModels.Frog);
+
+            return model;
         }
 
         /// <inheritdoc />
@@ -146,12 +202,30 @@ namespace DOL.GS.Spells
                 }
             }
 
-            // Optional Silence for the same duration (AmnesiaChance == 1)
-            if (Spell.AmnesiaChance == 1 && effect.Owner is GamePlayer)
+            // Control effects by AmnesiaChance  1 = Silence, 2 = Disarm, 3 = both
+            if (Spell.AmnesiaChance == 1 || Spell.AmnesiaChance == 3)
             {
-                effect.Owner.SilencedCount++;
-                effect.Owner.StopCurrentSpellcast();
+                if (effect.Owner is GamePlayer)
+                {
+                    effect.Owner.SilencedCount++;
+                    effect.Owner.StopCurrentSpellcast();
+                    effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+                }
+            }
+
+            if (Spell.AmnesiaChance == 2 || Spell.AmnesiaChance == 3)
+            {
+                effect.Owner.DisarmedCount++;
+                effect.Owner.StopAttack();
                 effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+
+                // NPC aggro parity with Disarm handler
+                if (effect.Owner is GameNPC)
+                {
+                    IOldAggressiveBrain aggroBrain = ((GameNPC)effect.Owner).Brain as IOldAggressiveBrain;
+                    if (aggroBrain != null)
+                        aggroBrain.AddToAggroList(Caster, 1);
+                }
             }
 
             base.OnEffectStart(effect);
@@ -209,10 +283,14 @@ namespace DOL.GS.Spells
                 }
             }
 
-            // --- Remove Silence if applied ---
-            if (Spell.AmnesiaChance == 1 && effect.Owner is GamePlayer)
+            // Remove Silence/Disarm if applied
+            if ((Spell.AmnesiaChance == 1 || Spell.AmnesiaChance == 3) && effect.Owner is GamePlayer)
             {
                 effect.Owner.SilencedCount--;
+            }
+            if (Spell.AmnesiaChance == 2 || Spell.AmnesiaChance == 3)
+            {
+                effect.Owner.DisarmedCount--;
             }
 
             base.OnEffectExpires(effect, noMessages);
@@ -244,6 +322,8 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             string description;
+            int durationSeconds = Spell.Duration / 1000;
+            int recastSeconds = Spell.RecastDelay / 1000;
 
             if (Spell.Value > 0)
             {
@@ -259,19 +339,25 @@ namespace DOL.GS.Spells
 
             if (Spell.LifeDrainReturn > 0)
             {
-                string frogtext = LanguageMgr.GetTranslation(delveClient, "SpellDescription.WarlockSpeedDecrease.Frog");
+                string appearancetype = LanguageMgr.GetWarlockMorphAppearance(delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE, Spell.ResurrectMana);
+
+                string morphText = LanguageMgr.GetTranslation(delveClient, "SpellDescription.WarlockSpeedDecrease.Frog", appearancetype);
                 string vampMain = LanguageMgr.GetTranslation(delveClient, "SpellDescription.VampiirEffectivenessDeBuff.MainDescription", (int)Spell.LifeDrainReturn);
                 string vampExtra = LanguageMgr.GetTranslation(delveClient, "SpellDescription.VampiirEffectivenessDeBuff.CombatCastable");
 
-                description += "\n\n" + frogtext + "\n\n" + vampMain + "\n\n" + vampExtra;
+                description += "\n\n" + morphText + "\n\n" + vampMain + "\n\n" + vampExtra;
             }
 
-            if (Spell.AmnesiaChance == 1)
+            if (Spell.AmnesiaChance == 1 || Spell.AmnesiaChance == 3)
             {
-                int durationSeconds = Spell.Duration / 1000;
                 string silenceMain = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Silence.MainDescription", durationSeconds);
-
                 description += "\n\n" + silenceMain;
+            }
+
+            if (Spell.AmnesiaChance == 2 || Spell.AmnesiaChance == 3)
+            {
+                string disarmMain = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription1", durationSeconds);
+                description += "\n\n" + disarmMain;
             }
 
             if (Spell.SubSpellID != 0)
@@ -286,6 +372,12 @@ namespace DOL.GS.Spells
                         description += "\n\n" + subspelldesc;
                     }
                 }
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string recastSecond = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                description += "\n\n" + recastSecond;
             }
 
             if (Spell.IsSecondary)
