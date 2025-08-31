@@ -105,7 +105,7 @@ namespace DOL.AI
                 {
                     int dist = Body.MaxDistance;
                     if (dist == 0)
-                        dist = (int)Math.Floor(Body.RoamingRange * 0.25);
+                        dist = (int)Math.Floor(Body.RoamingRange * 1.25);
 
                     dist += GameNPC.CONST_WALKTOTOLERANCE;
                     var position = Body.Position;
