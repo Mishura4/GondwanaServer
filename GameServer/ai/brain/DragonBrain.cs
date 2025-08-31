@@ -113,7 +113,7 @@ namespace DOL.AI.Brain
             if (wasInCombat && !Body.InCombat)
             {
                 Body.Reset();
-                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Coordinate : Body.SpawnPosition.Coordinate, 500))
+                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Coordinate : Body.Home.Coordinate, 500))
                 {
                     // Not very far - keep thinking, aggro, etc
                     Body.IsResetting = false;
@@ -238,7 +238,7 @@ namespace DOL.AI.Brain
         {
             GameDragon dragon = Body as GameDragon;
             if (dragon == null) return false;
-            return dragon.Coordinate.DistanceTo(dragon.SpawnPosition) > dragon.TetherRange;
+            return dragon.Coordinate.DistanceTo(dragon.Home) > dragon.TetherRange;
         }
 
         #endregion

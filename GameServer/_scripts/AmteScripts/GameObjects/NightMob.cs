@@ -46,8 +46,7 @@ namespace DOL.GS.Scripts
 
             if (add && IsAlive && ObjectState != eObjectState.Active)
             {
-                Position = SpawnPosition;
-                Heading = SpawnHeading;
+                Position = Home;
                 AddToWorld();
             }
             else if (!add && IsAlive && ObjectState == eObjectState.Active)

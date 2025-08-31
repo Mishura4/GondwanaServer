@@ -20,7 +20,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using DOL.GS;
+using DOL.GS.Geometry;
 using log4net;
+using System;
 
 namespace DOL.AI
 {
@@ -51,7 +53,7 @@ namespace DOL.AI
         /// <returns></returns>
         public override string ToString()
         {
-            return base.ToString() + ", noPlayersStopCountdown=" + noPlayersStopCountdown.ToString();
+            return base.ToString() + ", noPlayersStopCountdown=" + noPlayersStopCountdown.ToString() + " resetTimer=" + m_resetTimer;
         }
 
         /// <summary>
@@ -66,6 +68,10 @@ namespace DOL.AI
         /// </summary>
         protected virtual int NoPlayersStopDelay => 45000;
 
+        private RegionTimer? m_resetTimer = null;
+        
+        protected virtual int NoPlayersResetDelay => NoPlayersStopDelay * 60;
+
         /// <summary>
         /// Starts the brain thinking and resets the inactivity countdown
         /// </summary>
@@ -74,6 +80,8 @@ namespace DOL.AI
         {
             if (!Body.IsVisibleToPlayers)
                 return false;
+            
+            Interlocked.Exchange(ref m_resetTimer, null)?.Stop();
             Interlocked.Exchange(ref noPlayersStopCountdown, NoPlayersStopDelay/ThinkInterval);
             return base.Start();
         }
@@ -86,10 +94,38 @@ namespace DOL.AI
         /// <param name="callingTimer"></param>
         protected override int BrainTimerCallback(RegionTimer callingTimer)
         {
-            if (Interlocked.Decrement(ref noPlayersStopCountdown) <= 0)
+            var prev = Interlocked.Decrement(ref noPlayersStopCountdown);
+            if (prev <= 0)
             {
-                //Stop the brain timer
+                // Stop the brain timer
                 Stop();
+                
+                // Full reload on far from spawn & no players around at all
+                if (NoPlayersResetDelay > 0 && Body != null && Body.SpawnPosition != Position.Nowhere)
+                {
+                    int dist = Body.MaxDistance;
+                    if (dist == 0)
+                        dist = (int)Math.Floor(Body.RoamingRange * 0.25);
+
+                    dist += GameNPC.CONST_WALKTOTOLERANCE;
+                    var position = Body.Position;
+                    if (!position.Coordinate.IsWithinDistance(Body.SpawnPosition, dist))
+                    {
+                        var delay = NoPlayersResetDelay - NoPlayersStopDelay;
+                        if (delay <= 0)
+                        {
+                            Body.Reload();
+                        }
+                        else
+                        {
+                            m_resetTimer = new RegionTimer(Body, _ =>
+                            {
+                                Body.Reload();
+                                return 0;
+                            }, NoPlayersResetDelay - NoPlayersStopDelay);
+                        }
+                    }
+                }
                 return 0;
             }
             return base.BrainTimerCallback(callingTimer);

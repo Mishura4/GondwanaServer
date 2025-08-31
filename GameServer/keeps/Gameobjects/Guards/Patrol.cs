@@ -185,7 +185,7 @@ namespace DOL.GS.Keeps
                 if (i < guardsToPatrol)
                 {
                     // we need to reposition the patrol at their spawn point plus variation
-                    if (position == Position.Zero) position = guard.SpawnPosition;
+                    if (position == Position.Zero) position = guard.Home;
                     else position += Vector.Create(x: Util.Random(250, 350), y: Util.Random(250, 350));
 
                     if (guard.IsAlive)

@@ -358,7 +358,7 @@ namespace DOL.AI.Brain
             {
                 if (e == GameNPCEvent.ArriveAtSpawnPoint)
                 {
-                    Body.TurnTo(Body.SpawnPosition.Orientation);
+                    Body.TurnTo(Body.Home.Orientation);
                     return;
                 }
 

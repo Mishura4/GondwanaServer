@@ -1122,20 +1122,22 @@ namespace DOL.GS
         public virtual bool IsVisibleToPlayers => GameTimer.GetTickCount() - m_lastVisibleToPlayerTick < 60000;
 
         /// <summary>
-        /// Gets or sets the spawnposition of this npc
+        /// Gets or sets the reset point of this npc
+        /// </summary>
+        public virtual Position Home
+        {
+            get;
+            set;
+        } = Position.Nowhere;
+
+        /// <summary>
+        /// Gets or sets the spawn position of this npc
         /// </summary>
         public virtual Position SpawnPosition
         {
             get;
             set;
         } = Position.Nowhere;
-
-        [Obsolete("Use SpawnPosition.Heading instead!")]
-        public ushort SpawnHeading
-        {
-            get => SpawnPosition.Orientation.InHeading;
-            private set => SpawnPosition = Position.With(Angle.Heading(value));
-        }
         
         public short ZSpeedFactor
             => (short)((Motion.Destination.Z - Motion.Start.Z) / Motion.FullDistance);
@@ -1216,7 +1218,7 @@ namespace DOL.GS
             {
                 if (TetherRange > 0)
                 {
-                    if (Coordinate.DistanceTo(SpawnPosition) <= TetherRange)
+                    if (Coordinate.DistanceTo(Home) <= TetherRange)
                         return false;
                     else
                         return true;
@@ -1586,7 +1588,7 @@ namespace DOL.GS
             if (TPPoint != null)
                 PathTo(TPPoint.Position.Coordinate, speed);
             else
-                PathTo(SpawnPosition.Coordinate, speed);
+                PathTo(Home.Coordinate, speed);
         }
 
         /// <summary>
@@ -2238,7 +2240,8 @@ namespace DOL.GS
             MessageArticle = dbMob.MessageArticle;
 
             Position = Position.Create(dbMob.Region, dbMob.X, dbMob.Y, dbMob.Z, dbMob.Heading);
-            this.SpawnPosition = this.Position;
+            this.Home = this.Position;
+            this.SpawnPosition = Home;
 
             m_maxSpeedBase = (short)dbMob.Speed;
             m_currentSpeed = 0;
@@ -2356,6 +2359,13 @@ namespace DOL.GS
             OwnerID = dbMob.OwnerID;
 
             LoadTemplate(NPCTemplate);
+
+            if (m_maxdistance != 0 && Math.Abs(m_maxdistance) < Math.Abs(m_roamingRange))
+            {
+                log.WarnFormat(
+                    "warning: mob {0} ({1}) with template {2} has MaxDistance {3} which is smaller than {4}, mob will frequently reset, this is almost certainly an error",
+                    Name, InternalID, NPCTemplate?.TemplateId, m_maxdistance, m_roamingRange);
+            }
             /*
                 if (Inventory != null)
                     SwitchWeapon(ActiveWeaponSlot);
@@ -2434,15 +2444,16 @@ namespace DOL.GS
                 mob.Z = (int)this.Position.Z;
                 mob.Heading = (ushort)this.Position.Orientation.InHeading;
 
-                this.SpawnPosition = this.Position;
+                this.Home = this.Position;
+                this.SpawnPosition = Home;
                 ForceUpdateSpawnPos = false;
             }
             else
             {
-                mob.X = (int)this.SpawnPosition.X;
-                mob.Y = (int)this.SpawnPosition.Y;
-                mob.Z = (int)this.SpawnPosition.Z;
-                mob.Heading = (ushort)this.SpawnPosition.Orientation.InHeading;
+                mob.X = (int)this.Home.X;
+                mob.Y = (int)this.Home.Y;
+                mob.Z = (int)this.Home.Z;
+                mob.Heading = (ushort)this.Home.Orientation.InHeading;
             }
 
             //If mob is part of GroupMob we need to save the changing properties from PropertyDb which contains original value from db or new values from Commands
@@ -3167,6 +3178,7 @@ namespace DOL.GS
                     brain.Start();
             }
         }
+
         /// <summary>
         /// Adds the npc to the world
         /// </summary>
@@ -3211,11 +3223,16 @@ namespace DOL.GS
             if (anyPlayer)
                 m_lastVisibleToPlayerTick = GameTimer.GetTickCount();
 
-            SpawnPosition = Position;
+            Home = Position;
             lock (BrainSync)
             {
+                // Importantly, we re-check recent player presence here.
+                // We only want to check that the player was updated recently,
+                // not necessarily that there are players around NOW.
+                // This is because some brains need to keep working if this is i.e. a cross-region teleport,
+                // so that the NPC can for example teleport back.
                 ABrain brain = Brain;
-                if (brain != null)
+                if (IsVisibleToPlayers && brain != null)
                     brain.Start();
             }
 
@@ -3321,7 +3338,7 @@ namespace DOL.GS
             Health = MaxHealth;
             Mana = MaxMana;
             Endurance = MaxEndurance;
-            Position = SpawnPosition;
+            Position = Home;
             Tension = 0;
             ambientXNbUse = new Dictionary<MobXAmbientBehaviour, short>();
 
@@ -3357,10 +3374,14 @@ namespace DOL.GS
                 //Tolerance to check if we need to go home AGAIN, otherwise we might be told to go home
                 //for a few units only and this may end before the next Arrive-At-Target Event is fired and in this case
                 //We would never lose the state "IsReturningHome", which is then followed by other erros related to agro again to players
-                else if (!IsWithinRadius(SpawnPosition.Coordinate, GameNPC.CONST_WALKTOTOLERANCE))
+                else if (!IsWithinRadius(Home.Coordinate, GameNPC.CONST_WALKTOTOLERANCE))
                 {
                     WalkToSpawn();
                     return;
+                }
+                else
+                {
+                    TurnTo(Home.Orientation);
                 }
             }
 
@@ -3377,11 +3398,21 @@ namespace DOL.GS
 
             CurrentSpeed = 0;
 
-            if (Orientation != SpawnPosition.Orientation)
-                TurnTo(SpawnPosition.Orientation);
+            if (Orientation != Home.Orientation)
+                TurnTo(Home.Orientation);
 
             IsReturningHome = false;
             IsResetting = false;
+        }
+        
+        public void Reload()
+        {
+            RemoveFromWorld();
+            if (!string.IsNullOrEmpty(InternalID) && !LoadedFromScript)
+            {
+                LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(InternalID));
+                AddToWorld();
+            }
         }
 
         /// <summary>

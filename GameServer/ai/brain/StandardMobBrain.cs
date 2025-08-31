@@ -150,7 +150,7 @@ namespace DOL.AI.Brain
             // If NPC has a max distance and we are outside, full reset
             if (Body.MaxDistance != 0)
             {
-                var distance = Body.Position.Coordinate.DistanceTo(Body.SpawnPosition);
+                var distance = Body.Position.Coordinate.DistanceTo(Body.Home);
                 int maxdistance = Body.MaxDistance > 0 ? Body.MaxDistance : -Body.MaxDistance * AggroRange / 100;
                 if (maxdistance > 0 && distance > maxdistance)
                 {
@@ -163,7 +163,7 @@ namespace DOL.AI.Brain
             if (wasInCombat && !Body.InCombat)
             {
                 Body.Reset();
-                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Coordinate : Body.SpawnPosition.Coordinate, 500))
+                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Coordinate : Body.Home.Coordinate, 500))
                 {
                     // Not very far - keep thinking, aggro, etc
                     Body.IsResetting = false;
@@ -1868,10 +1868,10 @@ namespace DOL.AI.Brain
             if (Body.RoamingRange > 0)
                 maxRoamingRadius = Body.RoamingRange;
 
-            double targetX = Body.SpawnPosition.X + Util.Random(-maxRoamingRadius, maxRoamingRadius);
-            double targetY = Body.SpawnPosition.Y + Util.Random(-maxRoamingRadius, maxRoamingRadius);
+            double targetX = Body.Home.X + Util.Random(-maxRoamingRadius, maxRoamingRadius);
+            double targetY = Body.Home.Y + Util.Random(-maxRoamingRadius, maxRoamingRadius);
 
-            return Coordinate.Create(x: (int)targetX, y: (int)targetY, z: Body.SpawnPosition.Z);
+            return Coordinate.Create(x: (int)targetX, y: (int)targetY, z: Body.Home.Z);
         }
 
         #endregion

@@ -105,7 +105,7 @@ namespace DOL.AI.Brain
             if (Body.IsMoving || Body.InCombat)
                 return;
 
-            if (!Body.Coordinate.IsWithinDistance(Body.SpawnPosition, Math.Max(Body.RoamingRange, GameNPC.CONST_WALKTOTOLERANCE)))
+            if (!Body.Coordinate.IsWithinDistance(Body.Home, Math.Max(Body.RoamingRange, GameNPC.CONST_WALKTOTOLERANCE)))
             {
                 if (m_timeWithoutPlayers >= 30000)
                 {
@@ -115,7 +115,7 @@ namespace DOL.AI.Brain
                 }
                 else
                 {
-                    Body.TurnTo(Body.SpawnPosition.Coordinate);
+                    Body.TurnTo(Body.Home.Coordinate);
                 }
             }
             else
@@ -149,10 +149,10 @@ namespace DOL.AI.Brain
             Body.StopFollowing();
             Body.StopAttack();
             var destination = (Body.Position + Vector.Create(targetAngle, length: 300)).TurnedAround();
-            if (Body.MaxDistance > 0 && !destination.Coordinate.IsWithinDistance(Body.SpawnPosition, Body.MaxDistance))
+            if (Body.MaxDistance > 0 && !destination.Coordinate.IsWithinDistance(Body.Home, Body.MaxDistance))
             {
-                var angleToSpawn = Body.SpawnPosition.Coordinate.GetOrientationTo(destination.Coordinate);
-                var adjustedCoordinates = Body.SpawnPosition.Coordinate + Vector.Create(angleToSpawn, Body.MaxDistance);
+                var angleToSpawn = Body.Home.Coordinate.GetOrientationTo(destination.Coordinate);
+                var adjustedCoordinates = Body.Home.Coordinate + Vector.Create(angleToSpawn, Body.MaxDistance);
                 destination = destination.With(adjustedCoordinates).With(adjustedCoordinates.GetOrientationTo(target.Coordinate));
             }
             Body.PathTo(destination.Coordinate, Body.MaxSpeed);

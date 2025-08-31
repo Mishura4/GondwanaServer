@@ -35,10 +35,10 @@ namespace DOL.AI.Brain
             var targetAngle = Body.Coordinate.GetOrientationTo(target.Coordinate) + Angle.Degrees(180);
             var speed = (short)(Body.MaxSpeed * 1.5); // 150% speed
             var destination = Body.Coordinate + Vector.Create(targetAngle, speed * 3.5); // Flee for 3.5 seconds
-            if (Body.MaxDistance > 0 && !destination.IsWithinDistance(Body.SpawnPosition, Body.MaxDistance))
+            if (Body.MaxDistance > 0 && !destination.IsWithinDistance(Body.Home, Body.MaxDistance))
             {
-                var angleToSpawn = Body.SpawnPosition.Coordinate.GetOrientationTo(destination);
-                destination = Body.SpawnPosition.Coordinate + Vector.Create(angleToSpawn, Body.MaxDistance);
+                var angleToSpawn = Body.Home.Coordinate.GetOrientationTo(destination);
+                destination = Body.Home.Coordinate + Vector.Create(angleToSpawn, Body.MaxDistance);
             }
             
             var point = PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, destination, 128, 128, 256);

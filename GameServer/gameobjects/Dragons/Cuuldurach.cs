@@ -98,7 +98,7 @@ namespace DOL.GS
                 case 2: return Coordinate.Create(x: 406158, y: 707745 );
                 case 3: return Coordinate.Create(x: 410302, y: 708563 );
                 case 4: return Coordinate.Create(x: 411117, y: 704696 );
-                default: return SpawnPosition.Coordinate;
+                default: return Home.Coordinate;
             }
         }
 

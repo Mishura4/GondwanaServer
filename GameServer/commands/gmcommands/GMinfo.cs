@@ -149,6 +149,7 @@ namespace DOL.GS.Commands
                         if (respawn.Hours > 0)
                             hours = respawn.Hours + " hours ";
                         info.Add(" + Respawn: " + days + hours + respawn.Minutes + " minutes " + respawn.Seconds + " seconds");
+                        info.Add(" + Home:  " + target.Home.X + ", " + target.Home.Y + ", " + target.Home.Z);
                         info.Add(" + SpawnPoint:  " + target.SpawnPosition.X + ", " + target.SpawnPosition.Y + ", " + target.SpawnPosition.Z);
                     }
 

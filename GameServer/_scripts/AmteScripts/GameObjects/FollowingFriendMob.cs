@@ -622,9 +622,9 @@ namespace DOL.AI.Brain
                 CheckNPCAggro();
             }
 
-            if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving && Body.Heading != Body.SpawnPosition.Orientation.InHeading && Body.Position == Body.SpawnPosition)
+            if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving && Body.Heading != Body.Home.Orientation.InHeading && Body.Position == Body.Home)
             {
-                Body.TurnTo(Body.SpawnPosition.Orientation);
+                Body.TurnTo(Body.Home.Orientation);
             }
 
             if (!Body.InCombat)

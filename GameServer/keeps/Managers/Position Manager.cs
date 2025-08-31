@@ -82,7 +82,8 @@ namespace DOL.GS.Keeps
         public static void LoadGuardPosition(DBKeepPosition pos, GameKeepGuard guard)
         {
             LoadKeepItemPosition(pos, guard);
-
+            
+            guard.Home = guard.Position;
             guard.SpawnPosition = guard.Position;
         }
         

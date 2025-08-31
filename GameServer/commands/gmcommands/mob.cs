@@ -1398,7 +1398,8 @@ namespace DOL.GS.Commands
                     hours = respawn.Hours + " hours ";
 
                 info.Add(" + Respawn: " + days + hours + respawn.Minutes + " minutes " + respawn.Seconds + " seconds");
-                info.Add(" + SpawnPoint: " + targetMob.SpawnPosition.X + ", " + targetMob.SpawnPosition.Y + ", " + targetMob.SpawnPosition.Z);
+                info.Add(" + Home:  " + targetMob.Home.X + ", " + targetMob.Home.Y + ", " + targetMob.Home.Z);
+                info.Add(" + SpawnPoint:  " + targetMob.SpawnPosition.X + ", " + targetMob.SpawnPosition.Y + ", " + targetMob.SpawnPosition.Z);
             }
 
             info.Add(" ");

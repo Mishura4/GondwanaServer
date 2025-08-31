@@ -615,7 +615,7 @@ namespace DOL.GS
 
             GameObject oldTarget = TargetObject;
             TargetObject = GlareTarget;
-            Position = Position.With(z: SpawnPosition.Z); // this is a fix to correct Z errors that sometimes happen during dragon fights
+            Position = Position.With(z: Home.Z); // this is a fix to correct Z errors that sometimes happen during dragon fights
             TurnTo(GlareTarget);
             CastSpell(Glare, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
             GlareTarget = null;

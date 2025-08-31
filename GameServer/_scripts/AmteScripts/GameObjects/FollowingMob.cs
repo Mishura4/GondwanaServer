@@ -27,8 +27,8 @@ namespace DOL.GS.Scripts
                 if (value == null)
                     return;
 
-                double DX = SpawnPosition.X - value.SpawnPosition.X;
-                double DY = SpawnPosition.Y - value.SpawnPosition.Y;
+                double DX = Home.X - value.Home.X;
+                double DY = Home.Y - value.Home.Y;
                 m_DistMob = (int)Math.Sqrt(DX * DX + DY * DY);
 
                 if (m_DistMob > 0)
@@ -37,7 +37,7 @@ namespace DOL.GS.Scripts
                     if (DY > 0) m_Angle += (Math.PI / 2 - m_Angle) * 2;
                     m_Angle -= Math.PI / 2;
 
-                    m_Angle = (m_Angle - value.SpawnHeading / GameMath.RADIAN_TO_HEADING) % (Math.PI * 2);
+                    m_Angle = (m_Angle - value.Home.Orientation.InRadians) % (Math.PI * 2);
                 }
                 else m_Angle = 0;
             }
@@ -266,16 +266,13 @@ namespace DOL.AI.Brain
                 CheckNPCAggro();
             }
 
-            if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving
-                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPosition)
-                Body.TurnTo(Body.SpawnHeading);
-
             if (!Body.InCombat)
                 Body.TempProperties.removeProperty(GameLiving.LAST_ATTACK_DATA);
 
             if (Body.CurrentSpellHandler != null || Body.IsMoving || Body.AttackState ||
                 Body.InCombat || Body.IsMovingOnPath || Body.CurrentFollowTarget != null)
                 return;
+            
             if ((Body as FollowingMob)?.MobFollow == null && FollowMobID != "")
                 SetMobByMobID();
 

@@ -564,7 +564,8 @@ namespace DOL.GS.Keeps
                     foreach (var guard in Keep.Guards.Values)
                     {
                         guard.MoveTo(guard.Position);
-                        guard.SpawnPosition = guard.SpawnPosition.With(z: Keep.Z);
+                        guard.Home = guard.Home.With(z: Keep.Z);
+                        guard.SpawnPosition = guard.Home.With(z: Keep.Z);
                     }
                 }
             }
