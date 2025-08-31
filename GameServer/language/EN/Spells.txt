@@ -78,7 +78,7 @@ SpellDescription.MonsterRez.DamageDuration:			over a period of {0} seconds
 SpellDescription.SummonMonster.MainDescription:		Corpse resurrection.
 SpellDescription.DamageAdd.MainDescription:			The target's melee attacks do an additional {0} {1}.
 SpellDescription.DamageShield.MainDescription:		The target deals {0} {1} to enemies that hit them with a melee attack.
-SpellDescription.SpellReflection.MainDescription1:	{0} reflects spells back at the attacker with a {1}% chance and at {2}% of their original damage, while absorbing {3}% of damage dealt.
+SpellDescription.SpellReflection.MainDescription1:	Reflects spells back at the attacker with a {1}% chance and at {2}% of their original damage, while absorbing {3}% of damage dealt.
 SpellDescription.SpellReflection.MainDescription2:	Close combat or archery spells aren't reflected.
 SpellDescription.SpellReflectionDebuff.MainDescription:		Removes the target's magic deflection shield.
 SpellDescription.PowerShield.MainDescription:		When the user's health falls below {0}%, power is converted into health until it reaches {1}% of maximum health.
@@ -226,10 +226,11 @@ SpellDescription.MaidenKiss.MainDescription:			Cure the target from "Frog" statu
 SpellDescription.ArawnCure.MainDescription:				Cure the target from "Poison", "Disease", Resurrection Sickness" status.
 SpellDescription.Fear.SingleTarget:						Frightens away the targeted enemy monster. Cannot affect player's pets or enemies above level {0}.
 SpellDescription.Fear.AreaTarget:						A point-blank area of effect fear that frightens away enemy monsters within {1} units of the caster. Cannot affect player's pets or enemies above level {0}.
-SpellDescription.FearServant.SingleTarget:				Frightens away the targeted enemy's pet(s). Cannot affect enemy's pets above level {0}.
-SpellDescription.FearServant.AreaTarget:				A point-blank area of effect fear that frightens away enemy's pet(s) within {1} units of the caster. Cannot affect enemy's pets above level {0}.
+SpellDescription.FearServant.SingleTarget:				Send an enemy pet fleeing in terror. Cannot affect enemy's pets above level {0}.
+SpellDescription.FearServant.AreaTarget:				A point-blank area of effect fear that sends an enemy pet fleeing in terror within {1} units of the caster. Cannot affect enemy's pets above level {0}.
 SpellDescription.FearServant.SingleTarget&Npc:			Frightens away the targeted enemies. Cannot affect enemies above level {0}.
 SpellDescription.FearServant.AreaTarget&Npc:			A point-blank area of effect fear that frightens away enemies within {1} units of the caster. Cannot affect enemies above level {0}.
+SpellDescription.FearServant.PetDescription:			While feared, pets are unable to be controlled or released by their master.
 SpellDescription.BainsheePulseDmg.MainDescription:		Target takes {0} {1}.
 SpellDescription.BainsheePulseDmg.AreaDescription:		The spell affects all enemies in the immediate radius of the caster.
 SpellDescription.BainsheePulseDmg.SecondaryDescription:	Casting the chant again while it is running cancels it. The spell effect drops if the caster moves.

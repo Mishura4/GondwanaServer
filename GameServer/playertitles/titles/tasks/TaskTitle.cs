@@ -69,7 +69,12 @@ namespace DOL.GS.PlayerTitles
             Adventurer2 = 1 << 27,
             Adventurer3 = 1 << 28,
             Adventurer4 = 1 << 29,
-            Adventurer5 = 1 << 30
+            Adventurer5 = 1 << 30,
+            Duelist1 = 1 << 31,
+            Duelist2 = 1 << 32,
+            Duelist3 = 1 << 33,
+            Duelist4 = 1 << 34,
+            Duelist5 = 1 << 35
         }
         
         public abstract string TitleKey { get; }

@@ -8764,7 +8764,10 @@ namespace DOL.GS
                 if (canAwardTaskPoints && deathWasDuel)
                 {
                     TaskManager.UpdateTaskProgress(killerPlayer, "EnemyKilledInDuel", 1);
-                    TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
+                    if (!IsInRvR && !IsInPvP && !IsInPvPArea())
+                    {
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
+                    }
                 }
 
                 killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", killerPlayer.GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);

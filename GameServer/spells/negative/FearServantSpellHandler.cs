@@ -215,6 +215,7 @@ namespace DOL.GS.Spells
             int recastSeconds = Spell.RecastDelay / 1000;
 
             string main;
+            string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.FearServant.PetDescription");
 
             if (Spell.AmnesiaChance > 0)
             {
@@ -241,11 +242,11 @@ namespace DOL.GS.Spells
 
             if (Spell.RecastDelay > 0)
             {
-                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
-                return main + "\n\n" + secondDesc;
+                string thirdDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return main + "\n\n" + secondDesc + "\n\n" + thirdDesc;
             }
 
-            return main;
+            return main + "\n\n" + secondDesc;
         }
     }
 }

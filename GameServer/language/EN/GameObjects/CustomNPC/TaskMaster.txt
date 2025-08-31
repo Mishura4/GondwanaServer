@@ -12,6 +12,7 @@ TaskMaster.TraderTokens:	Trader Tokens: Master the market and complete successfu
 TaskMaster.ThiefTokens:		Thief Tokens: Hone your stealth and cunning to steal from players and earn these elusive tokens. Each token bestows new titles and unique bonuses, celebrating your prowess as a master thief who operates in the shadows.
 TaskMaster.BountyHunterTokens:	Bounty Hunter Tokens: Hunt down and eliminate outlaw players to earn these prestigious tokens. These tokens reward you with new titles and special bonuses, honoring your relentless pursuit of justice and order.
 TaskMaster.WrathTokens:		Wrath Tokens: Embrace the fury of battle and defeat enemies in Adrenaline Mode to earn these fierce tokens. Each token awards you with new titles and formidable bonuses, showcasing your dominance and unyielding wrath on the battlefield.
+TaskMaster.DuelistTokens:	Duelist Tokens: Challenge worthy opponents to honorable duels and win to earn these tokens. Each token unlocks distinguished titles and boosts your chance to land critical strikes, proving your growing expertise as a seasoned duelist.
 TaskMaster.AdventurerTokens:	Adventurer Tokens: Embark on daring quests and complete them to earn these heroic tokens. Each token grants you new titles and unique bonuses, highlighting your adventurous spirit and unwavering determination.
 TaskMaster.TokensToDeliver:	Return tokens to me to claim your rewards. Keep an eye out for tasks that offer these valuable tokens!
 TaskMaster.GiveTitle:		You have received the title of {0}!

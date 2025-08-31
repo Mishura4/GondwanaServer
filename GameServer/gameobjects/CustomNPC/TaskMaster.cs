@@ -114,6 +114,7 @@ namespace DOL.GS
                         LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.ThiefTokens"),
                         LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.BountyHunterTokens"),
                         LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.WrathTokens"),
+                        LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.DuelistTokens"),
                         LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.AdventurerTokens"),
                         LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.TokensToDeliver")
                         };
@@ -182,6 +183,9 @@ namespace DOL.GS
                     break;
                 case "TaskToken_Wrath":
                     success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Wrath, level, "Titles.Wrath");
+                    break;
+                case "TaskToken_Duelist":
+                    success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Duelist, level, "Titles.Duelist");
                     break;
                 case "TaskToken_Adventurer":
                     success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Adventurer, level, "Titles.Adventurer");

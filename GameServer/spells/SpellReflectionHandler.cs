@@ -135,7 +135,7 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             int recastSeconds = Spell.RecastDelay / 1000;
-            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpellReflection.MainDescription1", Spell.Name, Spell.Value, Spell.AmnesiaChance, Spell.LifeDrainReturn);
+            string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpellReflection.MainDescription1", Spell.Value, Spell.AmnesiaChance, Spell.LifeDrainReturn);
             string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.SpellReflection.MainDescription2");
 
             if (Spell.RecastDelay > 0)

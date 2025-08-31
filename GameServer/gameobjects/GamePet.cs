@@ -352,6 +352,11 @@ namespace DOL.GS
                 case "styletaunt": // Style taunt effects already scale with damage
                 case "curepoison":
                 case "curedisease":
+                case "arawncure":
+                case "curenearsight":
+                case "curemezz":
+                case "maidenkiss":
+                case "cureall":
                     break;
                 default:
                     break; // Don't mess with types we don't know

@@ -663,6 +663,13 @@ namespace DOL.AI.Brain
                 case "TRIGGERBUFF":
                 case "TENSIONBUFF":
                 case "BATTLEFEVERDURATIONBUFF":
+                case "SPELLSHIELD":
+                case "DEBUFFIMMUNITY":
+                case "CRITICALMAGICALBUFF":
+                case "CRITICALMELEEBUFF":
+                case "POWERSHIELD":
+                case "MAGICHEALABSORB":
+                case "DAMAGERETURN":
                     {
                         String target;
 
@@ -765,6 +772,12 @@ namespace DOL.AI.Brain
                 case "UNPETRIFY":
                     {
                         if (SelectToCureTarget(spell, CureSpellConstants.CurePetrifySpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "MAIDENKISS":
+                    {
+                        if (SelectCureTarget(spell, CureSpellConstants.MaidenKissSpellTypes, out GameObject target))
                             Body.TargetObject = target;
                         break;
                     }

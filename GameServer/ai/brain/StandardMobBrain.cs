@@ -1451,6 +1451,7 @@ namespace DOL.AI.Brain
                 case "CRITICALMELEEBUFF":
                 case "POWERSHIELD":
                 case "MAGICHEALABSORB":
+                case "DAMAGERETURN":
                     {
                         // Buff self, if not in melee, but not each and every mob
                         // at the same time, because it looks silly.
@@ -1519,6 +1520,12 @@ namespace DOL.AI.Brain
                 case "CUREALL":
                     {
                         if (SelectCureTarget(spell, CureSpellConstants.CureAllSpellTypes, out GameObject target))
+                            Body.TargetObject = target;
+                        break;
+                    }
+                case "MAIDENKISS":
+                    {
+                        if (SelectCureTarget(spell, CureSpellConstants.MaidenKissSpellTypes, out GameObject target))
                             Body.TargetObject = target;
                         break;
                     }

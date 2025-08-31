@@ -78,7 +78,7 @@ SpellDescription.MonsterRez.DamageDuration:			pendant une durée de {0} secondes
 SpellDescription.SummonMonster.MainDescription:		Résurrection cadavérique.
 SpellDescription.DamageAdd.MainDescription:			Les attaques de mêlée de la cible infligent {0} {1} supplémentaires.
 SpellDescription.DamageShield.MainDescription:		La cible inflige {0} {1} aux ennemis qui la frappent au corps à corps.
-SpellDescription.SpellReflection.MainDescription1:	{0} renvoie les sorts à l'attaquant avec {1}% de chances et à {2}% de leurs dégâts initiaux, tout en absorbant {3}% des dégâts infligés.
+SpellDescription.SpellReflection.MainDescription1:	Renvoie les sorts à l'attaquant avec {1}% de chances et à {2}% de leurs dégâts initiaux, tout en absorbant {3}% des dégâts infligés.
 SpellDescription.SpellReflection.MainDescription2:	Les sorts de combat rapprochés et les sorts d'archerie ne sont pas renvoyés.
 SpellDescription.SpellReflectionDebuff.MainDescription:		Supprime le bouclier de déflexion magique de la cible.
 SpellDescription.PowerShield.MainDescription:		Lorsque la santé de l'utilisateur tombe en dessous de {0}%, sa puissance est convertie en points de vie jusqu'à atteindre {1}% de sa santé maximale.
@@ -226,10 +226,11 @@ SpellDescription.MaidenKiss.MainDescription:			Guérit la cible du statut "Greno
 SpellDescription.ArawnCure.MainDescription:				Guérit la cible du statut "Poison", "Maladie", Maladie de la résurrection".
 SpellDescription.Fear.SingleTarget:						Effraie l'ennemi ciblé. N'affecte pas les "familiers" ni les ennemis de niveau supérieur à {0}.
 SpellDescription.Fear.AreaTarget:						Un sort de terreur de zone centré sur le lanceur, effrayant les monstres ennemis dans un rayon de {1} unités. N'affecte pas les "familiers" ni les ennemis de niveau supérieur à {0}.
-SpellDescription.FearServant.SingleTarget:				Effraie le "familier" de l'ennemi ciblé. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.SingleTarget:				Faites fuir de terreur un familier ennemi ciblé. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
 SpellDescription.FearServant.AreaTarget:				Un sort de terreur de zone centré sur le lanceur, effrayant les "familiers" ennemis dans un rayon de {1} unités. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
 SpellDescription.FearServant.SingleTarget&Npc:			Effraie l'ennemi ciblé. N'affecte pas les ennemis de niveau supérieur à {0}.
 SpellDescription.FearServant.AreaTarget&Npc:			Un sort de terreur de zone centré sur le lanceur, effrayant les ennemis dans un rayon de {1} unités. N'affecte pas les ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.PetDescription:			Sous l'effet de la terreur, les familiers ne peuvent pas être contrôlés ni libérés par leur maître.
 SpellDescription.BainsheePulseDmg.MainDescription:		La cible subit {0} {1}.
 SpellDescription.BainsheePulseDmg.AreaDescription:		Le sort affecte tous les ennemis dans le rayon immédiat du lanceur du sort.
 SpellDescription.BainsheePulseDmg.SecondaryDescription:	Lancer à nouveau l'incantation pendant son effet l'annule. Elle se dissipe si le lanceur du sort se déplace.

@@ -620,6 +620,13 @@ Titles.Wrath.Level3:					Vengeur de la Colère
 Titles.Wrath.Level4:					Apogée de Fureur
 Titles.Wrath.Level5:					Mad Max
 
+# /Duelist
+Titles.Duelist.Level1:					Provocator
+Titles.Duelist.Level2:					Pugnator
+Titles.Duelist.Level3:					Duello Magister
+Titles.Duelist.Level4:					Duello Princeps
+Titles.Duelist.Level5:					Summus Bellator
+
 # /Adventurer
 Titles.Adventurer.Level1:				Amateur de Découvertes
 Titles.Adventurer.Level2:				Vagabond Curieux

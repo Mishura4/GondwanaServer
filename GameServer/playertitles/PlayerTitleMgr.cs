@@ -59,6 +59,8 @@ namespace DOL.GS.PlayerTitles
 
             public WrathTitle[] Wrath { get; init; }
 
+            public DuelistTitle[] Duelist { get; init; }
+
             internal TaskTitleHolder()
             {
                 Adventurer = new[]
@@ -69,7 +71,16 @@ namespace DOL.GS.PlayerTitles
                     PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel4).FullName) as AdventurerTitle,
                     PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel5).FullName) as AdventurerTitle,
                 };
-                
+
+                Duelist = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DuelistTitleLevel1).FullName) as DuelistTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DuelistTitleLevel2).FullName) as DuelistTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DuelistTitleLevel3).FullName) as DuelistTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DuelistTitleLevel4).FullName) as DuelistTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DuelistTitleLevel5).FullName) as DuelistTitle,
+                };
+
                 Bountyhunter = new[]
                 {
                     PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel1).FullName) as BountyhunterTitle,
