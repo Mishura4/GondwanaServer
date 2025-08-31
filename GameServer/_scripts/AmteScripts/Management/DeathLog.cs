@@ -78,7 +78,6 @@ namespace DOL.GS.GameEvents
                     }
                     
                     bool autoReport = DeathCheck.Instance.IsChainKiller(playerKiller, playerVictim);
-
                     if (autoReport)
                     {
                         // Automatically report player

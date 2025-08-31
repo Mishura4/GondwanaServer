@@ -42,7 +42,11 @@ namespace DOL.GS
         /// <summary>
         /// Duel Target
         /// </summary>
-        public GamePlayer Target { get; protected set; }
+        public GamePlayer Target
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// Is Duel Started ?
@@ -99,7 +103,7 @@ namespace DOL.GS
             _distanceTimer.Start(3000);
         }
 
-        public void Stop()
+        public void Stop(GamePlayer? winner = null)
         {
             if (!Started) return;
             Started = false;
@@ -109,7 +113,7 @@ namespace DOL.GS
             var b = Target;
 
             // Clear duel state on target player first (keeps legacy behavior)
-            b?.DuelStop();
+            b?.DuelStop(winner);
 
             // Cancel hostile effects both ways
             if (a != null && b != null)
@@ -123,13 +127,22 @@ namespace DOL.GS
                         effect.Cancel(false);
             }
 
+            if (winner != null)
+            {
+                ApplyPairCooldown(Starter, Target);
+            }
+
             Unwire(Starter);
             Unwire(Target);
 
             Starter.XPGainers.Clear();
             if (b != null) b.XPGainers.Clear();
 
-            if (_distanceTimer != null) { _distanceTimer.Stop(); _distanceTimer = null; }
+            if (_distanceTimer != null)
+            {
+                _distanceTimer.Stop();
+                _distanceTimer = null;
+            }
 
             Target = null;
             Starter.Out.SendMessage(LanguageMgr.GetTranslation(Starter.Client, "GameObjects.GamePlayer.DuelStop.DuelEnds"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -143,7 +156,6 @@ namespace DOL.GS
             GameEventMgr.AddHandler(p, GamePlayerEvent.RegionChanged, DuelOnPlayerQuit);
             GameEventMgr.AddHandler(p, GameLivingEvent.AttackedByEnemy, DuelOnAttack);
             GameEventMgr.AddHandler(p, GameLivingEvent.AttackFinished, DuelOnAttack);
-            GameEventMgr.AddHandler(p, GameLivingEvent.Dying, DuelOnDeath);
         }
 
         protected virtual void Unwire(GamePlayer p)
@@ -154,7 +166,6 @@ namespace DOL.GS
             GameEventMgr.RemoveHandler(p, GamePlayerEvent.RegionChanged, DuelOnPlayerQuit);
             GameEventMgr.RemoveHandler(p, GameLivingEvent.AttackedByEnemy, DuelOnAttack);
             GameEventMgr.RemoveHandler(p, GameLivingEvent.AttackFinished, DuelOnAttack);
-            GameEventMgr.RemoveHandler(p, GameLivingEvent.Dying, DuelOnDeath);
         }
 
         private int DistanceWatchdog(RegionTimer _)
@@ -241,31 +252,6 @@ namespace DOL.GS
             // A duelist hit someone else OR a third party attacked a duelist -> cancel duel
             // If you want to require an actual landed hit to cancel, uncomment the next line:
             // if (!ad.IsHit) return;
-            Stop();
-        }
-
-        protected virtual void DuelOnDeath(DOLEvent e, object sender, EventArgs arguments)
-        {
-            if (!Started || Starter == null || Target == null) return;
-            if (sender is not GameLiving dead) return;
-
-            var deadCtrl = dead.GetController();
-            var a = ((GameLiving)Starter).GetController();
-            var b = ((GameLiving)Target).GetController();
-
-            if (deadCtrl != a && deadCtrl != b) return;
-
-            bool killedByOtherDuelist = false;
-
-            if (arguments is DyingEventArgs dea && dea.Killer is GameLiving killer)
-            {
-                var killerCtrl = killer.GetController();
-                killedByOtherDuelist = (killerCtrl == a && deadCtrl == b) || (killerCtrl == b && deadCtrl == a);
-            }
-
-            if (killedByOtherDuelist)
-                ApplyPairCooldown(Starter, Target);
-
             Stop();
         }
 

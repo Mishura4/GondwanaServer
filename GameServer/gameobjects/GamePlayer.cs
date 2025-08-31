@@ -8703,8 +8703,6 @@ namespace DOL.GS
                 }
             }
 
-            DuelStop();
-
             eChatType messageType;
             if (m_releaseType == eReleaseType.Duel)
                 messageType = eChatType.CT_Skill;
@@ -8892,10 +8890,14 @@ namespace DOL.GS
                             player.GetPersonalizedName(this), player.GetPersonalizedName(killer)), messageType, eChatLoc.CL_SystemWindow);
                 }
             }
+            
+            if (deathWasDuel)
+                XPGainers.Clear();
 
             //Dead ppl. dismount ...
             if (Steed != null)
                 DismountSteed(true);
+
             //Dead ppl. don't sit ...
             if (IsSitting)
             {
@@ -9088,6 +9090,8 @@ namespace DOL.GS
 
             DropPvPTreasuresOnDeath(killer);
             DropFlagsOnDeath((GameLiving)killer);
+
+            DuelStop(killer?.GetPlayerOwner());
         }
 
         protected virtual void DropPvPTreasuresOnDeath(GameObject killer)
@@ -9348,12 +9352,12 @@ namespace DOL.GS
         /// <summary>
         /// Stops the duel if it is running
         /// </summary>
-        public void DuelStop()
+        public void DuelStop(GamePlayer? killer = null)
         {
             if (Duel == null)
                 return;
 
-            Duel.Stop();
+            Duel.Stop(killer);
             Duel = null;
         }
         #endregion

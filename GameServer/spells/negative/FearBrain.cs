@@ -73,7 +73,7 @@ namespace DOL.AI.Brain
                 {
                     var distPrev = closestPlayer.GetDistanceSquaredTo(Body);
                     var distNew = player.GetDistanceSquaredTo(Body);
-                    closestPlayer = distPrev > distNew ? closestPlayer : player;
+                    closestPlayer = distPrev < distNew ? closestPlayer : player;
                 }
                 m_timeWithoutPlayers = 0;
             }
@@ -105,16 +105,13 @@ namespace DOL.AI.Brain
             if (Body.IsMoving || Body.InCombat)
                 return;
 
-            if (!Body.Coordinate.IsWithinDistance(Body.SpawnPosition, Body.RoamingRange + GameNPC.CONST_WALKTOTOLERANCE))
+            if (!Body.Coordinate.IsWithinDistance(Body.SpawnPosition, Math.Max(Body.RoamingRange, GameNPC.CONST_WALKTOTOLERANCE)))
             {
                 if (m_timeWithoutPlayers >= 30000)
                 {
                     m_timeWithoutPlayers = 0;
-                    if (!Body.Coordinate.IsWithinDistance(Body.SpawnPosition, Math.Max(Body.RoamingRange, GameNPC.CONST_WALKTOTOLERANCE)))
-                    {
-                        Body.WalkToSpawn();
-                        return;
-                    }
+                    Body.WalkToSpawn();
+                    return;
                 }
                 else
                 {
