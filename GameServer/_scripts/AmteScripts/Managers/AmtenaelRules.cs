@@ -568,7 +568,8 @@ namespace DOL.GS.ServerRules
                     {
                         return false;
                     }
-                    if (targetNpc.CurrentTerritory?.IsOwnedBy(targetPlayer) == true)
+
+                    if (targetNpc.CurrentTerritory?.IsOwnedBy(sourcePlayer) == true)
                     {
                         return true;
                     }
