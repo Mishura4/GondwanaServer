@@ -17,20 +17,7 @@ namespace DOL.GS.GameEvents
     public static class DeathLog
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
-        private static readonly ConcurrentDictionary<string, long> _lastProcessed = new();
-
-        private static bool IsLikelyDuplicate(GamePlayer killer, GamePlayer victim, int windowMs = 1500)
-        {
-            string key = killer.InternalID + "|" + victim.InternalID;
-            long now = victim.CurrentRegion?.Time ?? Environment.TickCount64;
-
-            if (_lastProcessed.TryGetValue(key, out var prev) && (now - prev) >= 0 && (now - prev) < windowMs)
-                return true;
-
-            _lastProcessed[key] = now;
-            return false;
-        }
-
+        
         [ScriptLoadedEvent]
         public static void OnScriptCompiled(DOLEvent e, object sender, EventArgs args)
         {
@@ -54,6 +41,7 @@ namespace DOL.GS.GameEvents
         {
             if (args is not DyingEventArgs { Killer: not null } dyingArgs)
                 return;
+            
             var killer = dyingArgs.Killer;
             if (sender is GamePlayer playerVictim)
             {
@@ -88,12 +76,8 @@ namespace DOL.GS.GameEvents
                         // PvP area
                         return;
                     }
-
-                    if (IsLikelyDuplicate(playerKiller, playerVictim))
-                        return;
-
+                    
                     bool autoReport = DeathCheck.Instance.IsChainKiller(playerKiller, playerVictim);
-                    GameServer.Database.AddObject(new DBDeathLog(playerVictim, playerKiller, autoReport));
 
                     if (autoReport)
                     {

@@ -9077,7 +9077,6 @@ namespace DOL.GS
 
             for (int slot = (int)eInventorySlot.FirstBackpack; slot <= (int)eInventorySlot.LastBackpack; slot++)
             {
-                base.Die(killer);
                 InventoryItem item = Inventory.GetItem((eInventorySlot)slot);
 
                 if (item is DieTriggerSpell dieTrigger)
