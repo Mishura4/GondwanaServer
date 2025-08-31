@@ -71,15 +71,24 @@ namespace DOL.GS
         private static void ApplyPairCooldown(GamePlayer a, GamePlayer b)
         {
             int cool = ServerProperties.Properties.DUEL_REMATCH_COOLDOWN_SECONDS;
-            if (cool <= 0 || a == null || b == null) return;
+            if (cool <= 0) return;
 
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             long until = now + cool;
+            
+            // TODO: This is called twice...
 
-            lock (a.TempProperties)
-                a.TempProperties.setProperty(REMATCH_KEY_PREFIX + b.InternalID, until);
-            lock (b.TempProperties)
-                b.TempProperties.setProperty(REMATCH_KEY_PREFIX + a.InternalID, until);
+            if (a != null)
+            {
+                lock (a.TempProperties)
+                    a.TempProperties.setProperty(REMATCH_KEY_PREFIX + b.InternalID, until);
+            }
+
+            if (b != null)
+            {
+                lock (b.TempProperties)
+                    b.TempProperties.setProperty(REMATCH_KEY_PREFIX + a.InternalID, until);
+            }
         }
 
         /// <summary>

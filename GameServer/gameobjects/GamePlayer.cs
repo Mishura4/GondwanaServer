@@ -9091,7 +9091,7 @@ namespace DOL.GS
             DropPvPTreasuresOnDeath(killer);
             DropFlagsOnDeath((GameLiving)killer);
 
-            DuelStop(killer?.GetPlayerOwner());
+            DuelStop((killer as GameLiving)?.GetController() as GamePlayer);
         }
 
         protected virtual void DropPvPTreasuresOnDeath(GameObject killer)
