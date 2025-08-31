@@ -36,6 +36,7 @@ namespace DOL.GS.Spells
     {
         // constructor
         public HealSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
         /// <summary>
         /// Execute heal spell
         /// </summary>
@@ -146,6 +147,11 @@ namespace DOL.GS.Spells
                 else
                 {
                     healed |= HealTarget(healTarget, heal);
+                }
+                
+                if (CastSubSpellsWithSpell)
+                {
+                    healed |= CastSubSpells(target);
                 }
             }
 
