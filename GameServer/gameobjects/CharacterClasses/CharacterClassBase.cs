@@ -122,6 +122,23 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Returns the adrenaline SpellID that should be used *right now* for this player.
+        /// Default: returns the configured m_adrenalineSpellID (static).
+        /// Override in subclasses (e.g., Occultist) to switch dynamically.
+        /// </summary>
+        public virtual int GetAdrenalineSpellID(GamePlayer player) => m_adrenalineSpellID;
+
+        /// <summary>
+        /// Convenience: returns the adrenaline Spell object for the current state.
+        /// Default: resolves from GetAdrenalineSpellID.
+        /// </summary>
+        public virtual Spell GetAdrenalineSpell(GamePlayer player)
+        {
+            int id = GetAdrenalineSpellID(player);
+            return id != 0 ? SkillBase.GetSpellByID(id) : null;
+        }
+
+        /// <summary>
         /// The GamePlayer for this character
         /// </summary>
         public GamePlayer Player { get; private set; }

@@ -94,6 +94,10 @@ namespace DOL.GS.PropertyCalc
 
             regen += living.BaseBuffBonusCategory[(int)property] - debuff;
 
+            int decrepitFlat = living.TempProperties.getProperty<int>("DECREPIT_REGEN_FLAT", 0);
+            if (decrepitFlat > 0)
+                regen += decrepitFlat;
+
             if (regen < 1)
                 regen = 1;
 
