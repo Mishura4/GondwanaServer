@@ -23,6 +23,8 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
 using DOL.Database;
+using DOL.Language;
+using DOL.GS.Spells;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -52,6 +54,17 @@ namespace DOL.GS.RealmAbilities
             {
                 caster.Out.SendMessage("You cannot currently use this ability", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return;
+            }
+
+            // If Cleric Ascendance is active and not permissive, cancel it before applying MoC
+            GameSpellEffect ascEff = SpellHandler.FindEffectOnTarget(caster, "Ascendance");
+            if (ascEff != null && (ascEff.Spell?.AmnesiaChance ?? 0) <= 0)
+            {
+                ascEff.Cancel(false);
+                caster.Out.SendMessage(
+                    LanguageMgr.GetTranslation(caster.Client, "RealmAbility.MasteryofConcentration.CanceledAscendance")
+                    ?? "Your Ascendance fades as you focus your concentration.",
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
             SendCasterSpellEffectAndCastMessage(living, 7007, true);

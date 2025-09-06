@@ -64,6 +64,10 @@ namespace DOL.GS.PropertyCalc
 
             regen += living.BaseBuffBonusCategory[(int)property] + living.AbilityBonus[(int)property] + living.ItemBonus[(int)property] - debuff;
 
+            int spiritFlat = living.TempProperties.getProperty<int>("SPIRIT_REGEN_FLAT", 0);
+            if (spiritFlat > 0)
+                regen += spiritFlat;
+
             if (regen < 1)
                 regen = 1;
 

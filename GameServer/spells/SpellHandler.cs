@@ -51,6 +51,16 @@ namespace DOL.GS.Spells
     /// </summary>
     public class SpellHandler : ISpellHandler
     {
+        public static class OccultistForms
+        {
+            public const string KEY_SPIRIT = "FORM_SPIRIT_ACTIVE";
+            public const string KEY_CHTONIC = "FORM_CHTONIC_ACTIVE";
+            public const string KEY_DECREPIT = "FORM_DECREPIT_ACTIVE";
+
+            public const string PET_BASE_TPL = "OCC_PET_BASE_TPL";
+            public const string PET_SPIRIT_TPL = "OCC_PET_SPIRIT_TPL";
+        }
+
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
@@ -212,7 +222,6 @@ namespace DOL.GS.Spells
         }
 
         public bool CastSubSpellsWithSpell { get; protected set; } = true;
-
 
         /// <summary>
         /// The CastingCompleteEvent

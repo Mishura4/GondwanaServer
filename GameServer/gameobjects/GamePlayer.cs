@@ -9528,7 +9528,20 @@ namespace DOL.GS
                     m_runningSpellHandler.CastSpell();
             }
         }
-        
+
+        private static bool IsAscendanceBlockedSpell(Spell spell)
+        {
+            if (spell == null) return false;
+            string st = spell.SpellType ?? string.Empty;
+
+            // Only block heals and resurrects (buffs/regen now allowed)
+            if (st.Equals("Heal", System.StringComparison.OrdinalIgnoreCase) ||
+                st.Equals("SpreadHeal", System.StringComparison.OrdinalIgnoreCase) || // keep if you use it
+                st.Equals("Resurrect", System.StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }
 
         /// <summary>
         /// Cast a specific spell from given spell line
@@ -9540,6 +9553,23 @@ namespace DOL.GS
         public bool CastSpell(Spell spell, SpellLine line, InventoryItem useItem)
         {
             bool casted = false;
+
+            {
+                GameSpellEffect ascEff = SpellHandler.FindEffectOnTarget(this, "Ascendance");
+                if (ascEff != null)
+                {
+                    int ascAmnesia = ascEff.Spell?.AmnesiaChance ?? 0;
+                    if (ascAmnesia <= 0 && IsAscendanceBlockedSpell(spell))
+                    {
+                        Out.SendMessage(
+                            LanguageMgr.GetTranslation(Client.Account.Language, "SpellDescription.Ascendance.CannotCast", spell.Name)
+                            ?? $"Ascendance forbids casting {spell.Name}.",
+                            eChatType.CT_SpellResisted,
+                            eChatLoc.CL_SystemWindow);
+                        return false;
+                    }
+                }
+            }
 
             if (IsCrafting)
             {
