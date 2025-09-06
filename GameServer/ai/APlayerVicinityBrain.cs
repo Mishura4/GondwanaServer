@@ -99,7 +99,7 @@ namespace DOL.AI
             {
                 // Stop the brain timer
                 Stop();
-                
+
                 // Full reload on far from spawn & no players around at all
                 if (NoPlayersResetDelay > 0 && Body != null && Body.SpawnPosition != Position.Nowhere)
                 {

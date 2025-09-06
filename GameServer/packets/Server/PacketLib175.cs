@@ -305,11 +305,12 @@ namespace DOL.GS.PacketHandler
             foreach (var (stat, i) in updateResists.Select((stat, i) => (stat, i)))
             {
                 var prop = (eProperty)stat;
+                var total = m_gameClient.Player.GetModified(prop);
                 racial[i] = SkillBase.GetRaceResist(m_gameClient.Player.Race, stat, m_gameClient.Player);
                 caps[i] = ResistCalculator.GetItemBonusCap(m_gameClient.Player, prop);
                 items[i] = m_gameClient.Player.ItemBonus[(int)prop];
                 secondary[i] = m_gameClient.Player.SpecBuffBonusCategory[(int)prop] + m_gameClient.Player.AbilityBonus[(int)prop];
-                buffs[i] = m_gameClient.Player.GetModified(prop) - (racial[i] + items[i] + secondary[i]);
+                buffs[i] = (total - (racial[i] + items[i])) + secondary[i];
             }
 
 
