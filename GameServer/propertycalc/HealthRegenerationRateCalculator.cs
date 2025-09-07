@@ -86,17 +86,17 @@ namespace DOL.GS.PropertyCalc
                 regen += 1; // compensate int rounding error
             }
 
-            regen += living.ItemBonus[(int)property];
-
-            int debuff = living.SpecBuffBonusCategory[(int)property];
+            int debuff = living.SpecDebuffCategory[(int)property];
             if (debuff < 0)
                 debuff = -debuff;
 
-            regen += living.BaseBuffBonusCategory[(int)property] - debuff;
+            regen += living.BaseBuffBonusCategory[(int)property]
+                + living.AbilityBonus[(int)property]
+                + living.ItemBonus[(int)property]
+                + living.SpecBuffBonusCategory[(int)property]
+                - debuff;
 
-            int decrepitFlat = living.TempProperties.getProperty<int>("DECREPIT_REGEN_FLAT", 0);
-            if (decrepitFlat > 0)
-                regen += decrepitFlat;
+            regen *= living.BuffBonusMultCategory1.Get((int)property);
 
             if (regen < 1)
                 regen = 1;

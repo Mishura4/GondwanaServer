@@ -301,16 +301,32 @@ namespace DOL.GS.PacketHandler
             var caps = new int[updateResists.Length];
             var buffs = new int[updateResists.Length];
             var secondary = new int[updateResists.Length];
+            var player = m_gameClient.Player;
             
             foreach (var (stat, i) in updateResists.Select((stat, i) => (stat, i)))
             {
                 var prop = (eProperty)stat;
-                var total = m_gameClient.Player.GetModified(prop);
-                racial[i] = SkillBase.GetRaceResist(m_gameClient.Player.Race, stat, m_gameClient.Player);
-                caps[i] = ResistCalculator.GetItemBonusCap(m_gameClient.Player, prop);
-                items[i] = m_gameClient.Player.ItemBonus[(int)prop];
-                secondary[i] = m_gameClient.Player.SpecBuffBonusCategory[(int)prop] + m_gameClient.Player.AbilityBonus[(int)prop];
+                var total = player.GetModified(prop);
+                racial[i] = SkillBase.GetRaceResist(player.Race, stat, player);
+                caps[i] = ResistCalculator.GetItemBonusCap(player, prop);
+                items[i] = player.ItemBonus[(int)prop];
+                secondary[i] = player.SpecBuffBonusCategory[(int)prop] + player.AbilityBonus[(int)prop];
                 buffs[i] = (total - (racial[i] + items[i])) + secondary[i];
+                switch (prop)
+                {
+                    case eProperty.Resist_Body:
+                    case eProperty.Resist_Cold:
+                    case eProperty.Resist_Energy:
+                    case eProperty.Resist_Heat:
+                    case eProperty.Resist_Matter:
+                    case eProperty.Resist_Natural:
+                    case eProperty.Resist_Spirit:
+                        buffs[i] -= Math.Abs(player.DebuffCategory[eProperty.MagicAbsorption]) + Math.Abs(player.SpecDebuffCategory[eProperty.MagicAbsorption]);
+                        buffs[i] += player.BaseBuffBonusCategory[eProperty.MagicAbsorption];
+                        secondary[i] += player.AbilityBonus[eProperty.MagicAbsorption];
+                        secondary[i] += player.SpecBuffBonusCategory[eProperty.MagicAbsorption];
+                        break;
+                }
             }
 
 

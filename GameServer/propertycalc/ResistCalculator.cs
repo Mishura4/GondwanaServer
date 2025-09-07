@@ -43,6 +43,9 @@ namespace DOL.GS.PropertyCalc
             if (living is not GameNPC)
                 buffBonus = Math.Min(buffBonus, BuffBonusCap);
 
+            // After cap; does this make sense?
+            buffBonus += living.SpecBuffBonusCategory[(int)property];
+
             switch (property)
             {
                 case eProperty.Resist_Body:
@@ -52,9 +55,10 @@ namespace DOL.GS.PropertyCalc
                 case eProperty.Resist_Matter:
                 case eProperty.Resist_Natural:
                 case eProperty.Resist_Spirit:
-                    debuff += Math.Abs(living.DebuffCategory[eProperty.MagicAbsorption]);
+                    debuff += Math.Abs(living.DebuffCategory[eProperty.MagicAbsorption]) + Math.Abs(living.SpecDebuffCategory[eProperty.MagicAbsorption]);
                     abilityBonus += living.AbilityBonus[eProperty.MagicAbsorption];
                     buffBonus += living.BaseBuffBonusCategory[eProperty.MagicAbsorption];
+                    buffBonus += living.SpecBuffBonusCategory[eProperty.MagicAbsorption];
                     break;
             }
 
@@ -99,6 +103,7 @@ namespace DOL.GS.PropertyCalc
                 + living.BuffBonusCategory4[(int)property];
             if (living is not GameNPC)
                 buffBonus = Math.Min(buffBonus, BuffBonusCap);
+
             switch (property)
             {
                 case eProperty.Resist_Body:
@@ -110,6 +115,7 @@ namespace DOL.GS.PropertyCalc
                 case eProperty.Resist_Spirit:
                     debuff += Math.Abs(living.DebuffCategory[eProperty.MagicAbsorption]);
                     buffBonus += living.BaseBuffBonusCategory[eProperty.MagicAbsorption];
+                    buffBonus += living.SpecBuffBonusCategory[eProperty.MagicAbsorption];
                     break;
             }
 
@@ -170,6 +176,8 @@ namespace DOL.GS.PropertyCalc
                 + living.BuffBonusCategory4[(int)property];
             if (living is not GameNPC)
                 buffBonus = Math.Min(buffBonus, BuffBonusCap);
+
+            buffBonus += living.SpecBuffBonusCategory[(int)property];
             return buffBonus + living.BuffBonusUncapped[(int)property];
         }
 
@@ -275,7 +283,9 @@ namespace DOL.GS.PropertyCalc
         {
             int buffBonus = living.BaseBuffBonusCategory[(int)property]
                 + living.BuffBonusCategory4[(int)property]
-                + living.BaseBuffBonusCategory[eProperty.MagicAbsorption];
+                + living.SpecBuffBonusCategory[(int)property]
+                + living.BaseBuffBonusCategory[eProperty.MagicAbsorption]
+                + living.SpecBuffBonusCategory[eProperty.MagicAbsorption];
             if (living is GameNPC)
                 return buffBonus;
             return Math.Min(buffBonus, BuffBonusCap);
