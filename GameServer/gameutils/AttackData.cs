@@ -265,6 +265,11 @@ namespace DOL.GS
             }
         }
 
+        public bool IsRangedAttack
+        {
+            get => m_attackType is eAttackType.Ranged;
+        }
+
         public bool IsOffHand
         {
             get { return m_isOffHand; }
@@ -344,12 +349,21 @@ namespace DOL.GS
                     case GameLiving.eAttackResult.HitStyle:
                     case GameLiving.eAttackResult.Missed:
                     case GameLiving.eAttackResult.Blocked:
+                        // TODO: How are those hits?
                     case GameLiving.eAttackResult.Evaded:
                     case GameLiving.eAttackResult.Fumbled:
                     case GameLiving.eAttackResult.Parried: return true;
                     default: return false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Whether this attack actually hit the target
+        /// </summary>
+        public bool IsSuccessfulHit
+        {
+            get => m_attackResult is GameLiving.eAttackResult.HitUnstyled or GameLiving.eAttackResult.HitStyle;
         }
 
         public bool IsRandomFumble

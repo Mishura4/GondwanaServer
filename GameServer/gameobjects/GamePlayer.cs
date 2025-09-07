@@ -8175,7 +8175,8 @@ namespace DOL.GS
             InventoryItem item = Inventory.GetItem((eInventorySlot)slot);
             if (item == null) return 0;
             // vampiir random armor debuff change ~
-            double eaf = (item.SPD_ABS + GetModified(eProperty.ArmorAbsorption)) * 0.01;
+            double stat = GetModified(eProperty.ArmorAbsorption);
+            double eaf = (item.SPD_ABS + stat) * 0.01;
             return eaf;
         }
 
