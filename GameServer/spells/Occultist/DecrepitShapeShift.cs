@@ -24,6 +24,15 @@ namespace DOL.GS.Spells
             : base(caster, spell, line)
         {
             Priority = 1;
+            
+            // --- Spell Damage (direct) ---
+            m_spellDmgPct = (int)Spell.Value; // % to direct spell damage and DoT damage
+            // --- Armor Absorption (pool) ---
+            m_absorbPct = Math.Max(0, (int)Spell.AmnesiaChance); // unified absorb %
+
+            // --- Extra Health Regen (%), ResurrectMana% ---
+            m_regenPct = ((float)Spell.ResurrectMana / 100);
+            // extra = round(Level * ResurrectMana / 100)
         }
 
         public override bool CheckBeginCast(GameLiving target, bool quiet)
@@ -64,16 +73,8 @@ namespace DOL.GS.Spells
             var owner = effect.Owner;
             owner.TempProperties.setProperty(OccultistForms.KEY_DECREPIT, true);
             
-            // --- Spell Damage (direct) ---
-            m_spellDmgPct = (int)Spell.Value; // % to direct spell damage and DoT damage
-            // --- Armor Absorption (pool) ---
-            m_absorbPct = Math.Max(0, (int)Spell.AmnesiaChance); // unified absorb %
-
-            // --- Extra Health Regen (%), ResurrectMana% ---
-            // extra = round(Level * ResurrectMana / 100)
-            if (Spell.ResurrectMana != 0)
+            if (m_regenPct != 0)
             {
-                m_regenPct = ((float)Spell.ResurrectMana / 100);
                 owner.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, m_regenPct);
             }
 
@@ -174,15 +175,12 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            int dmgPct = (int)Spell.Value;
-            int absPct = Spell.AmnesiaChance;
-            double regenPct = Spell.ResurrectMana / 10;
-
+            string abs = (m_absorbPct != 0 ? $"Your ABS is increased by {m_absorbPct}%" : string.Empty);
             return
-                $"Become a Decrepit Magus. Your magic damage is increased by {dmgPct}%. " +
-                $"Your ABS is {(absPct > 0 ? $"increased by {absPct}%" : "slightly increased")}. " +
+                $"Become a Decrepit Magus. Your magic damage is increased by {m_spellDmgPct}%. " +
+                abs + 
                 $"Melee attackers have a {DISEASE_PROC_CHANCE}% chance to become diseased when they strike you, " +
-                $"and your rotted flesh regenerates, increasing health regeneration by {regenPct}%.";
+                $"and your rotted flesh regenerates, increasing health regeneration by {m_regenPct}%.";
         }
     }
 }
