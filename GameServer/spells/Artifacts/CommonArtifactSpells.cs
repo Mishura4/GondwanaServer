@@ -262,7 +262,10 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("Morph")]
     public class Morph : AbstractMorphSpellHandler
     {
-        public Morph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        public Morph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+            Priority = 20;
+        }
 
         /// <inheritdoc />
         public override string GetDelveDescription(GameClient delveClient)

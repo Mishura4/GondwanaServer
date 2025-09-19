@@ -24,6 +24,7 @@ using DOL.GS.Effects;
 using DOL.GS.SkillHandler;
 using DOL.Language;
 using DOL.GS.ServerProperties;
+using DOL.GS.PlayerClass;
 
 namespace DOL.GS.Spells
 {
@@ -338,6 +339,23 @@ namespace DOL.GS.Spells
             {
                 string secondaryMessage = LanguageMgr.GetTranslation(language, "SpellDescription.Warlock.PrimarySpell");
                 description += "\n\n" + secondaryMessage;
+            }
+
+            switch (Spell.ID)
+            {
+                case 25191:
+                case 25192:
+                case 25193:
+                case 25194:
+                case 25195:
+                    {
+                        var viewer = delveClient?.Player;
+                        if (viewer?.CharacterClass is ClassOccultist)
+                        {
+                            description += "\n\n" + LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.ConditionDescription1");
+                        }
+                        break;
+                    }
             }
 
             return description;

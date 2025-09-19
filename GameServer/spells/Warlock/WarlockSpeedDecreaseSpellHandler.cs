@@ -110,7 +110,7 @@ namespace DOL.GS.Spells
         // constructor
         public WarlockSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
-            Priority = 1;
+            Priority = 80;
         }
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)

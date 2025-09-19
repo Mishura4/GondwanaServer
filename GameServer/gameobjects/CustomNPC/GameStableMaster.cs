@@ -144,8 +144,9 @@ namespace DOL.GS
                     return false;
                 }
 
-                if (SpellHandler.FindEffectOnTarget(player, "Petrify") != null)
+                if (SpellHandler.FindEffectOnTarget(player, "Petrify") != null || SpellHandler.FindEffectOnTarget(player, "SummonMonster") != null || SpellHandler.FindEffectOnTarget(player, "CallOfShadows") != null || SpellHandler.FindEffectOnTarget(player, "BringerOfDeath") != null)
                 {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.CantThisForm"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                     return false;
                 }
 

@@ -299,6 +299,11 @@ SpellHandler.Warlock.MustFinishCastingRange:				You must finish casting Range be
 SpellHandler.Warlock.MustFinishCastingUninterruptable:		You must finish casting Uninterruptable before you can cast it again.
 SpellHandler.Warlock.MustFinishCastingPowerless:			You must finish casting Powerless before you can cast it again.
 
+SpellHandler.Occultist.CastCondition1:						You can only cast this spell while under Chthonic form.
+SpellHandler.Occultist.CastCondition2:						This spell can't be cast while under Chthonic form.
+SpellHandler.Occultist.CastCondition3:						This spell can't be cast while under Decrepit or Spirit form.
+SpellHandler.Occultist.CastCondition4:						You must end your current form first.
+
 SpellHandler.SummonMonster.Target.Resist:					{0} has been resurrected from the limbs as a zombie and can't be effected by this spell!
 SpellHandler.IllusionSpell.Target.Resist:					{0} has created an illusion and can't be effected by this spell!
 SpellHandler.Morphed.Target.Resist:							{0} has been shapeshifted and can't be effected by this spell!

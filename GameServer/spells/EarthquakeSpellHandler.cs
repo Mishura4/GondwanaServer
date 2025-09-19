@@ -341,6 +341,11 @@ namespace DOL.GS.Spells
             return true;
         }
 
+        private bool HasNecromancerShade(GamePlayer p)
+        {
+            return FindEffectOnTarget(p, "NecromancerShadeEffect") != null || p?.IsShade == true;
+        }
+
         public override int CalculateToHitChance(GameLiving target)
         {
             if (target is GameNPC npc)
@@ -359,7 +364,9 @@ namespace DOL.GS.Spells
                 GamePlayer player = target as GamePlayer;
                 if (player!.IsSwimming ||
                     (player.CharacterClass is ClassVampiir && player.IsSprinting && player.CurrentSpeed == player.MaxSpeed) ||
-                    (player.CharacterClass is ClassBainshee && (player.Model == 1883 || player.Model == 1884 || player.Model == 1885)))
+                    (player.CharacterClass is ClassBainshee && (player.Model == 1883 || player.Model == 1884 || player.Model == 1885)) ||
+                    (player.CharacterClass is ClassOccultist && (FindEffectOnTarget(player, "SpiritShapeShift") != null || FindEffectOnTarget(player, "CallOfShadows") == null)) ||
+                    (player.CharacterClass is ClassNecromancer && HasNecromancerShade(player)))
                 {
                     return 0;
                 }

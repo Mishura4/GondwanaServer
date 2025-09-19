@@ -339,6 +339,14 @@ namespace DOL.GS.Spells
             return base.CalculateToHitChance(target);
         }
 
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            if (FindEffectOnTarget(target, "CallOfShadows") != null)
+                return 100;
+
+            return base.CalculateSpellResistChance(target);
+        }
+
         public override string GetDelveDescription(GameClient delveClient)
         {
             string mainDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Damnation.MainDescription1", Spell.AmnesiaChance, Spell.Duration / 1000);

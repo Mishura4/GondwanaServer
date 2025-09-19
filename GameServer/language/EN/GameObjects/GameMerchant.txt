@@ -21,6 +21,7 @@ GameMerchant.OnPlayerSell.TooFarAway:			{0} is too far away!
 GameMerchant.OnPlayerWithdraw:		            You withdraw {0} from your merchant.
 GameMerchant.OnPlayerInteract.Outlaw:			I expect nothing worthwhile from a scoundrel like you!
 GameMerchant.OnPlayerInteract.Morphed:			Oh, as a {0}, you can't quite hop onto a horse just yet!
+GameMerchant.OnPlayerInteract.CantThisForm:		You can't ride a horse under this form!
 GameMerchant.OnPlayerInteract.Damned:			Stay away, you damned ghoul!
 GameMerchant.OnPlayerInteract.EmbarkNotAllowed:	I can't let you embark for now!
 

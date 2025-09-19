@@ -45,6 +45,8 @@ Commands.Players.Duel.JailedSelf:				Vous ne pouvez pas défier en duel pendant 
 Commands.Players.Duel.JailedTarget:				{0} est en prison et ne peut pas commencer un duel ici !
 Commands.Players.Duel.StunnedSelf:				Vous ne pouvez pas commencer un duel en étant étourdi.
 Commands.Players.Duel.StunnedTarget:			{0} est étourdi et incapable de participer à un duel.
+Commands.Players.Duel.CantThisFormSelf:			Vous ne pouvez pas commencer un duel sous cette apparence.
+Commands.Players.Duel.CantThisFormTarget:		{0} ne peut pas commencer un duel pour le moment.
 Commands.Players.Duel.DeadSelf:					Vous ne pouvez pas commencer un duel en étant mort·e.
 Commands.Players.Duel.DeadTarget:				{0} est mort·e et incapable de participer à un duel.
 Commands.Players.Duel.Linkdead:					Vous ne pouvez pas défier en duel si vous ou votre cible êtes en linkdead ou en train de quitter.

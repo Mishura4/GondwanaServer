@@ -78,7 +78,7 @@ SpellDescription.MonsterRez.DamageDuration:			over a period of {0} seconds
 SpellDescription.SummonMonster.MainDescription:		Corpse resurrection.
 SpellDescription.DamageAdd.MainDescription:			The target's melee attacks do an additional {0} {1}.
 SpellDescription.DamageShield.MainDescription:		The target deals {0} {1} to enemies that hit them with a melee attack.
-SpellDescription.SpellReflection.MainDescription1:	Reflects spells back at the attacker with a {1}% chance and at {2}% of their original damage, while absorbing {3}% of damage dealt.
+SpellDescription.SpellReflection.MainDescription1:	Reflects spells back at the attacker with a {0}% chance and at {1}% of their original damage, while absorbing {2}% of damage dealt.
 SpellDescription.SpellReflection.MainDescription2:	Close combat or archery spells aren't reflected.
 SpellDescription.SpellReflectionDebuff.MainDescription:		Removes the target's magic deflection shield.
 SpellDescription.PowerShield.MainDescription:		When the user's health falls below {0}%, power is converted into health until it reaches {1}% of maximum health.
@@ -244,9 +244,24 @@ SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Temporarily reduces
 SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Can be cast while in combat.
 SpellDescription.VampiirArmorDebuff.MainDescription:		Temporarily debuffs the absorption and armor factor of one random piece of armor on the target by {0}%.
 SpellDescription.VampiirArmorDebuff.AdditionalInfo:			This will only affect the Head, Torso, or Legs armor of the target.
+SpellDescription.IllusionBlade.Part1:					Summons a spectral weapon that fights briefly at your side then vanishes.
+SpellDescription.IllusionBlade.Part2:					The blade acts on its own and cannot be controlled, released or healed.
 SpellDescription.RangeShield.MainDescription:			Shields the caster's group from ranged physical attacks.
 SpellDescription.PetSpell.MainDescription1:				Pet Spell:
 SpellDescription.PetSpell.MainDescription2:				Increases the target's listed stat(s).
+SpellDescription.Occultist.ConditionDescription1:		Can't be cast under Chtonic form.
+SpellDescription.Occultist.ConditionDescription2:		Can't be cast under Decrepit or Spirit form.
+SpellDescription.Occultist.Summon.UmbralAegis1:			Summon an Umbral Aegis to serve you. This demon specializes in taunting and tanking damages.
+SpellDescription.Occultist.Summon.UmbralAegis2:			Spirit form: Spirit Aegis gains a 200 radius DD proc, additional armor, magic absorption and increased combat speed.
+SpellDescription.Occultist.Summon.Soultorn1:			Summon a fallen Soultorn to serve you. This servant uses matter magic to damage foes for its master, but it is very weak to magical and physical attacks.
+SpellDescription.Occultist.Summon.Soultorn2:			Spirit form: Soultorn additionally matters debuff and diseases.
+SpellDescription.Occultist.Summon.UmbralHulk1:			Summon a plated fiend to serve you. This demon specializes in physical offense.
+SpellDescription.Occultist.Summon.UmbralHulk2:			Spirit form: Umbral Hulk gains a 5 seconds charge, 3 seconds rear stun, and increased offhand swing chance.
+SpellDescription.Occultist.Summon.ImageOfArawn1:		Summon a loyal Priest of Arawn to serve you. This passive servant supports its master's group with 12% single target heals.
+SpellDescription.Occultist.Summon.ImageOfArawn2:		Spirit form: Image of Arawn gains Cure poison, disease, rez sick, and can clear itself of nearsight.
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Summon a daemonic Succubus to serve you. The Succubus will mesmerize its target.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Spirit form: Arch Demon gains a strong Dex/Qui debuff and can cure itself of nearsight.
+
 
 # ML Spells ShortDescriptions
 SpellDescription.Convoker.SummonWood.MainDescription:			Summons 100 random material boards of wood usable for upgrading and repairing keep doors and walls.

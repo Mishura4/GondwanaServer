@@ -299,6 +299,11 @@ SpellHandler.Warlock.MustFinishCastingRange:				Vous devez finir d'incanter votr
 SpellHandler.Warlock.MustFinishCastingUninterruptable:		Vous devez finir d'incanter votre sort non-interruptible avant de le relancer.
 SpellHandler.Warlock.MustFinishCastingPowerless:			Vous devez finir d'incanter votre sort sans consommation de mana avant de le relancer.
 
+SpellHandler.Occultist.CastCondition1:						Vous devez être sous forme chtonique pour lancer ce sort.
+SpellHandler.Occultist.CastCondition2:						Vous ne pouvez pas lancer ce sort en étant sous forme chtonique.
+SpellHandler.Occultist.CastCondition3:						Vous ne pouvez pas lancer ce sort en étant sous forme décrépit ou esprit.
+SpellHandler.Occultist.CastCondition4:						Vous devez quitter votre forme actuelle avant de lancer ce sort.
+
 SpellHandler.SummonMonster.Target.Resist:					{0} a été ressuscité des limbes sous forme de zombie et reste insensible à ce sort !
 SpellHandler.IllusionSpell.Target.Resist:					{0} a invoqué une illusion et ne peut pas être affecté contre ce sort !
 SpellHandler.Morphed.Target.Resist:							{0} a subi une métamorphose et ne peut pas être affecté par ce sort !

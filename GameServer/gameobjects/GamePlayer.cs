@@ -59,6 +59,7 @@ using DOL.GS.Geometry;
 using AmteScripts.PvP.CTF;
 using Discord;
 using System.Drawing.Drawing2D;
+using static DOL.GS.Spells.SpellHandler;
 
 namespace DOL.GS
 {
@@ -9535,13 +9536,17 @@ namespace DOL.GS
             if (spell == null) return false;
             string st = spell.SpellType ?? string.Empty;
 
-            // Only block heals and resurrects (buffs/regen now allowed)
-            if (st.Equals("Heal", System.StringComparison.OrdinalIgnoreCase) ||
-                st.Equals("SpreadHeal", System.StringComparison.OrdinalIgnoreCase) || // keep if you use it
-                st.Equals("Resurrect", System.StringComparison.OrdinalIgnoreCase))
+            if (st.Equals("Heal", StringComparison.OrdinalIgnoreCase) ||
+                st.Equals("SpreadHeal", StringComparison.OrdinalIgnoreCase) ||
+                st.Equals("Resurrect", StringComparison.OrdinalIgnoreCase))
                 return true;
 
             return false;
+        }
+
+        private bool IsInBringerOfDeathForm()
+        {
+            return SpellHandler.FindEffectOnTarget(this, "BringerOfDeath") != null;
         }
 
         /// <summary>
@@ -9567,6 +9572,15 @@ namespace DOL.GS
                             ?? $"Ascendance forbids casting {spell.Name}.",
                             eChatType.CT_SpellResisted,
                             eChatLoc.CL_SystemWindow);
+                        return false;
+                    }
+                }
+
+                if (this != null && spell != null)
+                {
+                    if (OccultistCastingRules.TryBlockCast(this, spell, out string reason) && !string.IsNullOrEmpty(reason))
+                    {
+                        Out.SendMessage(reason, eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                 }
@@ -9670,7 +9684,8 @@ namespace DOL.GS
                     {
                         if (m_runningSpellHandler.CanQueue == false)
                         {
-                            m_runningSpellHandler.CasterMoves();
+                            if (!IsInBringerOfDeathForm())
+                                m_runningSpellHandler.CasterMoves();
                             return false;
                         }
 

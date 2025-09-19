@@ -45,9 +45,10 @@ PlayerStatistic.TotalCreaturesKilled:		Total des Créatures tuées
 PlayerStatistic.TotalCraftPerformed:		Total des Objets fabriqués
 
 # /Bonus de titres
-PlayerStatistic.Bonus.DemonslayerTitle:         +{0}% DPS en mêlée / +{1}% dégâts des sorts / +{2}% chance de coups critiques
+PlayerStatistic.Bonus.DemonslayerTitle:         +{0}% DPS en mêlée / +{1}% Dégâts des sorts / +{2}% Chance de coups critiques
 PlayerStatistic.Bonus.TraderTitle:              {0:0.##}% de réduction avec tous les marchands
-PlayerStatistic.Bonus.ThiefTitle:               +{0}% chance de vol / -{1}% temps de recharge de vol
-PlayerStatistic.Bonus.BountyhunterTitle:        +{0}% résistance au vol / +{1}% détection de furtivité
-PlayerStatistic.Bonus.WrathTitle:               +{0}% augmentation de tension / -{1}% perte de tension à la mort
-PlayerStatistic.Bonus.AdventurerTitle:          +{0}% vitesse max de marche & de nage / +{1}% de portée des Sorts-Archerie
+PlayerStatistic.Bonus.ThiefTitle:               +{0}% Chance de vol / -{1}% Temps de recharge de vol
+PlayerStatistic.Bonus.BountyhunterTitle:        +{0}% Résistance au vol / +{1}% Détection de furtivité
+PlayerStatistic.Bonus.WrathTitle:               +{0}% Augmentation de tension / -{1}% Perte de tension à la mort
+PlayerStatistic.Bonus.AdventurerTitle:          +{0}% Vitesse max de marche & de nage / +{1}% de portée des Sorts-Archerie
+PlayerStatistic.Bonus.DuelistTitle:				+{0}% Chance de coups critiques

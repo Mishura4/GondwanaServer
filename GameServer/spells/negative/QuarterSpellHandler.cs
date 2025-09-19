@@ -41,14 +41,20 @@ namespace DOL.GS.Spells
             return true;
         }
 
+        private bool HasNecromancerShade(GamePlayer p)
+        {
+            return FindEffectOnTarget(p, "NecromancerShadeEffect") != null || p?.IsShade == true;
+        }
+
         public override int CalculateSpellResistChance(GameLiving target)
         {
             if (Spell.AmnesiaChance > 0 && target.Level > Spell.AmnesiaChance)
                 return 100;
 
             var ResistChanceFactor = 2.6;
-            bool isGhostOrUndead = (target is GameNPC npc && (npc.Flags.HasFlag(GameNPC.eFlags.GHOST) || npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead || SpellHandler.FindEffectOnTarget(npc, "Damnation") != null));
-            bool isSpecialClass = (target is GamePlayer player && (player.CharacterClass is ClassNecromancer || player.CharacterClass is ClassOccultist || player.CharacterClass is ClassBainshee || player.CharacterClass is ClassVampiir || SpellHandler.FindEffectOnTarget(player, "Damnation") != null));
+            bool isHuman = FindEffectOnTarget(target, "SpiritShapeShift") == null && FindEffectOnTarget(target, "ChtonicShapeShift") == null && FindEffectOnTarget(target, "DecrepitShapeShift") == null && FindEffectOnTarget(target, "BringerOfDeath") == null && FindEffectOnTarget(target, "CallOfShadows") == null;
+            bool isGhostOrUndead = target is GameNPC npc && (npc.Flags.HasFlag(GameNPC.eFlags.GHOST) || npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead || FindEffectOnTarget(npc, "Damnation") != null);
+            bool isSpecialClass = target is GamePlayer player && (player.CharacterClass is ClassNecromancer && HasNecromancerShade(player) || (player.CharacterClass is ClassBainshee && (player.Model == 1883 || player.Model == 1884 || player.Model == 1885)) || player.CharacterClass is ClassVampiir || player.CharacterClass is ClassOccultist && !isHuman || FindEffectOnTarget(player, "Damnation") != null || FindEffectOnTarget(player, "SummonMonster") != null);
             bool isBoss = target is GameNPC gameNPC && gameNPC.IsBoss;
 
             if (isGhostOrUndead || isSpecialClass || isBoss)

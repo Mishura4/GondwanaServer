@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Effects;
 using DOL.GS.Realm;
 using DOL.GS.Spells;
 using System.Collections.Generic;
@@ -46,6 +47,28 @@ namespace DOL.GS.PlayerClass
         public override bool HasAdvancedFromBaseClass()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Use Tank adrenaline while under ChtonicShapeShift; Mage adrenaline otherwise.
+        /// </summary>
+        public override int GetAdrenalineSpellID(GamePlayer player)
+        {
+            return IsUnderChtonicShape(player)
+                ? AdrenalineSpellHandler.TANK_ADRENALINE_SPELL_ID
+                : AdrenalineSpellHandler.MAGE_ADRENALINE_SPELL_ID;
+        }
+
+        private static bool IsUnderChtonicShape(GamePlayer player)
+        {
+            if (player == null) return false;
+
+            foreach (IGameEffect eff in player.EffectList)
+            {
+                if (eff is GameSpellEffect gse && gse.SpellHandler is ChtonicShapeShift)
+                    return true;
+            }
+            return false;
         }
     }
 }

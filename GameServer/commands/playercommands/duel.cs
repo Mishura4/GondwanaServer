@@ -5,6 +5,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using System.Linq;
 using DOL.GS.Spells;
+using System.Numerics;
 
 namespace DOL.GS.Commands
 {
@@ -390,6 +391,18 @@ namespace DOL.GS.Commands
             if (actionTarget.PlayerAfkMessage != null)
             {
                 actionSource.Out.SendMessage(LanguageMgr.GetTranslation(actionSource.Client, "Commands.Players.Duel.AFKTarget", actionSource.GetPersonalizedName(actionTarget)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            // Monster Rez or Occultist Bringer of Deat & Call Of Shadows
+            if (SpellHandler.FindEffectOnTarget(actionSource, "SummonMonster") != null || SpellHandler.FindEffectOnTarget(actionSource, "CallOfShadows") != null || SpellHandler.FindEffectOnTarget(actionSource, "BringerOfDeath") != null)
+            {
+                actionSource.Out.SendMessage(LanguageMgr.GetTranslation(actionSource.Client, "Commands.Players.Duel.CantThisFormSelf"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (SpellHandler.FindEffectOnTarget(actionTarget, "SummonMonster") != null || SpellHandler.FindEffectOnTarget(actionTarget, "CallOfShadows") != null || SpellHandler.FindEffectOnTarget(actionTarget, "BringerOfDeath") != null)
+            {
+                actionSource.Out.SendMessage(LanguageMgr.GetTranslation(actionSource.Client, "Commands.Players.Duel.CantThisFormTarget", actionSource.GetPersonalizedName(actionTarget)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 

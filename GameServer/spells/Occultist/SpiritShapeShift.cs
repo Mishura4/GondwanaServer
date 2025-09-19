@@ -4,6 +4,7 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System;
+using System.Numerics;
 
 namespace DOL.GS.Spells
 {
@@ -25,7 +26,7 @@ namespace DOL.GS.Spells
         public SpiritShapeShift(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            Priority = 1;
+            Priority = 10;
         }
 
         public override bool CheckBeginCast(GameLiving target, bool quiet)
@@ -35,7 +36,7 @@ namespace DOL.GS.Spells
                 Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_CHTONIC, false))
             {
                 if (!quiet)
-                    MessageToCaster("You must end your current form first.", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(m_caster as GamePlayer, "SpellHandler.Occultist.CastCondition4"), eChatType.CT_System);
                 return false;
             }
             return base.CheckBeginCast(target, quiet);
@@ -61,40 +62,6 @@ namespace DOL.GS.Spells
             return (ushort)Spell.LifeDrainReturn;
         }
 
-        private static void ForEachControlledPet(GamePlayer owner, Action<GamePet> action)
-        {
-            if (owner?.ControlledBrain?.Body is GamePet main && main.IsAlive)
-                action(main);
-
-            var mainBody = owner?.ControlledBrain?.Body;
-            if (mainBody?.ControlledNpcList != null)
-            {
-                lock (mainBody.ControlledNpcList)
-                    foreach (var b in mainBody.ControlledNpcList)
-                        if (b?.Body is GamePet sub && sub.IsAlive)
-                            action(sub);
-            }
-        }
-
-        private static void ApplyTemplateFromPetMemory(GamePet pet, bool toSpirit)
-        {
-            if (pet == null) return;
-            int baseTpl = pet.TempProperties.getProperty<int>(OccultistForms.PET_BASE_TPL, 0);
-            int spiritTpl = pet.TempProperties.getProperty<int>(OccultistForms.PET_SPIRIT_TPL, 0);
-            int which = toSpirit ? spiritTpl : baseTpl;
-
-            if (which > 0)
-            {
-                var tpl = NpcTemplateMgr.GetTemplate(which);
-                if (tpl != null)
-                {
-                    if (ushort.TryParse(tpl.Model, out var m) && m > 0) pet.Model = m;
-                    if (!string.IsNullOrWhiteSpace(tpl.Name)) pet.Name = tpl.Name;
-                    if (byte.TryParse(tpl.Size, out var s) && s > 0) pet.Size = s;
-                }
-            }
-        }
-
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
@@ -102,10 +69,17 @@ namespace DOL.GS.Spells
 
             owner.TempProperties.setProperty(OccultistForms.KEY_SPIRIT, true);
 
+            if (effect.Owner is GamePlayer petowner && owner.ControlledBrain?.Body is GamePet pet)
+            {
+                owner.TempProperties.setProperty(OccultistForms.KEY_SPIRIT, true);
+                var spiritTpl = pet.TempProperties.getProperty<int>(OccultistForms.PET_SPIRIT_TPL, 0);
+                if (spiritTpl > 0) SpellHandler.OccultistForms.ApplyTemplate(pet, spiritTpl);
+            }
+
             // if caster already has pets, flip them to Spirit template
             if (owner is GamePlayer occOwner)
             {
-                ForEachControlledPet(occOwner, pet => ApplyTemplateFromPetMemory(pet, true));
+                OccultistForms.SetOccultistPetForm(occOwner, true);
             }
 
             // --- Store absorb % (Spell.Value) ---
@@ -158,7 +132,7 @@ namespace DOL.GS.Spells
             // if caster has pets, flip them back to base template
             if (owner is GamePlayer occOwner)
             {
-                ForEachControlledPet(occOwner, pet => ApplyTemplateFromPetMemory(pet, false));
+                OccultistForms.SetOccultistPetForm(occOwner, false);
             }
 
             // Remove flat power regen
@@ -190,6 +164,13 @@ namespace DOL.GS.Spells
             else
             {
                 owner.UpdateHealthManaEndu();
+            }
+
+            if (effect.Owner is GamePlayer petowner && owner.ControlledBrain?.Body is GamePet pet)
+            {
+                owner.TempProperties.removeProperty(OccultistForms.KEY_SPIRIT);
+                var baseTpl = pet.TempProperties.getProperty<int>(OccultistForms.PET_BASE_TPL, 0);
+                if (baseTpl > 0) SpellHandler.OccultistForms.ApplyTemplate(pet, baseTpl);
             }
 
             return base.OnEffectExpires(effect, noMessages);
@@ -244,9 +225,6 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            // Static text requested + dynamic hints
-            // Example text (provided): 
-            // "Become a Ghostly Spirit. 10% of all damage you take instead heals your power, your power regeneration is greatly increased, and you see hidden opponents easier. Additionally, your servants become highly resistant to damage and gain new abilities."
             int absorb = (int)Spell.Value;
             int stealthDet = Spell.AmnesiaChance;
             double perLevel = Spell.ResurrectMana / 10.0;

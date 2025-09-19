@@ -235,6 +235,23 @@ namespace DOL.GS.Spells
                 description += "\n\n" + secondaryMessage;
             }
 
+            switch (Spell.ID)
+            {
+                case 25075:
+                case 25076:
+                case 25077:
+                case 25078:
+                case 25079:
+                    {
+                        var viewer = delveClient?.Player;
+                        if (viewer?.CharacterClass is ClassOccultist)
+                        {
+                            description += "\n\n" + LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.ConditionDescription1");
+                        }
+                        break;
+                    }
+            }
+
             return description;
         }
     }

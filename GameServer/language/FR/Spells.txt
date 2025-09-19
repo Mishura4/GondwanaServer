@@ -78,7 +78,7 @@ SpellDescription.MonsterRez.DamageDuration:			pendant une durée de {0} secondes
 SpellDescription.SummonMonster.MainDescription:		Résurrection cadavérique.
 SpellDescription.DamageAdd.MainDescription:			Les attaques de mêlée de la cible infligent {0} {1} supplémentaires.
 SpellDescription.DamageShield.MainDescription:		La cible inflige {0} {1} aux ennemis qui la frappent au corps à corps.
-SpellDescription.SpellReflection.MainDescription1:	Renvoie les sorts à l'attaquant avec {1}% de chances et à {2}% de leurs dégâts initiaux, tout en absorbant {3}% des dégâts infligés.
+SpellDescription.SpellReflection.MainDescription1:	Renvoie les sorts à l'attaquant avec {0}% de chances et à {1}% de leurs dégâts initiaux, tout en absorbant {2}% des dégâts infligés.
 SpellDescription.SpellReflection.MainDescription2:	Les sorts de combat rapprochés et les sorts d'archerie ne sont pas renvoyés.
 SpellDescription.SpellReflectionDebuff.MainDescription:		Supprime le bouclier de déflexion magique de la cible.
 SpellDescription.PowerShield.MainDescription:		Lorsque la santé de l'utilisateur tombe en dessous de {0}%, sa puissance est convertie en points de vie jusqu'à atteindre {1}% de sa santé maximale.
@@ -244,9 +244,24 @@ SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Réduit temporairem
 SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Peut être lancé en combat.
 SpellDescription.VampiirArmorDebuff.MainDescription:		Réduit temporairement l'absorption et le facteur d'armure d'une pièce d'armure aléatoire de la cible de {0}%.
 SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Cela n'affectera que le heaume, le torse ou les jambes de la cible.
+SpellDescription.IllusionBlade.Part1:					Invoque une arme spectrale qui combat brièvement à vos côtés avant de disparaître.
+SpellDescription.IllusionBlade.Part2:					La lame agit de son propre chef et ne peut être contrôlée, libérée ou soignée.
 SpellDescription.RangeShield.MainDescription:			Protège le groupe de l'incantateur contre les attaques physiques d'archerie.
 SpellDescription.PetSpell.MainDescription1:				Sort de familier :
 SpellDescription.PetSpell.MainDescription2:				Augmente les statistiques listés de la cible.
+SpellDescription.Occultist.ConditionDescription1:		Ne peut être lancé sous la forme "Chtonique".
+SpellDescription.Occultist.ConditionDescription2:		Ne peut être lancé sous la forme "Esprit" ou "Décrépit".
+SpellDescription.Occultist.Summon.UmbralAegis1:			Invoquez un Égide Cuirassé à votre service. Ce démon excelle dans la provocation et l'encaissement des dégâts.
+SpellDescription.Occultist.Summon.UmbralAegis2:			Forme Esprit : l'Égide Spirituelle gagne un effet de dégâts directs dans un rayon de 200, une armure renforcée, une absorption magique et une vitesse de combat accrue.
+SpellDescription.Occultist.Summon.Soultorn1:			Invoquez une Âme Déchue à votre service. Ce serviteur inflige des dégâts aux ennemis avec de la magie de matière, mais il est très vulnérable aux attaques magiques et physiques.
+SpellDescription.Occultist.Summon.Soultorn2:			Forme Esprit : l'Âme Déchue inflige en plus un débuff de matière et des maladies.
+SpellDescription.Occultist.Summon.UmbralHulk1:			Faites apparaître un Fiélon Cuirassé à votre service. Ce démon est spécialisé dans les attaques physiques.
+SpellDescription.Occultist.Summon.UmbralHulk2:			Forme Esprit : le Colosse Cuirassé obtient une charge de 5 secondes, une attaque d'étourdissement arrière de 3 secondes et une probabilité augmentée de frapper avec l'arme secondaire.
+SpellDescription.Occultist.Summon.ImageOfArawn1:		Invoquez un Prêtre d'Arawn dévoué à votre service. Ce serviteur passif aide le groupe de son maître avec des soins individuels de 12 %.
+SpellDescription.Occultist.Summon.ImageOfArawn2:		Forme Esprit : l'Image d'Arawn obtient des sorts supplémentaires pour guérir le poison, les maladies, la maladie de résurrection, et peut dissiper la myopie.  
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Invoquez une Succube démoniaque à votre service. La Succube hypnotise sa cible.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Forme Esprit : le Démon Archi gagne un puissant affaiblissement de Dex/Qui et peut dissiper la myopie.
+
 
 # ML Spells ShortDescriptions
 SpellDescription.Convoker.SummonWood.MainDescription:			Invoque et génère 100 planches de bois au hasard utilisables pour améliorer et réparer les portes et les murs des forteresses.

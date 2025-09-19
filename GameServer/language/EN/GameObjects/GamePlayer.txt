@@ -433,7 +433,8 @@ GameObjects.GamePlayer.UseSlot.CantMountMoving:				You can't mount while you're 
 GameObjects.GamePlayer.UseSlot.CantMountStealthed:			You can't mount while you're in stealth.
 GameObjects.GamePlayer.UseSlot.CantMountDamned:				You can't mount while you're damned!
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:			You can't mount while you're petrified!
-GameObjects.GamePlayer.UseSlot.CantMountFrog:				You can't mount while you're under a "Frog" enchantment!
+GameObjects.GamePlayer.UseSlot.CantMountThisForm:			You can't mount while you're under this form!
+GameObjects.GamePlayer.UseSlot.CantMountMorph:				You can't mount while you're under a "{0}" enchantment!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:			You can't mount while you're dead.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:		You can't mount while carrying a Relic!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:				You can't see your target!

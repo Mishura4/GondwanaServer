@@ -253,6 +253,16 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            int baseChance = base.CalculateSpellResistChance(target);
+
+            if (FindEffectOnTarget(target, "CallOfShadows") != null)
+                return Math.Max(50, baseChance);
+
+            return baseChance;
+        }
+
         public override string GetDelveDescription(GameClient delveClient)
         {
             string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Petrify.MainDescription");

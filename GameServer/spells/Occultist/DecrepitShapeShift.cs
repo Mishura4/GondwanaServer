@@ -23,7 +23,7 @@ namespace DOL.GS.Spells
         public DecrepitShapeShift(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            Priority = 1;
+            Priority = 10;
             
             // --- Spell Damage (direct) ---
             m_spellDmgPct = (int)Spell.Value; // % to direct spell damage and DoT damage
@@ -42,7 +42,7 @@ namespace DOL.GS.Spells
                 Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_CHTONIC, false))
             {
                 if (!quiet)
-                    MessageToCaster("You must end your current form first.", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(m_caster as GamePlayer, "SpellHandler.Occultist.CastCondition4"), eChatType.CT_System);
                 return false;
             }
             return base.CheckBeginCast(target, quiet);

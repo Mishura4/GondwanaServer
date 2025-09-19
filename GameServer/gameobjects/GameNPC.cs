@@ -4773,7 +4773,6 @@ namespace DOL.GS
             {
                 switch (GetType().FullName)
                 {
-                    case "AmteMob":
                     case "DOL.GS.Scripts.MageMob":
                     case "DOL.GS.Scripts.TerritoryGuard":
                     case "DOL.GS.Scripts.GuardNPC":

@@ -20,7 +20,6 @@ namespace DOL.GS.Spells
         private int m_afBonusFlat;    // flat points added to eProperty.ArmorFactor (Category4)
         private int m_hpBonus;        // absolute HP added (BaseBuff)
         private int m_wsBonus;        // percent added to eProperty.WeaponSkill (SpecBuff)
-        private int m_parryBonus;     // percent added to eProperty.ParryChance (SpecBuff)
         private int m_resBonus;       // percent added to each secondary magic resist (SpecBuff)
         private int m_absBonus;
         private int m_tempParryLevel = 0;
@@ -32,7 +31,7 @@ namespace DOL.GS.Spells
 
         public ChtonicShapeShift(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
-            Priority = 1;           // same priority level as WarlockSpeedDecrease
+            Priority = 10;
             OverwritesMorphs = true;
             
             // -------------------------
@@ -64,8 +63,6 @@ namespace DOL.GS.Spells
             // 5) SECONDARY MAGIC RESISTS (+% via Spell.ResurrectMana)
             // -------------------------
             m_resBonus = Spell.ResurrectMana;
-
-            m_parryBonus = Spell.Damage > 0 ? (int)Spell.Damage : 5;
         }
 
         public override bool HasPositiveOrSpeedEffect() => true;
@@ -78,12 +75,12 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving target, bool quiet)
         {
-            // Do not allow casting if any form is already active (including this one)
             if (Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_SPIRIT, false) ||
                 Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_DECREPIT, false) ||
                 Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_CHTONIC, false))
             {
-                if (!quiet) ErrorTranslationToCaster("You must end your current form first.");
+                if (!quiet)
+                    MessageToCaster(LanguageMgr.GetTranslation(m_caster as GamePlayer, "SpellHandler.Occultist.CastCondition4"), eChatType.CT_System);
                 return false;
             }
             return base.CheckBeginCast(target, quiet);
@@ -124,16 +121,10 @@ namespace DOL.GS.Spells
                 owner.SpecBuffBonusCategory[(int)eProperty.Resist_Energy] += mult * m_resBonus;
             }
 
-            // Optional: grant Parry specialization temporarily (client-visible)
-            if (m_parryBonus != 0)
+            if (owner is GamePlayer player)
             {
-                if (owner is GamePlayer player)
-                {
-                    // TODO: Why is this a timer?
-                    new RegionTimerAction<GamePlayer>(player, p => ModTempParry(p, apply)).Start(1);
-                }
-                
-                owner.SpecBuffBonusCategory[(int)eProperty.ParryChance] += mult * m_parryBonus;
+                // TODO: Why is this a timer?
+                new RegionTimerAction<GamePlayer>(player, p => ModTempParry(p, apply)).Start(1);
             }
         }
 
@@ -155,7 +146,7 @@ namespace DOL.GS.Spells
             ApplyStats(effect, true);
 
             // Push UI updates
-            player.Out.SendCharStatsUpdate();
+            player!.Out.SendCharStatsUpdate();
             player.Out.SendCharResistsUpdate();
             player.UpdatePlayerStatus();
             player.Out.SendUpdatePlayer();
@@ -263,14 +254,12 @@ namespace DOL.GS.Spells
             }
         }
 
-
         public override string GetDelveDescription(GameClient delveClient)
         {
             int perLevelAF = (int)Spell.AmnesiaChance;
             int pctCore = (int)Spell.Value;
             int pctAbsExtra = (int)Math.Round(Spell.Value - (Spell.Value / 3.0));
             int pctSecRes = (int)Spell.ResurrectMana;
-            int parryPct = Spell.Damage > 0 ? (int)Spell.Damage : 5;
 
             string line1 = $"Become a Chthonic Knight.";
             string line2 = $"AF raises by an additional {perLevelAF} per level.";

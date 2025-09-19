@@ -342,6 +342,11 @@ namespace DOL.GS.Scripts
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
+            if (SpellHandler.FindEffectOnTarget(player, "SummonMonster") != null || SpellHandler.FindEffectOnTarget(player, "CallOfShadows") != null || SpellHandler.FindEffectOnTarget(player, "BringerOfDeath") != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageCantThisForm"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
             var wsd = SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease");
             if (wsd != null)
             {

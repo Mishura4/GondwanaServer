@@ -79,6 +79,26 @@ namespace DOL.GS.Spells
         }
         public IllusionBladeSummon(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string part1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.IllusionBlade.Part1");
+            string part2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.IllusionBlade.Part2");
+            string desc = part1 + "\n\n" + part2;
+
+            if (Spell.RecastDelay > 0)
+            {
+                int recastSeconds = Spell.RecastDelay / 1000;
+                string recast = LanguageMgr.GetTranslation(
+                    delveClient,
+                    "SpellDescription.Disarm.MainDescription2",
+                    recastSeconds
+                );
+                desc += "\n\n" + recast;
+            }
+
+            return desc;
+        }
     }
 }
 

@@ -20,44 +20,48 @@
 using System;
 using DOL.Events;
 using DOL.Language;
-using static DOL.GS.PlayerTitles.TaskTitle;
 
 namespace DOL.GS.PlayerTitles
 {
     public abstract class DuelistTitle : TaskTitle
     {
-        public int TensionRateBonus { get; init; }
-        
-        public int TensionConservationBonus { get; init; }
-
+        public int CritBonus { get; init; }
         protected DuelistTitle(int level)
         {
-
+            CritBonus = level * 4;
         }
 
         /// <inheritdoc />
         public override void OnTitleSelect(GamePlayer player)
         {
-            //player.BaseBuffBonusCategory[eProperty.MythicalTension] += TensionRateBonus;
-            //player.BaseBuffBonusCategory[eProperty.TensionConservationBonus] += TensionConservationBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalSpellHitChance] += CritBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalMeleeHitChance] += CritBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalHealHitChance] += CritBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalArcheryHitChance] += CritBonus;
+            player.BaseBuffBonusCategory[eProperty.OffhandDamageAndChanceBonus] += CritBonus;
             base.OnTitleSelect(player);
+            player.Out.SendCharStatsUpdate();
         }
 
         /// <inheritdoc />
         public override void OnTitleDeselect(GamePlayer player)
         {
-            //player.BaseBuffBonusCategory[eProperty.MythicalTension] -= TensionRateBonus;
-            //player.BaseBuffBonusCategory[eProperty.TensionConservationBonus] -= TensionConservationBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalSpellHitChance] -= CritBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalMeleeHitChance] -= CritBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalHealHitChance] -= CritBonus;
+            player.BaseBuffBonusCategory[eProperty.CriticalArcheryHitChance] -= CritBonus;
+            player.BaseBuffBonusCategory[eProperty.OffhandDamageAndChanceBonus] -= CritBonus;
             base.OnTitleDeselect(player);
+            player.Out.SendCharStatsUpdate();
         }
 
         /// <inheritdoc />
-        /*public override string GetStatsTranslation(string language)
+        public override string GetStatsTranslation(string language)
         {
-            return LanguageMgr.GetTranslation(language, "PlayerStatistic.Bonus.DuelistTitle", TensionRateBonus, TensionConservationBonus);
-        }*/
+            return LanguageMgr.GetTranslation(language, "PlayerStatistic.Bonus.DuelistTitle", CritBonus);
+        }
     }
-    
+
     [TaskTitleFlag(eTitleFlags.Duelist1)]
     public class DuelistTitleLevel1 : DuelistTitle
     {

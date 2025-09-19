@@ -31,14 +31,27 @@ namespace DOL.GS
         /// <inheritdoc />
         public override void Execute(GameLiving living)
         {
-            Spell sp = living.AdrenalineSpell;
+            var player = living as GamePlayer;
+            if (player == null) return;
 
-            if (sp == null)
+            // Dynamically pick the adrenaline spell NOW (respects ChtonicShapeShift)
+            Spell sp = ResolveAdrenalineSpell(player);
+            if (sp == null) return;
+
+            player.CastSpell(sp, SpellLine);
+        }
+
+        private static Spell ResolveAdrenalineSpell(GamePlayer player)
+        {
+            if (player.CharacterClass is CharacterClassBase ccb)
             {
-                return;
+                var dyn = ccb.GetAdrenalineSpell(player);
+                if (dyn != null) return dyn;
+
+                if (ccb.AdrenalineSpell != null) return ccb.AdrenalineSpell;
             }
 
-            living.CastSpell(sp, SpellLine);
+            return player.CharacterClass.AdrenalineSpell;
         }
     }
 }

@@ -130,7 +130,13 @@ namespace DOL.GS.Spells
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            INpcTemplate template = NpcTemplateMgr.GetTemplate(Spell.LifeDrainReturn);
+            int baseTplId = Spell.LifeDrainReturn;
+            int spiritTplId = Spell.AmnesiaChance;
+
+            bool spiritLikeActive = OccultistForms.IsSpiritLikeActive(Caster as GamePlayer);
+            int chosenTplId = (spiritLikeActive && spiritTplId > 0) ? spiritTplId : baseTplId;
+
+            INpcTemplate template = NpcTemplateMgr.GetTemplate(chosenTplId);
             if (template == null)
             {
                 if (log.IsWarnEnabled)
@@ -154,6 +160,8 @@ namespace DOL.GS.Spells
                 brain = GetPetBrain(Caster);
 
             m_pet = GetGamePet(template);
+            if (baseTplId > 0) m_pet.TempProperties.setProperty(OccultistForms.PET_BASE_TPL, baseTplId);
+            if (spiritTplId > 0) m_pet.TempProperties.setProperty(OccultistForms.PET_SPIRIT_TPL, spiritTplId);
             //brain.WalkState = eWalkState.Stay;
             m_pet.SetOwnBrain(brain as AI.ABrain);
 

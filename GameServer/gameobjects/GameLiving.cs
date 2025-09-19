@@ -2270,6 +2270,20 @@ namespace DOL.GS
                 return;
             }
 
+            if (EffectList.GetOfType<BringerOfDeathSpellEffect>() != null || TempProperties.getProperty("BOD_UNINTERRUPTIBLE", false))
+            {
+                InterruptTime = 0;
+                InterruptAction = 0;
+                return;
+            }
+
+            if (EffectList.GetOfType<CallOfShadowsSpellEffect>() != null || TempProperties.getProperty("COS_UNINTERRUPTIBLE", false))
+            {
+                InterruptTime = 0;
+                InterruptAction = 0;
+                return;
+            }
+
             if (InterruptTime < CurrentRegion.Time + duration)
                 InterruptTime = CurrentRegion.Time + duration;
 

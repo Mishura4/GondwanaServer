@@ -70,7 +70,7 @@ namespace DOL.GS.Spells
                     {
                         player.Out.SendSpellEffectAnimation(pet, pet, 7202, 0, false, 1);
                     }
-                    pet.Delete();
+                    pet.Die(Caster);
                 }
             }
             illusionPets.Clear();

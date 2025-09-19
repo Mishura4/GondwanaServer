@@ -42,6 +42,8 @@ using DOL.GS.ServerRules;
 using DOL.GS.Styles;
 using DOL.Territories;
 using static Grpc.Core.Metadata;
+using System.Collections;
+using DOL.GS.PlayerClass;
 
 namespace DOL.GS.Spells
 {
@@ -53,12 +55,187 @@ namespace DOL.GS.Spells
     {
         public static class OccultistForms
         {
-            public const string KEY_SPIRIT = "FORM_SPIRIT_ACTIVE";
-            public const string KEY_CHTONIC = "FORM_CHTONIC_ACTIVE";
-            public const string KEY_DECREPIT = "FORM_DECREPIT_ACTIVE";
+            public const string KEY_SPIRIT = "OCCULTIST_FORM_SPIRIT";
+            public const string KEY_DECREPIT = "OCCULTIST_FORM_DECREPIT";
+            public const string KEY_CHTONIC = "OCCULTIST_FORM_CHTONIC";
+            public const string KEY_COS = "OCCULTIST_FORM_CALL_OF_SHADOWS";
 
-            public const string PET_BASE_TPL = "OCC_PET_BASE_TPL";
-            public const string PET_SPIRIT_TPL = "OCC_PET_SPIRIT_TPL";
+            public const string PET_BASE_TPL = "OCCULT_PET_BASE_TPL";
+            public const string PET_SPIRIT_TPL = "OCCULT_PET_SPIRIT_TPL";
+
+            private static void PlaySwapFx(GamePet pet)
+            {
+                var list = pet.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE);
+                if (list == null) return;
+
+                foreach (var o in list)
+                {
+                    if (o is GamePlayer pl)
+                        pl.Out.SendSpellEffectAnimation(pet, pet, 10184, 0, false, 1);
+                }
+            }
+
+            public static void ApplyTemplate(GamePet pet, int tplId)
+            {
+                if (pet == null || tplId <= 0) return;
+                var tpl = NpcTemplateMgr.GetTemplate(tplId);
+                if (tpl == null) return;
+
+                if (ushort.TryParse(tpl.Model, out var m) && m > 0) pet.Model = m;
+                if (!string.IsNullOrWhiteSpace(tpl.Name)) pet.Name = tpl.Name;
+                if (byte.TryParse(tpl.Size, out var s) && s > 0) pet.Size = s;
+
+                try
+                {
+                    pet.Styles = tpl.Styles != null ? new List<Style>(tpl.Styles) : new List<Style>();
+                    pet.Spells = tpl.Spells != null ? new ArrayList(tpl.Spells) : new ArrayList();
+
+                    var clearAbilities = pet.GetType().GetMethod("ClearAbilities");
+                    var addAbility = pet.GetType().GetMethod("AddAbility", new[] { typeof(Ability) });
+
+                    if (clearAbilities != null && addAbility != null)
+                    {
+                        clearAbilities.Invoke(pet, null);
+                        if (tpl.Abilities != null)
+                        {
+                            foreach (Ability abil in tpl.Abilities)
+                                addAbility.Invoke(pet, new object[] { abil });
+                        }
+                    }
+                    else
+                    {
+                        var abilProp = pet.GetType().GetProperty("Abilities");
+                        if (abilProp != null && abilProp.CanWrite)
+                            abilProp.SetValue(pet, tpl.Abilities != null ? new ArrayList(tpl.Abilities) : new ArrayList());
+                    }
+
+                    if (pet.Brain is ControlledNpcBrain cb)
+                        cb.CheckSpells(StandardMobBrain.eCheckSpellType.Defensive);
+
+                    pet.SetPetLevel();
+                    pet.AutoSetStats();
+
+                    var owner = pet.GetPlayerOwner();
+                    if (owner != null) pet.SortSpells(owner.Level);
+
+                    owner?.Out?.SendObjectUpdate(pet);
+                    owner?.Out?.SendLivingEquipmentUpdate(pet);
+                    if (owner != null && pet.Brain is IControlledBrain brain)
+                        owner.Out.SendPetWindow(pet, ePetWindowAction.Update, brain.AggressionState, brain.WalkState);
+                }
+                catch
+                {
+                }
+
+                PlaySwapFx(pet);
+            }
+
+            public static void ForEachControlledPet(GamePlayer owner, Action<GamePet> action)
+            {
+                if (owner?.ControlledBrain?.Body is GamePet main && main.IsAlive)
+                    action(main);
+
+                var mainBody = owner?.ControlledBrain?.Body;
+                if (mainBody?.ControlledNpcList != null)
+                {
+                    lock (mainBody.ControlledNpcList)
+                        foreach (var b in mainBody.ControlledNpcList)
+                            if (b?.Body is GamePet sub && sub.IsAlive)
+                                action(sub);
+                }
+            }
+
+            public static void ApplyTemplateFromPetMemory(GamePet pet, bool toSpirit)
+            {
+                if (pet == null) return;
+                int baseTpl = pet.TempProperties.getProperty<int>(PET_BASE_TPL, 0);
+                int spiritTpl = pet.TempProperties.getProperty<int>(PET_SPIRIT_TPL, 0);
+                int which = toSpirit ? spiritTpl : baseTpl;
+
+                if (which > 0)
+                {
+                    ApplyTemplate(pet, which);
+
+                    var tpl = NpcTemplateMgr.GetTemplate(which);
+                    if (tpl != null)
+                    {
+                        if (ushort.TryParse(tpl.Model, out var m) && m > 0) pet.Model = m;
+                        if (!string.IsNullOrWhiteSpace(tpl.Name)) pet.Name = tpl.Name;
+                        if (byte.TryParse(tpl.Size, out var s) && s > 0) pet.Size = s;
+                    }
+                }
+            }
+
+            public static void SetOccultistPetForm(GamePlayer owner, bool toSpirit)
+            {
+                if (owner == null) return;
+                ForEachControlledPet(owner, pet => ApplyTemplateFromPetMemory(pet, toSpirit));
+            }
+
+            public static bool IsSpiritLikeActive(GameLiving l)
+            {
+                if (l == null) return false;
+                return l.TempProperties.getProperty<bool>(KEY_SPIRIT, false)
+                    || l.TempProperties.getProperty<bool>(KEY_COS, false);
+            }
+        }
+
+        public static class OccultistCastingRules
+        {
+            private static readonly HashSet<int> OnlyChtonicSpellIDs = new() { 25136, 25137 }; // Icebrand, Nethersbane
+            private static readonly HashSet<int> ForbiddenInChtonicIDs = new() { 25075, 25076, 25077, 25078, 25079, 25259, 25260, 25261, 25264, 25265, 25191, 25192, 25193, 25194, 25195, 25159, 25160, 25161, 25162, 25163 };
+            private static readonly HashSet<int> ForbiddenInDecrepitSpiritIDs = new() { 25206, 25207, 25208, 25209, 25210 };
+
+            private static bool IsOccultist(GamePlayer p) => p?.CharacterClass is ClassOccultist;
+
+            private static bool IsChtonic(GameLiving l) => l?.TempProperties.getProperty<bool>(OccultistForms.KEY_CHTONIC, false) == true;
+            private static bool IsSpirit(GameLiving l) => l?.TempProperties.getProperty<bool>(OccultistForms.KEY_SPIRIT, false) == true;
+            private static bool IsDecrepit(GameLiving l) => l?.TempProperties.getProperty<bool>(OccultistForms.KEY_DECREPIT, false) == true;
+
+            /// <summary>
+            /// Centralized “may I cast this?” logic for Occultist + shapeshift.
+            /// Return true if the cast MUST be blocked (with a human-readable reason).
+            /// </summary>
+            public static bool TryBlockCast(GamePlayer player, Spell spell, out string reason)
+            {
+                reason = null;
+                if (player == null || spell == null) return false;
+                if (!IsOccultist(player)) return false;
+
+                bool inChtonic = IsChtonic(player);
+                bool inDecreptitOrSpirit = IsSpirit(player) || IsDecrepit(player);
+                bool isHuman = !IsChtonic(player) && !IsDecrepit(player) && !IsChtonic(player);
+
+                if (OnlyChtonicSpellIDs.Contains(spell.ID))
+                {
+                    if (!inChtonic)
+                    {
+                        reason = LanguageMgr.GetTranslation(player, "SpellHandler.Occultist.CastCondition1");
+                        return true;
+                    }
+                    return false;
+                }
+
+                if (inChtonic)
+                {
+                    if (ForbiddenInChtonicIDs.Contains(spell.ID))
+                    {
+                        reason = LanguageMgr.GetTranslation(player, "SpellHandler.Occultist.CastCondition2");
+                        return true;
+                    }
+                }
+
+                if (inDecreptitOrSpirit || isHuman)
+                {
+                    if (ForbiddenInDecrepitSpiritIDs.Contains(spell.ID))
+                    {
+                        reason = LanguageMgr.GetTranslation(player, "SpellHandler.Occultist.CastCondition3");
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         }
 
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
@@ -602,6 +779,9 @@ namespace DOL.GS.Spells
         public virtual void CasterMoves()
         {
             if (Spell.InstrumentRequirement != 0)
+                return;
+
+            if (Caster.TempProperties.getProperty<bool>("BOD_CAN_MOVECAST", false))
                 return;
 
             if (Spell.MoveCast)

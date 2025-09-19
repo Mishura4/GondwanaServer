@@ -735,8 +735,19 @@ namespace DOL.GS.ServerRules
             if (living.IsSitting) return "GameObjects.GamePlayer.UseSlot.CantCallMountSeated";
             if (living.IsStealthed) return "GameObjects.GamePlayer.UseSlot.CantMountStealthed";
             if (living.IsDamned) return "GameObjects.GamePlayer.UseSlot.CantMountDamned";
-            if (SpellHandler.FindEffectOnTarget(living, "WarlockSpeedDecrease") != null) return "GameObjects.GamePlayer.UseSlot.CantMountFrog";
             if (SpellHandler.FindEffectOnTarget(living, "Petrify") != null) return "GameObjects.GamePlayer.UseSlot.CantMountPetrified";
+            if (SpellHandler.FindEffectOnTarget(player, "SummonMonster") != null || SpellHandler.FindEffectOnTarget(player, "CallOfShadows") != null || SpellHandler.FindEffectOnTarget(player, "BringerOfDeath") != null)
+            {
+                return "GameObjects.GamePlayer.UseSlot.CantMountThisForm";
+            }
+
+            var wsd = SpellHandler.FindEffectOnTarget(living, "WarlockSpeedDecrease");
+            if (wsd != null)
+            {
+                int rm = wsd.Spell?.ResurrectMana ?? 0;
+                string appearancetype = LanguageMgr.GetWarlockMorphAppearance((living as GamePlayer)?.Client?.Account?.Language ?? Properties.DB_LANGUAGE, rm);
+                return LanguageMgr.GetTranslation("GameObjects.GamePlayer.UseSlot.CantMountMorph", appearancetype);
+            }
 
             // You are carrying a relic ? You can't use a mount !
             if (player != null && GameRelic.IsPlayerCarryingRelic(player))

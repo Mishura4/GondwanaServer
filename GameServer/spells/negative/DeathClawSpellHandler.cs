@@ -73,6 +73,11 @@ namespace DOL.GS.Spells
             return true;
         }
 
+        private bool HasNecromancerShade(GamePlayer p)
+        {
+            return FindEffectOnTarget(p, "NecromancerShadeEffect") != null || p?.IsShade == true;
+        }
+
         public override int CalculateSpellResistChance(GameLiving target)
         {
             if (Spell.AmnesiaChance > 0 && target.Level > Spell.AmnesiaChance)
@@ -81,8 +86,9 @@ namespace DOL.GS.Spells
             var ResistChanceFactor = 2.6;
             bool isGhost = target is GameNPC npc && npc.Flags.HasFlag(GameNPC.eFlags.GHOST);
             bool isBoss = target is GameNPC gameNPC && gameNPC.IsBoss;
+            bool isSpecialClass = target is GamePlayer player && (player.CharacterClass is ClassNecromancer && HasNecromancerShade(player) || (player.CharacterClass is ClassBainshee && (player.Model == 1883 || player.Model == 1884 || player.Model == 1885)) || (player.CharacterClass is ClassVampiir && player.IsSprinting && player.CurrentSpeed == player.MaxSpeed) || (player.CharacterClass is ClassOccultist && (FindEffectOnTarget(player, "SpiritShapeShift") != null || FindEffectOnTarget(player, "CallOfShadows") != null || FindEffectOnTarget(player, "SummonMonster") != null)));
 
-            if (isBoss || isGhost)
+            if (isBoss || isGhost || isSpecialClass)
                 return base.CalculateSpellResistChance(target) * (int)ResistChanceFactor;
 
             return base.CalculateSpellResistChance(target);
