@@ -27,6 +27,7 @@ namespace DOL.GS.Spells
         private const string BOD_PREV_SPELL_ID = "BOD_PREV_SPELL_ID";
         private const string BOD_PREV_SPELL_LINE = "BOD_PREV_SPELL_LINE";
 
+        // TODO: Why not just use sub spell db field?
         private const int DISEASE_SUBSPELL_ID = 25296;
         private const int DISEASE_PROC_CHANCE = 50;
 
@@ -118,13 +119,6 @@ namespace DOL.GS.Spells
             if (_meleeSpeedBonus > 0)
                 o.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] += _meleeSpeedBonus;
 
-            // --- Absorption from DB (Spell.AmnesiaChance) ---
-            if (_absorbPct != 0)
-            {
-                o.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += _absorbPct;
-                o.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] += _absorbPct;
-            }
-
             // --- Regen multiplier (Decrepit-style) ---
             if (Math.Abs(_regenMult) > 0.0001f)
                 o.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, _regenMult);
@@ -177,13 +171,6 @@ namespace DOL.GS.Spells
             // Remove melee haste
             if (_meleeSpeedBonus > 0)
                 o.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] -= _meleeSpeedBonus;
-
-            // Remove ABS
-            if (_absorbPct != 0)
-            {
-                o.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] -= _absorbPct;
-                o.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] -= _absorbPct;
-            }
 
             // Unhook events
             if (_hookedEvents)
@@ -248,6 +235,7 @@ namespace DOL.GS.Spells
         }
 
         /// <summary>
+        /// Reduce any incoming damage by Spell.AmnesiaChance%.
         /// Defensive proc: 50% chance to apply disease when owner is hit by a successful physical attack.
         /// </summary>
         private void OnAttackedByEnemy(DOLEvent e, object sender, EventArgs args)
@@ -260,8 +248,20 @@ namespace DOL.GS.Spells
             // Only on successful melee/ranged physical hits that actually dealt damage
             if (!ad.IsSuccessfulHit || (!ad.IsMeleeAttack && !ad.IsRangedAttack))
                 return;
+
             if ((ad.Damage + ad.CriticalDamage) <= 0)
                 return;
+            
+            // --- Absorption from DB (Spell.AmnesiaChance) ---
+            if (_absorbPct > 0)
+            {
+                // Subtract from the hit
+                var pct = (_absorbPct / 100.0);
+                int reduceBase = (int)Math.Round(ad.Damage * pct);
+                int reduceCrit = (int)Math.Round(ad.CriticalDamage * pct);
+                ad.Damage -= reduceBase;
+                ad.CriticalDamage -= reduceCrit;
+            }
 
             if (!Util.Chance(DISEASE_PROC_CHANCE))
                 return;
