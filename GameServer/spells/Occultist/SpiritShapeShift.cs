@@ -1,4 +1,4 @@
-﻿using DOL.Events;
+using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
@@ -18,15 +18,30 @@ namespace DOL.GS.Spells
     [SpellHandler("SpiritShapeShift")]
     public class SpiritShapeShift : AbstractMorphSpellHandler
     {
-        // Temp keys
-        private const string KEY_HANDLER_FLAG = "SPIRIT_HANDLER_ATTACHED";
-        private const string KEY_ABSORB_PCT = "SPIRIT_ABSORB_PCT";
-        private const string KEY_REGEN_FLAT = "SPIRIT_REGEN_FLAT";      // flat extra Power regen per tick
+        // --- Store absorb % (Spell.Value) ---
+        private int m_absorbPct;
+
+        // --- Extra Power Regen (flat), scaling by Level and ResurrectMana% ---
+        // extra = round(Level * ResurrectMana / 100)
+        private int m_regenBonus;
 
         public SpiritShapeShift(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
             Priority = 10;
+
+            m_absorbPct = Math.Max(0, (int)Spell.Value);
+            m_regenBonus = Spell.ResurrectMana;
+            if (m_regenBonus != 0)
+            {
+                m_regenBonus = (int)Math.Round(caster.Level * (m_regenBonus / 100.0));
+            }
+        }
+
+        public override ushort GetModelFor(GameLiving living)
+        {
+            // Model taken from Spell.LifeDrainReturn
+            return (ushort)Spell.LifeDrainReturn;
         }
 
         public override bool CheckBeginCast(GameLiving target, bool quiet)
@@ -36,81 +51,34 @@ namespace DOL.GS.Spells
                 Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_CHTONIC, false))
             {
                 if (!quiet)
-                    MessageToCaster(LanguageMgr.GetTranslation(m_caster as GamePlayer, "SpellHandler.Occultist.CastCondition4"), eChatType.CT_System);
+                    MessageTranslationToCaster("SpellHandler.Occultist.CastCondition4", eChatType.CT_System);
                 return false;
             }
             return base.CheckBeginCast(target, quiet);
         }
 
-        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public void ToggleEffects(GameLiving target, bool apply)
         {
-            // Self-only
-            if (target != Caster)
+            target.TempProperties.setProperty(OccultistForms.KEY_SPIRIT, apply);
+
+            var sign = (sbyte)(apply ? 1 : -1);
+            if (m_regenBonus != 0)
             {
-                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.SelfOnly")
-                                ?? "You can only cast this on yourself.",
-                                eChatType.CT_System);
-                return false;
+                target.BaseBuffBonusCategory[eProperty.PowerRegenerationRate] += sign * m_regenBonus;
             }
 
-            return base.ApplyEffectOnTarget(target, effectiveness);
-        }
-
-        public override ushort GetModelFor(GameLiving living)
-        {
-            // Model taken from Spell.LifeDrainReturn
-            return (ushort)Spell.LifeDrainReturn;
-        }
-
-        public override void OnEffectStart(GameSpellEffect effect)
-        {
-            base.OnEffectStart(effect);
-            var owner = effect.Owner;
-
-            owner.TempProperties.setProperty(OccultistForms.KEY_SPIRIT, true);
-
-            if (effect.Owner is GamePlayer petowner && owner.ControlledBrain?.Body is GamePet pet)
-            {
-                owner.TempProperties.setProperty(OccultistForms.KEY_SPIRIT, true);
-                var spiritTpl = pet.TempProperties.getProperty<int>(OccultistForms.PET_SPIRIT_TPL, 0);
-                if (spiritTpl > 0) SpellHandler.OccultistForms.ApplyTemplate(pet, spiritTpl);
-            }
-
-            // if caster already has pets, flip them to Spirit template
-            if (owner is GamePlayer occOwner)
-            {
-                OccultistForms.SetOccultistPetForm(occOwner, true);
-            }
-
-            // --- Store absorb % (Spell.Value) ---
-            int storedabsorbPct = Math.Max(0, (int)Spell.Value);
-            if (storedabsorbPct > 0)
-                owner.TempProperties.setProperty(KEY_ABSORB_PCT, storedabsorbPct);
-
-            // --- Extra Power Regen (flat), scaling by Level and ResurrectMana% ---
-            // extra = round(Level * ResurrectMana / 100)
-            int regenPct = Spell.ResurrectMana;
-            if (regenPct != 0)
-            {
-                int extraRegen = (int)Math.Round(owner.Level * (regenPct / 100.0));
-                if (extraRegen > 0)
-                    owner.TempProperties.setProperty(KEY_REGEN_FLAT, extraRegen);
-            }
-
-            // --- Stealth Detection bonus (Spell.AmnesiaChance) ---
             if (Spell.AmnesiaChance != 0)
             {
-                owner.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] += Spell.AmnesiaChance;
+                target.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] += sign * Spell.AmnesiaChance;
             }
 
             // --- Unified event hook for incoming damage to perform absorb->mana conversion ---
-            if (!owner.TempProperties.getProperty(KEY_HANDLER_FLAG, false))
-            {
-                GameEventMgr.AddHandler(owner, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
-                owner.TempProperties.setProperty(KEY_HANDLER_FLAG, true);
-            }
+            if (apply)
+                GameEventMgr.AddHandler(target, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+            else
+                GameEventMgr.RemoveHandler(target, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
 
-            if (owner is GamePlayer gp)
+            if (target is GamePlayer gp)
             {
                 gp.Out.SendUpdateWeaponAndArmorStats();
                 gp.Out.SendCharStatsUpdate();
@@ -119,8 +87,22 @@ namespace DOL.GS.Spells
             }
             else
             {
-                owner.UpdateHealthManaEndu();
+                target.UpdateHealthManaEndu();
             }
+
+            // if caster already has pets, flip them to Spirit template
+            if (target is GamePlayer occOwner)
+            {
+                OccultistForms.SetOccultistPetForm(occOwner, apply);
+            }
+        }
+
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            base.OnEffectStart(effect);
+            var owner = effect.Owner;
+
+            ToggleEffects(owner, true);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -129,49 +111,7 @@ namespace DOL.GS.Spells
 
             owner.TempProperties.removeProperty(OccultistForms.KEY_SPIRIT);
 
-            // if caster has pets, flip them back to base template
-            if (owner is GamePlayer occOwner)
-            {
-                OccultistForms.SetOccultistPetForm(occOwner, false);
-            }
-
-            // Remove flat power regen
-            owner.TempProperties.removeProperty(KEY_REGEN_FLAT);
-
-            // Remove stored absorb %
-            owner.TempProperties.removeProperty(KEY_ABSORB_PCT);
-
-            // Remove event handler
-            if (owner.TempProperties.getProperty(KEY_HANDLER_FLAG, false))
-            {
-                GameEventMgr.RemoveHandler(owner, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
-                owner.TempProperties.removeProperty(KEY_HANDLER_FLAG);
-            }
-
-            // Remove Stealth Detection bonus
-            if (Spell.AmnesiaChance != 0)
-            {
-                owner.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] -= Spell.AmnesiaChance;
-            }
-
-            if (owner is GamePlayer gp)
-            {
-                gp.Out.SendUpdateWeaponAndArmorStats();
-                gp.Out.SendCharStatsUpdate();
-                gp.UpdatePlayerStatus();
-                gp.Out.SendUpdatePlayer();
-            }
-            else
-            {
-                owner.UpdateHealthManaEndu();
-            }
-
-            if (effect.Owner is GamePlayer petowner && owner.ControlledBrain?.Body is GamePet pet)
-            {
-                owner.TempProperties.removeProperty(OccultistForms.KEY_SPIRIT);
-                var baseTpl = pet.TempProperties.getProperty<int>(OccultistForms.PET_BASE_TPL, 0);
-                if (baseTpl > 0) SpellHandler.OccultistForms.ApplyTemplate(pet, baseTpl);
-            }
+            ToggleEffects(effect.Owner, false);
 
             return base.OnEffectExpires(effect, noMessages);
         }
@@ -188,31 +128,25 @@ namespace DOL.GS.Spells
             var owner = (GameLiving)sender;
 
             // Only apply on actual damaging hits
-            int total = ad.Damage + ad.CriticalDamage;
-            if (total <= 0)
+            if (ad.Damage + ad.CriticalDamage <= 0)
                 return;
 
-            int absorbPct = owner.TempProperties.getProperty<int>(KEY_ABSORB_PCT, 0);
-            if (absorbPct <= 0)
+            if (m_absorbPct <= 0)
                 return;
 
-            // absorb = round(total * absorbPct / 100), cap by actual base damage portion
-            int absorbed = (int)Math.Round(total * (absorbPct / 100.0));
-            if (absorbed <= 0)
-                return;
-
-            // Subtract from the hit (use ad.Damage; don't touch crit directly to avoid negatives)
-            int reduceFromDamage = Math.Min(ad.Damage, absorbed);
-            ad.Damage -= reduceFromDamage;
-
-            // Any remainder (if crit > 0 and absorbed > base damage) is effectively not applied
-            // to final damage; we don't need to modify ad.CriticalDamage as the engine sums them.
+            // Subtract from the hit
+            var pct = (m_absorbPct / 100.0);
+            int reduceBase = (int)Math.Round(ad.Damage * pct);
+            int reduceCrit = (int)Math.Round(ad.CriticalDamage * pct);
+            ad.Damage -= reduceBase;
+            ad.CriticalDamage -= reduceCrit;
 
             // Convert absorbed amount into power (positive change)
-            if (reduceFromDamage > 0)
+            int total = reduceBase + reduceCrit;
+            if (total > 0)
             {
                 // Use ChangeMana to respect caps and propagate properly
-                int changed = owner.ChangeMana(Caster, GameLiving.eManaChangeType.Spell, reduceFromDamage);
+                int changed = owner.ChangeMana(Caster, GameLiving.eManaChangeType.Spell, total);
 
                 // Optional feedback
                 if (owner is GamePlayer p && changed > 0)
