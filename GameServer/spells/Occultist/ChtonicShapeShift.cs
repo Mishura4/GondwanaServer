@@ -1,4 +1,4 @@
-﻿using DOL.Events;
+using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
@@ -106,7 +106,6 @@ namespace DOL.GS.Spells
             owner.BaseBuffBonusCategory[(int)eProperty.MaxHealth] += mult * m_hpBonus;
             owner.SpecBuffBonusCategory[(int)eProperty.WeaponSkill] += mult * m_wsBonus;
             owner.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += mult * m_absBonus;
-            owner.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] += mult * m_absBonus;
 
             if (m_hpBonus != 0 && apply)
                 owner.Health += m_hpBonus;
