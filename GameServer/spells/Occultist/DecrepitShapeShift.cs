@@ -1,4 +1,4 @@
-﻿using DOL.Database;
+using DOL.Database;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
@@ -85,7 +85,6 @@ namespace DOL.GS.Spells
             // --- Defensive Disease Proc (native event hook; 50% on melee hits) ---
             // --- Armor absorption logic ---
             owner.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += m_absorbPct;
-            owner.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] += m_absorbPct;
             GameEventMgr.AddHandler(owner, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
 
             if (owner is GamePlayer gp)
