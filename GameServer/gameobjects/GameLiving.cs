@@ -4304,7 +4304,7 @@ namespace DOL.GS
                     }
                 }
 
-                Group attackerGroup = attackerPlayer.Group;
+                Group attackerGroup = attackerPlayer.Group; 
                 if (attackerGroup != null)
                 {
                     List<GameLiving> xpGainers = new List<GameLiving>(8);
@@ -4378,7 +4378,9 @@ namespace DOL.GS
         {
             if (ad.IsHit && ad.CausesCombat)
             {
+                var damage = ad.TotalDamage;
                 Notify(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
+                ad.Modifier -= (damage - ad.TotalDamage);
 
                 if (this is GameNPC && ActiveWeaponSlot == eActiveWeaponSlot.Distance && this.IsWithinRadius(ad.Attacker, 150))
                     ((GameNPC)this).SwitchToMelee(ad.Attacker);
