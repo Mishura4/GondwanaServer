@@ -309,7 +309,7 @@ namespace DOL.GS.Spells
 
             return
                 $"Become the Bringer of Death. Your spell casts ignore interruption but reach only {potency}% of their potency and you take {absorb}% less damage from all sources.\n" +
-                $"Your movement speed is increased by {meleeHaste}%, even in speedwarps and while in combat. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.";
+                $"Your melee attack speed is increased by {meleeHaste}%. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.";
         }
     }
 }
