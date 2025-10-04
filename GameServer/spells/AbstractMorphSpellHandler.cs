@@ -1,4 +1,4 @@
-﻿using DOL.GS;
+using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
@@ -73,7 +73,7 @@ namespace DOL.GS.Spells
         {
             if (oldeffect.SpellHandler is AbstractMorphSpellHandler otherMorph && neweffect.SpellHandler is AbstractMorphSpellHandler newMorph)
             {
-                if (otherMorph.Priority >= newMorph.Priority)
+                if (otherMorph.Priority > newMorph.Priority)
                     return false;
                 else if (otherMorph.Priority < newMorph.Priority)
                     return true;
