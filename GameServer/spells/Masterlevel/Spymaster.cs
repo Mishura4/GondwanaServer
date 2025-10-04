@@ -561,7 +561,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Never replace existing camouflage effects, it causes pets to improperly destealth owners
         /// </summary>
-        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             return false;
         }

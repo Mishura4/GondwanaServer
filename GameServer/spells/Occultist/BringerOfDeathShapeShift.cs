@@ -1,4 +1,3 @@
-using System;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
@@ -6,6 +5,8 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.Language;
+using log4net;
+using System;
 
 namespace DOL.GS.Spells
 {
@@ -21,78 +22,42 @@ namespace DOL.GS.Spells
     [SpellHandler("BringerOfDeath")]
     public class BringerOfDeath : AbstractMorphSpellHandler
     {
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
+
         private const string BOD_FLAG_ACTIVE = "BOD_ACTIVE";
         private const string BOD_FLAG_UNINTERRUPTIBLE = "BOD_UNINTERRUPTIBLE";
         private const string BOD_FLAG_MOVECAST = "BOD_CAN_MOVECAST";
-        private const string BOD_PREV_SPELL_ID = "BOD_PREV_SPELL_ID";
-        private const string BOD_PREV_SPELL_LINE = "BOD_PREV_SPELL_LINE";
+        private const string BOD_PREV_SPELL = "BOD_PREV_SPELL";
 
         // TODO: Why not just use sub spell db field?
         private const int DISEASE_SUBSPELL_ID = 25296;
         private const int DISEASE_PROC_CHANCE = 50;
 
         private int _absorbPct;
-        private float _regenMult;
         private int _meleeSpeedBonus;
-        private int _spellDmgDelta;
-        private int _dotDmgDelta;
         private bool _hookedEvents;
+        private float _regenMult;
+        private int _spellDmgPct;
 
         public BringerOfDeath(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
             Priority = 11;
+
+            // --- Melee speed (haste) from Spell.Value ---
+            _meleeSpeedBonus = Math.Max(0, (int)Spell.Value);
+            
+            // --- Magical-only potency: write NEGATIVE bonuses so calculators reduce output ---
+            _spellDmgPct = PotencyToNegativeBonus();
+            
+            // --- Regen multiplier (Decrepit-style) ---
+            _regenMult = ((float)Spell.ResurrectMana / 100);
+
             _absorbPct = Math.Max(0, (int)Spell.AmnesiaChance);
-            _regenMult = ((float)Spell.ResurrectMana / 100f);
         }
 
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
         {
             return new BringerOfDeathSpellEffect(this, CalculateEffectDuration(target, effectiveness), 0);
-        }
-
-        public override bool CheckBeginCast(GameLiving target, bool quiet)
-        {
-            if (!base.CheckBeginCast(target, quiet))
-                return false;
-
-            GameSpellEffect prev = null;
-            foreach (var eff in Caster.FindEffectsOnTarget(typeof(AbstractMorphSpellHandler)))
-            {
-                if (eff.SpellHandler is DecrepitShapeShift
-                    || eff.SpellHandler is SpiritShapeShift
-                    || eff.SpellHandler is ChtonicShapeShift)
-                {
-                    prev = eff;
-                    break;
-                }
-            }
-
-            if (prev != null)
-            {
-                Caster.TempProperties.setProperty(BOD_PREV_SPELL_ID, prev.Spell.ID);
-                var lineKey = prev.SpellHandler.SpellLine?.KeyName ?? prev.SpellHandler.SpellLine?.Name;
-                Caster.TempProperties.setProperty(BOD_PREV_SPELL_LINE, lineKey ?? string.Empty);
-            }
-            else
-            {
-                Caster.TempProperties.removeProperty(BOD_PREV_SPELL_ID);
-                Caster.TempProperties.removeProperty(BOD_PREV_SPELL_LINE);
-            }
-
-            return true;
-        }
-
-        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
-        {
-            if (target != Caster)
-            {
-                MessageToCaster(
-                    LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.SelfOnly")
-                    ?? "You can only cast this on yourself.",
-                    eChatType.CT_System);
-                return false;
-            }
-            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         // Morph model comes from DB
@@ -104,119 +69,70 @@ namespace DOL.GS.Spells
             return potency - 100;
         }
 
-        public override void OnEffectStart(GameSpellEffect effect)
+        protected void SetFormProperties(GameLiving living, bool apply)
         {
-            base.OnEffectStart(effect);
-            var o = effect.Owner;
-
             // Mark + rules (your move-cast code elsewhere already keys off these)
-            o.TempProperties.setProperty(BOD_FLAG_ACTIVE, true);
-            o.TempProperties.setProperty(BOD_FLAG_UNINTERRUPTIBLE, true);
-            o.TempProperties.setProperty(BOD_FLAG_MOVECAST, true);
-
-            // --- Melee speed (haste) from Spell.Value ---
-            _meleeSpeedBonus = Math.Max(0, (int)Spell.Value);
-            if (_meleeSpeedBonus > 0)
-                o.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] += _meleeSpeedBonus;
-
-            // --- Regen multiplier (Decrepit-style) ---
-            if (Math.Abs(_regenMult) > 0.0001f)
-                o.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, _regenMult);
-
-            // --- Magical-only potency: write NEGATIVE bonuses so calculators reduce output ---
-            _spellDmgDelta = PotencyToNegativeBonus();
-            _dotDmgDelta = _spellDmgDelta;
-            if (_spellDmgDelta != 0)
+            if (apply)
             {
-                o.BaseBuffBonusCategory[(int)eProperty.SpellDamage] += _spellDmgDelta;
-                o.BaseBuffBonusCategory[(int)eProperty.DotDamageBonus] += _dotDmgDelta;
-            }
-
-            // --- Defensive disease proc on incoming physical hits ---
-            GameEventMgr.AddHandler(o, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
-            _hookedEvents = true;
-
-            // --- Soft no-interrupt shim: clear any interrupt timeout the moment we take damage while casting ---
-            GameEventMgr.AddHandler(o, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
-
-            // --- Client/state updates ---
-            if (o is GamePlayer p)
-            {
-                p.Out.SendUpdateWeaponAndArmorStats();
-                p.Out.SendCharStatsUpdate();
-                p.Out.SendCharResistsUpdate();
-                p.UpdatePlayerStatus();
-                p.Out.SendUpdatePlayer();
+                living.TempProperties.setProperty(BOD_FLAG_ACTIVE, true);
+                living.TempProperties.setProperty(BOD_FLAG_UNINTERRUPTIBLE, true);
+                living.TempProperties.setProperty(BOD_FLAG_MOVECAST, true);
             }
             else
             {
-                o.UpdateHealthManaEndu();
+                living.TempProperties.removeProperty(BOD_FLAG_ACTIVE);
+                living.TempProperties.removeProperty(BOD_FLAG_UNINTERRUPTIBLE);
+                living.TempProperties.removeProperty(BOD_FLAG_MOVECAST);
             }
+        }
+
+        protected void ApplyFormEffects(GameLiving living, bool apply)
+        {
+            var mult = (sbyte)(apply ? 1 : -1);
+            
+            if (_meleeSpeedBonus > 0)
+                living.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] += _meleeSpeedBonus * mult;
+
+            if (Math.Abs(_regenMult) > 0.0001f)
+                living.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, _regenMult * mult);
+
+            if (_spellDmgPct != 0)
+            {
+                living.BaseBuffBonusCategory[(int)eProperty.SpellDamage] += _spellDmgPct * mult;
+                living.BaseBuffBonusCategory[(int)eProperty.DotDamageBonus] += _spellDmgPct * mult;
+            }
+
+            if (apply)
+            {
+                // --- Defensive disease proc on incoming physical hits ---
+                GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+
+                // --- Soft no-interrupt shim: clear any interrupt timeout the moment we take damage while casting ---
+                GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
+            }
+            else
+            {
+                GameEventMgr.RemoveHandler(living, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+                GameEventMgr.RemoveHandler(living, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
+            }
+        }
+
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            var o = effect.Owner;
+
+            base.OnEffectStart(effect);
+
+            SetFormProperties(o, true);
+            ApplyFormEffects(o, true);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
             var o = effect.Owner;
 
-            // Remove potency debuffs
-            if (_spellDmgDelta != 0)
-            {
-                o.BaseBuffBonusCategory[(int)eProperty.SpellDamage] -= _spellDmgDelta;
-                o.BaseBuffBonusCategory[(int)eProperty.DotDamageBonus] -= _dotDmgDelta;
-            }
-
-            // Remove regen multiplier
-            o.BuffBonusMultCategory1.Remove((int)eProperty.HealthRegenerationRate, this);
-
-            // Remove melee haste
-            if (_meleeSpeedBonus > 0)
-                o.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] -= _meleeSpeedBonus;
-
-            // Unhook events
-            if (_hookedEvents)
-            {
-                GameEventMgr.RemoveHandler(o, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
-                GameEventMgr.RemoveHandler(o, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
-                _hookedEvents = false;
-            }
-
-            // Clear flags
-            o.TempProperties.removeProperty(BOD_FLAG_ACTIVE);
-            o.TempProperties.removeProperty(BOD_FLAG_UNINTERRUPTIBLE);
-            o.TempProperties.removeProperty(BOD_FLAG_MOVECAST);
-
-            // ---- Restore previous morph (if any) ----
-            int prevId = effect.Owner.TempProperties.getProperty<int>(BOD_PREV_SPELL_ID, 0);
-            string prevLineName = effect.Owner.TempProperties.getProperty<string>(BOD_PREV_SPELL_LINE, string.Empty);
-
-            // Clear the memory first to avoid loops if something goes wrong
-            effect.Owner.TempProperties.removeProperty(BOD_PREV_SPELL_ID);
-            effect.Owner.TempProperties.removeProperty(BOD_PREV_SPELL_LINE);
-
-            if (prevId > 0)
-            {
-                new RegionTimerAction<GameLiving>(o, living =>
-                {
-                    try
-                    {
-                        var prevSpell = SkillBase.GetSpellByID(prevId);
-                        SpellLine prevLine = null;
-
-                        if (!string.IsNullOrEmpty(prevLineName))
-                            prevLine = SkillBase.GetSpellLine(prevLineName);
-
-                        prevLine ??= SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
-
-                        if (prevSpell != null && prevLine != null)
-                        {
-                            var h = ScriptMgr.CreateSpellHandler(living, prevSpell, prevLine);
-                            h?.StartSpell(living);
-                        }
-                    }
-                    catch
-                    { }
-                }).Start(1);
-            }
+            ApplyFormEffects(o, false);
+            SetFormProperties(o, false);
 
             if (o is GamePlayer p)
             {
@@ -232,6 +148,11 @@ namespace DOL.GS.Spells
             }
 
             return base.OnEffectExpires(effect, noMessages);
+        }
+
+        public override void OnEffectRemove(GameSpellEffect effect, bool overwrite)
+        {
+            base.OnEffectRemove(effect, overwrite);
         }
 
         /// <summary>

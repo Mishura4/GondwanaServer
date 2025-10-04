@@ -80,8 +80,22 @@ namespace DOL.GS.Spells
             attempt.SendSpellResistAnimation(target);
         }
 
+        public override bool ShouldCancelOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        {
+            if (neweffect.SpellHandler is AbstractMorphSpellHandler newMorph && oldeffect.SpellHandler is AbstractMorphSpellHandler oldMorph)
+            {
+                if (newMorph.Priority > oldMorph.Priority)
+                    return true;
+
+                if (newMorph.Priority < oldMorph.Priority)
+                    return false;
+            }
+
+            return base.ShouldCancelOldEffect(oldeffect, neweffect);
+        }
+
         /// <inheritdoc />
-        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (oldeffect.SpellHandler is AbstractMorphSpellHandler otherMorph && neweffect.SpellHandler is AbstractMorphSpellHandler newMorph)
             {
@@ -94,7 +108,7 @@ namespace DOL.GS.Spells
             if (oldeffect.SpellHandler is IllusionSpell otherIllu && otherIllu.Priority <= Priority)
                 return true;
 
-            return base.IsBetterThanOldEffect(oldeffect, neweffect);
+            return base.ShouldOverwriteOldEffect(oldeffect, neweffect);
         }
 
         /// <inheritdoc />
@@ -128,7 +142,7 @@ namespace DOL.GS.Spells
                     continue;
                 }
 
-                if (model != 0 && IsBetterThanOldEffect(bestEffect, otherEffect))
+                if (model != 0 && ShouldOverwriteOldEffect(bestEffect, otherEffect))
                 {
                     bestEffect = otherEffect;
                     bestModel = model;

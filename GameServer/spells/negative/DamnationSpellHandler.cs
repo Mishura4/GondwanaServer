@@ -151,7 +151,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (neweffect.SpellHandler is DamnationSpellHandler)
             {

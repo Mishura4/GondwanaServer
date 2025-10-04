@@ -27,10 +27,10 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns></returns>
-        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (oldeffect.Owner is GamePlayer) return false; //no overwrite for players
-            return base.IsBetterThanOldEffect(oldeffect, neweffect);
+            return base.ShouldOverwriteOldEffect(oldeffect, neweffect);
         }
         /// <summary>
         /// Apply effect on target or do spell action if non duration spell

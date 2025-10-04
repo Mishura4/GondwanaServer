@@ -107,7 +107,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (oldeffect.SpellHandler is IllusionSpell oldIllusion && neweffect.SpellHandler is IllusionSpell newIllusion)
             {
@@ -129,7 +129,7 @@ namespace DOL.GS.Spells
                     return true;
             }
 
-            return base.IsBetterThanOldEffect(oldeffect, neweffect);
+            return base.ShouldOverwriteOldEffect(oldeffect, neweffect);
         }
 
         public enum eSpawnType

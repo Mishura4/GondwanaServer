@@ -147,19 +147,22 @@ namespace DOL.GS
                 return false;
             }
 
-            if (val is T)
+            if (val is T asT)
             {
-                value = (T)val;
+                value = asT;
+                return true;
             }
-            else if (val != null)
+
+            if (val != null)
             {
-                var typeConverter = val == null ? null : TypeDescriptor.GetConverter(val);
+                var typeConverter = TypeDescriptor.GetConverter(val);
                 if (typeConverter?.CanConvertFrom(typeof(T)) == true)
                 {
                     value = (T)typeConverter.ConvertFrom(val);
                     return true;
                 }
             }
+
             value = default;
             return true;
         }

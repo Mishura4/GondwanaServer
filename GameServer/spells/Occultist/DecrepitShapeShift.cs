@@ -12,9 +12,9 @@ namespace DOL.GS.Spells
     [SpellHandler("DecrepitShapeShift")]
     public class DecrepitShapeShift : AbstractMorphSpellHandler
     {
-        private int m_spellDmgPct;
-        private int m_absorbPct;
-        private float m_regenPct;
+        protected int m_spellDmgPct;
+        protected int m_absorbPct;
+        protected float m_regenPct;
         
         // Constants
         private const int DISEASE_SUBSPELL_ID = 25296; // "Decrepit's Disease"
@@ -35,7 +35,7 @@ namespace DOL.GS.Spells
             // extra = round(Level * ResurrectMana / 100)
         }
 
-        public override bool CheckBeginCast(GameLiving target, bool quiet)
+        protected virtual bool CheckFormConditions(GameLiving target, bool quiet)
         {
             if (Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_SPIRIT, false) ||
                 Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_DECREPIT, false) ||
@@ -45,6 +45,13 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation(m_caster as GamePlayer, "SpellHandler.Occultist.CastCondition4"), eChatType.CT_System);
                 return false;
             }
+            return true;
+        }
+
+        public override bool CheckBeginCast(GameLiving target, bool quiet)
+        {
+            if (!CheckFormConditions(target, quiet))
+                return false;
             return base.CheckBeginCast(target, quiet);
         }
 
@@ -66,26 +73,45 @@ namespace DOL.GS.Spells
             return (ushort)Spell.LifeDrainReturn;
         }
 
+        protected virtual void SetFormProperties(GameLiving living, bool apply)
+        {
+            if (apply)
+                living.TempProperties.setProperty(OccultistForms.KEY_DECREPIT, true);
+            else
+                living.TempProperties.removeProperty(OccultistForms.KEY_DECREPIT);
+        }
+
+        protected virtual void ApplyBonuses(GameLiving living, bool apply)
+        {
+            var mult = (sbyte)(apply ? 1 : -1);
+
+            if (m_regenPct != 0)
+            {
+                living.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, m_regenPct * mult);
+            }
+
+            // --- Spell Damage (direct) ---
+            living.SpecBuffBonusCategory[(int)eProperty.SpellDamage] += m_spellDmgPct * mult;
+            living.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] += m_spellDmgPct * mult;
+
+            // --- Defensive Disease Proc (native event hook; 50% on melee hits) ---
+            // --- Armor absorption logic ---
+            living.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += m_absorbPct * mult;
+
+            if (apply)
+                GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+            else
+                GameEventMgr.RemoveHandler(living, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+        }
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
 
             var owner = effect.Owner;
-            owner.TempProperties.setProperty(OccultistForms.KEY_DECREPIT, true);
-            
-            if (m_regenPct != 0)
-            {
-                owner.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, m_regenPct);
-            }
 
-            // --- Spell Damage (direct) ---
-            owner.SpecBuffBonusCategory[(int)eProperty.SpellDamage] += m_spellDmgPct;
-            owner.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] += m_spellDmgPct;
-
-            // --- Defensive Disease Proc (native event hook; 50% on melee hits) ---
-            // --- Armor absorption logic ---
-            owner.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += m_absorbPct;
-            GameEventMgr.AddHandler(owner, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+            SetFormProperties(owner, true);
+            ApplyBonuses(owner, true);
 
             if (owner is GamePlayer gp)
             {
@@ -100,17 +126,9 @@ namespace DOL.GS.Spells
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
             var owner = effect.Owner;
-            owner.TempProperties.removeProperty(OccultistForms.KEY_DECREPIT);
-            
-            owner.SpecBuffBonusCategory[(int)eProperty.SpellDamage] -= m_spellDmgPct;
-            owner.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] -= m_spellDmgPct;
-            owner.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] -= m_absorbPct;
-            owner.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] -= m_absorbPct;
 
-            // Multiplicative (i.e., % of base regen)
-            owner.BuffBonusMultCategory1.Remove((int)eProperty.HealthRegenerationRate, this);
-            
-            GameEventMgr.RemoveHandler(owner, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+            SetFormProperties(owner, false);
+            ApplyBonuses(owner, false);
 
             if (owner is GamePlayer gp)
             {
@@ -131,7 +149,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Defensive: disease proc (50%) + unified absorption on every damaging hit (melee, ranged, spell, DoT).
         /// </summary>
-        private void OnAttackedByEnemy(DOLEvent e, object sender, EventArgs arguments)
+        protected virtual void OnAttackedByEnemy(DOLEvent e, object sender, EventArgs arguments)
         {
             if (arguments is not AttackedByEnemyEventArgs { AttackData: { } ad })
                 return;

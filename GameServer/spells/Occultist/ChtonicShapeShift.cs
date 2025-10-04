@@ -67,6 +67,14 @@ namespace DOL.GS.Spells
 
         public override bool HasPositiveOrSpeedEffect() => true;
 
+        public override bool IsCancellable(GameSpellEffect compare)
+        {
+            if (compare.SpellHandler is BringerOfDeath)
+                return true;
+
+            return base.IsCancellable(compare);
+        }
+
         /// <summary>Model is driven by Spell.LifeDrainReturn (0 -> no model change).</summary>
         public override ushort GetModelFor(GameLiving living)
         {

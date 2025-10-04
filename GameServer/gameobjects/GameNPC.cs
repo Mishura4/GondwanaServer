@@ -2363,7 +2363,7 @@ namespace DOL.GS
             if (m_maxdistance != 0 && Math.Abs(m_maxdistance) < Math.Abs(m_roamingRange))
             {
                 log.WarnFormat(
-                    "warning: mob {0} ({1}) with template {2} has MaxDistance {3} which is smaller than {4}, mob will frequently reset, this is almost certainly an error",
+                    "warning: mob {0} ({1}) with template {2} has MaxDistance {3} which is smaller than its roaming range {4}, mob will frequently reset, this is almost certainly an error",
                     Name, InternalID, NPCTemplate?.TemplateId, m_maxdistance, m_roamingRange);
             }
             /*
@@ -2377,7 +2377,7 @@ namespace DOL.GS
         /// </summary>
         public override void DeleteFromDatabase()
         {
-            if (Brain != null && Brain is IControlledBrain)
+            if (Brain is IControlledBrain)
             {
                 return;
             }

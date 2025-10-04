@@ -418,34 +418,41 @@ namespace DOL.GS.Effects
                     }
 
                     // already added ?
-                    if (Owner != null)
+                    if (Owner == null)
+                    {
+                        //Enable Effect
+                        Owner = target;
+                        IsExpired = false;
+
+                        try
+                        {
+                            Owner.EffectList.BeginChanges();
+                            commitChange = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (log.IsWarnEnabled)
+                                log.WarnFormat("Effect ({0}) Could not Begin Change in living - {1} - Spell Effect List, {2}", this, Owner, ex);
+                            commitChange = false;
+                        }
+
+                        // Insert into Owner Effect List
+                        if (!Owner.EffectList.Add(this))
+                        {
+                            if (log.IsWarnEnabled)
+                                log.WarnFormat("{0}: effect was not added to the effects list, not starting it either. (effect class:{1} spell type:{2} spell name:'{3}')", Owner.Name, GetType().FullName, Spell.SpellType, Name);
+                            return;
+                        }
+                    }
+                    else if (Owner != target)
                     {
                         if (log.IsErrorEnabled)
                             log.ErrorFormat("Tried to start an already owned effect ({0})).\n{1}", this, Environment.StackTrace);
                         return;
                     }
-
-                    //Enable Effect
-                    Owner = target;
-                    IsExpired = false;
-                    try
+                    else
                     {
-                        Owner.EffectList.BeginChanges();
-                        commitChange = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat("Effect ({0}) Could not Begin Change in living - {1} - Spell Effect List, {2}", this, Owner, ex);
-                        commitChange = false;
-                    }
-
-                    // Insert into Owner Effect List
-                    if (!Owner.EffectList.Add(this))
-                    {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat("{0}: effect was not added to the effects list, not starting it either. (effect class:{1} spell type:{2} spell name:'{3}')", Owner.Name, GetType().FullName, Spell.SpellType, Name);
-                        return;
+                        IsExpired = false;
                     }
 
                     // Add concentration Effect To Caster List.

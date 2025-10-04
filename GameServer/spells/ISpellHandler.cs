@@ -125,7 +125,7 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns>true if new spell is better version</returns>
-        bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect);
+        bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect);
 
         /// <summary>
         /// Determines wether this spell is compatible with given spell
@@ -144,7 +144,7 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns></returns>
-        bool IsCancellableEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect);
+        bool ShouldCancelOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect);
 
         /// <summary>
         /// Determines wether this spell can be disabled

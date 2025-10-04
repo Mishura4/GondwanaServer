@@ -128,7 +128,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             Spell oldProcSpell = SkillBase.GetSpellByID((int)oldeffect.Spell.Value);
             Spell newProcSpell = SkillBase.GetSpellByID((int)neweffect.Spell.Value);
