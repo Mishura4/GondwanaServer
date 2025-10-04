@@ -274,7 +274,7 @@ namespace DOL.GS.Spells
             pet.CloneMaxHealth = Math.Max(1, (int)Math.Round(target.GetModified(eProperty.MaxHealth) * this.Spell.AmnesiaChance / 100.0));
             pet.Health = pet.CloneMaxHealth;
             pet.WeaponDps = (int)target.WeaponDamage(target.AttackWeapon);
-            pet.WeaponSpd = (int)target.AttackWeapon.SPD_ABS;
+            pet.WeaponSpd = target.AttackWeapon?.SPD_ABS ?? 0;
 
             var model = GetModelFor(target);
             if (model != 0)
