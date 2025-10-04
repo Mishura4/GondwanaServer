@@ -3389,7 +3389,8 @@ namespace DOL.GS
         /// <summary>
         /// give player a new Specialization or improve existing one
         /// </summary>
-        /// <param name="skill"></param>
+        /// <param name="skill">Spec to add</param>
+        /// <param name="notify">Whether to send a message to the player</param>
         protected virtual void AddSpecialization(Specialization skill, bool notify)
         {
             if (skill == null)
@@ -3398,7 +3399,7 @@ namespace DOL.GS
             lock (((ICollection)m_specialization).SyncRoot)
             {
                 // search for existing key
-                if (!m_specialization.ContainsKey(skill.KeyName))
+                if (!m_specialization.TryGetValue(skill.KeyName, out var spec))
                 {
                     // Adding
                     m_specialization.Add(skill.KeyName, skill);
@@ -3413,7 +3414,9 @@ namespace DOL.GS
                 else
                 {
                     // Updating
-                    m_specialization[skill.KeyName].Level = skill.Level;
+                    spec.Level = skill.Level;
+                    spec.Trainable = spec.Trainable || skill.Trainable;
+                    spec.AllowSave = spec.AllowSave || skill.AllowSave;
                 }
             }
         }
@@ -4351,7 +4354,7 @@ namespace DOL.GS
             List<Tuple<Skill, Skill>> copylist = new(list);
 
             // Add Spec
-            foreach (Specialization spec in specs.Where(item => item.Trainable))
+            foreach (Specialization spec in specs)
             {
                 int index = list.FindIndex(e => (e.Item1 is Specialization) && ((Specialization)e.Item1).KeyName == spec.KeyName);
 

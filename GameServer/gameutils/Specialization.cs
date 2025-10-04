@@ -86,18 +86,12 @@ namespace DOL.GS
         /// <summary>
         /// Is this Specialization Trainable ?
         /// </summary>
-        public virtual bool Trainable
-        {
-            get { return true; }
-        }
+        public bool Trainable { get; set; } = true;
 
         /// <summary>
         /// Can This Specialization be saved in Player record ?
         /// </summary>
-        public virtual bool AllowSave
-        {
-            get { return true; }
-        }
+        public bool AllowSave { get; set; } = true;
 
         /// <summary>
         /// Is this Specialization Handling Hybrid lists ?
@@ -491,14 +485,16 @@ namespace DOL.GS
         public UntrainableSpecialization(string keyname, string displayname, ushort icon, int ID)
             : base(keyname, displayname, icon, ID)
         {
+            Trainable = false;
+            Hidden = true;
         }
+    }
 
-        /// <summary>
-        /// Is this Specialization Trainable ?
-        /// </summary>
-        public override bool Trainable
+    public class TemporarySpecialization : UntrainableSpecialization
+    {
+        public TemporarySpecialization(string keyname, string displayname, ushort icon, int ID) : base(keyname, displayname, icon, ID)
         {
-            get { return false; }
+            AllowSave = false;
         }
     }
 
@@ -510,14 +506,7 @@ namespace DOL.GS
         public CareerSpecialization(string keyname, string displayname, ushort icon, int ID)
             : base(keyname, displayname, icon, ID)
         {
-        }
-
-        /// <summary>
-        /// Can This Specialization be saved in Player record ?
-        /// </summary>
-        public override bool AllowSave
-        {
-            get { return false; }
+            AllowSave = false;
         }
 
         /// <summary>

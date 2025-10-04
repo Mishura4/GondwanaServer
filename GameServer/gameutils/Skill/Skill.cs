@@ -1,4 +1,4 @@
-﻿/*
+/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
  * 
  * This program is free software; you can redistribute it and/or
@@ -109,6 +109,11 @@ namespace DOL.GS
         {
             return (Skill)MemberwiseClone();
         }
+
+        /// <summary>
+        /// Is this skill hidden from the player in spec list?
+        /// </summary>
+        public bool Hidden { get; set; } = false;
     }
 
     /// <summary>

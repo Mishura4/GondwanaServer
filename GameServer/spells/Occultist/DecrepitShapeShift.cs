@@ -106,7 +106,7 @@ namespace DOL.GS.Spells
             owner.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] -= m_spellDmgPct;
             owner.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] -= m_absorbPct;
             owner.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] -= m_absorbPct;
-            
+
             // Multiplicative (i.e., % of base regen)
             owner.BuffBonusMultCategory1.Remove((int)eProperty.HealthRegenerationRate, this);
             

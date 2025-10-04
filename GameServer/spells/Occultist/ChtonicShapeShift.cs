@@ -87,6 +87,7 @@ namespace DOL.GS.Spells
         }
 
         /// <summary>Self-only safety: refuse if target isn't the caster.</summary>
+        /// <todo>^ why? Also that's not how you make a self-target spell</todo>
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target != Caster)
@@ -95,6 +96,7 @@ namespace DOL.GS.Spells
                 return false;
             };
             
+            // and ignore effectiveness?
             return base.ApplyEffectOnTarget(target, 1.0);
         }
 
@@ -176,47 +178,6 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        /// <summary>
-        /// Unified damage absorption for *all* attack types (melee, ranged, spells, DoTs).
-        /// </summary>
-        private void OnAttackedByEnemy(DOLEvent e, object sender, EventArgs arguments)
-        {
-            if (arguments is not AttackedByEnemyEventArgs { AttackData: { } ad })
-                return;
-
-            var owner = (GameLiving)sender;
-
-            // Only apply on actual damaging hits
-            if ((ad.Damage + ad.CriticalDamage) <= 0)
-                return;
-
-            int absorbPercent = owner.TempProperties.getProperty<int>(KEY_ABS_UNIFIED, 0);
-            if (absorbPercent <= 0)
-                return;
-
-            if (!IsAnyCombatHit(ad))
-                return;
-
-            int total = ad.Damage + ad.CriticalDamage;
-            int absorbed = Math.Min(ad.Damage, (int)Math.Round(total * (absorbPercent / 100.0)));
-            ad.Damage -= absorbed;
-        }
-
-        private static bool IsAnyCombatHit(AttackData ad)
-        {
-            if (ad.AttackType is AttackData.eAttackType.MeleeOneHand
-                              or AttackData.eAttackType.MeleeTwoHand
-                              or AttackData.eAttackType.MeleeDualWield
-                              or AttackData.eAttackType.Ranged)
-            {
-                return ad.AttackResult is GameLiving.eAttackResult.HitUnstyled or GameLiving.eAttackResult.HitStyle;
-            }
-            if (ad.AttackType is AttackData.eAttackType.Spell or AttackData.eAttackType.DoT)
-                return true;
-
-            return false;
-        }
-
         private void ModTempParry(GamePlayer player, bool grant)
         {
             if (grant)
@@ -232,6 +193,8 @@ namespace DOL.GS.Spells
                 int levelToGrant = Math.Max(1, (int)player.Level);
 
                 parrySpec.Level = levelToGrant;
+                parrySpec.AllowSave = false;
+                parrySpec.Trainable = false;
                 player.AddSpecialization(parrySpec);
 
                 m_tempParryLevel = levelToGrant;
