@@ -76,7 +76,13 @@ namespace DOL.GS.Spells
             illusionPets.Clear();
             return base.OnEffectExpires(effect, noMessages);
         }
-        
+
+        public override bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
+        {
+            // Illusion never prevents applications.
+            return false;
+        }
+
         public override void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)
         {
             SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
@@ -85,11 +91,28 @@ namespace DOL.GS.Spells
             attempt.SendSpellResistAnimation(target);
         }
 
+        public override bool IsOverwritable(GameSpellEffect compare)
+        {
+            if (compare.SpellHandler is IllusionSpell otherIllu && otherIllu.Priority >= this.Priority)
+                return true;
+
+            if (compare.SpellHandler is AbstractMorphSpellHandler otherMorph)
+            {
+                // For illusions, we actually want to be replaced by any not-lower morph
+                if (otherMorph.Priority >= Priority)
+                    return true;
+            }
+
+            return base.IsOverwritable(compare);
+        }
+
         /// <inheritdoc />
-        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (oldeffect.SpellHandler is IllusionSpell oldIllusion && neweffect.SpellHandler is IllusionSpell newIllusion)
             {
+                if (newIllusion.Priority > Priority)
+                    return true;
                 if (oldIllusion.Spell.LifeDrainReturn != 0 && newIllusion.Spell.LifeDrainReturn == 0) // unmorph
                     return false;
                 if (newIllusion.Spell.Value < oldIllusion.Spell.Value) // less clones
@@ -98,7 +121,15 @@ namespace DOL.GS.Spells
                     return false;
                 return neweffect.Duration > oldeffect.RemainingTime;
             }
-            return base.IsNewEffectBetter(oldeffect, neweffect);
+
+            if (neweffect.SpellHandler is AbstractMorphSpellHandler otherMorph)
+            {
+                // For illusions, we actually want to be replaced by any not-lower morph
+                if (otherMorph.Priority >= Priority)
+                    return true;
+            }
+
+            return base.IsBetterThanOldEffect(oldeffect, neweffect);
         }
 
         public enum eSpawnType

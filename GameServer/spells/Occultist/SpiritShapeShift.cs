@@ -28,7 +28,7 @@ namespace DOL.GS.Spells
         public SpiritShapeShift(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            Priority = 10;
+            // Priority = 10;
 
             m_absorbPct = Math.Max(0, (int)Spell.Value);
             m_regenBonus = Spell.ResurrectMana;

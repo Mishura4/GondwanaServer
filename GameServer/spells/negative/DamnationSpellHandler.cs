@@ -1,4 +1,4 @@
-﻿using DOL.AI.Brain;
+using DOL.AI.Brain;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
@@ -151,7 +151,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (neweffect.SpellHandler is DamnationSpellHandler)
             {

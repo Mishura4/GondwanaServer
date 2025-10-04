@@ -125,7 +125,7 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns>true if new spell is better version</returns>
-        bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect);
+        bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect);
 
         /// <summary>
         /// Determines wether this spell is compatible with given spell

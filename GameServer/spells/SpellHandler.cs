@@ -193,7 +193,7 @@ namespace DOL.GS.Spells
             private static bool IsDecrepit(GameLiving l) => l?.TempProperties.getProperty<bool>(OccultistForms.KEY_DECREPIT, false) == true;
 
             /// <summary>
-            /// Centralized ìmay I cast this?î logic for Occultist + shapeshift.
+            /// Centralized ‚Äúmay I cast this?‚Äù logic for Occultist + shapeshift.
             /// Return true if the cast MUST be blocked (with a human-readable reason).
             /// </summary>
             public static bool TryBlockCast(GamePlayer player, Spell spell, out string reason)
@@ -3143,12 +3143,12 @@ namespace DOL.GS.Spells
         }
 
         /// <summary>
-        /// Determines wether this spell is better than given one
+        /// Determines whether this spell being applied is better than existing one
         /// </summary>
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns>true if this spell is better version than compare spell</returns>
-        public virtual bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public virtual bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             Spell oldspell = oldeffect.Spell;
             Spell newspell = neweffect.Spell;
@@ -3299,7 +3299,7 @@ namespace DOL.GS.Spells
                     else
                     {
                         // Check for Overwriting.
-                        if (IsNewEffectBetter(effect, neweffect))
+                        if (IsBetterThanOldEffect(effect, neweffect))
                         {
                             // New Spell is overwriting this one.
                             overwriteEffect = effect;

@@ -462,7 +462,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
 
             if (oldeffect.Spell.SpellType != neweffect.Spell.SpellType)

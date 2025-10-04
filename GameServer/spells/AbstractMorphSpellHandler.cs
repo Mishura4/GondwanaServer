@@ -54,12 +54,24 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override bool IsOverwritable(GameSpellEffect compare)
         {
-            if (compare.SpellHandler is AbstractMorphSpellHandler otherMorph && (OverwritesMorphs || otherMorph.OverwritesMorphs))
+            if (compare.SpellHandler is AbstractMorphSpellHandler otherMorph
+                && (OverwritesMorphs || otherMorph.OverwritesMorphs)
+                && compare.SpellHandler is not IllusionSpell)
                 return true;
 
             return base.IsOverwritable(compare);
         }
-        
+
+        public override bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
+        {
+            if (other.SpellHandler is AbstractMorphSpellHandler otherMorph)
+            {
+                if (this.Priority > otherMorph.Priority)
+                    return true;
+            }
+            return base.PreventsApplication(self, other);
+        }
+
         public override void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)
         {
             SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
@@ -69,7 +81,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (oldeffect.SpellHandler is AbstractMorphSpellHandler otherMorph && neweffect.SpellHandler is AbstractMorphSpellHandler newMorph)
             {
@@ -78,7 +90,11 @@ namespace DOL.GS.Spells
                 else if (otherMorph.Priority < newMorph.Priority)
                     return true;
             }
-            return base.IsNewEffectBetter(oldeffect, neweffect);
+
+            if (oldeffect.SpellHandler is IllusionSpell otherIllu && otherIllu.Priority <= Priority)
+                return true;
+
+            return base.IsBetterThanOldEffect(oldeffect, neweffect);
         }
 
         /// <inheritdoc />
@@ -112,7 +128,7 @@ namespace DOL.GS.Spells
                     continue;
                 }
 
-                if (model != 0 && IsNewEffectBetter(bestEffect, otherEffect))
+                if (model != 0 && IsBetterThanOldEffect(bestEffect, otherEffect))
                 {
                     bestEffect = otherEffect;
                     bestModel = model;

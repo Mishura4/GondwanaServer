@@ -33,12 +33,12 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public override bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (((SpellHandler)oldeffect.SpellHandler).HasPositiveOrSpeedEffect() || oldeffect.SpellHandler.Spell.Pulse > 0)
                 return true;
             
-            return base.IsNewEffectBetter(oldeffect, neweffect);
+            return base.IsBetterThanOldEffect(oldeffect, neweffect);
         }
         
         public override void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)

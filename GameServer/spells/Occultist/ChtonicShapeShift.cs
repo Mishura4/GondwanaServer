@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
 
         public ChtonicShapeShift(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
-            Priority = 10;
+            // Priority = 10;
             OverwritesMorphs = true;
             
             // -------------------------

@@ -23,7 +23,7 @@ namespace DOL.GS.Spells
         public DecrepitShapeShift(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            Priority = 10;
+            // Priority = 10;
             
             // --- Spell Damage (direct) ---
             m_spellDmgPct = (int)Spell.Value; // % to direct spell damage and DoT damage
