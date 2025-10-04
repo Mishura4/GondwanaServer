@@ -1,4 +1,4 @@
-﻿/*
+/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
  * 
  * This program is free software; you can redistribute it and/or
@@ -36,7 +36,8 @@ namespace DOL.GS.Delve
         private SpellDelve(Spell spell)
         {
             DelveType = "Spell";
-            Index = unchecked((short)spell.InternalID);
+            var id = spell?.InternalID ?? 0;
+            Index = unchecked((short)id);
             spellHandler = ScriptMgr.CreateSpellHandler(GamePlayer.CreateDummy(), spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
         }
 
