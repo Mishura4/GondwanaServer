@@ -208,7 +208,7 @@ namespace DOL.GS.Spells
                     return;
                 
                 var spec = player.GetSpecialization(Specs.Parry);
-                if (spec != null && spec.Level <= m_tempParryLevel)
+                if (spec is { Trainable: false, AllowSave: false } && spec.Level <= m_tempParryLevel)
                     player.RemoveSpecialization(Specs.Parry);
 
                 player.Out.SendUpdatePlayerSkills();
