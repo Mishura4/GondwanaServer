@@ -195,6 +195,7 @@ namespace DOL.GS.Spells
                 parrySpec.Level = levelToGrant;
                 parrySpec.AllowSave = false;
                 parrySpec.Trainable = false;
+                parrySpec.Hidden = true;
                 player.AddSpecialization(parrySpec);
 
                 m_tempParryLevel = levelToGrant;
