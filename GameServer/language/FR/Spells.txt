@@ -249,8 +249,8 @@ SpellDescription.IllusionBlade.Part2:					La lame agit de son propre chef et ne 
 SpellDescription.RangeShield.MainDescription:			Protège le groupe de l'incantateur contre les attaques physiques d'archerie.
 SpellDescription.PetSpell.MainDescription1:				Sort de familier :
 SpellDescription.PetSpell.MainDescription2:				Augmente les statistiques listés de la cible.
-SpellDescription.Occultist.ConditionDescription1:		Ne peut être lancé sous la forme "Chtonique".
-SpellDescription.Occultist.ConditionDescription2:		Ne peut être lancé sous la forme "Esprit" ou "Décrépit".
+SpellDescription.Occultist.ConditionDescription1:		Ne peut être lancé sous la forme Chtonique.
+SpellDescription.Occultist.ConditionDescription2:		Ne peut être lancé sous la forme Esprit ou Décrépit.
 SpellDescription.Occultist.Summon.UmbralAegis1:			Invoquez un Égide Cuirassé à votre service. Ce démon excelle dans la provocation et l'encaissement des dégâts.
 SpellDescription.Occultist.Summon.UmbralAegis2:			Forme Esprit : l'Égide Spirituelle gagne un effet de dégâts directs dans un rayon de 200, une armure renforcée, une absorption magique et une vitesse de combat accrue.
 SpellDescription.Occultist.Summon.Soultorn1:			Invoquez une Âme Déchue à votre service. Ce serviteur inflige des dégâts aux ennemis avec de la magie de matière, mais il est très vulnérable aux attaques magiques et physiques.

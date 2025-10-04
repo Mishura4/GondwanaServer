@@ -47,30 +47,26 @@ namespace DOL.GS.Spells
 
         private static int ReadIntParam(Spell spell, string key, int fallback = 0)
         {
-            try
+            if (spell.CustomParamsDictionary != null &&
+                spell.CustomParamsDictionary.TryGetValue(key, out var list) &&
+                list is { Count: > 0 } &&
+                int.TryParse(list[0], out var v))
             {
-                if (spell.CustomParamsDictionary != null &&
-                    spell.CustomParamsDictionary.TryGetValue(key, out var list) &&
-                    list is { Count: > 0 } &&
-                    int.TryParse(list[0], out var v))
-                    return v;
+                return v;
             }
-            catch { }
             return fallback;
         }
 
         private static double ReadDoubleParam(Spell spell, string key, double fallback = 0)
         {
-            try
+            if (spell.CustomParamsDictionary != null &&
+                spell.CustomParamsDictionary.TryGetValue(key, out var list) &&
+                list is { Count: > 0 } &&
+                double.TryParse(list[0], System.Globalization.NumberStyles.Any,
+                                System.Globalization.CultureInfo.InvariantCulture, out var v))
             {
-                if (spell.CustomParamsDictionary != null &&
-                    spell.CustomParamsDictionary.TryGetValue(key, out var list) &&
-                    list is { Count: > 0 } &&
-                    double.TryParse(list[0], System.Globalization.NumberStyles.Any,
-                                    System.Globalization.CultureInfo.InvariantCulture, out var v))
-                    return v;
+                return v;
             }
-            catch { }
             return fallback;
         }
 
@@ -79,7 +75,7 @@ namespace DOL.GS.Spells
             var brain = owner.ControlledBrain;
             if (brain?.Body is not GamePet pet) return;
 
-            // ----- 1) Level Scaling via GamePet’s built-in fields -----
+            // ----- 1) Level Scaling via GamePetâ€™s built-in fields -----
             // SummonSpellDamage: negative = % of owner level (e.g., -100 == match owner)
             // SummonSpellValue : optional hard cap
             double pct = ReadDoubleParam(Spell, "PetLevelPct", 100.0);
