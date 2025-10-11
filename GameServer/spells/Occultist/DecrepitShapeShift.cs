@@ -92,10 +92,10 @@ namespace DOL.GS.Spells
             living.SpecBuffBonusCategory[(int)eProperty.SpellDamage] += m_spellDmgPct * mult;
             living.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] += m_spellDmgPct * mult;
 
-            // --- Defensive Disease Proc (native event hook; 50% on melee hits) ---
             // --- Armor absorption logic ---
             living.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += m_absorbPct * mult;
 
+            // --- Defensive Disease Proc (native event hook; 50% on melee hits) ---
             if (apply)
                 GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
             else

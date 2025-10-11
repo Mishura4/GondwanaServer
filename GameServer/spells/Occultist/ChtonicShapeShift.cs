@@ -1,3 +1,4 @@
+using DOL.Database;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
@@ -24,6 +25,18 @@ namespace DOL.GS.Spells
         private int m_absBonus;
         private int m_tempParryLevel = 0;
 
+        public static int GetAFBonus(GameLiving target, double afPct, int perLevel)
+        {
+            int level = target.Level;
+            int perLevelAF = perLevel; // AF per level dial
+            int flatAFBase = (perLevelAF * level);     // "AF" units
+            int flatAFTotal = flatAFBase * 5;          // convert to eProperty points
+            double pctAF = afPct * 0.01;
+            int afPropBefore = target.GetModified(eProperty.ArmorFactor);
+            int finalAFBonus = flatAFTotal + (int)Math.Round(afPropBefore * pctAF);
+            return finalAFBonus;
+        }
+
         public ChtonicShapeShift(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
             // Priority = 10;
@@ -32,14 +45,7 @@ namespace DOL.GS.Spells
             // -------------------------
             // 1) ARMOR FACTOR (AF)
             // -------------------------
-            int level = caster.Level;
-            int perLevelAF = (int)Spell.AmnesiaChance; // AF per level dial
-            int flatAFBase = (perLevelAF * level);     // "AF" units
-            int flatAFTotal = flatAFBase * 5;          // convert to eProperty points
-            double pctAF = Spell.Value * 0.01;
-            int afPropBefore = caster.GetModified(eProperty.ArmorFactor);
-            int finalAFBonus = flatAFTotal + (int)Math.Round(afPropBefore * pctAF);
-            m_afBonusFlat = finalAFBonus;
+            m_afBonusFlat = GetAFBonus(caster, (int)Spell.Value, Spell.AmnesiaChance);
             
             // -------------------------
             // 2) MAX HEALTH (+% via Spell.Value)
@@ -58,6 +64,8 @@ namespace DOL.GS.Spells
             // 5) SECONDARY MAGIC RESISTS (+% via Spell.ResurrectMana)
             // -------------------------
             m_resBonus = Spell.ResurrectMana;
+
+            m_tempParryLevel = (int)caster.Level;
         }
 
         public override bool HasPositiveEffect => true;
@@ -95,6 +103,7 @@ namespace DOL.GS.Spells
         {
             var owner = effect.Owner;
             int mult = apply ? 1 : -1;
+            // Armor %
             owner.BuffBonusCategory4[(int)eProperty.ArmorFactor] += mult * m_afBonusFlat;
             owner.BaseBuffBonusCategory[(int)eProperty.MaxHealth] += mult * m_hpBonus;
             owner.SpecBuffBonusCategory[(int)eProperty.WeaponSkill] += mult * m_wsBonus;
@@ -116,7 +125,11 @@ namespace DOL.GS.Spells
             if (owner is GamePlayer player)
             {
                 // TODO: Why is this a timer?
-                new RegionTimerAction<GamePlayer>(player, p => GS.CharacterClassOccultist.ModTempParry(p, apply, (int)player.Level)).Start(1);
+                new RegionTimerAction<GamePlayer>(player, p =>
+                {
+                    m_tempParryLevel = GS.CharacterClassOccultist.ModTempParry(p, apply, m_tempParryLevel);
+                    return 0;
+                }).Start(1);
             }
         }
 

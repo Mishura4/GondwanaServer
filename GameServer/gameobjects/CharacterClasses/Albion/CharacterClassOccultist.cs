@@ -57,7 +57,7 @@ namespace DOL.GS
                 player.Out.SendUpdatePlayerSkills();
                 player.UpdatePlayerStatus();
 
-                return level;
+                return levelToGrant;
             }
             else
             {

@@ -1,3 +1,4 @@
+using Discord;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
@@ -54,8 +55,6 @@ namespace DOL.GS.Spells
         private int _tempParryLevel;
         private int _stealthDet;
 
-        private bool _hookedEvents;
-
         public CallOfShadowsSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
             Priority = 700;
@@ -67,18 +66,88 @@ namespace DOL.GS.Spells
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
             => new GameSpellEffect(this, CalculateEffectDuration(target, effectiveness), 0);
 
+        private void SetFormProperties(GameLiving target, bool apply)
+        {
+            // Flags: uninterruptible (no move-cast flag set)
+            if (apply)
+            {
+                target.TempProperties.setProperty(FLAG_ACTIVE, true);
+                target.TempProperties.setProperty(FLAG_UNINTERRUPTIBLE, true);
+
+                // Pet “spirit-like” template swap
+                target.TempProperties.setProperty(KEY_COS, true);
+            }
+            else
+            {
+                target.TempProperties.removeProperty(FLAG_ACTIVE);
+                target.TempProperties.removeProperty(FLAG_UNINTERRUPTIBLE);
+
+                target.TempProperties.removeProperty(KEY_COS);
+            }
+        }
+
+        private void ApplyFormEffects(GameLiving target, bool apply)
+        {
+            var mult = (sbyte)(apply ? 1 : -1);
+
+            // Decrepit bonuses:
+            target.SpecBuffBonusCategory[(int)eProperty.SpellDamage] += mult * _spellDmgBonus;
+            target.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] += mult * _spellDmgBonus;
+            target.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] += mult * _absorbAll;
+
+            // Regen (multiplicative bucket)
+            if (Math.Abs(_regenMult) > 0.0001f)
+            {
+                if (apply)
+                    target.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, _regenMult);
+                else
+                    target.BuffBonusMultCategory1.Remove((int)eProperty.HealthRegenerationRate, this);
+            }
+
+            // Chtonic bonuses:
+            target.BuffBonusCategory4[(int)eProperty.ArmorFactor] += mult * _afFlat;
+            target.BaseBuffBonusCategory[(int)eProperty.MaxHealth] += mult * _hpFlat;
+            target.SpecBuffBonusCategory[(int)eProperty.WeaponSkill] += mult * _wsPct;
+            target.SpecBuffBonusCategory[(int)eProperty.Resist_Heat] += mult * _secResPct;
+            target.SpecBuffBonusCategory[(int)eProperty.Resist_Cold] += mult * _secResPct;
+            target.SpecBuffBonusCategory[(int)eProperty.Resist_Matter] += mult * _secResPct;
+            target.SpecBuffBonusCategory[(int)eProperty.Resist_Body] += mult * _secResPct;
+            target.SpecBuffBonusCategory[(int)eProperty.Resist_Spirit] += mult * _secResPct;
+            target.SpecBuffBonusCategory[(int)eProperty.Resist_Energy] += mult * _secResPct;
+
+            // Spirit Bonus:
+            target.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] += mult * _stealthDet;
+
+            // Parry specialization (temporary) + parry chance
+            if (target is GamePlayer pl)
+            {
+                new RegionTimerAction<GamePlayer>(pl, p =>
+                {
+                    _tempParryLevel = GS.CharacterClassOccultist.ModTempParry(p, apply, _tempParryLevel);
+                    return 0;
+                }).Start(1);
+            }
+
+            if (apply)
+            {
+                GameEventMgr.AddHandler(target, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+                GameEventMgr.AddHandler(target, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
+            }
+            else
+            {
+                GameEventMgr.RemoveHandler(target, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
+                GameEventMgr.RemoveHandler(target, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
+            }
+        }
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
 
-            // Note: THIS WILL NOT BE ABLE TO HANDLE A RADIUS ON THIS SPELL.
+            // Note: THIS WILL NOT BE ABLE TO HANDLE A RADIUS ON THIS SPELL, HITTING SEVERAL TARGETS AT ONCE.
 
             var o = effect.Owner;
             var gp = o as GamePlayer;
-
-            // Flags: uninterruptible (no move-cast flag set)
-            o.TempProperties.setProperty(FLAG_ACTIVE, true);
-            o.TempProperties.setProperty(FLAG_UNINTERRUPTIBLE, true);
 
             // Decrepit:
             _spellDmgBonus = (int)Math.Round(DEC_SPELL_DMG_PCT * BOOST);
@@ -94,7 +163,7 @@ namespace DOL.GS.Spells
             _stealthDet = (int)Math.Round(SPI_STEALTH_DET * BOOST);
 
             // HP flat from % of current MaxHealth: 30% -> 33%
-            _hpFlat = (int)Math.Round(o.MaxHealth * (_wsPct / 100.0));
+            _hpFlat = (int)Math.Round(o.MaxHealth * (CHT_VALUE_CORE / 100.0) * BOOST);
 
             // AF flat from per-level and %AF component in your Chtonic logic, then +10%
             // base AF calc (see Chtonic handler)
@@ -106,41 +175,11 @@ namespace DOL.GS.Spells
 
             // Total absorb pool (stack Decrepit + Chtonic flavors)
             _absorbAll = decrepitAbs + chtAbs;
+            
+            _tempParryLevel = (int)o.Level;
 
-            // Decrepit bonuses:
-            o.SpecBuffBonusCategory[(int)eProperty.SpellDamage] += _spellDmgBonus;
-            o.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] += _spellDmgBonus;
-            o.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] += _absorbAll;
-
-            // Regen (multiplicative bucket)
-            if (Math.Abs(_regenMult) > 0.0001f)
-                o.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, _regenMult);
-
-            // Chtonic bonuses:
-            o.BuffBonusCategory4[(int)eProperty.ArmorFactor] += _afFlat;
-            o.BaseBuffBonusCategory[(int)eProperty.MaxHealth] += _hpFlat;
-            o.SpecBuffBonusCategory[(int)eProperty.WeaponSkill] += _wsPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Heat] += _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Cold] += _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Matter] += _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Body] += _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Spirit] += _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Energy] += _secResPct;
-
-            // Spirit Bonus:
-            o.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] += _stealthDet;
-
-            // Parry specialization (temporary) + parry chance
-            if (gp != null)
-                new RegionTimerAction<GamePlayer>(gp, p => _tempParryLevel = GS.CharacterClassOccultist.ModTempParry(p, true, (int)p.Level)).Start(1);
-
-            GameEventMgr.AddHandler(o, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
-            _hookedEvents = true;
-
-            GameEventMgr.AddHandler(o, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
-
-            // Pet “spirit-like” template swap
-            o.TempProperties.setProperty(KEY_COS, true);
+            SetFormProperties(o, true);
+            ApplyFormEffects(o, true);
 
             if (o is GamePlayer cosOwner)
                 SetOccultistPetForm(cosOwner, true);
@@ -164,43 +203,10 @@ namespace DOL.GS.Spells
             var o = effect.Owner;
             var gp = o as GamePlayer;
 
-            o.SpecBuffBonusCategory[(int)eProperty.SpellDamage] -= _spellDmgBonus;
-            o.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] -= _spellDmgBonus;
-
-            o.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] -= _absorbAll;
-
-            o.BuffBonusMultCategory1.Remove((int)eProperty.HealthRegenerationRate, this);
-
-            o.BuffBonusCategory4[(int)eProperty.ArmorFactor] -= _afFlat;
-            o.BaseBuffBonusCategory[(int)eProperty.MaxHealth] -= _hpFlat;
-            o.SpecBuffBonusCategory[(int)eProperty.WeaponSkill] -= _wsPct;
-
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Heat] -= _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Cold] -= _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Matter] -= _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Body] -= _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Spirit] -= _secResPct;
-            o.SpecBuffBonusCategory[(int)eProperty.Resist_Energy] -= _secResPct;
-
-            o.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] -= _stealthDet;
-            _stealthDet = 0;
-
-            if (gp != null && _tempParryLevel != 0)
-                new RegionTimerAction<GamePlayer>(gp, p => GS.CharacterClassOccultist.ModTempParry(p, false, _tempParryLevel)).Start(1);
-
-            if (_hookedEvents)
-            {
-                GameEventMgr.RemoveHandler(o, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
-                GameEventMgr.RemoveHandler(o, GameLivingEvent.AttackedByEnemy, ClearInterruptIfCasting);
-                _hookedEvents = false;
-            }
-
-            o.TempProperties.removeProperty(FLAG_ACTIVE);
-            o.TempProperties.removeProperty(FLAG_UNINTERRUPTIBLE);
+            SetFormProperties(o, false);
+            ApplyFormEffects(o, false);
 
             // Pets: flip back to base templates
-            o.TempProperties.removeProperty(KEY_COS);
-
             if (o is GamePlayer cosOwner)
                 SetOccultistPetForm(cosOwner, false);
 
