@@ -57,7 +57,7 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
-            return new List<GameLiving>{castTarget as GameLiving ?? Caster};
+            return new List<GameLiving>{ castTarget as GameLiving ?? Caster };
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -111,7 +111,7 @@ namespace DOL.GS.Spells
         {
             if (oldeffect.SpellHandler is IllusionSpell oldIllusion && neweffect.SpellHandler is IllusionSpell newIllusion)
             {
-                if (newIllusion.Priority > Priority)
+                if (newIllusion.Priority >= Priority)
                     return true;
                 if (oldIllusion.Spell.LifeDrainReturn != 0 && newIllusion.Spell.LifeDrainReturn == 0) // unmorph
                     return false;
@@ -225,7 +225,7 @@ namespace DOL.GS.Spells
             }
 
             bool hasLOS = LosCheckMgr.HasDataFor(target.CurrentRegion);
-            bool enableTeleport = !target.CurrentRegion.IsDungeon && hasLOS;
+            bool enableTeleport = !target.CurrentRegion.IsDungeon && hasLOS && target == Caster;
             Util.Shuffle(offsets);
             Coordinate masterCoord = target.Coordinate + offsets[numPets];
             for (int i = 0; i < numPets; i++)
@@ -290,7 +290,7 @@ namespace DOL.GS.Spells
         protected virtual IllusionPet CreatePet(GamePlayer target, IllusionPet.eIllusionFlags mode, List<Style> styles, IList spells, GameNpcInventoryTemplate npcInventory)
         {
             var pet = new IllusionPet(target, mode);
-            pet.Owner = Caster;
+            pet.Owner = target;
             pet.Level = target.Level;
             pet.IsWorthReward = false;
 
