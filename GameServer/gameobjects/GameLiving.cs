@@ -5906,26 +5906,44 @@ namespace DOL.GS
                 effect.Cancel(false);
             }
         }
-        public void CancelAllSpeedOrPulseEffects()
+
+        public void CancelEffects(Func<IGameEffect, bool> p)
+        {
+            List<IGameEffect> toRemove;
+            lock (EffectList)
+            {
+                toRemove = new List<IGameEffect>(EffectList.Where(p));
+            }
+            toRemove.ForEach(e => e.Cancel(false));
+        }
+
+        public void CancelEffects() => CancelEffects(_ => true);
+
+        public void CancelEffects<T>(Func<GameSpellEffect, bool> p) where T : SpellHandler
         {
             List<GameSpellEffect> toRemove;
             lock (EffectList)
             {
-                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)));
+                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is T && p(e)));
             }
             toRemove.ForEach(e => e.Cancel(false));
+        }
+
+        public void CancelEffects<T>() where T : SpellHandler => CancelEffects<T>((_) => true);
+
+        public void CancelEffects(Func<GameSpellEffect, bool> p)
+        {
+            CancelEffects<SpellHandler>(p);
+        }
+
+        public void CancelAllSpeedOrPulseEffects()
+        {
+            CancelEffects(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0));
         }
         
         public void CancelMorphSpellEffects()
         {
-            // EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.Spell.SpellType == "IllusionSpell" || spellHandler.Spell.SpellType == "ShadesOfMist" || spellHandler.Spell.SpellType == "Morph" || spellHandler.Spell.SpellType == "DreamMorph" || spellHandler.Spell.SpellType == "DreamGroupMorph" || spellHandler.Spell.SpellType == "MaddeningScalars" || spellHandler.Spell.SpellType == "AtlantisTabletMorph" || spellHandler.Spell.SpellType == "AlvarusMorph" || spellHandler.Spell.SpellType == "TraitorsDaggerProc")))
-
-            List<GameSpellEffect> toRemove;
-            lock (EffectList)
-            {
-                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is AbstractMorphSpellHandler));
-            }
-            toRemove.ForEach(e => e.Cancel(false));
+            CancelEffects<AbstractMorphSpellHandler>();
         }
 
         #endregion

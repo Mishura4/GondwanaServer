@@ -118,6 +118,12 @@ namespace DOL.GS.Spells
         {
             base.OnEffectStart(effect);
             ushort model = GetModelFor(effect.Owner);
+
+            if (this is not IllusionSpell)
+            {
+                effect.Owner.CancelEffects<IllusionSpell>();
+            }
+
             if (model != 0)
             {
                 effect.Owner.Model = model;
@@ -129,6 +135,11 @@ namespace DOL.GS.Spells
         {
             GameSpellEffect bestEffect = null;
             ushort bestModel = 0;
+
+            if (this is not IllusionSpell)
+            {
+                effect.Owner.CancelEffects<IllusionSpell>();
+            }
 
             foreach (var otherEffect in effect.Owner.FindEffectsOnTarget(typeof(AbstractMorphSpellHandler)))
             {
