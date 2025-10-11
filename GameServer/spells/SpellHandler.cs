@@ -3204,7 +3204,7 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns>true if this spell is better version than compare spell</returns>
-        public virtual bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public virtual bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             Spell oldspell = oldeffect.Spell;
             Spell newspell = neweffect.Spell;
@@ -3269,7 +3269,7 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns></returns>
-        public virtual bool IsCancellableEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public virtual bool ShouldCancelOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (neweffect.SpellHandler.Spell.Value >= oldeffect.SpellHandler.Spell.Value)
                 return true;
@@ -3347,7 +3347,7 @@ namespace DOL.GS.Spells
                     if (effect.SpellHandler.IsCancellable(neweffect))
                     {
                         // Spell is better than existing "Cancellable" or it should start disabled
-                        if (IsCancellableEffectBetter(effect, neweffect))
+                        if (ShouldCancelOldEffect(effect, neweffect))
                             cancellableEffects.Add(effect);
                         else
                             enable = false;
@@ -3355,7 +3355,7 @@ namespace DOL.GS.Spells
                     else
                     {
                         // Check for Overwriting.
-                        if (IsBetterThanOldEffect(effect, neweffect))
+                        if (ShouldOverwriteOldEffect(effect, neweffect))
                         {
                             // New Spell is overwriting this one.
                             overwriteEffect = effect;
@@ -3472,7 +3472,7 @@ namespace DOL.GS.Spells
                 {
                     if (best == null)
                         best = eff;
-                    else if (best.SpellHandler.IsCancellableEffectBetter(best, eff))
+                    else if (best.SpellHandler.ShouldCancelOldEffect(best, eff))
                         best = eff;
                 }
 
