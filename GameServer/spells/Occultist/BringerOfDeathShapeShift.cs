@@ -102,6 +102,14 @@ namespace DOL.GS.Spells
                 living.BaseBuffBonusCategory[(int)eProperty.DotDamageBonus] += _spellDmgPct * mult;
             }
 
+            if (_absorbPct != 0)
+            {
+                foreach (eResist res in Enum.GetValues<eResist>())
+                {
+                    living.SpecBuffBonusCategory[(int)res] += mult * _absorbPct;
+                }
+            }
+
             if (apply)
             {
                 // --- Defensive disease proc on incoming physical hits ---
@@ -185,41 +193,30 @@ namespace DOL.GS.Spells
             // Disease only on auto attacks
             if (ad.IsMeleeAttack || ad.IsRangedAttack)
             {
-                if (!Util.Chance(DISEASE_PROC_CHANCE))
-                    return;
-
-                Spell disease = SkillBase.GetSpellByID(DISEASE_SUBSPELL_ID);
-                if (disease == null)
+                if (Util.Chance(DISEASE_PROC_CHANCE))
                 {
                     // TODO: Why not just use subspells?
-                    var db = new DBSpell
+                    Spell disease = SkillBase.GetSpellByID(DISEASE_SUBSPELL_ID);
+                    if (disease == null)
                     {
-                        SpellID = DISEASE_SUBSPELL_ID,
-                        Name = "Bringer's Rot",
-                        Description = "A rotting disease that slows, weakens, and inhibits heals.",
-                        Type = "Disease",
-                        Target = "enemy",
-                        Damage = 30,
-                        DamageType = (int)eDamageType.Body,
-                        Duration = 20000
-                    };
-                    disease = new Spell(db, 50);
-                }
+                        var db = new DBSpell
+                        {
+                            SpellID = DISEASE_SUBSPELL_ID,
+                            Name = "Bringer's Rot",
+                            Description = "A rotting disease that slows, weakens, and inhibits heals.",
+                            Type = "Disease",
+                            Target = "enemy",
+                            Damage = 30,
+                            DamageType = (int)eDamageType.Body,
+                            Duration = 20000
+                        };
+                        disease = new Spell(db, 50);
+                    }
 
-                SpellLine line = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
-                ISpellHandler h = ScriptMgr.CreateSpellHandler(owner, disease, line);
-                h?.StartSpell(ad.Attacker);
-            }
-            
-            // --- Absorption from DB (Spell.AmnesiaChance) ---
-            if (_absorbPct > 0)
-            {
-                // Subtract from the hit
-                var pct = (_absorbPct / 100.0);
-                int reduceBase = (int)Math.Round(ad.Damage * pct);
-                int reduceCrit = (int)Math.Round(ad.CriticalDamage * pct);
-                ad.Damage -= reduceBase;
-                ad.CriticalDamage -= reduceCrit;
+                    SpellLine line = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
+                    ISpellHandler h = ScriptMgr.CreateSpellHandler(owner, disease, line);
+                    h?.StartSpell(ad.Attacker);
+                }
             }
         }
 

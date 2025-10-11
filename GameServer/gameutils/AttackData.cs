@@ -403,5 +403,9 @@ namespace DOL.GS
 
         public bool AblativeEffectApplied { get; set; } = false;
         public int AblativeDamageAbsorbed { get; set; } = 0;
+
+        public bool IsPhysicalDamage => DamageType is eDamageType.Natural or eDamageType.Crush or eDamageType.Thrust or eDamageType.Slash;
+
+        public bool IsMagicDamage => DamageType is eDamageType.Heat or eDamageType.Cold or eDamageType.Matter or eDamageType.Energy or eDamageType.Spirit or eDamageType.Body;
     }
 }

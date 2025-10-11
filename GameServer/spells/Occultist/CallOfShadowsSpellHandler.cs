@@ -70,6 +70,9 @@ namespace DOL.GS.Spells
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
+
+            // Note: THIS WILL NOT BE ABLE TO HANDLE A RADIUS ON THIS SPELL.
+
             var o = effect.Owner;
             var gp = o as GamePlayer;
 
@@ -224,6 +227,7 @@ namespace DOL.GS.Spells
 
             if (!ad.IsSuccessfulHit || (!ad.IsMeleeAttack && !ad.IsRangedAttack))
                 return;
+
             if ((ad.Damage + ad.CriticalDamage) <= 0)
                 return;
 

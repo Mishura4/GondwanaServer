@@ -115,7 +115,6 @@ namespace DOL.GS.PropertyCalc
                 case eProperty.Resist_Spirit:
                     debuff += Math.Abs(living.DebuffCategory[eProperty.MagicAbsorption]);
                     buffBonus += living.BaseBuffBonusCategory[eProperty.MagicAbsorption];
-                    buffBonus += living.SpecBuffBonusCategory[eProperty.MagicAbsorption];
                     break;
             }
 
