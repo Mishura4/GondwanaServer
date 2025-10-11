@@ -37,9 +37,11 @@ namespace DOL.GS.Spells
             if (target is IllusionPet)
                 return false;
 
+            bool quiet = Spell.Radius > 0;
             if (target.IsStealthed)
             {
-                ErrorTranslationToCaster("SpellHandler.TargetIsStealthed");
+                if (!quiet)
+                    ErrorTranslationToCaster("SpellHandler.TargetIsStealthed");
                 return false;
             }
             
