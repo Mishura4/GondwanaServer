@@ -35,6 +35,18 @@ namespace DOL.GS.Spells
             // extra = round(Level * ResurrectMana / 100)
         }
 
+        public override bool HasPositiveEffect => true;
+
+        public override bool HasPositiveOrSpeedEffect() => true;
+
+        public override bool IsCancellable(GameSpellEffect compare)
+        {
+            if (compare.SpellHandler is BringerOfDeath)
+                return true;
+
+            return base.IsCancellable(compare);
+        }
+
         protected virtual bool CheckFormConditions(GameLiving target, bool quiet)
         {
             if (Caster.TempProperties.getProperty<bool>(OccultistForms.KEY_SPIRIT, false) ||

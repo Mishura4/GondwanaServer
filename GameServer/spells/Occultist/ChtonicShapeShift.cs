@@ -65,6 +65,8 @@ namespace DOL.GS.Spells
             m_resBonus = Spell.ResurrectMana;
         }
 
+        public override bool HasPositiveEffect => true;
+
         public override bool HasPositiveOrSpeedEffect() => true;
 
         public override bool IsCancellable(GameSpellEffect compare)

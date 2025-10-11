@@ -38,6 +38,18 @@ namespace DOL.GS.Spells
             }
         }
 
+        public override bool HasPositiveEffect => true;
+
+        public override bool HasPositiveOrSpeedEffect() => true;
+
+        public override bool IsCancellable(GameSpellEffect compare)
+        {
+            if (compare.SpellHandler is BringerOfDeath)
+                return true;
+
+            return base.IsCancellable(compare);
+        }
+
         public override ushort GetModelFor(GameLiving living)
         {
             // Model taken from Spell.LifeDrainReturn
