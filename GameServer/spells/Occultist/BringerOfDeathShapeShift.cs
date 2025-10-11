@@ -165,13 +165,38 @@ namespace DOL.GS.Spells
                 return;
 
             var owner = (GameLiving)sender;
-
-            // Only on successful melee/ranged physical hits that actually dealt damage
-            if (!ad.IsSuccessfulHit || (!ad.IsMeleeAttack && !ad.IsRangedAttack))
+            // Only on hits that actually dealt damage
+            if (!ad.IsSuccessfulHit || (ad.Damage + ad.CriticalDamage) <= 0)
                 return;
 
-            if ((ad.Damage + ad.CriticalDamage) <= 0)
-                return;
+            // Disease only on auto attacks
+            if (ad.IsMeleeAttack || ad.IsRangedAttack)
+            {
+                if (!Util.Chance(DISEASE_PROC_CHANCE))
+                    return;
+
+                Spell disease = SkillBase.GetSpellByID(DISEASE_SUBSPELL_ID);
+                if (disease == null)
+                {
+                    // TODO: Why not just use subspells?
+                    var db = new DBSpell
+                    {
+                        SpellID = DISEASE_SUBSPELL_ID,
+                        Name = "Bringer's Rot",
+                        Description = "A rotting disease that slows, weakens, and inhibits heals.",
+                        Type = "Disease",
+                        Target = "enemy",
+                        Damage = 30,
+                        DamageType = (int)eDamageType.Body,
+                        Duration = 20000
+                    };
+                    disease = new Spell(db, 50);
+                }
+
+                SpellLine line = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
+                ISpellHandler h = ScriptMgr.CreateSpellHandler(owner, disease, line);
+                h?.StartSpell(ad.Attacker);
+            }
             
             // --- Absorption from DB (Spell.AmnesiaChance) ---
             if (_absorbPct > 0)
@@ -183,30 +208,6 @@ namespace DOL.GS.Spells
                 ad.Damage -= reduceBase;
                 ad.CriticalDamage -= reduceCrit;
             }
-
-            if (!Util.Chance(DISEASE_PROC_CHANCE))
-                return;
-
-            Spell disease = SkillBase.GetSpellByID(DISEASE_SUBSPELL_ID);
-            if (disease == null)
-            {
-                var db = new DBSpell
-                {
-                    SpellID = DISEASE_SUBSPELL_ID,
-                    Name = "Bringer's Rot",
-                    Description = "A rotting disease that slows, weakens, and inhibits heals.",
-                    Type = "Disease",
-                    Target = "enemy",
-                    Damage = 30,
-                    DamageType = (int)eDamageType.Body,
-                    Duration = 20000
-                };
-                disease = new Spell(db, 50);
-            }
-
-            SpellLine line = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
-            ISpellHandler h = ScriptMgr.CreateSpellHandler(owner, disease, line);
-            h?.StartSpell(ad.Attacker);
         }
 
         /// <summary>
