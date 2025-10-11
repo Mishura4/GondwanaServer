@@ -34,6 +34,49 @@ namespace DOL.GS
     /// </summary>
     public class CharacterClassOccultist : ClassDisciple
     {
+        public static int ModTempParry(GamePlayer player, bool grant, int level)
+        {
+            if (grant)
+            {
+                if (player == null || player.HasSpecialization(Specs.Parry))
+                    return 0;
+
+                var parrySpec = SkillBase.GetSpecialization(Specs.Parry);
+                if (parrySpec == null)
+                    // Log?
+                    return 0;
+
+                int levelToGrant = Math.Max(1, level);
+
+                parrySpec.Level = levelToGrant;
+                parrySpec.AllowSave = false;
+                parrySpec.Trainable = false;
+                parrySpec.Hidden = true;
+                player.AddSpecialization(parrySpec);
+
+                player.Out.SendUpdatePlayerSkills();
+                player.UpdatePlayerStatus();
+
+                return level;
+            }
+            else
+            {
+                if (player == null || level == 0)
+                    return 0;
+
+                int ret = 0;
+                var spec = player.GetSpecialization(Specs.Parry);
+                if (spec is { Trainable: false, AllowSave: false } && spec.Level <= level)
+                {
+                    player.RemoveSpecialization(Specs.Parry);
+                    ret = spec.Level;
+                }
+
+                player.Out.SendUpdatePlayerSkills();
+                player.UpdatePlayerStatus();
+                return ret;
+            }
+        }
 
     }
 }

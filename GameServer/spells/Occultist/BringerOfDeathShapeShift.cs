@@ -125,6 +125,19 @@ namespace DOL.GS.Spells
 
             SetFormProperties(o, true);
             ApplyFormEffects(o, true);
+
+            if (o is GamePlayer p)
+            {
+                p.Out.SendUpdateWeaponAndArmorStats();
+                p.Out.SendCharStatsUpdate();
+                p.Out.SendCharResistsUpdate();
+                p.UpdatePlayerStatus();
+                p.Out.SendUpdatePlayer();
+            }
+            else
+            {
+                o.UpdateHealthManaEndu();
+            }
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

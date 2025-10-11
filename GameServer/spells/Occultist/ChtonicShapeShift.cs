@@ -116,7 +116,7 @@ namespace DOL.GS.Spells
             if (owner is GamePlayer player)
             {
                 // TODO: Why is this a timer?
-                new RegionTimerAction<GamePlayer>(player, p => ModTempParry(p, apply)).Start(1);
+                new RegionTimerAction<GamePlayer>(player, p => GS.CharacterClassOccultist.ModTempParry(p, apply, (int)player.Level)).Start(1);
             }
         }
 
@@ -167,45 +167,6 @@ namespace DOL.GS.Spells
             }
 
             return base.OnEffectExpires(effect, noMessages);
-        }
-
-        private void ModTempParry(GamePlayer player, bool grant)
-        {
-            if (grant)
-            {
-                if (player == null || player.HasSpecialization(Specs.Parry))
-                    return;
-
-                var parrySpec = SkillBase.GetSpecialization(Specs.Parry);
-                if (parrySpec == null)
-                    // Log?
-                    return;
-
-                int levelToGrant = Math.Max(1, (int)player.Level);
-
-                parrySpec.Level = levelToGrant;
-                parrySpec.AllowSave = false;
-                parrySpec.Trainable = false;
-                parrySpec.Hidden = true;
-                player.AddSpecialization(parrySpec);
-
-                m_tempParryLevel = levelToGrant;
-
-                player.Out.SendUpdatePlayerSkills();
-                player.UpdatePlayerStatus();
-            }
-            else
-            {
-                if (player == null || m_tempParryLevel == 0)
-                    return;
-
-                var spec = player.GetSpecialization(Specs.Parry);
-                if (spec is { Trainable: false, AllowSave: false } && spec.Level <= m_tempParryLevel)
-                    player.RemoveSpecialization(Specs.Parry);
-
-                player.Out.SendUpdatePlayerSkills();
-                player.UpdatePlayerStatus();
-            }
         }
 
         public override string GetDelveDescription(GameClient delveClient)

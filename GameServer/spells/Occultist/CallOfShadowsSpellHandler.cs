@@ -1,4 +1,4 @@
-﻿using DOL.Database;
+using DOL.Database;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
@@ -129,7 +129,7 @@ namespace DOL.GS.Spells
 
             // Parry specialization (temporary) + parry chance
             if (gp != null)
-                new RegionTimerAction<GamePlayer>(gp, p => ModTempParry(p, true)).Start(1);
+                new RegionTimerAction<GamePlayer>(gp, p => _tempParryLevel = GS.CharacterClassOccultist.ModTempParry(p, true, (int)p.Level)).Start(1);
 
             GameEventMgr.AddHandler(o, GameLivingEvent.AttackedByEnemy, OnAttackedByEnemy);
             _hookedEvents = true;
@@ -182,7 +182,8 @@ namespace DOL.GS.Spells
             o.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] -= _stealthDet;
             _stealthDet = 0;
 
-            if (gp != null) new RegionTimerAction<GamePlayer>(gp, p => ModTempParry(p, false)).Start(1);
+            if (gp != null && _tempParryLevel != 0)
+                new RegionTimerAction<GamePlayer>(gp, p => GS.CharacterClassOccultist.ModTempParry(p, false, _tempParryLevel)).Start(1);
 
             if (_hookedEvents)
             {
@@ -264,46 +265,6 @@ namespace DOL.GS.Spells
             if (!gp.TempProperties.getProperty(FLAG_ACTIVE, false)) return;
 
             gp.DisabledCastingTimeout = 0;
-        }
-
-        private void ModTempParry(GamePlayer player, bool grant)
-        {
-            if (player == null) return;
-
-            if (grant)
-            {
-                if (player.HasSpecialization(Specs.Parry))
-                {
-                    _tempParryLevel = player.Level;
-                    return;
-                }
-
-                var parrySpec = SkillBase.GetSpecialization(Specs.Parry);
-                if (parrySpec == null) return;
-
-                int levelToGrant = Math.Max(1, (int)player.Level);
-                parrySpec.Level = levelToGrant;
-                parrySpec.AllowSave = false;
-                parrySpec.Trainable = false;
-                parrySpec.Hidden = true;
-                player.AddSpecialization(parrySpec);
-                _tempParryLevel = levelToGrant;
-
-                player.Out.SendUpdatePlayerSkills();
-                player.UpdatePlayerStatus();
-            }
-            else
-            {
-                if (player == null || _tempParryLevel == 0)
-                    return;
-
-                var spec = player.GetSpecialization(Specs.Parry);
-                if (spec is { Trainable: false, AllowSave: false } && spec.Level <= _tempParryLevel)
-                    player.RemoveSpecialization(Specs.Parry);
-
-                player.Out.SendUpdatePlayerSkills();
-                player.UpdatePlayerStatus();
-            }
         }
     }
 }
