@@ -54,10 +54,11 @@ namespace DOL.GS.Spells
             CreateIllusionPets(effect.Owner as GamePlayer);
         }
 
-        /// <inheritdoc />
-        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
+        protected override (string target, ushort radius, bool modified) GetModifiedTarget(GameObject castTarget)
         {
-            return new List<GameLiving>{ castTarget as GameLiving ?? Caster };
+            var (target, radius, modified) = base.GetModifiedTarget(castTarget);
+            radius = 0;
+            return (target, radius, modified);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

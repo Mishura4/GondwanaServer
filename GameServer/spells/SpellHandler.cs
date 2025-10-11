@@ -2332,6 +2332,66 @@ namespace DOL.GS.Spells
             GameEventMgr.Notify(GameLivingEvent.CastFinished, m_caster, new CastingEventArgs(this, target, m_lastAttackData));
         }
 
+        protected virtual (string target, ushort radius, bool modified) GetModifiedTarget(GameObject castTarget)
+        {
+            string modifiedTarget = Spell.Target.ToLowerInvariant();
+            var modifiedRadius    = (ushort)Spell.Radius;
+            bool targetChanged    = false;
+            int newtarget         = 0;
+            if (modifiedTarget != "enemy" && modifiedTarget != "realm" && modifiedTarget != "group")
+                return (modifiedTarget, modifiedRadius, false);
+
+            GameSpellEffect TargetMod = SpellHandler.FindEffectOnTarget(m_caster, "TargetModifier");
+            if (TargetMod == null)
+                return (modifiedTarget, modifiedRadius, false);
+
+            newtarget = (int)TargetMod.Spell.Value;
+            switch (newtarget)
+            {
+                case 0: // Apply on heal single
+                    if (m_spell.SpellType.ToLower() == "heal" && modifiedTarget == "realm")
+                    {
+                        modifiedTarget = "group";
+                        targetChanged = true;
+                    }
+                    break;
+                case 1: // Apply on heal group
+                    if (m_spell.SpellType.ToLower() == "heal" && modifiedTarget == "group")
+                    {
+                        modifiedTarget = "realm";
+                        modifiedRadius = (ushort)m_spell.Range;
+                        targetChanged = true;
+                    }
+                    break;
+                case 2: // apply on enemy
+                    if (modifiedTarget == "enemy")
+                    {
+                        if (m_spell.Radius == 0)
+                            modifiedRadius = 450;
+                        if (m_spell.Radius != 0)
+                            modifiedRadius += 300;
+                        targetChanged = true;
+                    }
+                    break;
+                case 3: // Apply on buff
+                    if (m_spell.Target.ToLower() == "group"
+                        && m_spell.Pulse != 0)
+                    {
+                        modifiedTarget = "realm";
+                        modifiedRadius = (ushort)m_spell.Range;
+                        targetChanged = true;
+                    }
+                    break;
+            }
+            
+            if (targetChanged)
+            {
+                if (TargetMod.Duration < 65535)
+                    TargetMod.Cancel(false);
+            }
+            return (modifiedTarget, modifiedRadius, false);
+        }
+
         /// <summary>
         /// Select all targets for this spell
         /// </summary>
@@ -2341,62 +2401,8 @@ namespace DOL.GS.Spells
         {
             var list = new List<LivingDistEntry>(Math.Max(Spell.TargetHardCap, (ushort)8));
             GameLiving target = castTarget as GameLiving;
-            bool targetchanged = false;
-            string modifiedTarget = Spell.Target.ToLower();
-            ushort modifiedRadius = (ushort)Spell.Radius;
+            var (modifiedTarget, modifiedRadius, targetChanged) = GetModifiedTarget(castTarget);
             int newtarget = 0;
-
-            GameSpellEffect TargetMod = SpellHandler.FindEffectOnTarget(m_caster, "TargetModifier");
-            if (TargetMod != null)
-            {
-                if (modifiedTarget == "enemy" || modifiedTarget == "realm" || modifiedTarget == "group")
-                {
-                    newtarget = (int)TargetMod.Spell.Value;
-
-                    switch (newtarget)
-                    {
-                        case 0: // Apply on heal single
-                            if (m_spell.SpellType.ToLower() == "heal" && modifiedTarget == "realm")
-                            {
-                                modifiedTarget = "group";
-                                targetchanged = true;
-                            }
-                            break;
-                        case 1: // Apply on heal group
-                            if (m_spell.SpellType.ToLower() == "heal" && modifiedTarget == "group")
-                            {
-                                modifiedTarget = "realm";
-                                modifiedRadius = (ushort)m_spell.Range;
-                                targetchanged = true;
-                            }
-                            break;
-                        case 2: // apply on enemy
-                            if (modifiedTarget == "enemy")
-                            {
-                                if (m_spell.Radius == 0)
-                                    modifiedRadius = 450;
-                                if (m_spell.Radius != 0)
-                                    modifiedRadius += 300;
-                                targetchanged = true;
-                            }
-                            break;
-                        case 3: // Apply on buff
-                            if (m_spell.Target.ToLower() == "group"
-                                && m_spell.Pulse != 0)
-                            {
-                                modifiedTarget = "realm";
-                                modifiedRadius = (ushort)m_spell.Range;
-                                targetchanged = true;
-                            }
-                            break;
-                    }
-                }
-                if (targetchanged)
-                {
-                    if (TargetMod.Duration < 65535)
-                        TargetMod.Cancel(false);
-                }
-            }
 
             if (modifiedTarget == "pet" && !HasPositiveEffect)
             {
