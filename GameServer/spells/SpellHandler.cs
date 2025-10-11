@@ -3976,11 +3976,8 @@ namespace DOL.GS.Spells
         /// Find effect by spell handler
         /// </summary>
         /// <returns>first occurance of effect in target's effect list or null</returns>
-        public static GameSpellEffect FindEffectOnTarget(GameLiving target, Type spellHandler)
+        public static GameSpellEffect FindEffectOnTarget<T>(GameLiving target) where T : SpellHandler
         {
-            if (spellHandler.IsInstanceOfType(typeof(SpellHandler)) == false)
-                return null;
-
             lock (target.EffectList)
             {
                 foreach (IGameEffect effect in target.EffectList)
@@ -3988,10 +3985,33 @@ namespace DOL.GS.Spells
                     GameSpellEffect gsp = effect as GameSpellEffect;
                     if (gsp == null)
                         continue;
-                    if (gsp.SpellHandler.GetType().IsInstanceOfType(spellHandler) == false)
+                    if (gsp.SpellHandler is not T)
                         continue;
                     if (gsp is GameSpellAndImmunityEffect && ((GameSpellAndImmunityEffect)gsp).ImmunityState)
                         continue; // ignore immunity effects
+                    return gsp;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Find effect by spell handler
+        /// </summary>
+        /// <returns>first occurance of effect in target's effect list or null</returns>
+        public static GameSpellEffect FindEffectOnTarget(GameLiving target, Func<IGameEffect, bool> predicate, bool skipImmunity = true)
+        {
+            lock (target.EffectList)
+            {
+                foreach (IGameEffect effect in target.EffectList)
+                {
+                    GameSpellEffect gsp = effect as GameSpellEffect;
+                    if (gsp == null)
+                        continue;
+                    if (skipImmunity && gsp is GameSpellAndImmunityEffect { ImmunityState: true })
+                        continue;
+                    if (!predicate(effect))
+                        continue;
                     return gsp;
                 }
             }

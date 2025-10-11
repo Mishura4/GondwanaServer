@@ -1,4 +1,5 @@
-﻿using DOL.AI.Brain;
+using DOL.AI.Brain;
+using DOL.GS.Effects;
 using DOL.GS.PlayerClass;
 using DOL.Language;
 
@@ -73,9 +74,19 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        private bool HasNecromancerShade(GamePlayer p)
+        public static bool IsResistingEntity(GameLiving target)
         {
-            return FindEffectOnTarget(p, "NecromancerShadeEffect") != null || p?.IsShade == true;
+            bool isShapeShifted = FindEffectOnTarget(target, e => e is GameSpellEffect { SpellHandler: SpiritShapeShift or ChtonicShapeShift or BringerOfDeath or CallOfShadowsSpellHandler }) != null;
+            bool isGhostOrUndead = (target is GameNPC npc && (npc.Flags.HasFlag(GameNPC.eFlags.GHOST) || npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead))
+                || FindEffectOnTarget<DamnationSpellHandler>(target) != null
+                || FindEffectOnTarget<SummonMonster>(target) != null;
+            bool isSpecialClass = target is GamePlayer player
+                && ((player.CharacterClass is ClassNecromancer && player.IsShade && FindEffectOnTarget(target, e => e is NecromancerShadeEffect) != null)
+                    || (player.CharacterClass is ClassBainshee && player.Model is 1883 or 1884 or 1885)
+                    || (player.CharacterClass is ClassVampiir));
+            bool isBoss = target is GameNPC { IsBoss: true };
+
+            return isShapeShifted || isGhostOrUndead || isSpecialClass || isBoss;
         }
 
         public override int CalculateSpellResistChance(GameLiving target)
@@ -84,11 +95,7 @@ namespace DOL.GS.Spells
                 return 100;
 
             var ResistChanceFactor = 2.6;
-            bool isGhost = target is GameNPC npc && npc.Flags.HasFlag(GameNPC.eFlags.GHOST);
-            bool isBoss = target is GameNPC gameNPC && gameNPC.IsBoss;
-            bool isSpecialClass = target is GamePlayer player && (player.CharacterClass is ClassNecromancer && HasNecromancerShade(player) || (player.CharacterClass is ClassBainshee && (player.Model == 1883 || player.Model == 1884 || player.Model == 1885)) || (player.CharacterClass is ClassVampiir && player.IsSprinting && player.CurrentSpeed == player.MaxSpeed) || (player.CharacterClass is ClassOccultist && (FindEffectOnTarget(player, "SpiritShapeShift") != null || FindEffectOnTarget(player, "CallOfShadows") != null || FindEffectOnTarget(player, "SummonMonster") != null)));
-
-            if (isBoss || isGhost || isSpecialClass)
+            if (IsResistingEntity(target))
                 return base.CalculateSpellResistChance(target) * (int)ResistChanceFactor;
 
             return base.CalculateSpellResistChance(target);

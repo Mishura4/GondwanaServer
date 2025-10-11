@@ -1,4 +1,4 @@
-﻿using DOL.AI.Brain;
+using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;

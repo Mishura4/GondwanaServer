@@ -67,6 +67,11 @@ namespace DOL.GS.Spells
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
             => new GameSpellEffect(this, CalculateEffectDuration(target, effectiveness), 0);
 
+        public override bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
+        {
+            return base.PreventsApplication(self, other);
+        }
+
         private void SetFormProperties(GameLiving target, bool apply)
         {
             // Flags: uninterruptible (no move-cast flag set)

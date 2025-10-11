@@ -1,4 +1,4 @@
-﻿using DOL.AI.Brain;
+using DOL.AI.Brain;
 using DOL.GS.PlayerClass;
 using DOL.GS.ServerProperties;
 using DOL.Language;
@@ -52,12 +52,7 @@ namespace DOL.GS.Spells
                 return 100;
 
             var ResistChanceFactor = 2.6;
-            bool isHuman = FindEffectOnTarget(target, "SpiritShapeShift") == null && FindEffectOnTarget(target, "ChtonicShapeShift") == null && FindEffectOnTarget(target, "DecrepitShapeShift") == null && FindEffectOnTarget(target, "BringerOfDeath") == null && FindEffectOnTarget(target, "CallOfShadows") == null;
-            bool isGhostOrUndead = target is GameNPC npc && (npc.Flags.HasFlag(GameNPC.eFlags.GHOST) || npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead || FindEffectOnTarget(npc, "Damnation") != null);
-            bool isSpecialClass = target is GamePlayer player && (player.CharacterClass is ClassNecromancer && HasNecromancerShade(player) || (player.CharacterClass is ClassBainshee && (player.Model == 1883 || player.Model == 1884 || player.Model == 1885)) || player.CharacterClass is ClassVampiir || player.CharacterClass is ClassOccultist && !isHuman || FindEffectOnTarget(player, "Damnation") != null || FindEffectOnTarget(player, "SummonMonster") != null);
-            bool isBoss = target is GameNPC gameNPC && gameNPC.IsBoss;
-
-            if (isGhostOrUndead || isSpecialClass || isBoss)
+            if (DeathClawSpellHandler.IsResistingEntity(target))
                 return base.CalculateSpellResistChance(target) * (int)ResistChanceFactor;
 
             return base.CalculateSpellResistChance(target);
