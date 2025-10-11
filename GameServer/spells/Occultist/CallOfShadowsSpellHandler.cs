@@ -38,7 +38,8 @@ namespace DOL.GS.Spells
         private const int CHT_VALUE_CORE = 30;
         private const int CHT_PER_LVL_AF = 4;
         private const int CHT_SEC_RES_PCT = 15;
-        private static readonly int CHT_ABSORB_PCT = (int)Math.Round(CHT_VALUE_CORE * (2.0 / 3.0));
+        private const double CHT_ABSORB_PCT_DBL = CHT_VALUE_CORE * (2.0 / 3.0);
+        private const int CHT_ABSORB_PCT = (int)(CHT_ABSORB_PCT_DBL * 2 + 1) / 2; // Rounding in constexpr
         private const int SPI_STEALTH_DET = 20;
 
         // ---- Global booster ----
@@ -46,7 +47,7 @@ namespace DOL.GS.Spells
 
         // Snapshots we apply/undo
         private int _spellDmgBonus;
-        private int _absorbAll;
+        private int _absBonus;
         private float _regenMult;
         private int _hpFlat;
         private int _wsPct;
@@ -93,7 +94,7 @@ namespace DOL.GS.Spells
             // Decrepit bonuses:
             target.SpecBuffBonusCategory[(int)eProperty.SpellDamage] += mult * _spellDmgBonus;
             target.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] += mult * _spellDmgBonus;
-            target.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] += mult * _absorbAll;
+            target.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += mult * _absBonus;
 
             // Regen (multiplicative bucket)
             if (Math.Abs(_regenMult) > 0.0001f)
@@ -158,23 +159,17 @@ namespace DOL.GS.Spells
             _wsPct = (int)Math.Round(CHT_VALUE_CORE * BOOST);
             _secResPct = (int)Math.Round(CHT_SEC_RES_PCT * BOOST);
             int chtAbs = (int)Math.Round(CHT_ABSORB_PCT * BOOST);
+            // HP flat from % of current MaxHealth: 30% -> 33%
+            _hpFlat = (int)Math.Round(o.MaxHealth * (CHT_VALUE_CORE / 100.0) * BOOST);
+            // AF flat from per-level and %AF component
+            int afPerLevel = (int)Math.Round(CHT_PER_LVL_AF * BOOST);
+            _afFlat = (int)Math.Round(BOOST * ChtonicShapeShift.GetAFBonus(effect.Owner, CHT_VALUE_CORE, afPerLevel));
 
             // Spirit:
             _stealthDet = (int)Math.Round(SPI_STEALTH_DET * BOOST);
 
-            // HP flat from % of current MaxHealth: 30% -> 33%
-            _hpFlat = (int)Math.Round(o.MaxHealth * (CHT_VALUE_CORE / 100.0) * BOOST);
-
-            // AF flat from per-level and %AF component in your Chtonic logic, then +10%
-            // base AF calc (see Chtonic handler)
-            int level = o.Level;
-            int flatAFBase = (CHT_PER_LVL_AF * level) * 5;
-            int afProp = o.GetModified(eProperty.ArmorFactor);
-            int pctAFComp = (int)Math.Round(afProp * (CHT_VALUE_CORE / 100.0));
-            _afFlat = (int)Math.Round((flatAFBase + pctAFComp) * BOOST);
-
             // Total absorb pool (stack Decrepit + Chtonic flavors)
-            _absorbAll = decrepitAbs + chtAbs;
+            _absBonus = decrepitAbs + chtAbs;
             
             _tempParryLevel = (int)o.Level;
 
@@ -236,16 +231,6 @@ namespace DOL.GS.Spells
 
             if ((ad.Damage + ad.CriticalDamage) <= 0)
                 return;
-
-            // --- Armor Absorption ---
-            if (_absorbAll > 0)
-            {
-                var pct = (_absorbAll / 100.0);
-                int reduceBase = (int)Math.Round(ad.Damage * pct);
-                int reduceCrit = (int)Math.Round(ad.CriticalDamage * pct);
-                ad.Damage -= reduceBase;
-                ad.CriticalDamage -= reduceCrit;
-            }
 
             if (!Util.Chance(DISEASE_PCT))
                 return;
