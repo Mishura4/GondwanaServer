@@ -2,6 +2,7 @@
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.Language;
+using System.Collections.Generic;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -74,6 +75,14 @@ namespace DOL.GS.RealmAbilities
         public override int GetReUseDelay(int level)
         {
             return 600;
+        }
+
+        public override void AddEffectsInfo(IList<string> list)
+        {
+            list.Add("The Assassin takes 10 seconds to disappear in the shadows.");
+            list.Add("Once in the shadows the Assassin will automatically teleport to and perform perforate artery to any enemy they choose within 1000 radius.");
+            list.Add("");
+            list.Add("This ability cannot be used to enter a locked keep or tower.");
         }
     }
 }

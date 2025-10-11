@@ -28,7 +28,7 @@ namespace DOL.GS.RealmAbilities
             {
                 Name = "Call of Shadows",
                 Icon = 7051,
-                ClientEffect = 0,
+                ClientEffect = 15184,
                 Target = "self",
                 Type = "CallOfShadows",
                 Duration = 30,

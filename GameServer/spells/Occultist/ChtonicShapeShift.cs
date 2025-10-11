@@ -24,11 +24,6 @@ namespace DOL.GS.Spells
         private int m_absBonus;
         private int m_tempParryLevel = 0;
 
-        private const string TP_ADDED  = "ChtonicShapeShift.ParryAdded";
-        private const string TP_GVL    = "ChtonicShapeShift.ParryGivenLevel";
-        private const string KEY_HANDLER_FLAG = "CHTONIC_HANDLER_ATTACHED";
-        private const string KEY_ABS_UNIFIED  = "CHTONIC_ABS_UNIFIED"; // percent absorb applied to all attack types
-
         public ChtonicShapeShift(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
             // Priority = 10;
@@ -96,20 +91,6 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(target, quiet);
         }
 
-        /// <summary>Self-only safety: refuse if target isn't the caster.</summary>
-        /// <todo>^ why? Also that's not how you make a self-target spell</todo>
-        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
-        {
-            if (target != Caster)
-            {
-                ErrorTranslationToCaster("SpellHandler.TargetSelfOnly");
-                return false;
-            };
-            
-            // and ignore effectiveness?
-            return base.ApplyEffectOnTarget(target, 1.0);
-        }
-
         private void ApplyStats(GameSpellEffect effect, bool apply)
         {
             var owner = effect.Owner;
@@ -124,10 +105,10 @@ namespace DOL.GS.Spells
 
             if (m_resBonus != 0)
             {
-                owner.SpecBuffBonusCategory[(int)eProperty.Resist_Heat]   += mult * m_resBonus;
-                owner.SpecBuffBonusCategory[(int)eProperty.Resist_Cold]   += mult * m_resBonus;
+                owner.SpecBuffBonusCategory[(int)eProperty.Resist_Heat] += mult * m_resBonus;
+                owner.SpecBuffBonusCategory[(int)eProperty.Resist_Cold] += mult * m_resBonus;
                 owner.SpecBuffBonusCategory[(int)eProperty.Resist_Matter] += mult * m_resBonus;
-                owner.SpecBuffBonusCategory[(int)eProperty.Resist_Body]   += mult * m_resBonus;
+                owner.SpecBuffBonusCategory[(int)eProperty.Resist_Body] += mult * m_resBonus;
                 owner.SpecBuffBonusCategory[(int)eProperty.Resist_Spirit] += mult * m_resBonus;
                 owner.SpecBuffBonusCategory[(int)eProperty.Resist_Energy] += mult * m_resBonus;
             }
@@ -143,7 +124,7 @@ namespace DOL.GS.Spells
         {
             base.OnEffectStart(effect);
 
-            var owner  = effect.Owner;
+            var owner = effect.Owner;
             var player = owner as GamePlayer;
             owner.TempProperties.setProperty(OccultistForms.KEY_CHTONIC, true);
 
@@ -153,7 +134,7 @@ namespace DOL.GS.Spells
                 npc.ControlledNpcList.Foreach(b => b.Body.Die(owner));
             else if (player != null)
                 player.CommandNpcRelease(); // TODO: Does this work? Are there pets we can't manually release?
-            
+
             ApplyStats(effect, true);
 
             // Push UI updates
@@ -166,10 +147,10 @@ namespace DOL.GS.Spells
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-            var owner  = effect.Owner;
+            var owner = effect.Owner;
             var player = owner as GamePlayer;
             owner.TempProperties.removeProperty(OccultistForms.KEY_CHTONIC);
-            
+
             ApplyStats(effect, false);
 
             if (player != null)
@@ -194,7 +175,7 @@ namespace DOL.GS.Spells
             {
                 if (player == null || player.HasSpecialization(Specs.Parry))
                     return;
-                
+
                 var parrySpec = SkillBase.GetSpecialization(Specs.Parry);
                 if (parrySpec == null)
                     // Log?
@@ -217,7 +198,7 @@ namespace DOL.GS.Spells
             {
                 if (player == null || m_tempParryLevel == 0)
                     return;
-                
+
                 var spec = player.GetSpecialization(Specs.Parry);
                 if (spec is { Trainable: false, AllowSave: false } && spec.Level <= m_tempParryLevel)
                     player.RemoveSpecialization(Specs.Parry);
@@ -234,13 +215,10 @@ namespace DOL.GS.Spells
             int pctAbsExtra = (int)Math.Round(Spell.Value - (Spell.Value / 3.0));
             int pctSecRes = (int)Spell.ResurrectMana;
 
-            string line1 = $"Become a Chthonic Knight.";
-            string line2 = $"AF raises by an additional {perLevelAF} per level.";
-            string line3 = $"Your health, your armor factor and weaponskills are each increased by {m_wsBonus}%,";
-            string line4 = $"your melee absorption by {m_absBonus}%, secondary magic resistances by {m_resBonus}%,";
-            string line5 = $"and you gain the ability to parry attacks.";
+            string line1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.ChtonicShapeShift1", perLevelAF, pctCore, pctAbsExtra, pctSecRes);
+            string line2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.ChtonicShapeShift2");
 
-            return $"{line1} {line2} {line3} {line4} {line5}";
+            return line1 + "\n" + line2;
         }
     }
 }

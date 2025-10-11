@@ -15,10 +15,9 @@ namespace DOL.GS.Spells
         protected int m_spellDmgPct;
         protected int m_absorbPct;
         protected float m_regenPct;
-        
-        // Constants
-        private const int DISEASE_SUBSPELL_ID = 25296; // "Decrepit's Disease"
-        private const int DISEASE_PROC_CHANCE = 50;    // 50%
+
+        private const int DISEASE_SUBSPELL_ID = 25296;
+        private const int DISEASE_PROC_CHANCE = 50;
 
         public DecrepitShapeShift(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
@@ -65,19 +64,6 @@ namespace DOL.GS.Spells
             if (!CheckFormConditions(target, quiet))
                 return false;
             return base.CheckBeginCast(target, quiet);
-        }
-
-        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
-        {
-            if (target != Caster)
-            {
-                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.SelfOnly")
-                                ?? "You can only cast this on yourself.",
-                                eChatType.CT_System);
-                return false;
-            }
-
-            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override ushort GetModelFor(GameLiving living)
@@ -204,12 +190,15 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            string abs = (m_absorbPct != 0 ? $"Your ABS is increased by {m_absorbPct}%" : string.Empty);
-            return
-                $"Become a Decrepit Magus. Your magic damage is increased by {m_spellDmgPct}%. " +
-                abs + 
-                $"Melee attackers have a {DISEASE_PROC_CHANCE}% chance to become diseased when they strike you, " +
-                $"and your rotted flesh regenerates, increasing health regeneration by {m_regenPct}%.";
+            string line1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.DecrepitShapeShift1", m_spellDmgPct);
+            string line2 = string.Empty;
+            if (m_absorbPct > 0)
+            {
+                line2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.DecrepitShapeShift2", m_absorbPct);
+            }
+            string line3 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.DecrepitShapeShift3", DISEASE_PROC_CHANCE, m_regenPct);
+
+            return string.IsNullOrEmpty(line2) ? (line1 + "\n" + line3) : (line1 + "\n" + line2 + "\n" + line3);
         }
     }
 }

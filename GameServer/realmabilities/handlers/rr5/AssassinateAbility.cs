@@ -2,6 +2,7 @@
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.Language;
+using System.Collections.Generic;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -70,6 +71,15 @@ namespace DOL.GS.RealmAbilities
         public override int GetReUseDelay(int level)
         {
             return 600;
+        }
+
+        public override void AddEffectsInfo(IList<string> list)
+        {
+            list.Add("The Assassin selects a target within a 750-unit range and spends 15 seconds, without moving, preparing the assassination attempt.");
+            list.Add("");
+            list.Add("The attempt will fail if the assassin takes any action during those 15 seconds, or if the target moves more than 750 units away from the target and the recast timer is not refunded.");
+            list.Add("");
+            list.Add("Once prepared, the next attack on that target by the assassin will not break stealth.");
         }
     }
 }

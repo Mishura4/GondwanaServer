@@ -20,12 +20,10 @@ namespace DOL.GS.Spells
 
             if (effect.Owner is GamePlayer player)
             {
-                // +X% effectiveness → +X * 0.01 to the internal multiplier
                 double bonus = Spell.Value * 0.01;
                 player.TempProperties.setProperty(ASC_BONUS_KEY, bonus);
                 player.Effectiveness += bonus;
 
-                // If MoC is up and Ascendance isn't “permissive” (AmnesiaChance <= 0), cancel MoC now.
                 var moc = player.EffectList.GetOfType<MasteryofConcentrationEffect>();
                 if (moc != null && Spell.AmnesiaChance <= 0)
                 {
@@ -75,18 +73,24 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             string lang = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            int recastSeconds = Spell.RecastDelay / 1000;
 
-            // Suggested keys:
-            // "SpellDescription.Ascendance.MainDescription" = "Greatly increases your spell and ability effectiveness by {0}%."
-            // "SpellDescription.Ascendance.Restrictions"    = "While Ascendance is active: you cannot cast Heal or Resurrect. If this spell’s AmnesiaChance is above 0, those restrictions are lifted."
-            // "SpellDescription.Ascendance.Interaction"     = "Casting Mastery of Concentration cancels Ascendance, and vice versa, unless this spell’s AmnesiaChance is above 0."
-            string main = LanguageMgr.GetTranslation(lang, "SpellDescription.Ascendance.MainDescription", (int)Spell.Value)
-                          ?? $"Greatly increases your effectiveness by {(int)Spell.Value}%.";
-            string rest = LanguageMgr.GetTranslation(lang, "SpellDescription.Ascendance.Restrictions")
-                          ?? "While Ascendance is active: you cannot cast Heal or Resurrect. If this spell’s AmnesiaChance is above 0, those restrictions are lifted.";
-            string interact = LanguageMgr.GetTranslation(lang, "SpellDescription.Ascendance.Interaction")
-                          ?? "Casting Mastery of Concentration cancels Ascendance, and vice versa, unless this spell’s AmnesiaChance is above 0.";
-            return main + "\n\n" + rest + "\n\n" + interact;
+            string description = LanguageMgr.GetTranslation(lang, "SpellDescription.Ascendance.MainDescription", (int)Spell.Value);
+
+            if (Spell.AmnesiaChance == 0)
+            {
+                string rest = LanguageMgr.GetTranslation(lang, "SpellDescription.Ascendance.Restrictions");
+                string interact = LanguageMgr.GetTranslation(lang, "SpellDescription.Ascendance.Interaction");
+                description += "\n\n" + rest + "\n\n" + interact;
+            }
+
+            if (Spell.RecastDelay > 0)
+            {
+                string secondDesc = LanguageMgr.GetTranslation(lang, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return description + "\n\n" + secondDesc;
+            }
+
+            return description;
         }
     }
 }

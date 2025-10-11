@@ -170,6 +170,7 @@ namespace DOL.GS.Spells
             m_pet.Position = GetSummonPosition();
 
             m_pet.Realm = Caster.Realm;
+            m_pet.TempProperties.setProperty(OccultistForms.PET_SUMMON_SPELL_ID, Spell.ID);
 
             // Fix owner pet issue
             if (Caster is GameNPC mob && mob.Faction != null)

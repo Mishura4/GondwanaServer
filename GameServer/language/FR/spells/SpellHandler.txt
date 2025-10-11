@@ -303,6 +303,7 @@ SpellHandler.Occultist.CastCondition1:						Vous devez être sous forme chtoniqu
 SpellHandler.Occultist.CastCondition2:						Vous ne pouvez pas lancer ce sort en étant sous forme chtonique.
 SpellHandler.Occultist.CastCondition3:						Vous ne pouvez pas lancer ce sort en étant sous forme décrépit ou esprit.
 SpellHandler.Occultist.CastCondition4:						Vous devez quitter votre forme actuelle avant de lancer ce sort.
+SpellHandler.Occultist.Self.AbsorbToPower:					Vous siphonnez {0} de mana de l’attaque reçue.
 
 SpellHandler.SummonMonster.Target.Resist:					{0} a été ressuscité des limbes sous forme de zombie et reste insensible à ce sort !
 SpellHandler.IllusionSpell.Target.Resist:					{0} a invoqué une illusion et ne peut pas être affecté contre ce sort !

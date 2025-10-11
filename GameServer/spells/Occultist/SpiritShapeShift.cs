@@ -52,7 +52,6 @@ namespace DOL.GS.Spells
 
         public override ushort GetModelFor(GameLiving living)
         {
-            // Model taken from Spell.LifeDrainReturn
             return (ushort)Spell.LifeDrainReturn;
         }
 
@@ -157,13 +156,11 @@ namespace DOL.GS.Spells
             int total = reduceBase + reduceCrit;
             if (total > 0)
             {
-                // Use ChangeMana to respect caps and propagate properly
                 int changed = owner.ChangeMana(Caster, GameLiving.eManaChangeType.Spell, total);
 
-                // Optional feedback
                 if (owner is GamePlayer p && changed > 0)
                 {
-                    p.SendTranslatedMessage("SpiritShapeShift.Self.AbsorbToPower",
+                    p.SendTranslatedMessage("SpellHandler.Occultist.Self.AbsorbToPower",
                         eChatType.CT_Spell, eChatLoc.CL_SystemWindow, changed);
                 }
             }
@@ -173,15 +170,13 @@ namespace DOL.GS.Spells
         {
             int absorb = (int)Spell.Value;
             int stealthDet = Spell.AmnesiaChance;
-            double perLevel = Spell.ResurrectMana / 10.0;
+            double perLevel = Spell.ResurrectMana / 100.0;
 
-            string baseText = "Become a Ghostly Spirit. " +
-                              $"{absorb}% of all damage you take is absorbed and instead restores your power. " +
-                              $"Your power regeneration is increased by {perLevel}% per level, " +
-                              $"and your chance to uncover stealther enemies is {stealthDet}% greater. " +
-                              $"Additionally, your servants become highly resistant to damage and gain new abilities.";
+            string description1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.SpiritShapeShift1", absorb);
+            string description2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.SpiritShapeShift2", perLevel, stealthDet);
+            string description3 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.SpiritShapeShift3");
 
-            return baseText;
+            return description1 + "\n" + description2 + "\n" + description3;
         }
     }
 }

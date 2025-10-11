@@ -144,26 +144,20 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            // Simple, non-localized delve; replace with LanguageMgr.GetTranslation if you add keys.
             string typeName = GlobalConstants.DamageTypeToName(Spell.DamageType);
             int pct = Math.Max(0, Math.Min(100, (int)Spell.Value));
             int recastSeconds = Spell.RecastDelay / 1000;
 
-            string text = $"Reflects {pct}% of incoming melee, ranged, and direct spell damage (excluding DoTs) " +
+            string description = $"Reflects {pct}% of incoming melee, ranged, and direct spell damage (excluding DoTs) " +
                           $"back to the attacker as {typeName} damage while active.";
 
-            if (Spell.Duration > 0 && Spell.Duration < 65535)
+            if (Spell.RecastDelay > 0)
             {
-                string dur = (Spell.Duration >= 60000)
-                    ? $"{(int)(Spell.Duration / 60000)}:{Spell.Duration % 60000} min"
-                    : $"{Spell.Duration / 1000} sec";
-                text += $"\n\nDuration: {dur}";
+                string secondDesc = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                return description + "\n\n" + secondDesc;
             }
 
-            if (Spell.RecastDelay > 0)
-                text += $"\n\nRecast: {recastSeconds} sec";
-
-            return text;
+            return description;
         }
     }
 }

@@ -222,8 +222,8 @@ SpellDescription.Archery.SingleTarget:					Deals {0} {1} to the target.
 SpellDescription.Archery.AreaTarget:					Deals {0} {1} to the target and its surroundings.
 SpellDescription.Archery.SecondaryEffectiveness:		The shot's effectiveness is increased by {0}%.
 SpellDescription.WarlockSpeedDecrease.Frog:				The target is shapeshifted into a Frog!
-SpellDescription.MaidenKiss.MainDescription:			Cure the target from "Frog" status.
-SpellDescription.ArawnCure.MainDescription:				Cure the target from "Poison", "Disease", Resurrection Sickness" status.
+SpellDescription.MaidenKiss.MainDescription:			Cure the target from « Frog » status.
+SpellDescription.ArawnCure.MainDescription:				Cure the target from Poison, Disease, Resurrection Sickness status.
 SpellDescription.Fear.SingleTarget:						Frightens away the targeted enemy monster. Cannot affect player's pets or enemies above level {0}.
 SpellDescription.Fear.AreaTarget:						A point-blank area of effect fear that frightens away enemy monsters within {1} units of the caster. Cannot affect player's pets or enemies above level {0}.
 SpellDescription.FearServant.SingleTarget:				Send an enemy pet fleeing in terror. Cannot affect enemy's pets above level {0}.
@@ -249,6 +249,9 @@ SpellDescription.IllusionBlade.Part2:					The blade acts on its own and cannot b
 SpellDescription.RangeShield.MainDescription:			Shields the caster's group from ranged physical attacks.
 SpellDescription.PetSpell.MainDescription1:				Pet Spell:
 SpellDescription.PetSpell.MainDescription2:				Increases the target's listed stat(s).
+SpellDescription.Ascendance.MainDescription:			Greatly increases your spell and ability effectiveness by {0}%.
+SpellDescription.Ascendance.Restrictions:				While Ascendance is active you cannot cast Heal or Resurrect.
+SpellDescription.Ascendance.Interaction:				Casting Mastery of Concentration cancels Ascendance, and vice versa.
 SpellDescription.Occultist.ConditionDescription1:		Can't be cast under Chtonic form.
 SpellDescription.Occultist.ConditionDescription2:		Can't be cast under Decrepit or Spirit form.
 SpellDescription.Occultist.Summon.UmbralAegis1:			Summon an Umbral Aegis to serve you. This demon specializes in taunting and tanking damages.
@@ -261,6 +264,16 @@ SpellDescription.Occultist.Summon.ImageOfArawn1:		Summon a loyal Priest of Arawn
 SpellDescription.Occultist.Summon.ImageOfArawn2:		Spirit form: Image of Arawn gains Cure poison, disease, rez sick, and can clear itself of nearsight.
 SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Summon a daemonic Succubus to serve you. The Succubus will mesmerize its target.
 SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Spirit form: Arch Demon gains a strong Dex/Qui debuff and can cure itself of nearsight.
+SpellDescription.Occultist.SpiritShapeShift1:			Become a Ghostly Spirit. {0}% of all damage you take is absorbed and instead restores your power.
+SpellDescription.Occultist.SpiritShapeShift2:			Your power regeneration is increased by {0} per level, and your chance to uncover stealther enemies is {1}% greater.
+SpellDescription.Occultist.SpiritShapeShift3:			Additionally, your servants become highly resistant to damages and gain new abilities.
+SpellDescription.Occultist.ChtonicShapeShift1:			Become a Chthonic Knight. Your AF increases by an additional {0} per level. Your health, your armor factor and weaponskills are each increased by {1}%, your melee absorption by {2}%, secondary magic resistances by {3}%.
+SpellDescription.Occultist.ChtonicShapeShift2:			You also gain the ability to parry attacks.
+SpellDescription.Occultist.DecrepitShapeShift1:			Become a Decrepit Magus. Your magic damage is increased by {0}%
+SpellDescription.Occultist.DecrepitShapeShift2:			Your armor absorption is increased by {0}%.
+SpellDescription.Occultist.DecrepitShapeShift3:			Melee attackers have a {0}% chance to become diseased when they strike you, and your rotted flesh regenerates, increasing health regeneration by {1}.
+SpellDescription.Occultist.BringerOfDeath1:				Become the Bringer of Death. Your spell casts ignore interruption but reach only {0}% of their potency and you take {1}% less damage from all sources.
+SpellDescription.Occultist.BringerOfDeath2:				Your melee attack speed increases by {0}%. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.
 
 
 # ML Spells ShortDescriptions

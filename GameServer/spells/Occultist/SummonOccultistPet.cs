@@ -109,7 +109,7 @@ namespace DOL.GS.Spells
 
             if (OccultistForms.IsSpiritLikeActive(owner) && spiritTplId > 0)
             {
-                OccultistForms.ApplyTemplate(pet, spiritTplId);
+                OccultistForms.ApplyTemplateFromPetMemory(pet, toSpirit: true);
             }
 
             owner.Out?.SendObjectUpdate(pet);

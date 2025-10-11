@@ -229,9 +229,10 @@ namespace DOL.GS.Spells
             int meleeHaste = Math.Max(0, (int)Spell.Value);
             int absorb = Math.Max(0, (int)Spell.AmnesiaChance);
 
-            return
-                $"Become the Bringer of Death. Your spell casts ignore interruption but reach only {potency}% of their potency and you take {absorb}% less damage from all sources.\n" +
-                $"Your melee attack speed is increased by {meleeHaste}%. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.";
+            string line1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.BringerOfDeath1", potency, absorb);
+            string line2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.BringerOfDeath2", meleeHaste);
+
+            return line1 + "\n\n" + line2;
         }
     }
 }

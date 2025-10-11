@@ -62,6 +62,7 @@ namespace DOL.GS.Spells
 
             public const string PET_BASE_TPL = "OCCULT_PET_BASE_TPL";
             public const string PET_SPIRIT_TPL = "OCCULT_PET_SPIRIT_TPL";
+            public const string PET_SUMMON_SPELL_ID = "OCCULT_PET_SUMMON_SPELL_ID";
 
             private static void PlaySwapFx(GamePet pet)
             {
@@ -85,29 +86,20 @@ namespace DOL.GS.Spells
                 if (!string.IsNullOrWhiteSpace(tpl.Name)) pet.Name = tpl.Name;
                 if (byte.TryParse(tpl.Size, out var s) && s > 0) pet.Size = s;
 
+                pet.MeleeDamageType = tpl.MeleeDamageType;
+                pet.Race = (short)tpl.Race;
+                pet.BodyType = (ushort)tpl.BodyType;
+                pet.VisibleActiveWeaponSlots = tpl.VisibleActiveWeaponSlot;
+                pet.ParryChance = tpl.ParryChance;
+                pet.EvadeChance = tpl.EvadeChance;
+                pet.BlockChance = tpl.BlockChance;
+                pet.LeftHandSwingChance = tpl.LeftHandSwingChance;
+
                 try
                 {
                     pet.Styles = tpl.Styles != null ? new List<Style>(tpl.Styles) : new List<Style>();
                     pet.Spells = tpl.Spells != null ? new ArrayList(tpl.Spells) : new ArrayList();
-
-                    var clearAbilities = pet.GetType().GetMethod("ClearAbilities");
-                    var addAbility = pet.GetType().GetMethod("AddAbility", new[] { typeof(Ability) });
-
-                    if (clearAbilities != null && addAbility != null)
-                    {
-                        clearAbilities.Invoke(pet, null);
-                        if (tpl.Abilities != null)
-                        {
-                            foreach (Ability abil in tpl.Abilities)
-                                addAbility.Invoke(pet, new object[] { abil });
-                        }
-                    }
-                    else
-                    {
-                        var abilProp = pet.GetType().GetProperty("Abilities");
-                        if (abilProp != null && abilProp.CanWrite)
-                            abilProp.SetValue(pet, tpl.Abilities != null ? new ArrayList(tpl.Abilities) : new ArrayList());
-                    }
+                    ApplyAbilitiesFromTemplate(pet, tpl);
 
                     if (pet.Brain is ControlledNpcBrain cb)
                         cb.CheckSpells(StandardMobBrain.eCheckSpellType.Defensive);
@@ -123,11 +115,38 @@ namespace DOL.GS.Spells
                     if (owner != null && pet.Brain is IControlledBrain brain)
                         owner.Out.SendPetWindow(pet, ePetWindowAction.Update, brain.AggressionState, brain.WalkState);
                 }
-                catch
-                {
-                }
+                catch { }
 
                 PlaySwapFx(pet);
+            }
+
+            static void ApplyAbilitiesFromTemplate(GamePet pet, NpcTemplate tpl)
+            {
+                try
+                {
+                    var dict = pet.Abilities as IDictionary;
+                    if (dict != null && dict.Count > 0)
+                    {
+                        var toRemove = new List<string>(dict.Count);
+                        foreach (Ability a in dict.Values)
+                            if (a != null && !string.IsNullOrEmpty(a.KeyName))
+                                toRemove.Add(a.KeyName);
+
+                        foreach (var key in toRemove)
+                            pet.RemoveAbility(key);
+                    }
+
+                    if (tpl?.Abilities != null)
+                    {
+                        foreach (Ability abil in tpl.Abilities)
+                        {
+                            if (abil == null) continue;
+                            var resolved = SkillBase.GetAbility(abil.Name, abil.Level);
+                            pet.AddAbility(resolved ?? abil);
+                        }
+                    }
+                }
+                catch { }
             }
 
             public static void ForEachControlledPet(GamePlayer owner, Action<GamePet> action)
@@ -148,20 +167,51 @@ namespace DOL.GS.Spells
             public static void ApplyTemplateFromPetMemory(GamePet pet, bool toSpirit)
             {
                 if (pet == null) return;
+
                 int baseTpl = pet.TempProperties.getProperty<int>(PET_BASE_TPL, 0);
                 int spiritTpl = pet.TempProperties.getProperty<int>(PET_SPIRIT_TPL, 0);
                 int which = toSpirit ? spiritTpl : baseTpl;
 
-                if (which > 0)
-                {
-                    ApplyTemplate(pet, which);
+                if (which <= 0)
+                    return;
 
-                    var tpl = NpcTemplateMgr.GetTemplate(which);
-                    if (tpl != null)
+                ApplyTemplate(pet, which);
+
+                var tpl = NpcTemplateMgr.GetTemplate(which);
+                if (tpl != null)
+                {
+                    if (ushort.TryParse(tpl.Model, out var m) && m > 0) pet.Model = m;
+                    if (!string.IsNullOrWhiteSpace(tpl.Name)) pet.Name = tpl.Name;
+                    if (byte.TryParse(tpl.Size, out var s) && s > 0) pet.Size = s;
+                }
+
+                int summonId = pet.TempProperties.getProperty<int>(PET_SUMMON_SPELL_ID, 0);
+                bool isUmbralHulk = (summonId == 25161);
+
+                if (toSpirit)
+                {
+                    static ushort MulU16(ushort v, double factor) => (ushort)Math.Min(ushort.MaxValue, Math.Round(v * factor));
+
+                    static short MulI16(short v, double factor)
                     {
-                        if (ushort.TryParse(tpl.Model, out var m) && m > 0) pet.Model = m;
-                        if (!string.IsNullOrWhiteSpace(tpl.Name)) pet.Name = tpl.Name;
-                        if (byte.TryParse(tpl.Size, out var s) && s > 0) pet.Size = s;
+                        double res = Math.Round(v * factor);
+                        if (res < 0) res = 0;
+                        if (res > short.MaxValue) res = short.MaxValue;
+                        return (short)res;
+                    }
+
+                    if (isUmbralHulk)
+                    {
+                        pet.ArmorAbsorb = MulU16((ushort)pet.ArmorAbsorb, 1.60);
+                        pet.ArmorFactor = MulU16((ushort)pet.ArmorFactor, 2.00);
+                        pet.Strength = MulI16(pet.Strength, 2.00);
+                        pet.Constitution = MulI16(pet.Constitution, 1.25);
+                        pet.WeaponDps = (ushort)Math.Max(1, Math.Round(pet.WeaponDps * 2.25));
+                    }
+                    else
+                    {
+                        pet.ArmorFactor = MulU16((ushort)pet.ArmorFactor, 1.25);
+                        pet.ArmorAbsorb = MulU16((ushort)pet.ArmorAbsorb, 1.20);
                     }
                 }
             }
@@ -3148,7 +3198,7 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns>true if this spell is better version than compare spell</returns>
-        public virtual bool ShouldOverwriteOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public virtual bool IsBetterThanOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             Spell oldspell = oldeffect.Spell;
             Spell newspell = neweffect.Spell;
@@ -3213,7 +3263,7 @@ namespace DOL.GS.Spells
         /// <param name="oldeffect"></param>
         /// <param name="neweffect"></param>
         /// <returns></returns>
-        public virtual bool ShouldCancelOldEffect(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        public virtual bool IsCancellableEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
         {
             if (neweffect.SpellHandler.Spell.Value >= oldeffect.SpellHandler.Spell.Value)
                 return true;
@@ -3291,7 +3341,7 @@ namespace DOL.GS.Spells
                     if (effect.SpellHandler.IsCancellable(neweffect))
                     {
                         // Spell is better than existing "Cancellable" or it should start disabled
-                        if (ShouldCancelOldEffect(effect, neweffect))
+                        if (IsCancellableEffectBetter(effect, neweffect))
                             cancellableEffects.Add(effect);
                         else
                             enable = false;
@@ -3299,7 +3349,7 @@ namespace DOL.GS.Spells
                     else
                     {
                         // Check for Overwriting.
-                        if (ShouldOverwriteOldEffect(effect, neweffect))
+                        if (IsBetterThanOldEffect(effect, neweffect))
                         {
                             // New Spell is overwriting this one.
                             overwriteEffect = effect;
@@ -3416,7 +3466,7 @@ namespace DOL.GS.Spells
                 {
                     if (best == null)
                         best = eff;
-                    else if (best.SpellHandler.ShouldCancelOldEffect(best, eff))
+                    else if (best.SpellHandler.IsCancellableEffectBetter(best, eff))
                         best = eff;
                 }
 

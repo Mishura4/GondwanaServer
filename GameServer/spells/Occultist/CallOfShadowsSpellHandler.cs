@@ -67,17 +67,6 @@ namespace DOL.GS.Spells
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
             => new GameSpellEffect(this, CalculateEffectDuration(target, effectiveness), 0);
 
-        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
-        {
-            if (target != Caster)
-            {
-                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.SelfOnly")
-                                ?? "You can only cast this on yourself.", eChatType.CT_System);
-                return false;
-            }
-            return base.ApplyEffectOnTarget(target, effectiveness);
-        }
-
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
@@ -118,7 +107,6 @@ namespace DOL.GS.Spells
             // Decrepit bonuses:
             o.SpecBuffBonusCategory[(int)eProperty.SpellDamage] += _spellDmgBonus;
             o.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] += _spellDmgBonus;
-            o.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] += _absorbAll;
             o.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] += _absorbAll;
 
             // Regen (multiplicative bucket)
@@ -176,7 +164,6 @@ namespace DOL.GS.Spells
             o.SpecBuffBonusCategory[(int)eProperty.SpellDamage] -= _spellDmgBonus;
             o.SpecBuffBonusCategory[(int)eProperty.DotDamageBonus] -= _spellDmgBonus;
 
-            o.SpecBuffBonusCategory[(int)eProperty.ArmorAbsorption] -= _absorbAll;
             o.SpecBuffBonusCategory[(int)eProperty.MagicAbsorption] -= _absorbAll;
 
             o.BuffBonusMultCategory1.Remove((int)eProperty.HealthRegenerationRate, this);
@@ -238,6 +225,17 @@ namespace DOL.GS.Spells
                 return;
             if ((ad.Damage + ad.CriticalDamage) <= 0)
                 return;
+
+            // --- Armor Absorption ---
+            if (_absorbAll > 0)
+            {
+                var pct = (_absorbAll / 100.0);
+                int reduceBase = (int)Math.Round(ad.Damage * pct);
+                int reduceCrit = (int)Math.Round(ad.CriticalDamage * pct);
+                ad.Damage -= reduceBase;
+                ad.CriticalDamage -= reduceCrit;
+            }
+
             if (!Util.Chance(DISEASE_PCT))
                 return;
 
@@ -285,6 +283,9 @@ namespace DOL.GS.Spells
 
                 int levelToGrant = Math.Max(1, (int)player.Level);
                 parrySpec.Level = levelToGrant;
+                parrySpec.AllowSave = false;
+                parrySpec.Trainable = false;
+                parrySpec.Hidden = true;
                 player.AddSpecialization(parrySpec);
                 _tempParryLevel = levelToGrant;
 
@@ -293,10 +294,11 @@ namespace DOL.GS.Spells
             }
             else
             {
-                if (_tempParryLevel == 0) return;
+                if (player == null || _tempParryLevel == 0)
+                    return;
 
                 var spec = player.GetSpecialization(Specs.Parry);
-                if (spec != null && spec.Level <= _tempParryLevel)
+                if (spec is { Trainable: false, AllowSave: false } && spec.Level <= _tempParryLevel)
                     player.RemoveSpecialization(Specs.Parry);
 
                 player.Out.SendUpdatePlayerSkills();

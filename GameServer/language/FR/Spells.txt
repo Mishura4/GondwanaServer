@@ -222,12 +222,12 @@ SpellDescription.Archery.SingleTarget:					Inflige {0} {1} à la cible.
 SpellDescription.Archery.AreaTarget:					Inflige {0} {1} à la cible et à son entourage.
 SpellDescription.Archery.SecondaryEffectiveness:		L'efficacité du tir est augmentée de {0}%.
 SpellDescription.WarlockSpeedDecrease.Frog:				Transforme la cible en Grenouille !
-SpellDescription.MaidenKiss.MainDescription:			Guérit la cible du statut "Grenouille".
-SpellDescription.ArawnCure.MainDescription:				Guérit la cible du statut "Poison", "Maladie", Maladie de la résurrection".
-SpellDescription.Fear.SingleTarget:						Effraie l'ennemi ciblé. N'affecte pas les "familiers" ni les ennemis de niveau supérieur à {0}.
-SpellDescription.Fear.AreaTarget:						Un sort de terreur de zone centré sur le lanceur, effrayant les monstres ennemis dans un rayon de {1} unités. N'affecte pas les "familiers" ni les ennemis de niveau supérieur à {0}.
-SpellDescription.FearServant.SingleTarget:				Faites fuir de terreur un familier ennemi ciblé. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
-SpellDescription.FearServant.AreaTarget:				Un sort de terreur de zone centré sur le lanceur, effrayant les "familiers" ennemis dans un rayon de {1} unités. N'affecte pas les "familiers" ennemis de niveau supérieur à {0}.
+SpellDescription.MaidenKiss.MainDescription:			Guérit la cible du statut « Grenouille ».
+SpellDescription.ArawnCure.MainDescription:				Guérit la cible du statut Poison, Maladie, Maladie de la résurrection.
+SpellDescription.Fear.SingleTarget:						Effraie l'ennemi ciblé. N'affecte pas les familiers ni les ennemis de niveau supérieur à {0}.
+SpellDescription.Fear.AreaTarget:						Un sort de terreur de zone centré sur le lanceur, effrayant les monstres ennemis dans un rayon de {1} unités. N'affecte pas les familiers ni les ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.SingleTarget:				Faites fuir de terreur un familier ennemi ciblé. N'affecte pas les familiers ennemis de niveau supérieur à {0}.
+SpellDescription.FearServant.AreaTarget:				Un sort de terreur de zone centré sur le lanceur, effrayant les familiers ennemis dans un rayon de {1} unités. N'affecte pas les familiers ennemis de niveau supérieur à {0}.
 SpellDescription.FearServant.SingleTarget&Npc:			Effraie l'ennemi ciblé. N'affecte pas les ennemis de niveau supérieur à {0}.
 SpellDescription.FearServant.AreaTarget&Npc:			Un sort de terreur de zone centré sur le lanceur, effrayant les ennemis dans un rayon de {1} unités. N'affecte pas les ennemis de niveau supérieur à {0}.
 SpellDescription.FearServant.PetDescription:			Sous l'effet de la terreur, les familiers ne peuvent pas être contrôlés ni libérés par leur maître.
@@ -261,6 +261,16 @@ SpellDescription.Occultist.Summon.ImageOfArawn1:		Invoquez un Prêtre d'Arawn d�
 SpellDescription.Occultist.Summon.ImageOfArawn2:		Forme Esprit : l'Image d'Arawn obtient des sorts supplémentaires pour guérir le poison, les maladies, la maladie de résurrection, et peut dissiper la myopie.  
 SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Invoquez une Succube démoniaque à votre service. La Succube hypnotise sa cible.
 SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Forme Esprit : le Démon Archi gagne un puissant affaiblissement de Dex/Qui et peut dissiper la myopie.
+SpellDescription.Occultist.SpiritShapeShift1:			Prenez la forme d'un Esprit fantomatique. {0}% des dégâts reçus sont absorbés puis convertis en mana.
+SpellDescription.Occultist.SpiritShapeShift2:			Votre régénération de mana est accrue de {0} par niveau, tandis que votre détection des ennemis furtifs augmente de {1}%.
+SpellDescription.Occultist.SpiritShapeShift3:			Vos serviteurs bénéficient également d'une meilleure robustesse et obtiennent des capacités supplémentaires.
+SpellDescription.Occultist.ChtonicShapeShift1:			Incarnez un Chevalier Chtonique. Votre facteur d'armure augmente de {0} par niveau. Votre santé, votre facteur d'armure et vos compétences d'armes sont chacun augmentés de {1}%, votre absorption de mêlée de {2}%, et vos résistances magiques secondaires de {3}%.  
+SpellDescription.Occultist.ChtonicShapeShift2:			Vous gagnez également la capacité de parer les attaques.
+SpellDescription.Occultist.DecrepitShapeShift1:			Incarnez un Mage Décrépit. Vos dégâts magiques sont augmentés de {0}%.
+SpellDescription.Occultist.DecrepitShapeShift2:			Votre absorption d'armure est augmentée de {0}%.
+SpellDescription.Occultist.DecrepitShapeShift3:			Les attaquants en mêlée ont {0}% de chance d'être affectés par une maladie lorsqu'ils vous frappent, et votre chair putréfiée se régénère, augmentant la régénération de santé de {1}.
+SpellDescription.Occultist.BringerOfDeath1:				Incarnez le Porteur de Mort. Vos sorts ne peuvent être interrompus mais n'atteignent que {0}% de leur puissance, et vous subissez {1}% de dégâts en moins qu'ils soient magiques ou physiques.
+SpellDescription.Occultist.BringerOfDeath2:				Votre vitesse d'attaque en mêlée augmente de {0}%. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.  
 
 
 # ML Spells ShortDescriptions
