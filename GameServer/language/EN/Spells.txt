@@ -273,7 +273,7 @@ SpellDescription.Occultist.DecrepitShapeShift1:			Become a Decrepit Magus. Your 
 SpellDescription.Occultist.DecrepitShapeShift2:			Your armor absorption is increased by {0}%.
 SpellDescription.Occultist.DecrepitShapeShift3:			Melee attackers have a {0}% chance to become diseased when they strike you, and your rotted flesh regenerates, increasing health regeneration by {1}.
 SpellDescription.Occultist.BringerOfDeath1:				Become the Bringer of Death. Your spell casts ignore interruption but reach only {0}% of their potency and you take {1}% less damage from all sources.
-SpellDescription.Occultist.BringerOfDeath2:				Your melee attack speed increases by {0}%. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.
+SpellDescription.Occultist.BringerOfDeath2:				Your movement speed increases by {0}%, even in speedwarps and while in combat. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.
 
 
 # ML Spells ShortDescriptions

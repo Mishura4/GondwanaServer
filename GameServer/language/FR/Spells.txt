@@ -270,7 +270,7 @@ SpellDescription.Occultist.DecrepitShapeShift1:			Incarnez un Mage Décrépit. V
 SpellDescription.Occultist.DecrepitShapeShift2:			Votre absorption d'armure est augmentée de {0}%.
 SpellDescription.Occultist.DecrepitShapeShift3:			Les attaquants en mêlée ont {0}% de chance d'être affectés par une maladie lorsqu'ils vous frappent, et votre chair putréfiée se régénère, augmentant la régénération de santé de {1}.
 SpellDescription.Occultist.BringerOfDeath1:				Incarnez le Porteur de Mort. Vos sorts ne peuvent être interrompus mais n'atteignent que {0}% de leur puissance, et vous subissez {1}% de dégâts en moins qu'ils soient magiques ou physiques.
-SpellDescription.Occultist.BringerOfDeath2:				Votre vitesse d'attaque en mêlée augmente de {0}%. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.  
+SpellDescription.Occultist.BringerOfDeath2:				Votre vitesse de mouvement augmente de {0}%, même en speedwarps ou en combat. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.  
 
 
 # ML Spells ShortDescriptions

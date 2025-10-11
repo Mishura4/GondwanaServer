@@ -34,7 +34,7 @@ namespace DOL.GS.Spells
         private const int DISEASE_PROC_CHANCE = 50;
 
         private int _absorbPct;
-        private int _meleeSpeedBonus;
+        private double _movementSpeedBonus;
         private bool _hookedEvents;
         private float _regenMult;
         private int _spellDmgPct;
@@ -43,8 +43,8 @@ namespace DOL.GS.Spells
         {
             Priority = 11;
 
-            // --- Melee speed (haste) from Spell.Value ---
-            _meleeSpeedBonus = Math.Max(0, (int)Spell.Value);
+            // --- Max speed from Spell.Value ---
+            _movementSpeedBonus = Math.Max(1.00, 1.00 + (Spell.Value / 100));
             
             // --- Magical-only potency: write NEGATIVE bonuses so calculators reduce output ---
             _spellDmgPct = PotencyToNegativeBonus();
@@ -89,9 +89,14 @@ namespace DOL.GS.Spells
         protected void ApplyFormEffects(GameLiving living, bool apply)
         {
             var mult = (sbyte)(apply ? 1 : -1);
-            
-            if (_meleeSpeedBonus > 0)
-                living.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] += _meleeSpeedBonus * mult;
+
+            if (_movementSpeedBonus > 0)
+            {
+                if (apply)
+                    living.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, this, _movementSpeedBonus);
+                else
+                    living.BuffBonusMultCategory1.Remove((int)eProperty.MaxSpeed, this);
+            }
 
             if (Math.Abs(_regenMult) > 0.0001f)
                 living.BuffBonusMultCategory1.Set((int)eProperty.HealthRegenerationRate, this, _regenMult * mult);
@@ -236,11 +241,11 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             int potency = Math.Max(0, Math.Min(100, (int)Spell.Damage));
-            int meleeHaste = Math.Max(0, (int)Spell.Value);
+            int moveSpeed = Math.Max(0, (int)Spell.Value);
             int absorb = Math.Max(0, (int)Spell.AmnesiaChance);
 
             string line1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.BringerOfDeath1", potency, absorb);
-            string line2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.BringerOfDeath2", meleeHaste);
+            string line2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Occultist.BringerOfDeath2", moveSpeed);
 
             return line1 + "\n\n" + line2;
         }

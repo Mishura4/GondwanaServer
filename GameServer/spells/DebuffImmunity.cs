@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
@@ -104,7 +104,7 @@ namespace DOL.GS.Spells
         {
             int baseResistChance = base.CalculateSpellResistChance(target);
 
-            var resistDebuff = FindEffectOnTarget(target, typeof(AbstractResistDebuff));
+            var resistDebuff = FindEffectOnTarget<AbstractResistDebuff>(target);
             if (resistDebuff != null)
             {
                 baseResistChance += (int)resistDebuff.Spell.Value;

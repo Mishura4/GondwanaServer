@@ -73,7 +73,7 @@ namespace DOL.GS.PropertyCalc
                 if (ServerProperties.Properties.ENABLE_PVE_SPEED &&
                     !player.InCombat && !player.IsStealthed && !player.CurrentRegion.IsRvR)
                 {
-                    if (speed < 1.25 && speed >= 1)
+                    if (speed is < 1.25 and >= 1)
                         speed = 1.25; // new run speed is 125% when no buff
                 }
 
@@ -169,9 +169,12 @@ namespace DOL.GS.PropertyCalc
                     speed *= 0.2 + healthPercent * (0.8 / 0.33); //33%hp=full speed 0%hp=20%speed
                 }
             }
+            
+            var specBonus = living.SpecBuffBonusCategory[property];
 
             speed = living.MaxSpeedBase * speed + 0.5; // 0.5 is to fix the rounding error when converting to int so root results in speed 2 (191*0.01=1.91+0.5=2.41)
             speed += itemSpeedBonus;
+            speed += specBonus;
 
             GameSpellEffect iConvokerEffect = SpellHandler.FindEffectOnTarget(living, "SpeedWrap");
             if (iConvokerEffect != null && living.EffectList.GetOfType<ChargeEffect>() == null)

@@ -928,7 +928,7 @@ namespace DOL.GS.Spells
                     if (!quiet) MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.CantCastInSiegeram"), eChatType.CT_System);
                     return false;
                 }
-                GameSpellEffect naturesWomb = FindEffectOnTarget(Caster, typeof(NaturesWombEffect));
+                GameSpellEffect naturesWomb = FindEffectOnTarget(Caster, e => e is NaturesWombEffect);
                 if (naturesWomb != null)
                 {
                     //[StephenxPimentel]
