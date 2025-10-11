@@ -2304,7 +2304,7 @@ namespace DOL.GS.PacketHandler
 
             // Get Skills as "Usable Skills" which are in network order ! (with forced update)
             List<Tuple<Skill, Skill>> usableSkills = m_gameClient.Player.GetAllUsableSkills(true).ToList();
-            usableSkills.RemoveAll(kv => kv.Item1.Hidden || kv.Item2.Hidden);
+            usableSkills.RemoveAll(kv => kv.Item1.Hidden);
 
             bool sent = false; // set to true once we can't send packet anymore !
             int index = 0; // index of our position in the list !
