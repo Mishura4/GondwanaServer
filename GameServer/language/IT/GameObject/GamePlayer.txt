@@ -1,0 +1,510 @@
+# GAMEPLAYER (IT)
+GameObjects.GamePlayer.AddAbility.YouLearn:            Impari l'abilità {0}.
+GameObjects.GamePlayer.AddSpecialisation.YouLearn:     Impari la specializzazione {0}.
+GameObjects.GamePlayer.AddSpellLine.YouLearn:          Impari la linea di incantesimi {0}.
+
+GameObjects.GamePlayer.ApplyPoison.CantApplyRecentCombat:   Sei stato in combattimento di recente e per ora non puoi applicare veleni.
+GameObjects.GamePlayer.ApplyPoison.CantPoisonWeapon:        Non puoi usare il veleno su quest'arma.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoison:           Non puoi usare questo veleno.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Non puoi usare questi veleni.
+GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   I veleni possono essere applicati solo alle armi.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Non puoi riapplicare il veleno su quest'arma.
+GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Non puoi avvelenare il tuo/la tua {0}!
+
+GameObjects.GamePlayer.AblativeArmor.Target:        La tua armatura assorbe {0} danni aggiuntivi grazie al tuo bonus ablativo!
+GameObjects.GamePlayer.AblativeArmor.Attacker:      L'armatura di {0} assorbe {1} danni aggiuntivi grazie al suo bonus ablativo!
+
+GameObjects.GamePlayer.Attack.AlreadyDead:          {0} è già morto.
+GameObjects.GamePlayer.Attack.Blocked:              {0} blocca il tuo attacco.
+GameObjects.GamePlayer.Attack.CantBeAttacked:       Questo non può essere attaccato.
+GameObjects.GamePlayer.Attack.CantCritical:         Non puoi infliggere un colpo critico al tuo bersaglio; esegui un colpo normale.
+GameObjects.GamePlayer.Attack.CantSeeTarget:        Non puoi vedere il tuo bersaglio.
+GameObjects.GamePlayer.Attack.CantUseQuiver:        Non puoi usare le munizioni selezionate con quest'arma.
+GameObjects.GamePlayer.Attack.CouldRepair:          Il tuo/la tua {0} può essere riparato/a.
+GameObjects.GamePlayer.Attack.Critical:             Infliggi un colpo critico a {0} e causi {1} danni aggiuntivi!
+GameObjects.GamePlayer.Attack.Evade:                {0} ti attacca, ma schivi!
+GameObjects.GamePlayer.Attack.Evaded:               {0} schiva il tuo attacco!
+GameObjects.GamePlayer.Attack.Fumble:               Inciampi e ti serve un momento per riprenderti!
+GameObjects.GamePlayer.Attack.Fumbled:              {0} inciampa!
+GameObjects.GamePlayer.Attack.HitsYour:             {0} colpisce il tuo/la tua {1} per {2}{3} danni!
+GameObjects.GamePlayer.Attack.HitsYou:              {0} ti colpisce per {1}{2} danni!
+GameObjects.GamePlayer.Attack.HitsYouCritical:      {0} ti colpisce criticamente per {1} danni aggiuntivi!
+GameObjects.GamePlayer.Attack.Intercepted:          {0} si mette davanti a {1} e intercetta il colpo!
+GameObjects.GamePlayer.Attack.InterceptedHit:       {0} {1}{2}, ma colpisci {3} per {4}{5} danni!
+GameObjects.GamePlayer.Attack.InterceptHit:         {0} {1}{2} e colpisci per {3}{4} danni!
+GameObjects.GamePlayer.Attack.Interrupted:          {0} ti attacca e il tuo/la tua {1} viene interrotto/a!
+GameObjects.GamePlayer.Attack.InterruptedCrafting:  Interrompi la creazione dell'oggetto.
+GameObjects.GamePlayer.Attack.Location.Arm:         Braccio
+GameObjects.GamePlayer.Attack.Location.Foot:        Piede
+GameObjects.GamePlayer.Attack.Location.Hand:        Mano
+GameObjects.GamePlayer.Attack.Location.Head:        Testa
+GameObjects.GamePlayer.Attack.Location.Leg:         Gamba
+GameObjects.GamePlayer.Attack.Location.Torso:       Torso
+GameObjects.GamePlayer.Attack.Miss:                 Mancato.
+GameObjects.GamePlayer.Attack.Missed:               {0} ti attacca, ma manca il bersaglio.
+GameObjects.GamePlayer.Attack.MustSelectQuiver:     Devi selezionare uno scomparto nel tuo faretra.
+GameObjects.GamePlayer.Attack.NeedRepair:           Il tuo/la tua {0} necessita di riparazioni.
+GameObjects.GamePlayer.Attack.NeedRepairDire:       Il tuo/la tua {0} necessita urgentemente di riparazioni.
+GameObjects.GamePlayer.Attack.NeedTarget:           Devi selezionare un bersaglio da attaccare.
+GameObjects.GamePlayer.Attack.NotInView:            {0} non è in vista.
+GameObjects.GamePlayer.Attack.Parried:              {0} para il tuo attacco.
+GameObjects.GamePlayer.Attack.Parry:                {0} ti attacca, ma pari il colpo!
+GameObjects.GamePlayer.Attack.ReadyToFire:          Sei pronto a sparare.
+GameObjects.GamePlayer.Attack.StrafMiss:            Il tuo movimento laterale ti ha fatto mancare il colpo.
+GameObjects.GamePlayer.Attack.TooFarAway:           {0} è troppo lontano per essere attaccato.
+GameObjects.GamePlayer.Attack.TooTired:             Sei troppo stanco per mantenere a lungo il tiro.
+GameObjects.GamePlayer.Attack.Type.Shot:            Tiro
+GameObjects.GamePlayer.Attack.Type.Throw:           Lancio
+GameObjects.GamePlayer.Attack.WithYour:             con il/la tuo/a
+GameObjects.GamePlayer.Attack.YouAttack:            Attacchi
+GameObjects.GamePlayer.Attack.YouShot:              Spari a
+GameObjects.GamePlayer.Attack.CounterAttackSuccess: Usi {0} per contrattaccare.
+GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:   Non puoi usare lo stile di contrattacco con l'arma attuale.
+GameObjects.GamePlayer.Attack.CounterAttackNoStyle:       Nessuno stile di contrattacco trovato per la tua classe.
+GameObjects.GamePlayer.Attack.CounterAttackByEnemy:       {0} esegue un contrattacco!
+
+GameObjects.GamePlayer.Bind.Bound:          Il tuo spirito è ora vincolato a questa pietra d'anima.
+GameObjects.GamePlayer.Bind.CantBindDead:   La morte ti impedisce di vincolare il tuo spirito alla pietra d'anima.
+GameObjects.GamePlayer.Bind.CantHere:       Non c'è alcuna pietra d'anima vicina a cui vincolarti.
+GameObjects.GamePlayer.Bind.LastBindPoint:  Ultimo punto di vincolo: {0}.
+GameObjects.GamePlayer.Bind.MustWait:       Devi attendere {0} secondi prima di poterti vincolare di nuovo.
+
+GameObjects.GamePlayer.CastSpell.AlreadyCastFollow:     Stai già lanciando un incantesimo! Questo incantesimo è stato messo in coda.
+GameObjects.GamePlayer.CastSpell.AlreadyCastNoQueue:    Stai già lanciando un incantesimo. Per attivare la coda degli incantesimi, usa “/noqueue”.
+GameObjects.GamePlayer.CastSpell.AlreadyChosenSpells:   Hai già scelto i tuoi incantesimi per questa camera.
+GameObjects.GamePlayer.CastSpell.AlreadyPlaySong:       Stai già suonando una melodia.
+GameObjects.GamePlayer.CastSpell.CantCastMezzed:        Non puoi lanciare incantesimi mentre sei ipnotizzato.
+GameObjects.GamePlayer.CastSpell.CantCastStunned:       Non puoi lanciare incantesimi mentre sei stordito.
+GameObjects.GamePlayer.CastSpell.CantCastFumblingWords: La tua invocazione fallisce e non puoi lanciare il tuo incantesimo!
+GameObjects.GamePlayer.CastSpell.CantSpellDirectly:     Non puoi lanciare direttamente questo incantesimo!
+GameObjects.GamePlayer.CastSpell.FollowSpell:           Hai preparato un {0} come incantesimo di seguito!
+GameObjects.GamePlayer.CastSpell.NotAFollowSpell:       Non puoi preparare questo incantesimo come incantesimo di seguito!
+GameObjects.GamePlayer.CastSpell.PrimarySpellFirst:     Devi salvare prima un incantesimo principale!
+GameObjects.GamePlayer.CastSpell.PrepareSecondarySpell: Lo prepari come incantesimo secondario!
+GameObjects.GamePlayer.CastSpell.SelectSecondSpell:     Scegli il secondo incantesimo per il tuo/la tua {0}.
+GameObjects.GamePlayer.CastSpell.SpellInChamber:        Carichi {0} nel tuo/la tua {1}.
+GameObjects.GamePlayer.CastSpell.SpellNotInChamber:     Questo incantesimo non può essere salvato in questa camera.
+GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:   Solo un incantesimo secondario può seguire l'incantesimo lanciato!
+GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:   Stai già lanciando un incantesimo.
+GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast:    Devi attendere {0} secondi per lanciare un incantesimo!
+
+GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:          Il tuo bersaglio è troppo lontano perché il tuo compagno lo possa attaccare.
+GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:   Devi selezionare una destinazione per la tua creatura.
+GameObjects.GamePlayer.CommandNpcAttack.KillTarget:                Ordini a {0} di uccidere il tuo bersaglio!
+GameObjects.GamePlayer.CommandNpcAttack.IsConfused:                Il tuo/la tua {0} è confuso/a!
+GameObjects.GamePlayer.CommandNpcAttack.FollowYou:                 Ordini a {0} di seguirti!
+GameObjects.GamePlayer.CommandNpcAttack.Stay:                      Ordini a {0} di restare!
+GameObjects.GamePlayer.CommandNpcAttack.ComeHere:                  Ordini a {0} di venire da te.
+GameObjects.GamePlayer.CommandNpcAttack.GoToTarget:                Ordini a {0} di andare al tuo bersaglio.
+GameObjects.GamePlayer.CommandNpcAttack.Passive:                   Ordini a {0} di ritirarsi dal combattimento!
+GameObjects.GamePlayer.CommandNpcAttack.Aggressive:                Ordini a {0} di attaccare tutti i nemici!
+GameObjects.GamePlayer.CommandNpcAttack.Denfensive:                Ordini a {0} di difenderti!
+
+GameObjects.GamePlayer.CraftItem.DontHaveAbilityMake:              Non possiedi l'abilità necessaria per creare questo oggetto.
+GameObjects.GamePlayer.CurrentTitle.TitleCleared:                  Il tuo titolo è stato rimosso.
+
+GameObjects.GamePlayer.Die.CorpseLies:             {0} è morto. Il suo cadavere giace a terra.
+GameObjects.GamePlayer.Die.DeadRVR:                Sei caduto in battaglia per il tuo regno e non perdi esperienza.
+GameObjects.GamePlayer.Die.DeathN1:                Questa è la tua prima morte a questo livello. Le perdite di esperienza e costituzione sono fortemente ridotte.
+GameObjects.GamePlayer.Die.DeathN2:                Questa è la tua seconda morte a questo livello. Le perdite di esperienza e costituzione sono ridotte.
+GameObjects.GamePlayer.Die.DuelDefeated:           {0} è stato sconfitto da {1} in duello!
+GameObjects.GamePlayer.Die.DuelWinner:             {0} vince il duello!
+GameObjects.GamePlayer.Die.Killed:                 {0} è appena stato ucciso.
+GameObjects.GamePlayer.Die.KilledBy:               {0} è stato appena ucciso da {1}.
+GameObjects.GamePlayer.Die.KilledByLocation:       {0} è stato appena ucciso da {1} presso {2}.
+GameObjects.GamePlayer.Die.KilledLocation:         {0} è stato appena ucciso presso {1}.
+GameObjects.GamePlayer.Die.LoseExperience:         Perdi esperienza.
+GameObjects.GamePlayer.Die.ReleaseToReturn:        Sei morto. Digita “/release” per tornare alla tua pietra d'anima.
+GameObjects.GamePlayer.Die.YouKilled:              Hai ucciso {0}.
+
+GameObjects.GamePlayer.DrowningTimerCallback.CannotBreath:  Non puoi respirare sott'acqua e ingoi acqua!
+GameObjects.GamePlayer.DrowningTimerCallback.Take5%Damage:  Perdi il 5% dei tuoi punti vita massimi.
+
+GameObjects.GamePlayer.DuelStop.DuelEnds:                     Il tuo duello termina.
+
+GameObjects.GamePlayer.GainBountyPoints.YouGet:               Ottieni {0} punti taglia.
+GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus:       Ottieni un bonus di {0} punti taglia grazie ai tuoi territori.
+
+GameObjects.GamePlayer.GainCraftingSkill.GainSkill:           Ottieni un aumento di abilità in {0}. ({1})
+GameObjects.GamePlayer.GainCraftingSkill.ReachedSkill:        {0} ha raggiunto il titolo “Leggendario” (1000 punti abilità) in {1}.
+
+GameObjects.GamePlayer.GainExperience.CampBonus:              ({0} bonus accampamento)
+GameObjects.GamePlayer.GainExperience.CannotRaise:            Non puoi raggiungere il livello 6 prima di scegliere una specializzazione.
+GameObjects.GamePlayer.GainExperience.GroupBonus:             ({0} bonus gruppo)
+GameObjects.GamePlayer.GainExperience.OutpostBonus:           ({0} bonus avamposto)
+GameObjects.GamePlayer.GainExperience.RoyaumesouspeupleBonus: Ricevi un bonus di {0} per regni sotto-popolati!
+GameObjects.GamePlayer.GainExperience.TalkToTrainer:          Parla con il tuo allenatore per maggiori informazioni.
+GameObjects.GamePlayer.GainExperience.YouGet:                 Ottieni {0} punti esperienza.
+GameObjects.GamePlayer.GainExperience.BonusRenaissance:       di cui {0} punti bonus da Rinascita
+GameObjects.GamePlayer.GainExperience.BonusTerritory:         di cui {0} punti bonus da Territori
+GameObjects.GamePlayer.GainExperience.BonusGameEvent:         di cui {0} punti bonus da Eventi
+
+GameObjects.GamePlayer.GainRealmPoints.Earned:                {0} ha guadagnato 1.000.000 punti reame in {1}.
+GameObjects.GamePlayer.GainRealmPoints.GainBonus:             Ottieni un bonus di +{0} a tutte le tue specializzazioni!
+GameObjects.GamePlayer.GainRealmPoints.GainedLevel:           Hai guadagnato un livello reame!
+GameObjects.GamePlayer.GainRealmPoints.GainedRank:            Hai ottenuto un nuovo rango e titolo reame!
+GameObjects.GamePlayer.GainRealmPoints.NewRealmTitle:         Il tuo nuovo titolo reame è {0}.
+GameObjects.GamePlayer.GainRealmPoints.ReachedRank:           Hai raggiunto il rango reame {0}L0!
+GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:       {0} ha raggiunto il rango reame {1:#L#} in {2}!
+GameObjects.GamePlayer.GainRealmPoints.YouGet:                Ottieni {0} punti reame!
+GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:           Ottieni {0} punti reame bonus grazie ai bonus di area!
+GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP:      Ottieni {0} punti reame per la difesa del tuo territorio!
+GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:     Ottieni {0} punti reame per aver curato un membro del tuo reame!
+
+GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:   Esamini {0}. {1} è membro di un reame nemico!
+GameObjects.GamePlayer.GetExamineMessages.NeutralMember:      Esamini {0}. {1} non appartiene a nessuna gilda.
+GameObjects.GamePlayer.GetExamineMessages.OtherGuildMember:   Esamini {0}. {1} è membro della gilda: {2}.
+GameObjects.GamePlayer.GetExamineMessages.RealmMember:        Esamini {0}. {1} è un/una {2} del tuo reame.
+GameObjects.GamePlayer.GetExamineMessages.YouExamine:         Esamini {0}.
+GameObjects.GamePlayer.GetExamineMessages.YourGuildMember:    Esamini {0}. {1} è un/una {2} della tua gilda.
+
+GameObjects.GamePlayer.IsCloakHoodUp.NowWear:                 Ora indossi il cappuccio alzato.
+GameObjects.GamePlayer.IsCloakHoodUp.NoLongerWear:            Ora indossi il cappuccio abbassato.
+
+GameObjects.GamePlayer.IsCloakInvisible.Invisible:            Ora non vedi il tuo mantello.
+GameObjects.GamePlayer.IsCloakInvisible.Visible:              Ora rivedi il tuo mantello.
+
+GameObjects.GamePlayer.IsHelmInvisible.Invisible:             Ora non vedi il tuo elmo.
+GameObjects.GamePlayer.IsHelmInvisible.Visible:               Ora rivedi il tuo elmo.
+
+GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Smetti di cavalcare.
+GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Sali in sella.
+GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Devi essere equipaggiato con un cavallo.
+GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Devi essere a cavallo per usare questo inventario.
+
+GameObjects.GamePlayer.ItemBonusName.Bonus1:    Forza
+GameObjects.GamePlayer.ItemBonusName.Bonus2:    Destrezza
+GameObjects.GamePlayer.ItemBonusName.Bonus3:    Costituzione
+GameObjects.GamePlayer.ItemBonusName.Bonus4:    Agilità
+GameObjects.GamePlayer.ItemBonusName.Bonus5:    Intelligenza
+GameObjects.GamePlayer.ItemBonusName.Bonus6:    Pietà
+GameObjects.GamePlayer.ItemBonusName.Bonus7:    Empatia
+GameObjects.GamePlayer.ItemBonusName.Bonus8:    Carisma
+GameObjects.GamePlayer.ItemBonusName.Bonus9:    Mana
+GameObjects.GamePlayer.ItemBonusName.Bonus10:   PV (Punti Vita)
+GameObjects.GamePlayer.ItemBonusName.Bonus11:   Resistenza Corpo
+GameObjects.GamePlayer.ItemBonusName.Bonus12:   Resistenza Freddo
+GameObjects.GamePlayer.ItemBonusName.Bonus13:   Resistenza Contundente
+GameObjects.GamePlayer.ItemBonusName.Bonus14:   Resistenza Energia
+GameObjects.GamePlayer.ItemBonusName.Bonus15:   Resistenza Calore
+GameObjects.GamePlayer.ItemBonusName.Bonus16:   Resistenza Materia
+GameObjects.GamePlayer.ItemBonusName.Bonus17:   Resistenza Taglio
+GameObjects.GamePlayer.ItemBonusName.Bonus18:   Resistenza Spirito
+GameObjects.GamePlayer.ItemBonusName.Bonus19:   Resistenza Perforazione
+GameObjects.GamePlayer.ItemBonusName.Bonus119:  Velocità accumulo tensione
+GameObjects.GamePlayer.ItemBonusName.Bonus147:  Tasso massimo di concentrazione
+GameObjects.GamePlayer.ItemBonusName.Bonus148:  Bonus fattore armatura (FA)
+GameObjects.GamePlayer.ItemBonusName.Bonus149:  Bonus assorbimento (Ass)
+GameObjects.GamePlayer.ItemBonusName.Bonus150:  Velocità rigenerazione PV
+GameObjects.GamePlayer.ItemBonusName.Bonus151:  Velocità rigenerazione mana
+GameObjects.GamePlayer.ItemBonusName.Bonus152:  Velocità rigenerazione resistenza
+GameObjects.GamePlayer.ItemBonusName.Bonus153:  Gittata incantesimi
+GameObjects.GamePlayer.ItemBonusName.Bonus154:  Gittata armi a distanza
+GameObjects.GamePlayer.ItemBonusName.Bonus155:  Velocità corpo a corpo
+GameObjects.GamePlayer.ItemBonusName.Bonus156:  Volontà
+GameObjects.GamePlayer.ItemBonusName.Bonus169:  Probabilità di schivata
+GameObjects.GamePlayer.ItemBonusName.Bonus170:  Probabilità di blocco (Scudi)
+GameObjects.GamePlayer.ItemBonusName.Bonus171:  Probabilità di parata
+GameObjects.GamePlayer.ItemBonusName.Bonus175:  Probabilità di colpire in combattimento
+GameObjects.GamePlayer.ItemBonusName.Bonus181:  Tasso successo incantesimi
+GameObjects.GamePlayer.ItemBonusName.Bonus197:  Resistenza agli attacchi perforanti
+GameObjects.GamePlayer.ItemBonusName.Bonus249:  Resistenza Essenza
+
+GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Sei nella lava e subisci danni!
+GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Subisci danni pari al 34% dei tuoi punti vita massimi.
+
+GameObjects.GamePlayer.OnItemEquipped.Increased:      Il tuo/la tua {0} è aumentato/a.
+GameObjects.GamePlayer.OnItemEquipped.Magic:          La magia di {0} scorre nelle tue vene.
+GameObjects.GamePlayer.OnItemEquipped.WieldBothHands: Brandisci il/la tuo/a {0} a due mani.
+GameObjects.GamePlayer.OnItemEquipped.WieldLeftHand:  Brandisci il/la tuo/a {0} nella mano sinistra.
+GameObjects.GamePlayer.OnItemEquipped.WieldRightHand: Brandisci il/la tuo/a {0} nella mano destra.
+
+GameObjects.GamePlayer.OnItemUnequipped.Decreased:    Il tuo/la tua {0} è diminuito/a.
+GameObjects.GamePlayer.OnItemUnequipped.BothHandsFree: Riponi {0}. Ora hai le mani libere.
+GameObjects.GamePlayer.OnItemUnequipped.LeftHandFree:  Riponi {0} dalla tua mano sinistra.
+GameObjects.GamePlayer.OnItemUnequipped.RightHandFree: Riponi {0} dalla tua mano destra.
+
+GameObjects.GamePlayer.OnLevelUp.AttainedRank:        Hai raggiunto il rango {0}!
+GameObjects.GamePlayer.OnLevelUp.FreeLevelEligible:   Hai diritto a un livello gratuito! Clicca sul tuo allenatore per riceverlo (oppure digita “/freelevel decline” per rifiutare).
+GameObjects.GamePlayer.OnLevelUp.HitsRaise:           I tuoi punti vita aumentano di {0}.
+GameObjects.GamePlayer.OnLevelUp.PowerRaise:          I tuoi punti mana aumentano di {0}.
+GameObjects.GamePlayer.OnLevelUp.Reached:             {0} ha raggiunto il livello {1} in {2}!
+GameObjects.GamePlayer.OnLevelUp.SecondStage:         Hai raggiunto la seconda fase del tuo livello {0}!
+GameObjects.GamePlayer.OnLevelUp.StatRaise:           I tuoi attributi aumentano!
+GameObjects.GamePlayer.OnLevelUp.YouAchieved:         Hai completato il livello {0}!
+GameObjects.GamePlayer.OnLevelUp.YouGetSpec:          Ottieni {0} punti specializzazione da spendere a questo livello!
+GameObjects.GamePlayer.OnLevelUp.YouRaise:            Sei salito al livello {0}!
+GameObjects.GamePlayer.OnRenaissance:                 Hai appena completato la tua Rinascita!
+
+GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} è stato disconnesso dal server!
+
+GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Ti stai muovendo e non puoi richiamare la tua cavalcatura!
+GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Ti muovi e interrompi la tua creazione.
+
+GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} si allena in varie specializzazioni.
+GameObjects.GamePlayer.OnSkillTrained.YouHave:         Ti restano {0} punti specializzazione a questo livello.
+GameObjects.GamePlayer.OnSkillTrained.YouSpend:        Spendi {0} punti e aumenti la tua specializzazione in {1}.
+
+GameObjects.GamePlayer.OpenSelfCraft.AlreadySelfCrafting: Stai già incantando qualcosa.
+GameObjects.GamePlayer.OpenSelfCraft.CanOnlyCraftBackpack: Puoi combinare oggetti solo nel tuo zaino.
+
+GameObjects.GamePlayer.PickupObject.Autosplit:             (Divisione automatica) {0} va a {1}.
+GameObjects.GamePlayer.PickupObject.BackpackFull:          Il tuo inventario è pieno; devi liberare spazio.
+GameObjects.GamePlayer.PickupObject.CantGetThat:           Non puoi raccogliere quello.
+GameObjects.GamePlayer.PickupObject.GroupMemberPicksUp:    {0} raccoglie {1}.
+GameObjects.GamePlayer.PickupObject.ItemBelowBGThreshold:  Questo oggetto è sotto il livello del tuo gruppo di battaglia.
+GameObjects.GamePlayer.PickupObject.LootDoesntBelongYou:   Questo bottino non ti appartiene — non puoi prenderlo.
+GameObjects.GamePlayer.PickupObject.MustHaveTarget:        Ti serve un bersaglio per raccogliere qualcosa.
+GameObjects.GamePlayer.PickupObject.NoOneGroupWantsMoney:  Nessuno nel gruppo vuole il denaro.
+GameObjects.GamePlayer.PickupObject.NoOneWantsThis:        Nessuno nel gruppo vuole {0}.
+GameObjects.GamePlayer.PickupObject.ObjectTooFarAway:      {0} è troppo lontano per essere raccolto.
+GameObjects.GamePlayer.PickupObject.TooFarFromBoat:        Sei troppo lontano dalla barca per salire a bordo.
+GameObjects.GamePlayer.PickupObject.YouGet:                Raccogli {0} e lo riponi nel tuo zaino.
+GameObjects.GamePlayer.PickupObject.YouPickUp:             Raccogli {0}.
+GameObjects.GamePlayer.PickupObject.YourLootShare:         La tua parte di bottino è {0}.
+GameObjects.GamePlayer.PickupObject.GuildDueTax:           La tua tassa di {0} va nella banca della gilda.
+GameObjects.GamePlayer.PickupObject.CannotDepositHere:     {0} non può essere depositato qui!
+GameObjects.GamePlayer.PickupObject.WaitToPickup:          Devi attendere {0} secondi per raccogliere {1}!
+GameObjects.GamePlayer.PickupObject.HeadPickedUp:          Hai recuperato la testa di {0}.
+GameObjects.GamePlayer.PickupObject.HeadInventoryFull:     Non hai potuto recuperare la testa di {0}; il tuo inventario è pieno!
+
+GameObjects.GamePlayer.Pray.AlreadyPraying:            Stai già pregando.
+GameObjects.GamePlayer.Pray.Begin:                     Cominci a pregare.
+GameObjects.GamePlayer.Pray.CantPrayNow:               Non puoi pregare ora.
+GameObjects.GamePlayer.Pray.GainBack:                  Le tue preghiere sono state ascoltate; recuperi esperienza.
+GameObjects.GamePlayer.Pray.MustGetCloser:             Devi avvicinarti alla tua tomba per pregare.
+GameObjects.GamePlayer.Pray.MustStandingStill:         Devi restare fermo per pregare.
+GameObjects.GamePlayer.Pray.NeedTarget:                Devi selezionare una tomba per pregare.
+GameObjects.GamePlayer.Pray.SelectGrave:               Seleziona la tua tomba per pregare.
+GameObjects.GamePlayer.Pray.CantPrayRiding:            Non puoi pregare a cavallo!
+
+GameObjects.GamePlayer.Pronoun.Female.Objective:       lei
+GameObjects.GamePlayer.Pronoun.Female.Possessive:      sua
+GameObjects.GamePlayer.Pronoun.Female.Subjective:      lei
+GameObjects.GamePlayer.Pronoun.Male.Objective:         lui
+GameObjects.GamePlayer.Pronoun.Male.Possessive:        suo
+GameObjects.GamePlayer.Pronoun.Male.Subjective:        egli
+
+GameObjects.GamePlayer.Quit.CantQuitCrafting:          Non puoi disconnetterti mentre stai creando.
+GameObjects.GamePlayer.Quit.CantQuitDead:              Non puoi disconnetterti dopo la tua morte improvvisa! Digita “/release” per rianimarti.
+GameObjects.GamePlayer.Quit.CantQuitInInstance:        Non puoi disconnetterti mentre sei in un'istanza!
+GameObjects.GamePlayer.Quit.CantQuitMount:             Non puoi disconnetterti mentre sei a cavallo.
+GameObjects.GamePlayer.Quit.RecentlyInCombat:          Sei stato di recente in combattimento; devi aspettare più a lungo per disconnetterti.
+GameObjects.GamePlayer.Quit.CantQuitStanding:          Devi restare fermo per disconnetterti.
+GameObjects.GamePlayer.Quit.YouWillQuit1:              Uscirai dal gioco tra {0} secondi.
+GameObjects.GamePlayer.Quit.YouWillQuit2:              Uscirai dal gioco tra {0} secondi. Digita “/stand” o muoviti per annullare.
+GameObjects.GamePlayer.Quit.CanTQuitDamned:            Non puoi disconnetterti; sei maledetto.
+GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease: Non puoi disconnetterti finché sei sotto l'incantesimo “{0}”.
+GameObjects.GamePlayer.Quit.CanTQuitStunned:           Non puoi disconnetterti; sei immobilizzato da un incantesimo.
+GameObjects.GamePlayer.Quit.CanTQuitMezzed:            Non puoi disconnetterti; stai dormendo.
+
+GameObjects.GamePlayer.RealmTitle.UnknownRealm:        Reame sconosciuto.
+
+GameObjects.GamePlayer.ReceiveItem.Receive:            Ricevi {0}.
+GameObjects.GamePlayer.ReceiveItem.ReceiveFrom:        Ricevi {0} da {1}.
+
+GameObjects.GamePlayer.ReceiveTradeItem.CantTrade:         Non puoi commerciare questo oggetto.
+GameObjects.GamePlayer.ReceiveTradeItem.StillSelfcrafting: Stai ancora incantando.
+
+GameObjects.GamePlayer.RefreshSpec.AfterBlocked:       Questo stile è migliore dopo che il tuo ultimo attacco è stato bloccato.
+GameObjects.GamePlayer.RefreshSpec.AfterEvaded:        Questo stile è migliore dopo che il tuo ultimo attacco è stato schivato.
+GameObjects.GamePlayer.RefreshSpec.AfterFumbles:       Questo stile è migliore dopo che il tuo ultimo attacco è completamente fallito.
+GameObjects.GamePlayer.RefreshSpec.AfterMissed:        Questo stile è migliore dopo che il tuo ultimo attacco è andato a vuoto.
+GameObjects.GamePlayer.RefreshSpec.AfterParried:       Questo stile è migliore dopo che il tuo ultimo attacco è stato parato.
+GameObjects.GamePlayer.RefreshSpec.AfterStyle:         Questo stile può essere usato solo dopo lo stile {0}.
+GameObjects.GamePlayer.RefreshSpec.TargetBlocked:      Questo stile è migliore dopo che l'ultimo attacco del tuo bersaglio è stato bloccato.
+GameObjects.GamePlayer.RefreshSpec.TargetEvaded:       Questo stile è migliore dopo che l'ultimo attacco del tuo bersaglio è stato schivato.
+GameObjects.GamePlayer.RefreshSpec.TargetFumbles:      Questo stile è migliore dopo che l'ultimo attacco del tuo bersaglio è completamente fallito.
+GameObjects.GamePlayer.RefreshSpec.TargetMisses:       Questo stile è migliore dopo che l'ultimo attacco del tuo bersaglio è andato a vuoto.
+GameObjects.GamePlayer.RefreshSpec.TargetHits:         Questo stile è migliore dopo che l'ultimo attacco del tuo bersaglio è andato a segno.
+GameObjects.GamePlayer.RefreshSpec.TargetParried:      Questo stile è migliore dopo che l'ultimo attacco del tuo bersaglio è stato parato.
+GameObjects.GamePlayer.RefreshSpec.TargetStyle:        Questo stile è migliore dopo che l'ultimo attacco del tuo bersaglio è stato uno stile.
+GameObjects.GamePlayer.RefreshSpec.YouLearn:           Impari lo stile di combattimento {0}.
+
+GameObjects.GamePlayer.Release.CantReleaseDuel:        Non puoi cambiare la tua resurrezione per una morte in duello!
+GameObjects.GamePlayer.Release.GraveErected:           Una tomba è apparsa nel punto della tua morte.
+GameObjects.GamePlayer.Release.LostConstitution:       Hai perso punti costituzione. Cerca un guaritore per recuperarli.
+GameObjects.GamePlayer.Release.NoLongerReleaseAuto:    Non verrai più rianimato automaticamente (rimangono {0} secondi).
+GameObjects.GamePlayer.Release.NotDead:                Non sei ancora morto.
+GameObjects.GamePlayer.Release.NoValidBindpoint:       Non sei vincolato a una pietra d'anima valida; verrai rianimato qui.
+GameObjects.GamePlayer.Release.ReturnToPray:           Torna alla tua tomba (/pray) per recuperare esperienza.
+GameObjects.GamePlayer.Release.SurroundingChange:      L'ambiente circostante cambia all'improvviso.
+GameObjects.GamePlayer.Release.WillReleaseAuto:        Verrai rianimato automaticamente tra {0} secondi.
+GameObjects.GamePlayer.Release.WillReleaseAutoCity:    Verrai rianimato automaticamente in città tra {0} secondi.
+GameObjects.GamePlayer.Release.WillReleaseIn:          Verrai rianimato tra {0} secondi.
+GameObjects.GamePlayer.Release.YouRelease:             Riporti il tuo corpo in vita.
+GameObjects.GamePlayer.Release.ReleaseToPortalKeep:    Verrai rianimato tra {0} secondi al forte di confine più vicino.
+GameObjects.GamePlayer.Release.ReleaseToHouse:         Verrai rianimato nella tua casa tra {0} secondi!
+
+GameObjects.GamePlayer.RemoveAbility.YouLose:          Perdi l'abilità {0}.
+GameObjects.GamePlayer.RemoveSpecialization.YouLose:   Perdi la specializzazione {0}.
+GameObjects.GamePlayer.RemoveSpellLine.YouLose:        Perdi la linea di incantesimi {0}.
+
+GameObjects.GamePlayer.SaveIntoDatabase.CharacterSaved: Il tuo personaggio è stato salvato.
+
+GameObjects.GamePlayer.Say.YouSay:                     Dici: “{0}”
+GameObjects.GamePlayer.SayReceive.Says:                {0} dice: “{1}”
+GameObjects.GamePlayer.SayReceive.FalseLanguage:       {0} dice qualcosa in una lingua che non capisci.
+
+GameObjects.GamePlayer.SendReceive.Sends:              {0} invia: “{1}”
+GameObjects.GamePlayer.SendReceive.FalseLanguage:      {0} invia qualcosa in una lingua che non capisci.
+GameObjects.GamePlayer.SendReceive.Afk:                {0} è AFK.
+GameObjects.GamePlayer.SendReceive.AfkMessage:         <AFK> {0} invia: “{1}”
+GameObjects.GamePlayer.Send.target.DontUnderstandYou:  {0} non ti capisce.
+GameObjects.GamePlayer.Send.YouSendTo:                 Invi “{0}” a {1}.
+
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget: Libero il controllo del tuo bersaglio.
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget2: Perdi il controllo del tuo/la tua {0}.
+
+GameObjects.GamePlayer.Shade.AlreadyShade:             Sei già nascosto!
+GameObjects.GamePlayer.Shade.NoLongerShade:            Non sei più nascosto!
+
+GameObjects.GamePlayer.Sit.AlreadySitting:             Sei già seduto.
+GameObjects.GamePlayer.Sit.CantSitDead:                Non puoi sederti mentre sei morto.
+GameObjects.GamePlayer.Sit.CantSitMezzed:              Non puoi sederti mentre sei ipnotizzato.
+GameObjects.GamePlayer.Sit.CantSitStunned:             Non puoi sederti mentre sei stordito.
+GameObjects.GamePlayer.Sit.InterruptCallMount:         Ti siedi e smetti di richiamare la tua cavalcatura.
+GameObjects.GamePlayer.Sit.MustDismount:               Devi prima scendere da cavallo.
+GameObjects.GamePlayer.Sit.MustStandingStill:          Devi restare fermo per sederti.
+GameObjects.GamePlayer.Sit.NoLongerWaitingQuit:        Non stai più aspettando di uscire dal gioco.
+GameObjects.GamePlayer.Sit.NotSitting:                 Non sei seduto.
+GameObjects.GamePlayer.Sit.YouSitDown:                 Ti siedi. Digita “/stand” o muoviti per alzarti.
+GameObjects.GamePlayer.Sit.YouStandUp:                 Ti alzi.
+
+GameObjects.GamePlayer.Spell.NotEnoughPowerful:        Non sei abbastanza potente per usare l'incantesimo di questo oggetto.
+GameObjects.GamePlayer.Spell.NotImplemented:           {0} ({1}) non è ancora implementato su questo server.
+GameObjects.GamePlayer.Spell.Proc.NotImplemented:      L'effetto reattivo con ID {0} non è ancora implementato su questo server.
+GameObjects.GamePlayer.Spell.ResurrectionIllness:      Malattia della resurrezione
+
+GameObjects.GamePlayer.Sprint.CantSprintDead:          Non puoi scattare; sei morto.
+GameObjects.GamePlayer.Sprint.CantSprintHidden:        Non puoi scattare mentre sei nascosto.
+GameObjects.GamePlayer.Sprint.NoLongerReady:           Non sei più pronto a scattare.
+GameObjects.GamePlayer.Sprint.PrepareSprint:           Ti prepari a scattare.
+GameObjects.GamePlayer.Sprint.TooFatigued:             Sei troppo affaticato per scattare.
+
+GameObjects.GamePlayer.StartAttack.CannotMelee:            Non puoi colpire con uno strumento.
+GameObjects.GamePlayer.StartAttack.CannotWithoutWeapon:    Non puoi attaccare senza un'arma.
+GameObjects.GamePlayer.StartAttack.CantAttackmesmerized:   Non puoi attaccare mentre dormi.
+GameObjects.GamePlayer.StartAttack.CantAttackStunned:      Non puoi attaccare mentre sei stordito.
+GameObjects.GamePlayer.StartAttack.CantDisarmed:           Sei disarmato e non puoi attaccare!
+GameObjects.GamePlayer.StartAttack.CantDisarmed2:          Sei disarmato e non puoi lanciare questo incantesimo!
+GameObjects.GamePlayer.StartAttack.CantInShadeMode:        Non puoi iniziare un combattimento in modalità Ombra!
+GameObjects.GamePlayer.StartAttack.CantUseQuiver:          Non puoi selezionare questa faretra con l'arma attuale.
+GameObjects.GamePlayer.StartAttack.CombatNoTarget:         Entri in combattimento, ma non hai un bersaglio.
+GameObjects.GamePlayer.StartAttack.CombatTarget:           Entri in combattimento e metti a fuoco [{0}]
+GameObjects.GamePlayer.StartAttack.SelectQuiver:           Devi selezionare una faretra.
+GameObjects.GamePlayer.StartAttack.SpellCancelled:         Il tuo incantesimo è stato annullato.
+GameObjects.GamePlayer.StartAttack.TargetInRange:          , bersaglio a portata
+GameObjects.GamePlayer.StartAttack.TargetOutOfRange:       , bersaglio fuori portata
+GameObjects.GamePlayer.StartAttack.TiredShot:              Sei troppo stanco per tentare un tiro critico.
+GameObjects.GamePlayer.StartAttack.TiredUse:               Sei troppo stanco per usare il/la tuo/a {0}.
+GameObjects.GamePlayer.StartAttack.YouCantCombat:          Non puoi attaccare se sei morto.
+GameObjects.GamePlayer.StartAttack.YouMustWait:            Devi attendere {0} secondi per tentare un attacco.
+GameObjects.GamePlayer.StartAttack.YouMustWaitAgain:       Devi attendere {0} secondi per tentare un altro attacco.
+GameObjects.GamePlayer.StartAttack.YouPrepare:             Prepari il/la tuo/a {0} ({1}.{2}s allo sparo {3})
+
+GameObjects.GamePlayer.Stealth.NoLongerHidden:         Non sei più nascosto.
+GameObjects.GamePlayer.Stealth.NowHidden:              Ora sei nascosto.
+
+GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Non hai più munizioni nella faretra.
+GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Non userai la tua faretra.
+GameObjects.GamePlayer.SwitchQuiver.ShootWith:         Attaccherai con: {0}.
+GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Il tuo incantesimo è stato annullato.
+
+GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Non puoi commerciare con questo giocatore perché sei fuorilegge.
+GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Non puoi commerciare con un/una fuorilegge.
+
+GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Sei sovraccarico.
+GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Sei sovraccarico e ti muovi lentamente.
+
+GameObjects.GamePlayer.UpdateSpellLine.GainPower:      Guadagni potere nella linea di incantesimi {0}.
+
+GameObjects.GamePlayer.UseSlot.AttemptToUse:           Provi a usare {0}.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShot:        Ora sparerai automaticamente.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShotReload:  Ora sparerai e ricaricherai automaticamente.
+GameObjects.GamePlayer.UseSlot.CantCallMountSeated:    Non puoi richiamare la tua cavalcatura mentre sei seduto.
+GameObjects.GamePlayer.UseSlot.CantFire:               Non puoi lanciare né usare questo oggetto.
+GameObjects.GamePlayer.UseSlot.CantMountCombat:        Sei in combattimento e non puoi richiamare la tua cavalcatura.
+GameObjects.GamePlayer.UseSlot.CantMountHere:          Non puoi evocare una cavalcatura qui!
+GameObjects.GamePlayer.UseSlot.CantCallMountRVR:       Non puoi evocare una cavalcatura qui!
+GameObjects.GamePlayer.UseSlot.CantMountInDungeon:     Non puoi evocare una cavalcatura in un dungeon!
+GameObjects.GamePlayer.UseSlot.CantMountMoving:        Non puoi montare mentre ti muovi.
+GameObjects.GamePlayer.UseSlot.CantMountStealthed:     Non puoi montare mentre sei in furtività.
+GameObjects.GamePlayer.UseSlot.CantMountDamned:        Non puoi montare mentre sei maledetto!
+GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Non puoi montare mentre sei pietrificato!
+GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Non puoi montare in questa forma!
+GameObjects.GamePlayer.UseSlot.CantMountMorph:         Non puoi montare mentre l'incantesimo “{0}” è attivo su di te!
+GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Non puoi montare; sei morto.
+GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Non puoi usare questa cavalcatura mentre porti una reliquia!
+GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Non puoi vedere il tuo bersaglio.
+GameObjects.GamePlayer.UseSlot.CantSummonRvR:          Non puoi evocare una cavalcatura in un'area RvR.
+GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:    Non puoi usare questo oggetto direttamente dallo zaino. Equipaggialo prima.
+GameObjects.GamePlayer.UseSlot.CantUseInCombat:        Non puoi usare questo oggetto in combattimento.
+GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:    Non puoi usare questo oggetto stando seduto!
+GameObjects.GamePlayer.UseSlot.CantUseHere:            Non puoi usarlo qui!
+GameObjects.GamePlayer.UseSlot.IllegalSourceObject:    Oggetto sorgente non valido. {0} è pronto!
+GameObjects.GamePlayer.UseSlot.MustDismountBefore:     Devi prima scendere da cavallo.
+GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload: Non sparerai né ricaricherai più automaticamente.
+GameObjects.GamePlayer.UseSlot.NotEnouthPower:         Non sei abbastanza potente per usare l'incantesimo di questo oggetto.
+GameObjects.GamePlayer.UseSlot.OutOfCharges:           {0} ha esaurito le cariche.
+GameObjects.GamePlayer.UseSlot.StopCallingMount:       Smetti di richiamare la tua cavalcatura.
+GameObjects.GamePlayer.UseSlot.SummonHorseLevel:       Devi essere di livello {0} per evocare questo cavallo.
+GameObjects.GamePlayer.UseSlot.WhistleMount:           Fai un fischio alla tua cavalcatura.
+GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:      Devi attendere {0} secondi prima di usare questo oggetto.
+GameObjects.GamePlayer.UseSlot.CantUseState:           Non puoi usare {0} nel tuo stato attuale.
+GameObjects.GamePlayer.UseSlot.Used:                   Usi {0}.
+GameObjects.GamePlayer.UseSlot.CantUseCast:            Devi terminare l'azione attuale per usare il/la tuo/a {0}.
+GameObjects.GamePlayer.UseSlot.WrongTarget:            Ti serve un bersaglio per usare questa abilità!
+GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:        Lo scomparto {0} della faretra è vuoto!
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:   Effetto oggetto con ID {0} non ancora implementato.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:     Linea di incantesimi dell'oggetto non trovata.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:    Incantesimo oggetto con ID {0} non trovato.
+GameObjects.GamePlayer.UseSlot.CantDischargeInState:   Nel tuo stato attuale non puoi scaricare un oggetto.
+GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:    Devi attendere {0} secondo/i prima di scaricare {1}!
+GameObjects.GamePlayer.UseSlot.Cooldown:               Devi attendere {0} per usare questo oggetto!
+GameObjects.GamePlayer.UseSlot.Cooldown.Seconds:       restano {0} secondi
+GameObjects.GamePlayer.UseSlot.Cooldown.MinutesAndSeconds:  restano {0} minuti e {1} secondi
+GameObjects.GamePlayer.UseSlot.NoMagicItemZone:        L'uso di oggetti magici non è consentito in questa zona.
+GameObjects.GamePlayer.UseSlot.CannotUseInState:       Nel tuo stato non puoi usare nulla.
+GameObjects.GamePlayer.UseSlot.NotPowerfulEnough:      Non sei abbastanza potente per usare l'incantesimo di questo oggetto.
+GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Non puoi usare questo inventario.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Effetto di carica con ID {0} non ancora implementato.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Effetto di carica con ID {0} non trovato.
+
+GameObjects.GamePlayer.Whisper.SelectTarget:           Seleziona un bersaglio a cui sussurrare.
+GameObjects.GamePlayer.Murder:                         Hai perso 1 punto reputazione per aver ucciso {0}.
+GameObjects.GamePlayer.Multiplekills:                  Hai perso 1 punto reputazione per uccisioni multiple di {0}.
+GameObjects.GamePlayer.GuardKill:                      Hai perso 1 punto reputazione per l'uccisione di una guardia.
+GameObjects.GamePlayer.Wanted:                         {0} è ora ricercato per i suoi crimini.
+GameObjects.GamePlayer.Jailed:                         {0} è stato incarcerato da {1}.
+GameObjects.GamePlayer.Jailed.Unknown:                 {0} è stato incarcerato dalle guardie.
+GameObjects.GamePlayer.Released:                       {0} è stato rilasciato dalla prigione.
+
+GameObjects.GamePlayer.RvR:                            – Giocatori uccisi in totale: {0} –
+GameObjects.GamePlayer.RvR.Champion:                   – Giocatori uccisi in totale: {0} – Campione del giorno: {1} ({2} assalitori nemici uccisi)
+GameObjects.GamePlayer.RvR.Control:                    L'RvR {1} è sotto il controllo di {0}!
+GameObjects.GamePlayer.RvR.Open.Claimable:             Vuoi [reclamare il controllo]?
+GameObjects.GamePlayer.RvR.Open.UnClaimble:            Devi attendere {0} secondi prima di poter reclamare il controllo.
+GameObjects.GamePlayer.RvR.Closed:                     La conquista del forte non è temporaneamente disponibile.
+GameObjects.GamePlayer.RvR.In.Combat:                  Non puoi conquistare il forte durante il combattimento.
+GameObjects.GamePlayer.RvR.Occupied:                   Sono occupato adesso, tornate più tardi.
+GameObjects.GamePlayer.RvR.Interrupt:                  Sei stato interrotto.
+GameObjects.GamePlayer.RvR.Too.Far:                    Ti sei allontanato troppo.
+GameObjects.GamePlayer.RvR.Capture.Timer:              Conquista del forte
+GameObjects.GamePlayer.RvR.Capture.Start:              {0} inizia a prendere il controllo del forte!
+GameObjects.GamePlayer.PvP.DieDropItem:                La tua morte ha disperso {0} dei tuoi tesori!
+
+GameObjects.GamePlayer.Champion.LevelUp:               Hai ricevuto un livello Campione aggiuntivo!
+GameObjects.GamePlayer.Champion.NeedToBeChampion:      Devi essere Campione per usare questo inventario.
+
+GameObjects.GamePlayer.SaddleBag.CL2:                  Questa bisaccia richiede livello Campione 2!
+GameObjects.GamePlayer.SaddleBag.CL3:                  Questa bisaccia richiede livello Campione 3!
+GameObjects.GamePlayer.SaddleBag.CL4:                  Questa bisaccia richiede livello Campione 4!
+GameObjects.GamePlayer.SaddleBag.CL5:                  Questa bisaccia richiede livello Campione 5!
+GameObjects.GamePlayer.SaddleBag.Activated:            Hai attivato una bisaccia!
+GameObjects.GamePlayer.SaddleBag.ActivateError:        Si è verificato un errore durante l'attivazione di questa bisaccia!
+GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Hai già attivato questa bisaccia!
+
+GameObjects.GamePlayer.Reputation.Zero:                La tua reputazione è ora neutrale.
+
+GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Il totale dei tuoi punti specializzazione era errato. Ora è stato corretto — per favore, allena di nuovo.

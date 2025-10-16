@@ -1,0 +1,12 @@
+GameUtils.PlayerTradeWindow.Repair.RecipientOnly:				Only a recipient of a trade can initiate a repair.
+GameUtils.PlayerTradeWindow.Repair.OneItem:						You can only repair one item at a time!
+GameUtils.PlayerTradeWindow.Repair.SideMustBeEmpty:				Your trade windows side must be empty to repair!
+GameUtils.PlayerTradeWindow.Combine.RecipientOnly:				Only a recipient of a trade can initiate a combine.
+GameUtils.PlayerTradeWindow.Combine.OneItem:					You can only combine your items into one item!
+GameUtils.PlayerTradeWindow.AcceptedTrade:						{0} has accepted the trade.
+GameUtils.PlayerTradeWindow.NotEnoughMoney.Self:				You don't have enough money.
+GameUtils.PlayerTradeWindow.NotEnoughMoney.Other:				{0} doesn't have enough money.
+GameUtils.PlayerTradeWindow.NotEnoughSpace.Self:				You don't have enough space in your inventory.
+GameUtils.PlayerTradeWindow.NotEnoughSpace.Other:				{0} doesn't have enough space in his inventory.
+GameUtils.PlayerTradeWindow.TradeCompleted:						Trade Completed. {0} items for {1} items.
+GameUtils.PlayerTradeWindow.MoneyReceived:						You get {0}.

@@ -1,0 +1,12 @@
+GameUtils.PlayerTradeWindow.Repair.RecipientOnly:				Seul le receveur de l'échange peut initier une réparation.
+GameUtils.PlayerTradeWindow.Repair.OneItem:						Vous ne pouvez réparer qu'un seul objet à la fois !
+GameUtils.PlayerTradeWindow.Repair.SideMustBeEmpty:				Votre côté de la fenêtre d'échange doit être vide pour réparer !
+GameUtils.PlayerTradeWindow.Combine.RecipientOnly:				Seul le receveur de l'échange peut initier une combinaison.
+GameUtils.PlayerTradeWindow.Combine.OneItem:					La combinaison ne peut viser qu'un seul objet à la fois.
+GameUtils.PlayerTradeWindow.AcceptedTrade:						{0} a accepté l'échange.
+GameUtils.PlayerTradeWindow.NotEnoughMoney.Self:				Vous n'avez pas assez d'argent !
+GameUtils.PlayerTradeWindow.NotEnoughMoney.Other:				{0} n'a pas assez d'argent.
+GameUtils.PlayerTradeWindow.NotEnoughSpace.Self:				Vous n'avez pas assez de place dans votre inventaire.
+GameUtils.PlayerTradeWindow.NotEnoughSpace.Other:				{0} n'a pas assez de place dans son inventaire.
+GameUtils.PlayerTradeWindow.TradeCompleted:						Échange terminé. {0} objet(s) contre {1} objet(s).
+GameUtils.PlayerTradeWindow.MoneyReceived:						Vous recevez {0}.

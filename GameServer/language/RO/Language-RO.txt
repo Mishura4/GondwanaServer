@@ -1,0 +1,96 @@
+# LANGUAGEMGR (RO)
+System.LanguagesName.EN:				Engleză
+System.LanguagesName.FR:				Franceză
+System.LanguagesName.DE:				Germană
+System.LanguagesName.ES:				Spaniolă
+System.LanguagesName.CZ:				Cehă
+System.LanguagesName.IT:				Italiană
+
+# Miscellaneous Language
+Language.Hours.Short:					{0}h
+Language.Minutes.Short:					{0}min
+Language.Seconds.Short:					{0}s
+Language.Hours.Long:						{0} ore
+Language.Minutes.Short:					{0} minute
+Language.Seconds.Short:					{0} secunde
+Language.NotApplicable:					N/A
+
+Language.Time.Long:						0 secunde
+Language.Time.LongH:						{0:%h} ore
+Language.Time.Longh:						{0:%h} oră
+Language.Time.LongHM:					{0:%h} ore și {0:%m} minute
+Language.Time.LongHm:					{0:%h} ore și {0:%m} minut
+Language.Time.LonghM:					{0:%h} oră și {0:%m} minute
+Language.Time.Longhm:					{0:%h} oră și {0:%m} minut
+Language.Time.LongHMS:					{0:%h} ore, {0:%m} minute și {0:%s} secunde
+Language.Time.LongHMs:					{0:%h} ore, {0:%m} minute și {0:%s} secundă
+Language.Time.LongHmS:					{0:%h} ore, {0:%m} minut și {0:%s} secunde
+Language.Time.LongHms:					{0:%h} ore, {0:%m} minut și {0:%s} secundă
+Language.Time.LonghMS:					{0:%h} oră, {0:%m} minute și {0:%s} secunde
+Language.Time.LonghMs:					{0:%h} oră, {0:%m} minute și {0:%s} secundă
+Language.Time.LonghmS:					{0:%h} oră, {0:%m} minut și {0:%s} secunde
+Language.Time.Longhms:					{0:%h} oră, {0:%m} minut și {0:%s} secundă
+Language.Time.LongM:						{0:%m} minute
+Language.Time.Longm:						{0:%m} minut
+Language.Time.LongMS:					{0:%m} minute și {0:%s} secunde
+Language.Time.LongMs:					{0:%m} minute și {0:%s} secundă
+Language.Time.LongmS:					{0:%m} minut și {0:%s} secunde
+Language.Time.Longms:					{0:%m} minut și {0:%s} secundă
+Language.Time.LongS:						{0:%s} secunde
+Language.Time.Longs:						{0:%s} secundă
+
+Language.Mithril.Amount:					{0} Mithril
+Language.Platinum.Amount:					{0} Platină
+Language.Gold.Amount:						{0} Aur
+Language.Silver.Amount:						{0} Argint
+Language.Copper.Amount:						{0} Cupru
+
+Language.Systems.Spell:					Vrajă
+
+# Stats
+Language.Resists:						Rezistențe
+Language.DamageType.Natural.Noun:			Natural
+Language.DamageType.Crush.Noun:				Strivire
+Language.DamageType.Slash.Noun:				Tăiere
+Language.DamageType.Thrust.Noun:			Împungere
+Language.DamageType.Body.Noun:				Trup
+Language.DamageType.Cold.Noun:				Rece
+Language.DamageType.Energy.Noun:			Energie
+Language.DamageType.Heat.Noun:				Căldură
+Language.DamageType.Matter.Noun:			Materie
+Language.DamageType.Spirit.Noun:			Spirit
+Language.DamageType.Falling.Noun:			Cădere
+Language.DamageType.GM.Noun:				Brut
+
+Language.DamageType.Melee.Noun:				Toate daunele de corp la corp
+Language.DamageType.Spell.Noun:				Toate daunele de vrăji
+Language.DamageType.DoT.Noun:				Daune în timp
+
+Language.DamageType.Natural.Damage:			daune naturale
+Language.DamageType.Crush.Damage:			daune de strivire
+Language.DamageType.Slash.Damage:			daune de tăiere
+Language.DamageType.Thrust.Damage:			daune de împungere
+Language.DamageType.Body.Damage:			daune de trup
+Language.DamageType.Cold.Damage:			daune de rece
+Language.DamageType.Energy.Damage:			daune de energie
+Language.DamageType.Heat.Damage:			daune de căldură
+Language.DamageType.Matter.Damage:			daune de materie
+Language.DamageType.Spirit.Damage:			daune de spirit
+Language.DamageType.Falling.Damage:			daune de cădere
+Language.DamageType.GM.Damage:				daune brute
+
+Language.DamageType.Melee.Damage:			daune de corp la corp
+Language.DamageType.Spell.Damage:			daune de vrăji
+Language.DamageType.DoT.Damage:				daune în timp
+
+# Target
+Language.SpellTarget.Realm:					regat
+Language.SpellTarget.Self:					sine
+Language.SpellTarget.Enemy:					inamic
+Language.SpellTarget.Pet:						animal de companie
+Language.SpellTarget.Group:					grup
+Language.SpellTarget.Area:					zonă
+Language.SpellTarget.Corpse:					cadavru
+Language.SpellTarget.Unknown:					tintă necunoscută
+
+Language.InternalError:						A apărut o eroare de server în timpul executării acestei acțiuni; vă rugăm să contactați stafful serverului.

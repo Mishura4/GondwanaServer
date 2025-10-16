@@ -1,0 +1,70 @@
+Tasks.SystemDisabled: Il sistema delle missioni è attualmente disattivato.
+Tasks.PvPRvRGvGTasks: ======= MISSIONI PvP/RvR/GvG =======
+Tasks.PvETasks: ======== MISSIONI PvE ========
+Tasks.CraftingTasks: == MISSIONI DI ARTIGIANATO (Livello min: {0}) ==
+Tasks.SpecialTasks: ======== MISSIONI SPECIALI ========
+Tasks.TaskCompletionTokenInfo: Ogni gettone missione PvP, RvR, GvG, PvE o Artigianato deve essere consegnato al Maestro delle Missioni per ricevere ricompense.
+Tasks.SpecialTaskCompletionTokenInfo: I gettoni delle missioni speciali sono specifici di ciascuna missione. Questi gettoni sbloccano nuovi titoli del giocatore con bonus speciali.
+Tasks.SnapshotTitle: MISSIONI
+Tasks.KillEnemyPlayersGroup: Uccidi giocatori nemici in gruppo
+Tasks.KillEnemyPlayersAlone: Uccidi giocatori nemici da solo
+Tasks.KillKeepGuards: Uccidi le guardie dei forti
+Tasks.TakeKeeps: Conquista forti
+Tasks.RvRChampionOfTheDay: Essere Campione del Giorno in RvR
+Tasks.KillTerritoryGuards: Uccidi le guardie di territorio
+Tasks.KillTerritoryBoss: Conquista territori
+Tasks.TurnInPvPGvGTaskToken: Gettone Missione PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: Uccidi creature dei dungeon
+Tasks.KillOutdoorsCreatures: Uccidi creature all'aperto
+Tasks.KillAnimalCreatures: Uccidi creature animali
+Tasks.KillDemonCreatures: Uccidi creature demoniache
+Tasks.KillDragonCreatures: Uccidi creature draconiche
+Tasks.KillElementalCreatures: Uccidi creature elementali
+Tasks.KillGiantCreatures: Uccidi creature giganti
+Tasks.KillHumanoidCreatures: Uccidi creature umanoidi
+Tasks.KillInsectCreatures: Uccidi creature insettoidi
+Tasks.KillMagicalCreatures: Uccidi creature magiche
+Tasks.KillReptileCreatures: Uccidi creature rettiliane
+Tasks.KillPlantCreatures: Uccidi creature vegetali
+Tasks.KillUndeadCreatures: Uccidi creature non morte
+Tasks.TurnInPvETaskToken: Gettone Missione PvE
+Tasks.SuccessfulItemCombinations: Combinazioni di oggetti riuscite
+Tasks.MasteredCrafts: Oggetti creati tramite Artigianato
+Tasks.MasterpieceCrafted: Capolavori creati
+Tasks.TurnInCraftingTaskToken: Gettone Missione di Artigianato
+Tasks.EpicBossesSlaughtered: Boss epici abbattuti
+Tasks.ItemsSoldToPlayers: Transazioni tramite il mercato
+Tasks.SuccessfulPvPThefts: Furti a giocatori riusciti
+Tasks.OutlawPlayersSentToJail: Neutralizza i Fuorilegge
+Tasks.EnemiesKilledInAdrenalineMode: Nemici uccisi in modalità Adrenalina
+Tasks.EnemyKilledInDuel: Vittorie in duello
+Tasks.QuestsCompleted: Missioni completate
+Tasks.MaxLevelReached: Livello massimo
+Tasks.Level: Livello {0}
+
+Tasks.KillEnemyPlayersGroupLog: Uccidi giocatori nemici in gruppo: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Uccidi giocatori nemici da solo: {0}/{1}
+Tasks.KillKeepGuardsLog: Uccidi le guardie dei forti: {0}/{1}
+Tasks.TakeKeepsLog: Conquista forti: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Uccidi le guardie di territorio: {0}/{1}
+Tasks.KillTerritoryBossLog: Conquista territori: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Combinazioni di oggetti riuscite: {0}/{1}
+Tasks.MasteredCraftsLog: Oggetti creati tramite Artigianato: {0}/{1}
+Tasks.MasterpieceCraftedLog: Capolavori creati: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Boss epici abbattuti: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Transazioni tramite il mercato: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Furti a giocatori riusciti: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Neutralizza i Fuorilegge: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Nemici uccisi in modalità Adrenalina: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Vittorie in duello: {0}/{1}
+Tasks.QuestsCompletedLog: Missioni completate: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Missione: Ottieni un gettone missione PvP/RvR/GvG - livello {0}
+Tasks.TurnInPvETaskTokenMessage: Missione: Ottieni un gettone missione PvE - livello {0}
+Tasks.TurnInCraftingTaskTokenMessage: Missione: Ottieni un gettone missione di Artigianato - livello {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Missione: Ottieni un gettone speciale «Uccisore di Demoni» - livello {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Missione: Ottieni un gettone speciale «Mercante» - livello {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Missione: Ottieni un gettone speciale «Ladro» - livello {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Missione: Ottieni un gettone speciale «Cacciatore di Taglie» - livello {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Missione: Ottieni un gettone speciale «Febbre da Combattimento» - livello {0}
+Tasks.EnemyKilledInDuelSpecialToken: Missione: Hai ricevuto un gettone «Duellante» - livello {0}
+Tasks.QuestsCompletedSpecialToken: Missione: Ottieni un gettone speciale «Avventuriero» - livello {0}

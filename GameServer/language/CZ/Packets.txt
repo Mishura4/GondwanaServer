@@ -1,0 +1,255 @@
+# /packets/Client/168 (CS)
+# /DetailDisplayHandler
+DetailDisplayHandler.HandlePacket.UniqueObject:	Unikátní předmět
+
+DetailDisplayHandler.GetShortItemInfo.CrafterName:		Řemeslník: {0}
+DetailDisplayHandler.GetShortItemInfo.NoDrop:			Nelze upustit.
+
+DetailDisplayHandler.HandlePacket.Any:				Vše
+DetailDisplayHandler.HandlePacket.Back:				(Záda)
+DetailDisplayHandler.HandlePacket.BonusLevel:			Úroveň bonusu: {0}
+DetailDisplayHandler.HandlePacket.CannotDestroyed:		Nelze zničit.
+DetailDisplayHandler.HandlePacket.CannotDropped:		Nelze upustit ani vložit do truhly.
+DetailDisplayHandler.HandlePacket.CannotSold:			Nelze prodat.
+DetailDisplayHandler.HandlePacket.CannotPick:			Nelze sebrat.
+DetailDisplayHandler.HandlePacket.CannotTraded:			Nelze obchodovat s hráči.
+DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR:		Nelze použít v RvR.
+DetailDisplayHandler.HandlePacket.EffectWhenSitting:		Efekty platí pouze když sedíš.
+DetailDisplayHandler.HandlePacket.ChampionLevel:			- Vyžadováno: Úroveň šampiona {0}
+DetailDisplayHandler.HandlePacket.ChatItem:				[Chat] {0}/Předmět: "{1}"
+DetailDisplayHandler.HandlePacket.CrafterName:			Řemeslník: {0}
+DetailDisplayHandler.HandlePacket.Damage:				Poškození:
+DetailDisplayHandler.HandlePacket.Defense:				Obrana:
+DetailDisplayHandler.HandlePacket.Devastating:			Devastující
+DetailDisplayHandler.HandlePacket.DontBelongGuild:		Nejsi členem cechu.
+DetailDisplayHandler.HandlePacket.FatigueCost:			Cena výdrže:
+DetailDisplayHandler.HandlePacket.FollowupStyle:			Navazující styl: {0}
+DetailDisplayHandler.HandlePacket.Front:				(Čelo)	
+DetailDisplayHandler.HandlePacket.GuildItem:				[Cech] {0}/Předmět: "{1}"
+DetailDisplayHandler.HandlePacket.High:					Vysoké
+DetailDisplayHandler.HandlePacket.HighBonus:				Vysoký bonus
+DetailDisplayHandler.HandlePacket.HighPenalty:			Vysoká penalizace
+DetailDisplayHandler.HandlePacket.Item:					{0}/předmět: "{1}
+DetailDisplayHandler.HandlePacket.LevName:				Úro   Jméno
+DetailDisplayHandler.HandlePacket.Low:					Nízké
+DetailDisplayHandler.HandlePacket.LowBonus:				Nízký bonus
+DetailDisplayHandler.HandlePacket.LowPenalty:				Nízká penalizace
+DetailDisplayHandler.HandlePacket.Medium:				Střední
+DetailDisplayHandler.HandlePacket.MediumBonus:			Střední bonus
+DetailDisplayHandler.HandlePacket.MediumPenalty:			Střední penalizace
+DetailDisplayHandler.HandlePacket.MustBeInChatGroup:		Musíš být ve skupině chatu.
+DetailDisplayHandler.HandlePacket.MustBeInBattleGroup:		Musíš být v bojové skupině.
+DetailDisplayHandler.HandlePacket.NoBonus:				Žádný
+DetailDisplayHandler.HandlePacket.NoGroup:				Nejsi ve skupině.
+DetailDisplayHandler.HandlePacket.NoInformation:			Žádné speciální informace!
+DetailDisplayHandler.HandlePacket.None:					Žádné
+DetailDisplayHandler.HandlePacket.NoPermissionToSpeak:		Nemáš oprávnění mluvit v cechovním kanálu.
+DetailDisplayHandler.HandlePacket.OnlyModerator:			Pouze moderátoři mohou mluvit v tomto kanálu.
+DetailDisplayHandler.HandlePacket.Opening:				Otevírací:
+DetailDisplayHandler.HandlePacket.OpeningStyle:			Otevírací styl:
+DetailDisplayHandler.HandlePacket.Or:					nebo {0}
+DetailDisplayHandler.HandlePacket.Positional:			Pozicní
+DetailDisplayHandler.HandlePacket.Side:					(strana)
+DetailDisplayHandler.HandlePacket.TargetBlocks:			Cíl blokuje
+DetailDisplayHandler.HandlePacket.TargetEffect:			Efekt na cíl:
+DetailDisplayHandler.HandlePacket.TargetEvades:			Cíl uhýbá
+DetailDisplayHandler.HandlePacket.TargetFumbles:			Cíl zpacká útok
+DetailDisplayHandler.HandlePacket.TargetHits:				Cíl zasahuje
+DetailDisplayHandler.HandlePacket.TargetMisses:			Cíl mine
+DetailDisplayHandler.HandlePacket.TargetParrys:			Cíl odráží
+DetailDisplayHandler.HandlePacket.TargetStyle:			Cíl provádí styl
+DetailDisplayHandler.HandlePacket.ToHit:					Zásah:
+DetailDisplayHandler.HandlePacket.VeryHigh:				Velmi vysoké
+DetailDisplayHandler.HandlePacket.VeryHighBonus:			Velmi vysoký bonus
+DetailDisplayHandler.HandlePacket.VeryHighPenalty:		Velmi vysoká penalizace
+DetailDisplayHandler.HandlePacket.VeryLow:				Velmi nízké
+DetailDisplayHandler.HandlePacket.VeryLowBonus:			Velmi nízký bonus
+DetailDisplayHandler.HandlePacket.VeryLowPenalty:			Velmi nízká penalizace
+DetailDisplayHandler.HandlePacket.VeryStrange:			Je to velmi zvláštní, tento typ předmětů neznám.
+DetailDisplayHandler.HandlePacket.WeaponType:			Typ zbraně: {0}
+DetailDisplayHandler.HandlePacket.YouBlock:				Blokuješ
+DetailDisplayHandler.HandlePacket.YouEvade:				Uhýbáš
+DetailDisplayHandler.HandlePacket.YouFumble:				Zpackáš útok
+DetailDisplayHandler.HandlePacket.YouHit:				Zasahuješ
+DetailDisplayHandler.HandlePacket.YouMiss:				Míjíš
+DetailDisplayHandler.HandlePacket.YouParry:				Odrážíš
+DetailDisplayHandler.WriteBonusLine.Points:				b.
+DetailDisplayHandler.WriteBonusLine.PowerPool:			% many.
+DetailDisplayHandler.WriteClassicArmorInfos.Absorption:	- {0}% Absorpce
+DetailDisplayHandler.WriteClassicArmorInfos.ArmorMod:		Modifikátor zbroje:
+DetailDisplayHandler.WriteClassicArmorInfos.BaseFactor:	- {0} Základní zbroj
+DetailDisplayHandler.WriteClassicArmorInfos.ClampFact:	- {0} Skutečná zbroj
+DetailDisplayHandler.WriteClassicArmorInfos.Condition:	- {0}% Stav
+DetailDisplayHandler.WriteClassicArmorInfos.EffArmor:		Zbroj:
+DetailDisplayHandler.WriteClassicArmorInfos.Factor:		- {0} Zbroj
+DetailDisplayHandler.WriteClassicArmorInfos.Quality:		- {0}% Kvalita
+DetailDisplayHandler.WriteClassicShieldInfos.BaseDPS:		- {0} Základní DPS
+DetailDisplayHandler.WriteClassicShieldInfos.ClampDPS:		- {0} Skutečné DPS
+DetailDisplayHandler.WriteClassicShieldInfos.DamageMod:		Modifikátor poškození (při použití se styly Štítu):
+DetailDisplayHandler.WriteClassicShieldInfos.Large:		- Velikost štítu: Velký
+DetailDisplayHandler.WriteClassicShieldInfos.Medium:		- Velikost štítu: Střední
+DetailDisplayHandler.WriteClassicShieldInfos.Small:		- Velikost štítu: Malý
+DetailDisplayHandler.WriteClassicShieldInfos.SPD:			- {0} Rychlost štítu
+DetailDisplayHandler.WriteClassicWeaponInfos.BaseDPS:		- {0} Základní DPS
+DetailDisplayHandler.WriteClassicWeaponInfos.ClampDPS:		- {0} Skutečné DPS
+DetailDisplayHandler.WriteClassicWeaponInfos.Condition:	- {0}% Stav
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageMod:		Modifikátor poškození:
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageType:	Typ poškození: {0}
+DetailDisplayHandler.WriteClassicWeaponInfos.EffDamage:	Efektivní poškození:
+DetailDisplayHandler.WriteClassicWeaponInfos.Quality:		- {0}% Kvalita
+DetailDisplayHandler.WriteClassicWeaponInfos.SPD:			- {0} Rychlost zbraně
+DetailDisplayHandler.WriteHorseInfo.AdvancedHorse:		Jde o pokročilé jízdní zvíře.
+DetailDisplayHandler.WriteHorseInfo.Armor:				- Zbroj: {0}
+DetailDisplayHandler.WriteHorseInfo.Barding:				- Postroj: Žádný
+DetailDisplayHandler.WriteHorseInfo.BasicHorse:			Jde o klasické jízdní zvíře.
+DetailDisplayHandler.WriteHorseInfo.Food:				- Oblíbené krmivo: Seno a občas jablko.
+DetailDisplayHandler.WriteHorseInfo.MountWindow:			Chceš‑li aktivovat toto jízdní zvíře, přesuň ikonu do vyhrazeného slotu v okně jízd.
+DetailDisplayHandler.WriteHorseInfo.Name:				- Jméno: {0}.
+DetailDisplayHandler.WriteHorseInfo.NameMount:			(Použij /namemount pro pojmenování jízdního zvířete.)
+DetailDisplayHandler.WriteHorseInfo.Quickbar:			K vyvolání tohoto jízdního zvířete přesuň ikonu z okna jízd na rychlou lištu a stiskni tlačítko vytvořit.
+DetailDisplayHandler.WriteHorseInfo.RvRZzones:			Nelze vyvolat v RvR zónách.
+DetailDisplayHandler.WriteHorseInfo.Speed1:				(+35% rychlost)
+DetailDisplayHandler.WriteHorseInfo.Speed2:				(+45% rychlost)
+DetailDisplayHandler.WriteHorseInfo.Summon:				Klikni na tuto ikonu na liště kouzel pro vyvolání (nebo odvolání) jízdního zvířete.
+DetailDisplayHandler.WriteMagicalBonuses.ChargedMagic:	Nabitá magická schopnost:
+DetailDisplayHandler.WriteMagicalBonuses.Charges:		- {0} Nábojů
+DetailDisplayHandler.WriteMagicalBonuses.FocusBonus:		Bonus na soustředění:
+DetailDisplayHandler.WriteMagicalBonuses.Level:			- {0} Úroveň
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired:	Vyžadovaná úroveň:
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired2:	Vyžadovaná úroveň: {0} Úroveň
+DetailDisplayHandler.WriteMagicalBonuses.MagicAbility:	Magická schopnost:
+DetailDisplayHandler.WriteMagicalBonuses.MagicBonus:		Magické bonusy:
+DetailDisplayHandler.WriteMagicalBonuses.MaxCharges:		- {0} Maximum
+DetailDisplayHandler.WriteMagicalBonuses.StrikeArmor:		- Kouzlo se může seslat, když nepřítel zasáhne tuto zbroj.
+DetailDisplayHandler.WriteMagicalBonuses.StrikeEnemy:		- Kouzlo se může seslat, když tato zbraň zasáhne nepřítele.
+DetailDisplayHandler.WriteMagicalBonuses.UsedItem:		- Kouzlo se může seslat při použití předmětu.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem1:		Lze použít každých: {0} s.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem2:		Lze použít každých: {0}:{1} min.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem3:		Znovu použitelné za: {0}.
+DetailDisplayHandler.WriteMagicalBonuses.Inactive:		(neaktivní)
+DetailDisplayHandler.WriteBonusConditions.Title:		Podmínky bonusů:
+DetailDisplayHandler.WriteBonusConditions.Renaissance:	Musí být „Renaissance“
+DetailDisplayHandler.WritePoisonInfo.Charges:			- {0} Nábojů
+DetailDisplayHandler.WritePoisonInfo.Level:				- {0} Úroveň
+DetailDisplayHandler.WritePoisonInfo.LevelRequired:		Vyžadovaná úroveň:
+DetailDisplayHandler.WritePoisonInfo.MaxCharges:			- {0} Maximum
+DetailDisplayHandler.WritePoisonInfo.ProcAbility:		Ofenzivní efekt:
+DetailDisplayHandler.WritePotionInfo.ChargedMagic:		Nabitá magická schopnost:
+DetailDisplayHandler.WritePotionInfo.Charges:			- {0} Nábojů
+DetailDisplayHandler.WritePotionInfo.Level:				- {0} Úroveň
+DetailDisplayHandler.WritePotionInfo.LevelRequired:		Podmínka úrovně
+DetailDisplayHandler.WritePotionInfo.MaxCharges:			- {0} Maximum
+DetailDisplayHandler.WritePotionInfo.NoUseInCombat:		Nelze použít v boji.
+DetailDisplayHandler.WritePotionInfo.UseItem2:			Lze použít každých: 1:00 min
+DetailDisplayHandler.WritePotionInfo.UseItem3:			Znovu použitelné za: {0}
+DetailDisplayHandler.WritePotionInfo.Type:				Funkce: {0}
+DetailDisplayHandler.WritePotionInfo.Value:				Hodnota: {0}
+DetailDisplayHandler.WritePotionInfo.Target:				Cíl: {0}
+DetailDisplayHandler.WritePotionInfo.Range:				Dosah: {0}
+DetailDisplayHandler.WriteUsableClasses.UsableBy:		Použitelné pro:
+
+# /DoorRequestHandler.cs
+DoorRequestHandler.OnTick.TooFarAway:			Jsi příliš daleko od {0}!
+
+# /PlayerBonusesListRequestHandler
+PlayerBonusesListRequestHandler.HandlePacket.Bonuses:	Aktuální bonusy
+PlayerBonusesListRequestHandler.HandlePacket.Magic:		Magický bonus: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Melee:		Bonus na blízko: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Outpost:	Bonus pevnosti
+PlayerBonusesListRequestHandler.HandlePacket.Realm:		Bonusy říše:
+PlayerBonusesListRequestHandler.HandlePacket.Relic:		Bonus relikvie:
+PlayerBonusesListRequestHandler.HandlePacket.Resist:		Odolnosti
+PlayerBonusesListRequestHandler.HandlePacket.Special:		Bonusy speciálních předmětů
+PlayerBonusesListRequestHandler.HandlePacket.Specs:		+{0} všechny dovednosti
+
+# /PlayerInitRequestHandler
+PlayerInitRequestHandler.AllianceMessage:			Zpráva aliance: {0}
+PlayerInitRequestHandler.FreeLevel:				Máš nárok na bezplatnou úroveň! Klikni na instruktora pro získání (nebo napiš "/freelevel decline" pro odmítnutí).
+PlayerInitRequestHandler.GuildMessage:				Zpráva cechu:
+PlayerInitRequestHandler.LevelCap:					Překročil(a) jsi limit úrovně pro toto bojiště!
+PlayerInitRequestHandler.OfficerMessage:				Zpráva důstojníků: {0}
+PlayerInitRequestHandler.SaferLocation:				Tato oblast není momentálně bezpečná a budeš přesunut(a) na bezpečnější místo.
+
+# /PlayerMoveItemRequestHandler
+PlayerMoveItemRequestHandler.InvalidTradeTarget:	Neplatný cíl obchodu. ({0})
+PlayerMoveItemRequestHandler.CantTradeInactive:		Nelze obchodovat s neaktivními hráči.
+PlayerMoveItemRequestHandler.CantTradeYourself:		Nemůžeš obchodovat sám(a) se sebou, no tak!
+PlayerMoveItemRequestHandler.CantRemoveItem:			Tento předmět nemůžeš odebrat!
+PlayerMoveItemRequestHandler.InvalidItem:				Neplatný předmět (slot# {0}).
+PlayerMoveItemRequestHandler.CantDropItem:			Tento předmět nelze položit na zem!
+PlayerMoveItemRequestHandler.YouDropItem:				Pokládáš {0} na zem.
+PlayerMoveItemRequestHandler.TooFarAway:				Jsi příliš daleko na to, abys něco předal(a) hráči {0}.
+
+# /PlayerPickUpRequestHandler
+PlayerPickUpRequestHandler.HandlePacket.InvalidTarget:	Tvůj cíl je neplatný!
+PlayerPickUpRequestHandler.HandlePacket.Target:		Musíš vybrat cíl, abys něco získal(a)!
+
+# /PlayerPositionUpdateHandler
+PlayerPositionUpdateHandler.Endurance:				Ztrácíš výdrž!
+PlayerPositionUpdateHandler.Entered:					Vstoupil(a) jsi do {0}.
+PlayerPositionUpdateHandler.FallingDamage:			Utrpěl(a) jsi poškození pádem!
+PlayerPositionUpdateHandler.FallPercent:				Přicházíš o {0}% svých celkových životů.
+PlayerPositionUpdateHandler.SafeFall:				Poškození bylo sníženo díky dovednosti bezpečný pád!
+PlayerPositionUpdateHandler.CloudsongFall:			Tvoje lehkost výrazně zmírnila dopad!
+PlayerPositionUpdateHandler.MythSafeFall:			Poškození bylo sníženo díky tvé výbavě!
+PlayerPositionUpdateHandler.UnknownZone:			Neznámá oblast! Budeš vrácen(a) ke kameni duší.
+
+# /PlayerTrainRequestHandler
+PlayerTrainRequestHandler.MustSelectValidTrainer:	Musíš vybrat platného instruktora pro svou třídu.
+PlayerTrainRequestHandler.AlreadyHaveAbility:		Tuto schopnost už máš!
+PlayerTrainRequestHandler.DoNotMeetRequirements:		Nesplňuješ požadavky pro tuto schopnost!
+PlayerTrainRequestHandler.NotEnoughChampionPoints:	Nemáš dost bodů specializace šampiona pro tuto schopnost!
+PlayerTrainRequestHandler.CouldNotFindChampionSpec:	Specializace šampiona nenalezena!
+PlayerTrainRequestHandler.CantTrainSpecAgainThisLevel:	Na této úrovni se už v této specializaci nemůžeš dále trénovat!
+PlayerTrainRequestHandler.SpecializationCostsPoints:	Tato specializace stojí {0} bodů specializace!
+PlayerTrainRequestHandler.NotEnoughSpecPoints:		Nemáš dost bodů specializace pro tuto úroveň.
+PlayerTrainRequestHandler.RealmAbilityCostsPoints:	{0} stojí {1} bodů schopností říše!
+PlayerTrainRequestHandler.NotEnoughRealmAbilityPoints:	Nemáš dost bodů schopností říše, abys to získal(a).
+PlayerTrainRequestHandler.NotExperiencedEnoughForAbility:	Nemáš dostatek zkušeností k získání {0} právě teď. Vrať se později.
+PlayerTrainRequestHandler.TrainingFailed:			Bohužel trénink selhal. Prosím nahlas administrátorům nebo GM. Děkujeme.
+
+# /PlayerTargetHandler
+PlayerTargetHandler.Gravestone:					Přestáváš mířit na svůj náhrobek. Tvé modlitby selhávají.
+
+# /DestroyItemRequestHandler
+DestroyItemRequestHandler.CantDestroyItem:		Nemůžeš zničit {0}!
+DestroyItemRequestHandler.CantDestroyRelic:		Relikvii nelze zničit!
+DestroyItemRequestHandler.CantDestroyEquippedItem:	Nelze zničit vybavený předmět!
+DestroyItemRequestHandler.ItemDestroyed:			Ničíš {0}.
+DestroyItemRequestHandler.CantDestroyPvPFlag:		PvP vlajku nelze zničit!
+
+# /DialogResponseHandler
+DialogResponseHandler.SameRegionGuildLeaderToAccept:	Musíš být ve stejné oblasti jako vůdce cechu, abys mohl(a) přijmout pozvánku.
+DialogResponseHandler.StillInGuild:				Stále jsi v cechu, nejprve musíš odejít.
+DialogResponseHandler.GuildLeaderNotInGuild:		Hráč, který zve, není v cechu!
+DialogResponseHandler.GuildInviteDeclined:			{0} odmítl(a) tvoje pozvání.
+DialogResponseHandler.NotInGuild:					Nejsi v cechu.
+DialogResponseHandler.InviteExpired:				Tato pozvánka vypršela.
+DialogResponseHandler.GuildDeclineQuit:			Odmítáš opustit cech.
+DialogResponseHandler.StillInGroup:				Pořád jsi ve skupině.
+DialogResponseHandler.CannotJoinGroupInCombat:		Nemůžeš se připojit ke skupině během boje!
+DialogResponseHandler.GroupFull:					Skupina je plná.
+DialogResponseHandler.MustBeGuildMemberToUseCommands:	Musíš být členem cechu, než můžeš použít tyto příkazy!
+DialogResponseHandler.NearKeepToClaim:			Musíš být poblíž pevnosti, abys ji mohl(a) zabrat.
+DialogResponseHandler.DepositInLockbox:			Vkládáš {0} do trezoru.
+DialogResponseHandler.LockboxHasMoneyWeeklyPayment:	Trezor nyní obsahuje {0}. Týdenní platba je {1}.
+DialogResponseHandler.HousePrepaidForPayments:		Dům je nyní předplacen na následující {0} platby.
+
+# /InviteToGroupHandler
+InviteToGroupHandler.InvalidTarget:				Musíš vybrat platného hráče jako cíl.
+InviteToGroupHandler.NotLeader:					Nejsi vůdce skupiny.
+InviteToGroupHandler.GroupFull:					Skupina je již plná.
+InviteToGroupHandler.TargetInGroup:				Tento hráč je už ve skupině.
+InviteToGroupHandler.Invited:					Pozval(a) jsi {0}, aby se připojil(a) ke skupině.
+InviteToGroupHandler.InvitePrompt1:				{0} tě pozval(a), abys se připojil(a) k jeho/její skupině.
+InviteToGroupHandler.InvitePrompt2:				Přijmout?
+InviteToGroupHandler.InviteNotification:			{0} tě pozval(a), abys se připojil(a) k jeho/její skupině.
+
+# /PlayerAttackRequestHandler
+PlayerAttackRequestHandler.CantEnterMelee:		Nemůžeš bojovat na blízko s vybavenou střelnou zbraní!
+
+# /PlayerDismountRequestHandler
+PlayerDismountRequestHandler.NoRidingSteed:		Nesedíš na jízdním zvířeti!
+
+# /EmblemDialogReponseHandler
+EmblemDialogReponseHandler.EmblemAlreadyInUse:	Tento emblém už používá jiný cech, zvol jiný!

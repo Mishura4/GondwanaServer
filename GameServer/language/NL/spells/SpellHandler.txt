@@ -1,0 +1,328 @@
+# SpellHandler (NL)
+SpellHandler.CancelEffect:			Je schakelt je effect uit.
+SpellHandler.PulsingSpellCancelled:		Je spreuk is uitgeschakeld.
+SpellHandler.PulsingSpellNoMana:		Je hebt niet genoeg mana en je spreuk is uitgeschakeld.
+SpellHandler.NoMoreMana:			Je hebt al je mana verbruikt en kunt geen spreuken meer uitspreken!
+SpellHandler.StopPlayingSong:			Je stopt met het spelen van je melodie.
+SpellHandler.TooFarStopPlayingSong:		Je bent te ver van het doel. Je stopt met het spelen van je melodie.
+SpellHandler.CasterMove:			Je beweegt en onderbreekt je spreuk!
+SpellHandler.BeginCasting:			Je begint een {0}-spreuk uit te spreken!
+SpellHandler.BeginPlaying:			Je begint {0} te spelen!
+SpellHandler.SpellInterrupted:			{0} valt je aan en je spreuk wordt onderbroken!
+SpellHandler.DamageImmunity:			{0} is immuun voor dit effect!
+SpellHandler.Target.TooFast:			{0} beweegt te snel voor deze spreuk om effect te hebben!
+SpellHandler.DeadCantCast:			Je bent dood en kunt geen spreuken uitspreken!
+SpellHandler.CantCastInSiegeram:			Je kunt geen spreuken uitspreken in een stormram!
+SpellHandler.SilencedCantCast:			Je bent tot zwijgen gebracht en kunt momenteel geen spreuken uitspreken.
+SpellHandler.PhaseshiftedCantCast:		Je staat onder "Faseverschuiving" en kunt geen spreuken uitspreken.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} staat onder "Faseverschuiving" en kan niet door deze spreuk worden getroffen!
+SpellHandler.OnlyWorksOnDead:			Deze spreuk werkt alleen op gevallen leden van je rijk!
+SpellHandler.CantAttackSelf:			Je kunt jezelf niet aanvallen!
+SpellHandler.TargetNotInView:			Je doel is niet in zicht!
+SpellHandler.TargetNotInViewSpellFail:		Je doel bevindt zich buiten je gezichtsveld. De spreuk mislukt!
+SpellHandler.TargetNotVisible:			Je doel is niet zichtbaar!
+SpellHandler.TargetInvalid:			Ongeldig doel.
+SpellHandler.MustSelectTarget:			Je moet een doel selecteren voor deze spreuk!
+SpellHandler.TargetTooFar:			Dat doel is te ver weg!
+SpellHandler.AreaTargetOutOfRange:		Je doelgebied is buiten bereik. Kies een dichterbij gelegen punt.
+SpellHandler.MustCastOnControlled:		Je moet deze spreuk op een door jou bestuurde creatuur uitspreken.
+SpellHandler.SpellRequiresConcentration:	Deze spreuk vereist {0} concentratiepunten!
+SpellHandler.MaxConcentrationSpells:		Je kunt maximaal 50 concentratiespreuken tegelijk actief hebben!
+SpellHandler.WrongInstrument:			Je hebt niet het juiste type instrument uitgerust!
+SpellHandler.CantCastWhileSitting:		Je kunt geen spreuken uitspreken terwijl je zit!
+SpellHandler.CantCastWhileSitting2:		Je kunt deze spreuk niet uitspreken terwijl je zit!
+SpellHandler.CantCastWhileMoving:		Je moet stil staan om deze spreuk uit te spreken!
+SpellHandler.CantCastOnDead:			Je kunt deze spreuk niet op een dode uitspreken!
+SpellHandler.MustWaitBeforeUse:			Je moet {0} seconden wachten voordat je deze spreuk opnieuw kunt gebruiken!
+SpellHandler.InteruptWaitBeforeCast:		Je bent onderbroken en moet {0} seconden wachten voordat je opnieuw kunt spreuken!
+SpellHandler.NotEnoughPower:			Je hebt niet genoeg mana om deze spreuk uit te spreken!
+SpellHandler.GroundTargetNotInView:		Je gronddoel is niet in zicht!
+SpellHandler.OnlyWorksOnFriendlyTargets:	Deze spreuk werkt alleen op bondgenoten!
+SpellHandler.LostFocusOnSpell:			Je verliest je focus op je spreuk {0}.
+SpellHandler.InterruptFocus:			Je beweegt en onderbreekt je concentratie!
+SpellHandler.YouResistEffect:			Je weerstaat het effect!
+SpellHandler.TargetResistsEffect:		{0} weerstaat het effect!
+SpellHandler.PetResistsEffect:			Je {0} weerstaat het effect!
+SpellHandler.NoEffectOnKeepComponent:		Je spreuk heeft geen effect op het fortonderdeel!
+SpellHandler.NoEffectOnTarget:			Je spreuk heeft geen effect op {0}!
+SpellHandler.TargetAlreadyMezz:			Je doel is al getroffen door een beheersings‑effect!
+SpellHandler.CantHaveEffectAgainYet:		Je kunt dit effect nog niet opnieuw ontvangen!
+SpellHandler.AlreadyHaveEffectWait:		Je hebt dit effect al. Wacht tot het is afgelopen! De spreuk is mislukt.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} kan dit effect nog niet opnieuw ontvangen!
+SpellHandler.TargetAlreadyHasEffect:		{0} heeft dit effect al.
+SpellHandler.WaitUntilExpires:			Wacht tot het afloopt. Spreuk mislukt.
+SpellHandler.TargetImmune:			Je doel is immuun!
+SpellHandler.MezIntercepted:			Je defensieve voorwerpeffect onderschept de beheersingsspreuk en verdwijnt!
+SpellHandler.CeremonialBracerInterceptMez:	De Ceremoniële Armband onderschept je beheersing!
+SpellHandler.StunIntercepted:			Je defensieve voorwerpeffect onderschept de verdoving en verdwijnt!
+SpellHandler.YouMiss:				Je mist je doel!
+SpellHandler.TargetMissed:			{0} mist zijn doel!
+SpellHandler.EngageCannotBeUsed:			{0} is recent aangevallen en je kunt niet aangrijpen.
+SpellHandler.NotEnoughEndurance:			Je focust op het blokkeren van de slag!
+SpellHandler.MustTargetPlayer:			Je moet een speler als doel nemen.
+SpellHandler.BuffNoEffectOnVampiir:		Je verbetering heeft geen effect op de Vampiir!
+SpellHandler.BuffNoEffectOnYou:			Deze verbetering heeft geen effect op jou!
+SpellHandler.AlreadyHasEffect:			Je hebt dit effect al!
+SpellHandler.AlreadyHasThisEffect:		{0} heeft dit effect al.
+SpellHandler.TargetIsStealthed:			Deze spreuk kan niet op een verborgen doel worden toegepast!
+SpellHandler.DefaultDescription:			{0} heeft een waarde van {1} en een schade van {2}.
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Je gezel is niet in zicht.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Onderbreking van zichtlijn in CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	Je kunt je doel hier vandaan niet zien!
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Onderbreking van zichtlijn in CheckLOSNPCToTarget
+
+SpellHandler.HitTarget:			Je raakt {0} voor {1}{2} schade!
+SpellHandler.NPCHitTarget:			Je {0} raakt {1} voor {2}{3} schade!
+SpellHandler.CriticalHit:			Je veroorzaakt een kritieke treffer en doet {0} extra schade!
+SpellHandler.TargetPronoun.Your:		Je
+SpellHandler.TargetPronoun.Targets:		Het doel
+
+SpellHandler.MustBeStealthedBow:		Je moet verborgen zijn en een boog dragen om deze vaardigheid te gebruiken!
+SpellHandler.MustWieldBow:			Je moet een boog dragen om deze vaardigheid te gebruiken!
+SpellHandler.Archery.Prepare:			Je bereidt een {0} voor.
+SpellHandler.Archery.DisarmedCantCast:		Je kunt geen spreuken uitspreken omdat je ontwapend bent.
+SpellHandler.ChamberSpell.YouInvulnerable:	Je bent momenteel onkwetsbaar en kunt deze spreuk niet uitspreken!
+SpellHandler.ChamberSpell.TargetInvulnerable:	Je doel is momenteel onkwetsbaar en kan niet worden aangevallen!
+SpellHandler.SiegeArrow.InvalidTarget:		Voor deze spreuk moet je een fortonderdeel als doel nemen!
+SpellHandler.SiegeArrow.InvalidComponentTarget:	Je doel moet een fortonderdeel zijn!
+SpellHandler.SiegeArrow.PrepareSpell:		Je bereidt {0} voor.
+SpellHandler.BumpSpell.TargetHurled:		{0} wordt de lucht in geslingerd!
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Je doel heeft al een effect van dit type!
+
+SpellHandler.Convoker.AreaTargetOutOfRange:	Je doelgebied is buiten bereik. Kies een dichterbij gelegen punt op de grond.
+SpellHandler.Convoker.AreaTargetNotInView:	Je doelgebied is niet in zicht.
+SpellHandler.Convoker.MustSetGroundTarget:	Je moet een gronddoel instellen!
+
+SpellHandler.IchorOfTheDeep.NoTarget:		Je hebt een doel nodig voor deze vaardigheid!
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} is te ver weg.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	Je gebruikt deze vaardigheid al.
+SpellHandler.IchorOfTheDeep.CastMessage:	Je spreekt {0} uit!
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} spreekt een spreuk uit!
+SpellHandler.IchorOfTheDeep.HitMob:		Je raakt {0} voor {1} schade.
+SpellHandler.IchorOfTheDeep.HitPlayer:		Je raakt {0} voor {1} schade.
+
+SpellHandler.OmniHeal.SelfHealed:		Je herstelt {0} uithoudingspunten en {1} manapunten.
+SpellHandler.OmniHeal.TargetHealed:		Je heelt {0} voor {1} uithoudingspunten en {2} manapunten.
+SpellHandler.OmniHeal.YouAreHealed:		{0} heelt jou voor {1} uithoudingspunten en {2} manapunten.
+SpellHandler.OmniHarm.InflictLossesToTarget:	Je brengt {2} ook {0} uithoudingsverlies en {1} manaverlies toe!
+SpellHandler.OmniHarm.InflictLossesToYou:		{0} brengt jou {1} uithoudingsverlies en {2} manaverlies toe!
+
+SpellHandler.HealSpell.TargetDead:		{0} is dood!
+SpellHandler.HealSpell.NoHelp:			Deze speler wil geen hulp.
+SpellHandler.HealSpell.FullyHealedSelf:		Je bent volledig genezen.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} is volledig genezen.
+SpellHandler.HealSpell.RealmPointsGained:	Je krijgt {0} rijkspunten voor het genezen van een lid van je rijk.
+SpellHandler.HealSpell.SelfHealed:		Je heelt jezelf voor {0} levenspunten.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} heelt zichzelf voor {1} levenspunten.
+SpellHandler.HealSpell.TargetHealed:		Je heelt {0} voor {1} levenspunten!
+SpellHandler.HealSpell.TargetDamageToHeal:		Je heelt {0} voor {1} levenspunten in plaats van schade toe te brengen vanwege diens magisch schild!
+SpellHandler.HealSpell.YouAreHealed:		Je wordt door {0} voor {1} levenspunten geheeld.
+SpellHandler.HealSpell.CriticalHeal:		Je voert een kritieke genezing uit en herstelt {0} extra levenspunten!
+SpellHandler.HealSpell.EfficientHealingBuff:	Je efficiënte genezingsverhoging geeft je {0} extra genezingspunten!
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Je efficiënte uithoudingsverhoging geeft je {0} extra uithoudingspunten tijdens het genezen!
+SpellHandler.HealSpell.TargetDamnedDamaged:		Je bent vervloekt! De genezingsspreuk brengt je {0} schade toe in plaats van je te genezen!
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	De genezing is minder effectief omdat je vervloekt bent!
+SpellHandler.HealSpell.DamnedNoHeal:		De genezingsspreuk heeft geen effect op je omdat je vervloekt bent!
+SpellHandler.HealSpell.YouDiseased:			Je bent ziek; genezing wordt met {0}% verminderd!
+SpellHandler.HealSpell.HealingReduced:		Genezing wordt met {0}% verminderd door genezingsremmende effecten.
+SpellHandler.HealSpell.HealingReducedShield:		Genezing wordt met {0}% verminderd door de beschermbarrière van {1}.
+SpellHandler.HealSpell.HealingNull:			Je spreuk heelt het doel niet vanwege genezingsremming.
+SpellHandler.HealSpell.HealingNullYou:		Genezing mislukt vanwege jouw remmende effecten.
+SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	Levensdrain heeft geen effect omdat zowel jij als je doel vervloekt zijn!
+SpellHandler.LifeDrain.TargetDamnedDamaged:		Je bent vervloekt! Levensdrain brengt je {0} schade toe in plaats van je te genezen!
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	Levensdrain is minder effectief omdat {0} vervloekt is!
+SpellHandler.LifeDrain.DamnedNoHeal:		Levensdrain heelt je niet omdat je vervloekt bent!
+SpellHandler.LifeDrain.DamnedTargetHealed:		{0} wordt geheeld en krijgt {1} levenspunten terug!
+SpellHandler.LifeDrain.DamnedTargetCriticallyHealed:	{0} ontvangt een kritieke genezing en krijgt {1} levenspunten terug!
+SpellHandler.LifeDrain.DamnedYouHealed:		Je wordt geheeld en krijgt {0} levenspunten terug!
+SpellHandler.LifeDrain.DamnedYouCriticallyHealed:	Je ontvangt een kritieke genezing en krijgt {0} levenspunten terug!
+SpellHandler.SpreadHeal.GroupFullyHealed:	Je groep is al volledig genezen!
+
+SpellHandler.Zephyr.NoAttackInZephyr:		Je wordt gedragen door een Zefier en kunt niet worden aangevallen!
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Je doel wordt gedragen door een Zefier en kan niet worden aangevallen!
+SpellHandler.Zephyr.PickedUpByZephyr:		Een krachtige Zefier tilt je omhoog!
+SpellHandler.Phaseshift.NotEnoughEndurance:	Je hebt 50% uithoudingsvermogen nodig om deze spreuk te gebruiken!
+SpellHandler.Groupport.CannotUseAbilityHere:	Je kunt deze vaardigheid hier niet gebruiken!
+SpellHandler.Groupport.BindInAnotherRegion:	Bind je in een andere regio om deze vaardigheid te gebruiken!
+SpellHandler.Groupport.GroupInCombat:		Je kunt geen groep teleporteren die in gevecht is!
+SpellHandler.Groupport.NotInGroup:		Je zit niet in een groep!
+SpellHandler.TargetNoLongerInRange:		Je doel is niet langer binnen bereik.
+SpellHandler.TargetNoLongerInView:		Je doel is niet langer in zicht.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} beweegt te snel voor deze spreuk om effect te hebben!
+SpellHandler.Earthquake.Ending:			De aardbeving is voorbij.
+SpellHandler.YouDamnedResistEffect:		Je bent vervloekt en weerstaat het effect!
+SpellHandler.TargetDamnedResistsEffect:		{0} is vervloekt en weerstaat het effect!
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	Je kunt deze spreuk niet in gevecht uitspreken!
+SpellHandler.VampiirBolt.PowerTaken:		{0} onttrekt {1} mana van je!
+SpellHandler.VampiirBolt.PowerReceived:		Je ontvangt {0} mana van {1}!
+SpellHandler.VampiirBolt.NoPowerReceived:	Je hebt geen mana teruggekregen van {0}!
+SpellHandler.VampiirBolt.TargetTooHigh:		Het doel kan niet door deze spreuk worden getroffen omdat het niveau te hoog is!
+
+SpellHandler.WrathofChampions.CastSpell:	Je spreekt {0} uit!
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} spreekt een spreuk uit!
+SpellHandler.WrathofChampions.HitMob:		Je raakt {0} voor {1} schade.
+SpellHandler.WrathofChampions.HitPlayer:		Je raakt {0} voor {1} schade.
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} raakt jou voor {1} schade.
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		{0} toestaan je te verrijzen met {1} procent levenspunten?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Niemand probeert je momenteel te verrijzen.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Je wijst een verrijzenis af.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Je bent verrijzen door {0}!
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	Een wonderlijke kracht brengt je tot leven!
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	Een wonderlijke kracht brengt je tot leven! Je krijgt {0}% leven terug.
+SpellHandler.ResurrectSpellHandler.RezExpired:		Je verrijzenisspreuk is verlopen.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Je doel overweegt al een verrijzenis!
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		De speler die je hebt verrezen leverde bij zijn dood geen rijkspunten op.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		Daarom ontvang je geen rijkspunten voor zijn verrijzenis.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Je concentratie neemt af.
+SpellHandler.Battlewarder.WarderFallen:		Je Slagwachter is gevallen!
+SpellHandler.Convoker.TemplateNotFound:		NPCTemplate {0} niet gevonden!
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Je gezel heeft al een actief vermogen van dit type.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	Je kunt deze vaardigheid niet op je eigen gezel gebruiken.
+
+SpellHandler.BoltSpell.PartialBlock:		Je blokkeert de spreuk van {0} gedeeltelijk!
+SpellHandler.BoltSpell.Blocked:			{0} blokkeert!
+
+SpellHandler.Arrow.Block:			Je blokkeert de pijl van {0}!
+SpellHandler.Arrow.ArrowBlocked:			{0} blokkeert je pijl!
+SpellHandler.Archery.PenetrateBarrier:		Een schot heeft je magische barrière doorboord!
+SpellHandler.Archery.StrikeAbsorbed:		Je schot is geabsorbeerd door een magische barrière!
+SpellHandler.Archery.BlowAbsorbed:		De slag is geabsorbeerd door een magische barrière!
+SpellHandler.Archery.Interrupted:			{0} valt je aan en je schot wordt onderbroken!
+
+SpellHandler.Chamber.CannotUseState:		Je kunt dit niet gebruiken in je huidige toestand.
+SpellHandler.Chamber.TargetNotAttackable:	Dat doel kan momenteel niet worden aangevallen!
+SpellHandler.Chamber.SelectFirstSpell:		Kies de eerste spreuk voor je {0}.
+SpellHandler.Chamber.NoSpellsLoaded:		Geen spreuken geladen in {0}.
+SpellHandler.Chamber.ReadyForUse:		Je {0} is klaar voor gebruik.
+SpellHandler.Chamber.CastsSpell:			{0} spreekt een spreuk uit!
+
+SpellHandler.Lifedrain.Heal:			Je steelt {0} levenspunt{1}.
+SpellHandler.Lifedrain.NoAbsorb:		Je kunt geen extra levenspunten meer absorberen.
+SpellHandler.PowerDrain.PowerGain:		Je siphont {0} mana van het doel!
+SpellHandler.PowerDrain.PowerLoss:		{0}% van je mana is afgetapt door {1}!
+SpellHandler.PowerDrain.NoAbsorb:		Je kunt geen extra mana meer absorberen.
+SpellHandler.PowerLock.SpellHit:			{0} tapt {1} mana van je af.
+SpellHandler.PowerLock.StealSuccess:		Je steelt {1} mana van {0}!
+SpellHandler.PowerLock.StealOverflow:		Je steelt {1} mana van {0}! ({2} overschot)
+
+SpellHandler.PrimerSpell.EffectExpired:		Het effect van je wijzigingsspreuk is verlopen.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	Je beweegt en verbreekt je wijzigingsspreuk.
+
+SpellHandler.BuffShear.ShearSuccess:		Je spreuk scheurt een deel van de versterkende magie van je doel weg.
+SpellHandler.BuffShear.EnhancingMagicRipped:	Een deel van je versterkende magie is door een spreuk verwijderd!
+SpellHandler.BuffShear.ConnectionTooStrong:	De band van het doel met zijn verbetering is te sterk om te verwijderen.
+SpellHandler.BuffShear.NoEnhancementFound:	Geen verbetering van dit type op het doel gevonden.
+SpellHandler.AblativeShear.ShearSuccess:		Je spreuk verwijdert de ablatieve schilden van je doel.
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Je ablatieve schild is door een spreuk verwijderd!
+SpellHandler.AblativeShear.NoEnhancementFound:	Het doel bezit geen ablatief schild.
+
+SpellHandler.Conversion.MagicalAbsorption:	Een magische spreuk absorbeert {0} schade van je aanval!
+SpellHandler.Conversion.ConvertToHealth:	Je zet {0} schade om in levenspunten.
+SpellHandler.Conversion.CannotConvertMoreHealth:	Je kunt niet meer naar leven omzetten!
+SpellHandler.Conversion.ConvertToEndurance:	Je zet {0} schade om in uithoudingsvermogen.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	Je kunt niet meer naar uithoudingsvermogen omzetten!
+SpellHandler.Conversion.ConvertToMana:		Je zet {0} schade om in manapunten.
+SpellHandler.Conversion.CannotConvertMoreMana:	Je kunt niet meer naar manapunten omzetten!
+SpellHandler.PetConversion.AbsorbPower:		Je absorbeert {0} manapunten.
+SpellHandler.PetConversion.ManaFull:		Je manabalk is al vol!
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	De schadereductiebarrière absorbeert {0} schade!
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	Een schadereductiebarrière absorbeert {0} schade van je aanval!
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	De barrière geeft je {0} manapunten terug.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	Je steelt {0} levenspunt{1}.
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	Je kunt geen extra levenspunten meer absorberen.
+SpellHandler.DamageToPower.PowerSteal:		Je steelt {0} manapunt{1}.
+SpellHandler.DamageToPower.NoMorePower:		Je kunt geen extra mana meer absorberen.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} steelt {1} uithoudingsvermogen van je!
+SpellHandler.EnduranceDrain.StealSuccess:	Je steelt {1} uithoudingsvermogen van {0}!
+SpellHandler.EnduranceDrain.StealPoints:		Je steelt {0} uithoudingspunt{1}.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	Je kunt geen extra uithoudingsvermogen meer absorberen.
+SpellHandler.EnduranceHeal.CasterFull:		Je uithoudingsbalk is vol.
+SpellHandler.EnduranceHeal.TargetFull:		{0} heeft een volle uithoudingsbalk.
+SpellHandler.EnduranceHeal.CasterHealed:		Je herstelt {0} uithoudingspunten.
+SpellHandler.EnduranceHeal.TargetHealed:		Je herstelt {0} uithoudingspunten voor {1}.
+SpellHandler.EnduranceHeal.TargetRestored:	Je uithoudingsvermogen is door {0} met {1} punten hersteld.
+SpellHandler.EnduranceHeal.TargetTooHigh:	Je kunt geen uithoudingsgenezing spreken als het doel meer dan 90% van de balk gevuld heeft!
+SpellHandler.HealthToEndurance.TransferLife:	Je zet {0} levenspunt(en) om naar uithoudingsvermogen!
+SpellHandler.HealthToEndurance.InsufficientHealth:	Je gezondheid is onvoldoende om deze spreuk uit te voeren!
+SpellHandler.HealthToEndurance.Diseased:		Je bent ziek! De omzetting van leven naar uithoudingsvermogen is verminderd!
+SpellHandler.HealthToEndurance.DamnedNoEffect:	Je bent vervloekt! De omzetting van leven naar uithoudingsvermogen faalt!
+SpellHandler.HealthToEndurance.DamnedPartialEffect:	Je bent vervloekt! De omzetting van leven naar uithoudingsvermogen is verminderd!
+SpellHandler.HealthToEndurance.HealthLost:	Je zet {0}% van je levenspunten om naar uithoudingsvermogen!
+SpellHandler.HealthToEndurance.EnduranceGained:	Je krijgt {0}% uithoudingsvermogen terug!
+
+SpellHandler.FocusShell.NoPets:			Deze spreuk kan niet op gezellen worden uitgesproken!
+SpellHandler.FocusShell.SameRealm:		Deze spreuk werkt alleen op leden van je rijk!
+SpellHandler.FocusShell.MustBeRvR:		Deze spreuk kan alleen in RvR of PvP worden gebruikt.
+SpellHandler.SummonSpell.PetControl:		De {0} staat nu onder jouw controle.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	Je kunt deze spreuk hier niet uitspreken!
+
+SpellHandler.PowerHeal.FullPowerOther:		De manabalk van {0} is vol!
+SpellHandler.PowerHeal.RestorePowerSelf:	Je herstelt {0} manapunten.
+SpellHandler.PowerHeal.RestorePowerOther:	Je herstelt {0} manapunten voor {1}!
+SpellHandler.PowerHeal.PowerRestored:		Je mana is door {0} met {1} punten hersteld.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	Je kunt geen mana naar jezelf overdragen!
+SpellHandler.PowerTransfer.TransferSuccess:	Je draagt {0} manapunten over aan {1}!
+SpellHandler.PowerTransfer.PowerReceived:	{0} draagt {1} manapunten aan jou over!
+SpellHandler.PowerRegenBuff.NoEffect:		Deze spreuk heeft geen effect op deze klasse!
+
+SpellHandler.Silence.AlreadyAffected:		Je doel is al getroffen door een effect van dit type!
+SpellHandler.SpeedEnhancement.CombatRecent:	Je was recent in gevecht; de spreuk heeft geen effect op jou!
+SpellHandler.WaterBreathing.StartEffect:	Je kunt vrij bewegen en onder water ademen alsof je in de lucht bent!
+SpellHandler.WaterBreathing.EndEffect:		Je slikt water in en beseft dat je niet langer onder water kunt ademen!
+
+SpellHandler.GroundAreaEffect.AlreadyActive:	Je hebt al een actief grondeffect en kunt er geen tweede uitspreken!
+SpellHandler.PowerShield.EffectStart:		Oude magie versterkt je levensessentie.
+SpellHandler.PowerShield.EffectStartOthers:	Oude magie versterkt de levensessentie van {0}.
+SpellHandler.PowerShield.EffectExpires:		Je magische schild is verdwenen!
+SpellHandler.PowerShield.EffectExpiresOthers:	Het magische schild van {0} is verdwenen!
+SpellHandler.PowerShield.InsufficientMana:	Je mana is onvoldoende om het genezingseffect van je schild te activeren.
+SpellHandler.DebuffImmunity.Refreshed:		Je bescherming tegen verzwakkingsspreuken is vernieuwd.
+SpellHandler.DebuffImmunity.Start:		Je bescherming tegen verzwakkingsspreuken is verhoogd voor de duur van de spreuk!
+SpellHandler.DebuffImmunity.GainImmunity:	Je krijgt immuniteit tegen verzwakkingsspreuken en verhoogt je weerstaankans met {0}%.
+SpellHandler.DebuffImmunity.WornOff:		Je immuniteit tegen verzwakkingsspreuken neemt af.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	De kans van {0} om verzwakkingsspreuken te weerstaan is verhoogd.
+SpellHandler.DebuffImmunity.TargetWornOff:	De immuniteit van {0} tegen verzwakkingsspreuken is verdwenen.
+SpellHandler.GatewayPersonalBind.CantUseHere:	Je kunt dit voorwerp hier niet gebruiken!
+SpellHandler.GatewayPersonalBind.MustStandStill:	Je moet stil staan om dit voorwerp te gebruiken!
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	Je was recent in gevecht en kunt dit voorwerp niet gebruiken!
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:		Je bereidt al een afstandsspreuk voor.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Je bereidt al een ononderbreekbare spreuk voor.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		Je bereidt al een spreuk zonder manakosten voor.
+SpellHandler.Warlock.MustFinishCastingRange:		Je moet je afstandsspreuk afmaken voordat je hem opnieuw uitspreekt.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:	Je moet je ononderbreekbare spreuk afmaken voordat je hem opnieuw uitspreekt.
+SpellHandler.Warlock.MustFinishCastingPowerless:		Je moet je spreuk zonder manakosten afmaken voordat je hem opnieuw uitspreekt.
+
+SpellHandler.Cleric.Ascendance.OnEnd:			Je staat van Verheffing eindigt.
+SpellHandler.Cleric.Ascendance.OnStart:		Je bereikt Verheffing en verhoogt je efficiëntie aanzienlijk.
+SpellHandler.Cleric.Ascendance.CanceledMoC:		Je Meesterschap van Concentratie dooft wanneer je Verheffing binnengaat.
+SpellHandler.Cleric.Ascendance.CannotCast:		Verheffing voorkomt het uitspreken van {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:	Je Verheffing dooft terwijl je je concentratie focust.
+SpellHandler.Cleric.DamageReturn.Active:		Een krachtige reflecterende aura omhult je.
+SpellHandler.Cleric.DamageReturn.WornOff:		Je reflecterende barrière is verdwenen.
+SpellHandler.Cleric.DamageReturn.VictimReflect:	Je barrière reflecteert {0} {1} naar de aanvaller.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:	Je lijdt {0} {1} door de reflecterende magische barrière van de tegenstander.
+SpellHandler.Cleric.OffProcShear.Removed:		De offensieve procs van het doel zijn verwijderd!
+SpellHandler.Cleric.OffProcShear.YourProcRipped:	Je offensieve procs zijn verwijderd!
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:	Een vervloekte vervangingsproc is op het doel toegepast!
+SpellHandler.Cleric.OffProcShear.YouAreCursed:		Je bent vervloekt: je treffers genezen je vijanden.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:	Geen offensieve procs op het doel gevonden.
+
+SpellHandler.Occultist.CastCondition1:			Je moet in chthonische vorm zijn om deze spreuk uit te spreken.
+SpellHandler.Occultist.CastCondition2:			Je kunt deze spreuk niet uitspreken terwijl je in chthonische vorm bent.
+SpellHandler.Occultist.CastCondition3:			Je kunt deze spreuk niet uitspreken terwijl je in broze vorm of geestvorm bent.
+SpellHandler.Occultist.CastCondition4:			Je moet je huidige vorm verlaten voordat je deze spreuk uitspreekt.
+SpellHandler.Occultist.Self.AbsorbToPower:		Je siphont {0} mana uit de ontvangen aanval.
+
+SpellHandler.SummonMonster.Target.Resist:			{0} is uit de Limbus teruggehaald als zombie en blijft ongevoelig voor deze spreuk!
+SpellHandler.IllusionSpell.Target.Resist:			{0} heeft een illusie opgeroepen en kan niet door deze spreuk worden getroffen!
+SpellHandler.Morphed.Target.Resist:			{0} heeft een metamorfose ondergaan en kan niet door deze spreuk worden getroffen!
+
+SpellHandler.DelveInfo.Sec:			sec

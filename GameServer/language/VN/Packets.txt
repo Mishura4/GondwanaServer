@@ -1,0 +1,255 @@
+# /packets/Client/168 (VI)
+# /DetailDisplayHandler
+DetailDisplayHandler.HandlePacket.UniqueObject:	Vật phẩm Độc nhất
+
+DetailDisplayHandler.GetShortItemInfo.CrafterName:		Thợ chế tác: {0}
+DetailDisplayHandler.GetShortItemInfo.NoDrop:			Không thể vứt.
+
+DetailDisplayHandler.HandlePacket.Any:				Tất cả
+DetailDisplayHandler.HandlePacket.Back:				(Mặt sau)
+DetailDisplayHandler.HandlePacket.BonusLevel:			Cấp thưởng: {0}
+DetailDisplayHandler.HandlePacket.CannotDestroyed:		Không thể phá hủy.
+DetailDisplayHandler.HandlePacket.CannotDropped:		Không thể vứt hoặc đặt vào rương.
+DetailDisplayHandler.HandlePacket.CannotSold:			Không thể bán.
+DetailDisplayHandler.HandlePacket.CannotPick:			Không thể nhặt.
+DetailDisplayHandler.HandlePacket.CannotTraded:			Không thể giao dịch với người chơi.
+DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR:		Không thể dùng trong RvR.
+DetailDisplayHandler.HandlePacket.EffectWhenSitting:		Hiệu ứng chỉ áp dụng khi đang ngồi.
+DetailDisplayHandler.HandlePacket.ChampionLevel:			- Yêu cầu: Cấp Tướng {0}
+DetailDisplayHandler.HandlePacket.ChatItem:				[Chat] {0}/Vật phẩm: "{1}"
+DetailDisplayHandler.HandlePacket.CrafterName:			Thợ chế tác: {0}
+DetailDisplayHandler.HandlePacket.Damage:				Sát thương:
+DetailDisplayHandler.HandlePacket.Defense:				Phòng thủ:
+DetailDisplayHandler.HandlePacket.Devastating:			Hủy diệt
+DetailDisplayHandler.HandlePacket.DontBelongGuild:		Bạn không thuộc bang hội nào.
+DetailDisplayHandler.HandlePacket.FatigueCost:			Tiêu hao thể lực:
+DetailDisplayHandler.HandlePacket.FollowupStyle:			Chiêu nối tiếp: {0}
+DetailDisplayHandler.HandlePacket.Front:				(Mặt trước)	
+DetailDisplayHandler.HandlePacket.GuildItem:				[Bang hội] {0}/Vật phẩm: "{1}"
+DetailDisplayHandler.HandlePacket.High:					Cao
+DetailDisplayHandler.HandlePacket.HighBonus:				Thưởng cao
+DetailDisplayHandler.HandlePacket.HighPenalty:			Phạt cao
+DetailDisplayHandler.HandlePacket.Item:					{0}/vật phẩm: "{1}
+DetailDisplayHandler.HandlePacket.LevName:				Cấp   Tên
+DetailDisplayHandler.HandlePacket.Low:					Thấp
+DetailDisplayHandler.HandlePacket.LowBonus:				Thưởng thấp
+DetailDisplayHandler.HandlePacket.LowPenalty:				Phạt thấp
+DetailDisplayHandler.HandlePacket.Medium:				Trung bình
+DetailDisplayHandler.HandlePacket.MediumBonus:			Thưởng trung bình
+DetailDisplayHandler.HandlePacket.MediumPenalty:			Phạt trung bình
+DetailDisplayHandler.HandlePacket.MustBeInChatGroup:		Bạn phải ở trong nhóm chat.
+DetailDisplayHandler.HandlePacket.MustBeInBattleGroup:		Bạn phải ở trong nhóm chiến đấu.
+DetailDisplayHandler.HandlePacket.NoBonus:				Không
+DetailDisplayHandler.HandlePacket.NoGroup:				Bạn không ở trong nhóm.
+DetailDisplayHandler.HandlePacket.NoInformation:			Không có thông tin đặc biệt!
+DetailDisplayHandler.HandlePacket.None:					Không
+DetailDisplayHandler.HandlePacket.NoPermissionToSpeak:		Bạn không có quyền nói trong kênh bang hội.
+DetailDisplayHandler.HandlePacket.OnlyModerator:			Chỉ người điều hành mới được nói trong kênh này.
+DetailDisplayHandler.HandlePacket.Opening:				Mở đầu:
+DetailDisplayHandler.HandlePacket.OpeningStyle:			Chiêu mở đầu:
+DetailDisplayHandler.HandlePacket.Or:					hoặc {0}
+DetailDisplayHandler.HandlePacket.Positional:			Theo vị trí
+DetailDisplayHandler.HandlePacket.Side:					(bên hông)
+DetailDisplayHandler.HandlePacket.TargetBlocks:			Mục tiêu đỡ đòn
+DetailDisplayHandler.HandlePacket.TargetEffect:			Hiệu ứng lên mục tiêu:
+DetailDisplayHandler.HandlePacket.TargetEvades:			Mục tiêu né tránh
+DetailDisplayHandler.HandlePacket.TargetFumbles:			Mục tiêu vấp
+DetailDisplayHandler.HandlePacket.TargetHits:				Mục tiêu đánh trúng
+DetailDisplayHandler.HandlePacket.TargetMisses:			Mục tiêu đánh trượt
+DetailDisplayHandler.HandlePacket.TargetParrys:			Mục tiêu đỡ đòn
+DetailDisplayHandler.HandlePacket.TargetStyle:			Mục tiêu thi triển chiêu thức
+DetailDisplayHandler.HandlePacket.ToHit:					Tỷ lệ đánh trúng:
+DetailDisplayHandler.HandlePacket.VeryHigh:				Rất cao
+DetailDisplayHandler.HandlePacket.VeryHighBonus:			Thưởng rất cao
+DetailDisplayHandler.HandlePacket.VeryHighPenalty:		Phạt rất cao
+DetailDisplayHandler.HandlePacket.VeryLow:				Rất thấp
+DetailDisplayHandler.HandlePacket.VeryLowBonus:			Thưởng rất thấp
+DetailDisplayHandler.HandlePacket.VeryLowPenalty:			Phạt rất thấp
+DetailDisplayHandler.HandlePacket.VeryStrange:			Rất lạ, tôi không nhận ra loại vật phẩm này.
+DetailDisplayHandler.HandlePacket.WeaponType:			Loại vũ khí: {0}
+DetailDisplayHandler.HandlePacket.YouBlock:				Bạn đỡ đòn
+DetailDisplayHandler.HandlePacket.YouEvade:				Bạn né tránh
+DetailDisplayHandler.HandlePacket.YouFumble:				Bạn vấp
+DetailDisplayHandler.HandlePacket.YouHit:				Bạn đánh trúng
+DetailDisplayHandler.HandlePacket.YouMiss:				Bạn đánh trượt
+DetailDisplayHandler.HandlePacket.YouParry:				Bạn đỡ đòn
+DetailDisplayHandler.WriteBonusLine.Points:				đ
+DetailDisplayHandler.WriteBonusLine.PowerPool:			% năng lượng.
+DetailDisplayHandler.WriteClassicArmorInfos.Absorption:	- {0}% Hấp thụ
+DetailDisplayHandler.WriteClassicArmorInfos.ArmorMod:		Hệ số giáp:
+DetailDisplayHandler.WriteClassicArmorInfos.BaseFactor:	- {0} Giáp cơ bản
+DetailDisplayHandler.WriteClassicArmorInfos.ClampFact:	- {0} Giáp thực tế
+DetailDisplayHandler.WriteClassicArmorInfos.Condition:	- {0}% Độ bền
+DetailDisplayHandler.WriteClassicArmorInfos.EffArmor:		Giáp:
+DetailDisplayHandler.WriteClassicArmorInfos.Factor:		- {0} Giáp
+DetailDisplayHandler.WriteClassicArmorInfos.Quality:		- {0}% Chất lượng
+DetailDisplayHandler.WriteClassicShieldInfos.BaseDPS:		- {0} DPS cơ bản
+DetailDisplayHandler.WriteClassicShieldInfos.ClampDPS:		- {0} DPS thực tế
+DetailDisplayHandler.WriteClassicShieldInfos.DamageMod:		Hệ số sát thương (khi dùng cùng chiêu của Khiên):
+DetailDisplayHandler.WriteClassicShieldInfos.Large:		- Kích cỡ khiên: Lớn
+DetailDisplayHandler.WriteClassicShieldInfos.Medium:		- Kích cỡ khiên: Vừa
+DetailDisplayHandler.WriteClassicShieldInfos.Small:		- Kích cỡ khiên: Nhỏ
+DetailDisplayHandler.WriteClassicShieldInfos.SPD:			- {0} Tốc độ khiên
+DetailDisplayHandler.WriteClassicWeaponInfos.BaseDPS:		- {0} DPS cơ bản
+DetailDisplayHandler.WriteClassicWeaponInfos.ClampDPS:		- {0} DPS thực tế
+DetailDisplayHandler.WriteClassicWeaponInfos.Condition:	- {0}% Độ bền
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageMod:		Hệ số sát thương:
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageType:	Loại sát thương: {0}
+DetailDisplayHandler.WriteClassicWeaponInfos.EffDamage:	Sát thương hiệu quả:
+DetailDisplayHandler.WriteClassicWeaponInfos.Quality:		- {0}% Chất lượng
+DetailDisplayHandler.WriteClassicWeaponInfos.SPD:			- {0} Tốc độ vũ khí
+DetailDisplayHandler.WriteHorseInfo.AdvancedHorse:		Đây là thú cưỡi cao cấp.
+DetailDisplayHandler.WriteHorseInfo.Armor:				- Giáp: {0}
+DetailDisplayHandler.WriteHorseInfo.Barding:				- Khóa yên: Không
+DetailDisplayHandler.WriteHorseInfo.BasicHorse:			Đây là thú cưỡi cổ điển.
+DetailDisplayHandler.WriteHorseInfo.Food:				- Thức ăn ưa thích: Cỏ khô và đôi khi một quả táo.
+DetailDisplayHandler.WriteHorseInfo.MountWindow:			Để kích hoạt thú cưỡi này, kéo biểu tượng vào ô dành riêng trong cửa sổ thú cưỡi.
+DetailDisplayHandler.WriteHorseInfo.Name:				- Tên: {0}.
+DetailDisplayHandler.WriteHorseInfo.NameMount:			(Dùng /namemount để đặt tên thú cưỡi.)
+DetailDisplayHandler.WriteHorseInfo.Quickbar:			Để triệu hồi thú cưỡi này, kéo biểu tượng từ cửa sổ thú cưỡi lên thanh nhanh rồi nhấn tạo.
+DetailDisplayHandler.WriteHorseInfo.RvRZzones:			Không thể triệu hồi trong khu vực RvR.
+DetailDisplayHandler.WriteHorseInfo.Speed1:				(+35% tốc độ)
+DetailDisplayHandler.WriteHorseInfo.Speed2:				(+45% tốc độ)
+DetailDisplayHandler.WriteHorseInfo.Summon:				Nhấp biểu tượng này trên thanh hành động để triệu hồi (hoặc giải tán) thú cưỡi.
+DetailDisplayHandler.WriteMagicalBonuses.ChargedMagic:	Năng lực Phép thuật Tích trữ:
+DetailDisplayHandler.WriteMagicalBonuses.Charges:		- {0} Lần nạp
+DetailDisplayHandler.WriteMagicalBonuses.FocusBonus:		Thưởng chuyên chú:
+DetailDisplayHandler.WriteMagicalBonuses.Level:			- {0} Cấp
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired:	Cấp yêu cầu:
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired2:	Cấp yêu cầu: {0} Cấp
+DetailDisplayHandler.WriteMagicalBonuses.MagicAbility:	Khả năng ma thuật:
+DetailDisplayHandler.WriteMagicalBonuses.MagicBonus:		Thưởng ma thuật:
+DetailDisplayHandler.WriteMagicalBonuses.MaxCharges:		- {0} Tối đa
+DetailDisplayHandler.WriteMagicalBonuses.StrikeArmor:		- Phép có thể kích hoạt khi kẻ địch đánh trúng giáp này.
+DetailDisplayHandler.WriteMagicalBonuses.StrikeEnemy:		- Phép có thể kích hoạt khi vũ khí này đánh trúng kẻ địch.
+DetailDisplayHandler.WriteMagicalBonuses.UsedItem:		- Phép có thể kích hoạt khi sử dụng vật phẩm.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem1:		Có thể dùng mỗi: {0} giây.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem2:		Có thể dùng mỗi: {0}:{1} phút.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem3:		Có thể dùng lại sau: {0}.
+DetailDisplayHandler.WriteMagicalBonuses.Inactive:		(không hoạt động)
+DetailDisplayHandler.WriteBonusConditions.Title:		Điều kiện Thưởng:
+DetailDisplayHandler.WriteBonusConditions.Renaissance:	Phải là "Renaissance"
+DetailDisplayHandler.WritePoisonInfo.Charges:			- {0} Lần nạp
+DetailDisplayHandler.WritePoisonInfo.Level:				- {0} Cấp
+DetailDisplayHandler.WritePoisonInfo.LevelRequired:		Cấp yêu cầu:
+DetailDisplayHandler.WritePoisonInfo.MaxCharges:			- {0} Tối đa
+DetailDisplayHandler.WritePoisonInfo.ProcAbility:		Hiệu ứng tấn công:
+DetailDisplayHandler.WritePotionInfo.ChargedMagic:		Năng lực phép thuật tích trữ:
+DetailDisplayHandler.WritePotionInfo.Charges:			- {0} Lần nạp
+DetailDisplayHandler.WritePotionInfo.Level:				- {0} Cấp
+DetailDisplayHandler.WritePotionInfo.LevelRequired:		Điều kiện cấp
+DetailDisplayHandler.WritePotionInfo.MaxCharges:			- {0} Tối đa
+DetailDisplayHandler.WritePotionInfo.NoUseInCombat:		Không thể dùng trong chiến đấu.
+DetailDisplayHandler.WritePotionInfo.UseItem2:			Có thể dùng mỗi: 1:00 phút
+DetailDisplayHandler.WritePotionInfo.UseItem3:			Có thể dùng lại sau: {0}
+DetailDisplayHandler.WritePotionInfo.Type:				Chức năng: {0}
+DetailDisplayHandler.WritePotionInfo.Value:				Giá trị: {0}
+DetailDisplayHandler.WritePotionInfo.Target:				Mục tiêu: {0}
+DetailDisplayHandler.WritePotionInfo.Range:				Tầm: {0}
+DetailDisplayHandler.WriteUsableClasses.UsableBy:		Dùng được bởi:
+
+# /DoorRequestHandler.cs
+DoorRequestHandler.OnTick.TooFarAway:			Bạn ở quá xa {0}!
+
+# /PlayerBonusesListRequestHandler
+PlayerBonusesListRequestHandler.HandlePacket.Bonuses:	Thưởng hiện tại
+PlayerBonusesListRequestHandler.HandlePacket.Magic:		Thưởng phép: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Melee:		Thưởng cận chiến: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Outpost:	Thưởng Pháo đài
+PlayerBonusesListRequestHandler.HandlePacket.Realm:		Thưởng Vương quốc:
+PlayerBonusesListRequestHandler.HandlePacket.Relic:		Thưởng Thánh tích:
+PlayerBonusesListRequestHandler.HandlePacket.Resist:		Kháng
+PlayerBonusesListRequestHandler.HandlePacket.Special:		Thưởng vật phẩm đặc biệt
+PlayerBonusesListRequestHandler.HandlePacket.Specs:		+{0} mọi kỹ năng
+
+# /PlayerInitRequestHandler
+PlayerInitRequestHandler.AllianceMessage:			Tin nhắn Liên minh: {0}
+PlayerInitRequestHandler.FreeLevel:				Bạn đủ điều kiện nhận một cấp miễn phí! Nhấp vào huấn luyện viên để nhận (hoặc gõ "/freelevel decline" để từ chối).
+PlayerInitRequestHandler.GuildMessage:				Tin nhắn Bang hội:
+PlayerInitRequestHandler.LevelCap:					Bạn đã vượt cấp tối đa cho chiến trường này!
+PlayerInitRequestHandler.OfficerMessage:				Tin nhắn Sĩ quan: {0}
+PlayerInitRequestHandler.SaferLocation:				Khu vực này hiện không an toàn và bạn sẽ được chuyển đến nơi an toàn hơn.
+
+# /PlayerMoveItemRequestHandler
+PlayerMoveItemRequestHandler.InvalidTradeTarget:	Mục tiêu giao dịch không hợp lệ. ({0})
+PlayerMoveItemRequestHandler.CantTradeInactive:		Không thể giao dịch với người chơi không hoạt động.
+PlayerMoveItemRequestHandler.CantTradeYourself:		Bạn không thể tự giao dịch với chính mình!
+PlayerMoveItemRequestHandler.CantRemoveItem:			Bạn không thể gỡ vật phẩm đó!
+PlayerMoveItemRequestHandler.InvalidItem:				Vật phẩm không hợp lệ (ô# {0}).
+PlayerMoveItemRequestHandler.CantDropItem:			Bạn không thể vứt vật phẩm đó xuống đất!
+PlayerMoveItemRequestHandler.YouDropItem:				Bạn thả {0} xuống đất.
+PlayerMoveItemRequestHandler.TooFarAway:				Bạn ở quá xa để đưa vật gì đó cho {0}.
+
+# /PlayerPickUpRequestHandler
+PlayerPickUpRequestHandler.HandlePacket.InvalidTarget:	Mục tiêu của bạn không hợp lệ!
+PlayerPickUpRequestHandler.HandlePacket.Target:		Bạn phải chọn mục tiêu để nhận được vật gì đó!
+
+# /PlayerPositionUpdateHandler
+PlayerPositionUpdateHandler.Endurance:				Bạn đang mất thể lực!
+PlayerPositionUpdateHandler.Entered:					Bạn đã vào {0}.
+PlayerPositionUpdateHandler.FallingDamage:			Bạn chịu sát thương do rơi!
+PlayerPositionUpdateHandler.FallPercent:				Bạn mất {0}% tổng sinh lực.
+PlayerPositionUpdateHandler.SafeFall:				Sát thương đã giảm nhờ kỹ năng Rơi an toàn!
+PlayerPositionUpdateHandler.CloudsongFall:			Trọng lượng nhẹ giúp giảm đáng kể cú va chạm!
+PlayerPositionUpdateHandler.MythSafeFall:			Sát thương đã giảm nhờ trang bị của bạn!
+PlayerPositionUpdateHandler.UnknownZone:			Khu vực không xác định! Bạn sẽ được đưa về đá linh hồn.
+
+# /PlayerTrainRequestHandler
+PlayerTrainRequestHandler.MustSelectValidTrainer:	Bạn phải chọn huấn luyện viên phù hợp với lớp của mình.
+PlayerTrainRequestHandler.AlreadyHaveAbility:		Bạn đã có kỹ năng đó!
+PlayerTrainRequestHandler.DoNotMeetRequirements:		Bạn không đáp ứng yêu cầu cho kỹ năng đó!
+PlayerTrainRequestHandler.NotEnoughChampionPoints:	Bạn không có đủ điểm chuyên môn Tướng cho kỹ năng đó!
+PlayerTrainRequestHandler.CouldNotFindChampionSpec:	Không tìm thấy chuyên môn Tướng!
+PlayerTrainRequestHandler.CantTrainSpecAgainThisLevel:	Bạn không thể huấn luyện lại chuyên môn đó ở cấp này!
+PlayerTrainRequestHandler.SpecializationCostsPoints:	Chuyên môn đó tốn {0} điểm chuyên môn!
+PlayerTrainRequestHandler.NotEnoughSpecPoints:		Bạn không còn đủ điểm chuyên môn cho cấp này.
+PlayerTrainRequestHandler.RealmAbilityCostsPoints:	{0} tốn {1} điểm Kỹ năng Vương quốc!
+PlayerTrainRequestHandler.NotEnoughRealmAbilityPoints:	Bạn không có đủ điểm Kỹ năng Vương quốc để nhận điều đó.
+PlayerTrainRequestHandler.NotExperiencedEnoughForAbility:	Bạn chưa đủ kinh nghiệm để nhận {0} lúc này. Quay lại sau.
+PlayerTrainRequestHandler.TrainingFailed:			Rất tiếc, quá trình huấn luyện thất bại. Vui lòng báo cho quản trị viên hoặc GM. Cảm ơn.
+
+# /PlayerTargetHandler
+PlayerTargetHandler.Gravestone:					Bạn ngừng nhắm vào bia mộ của mình. Lời cầu nguyện không thành.
+
+# /DestroyItemRequestHandler
+DestroyItemRequestHandler.CantDestroyItem:		Bạn không thể phá hủy {0}!
+DestroyItemRequestHandler.CantDestroyRelic:		Không thể phá hủy thánh tích!
+DestroyItemRequestHandler.CantDestroyEquippedItem:	Không thể phá hủy vật phẩm đang trang bị!
+DestroyItemRequestHandler.ItemDestroyed:			Bạn phá hủy {0}.
+DestroyItemRequestHandler.CantDestroyPvPFlag:		Không thể phá hủy cờ PvP!
+
+# /DialogResponseHandler
+DialogResponseHandler.SameRegionGuildLeaderToAccept:	Bạn phải ở cùng khu vực với thủ lĩnh bang hội để chấp nhận lời mời.
+DialogResponseHandler.StillInGuild:				Bạn vẫn đang ở trong bang hội, hãy rời khỏi trước.
+DialogResponseHandler.GuildLeaderNotInGuild:		Người mời không ở trong bang hội!
+DialogResponseHandler.GuildInviteDeclined:			{0} đã từ chối lời mời của bạn.
+DialogResponseHandler.NotInGuild:					Bạn không ở trong bang hội.
+DialogResponseHandler.InviteExpired:				Lời mời này đã hết hạn.
+DialogResponseHandler.GuildDeclineQuit:			Bạn từ chối rời bang hội.
+DialogResponseHandler.StillInGroup:				Bạn vẫn đang trong nhóm.
+DialogResponseHandler.CannotJoinGroupInCombat:		Bạn không thể tham gia nhóm khi đang chiến đấu!
+DialogResponseHandler.GroupFull:					Nhóm đã đầy.
+DialogResponseHandler.MustBeGuildMemberToUseCommands:	Bạn phải là thành viên bang hội trước khi dùng các lệnh này!
+DialogResponseHandler.NearKeepToClaim:			Bạn phải ở gần pháo đài để chiếm.
+DialogResponseHandler.DepositInLockbox:			Bạn gửi {0} vào két.
+DialogResponseHandler.LockboxHasMoneyWeeklyPayment:	Két hiện có {0}. Thanh toán hằng tuần là {1}.
+DialogResponseHandler.HousePrepaidForPayments:		Ngôi nhà đã được trả trước cho {0} kỳ thanh toán tiếp theo.
+
+# /InviteToGroupHandler
+InviteToGroupHandler.InvalidTarget:				Bạn phải chọn người chơi hợp lệ làm mục tiêu.
+InviteToGroupHandler.NotLeader:					Bạn không phải là trưởng nhóm.
+InviteToGroupHandler.GroupFull:					Nhóm đã đầy.
+InviteToGroupHandler.TargetInGroup:				Người chơi đó đã ở trong một nhóm.
+InviteToGroupHandler.Invited:					Bạn đã mời {0} tham gia nhóm.
+InviteToGroupHandler.InvitePrompt1:				{0} đã mời bạn tham gia nhóm của họ.
+InviteToGroupHandler.InvitePrompt2:				Chấp nhận?
+InviteToGroupHandler.InviteNotification:			{0} đã mời bạn tham gia nhóm của họ.
+
+# /PlayerAttackRequestHandler
+PlayerAttackRequestHandler.CantEnterMelee:		Bạn không thể chiến đấu cận chiến khi đang trang bị súng!
+
+# /PlayerDismountRequestHandler
+PlayerDismountRequestHandler.NoRidingSteed:		Bạn không cưỡi thú nào cả!
+
+# /EmblemDialogReponseHandler
+EmblemDialogReponseHandler.EmblemAlreadyInUse:	Huy hiệu này đã được một bang hội khác dùng, hãy chọn cái khác!

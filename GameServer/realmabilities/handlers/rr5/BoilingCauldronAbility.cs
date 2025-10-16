@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -63,11 +64,11 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("Summon a cauldron that boil in place for 3.5s before spilling and doing damage to all those nearby. 15min RUT.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BoilingCauldronAbility.AddEffectsInfo.Info1"));
             list.Add("");
-            list.Add("Target: Enemy");
-            list.Add("Duration: 3.5s");
-            list.Add("Casting time: Instant");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BoilingCauldronAbility.AddEffectsInfo.Info2"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BoilingCauldronAbility.AddEffectsInfo.Info3"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BoilingCauldronAbility.AddEffectsInfo.Info4"));
         }
 
     }

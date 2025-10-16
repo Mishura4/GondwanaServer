@@ -1,0 +1,328 @@
+# SpellHandler (DE)
+SpellHandler.CancelEffect:			Ihr beendet Euren Effekt.
+SpellHandler.PulsingSpellCancelled:		Ihr Zauber wurde deaktiviert.
+SpellHandler.PulsingSpellNoMana:		Sie haben nicht genug Mana und Ihr Zauber wurde deaktiviert.
+SpellHandler.NoMoreMana:			Sie haben Ihr gesamtes Mana aufgebraucht und können keine Zauber mehr wirken!
+SpellHandler.StopPlayingSong:			Ihr beendet Euer Lied.
+SpellHandler.TooFarStopPlayingSong:		Sie sind zu weit vom Ziel entfernt. Sie hören auf, Ihre Melodie zu spielen.
+SpellHandler.CasterMove:			Ihr bewegt Euch und unterbrecht damit Euren Zauberspruch!
+SpellHandler.BeginCasting:			Sie beginnen, einen {0}-Zauber zu wirken!
+SpellHandler.BeginPlaying:			Sie beginnen, {0} zu spielen!
+SpellHandler.SpellInterrupted:			{0} greift Sie an und Ihr Zauber wird unterbrochen!
+SpellHandler.DamageImmunity:			{0} ist gegen diesen Effekt immun!
+SpellHandler.Target.TooFast:			{0} bewegt sich zu schnell, als dass dieser Zauber Wirkung zeigen könnte!
+SpellHandler.DeadCantCast:			Sie sind tot und können keinen Zauber wirken!
+SpellHandler.CantCastInSiegeram:			Sie können in einem Rammbock keinen Zauber wirken!
+SpellHandler.SilencedCantCast:			Sie sind zum Schweigen gebracht und können derzeit keinen Zauber wirken.
+SpellHandler.PhaseshiftedCantCast:		Sie befinden sich unter „Phasenverschiebung“ und können keinen Zauber wirken.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} befindet sich unter „Phasenverschiebung“ und kann von diesem Zauber nicht betroffen werden!
+SpellHandler.OnlyWorksOnDead:			Dieser Zauber funktioniert nur auf gefallenen Mitgliedern Ihres Reiches!
+SpellHandler.CantAttackSelf:			Sie können sich nicht selbst angreifen!
+SpellHandler.TargetNotInView:			Ihr Ziel ist nicht in Sicht!
+SpellHandler.TargetNotInViewSpellFail:		Ihr Ziel befindet sich außerhalb Ihres Sichtfeldes. Der Zauber schlägt fehl!
+SpellHandler.TargetNotVisible:			Ihr Ziel ist nicht sichtbar!
+SpellHandler.TargetInvalid:			Das Ziel ist ungültig.
+SpellHandler.MustSelectTarget:			Sie müssen ein Ziel für diesen Zauber auswählen!
+SpellHandler.TargetTooFar:			Dieses Ziel ist zu weit entfernt!
+SpellHandler.AreaTargetOutOfRange:		Ihr Flächenziel ist außerhalb der Reichweite. Wählen Sie ein näher gelegenes Ziel.
+SpellHandler.MustCastOnControlled:		Sie müssen diesen Zauber auf eine von Ihnen kontrollierte Kreatur wirken.
+SpellHandler.SpellRequiresConcentration:	Dieser Zauber erfordert {0} Konzentrationspunkte!
+SpellHandler.MaxConcentrationSpells:		Sie können höchstens 50 gleichzeitige Konzentrationszauber aktiv haben!
+SpellHandler.WrongInstrument:			Sie führen nicht den richtigen Instrumententyp!
+SpellHandler.CantCastWhileSitting:		Sie können im Sitzen keinen Zauber wirken!
+SpellHandler.CantCastWhileSitting2:		Sie können diesen Zauber im Sitzen nicht wirken!
+SpellHandler.CantCastWhileMoving:		Sie müssen stillstehen, um diesen Zauber zu wirken!
+SpellHandler.CantCastOnDead:			Sie können diesen Zauber nicht auf einen Toten wirken!
+SpellHandler.MustWaitBeforeUse:			Sie müssen {0} Sekunden warten, bevor Sie diesen Zauber benutzen können!
+SpellHandler.InteruptWaitBeforeCast:		Sie wurden unterbrochen und müssen {0} Sekunden warten, bevor Sie erneut zaubern können!
+SpellHandler.NotEnoughPower:			Sie haben nicht genug Mana, um diesen Zauber zu wirken!
+SpellHandler.GroundTargetNotInView:		Ihr Bodenziel ist nicht in Sicht!
+SpellHandler.OnlyWorksOnFriendlyTargets:	Dieser Zauber funktioniert nur auf verbündeten Zielen!
+SpellHandler.LostFocusOnSpell:			Sie verlieren die Konzentration auf Ihren Zauber {0}.
+SpellHandler.InterruptFocus:			Sie bewegen sich und unterbrechen Ihre Konzentration!
+SpellHandler.YouResistEffect:			Sie widerstehen dem Effekt!
+SpellHandler.TargetResistsEffect:		{0} widersteht dem Effekt!
+SpellHandler.PetResistsEffect:			Ihr {0} widersteht dem Effekt!
+SpellHandler.NoEffectOnKeepComponent:		Ihr Zauber hat keine Wirkung auf die Festungskomponente!
+SpellHandler.NoEffectOnTarget:			Ihr Zauber hat keine Wirkung auf {0}!
+SpellHandler.TargetAlreadyMezz:			Ihr Ziel ist bereits von einem Mezz betroffen!
+SpellHandler.CantHaveEffectAgainYet:		Sie können diesen Effekt noch nicht erneut erhalten!
+SpellHandler.AlreadyHaveEffectWait:		Sie haben diesen Effekt bereits. Warten Sie auf sein Ende! Der Zauber ist fehlgeschlagen.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} kann diesen Effekt noch nicht erneut erhalten!
+SpellHandler.TargetAlreadyHasEffect:		{0} hat diesen Effekt bereits.
+SpellHandler.WaitUntilExpires:			Warten Sie, bis er abläuft. Zauber fehlgeschlagen.
+SpellHandler.TargetImmune:			Ihr Ziel ist immun!
+SpellHandler.MezIntercepted:			Ihr defensiver Gegenstandseffekt fängt den Mezz-Zauber ab und erlischt!
+SpellHandler.CeremonialBracerInterceptMez:	Die Zeremonielle Armschiene fängt Ihren Mezz ab!
+SpellHandler.StunIntercepted:			Ihr defensiver Gegenstandseffekt fängt den Betäubungszauber ab und erlischt!
+SpellHandler.YouMiss:				Sie verfehlen Ihr Ziel!
+SpellHandler.TargetMissed:			{0} hat sein Ziel verfehlt!
+SpellHandler.EngageCannotBeUsed:			{0} wurde kürzlich angegriffen, und Sie können nicht engagieren.
+SpellHandler.NotEnoughEndurance:			Sie konzentrieren sich darauf, den Schlag zu blocken!
+SpellHandler.MustTargetPlayer:			Sie müssen einen Spieler anvisieren.
+SpellHandler.BuffNoEffectOnVampiir:		Ihr Verbesserungszauber hat auf den Vampiir keine Wirkung!
+SpellHandler.BuffNoEffectOnYou:			Dieser Verbesserungszauber hat auf Sie keine Wirkung!
+SpellHandler.AlreadyHasEffect:			Sie haben diesen Effekt bereits!
+SpellHandler.AlreadyHasThisEffect:		{0} hat diesen Effekt bereits
+SpellHandler.TargetIsStealthed:			Dieser Zauber kann nicht auf ein getarntes Ziel angewendet werden!
+SpellHandler.DefaultDescription:			{0} hat einen Wert von {1} und einen Schadenswert von {2}.
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Ihr Begleiter ist nicht in Sicht.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Sichtlinienunterbrechung in CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	Sie können Ihr Ziel von hier aus nicht sehen!
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Sichtlinienunterbrechung in CheckLOSNPCToTarget
+
+SpellHandler.HitTarget:			Sie treffen {0} für {1}{2} Schaden!
+SpellHandler.NPCHitTarget:			Ihr {0} trifft {1} für {2}{3} Schaden!
+SpellHandler.CriticalHit:			Sie fügen einen kritischen Treffer zu und verursachen {0} zusätzlichen Schaden!
+SpellHandler.TargetPronoun.Your:		Ihr
+SpellHandler.TargetPronoun.Targets:		Das Ziel
+
+SpellHandler.MustBeStealthedBow:		Sie müssen getarnt sein und einen Bogen führen, um diese Fähigkeit zu benutzen!
+SpellHandler.MustWieldBow:			Sie müssen einen Bogen führen, um diese Fähigkeit zu benutzen!
+SpellHandler.Archery.Prepare:			Sie bereiten einen {0} vor.
+SpellHandler.Archery.DisarmedCantCast:		Sie können keinen Zauber wirken, da Sie entwaffnet sind.
+SpellHandler.ChamberSpell.YouInvulnerable:	Sie sind derzeit unverwundbar und können diesen Zauber nicht wirken!
+SpellHandler.ChamberSpell.TargetInvulnerable:	Ihr Ziel ist derzeit unverwundbar und kann nicht angegriffen werden!
+SpellHandler.SiegeArrow.InvalidTarget:		Für diesen Zauber müssen Sie eine Festungskomponente anvisieren!
+SpellHandler.SiegeArrow.InvalidComponentTarget:	Ihr Ziel muss eine Festungskomponente sein!
+SpellHandler.SiegeArrow.PrepareSpell:		Sie bereiten {0} vor.
+SpellHandler.BumpSpell.TargetHurled:		{0} wird in die Luft geschleudert!
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Ihr Ziel hat bereits einen Effekt dieser Art!
+
+SpellHandler.Convoker.AreaTargetOutOfRange:	Ihr Flächenziel ist außerhalb der Reichweite. Wählen Sie einen näheren Punkt am Boden.
+SpellHandler.Convoker.AreaTargetNotInView:	Ihr Flächenziel ist nicht in Sicht.
+SpellHandler.Convoker.MustSetGroundTarget:	Sie müssen ein Bodenziel festlegen!
+
+SpellHandler.IchorOfTheDeep.NoTarget:		Sie benötigen ein Ziel für diese Fähigkeit!
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} ist zu weit entfernt.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	Sie verwenden diese Fähigkeit bereits.
+SpellHandler.IchorOfTheDeep.CastMessage:	Sie wirken {0}!
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} wirkt einen Zauber!
+SpellHandler.IchorOfTheDeep.HitMob:		Sie treffen den {0} für {1} Schaden.
+SpellHandler.IchorOfTheDeep.HitPlayer:		Sie treffen {0} für {1} Schaden.
+
+SpellHandler.OmniHeal.SelfHealed:		Sie erhalten {0} Ausdauerpunkte und {1} Manapunkte.
+SpellHandler.OmniHeal.TargetHealed:		Sie heilen {0} um {1} Ausdauerpunkte und {2} Manapunkte.
+SpellHandler.OmniHeal.YouAreHealed:		Sie werden von {0} um {1} Ausdauerpunkte und {2} Manapunkte geheilt.
+SpellHandler.OmniHarm.InflictLossesToTarget:	Sie fügen {2} außerdem {0} Ausdauerverlust und {1} Manaverlust zu!
+SpellHandler.OmniHarm.InflictLossesToYou:		{0} fügt Ihnen {1} Ausdauerverlust und {2} Manaverlust zu!
+
+SpellHandler.HealSpell.TargetDead:		{0} ist tot!
+SpellHandler.HealSpell.NoHelp:			Dieser Spieler wünscht keine Unterstützung.
+SpellHandler.HealSpell.FullyHealedSelf:		Sie sind vollständig geheilt.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} ist vollständig geheilt.
+SpellHandler.HealSpell.RealmPointsGained:	Sie erhalten {0} Reichspunkte für das Heilen eines Mitglieds Ihres Reiches.
+SpellHandler.HealSpell.SelfHealed:		Sie heilen sich um {0} Lebenspunkte.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} heilt sich um {1} Lebenspunkte.
+SpellHandler.HealSpell.TargetHealed:		Sie heilen {0} um {1} Lebenspunkte!
+SpellHandler.HealSpell.TargetDamageToHeal:		Sie heilen {0} um {1} Lebenspunkte, statt Schaden zu verursachen, aufgrund seines/ihres magischen Schildes!
+SpellHandler.HealSpell.YouAreHealed:		Sie werden von {0} um {1} Lebenspunkte geheilt.
+SpellHandler.HealSpell.CriticalHeal:		Sie wirken eine kritische Heilung und stellen {0} zusätzliche Lebenspunkte wieder her!
+SpellHandler.HealSpell.EfficientHealingBuff:	Ihr Effizienz-Heilungsbuff gewährt Ihnen {0} zusätzliche Heilungspunkte!
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Ihr Effizienz-Ausdauerbuff gewährt Ihnen beim Heilen {0} zusätzliche Ausdauerpunkte!
+SpellHandler.HealSpell.TargetDamnedDamaged:		Sie sind verflucht! Der Heilzauber fügt Ihnen {0} Schaden zu, anstatt Sie zu heilen!
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	Der Heilzauber ist weniger effektiv, weil Sie verflucht sind!
+SpellHandler.HealSpell.DamnedNoHeal:		Der Heilzauber wirkt nicht auf Sie, weil Sie verflucht sind!
+SpellHandler.HealSpell.YouDiseased:			Sie sind krank, die Heilung wird um {0}% reduziert!
+SpellHandler.HealSpell.HealingReduced:		Die Heilung wird aufgrund von Heilungshemmungseffekten um {0}% reduziert.
+SpellHandler.HealSpell.HealingReducedShield:		Die Heilung wird um {0}% reduziert aufgrund der Schutzbarriere von {1}.
+SpellHandler.HealSpell.HealingNull:			Ihr Zauber heilt das Ziel aufgrund von Heilungshemmung nicht.
+SpellHandler.HealSpell.HealingNullYou:		Die Heilung schlägt aufgrund Ihrer Hemmungseffekte fehl.
+SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	Der Lebensentzug hat keine Wirkung, da sowohl Sie als auch Ihr Ziel verflucht sind!
+SpellHandler.LifeDrain.TargetDamnedDamaged:		Sie sind verflucht! Der Lebensentzug fügt Ihnen {0} Schaden zu, anstatt Sie zu heilen!
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	Der Lebensentzug ist weniger effektiv, da {0} verflucht ist!
+SpellHandler.LifeDrain.DamnedNoHeal:		Der Lebensentzug heilt Sie nicht, weil Sie verflucht sind!
+SpellHandler.LifeDrain.DamnedTargetHealed:		{0} wird geheilt und erhält {1} Lebenspunkte zurück!
+SpellHandler.LifeDrain.DamnedTargetCriticallyHealed:	{0} erhält einen kritischen Heilungsbonus und bekommt {1} Lebenspunkte zurück!
+SpellHandler.LifeDrain.DamnedYouHealed:		Sie werden geheilt und erhalten {0} Lebenspunkte zurück!
+SpellHandler.LifeDrain.DamnedYouCriticallyHealed:	Sie erhalten einen kritischen Heilungsbonus und bekommen {0} Lebenspunkte zurück!
+SpellHandler.SpreadHeal.GroupFullyHealed:	Ihre Gruppe ist bereits vollständig geheilt!
+
+SpellHandler.Zephyr.NoAttackInZephyr:		Sie werden von einem Zephyr getragen und können nicht angegriffen werden!
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Ihr Ziel wird von einem Zephyr getragen und kann nicht angegriffen werden!
+SpellHandler.Zephyr.PickedUpByZephyr:		Ein mächtiger Zephyr reißt Sie empor!
+SpellHandler.Phaseshift.NotEnoughEndurance:	Sie benötigen 50 % Ausdauer, um diesen Zauber zu verwenden!
+SpellHandler.Groupport.CannotUseAbilityHere:	Sie können diese Fähigkeit hier nicht verwenden!
+SpellHandler.Groupport.BindInAnotherRegion:	Binden Sie sich in einer anderen Region, um diese Fähigkeit zu nutzen!
+SpellHandler.Groupport.GroupInCombat:		Sie können keine Gruppe teleportieren, die sich im Kampf befindet!
+SpellHandler.Groupport.NotInGroup:		Sie sind in keiner Gruppe!
+SpellHandler.TargetNoLongerInRange:		Ihr Ziel ist nicht mehr in Reichweite.
+SpellHandler.TargetNoLongerInView:		Ihr Ziel ist nicht mehr in Sicht.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} bewegt sich zu schnell, als dass dieser Zauber eine Wirkung hätte!
+SpellHandler.Earthquake.Ending:			Das Erdbeben ist zu Ende.
+SpellHandler.YouDamnedResistEffect:		Sie sind verflucht und widerstehen dem Effekt!
+SpellHandler.TargetDamnedResistsEffect:		{0} ist verflucht und widersteht dem Effekt!
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	Sie können diesen Zauber im Kampf nicht wirken!
+SpellHandler.VampiirBolt.PowerTaken:		{0} entzieht Ihnen {1} Mana!
+SpellHandler.VampiirBolt.PowerReceived:		Sie erhalten {0} Mana von {1}!
+SpellHandler.VampiirBolt.NoPowerReceived:	Sie haben von {0} kein Mana zurückerhalten!
+SpellHandler.VampiirBolt.TargetTooHigh:		Das Ziel kann von diesem Zauber nicht betroffen werden, da sein Level zu hoch ist!
+
+SpellHandler.WrathofChampions.CastSpell:	Sie wirken {0}!
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} wirkt einen Zauber!
+SpellHandler.WrathofChampions.HitMob:		Sie treffen den {0} für {1} Schaden.
+SpellHandler.WrathofChampions.HitPlayer:		Sie treffen {0} für {1} Schaden.
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} trifft Sie für {1} Schaden.
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Erlauben Sie {0}, Sie mit {1} Prozent Lebenspunkten wiederzubeleben?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Niemand versucht derzeit, Sie wiederzubeleben.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Sie lehnen eine Wiederbelebung ab.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Sie wurden von {0} wiederbelebt!
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	Eine wundersame Kraft erweckt Sie zum Leben!
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	Eine wundersame Kraft erweckt Sie zum Leben! Sie stellt Ihnen {0}% Leben wieder her.
+SpellHandler.ResurrectSpellHandler.RezExpired:		Ihr Wiederbelebungszauber ist abgelaufen.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Ihr Ziel erwägt bereits eine Wiederbelebung!
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		Der Spieler, den Sie wiederbelebt haben, brachte bei seinem Tod keine Reichspunkte.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		Sie erhalten daher bei seiner Wiederbelebung keine Reichspunkte.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Ihre Konzentration lässt nach.
+SpellHandler.Battlewarder.WarderFallen:		Ihr Schlachtwächter ist gefallen!
+SpellHandler.Convoker.TemplateNotFound:		NPCTemplate {0} nicht gefunden!
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Ihr Begleiter hat bereits eine aktive Fähigkeit dieser Art.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	Sie können diese Fähigkeit nicht auf Ihren eigenen Begleiter anwenden.
+
+SpellHandler.BoltSpell.PartialBlock:		Sie blocken den Zauber von {0} teilweise!
+SpellHandler.BoltSpell.Blocked:			{0} blockt!
+
+SpellHandler.Arrow.Block:			Sie blocken den Pfeil von {0}!
+SpellHandler.Arrow.ArrowBlocked:			{0} blockt Ihren Pfeil!
+SpellHandler.Archery.PenetrateBarrier:		Ein Schuss hat Ihre magische Barriere durchdrungen!
+SpellHandler.Archery.StrikeAbsorbed:		Ihr Schuss wurde von einer magischen Barriere absorbiert!
+SpellHandler.Archery.BlowAbsorbed:		Der Schlag wurde von einer magischen Barriere absorbiert!
+SpellHandler.Archery.Interrupted:			{0} greift Sie an und Ihr Schuss wird unterbrochen!
+
+SpellHandler.Chamber.CannotUseState:		Sie können dies in Ihrem aktuellen Zustand nicht verwenden.
+SpellHandler.Chamber.TargetNotAttackable:	Dieses Ziel ist derzeit nicht angreifbar!
+SpellHandler.Chamber.SelectFirstSpell:		Wählen Sie den ersten Zauber für Ihren {0}.
+SpellHandler.Chamber.NoSpellsLoaded:		Kein Zauber in {0} geladen.
+SpellHandler.Chamber.ReadyForUse:		Ihr {0} ist einsatzbereit.
+SpellHandler.Chamber.CastsSpell:			{0} wirkt einen Zauber!
+
+SpellHandler.Lifedrain.Heal:			Sie stehlen {0} Lebenspunkt{1}.
+SpellHandler.Lifedrain.NoAbsorb:		Sie können keine weiteren Lebenspunkte absorbieren.
+SpellHandler.PowerDrain.PowerGain:		Sie siphonen {0} Mana vom Ziel!
+SpellHandler.PowerDrain.PowerLoss:		{0}% Ihres Manas wurden von {1} abgesaugt!
+SpellHandler.PowerDrain.NoAbsorb:		Sie können kein weiteres Mana absorbieren.
+SpellHandler.PowerLock.SpellHit:			{0} saugt Ihnen {1} Mana ab.
+SpellHandler.PowerLock.StealSuccess:		Sie stehlen {1} Mana von {0}!
+SpellHandler.PowerLock.StealOverflow:		Sie stehlen {1} Mana von {0}! ({2} Überlauf)
+
+SpellHandler.PrimerSpell.EffectExpired:		Ihr Modifikationszauber-Effekt ist abgelaufen.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	Sie bewegen sich und brechen Ihren Modifikationszauber ab.
+
+SpellHandler.BuffShear.ShearSuccess:		Ihr Zauber reißt einen Teil der Verbesserungsmagie Ihres Ziels ab.
+SpellHandler.BuffShear.EnhancingMagicRipped:	Ein Teil Ihrer Verbesserungsmagie wurde durch einen Zauber entfernt!
+SpellHandler.BuffShear.ConnectionTooStrong:	Die Bindung des Ziels an seine Verbesserung ist zu stark, um sie zu entfernen.
+SpellHandler.BuffShear.NoEnhancementFound:	Keine Verbesserung dieser Art auf dem Ziel gefunden.
+SpellHandler.AblativeShear.ShearSuccess:		Ihr Zauber entfernt die ablativen Schilde Ihres Ziels.
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Ihr ablativer Schild wurde durch einen Zauber entfernt!
+SpellHandler.AblativeShear.NoEnhancementFound:	Das Ziel besitzt keinen ablativen Schild.
+
+SpellHandler.Conversion.MagicalAbsorption:	Ein magischer Zauber absorbiert {0} Schaden Ihres Angriffs!
+SpellHandler.Conversion.ConvertToHealth:	Sie wandeln {0} Schaden in Lebenspunkte um.
+SpellHandler.Conversion.CannotConvertMoreHealth:	Sie können nicht mehr in Lebenspunkte umwandeln!
+SpellHandler.Conversion.ConvertToEndurance:	Sie wandeln {0} Schaden in Ausdauer um.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	Sie können nicht mehr in Ausdauer umwandeln!
+SpellHandler.Conversion.ConvertToMana:		Sie wandeln {0} Schaden in Manapunkte um.
+SpellHandler.Conversion.CannotConvertMoreMana:	Sie können nicht mehr in Manapunkte umwandeln!
+SpellHandler.PetConversion.AbsorbPower:		Sie absorbieren {0} Manapunkte.
+SpellHandler.PetConversion.ManaFull:		Ihre Manaleiste ist bereits voll!
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	Die Schadensreduktionsbarriere absorbiert {0} Schadenspunkte!
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	Eine Schadensreduktionsbarriere absorbiert {0} Schadenspunkte Ihres Angriffs!
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	Die Barriere gibt Ihnen {0} Manapunkte zurück.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	Sie stehlen {0} Lebenspunkt{1}
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	Sie können keine weiteren Lebenspunkte absorbieren.
+SpellHandler.DamageToPower.PowerSteal:		Sie stehlen {0} Manapunkt{1}.
+SpellHandler.DamageToPower.NoMorePower:		Sie können kein weiteres Mana absorbieren.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} stiehlt Ihnen {1} Ausdauer!
+SpellHandler.EnduranceDrain.StealSuccess:	Sie stehlen {1} Ausdauer von {0}!
+SpellHandler.EnduranceDrain.StealPoints:		Sie stehlen {0} Ausdauerpunkt{1}.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	Sie können keine weitere Ausdauer absorbieren.
+SpellHandler.EnduranceHeal.CasterFull:		Ihre Ausdauerleiste ist voll.
+SpellHandler.EnduranceHeal.TargetFull:		{0} hat eine volle Ausdauerleiste.
+SpellHandler.EnduranceHeal.CasterHealed:		Sie stellen {0} Ausdauerpunkte wieder her.
+SpellHandler.EnduranceHeal.TargetHealed:		Sie stellen {0} für {1} Ausdauerpunkte wieder her!
+SpellHandler.EnduranceHeal.TargetRestored:	Ihre Ausdauer wurde von {0} um {1} Punkte wiederhergestellt.
+SpellHandler.EnduranceHeal.TargetTooHigh:	Sie können keine Ausdauerheilung wirken, wenn das Ziel mehr als 90 % seiner Ausdauerleiste gefüllt hat!
+SpellHandler.HealthToEndurance.TransferLife:	Sie übertragen {0} Lebenspunkt(e) in Ausdauer!
+SpellHandler.HealthToEndurance.InsufficientHealth:	Ihre Gesundheit ist unzureichend, um diesen Zauber auszuführen!
+SpellHandler.HealthToEndurance.Diseased:		Sie sind krank! Die Umwandlung von Lebenspunkten in Ausdauer ist reduziert!
+SpellHandler.HealthToEndurance.DamnedNoEffect:	Sie sind verflucht! Die Umwandlung von Lebenspunkten in Ausdauer schlägt fehl!
+SpellHandler.HealthToEndurance.DamnedPartialEffect:	Sie sind verflucht! Die Umwandlung von Lebenspunkten in Ausdauer ist reduziert!
+SpellHandler.HealthToEndurance.HealthLost:	Sie übertragen {0}% Ihrer Lebenspunkt(e) in Ausdauer!
+SpellHandler.HealthToEndurance.EnduranceGained:	Sie erhalten {0}% Ausdauer zurück!
+
+SpellHandler.FocusShell.NoPets:			Dieser Zauber kann nicht auf Begleiter gewirkt werden!
+SpellHandler.FocusShell.SameRealm:		Dieser Zauber funktioniert nur auf Mitglieder Ihres Reiches!
+SpellHandler.FocusShell.MustBeRvR:		Dieser Zauber kann nur in RvR oder PvP verwendet werden.
+SpellHandler.SummonSpell.PetControl:		Der/die {0} steht nun unter Ihrer Kontrolle.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	Sie können diesen Zauber hier nicht wirken!
+
+SpellHandler.PowerHeal.FullPowerOther:		Die Manaleiste von {0} ist voll!
+SpellHandler.PowerHeal.RestorePowerSelf:	Sie stellen {0} Manapunkte wieder her.
+SpellHandler.PowerHeal.RestorePowerOther:	Sie stellen {0} von {1} Manapunkten wieder her!
+SpellHandler.PowerHeal.PowerRestored:		Ihr Mana wurde von {0} um {1} Punkte wiederhergestellt.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	Sie können kein Mana an sich selbst übertragen!
+SpellHandler.PowerTransfer.TransferSuccess:	Sie übertragen {0} Manapunkte an {1}!
+SpellHandler.PowerTransfer.PowerReceived:	{0} überträgt Ihnen {1} Manapunkte!
+SpellHandler.PowerRegenBuff.NoEffect:		Dieser Zauber hat auf diese Klasse keine Wirkung!
+
+SpellHandler.Silence.AlreadyAffected:		Ihr Ziel ist bereits von einem Effekt dieser Art betroffen!
+SpellHandler.SpeedEnhancement.CombatRecent:	Sie waren kürzlich im Kampf, der Zauber hat auf Sie keine Wirkung!
+SpellHandler.WaterBreathing.StartEffect:	Sie können sich frei bewegen und unter Wasser wie an der Luft atmen!
+SpellHandler.WaterBreathing.EndEffect:		Sie schlucken Wasser und erkennen plötzlich, dass Sie nicht mehr unter Wasser atmen können!
+
+SpellHandler.GroundAreaEffect.AlreadyActive:	Sie haben bereits einen aktiven Bodeneffekt und können keinen weiteren wirken!
+SpellHandler.PowerShield.EffectStart:		Uralte Magie stärkt Ihre Lebensessenz.
+SpellHandler.PowerShield.EffectStartOthers:	Uralte Magie stärkt die Lebensessenz von {0}.
+SpellHandler.PowerShield.EffectExpires:		Ihr magischer Schild ist erloschen!
+SpellHandler.PowerShield.EffectExpiresOthers:	Der magische Schild von {0} ist erloschen!
+SpellHandler.PowerShield.InsufficientMana:	Ihre Manareserven reichen nicht aus, um den Heilungseffekt Ihres Schildes zu aktivieren.
+SpellHandler.DebuffImmunity.Refreshed:		Ihr Schutz gegen Schwächungszauber wurde erneuert.
+SpellHandler.DebuffImmunity.Start:		Ihr Schutz gegen Schwächungszauber ist für die Zauberdauer erhöht!
+SpellHandler.DebuffImmunity.GainImmunity:	Sie erhalten eine Immunität gegen Schwächungszauber und erhöhen Ihre Widerstandschance um {0}%.
+SpellHandler.DebuffImmunity.WornOff:		Ihre Immunität gegen Schwächungszauber lässt nach.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	Die Chance von {0}, Schwächungszaubern zu widerstehen, hat sich erhöht.
+SpellHandler.DebuffImmunity.TargetWornOff:	Die Immunität von {0} gegen Schwächungszauber ist erloschen.
+SpellHandler.GatewayPersonalBind.CantUseHere:	Sie können diesen Gegenstand hier nicht benutzen!
+SpellHandler.GatewayPersonalBind.MustStandStill:	Sie müssen stillstehen, um diesen Gegenstand zu benutzen!
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	Sie waren kürzlich im Kampf und können diesen Gegenstand nicht benutzen!
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:		Sie bereiten bereits einen Fernzauber vor.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Sie bereiten bereits einen nicht unterbrechbaren Zauber vor.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		Sie bereiten bereits einen manafreien Zauber vor.
+SpellHandler.Warlock.MustFinishCastingRange:		Sie müssen das Wirken Ihres Fernzaubers beenden, bevor Sie ihn erneut wirken.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:	Sie müssen das Wirken Ihres nicht unterbrechbaren Zaubers beenden, bevor Sie ihn erneut wirken.
+SpellHandler.Warlock.MustFinishCastingPowerless:		Sie müssen das Wirken Ihres manafreien Zaubers beenden, bevor Sie ihn erneut wirken.
+
+SpellHandler.Cleric.Ascendance.OnEnd:			Ihr Aufstiegszustand lässt nach.
+SpellHandler.Cleric.Ascendance.OnStart:		Sie erreichen den Aufstieg und steigern Ihre Effizienz erheblich.
+SpellHandler.Cleric.Ascendance.CanceledMoC:		Ihre Meisterschaft der Konzentration erlischt, da Sie den Aufstieg betreten.
+SpellHandler.Cleric.Ascendance.CannotCast:		Der Aufstieg verhindert das Wirken von {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:	Ihr Aufstieg erlischt, während Sie Ihre Konzentration fokussieren.
+SpellHandler.Cleric.DamageReturn.Active:		Eine mächtige reflektierende Aura umgibt Sie.
+SpellHandler.Cleric.DamageReturn.WornOff:		Ihre reflektierende Barriere ist erloschen.
+SpellHandler.Cleric.DamageReturn.VictimReflect:	Ihre Barriere reflektiert {0} {1} auf den Angreifer.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:	Sie erleiden {0} {1} aufgrund der reflektierenden Zauberbarriere des Gegners.
+SpellHandler.Cleric.OffProcShear.Removed:		Die offensiven Procs des Ziels wurden entfernt!
+SpellHandler.Cleric.OffProcShear.YourProcRipped:	Ihre offensiven Procs wurden entfernt!
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:	Ein verfluchter Ersatz‑Proc wurde auf das Ziel angewendet!
+SpellHandler.Cleric.OffProcShear.YouAreCursed:		Sie sind verflucht: Ihre Treffer heilen Ihre Feinde.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:	Keine offensiven Procs auf dem Ziel gefunden.
+
+SpellHandler.Occultist.CastCondition1:			Sie müssen in chthonischer Form sein, um diesen Zauber zu wirken.
+SpellHandler.Occultist.CastCondition2:			Sie können diesen Zauber nicht wirken, während Sie in chthonischer Form sind.
+SpellHandler.Occultist.CastCondition3:			Sie können diesen Zauber nicht wirken, während Sie in gebrechlicher Form oder Geisterform sind.
+SpellHandler.Occultist.CastCondition4:			Sie müssen Ihre aktuelle Form verlassen, bevor Sie diesen Zauber wirken.
+SpellHandler.Occultist.Self.AbsorbToPower:		Sie siphonen {0} Mana aus dem erhaltenen Angriff.
+
+SpellHandler.SummonMonster.Target.Resist:			{0} wurde aus den Limbus als Zombie zurückgeholt und bleibt gegen diesen Zauber unempfindlich!
+SpellHandler.IllusionSpell.Target.Resist:			{0} hat eine Illusion beschworen und kann von diesem Zauber nicht betroffen werden!
+SpellHandler.Morphed.Target.Resist:			{0} hat eine Metamorphose durchlaufen und kann von diesem Zauber nicht betroffen werden!
+
+SpellHandler.DelveInfo.Sec:			Sekunde(n)

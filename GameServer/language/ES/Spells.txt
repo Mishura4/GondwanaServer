@@ -1,0 +1,570 @@
+# DelveInfo
+DelveInfo.CastingTime:          Tiempo de lanzamiento: {0}
+DelveInfo.ConcentrationCost:    Coste de concentración: {0}
+DelveInfo.Damage:               Daño: {0}
+DelveInfo.DamageType:           Tipo de daño: {0}
+DelveInfo.Duration:             Duración: 
+DelveInfo.Focus:                Hechizo de canalización. Se interrumpe con la primera acción.
+DelveInfo.Frequency:            Frecuencia: {0}
+DelveInfo.HealthReturned:       Salud recuperada: {0}% del daño infligido
+DelveInfo.InstrumentRequire:    Instrumento requerido: {0}
+DelveInfo.PowerCost:            Coste de maná: {0}
+DelveInfo.HealthCost:           Coste de salud: {0}
+DelveInfo.Radius:               Radio: {0}
+DelveInfo.Range:                Alcance: {0}
+DelveInfo.RangeModified:	    Alcance: {0} {1}
+DelveInfo.RecastTime:           Reutilización: 
+DelveInfo.Target:               Objetivo: {0}
+DelveInfo.Value:                Valor: {0}
+DelveInfo.ValueNegative:        Valor: -{0}
+DelveInfo.Destination:		    Destino: {0}
+
+# Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Inflige {0} de {1} al objetivo.
+SpellDescription.DoT.MainDescription:				El objetivo sufre {0} de {1} cada {2} s.
+SpellDescription.BoltSpell.MainDescription:			Un proyectil mágico impacta y explota causando {0} de {1}. Puede ser bloqueado.
+SpellDescription.LifeDrain.MainDescription:			Inflige {0} de {1} y cura al lanzador un {2}% del daño causado.
+SpellDescription.DirectDamageWithDebuff.MainDescription:	Inflige {0} de {1} y reduce {2} del objetivo un {3}%.
+SpellDescription.Nearsight.MainDescription1:		Reduce el alcance efectivo de los ataques a distancia del objetivo en un {0}%.
+SpellDescription.Nearsight.MainDescription2:		Los hechizos de miopía que afectan al grupo del lanzador actúan con un {0}% menos de eficacia o pueden ser resistidos por completo.
+SpellDescription.SpreadHeal.MainDescription:		Cura de área por {0}.
+SpellDescription.RegenHeal.MainDescription:			El objetivo regenera {0} puntos de salud adicionales.
+SpellDescription.RegenPower.MainDescription:		El objetivo regenera {0} puntos de maná adicionales.
+SpellDescription.RegenEndu.MainDescription:			El objetivo regenera {0} puntos de aguante adicionales.
+SpellDescription.SpeedDecrease.MainDescription:		Reduce la velocidad del objetivo un {0}%.
+SpellDescription.SpeedDecrease.Rooted:				El objetivo queda inmovilizado.
+SpellDescription.Slow.MainDescription:				Reduce la velocidad del objetivo un {0}%. No genera inmunidad y no se interrumpe con golpes.
+SpellDescription.Bladeturn.MainDescription:			Crea una “burbuja” que absorbe el daño de un golpe cuerpo a cuerpo.
+SpellDescription.Demi.MainDescription:				{0} reduce la salud del enemigo a la mitad.
+SpellDescription.Quarter.MainDescription:			{0} reduce la salud del enemigo a un cuarto.
+SpellDescription.DemiQuarter.AmnesiaDescription:	No afecta a criaturas débiles ni a objetivos por encima del nivel {0}.
+SpellDescription.DemiQuarter.EndDescription:		Este hechizo rara vez afecta a espíritus, demonios, nigromantes, banshees y vampiros.
+SpellDescription.LifeTransfer.MainDescription:		Transfiere {0} puntos de salud del lanzador a su objetivo.
+SpellDescription.Heal.MainDescription:				Cura {0} puntos de salud al objetivo.
+SpellDescription.HealEnemy.MainDescription:			Cura a tu enemigo {0} puntos de salud al golpear (proc).
+SpellDescription.Disease.MainDescription:			Aplica una enfermedad que ralentiza un {0}%, reduce la fuerza un {1}% y frena las curas un {2}%.
+SpellDescription.Petrify.MainDescription:			Petrifica al objetivo convirtiéndolo en estatua. Queda paralizado y absorbe 50% del daño físico y 75% del daño mágico recibido mientras es atacado.
+SpellDescription.Unpetrify.MainDescription:			Cura el estado de “Petrificado” del objetivo.
+SpellDescription.HealDebuff.MainDescription:		Reduce la efectividad de las curas un {0}%. Se acumula con “Enfermedad”.
+SpellDescription.DebuffImmunity.MainDescription:	Otorga inmunidad a debilitaciones y +{0}% de probabilidad de resistir durante {1} s.
+SpellDescription.MagicHealAbsorb.MainDescription:	El próximo ataque mágico contra ti absorbe y convierte {0}% del daño en curación y {1}% en maná y aguante.
+SpellDescription.Trigger.MainDescription:			Aplica un efecto mágico (proc) como mejora. {0} se dispara cuando el objetivo es golpeado.
+SpellDescription.WaterBreathing.MainDescription:	Permite respirar bajo el agua y moverse al {0}% de la velocidad terrestre.
+SpellDescription.TensionDebuff.MainDescription:		Reduce las ganancias de tensión del objetivo un {1}%.
+SpellDescription.TensionBuff.MainDescription:		Aumenta las ganancias de tensión del objetivo un {1}%.
+SpellDescription.Teleport.MainDescription:			{0} teletransporta al objetivo a {1}.
+SpellDescription.PlayerPortal.MainDescription:		Abre un portal de ida y vuelta de un solo uso enlazado al punto de retorno de su invocador. Funciona en {0}.
+SpellDescription.Earthquake.MainDescription1:		Crea un terremoto de magnitud {0} que causa hasta {1} de daño cerca del epicentro, decreciendo hasta {2} en los bordes.
+SpellDescription.Earthquake.MainDescription2:		No afecta a monstruos voladores o nadadores, ni a banshees o vampiros flotantes.
+SpellDescription.HoT.MainDescription:				El objetivo recupera {0} de salud cada {1} s.
+SpellDescription.DDWithDebuff.MainDescription:		Inflige {0} de {1} y reduce la resistencia a {1} del objetivo un {2}%.
+SpellDescription.AfHitsBuff.MainDescription:		Aumenta el factor de armadura y la salud un {0}% mientras se permanezca en el radio del aura.
+SpellDescription.AllStatsBuff.MainDescription:		Aumenta todos los atributos del objetivo en {0}.
+SpellDescription.PowerDrain.MainDescription:		Inflige {0} de {1}; el lanzador recupera {2}% del daño como maná.
+SpellDescription.RealPowerDrain.MainDescription:	Inflige {0} de {1}; el lanzador recupera {2}% como maná y el objetivo pierde {3}% de su maná total.
+SpellDescription.PowerLock.MainDescription1:		Ancla a tu objetivo y a ti en el sitio, drenando {0}% de su maná base cada {1}s durante {2} s.
+SpellDescription.PowerLock.MainDescription2:		Durante el efecto, ninguno de los dos puede recibir daño cuerpo a cuerpo.
+SpellDescription.PowerLock.MainDescription3:		Solo usable contra jugadores o mascotas bajo control de jugadores.
+SpellDescription.Damnation.MainDescription1:		El objetivo queda maldito, se vuelve zombi y pierde efectos positivos. Gana {0}% de resistencia a daño cuerpo a cuerpo pero morirá inevitablemente tras {1} s. Ninguna curación revierte esto.
+SpellDescription.Damnation.MainDescription2:		Las curas se reducen drásticamente al {0}%.
+SpellDescription.Damnation.MainDescription3:		Las curas no tienen efecto sobre el maldito.
+SpellDescription.Damnation.MainDescription4:		Las curas se convierten en daño en un {0}%.
+SpellDescription.Damnation.MainDescription5:		No afecta a no-muertos.
+SpellDescription.MonsterRez.MainDescription:		Resucita como no‑muerto y restaura {0}% de salud y {1}% de maná y aguante sin pérdida de experiencia ni constitución.
+SpellDescription.MonsterRez.DamageMain:				Inflige {1} de {0} al objetivo
+SpellDescription.MonsterRez.DamageRadius:			y a su alrededor
+SpellDescription.MonsterRez.DamageFrequency:		cada {0} s
+SpellDescription.MonsterRez.DamageDuration:			durante {0} s
+SpellDescription.SummonMonster.MainDescription:		Resurrección desde el cadáver.
+SpellDescription.DamageAdd.MainDescription:			Los ataques cuerpo a cuerpo del objetivo infligen {0} de {1} adicional.
+SpellDescription.DamageShield.MainDescription:		Inflige {0} de {1} a los enemigos que te golpeen en cuerpo a cuerpo.
+SpellDescription.SpellReflection.MainDescription1:	Devuelve hechizos con un {0}% de probabilidad y al {1}% de su daño, absorbiendo {2}% del daño causado.
+SpellDescription.SpellReflection.MainDescription2:	No refleja estilos cuerpo a cuerpo ni disparos de arqueros.
+SpellDescription.SpellReflectionDebuff.MainDescription:		Elimina el escudo de desvío mágico del objetivo.
+SpellDescription.PowerShield.MainDescription:		Si tu salud baja de {0}%, convierte maná en salud hasta alcanzar el {1}% de tu vida máxima.
+SpellDescription.PowerTransfer.MainDescription:		Transfiere {0} puntos de maná del lanzador al objetivo.
+SpellDescription.Resurrect.MainDescription:			Resucita y restaura {0}% de salud y {1}% de maná (y aguante) sin pérdida de experiencia ni constitución.
+SpellDescription.OffensiveProc.MainDescription:		{0} otorga un {1}% de probabilidad de activar un hechizo secundario con tus ataques cuerpo a cuerpo:
+SpellDescription.DefensiveProc.MainDescription:		{0} otorga un {1}% de probabilidad de activar un hechizo secundario cuando te golpean en cuerpo a cuerpo:
+SpellDescription.SpeedEnhancement.MainDescription:	Aumenta la velocidad a {0}% de la normal.
+SpellDescription.SpellShield.MainDescription:		{0} absorbe el 100% del daño mágico y el 70% del daño por DoT cuando la salud del jugador cae al {1}% o menos.
+SpellDescription.StyleBleeding.MainDescription:		El objetivo sufre {0} de {1} cada {2} s.
+SpellDescription.StyleTaunt.Increase:				Provoca al objetivo y sube tu amenaza contra él en {0}.
+SpellDescription.StyleTaunt.Decrease:				Reduce la provocación y baja tu amenaza en -{0}.
+SpellDescription.Taunt.MainDescription:				Provoca al objetivo y aumenta tu amenaza en {0}.
+SpellDescription.SummonSpell.MainDescription:		Invoca una mascota que sirve al invocador. Afecta a criaturas hasta el {0}% de tu nivel, con nivel máximo {1}.
+SpellDescription.MeleeAblativeArmor.MainDescription:		Otorga un escudo temporal que absorbe el {0}% del daño físico hasta un máximo de {1}.
+SpellDescription.MagicAblativeArmor.MainDescription:		Otorga un escudo temporal que absorbe el {0}% del daño mágico hasta un máximo de {1}.
+SpellDescription.BothAblativeArmor.MainDescription:	Otorga un escudo temporal que absorbe el {0}% de todo daño hasta un máximo de {1}.
+SpellDescription.BattleFeverDurationBuff.MainDescription:	Aumenta la duración del Furia de Batalla un {0}%.
+SpellDescription.TankAdrenaline.MainDescription:	¡La fiebre de batalla te consume! Tus golpes cuerpo a cuerpo no fallan contra enemigos de tu nivel y tu defensa y poder cuerpo a cuerpo aumentan mucho.
+SpellDescription.MageAdrenaline.MainDescription:	¡La fiebre de batalla te consume! Tu defensa, probabilidad de impacto de hechizos y velocidad de lanzamiento aumentan mucho y no puedes ser interrumpido por golpes.
+SpellDescription.StealthAdrenaline.MainDescription:	¡La fiebre de batalla te consume! Tus golpes cuerpo a cuerpo no fallan contra enemigos de tu nivel, y tu defensa, sigilo y potencia a distancia y cuerpo a cuerpo aumentan mucho.
+SpellDescription.Amnesia.MainDescription:			Borra la mente del monstruo para que olvide a quién atacaba. Interrumpe los hechizos en curso de enemigos sin aturdir, salvo si resisten.
+SpellDescription.Mesmerize.MainDescription:			El objetivo queda hipnotizado e incapaz de actuar.
+SpellDescription.Stun.MainDescription:				Aturde al objetivo durante {0} s.
+SpellDescription.Charm.MainDescription1:			Intento de dominar a una criatura {0}.
+SpellDescription.Charm.MainDescription2:			Afecta a monstruos hasta el {0}% de tu nivel, con nivel máximo {1}.
+SpellDescription.CombatHeal.MainDescription:		Cura {0} de daño cada {1} s.
+SpellDescription.Confusion.MainDescriptionPositive:	La criatura tiene un {0}% de probabilidad de cambiar de objetivo.
+SpellDescription.Confusion.MainDescriptionNegative:	Tiene 100% de probabilidad de cambiar de objetivo y 75% de atacar a un aliado.
+SpellDescription.PetConversion.MainDescription:		Liberas al objetivo y a todas tus torretas en la zona. Recuperas el {0}% del maná gastado en invocar a la mascota.
+SpellDescription.CraftingSpeedBuff.MainDescription:	Aumenta la velocidad de artesanía un {0}%.
+SpellDescription.CureDisease.MainDescription:		Elimina todas las enfermedades del objetivo.
+SpellDescription.CureMezz.MainDescription:			Elimina todos los efectos de hipnosis del objetivo.
+SpellDescription.CureNearsight.MainDescription:		Elimina todos los efectos de miopía.
+SpellDescription.CurePoison.MainDescription:		Elimina todos los efectos de daño en el tiempo (como venenos) del objetivo.
+SpellDescription.DamageSpeedDecrease.MainDescription:		Reduce la velocidad del objetivo un {0}%. Inflige {1} de {2}.
+SpellDescription.DamageToPower.MainDescription:		Convierte el {0}% del daño de hechizos recibido por el objetivo en maná.
+SpellDescription.DeathClaw.MainDescription:			{0} reduce la salud del enemigo en 90%. No afecta a espíritus, criaturas débiles ni por encima del nivel {1}; efecto reducido en no‑muertos y jefes.
+SpellDescription.EnduranceDrain.MainDescription:	Se drena un {0}% de aguante del objetivo y se transfiere al lanzador.
+SpellDescription.EnduranceHeal.MainDescription:		Restaura {0} de aguante.
+SpellDescription.Disarm.MainDescription1:			Desarma al objetivo durante {0} s.
+SpellDescription.Disarm.MainDescription2:			No se puede volver a aplicar hasta pasados {0} s.
+SpellDescription.GroundArea.MainDescription1:		Crea una “nube” que afecta a todos los presentes en el área.
+SpellDescription.GroundArea.MainDescription2:		Efecto de área:
+SpellDescription.CloudsongFall.MainDescription:		Reduce el daño por caída un {0}%.
+SpellDescription.DoomHammer.MainDescription:		Inflige {0} de {1}.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Inflige {0} de {1} en cada pulso al objetivo. Aumenta {2}% por pulso hasta {3}%. Coste {4}% de maná por pulso.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Inflige {0} de {1} por pulso y reduce {5}% la velocidad. Aumenta {2}% por pulso hasta {3}%. Coste {4}% de maná por pulso.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Inflige {0} de {1} por pulso en área. Aumenta {2}% por pulso hasta {3}%. Coste {4}% de maná por pulso.
+SpellDescription.RampingDamageFocus.AoESnare:				Inflige {0} de {1} por pulso en área y reduce {5}% la velocidad. Aumenta {2}% por pulso hasta {3}%. Coste {4}% de maná por pulso.
+SpellDescription.HereticPiercingMagic.MainDescription:		Aumenta la efectividad de los hechizos del objetivo un {0}%, reduciendo los resist completos contra enemigos de nivel superior.
+SpellDescription.SummonNethersbane.MainDescription1:		Invoca Nethersbane, la hoja profana de Arawn.
+SpellDescription.SummonNethersbane.MainDescription2:		Su tipo de daño es frío.
+SpellDescription.SummonIcebrand.MainDescription1:			Invoca Icebrand, la hoja profana imbuida de sombras.
+SpellDescription.SummonIcebrand.MainDescription2:			Su tipo de daño es frío.
+SpellDescription.GoldenSpearJavelin.MainDescription:		Invoca 5 jabalinas mágicas.
+SpellDescription.OmniHeal.MainDescription:					Devuelve {0}% de salud, aguante y maná.
+SpellDescription.OmniHarm.MainDescription:					El objetivo pierde {0} de aguante y {1} de maná.
+SpellDescription.OmniLifeDrain.MainDescription:				Inflige daño; devuelve al lanzador {0}% como salud, {1}% como maná y {2}% como aguante.
+SpellDescription.PowerHeal.MainDescription:					Restaura el {0}% del maná del objetivo.
+SpellDescription.Silence.MainDescription:					Enmudece al enemigo durante {0} s.
+SpellDescription.IllusionSpell.MainDescription1:			El invocador crea {0} {1} ilusiones que lo rodean y confunden a los enemigos.
+SpellDescription.IllusionSpell.MainDescription2:			Las ilusiones infligen el {0}% del daño del invocador, tienen el {1}% de su vida máxima y desaparecen tras {2} s.
+SpellDescription.IllusionSpell.SubDescription1:				El invocador adopta la forma de una criatura y las {0} ilusiones comparten su apariencia.
+SpellDescription.IllusionSpell.SubDescription2a:			Las ilusiones se mueven con el invocador e imitan sus movimientos, estilos y hechizos.
+SpellDescription.IllusionSpell.SubDescription2b:			Si el lanzador se mueve, las ilusiones desaparecen y el hechizo termina.
+SpellDescription.Bump.MainDescriptionSingle:		Lanza al enemigo {0} unidades hacia arriba y lo impulsa {1}%–{2}% de la distancia máxima, quedando aturdido en el aire.
+SpellDescription.Bump.MainDescriptionArea:			Empuja a todos los enemigos en un radio de {3} unidades {0} hacia arriba y {1}%–{2}% hacia delante, quedando aturdidos en el aire.
+SpellDescription.Bump.MainDescriptionCone:			Empuja a los enemigos en un cono {0} hacia arriba y {1}%–{2}% hacia delante, quedando aturdidos en el aire.
+SpellDescription.Conversion.MainDescription:		Convierte el {0}% de todo daño recibido en salud, aguante y maná.
+SpellDescription.MagicConversion.MainDescription:	Convierte el {0}% de todo daño mágico recibido en salud, aguante y maná.
+SpellDescription.Fury.MainDescription:				Otorga {0}% de probabilidad de resistir control y aumenta todas las resistencias mágicas un {0}%.
+SpellDescription.HealthToFatigue.MainDescription:	Consume {0}% de tu salud y recupera {1}% del aguante perdido.
+SpellDescription.Chamber.MainDescription:			Permite precargar una cámara con un hechizo primario y uno secundario para descargarlos inmediatamente sobre el objetivo.
+SpellDescription.Chamber.CanContainBolts:			Puede contener proyectiles.
+SpellDescription.Chamber.CannotContainBolts:		No puede contener proyectiles.
+SpellDescription.FocusShell.MainDescription:		Reduce el daño cuerpo a cuerpo y de hechizos recibido un {0}%.
+SpellDescription.FocusShell.OnlyInPvPORvR:			Solo usable en zonas RvR o PvP.
+SpellDescription.Powerless.MainDescription:			Permite lanzar un hechizo secundario sin coste de maná.
+SpellDescription.Range.MainDescription:				Permite lanzar un hechizo secundario con {0}% de alcance.
+SpellDescription.Uninterruptable.MainDescription:	Permite lanzar un hechizo secundario sin interrupciones, pero reduce su efectividad un {0}%.
+SpellDescription.Agony.ConditionDescription:		Requiere que el objetivo esté bajo “Dread” y “Anguish”.
+SpellDescription.Doom.ConditionDescription:			Requiere “Dread”, “Anguish” y “Agony”.
+SpellDescription.Doom.Expires:						Al expirar:
+SpellDescription.BuffShear.Str:						Elimina mejoras que aumenten la fuerza.
+SpellDescription.BuffShear.Dex:						Elimina mejoras que aumenten la destreza.
+SpellDescription.BuffShear.Con:						Elimina mejoras que aumenten la constitución.
+SpellDescription.BuffShear.Acuity:					Elimina mejoras que aumenten la lucidez.
+SpellDescription.BuffShear.StrCon:					Elimina mejoras de fuerza/constitución.
+SpellDescription.BuffShear.DexQui:					Elimina mejoras de destreza/rapidez.
+SpellDescription.BuffShear.Random:					Elimina aleatoriamente una mejora positiva.
+SpellDescription.BuffShear.Ablative:				Elimina todos los escudos ablativos.
+SpellDescription.ResistBuff.MainDescription:				Aumenta la resistencia a {0} un {1}%.
+SpellDescription.BodySpiritEnergyBuff.MainDescription:		Aumenta la resistencia a cuerpo, espíritu y energía un {0}%.
+SpellDescription.HeatColdMatterBuff.MainDescription:		Aumenta la resistencia a calor, frío y materia un {0}%.
+SpellDescription.AllMagicResistsBuff.MainDescription:		Aumenta todas las resistencias mágicas un {0}%.
+SpellDescription.SecondaryMagicResistsBuff.MainDescription:	Aumenta las resistencias mágicas secundarias un {0}%.
+SpellDescription.AllMeleeResistsBuff.MainDescription:		Aumenta las resistencias de daño cuerpo a cuerpo un {0}%.
+SpellDescription.AllResistsBuff.MainDescription:			Aumenta todas las resistencias un {0}%.
+SpellDescription.EssenceBuff.MainDescription:				Aumenta la resistencia al daño de “Esencia” un {0}%.
+SpellDescription.ResistDebuff.MainDescription:				Reduce la resistencia a {0} del objetivo un {1}%.
+SpellDescription.CrushSlashThrustDebuff.MainDescription:	Reduce las resistencias a daño cuerpo a cuerpo un {0}%.
+SpellDescription.EssenceDebuff.MainDescription:				Reduce las resistencias al daño de “Esencia”.
+SpellDescription.DualStatDebuff.MainDescription:			Reduce {0} y {1} del objetivo en {2}.
+SpellDescription.DualStatBuff.MainDescription:				Aumenta {0} y {1} en {2}.
+SpellDescription.SingleStatBuff.MainDescription:			Aumenta {0} en {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Aumenta la velocidad de ataque un {0}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	Las acciones consumen un {0}% menos de aguante.
+SpellDescription.DPSBuff.MainDescription:					Aumenta el DPS un {0}%.
+SpellDescription.MeleeDamageBuff.MainDescription:			Infliges un {0}% más de daño cuerpo a cuerpo.
+SpellDescription.MesmerizeDurationBuff.MainDescription:		Reduce la eficacia de los hechizos de hipnosis un {0}%.
+SpellDescription.EvadeChanceBuff.MainDescription:			Otorga un {0}% de probabilidad de esquivar.
+SpellDescription.ParryChanceBuff.MainDescription:			Otorga un {0}% de probabilidad de parar.
+SpellDescription.WeaponSkillBuff.MainDescription:			Aumenta la pericia con {0} un {1}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Aumenta la habilidad de Sigilo {0} un {1}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Aumenta la habilidad Flexible {0} un {1}%.
+SpellDescription.ResiPierceBuff.MainDescription:			Otorga un {0}% de probabilidad de atravesar resistencias mágicas.
+SpellDescription.CriticalMagicalBuff.MainDescription:		Aumenta la probabilidad de crítico de hechizos un {0}%.
+SpellDescription.CriticalMeleeBuff.MainDescription:			Aumenta la probabilidad de crítico en cuerpo a cuerpo un {0}%.
+SpellDescription.SingleStatDebuff.MainDescription:			Reduce {0} en {1}.
+SpellDescription.CombatSpeedDebuff.MainDescription:			Reduce la velocidad de ataque del objetivo un {0}%.
+SpellDescription.MeleeDamageDebuff.MainDescription:			El objetivo inflige un {0}% menos de daño cuerpo a cuerpo.
+SpellDescription.FatigueConsumptionDebuff.MainDescription:	Aumenta el aguante consumido en combate por el objetivo un {0}%.
+SpellDescription.FumbleChanceDebuff.MainDescription:		Aumenta la probabilidad de fallo del objetivo un {0}%.
+SpellDescription.DPSDebuff.MainDescription:					Reduce el DPS un {0}%.
+SpellDescription.SkillsDebuff.MainDescription:				Reduce habilidades un {0}%.
+SpellDescription.Warlock.SecondarySpell:					Este es un hechizo secundario.
+SpellDescription.Warlock.PrimarySpell:						Este es un hechizo primario.
+SpellDescription.AllStatsDebuff.MainDescription:			Reduce todos los atributos del objetivo en {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:		Reduce todos los atributos del objetivo en {0}%.
+SpellDescription.Morph.MainDescription:						El objetivo se ha transformado en {0}.
+SpellDescription.PowerRend.MainDescription:					El objetivo pierde {0}% de su maná.
+SpellDescription.SummonAnimistFnF.MainDescription:		Invoca una torreta estacionaria en tu objetivo de suelo que ataca a enemigos en alcance.
+SpellDescription.Bomber.MainDescription:				Invoca un espíritu elemental que vuela al objetivo, explota y lanza su hechizo al llegar.
+SpellDescription.SavageParryBuff.MainDescription:		Aumenta tu probabilidad de parar un {0}%.
+SpellDescription.SavageEvadeBuff.MainDescription:		Aumenta tu probabilidad de esquivar un {0}%.
+SpellDescription.SavageCombatSpeedBuff.MainDescription:	Aumenta tu velocidad de ataque un {0}%.
+SpellDescription.SavageDPSBuff.MainDescription:			Aumenta tu daño cuerpo a cuerpo en {0}.
+SpellDescription.SavageEnduranceHeal.MainDescription:	Recuperas {0} de aguante a costa de parte de tu salud.
+SpellDescription.Archery.SingleTarget:					Inflige {0} de {1} al objetivo.
+SpellDescription.Archery.AreaTarget:					Inflige {0} de {1} al objetivo y a su entorno.
+SpellDescription.Archery.SecondaryEffectiveness:		La efectividad del disparo aumenta un {0}%.
+SpellDescription.WarlockSpeedDecrease.Frog:				¡Transforma al objetivo en una rana!
+SpellDescription.MaidenKiss.MainDescription:			Cura el estado de “Rana” del objetivo.
+SpellDescription.ArawnCure.MainDescription:				Cura veneno, enfermedad y res‑sickness.
+SpellDescription.Fear.SingleTarget:						Asusta al enemigo seleccionado. No afecta a mascotas ni a objetivos por encima de nivel {0}.
+SpellDescription.Fear.AreaTarget:						Asusta a monstruos enemigos en un radio de {1} alrededor del lanzador. No afecta por encima de nivel {0}.
+SpellDescription.FearServant.SingleTarget:				Asusta a una mascota enemiga. No afecta por encima de nivel {0}.
+SpellDescription.FearServant.AreaTarget:				Asusta a mascotas enemigas en un radio de {1}. No afecta por encima de nivel {0}.
+SpellDescription.FearServant.SingleTarget&Npc:			Asusta al enemigo seleccionado. No afecta por encima de nivel {0}.
+SpellDescription.FearServant.AreaTarget&Npc:			Asusta a enemigos en un radio de {1}. No afecta por encima de nivel {0}.
+SpellDescription.FearServant.PetDescription:			Bajo miedo, las mascotas no pueden ser controladas ni liberadas por su amo.
+SpellDescription.BainsheePulseDmg.MainDescription:		El objetivo sufre {0} de {1}.
+SpellDescription.BainsheePulseDmg.AreaDescription:		Afecta a todos los enemigos cerca del lanzador.
+SpellDescription.BainsheePulseDmg.SecondaryDescription:	Re‑lanzar durante su efecto lo cancela. Termina si el lanzador se mueve.
+SpellDescription.BeFriend.MainDescriptionArea:			Encanta temporalmente (hasta nivel {0}) a monstruos cercanos haciéndolos amistosos y aliados.
+SpellDescription.BeFriend.MainDescriptionSingle:		Encanta temporalmente (hasta nivel {0}) al monstruo seleccionado haciéndolo amistoso y aliado.
+SpellDescription.VampiirStealthDetection.MainDescription:	Aumenta la detección de enemigos en sigilo un {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Reduce temporalmente las bonificaciones de habilidad del objetivo un {0}%.
+SpellDescription.VampiirMeleeResistance.MainDescription:	Aumenta las resistencias de daño cuerpo a cuerpo un {0}%.
+SpellDescription.VampiirMagicResistance.MainDescription:	Aumenta la probabilidad de resistir daño mágico un {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Reduce temporalmente la efectividad del objetivo un {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Lanzable en combate.
+SpellDescription.VampiirArmorDebuff.MainDescription:		Reduce temporalmente la absorción y el factor de armadura de una pieza aleatoria (casco, torso o piernas) un {0}%.
+SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Solo afectan casco, torso o piernas.
+SpellDescription.VampiirBolt.MainDescription:			Absorbe el {0}% del maná del objetivo y lo transfiere al lanzador.
+SpellDescription.VampiirBolt.MainDescription2:			No afecta a objetivos por encima del nivel {0}.
+SpellDescription.IllusionBlade.Part1:					Invoca un arma espectral que lucha a tu lado brevemente antes de desvanecerse.
+SpellDescription.IllusionBlade.Part2:					Actúa por sí misma y no puede ser controlada, liberada ni curada.
+SpellDescription.RangeShield.MainDescription:			Protege al grupo del lanzador contra ataques físicos de arqueros.
+SpellDescription.PetSpell.MainDescription1:				Hechizos de mascota:
+SpellDescription.PetSpell.MainDescription2:				Aumenta los valores listados del objetivo.
+SpellDescription.Ascendance.MainDescription:			Aumenta mucho la efectividad de tus hechizos y habilidades en {0}%.
+SpellDescription.Ascendance.Restrictions:				Mientras dure, no puedes lanzar curas ni resurrecciones.
+SpellDescription.Ascendance.Interaction:				“Maestro de la concentración” cancela “Ascenso” y viceversa.  
+SpellDescription.Occultist.ConditionDescription1:		No lanzable en forma Ctoniana.
+SpellDescription.Occultist.ConditionDescription2:		No lanzable en forma Espíritu ni Demente.
+SpellDescription.Occultist.Summon.UmbralAegis1:			Invoca una Égida Acorazada. Excelente para provocar y absorber daño.
+SpellDescription.Occultist.Summon.UmbralAegis2:			Forma Espíritu: la Égida obtiene DD de 200 de radio, más armadura, absorción mágica y mayor velocidad de combate.
+SpellDescription.Occultist.Summon.Soultorn1:			Invoca un Alma Desgarrada. Inflige daño de materia pero es frágil ante magia y físico.
+SpellDescription.Occultist.Summon.Soultorn2:			Forma Espíritu: aplica además debuff de materia y enfermedad.
+SpellDescription.Occultist.Summon.UmbralHulk1:			Invoca un Atronador Acorazado, experto en daño físico.
+SpellDescription.Occultist.Summon.UmbralHulk2:			Forma Espíritu: obtiene carga de 5 s, aturdimiento por espalda de 3 s y mayor probabilidad de mano secundaria.
+SpellDescription.Occultist.Summon.ImageOfArawn1:		Invoca una Imagen de Arawn. Cura aliados con sanaciones individuales del 12%.
+SpellDescription.Occultist.Summon.ImageOfArawn2:		Forma Espíritu: añade curas de veneno, enfermedad y res‑sickness y puede eliminar miopía.  
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Invoca una Súcubo demoníaca que hipnotiza a su objetivo.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Forma Espíritu: el Archidemonio obtiene un fuerte debuff Dex/Qui y puede eliminar miopía.
+SpellDescription.Occultist.SpiritShapeShift1:			Adopta forma espiritual. Se absorbe {0}% del daño y se convierte en maná.
+SpellDescription.Occultist.SpiritShapeShift2:			La regeneración de maná aumenta {0} por nivel y la detección de sigilo {1}%.
+SpellDescription.Occultist.SpiritShapeShift3:			Tus siervos también se vuelven más resistentes y obtienen habilidades extra.
+SpellDescription.Occultist.ChtonicShapeShift1:			Encarnas a un Caballero Ctoniano. El AF aumenta {0} por nivel; salud, AF y armas suben {1}%, la absorción cuerpo a cuerpo {2}% y las resistencias mágicas secundarias {3}%.  
+SpellDescription.Occultist.ChtonicShapeShift2:			Además, obtienes la habilidad de parar.
+SpellDescription.Occultist.DecrepitShapeShift1:			Encarnas a un Mago Decrépito. Tu daño mágico aumenta {0}%.
+SpellDescription.Occultist.DecrepitShapeShift2:			La absorción de armadura aumenta {0}%.
+SpellDescription.Occultist.DecrepitShapeShift3:			Los atacantes cuerpo a cuerpo tienen {0}% de aplicar enfermedad; tu carne podrida regenera y la regeneración de salud sube {1}.
+SpellDescription.Occultist.BringerOfDeath1:				Encarnas al Portador de la Muerte. Tus hechizos no se interrumpen pero funcionan al {0}% y recibes {1}% menos daño mágico y físico.
+SpellDescription.Occultist.BringerOfDeath2:				Te mueves un {0}% más rápido, incluso en warps de velocidad o en combate. También están activos los bonos de regeneración y la enfermedad de la forma Decrépita.
+SpellDescription.DamageReturn.MainDescription:			Devuelve {0}% del daño directo mágico (no DoT), cuerpo a cuerpo y de proyectiles en {1} al atacante mientras dure.
+SpellDescription.OffProcShear.Main1:					Elimina procs ofensivos activos del objetivo.
+SpellDescription.OffProcShear.Main2:					Aplica un proc maldito de reemplazo cuyos subhechizos curan a los enemigos del objetivo cuando estos golpean.
+SpellDescription.OffProcShear.ReplacementHeader:		Proc de reemplazo:
+
+
+# ML Spells ShortDescriptions
+SpellDescription.Convoker.SummonWood.MainDescription:			Invoca aleatoriamente 100 tablones para reforzar y reparar puertas y muros de fortalezas.
+SpellDescription.Convoker.PrescienceNode.MainDescription1:		Runa colocada en el suelo (radio 1000) que detecta enemigos ocultos sin romper su invisibilidad.
+SpellDescription.Convoker.PrescienceNode.MainDescription2:		La runa puede ser atacada y tiene {0} de salud.
+SpellDescription.Convoker.Prescience.MainDescription1:			¡Una runa de presencia te ha detectado!
+SpellDescription.Convoker.Prescience.MainDescription2:			Te otorga pre‑cognición para anticipar movimientos enemigos.
+SpellDescription.Convoker.PowerTrap.MainDescription:			Coloca una runa que al detonar drena 20% del maná de los enemigos (solo a quienes tengan maná).
+SpellDescription.Convoker.SpeedWrap.MainDescription:			Runa que anula aumentos de velocidad a los enemigos que la atraviesen. Durante 6 s tras salir del radio no pueden recibir hechizos de velocidad.
+SpellDescription.Convoker.SummonWarcrystal.MainDescription:		Invoca y coloca munición de asedio (perdigones, bolas, hielo o rocas) en tu inventario.
+SpellDescription.Convoker.Battlewarder.MainDescription1:		Invoca un Guardián de Batalla para interceptar ataques enemigos. Permanece inmóvil y consume maná mientras esté activo.
+SpellDescription.Convoker.Battlewarder.MainDescription2:		Objetivo de suelo. Puede coexistir con otras mascotas; se pueden invocar varios guardianes.
+SpellDescription.Convoker.DissonanceTrap.MainDescription:		Coloca una runa que al detonar inflige {0} de {1}.
+SpellDescription.Convoker.BrittleGuard.MainDescription1:		Invoca un “Guardián Quebradizo” que puede bloquear un golpe cuerpo a cuerpo por ti.
+SpellDescription.Convoker.BrittleGuard.MainDescription2:		Tiene un punto de vida y muere tras interceptar un golpe. Solo uno activo a la vez.
+SpellDescription.Convoker.SummonMastery.MainDescription:		Aumenta el nivel efectivo de tus mascotas y mejora su daño y absorción.
+SpellDescription.Convoker.SummonTitan.MainDescription1:			Invoca un Titán que crece en tamaño y poder y golpea con fuerza colosal.
+SpellDescription.Convoker.SummonTitan.MainDescription2:			Permanecerá inmóvil y atacará solo a enemigos en alcance cuerpo a cuerpo.
+SpellDescription.Spymaster.Decoy.MainDescription:				Invoca un aliado señuelo con equipo épico, 1 punto de vida y sin capacidades ofensivas para distraer.
+SpellDescription.Spymaster.Sabotage.MainDescription:			Sabotea un objetivo (runa o máquina de asedio) dejándolo inutilizable.
+SpellDescription.Spymaster.TangleSnare.MainDescription:			Coloca una runa que ralentiza a enemigos en su radio un {0}% al detonar. Rompe el sigilo al usarla.
+SpellDescription.Spymaster.PoisonSpike.MainDescription:			Coloca una runa venenosa que inflige {0} de {1} a enemigos cercanos. Rompe el sigilo.
+SpellDescription.Spymaster.Loockout.MainDescription1:			Un vigía estacionario detecta enemigos ocultos en {0} de radio. Permanece oculto si no se mueve.
+SpellDescription.Spymaster.Loockout.MainDescription2:			El objetivo debe estar sentado e inmóvil; si se mueve, el efecto termina.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Runa que inflige gran daño a máquinas de asedio.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		Inflige {0} de daño al activarse.
+SpellDescription.Spymaster.EssenceFlare.MainDescription:		Aplica un veneno que deja a enemigos en penumbra 15 s.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Oculta a tu grupo. Moverse, lanzar o cantar cancela el efecto para miembros no ocultos.
+SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Drana {0} de aguante a enemigos cercanos.
+SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Otorga {0}% de daño extra a máquinas de asedio y estructuras.
+SpellDescription.Battlemaster.MLManadrain.MainDescription:		Drana {0} de maná a enemigos cercanos.
+SpellDescription.Battlemaster.Grapple.MainDescription1:			Efecto de corto alcance que inmoviliza {0} s y anula efectos.
+SpellDescription.Battlemaster.Grapple.MainDescription2:			Fija al objetivo; no puede moverse ni usar ataques cuerpo a cuerpo, pero puede lanzar y cantar durante 10 s.
+SpellDescription.Battlemaster.Grapple.MainDescription3:			Un objetivo fijado no puede ser atacado cuerpo a cuerpo.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	Otorga {0}% de activar daño de esencia extra con ataques cuerpo a cuerpo.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		Ataque a distancia que usa fórmulas de daño cuerpo a cuerpo.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Los ataques cuerpo a cuerpo quedan deshabilitados 10 s después.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Reduce la resistencia a esencia de enemigos cercanos un {0}%.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription2:	Reduce la resistencia a esencia del objetivo un {0}%.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Protege a un aliado cercano frente a ataques cuerpo a cuerpo. Mientras viva o esté en alcance, el aliado no puede ser fijado como objetivo.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	El efecto solo se mantiene si el protegido permanece inmóvil.
+SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Reduce la movilidad del objetivo un {0}%.
+SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:		Reduce la velocidad de lanzamiento de enemigos un {0}%.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Reduce maná, salud y aguante de enemigos en área un {0}%.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Reduce los recursos en área un {0}% y te cuesta {1}% de tu salud.
+SpellDescription.Banelord.Oppression.MainDescription:			Reduce la capacidad de carga máxima de enemigos cercanos un {0}%.
+SpellDescription.Banelord.FatDebuff.MainDescription:			Aumenta el consumo de aguante de ataques enemigos un {0}%.
+SpellDescription.Banelord.MissHit.MainDescription:				Reduce la probabilidad de acierto de enemigos cercanos un {0}%.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Área de corta distancia que ralentiza un {0}% y aturde al lanzador.
+SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:	Aturde {0} s e impide actuar.
+SpellDescription.Banelord.ToHitBuff.MainDescription:			Aumenta la probabilidad de acierto de aliados cercanos un {0}%.
+SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Reduce la efectividad de enemigos (hechizos y cuerpo a cuerpo) un {0}%.
+SpellDescription.Banelord.Banespike.MainDescription:			Aumenta el daño de aliados cercanos un {0}%.
+SpellDescription.Banelord.NbTargetAffected.MainDescription:		Hasta {0} enemigos pueden verse afectados.
+SpellDescription.Perfector.FOH.MainDescription1:				Crea una esfera a tus pies que restaura {0} de salud con el tiempo a aliados (hasta 40).
+SpellDescription.Perfector.FOH.MainDescription2:				En PvE, atrae la atención de los enemigos hacia el lanzador.
+SpellDescription.Perfector.FOP.MainDescription1:				Crea una esfera a tus pies que regenera {0} de maná con el tiempo a aliados (hasta 40).
+SpellDescription.Perfector.FOP.MainDescription2:				Aliados que combatieron en los últimos 10 s en PvE no se benefician.
+SpellDescription.Perfector.FOR.MainDescription:					Runa que reduce la duración de control sobre aliados cercanos un {0}%.
+SpellDescription.Perfector.SickHeal.MainDescription:			Permite superar efectos relacionados con la resurrección.
+SpellDescription.Perfector.FOD.MainDescription:					Runa defensiva que drena {0}% de maná a enemigos en su radio.
+SpellDescription.Perfector.PoT.MainDescription:					Regeneración mantenida que aumenta el maná por tic en {0}%.
+SpellDescription.Perfector.CCResist.MainDescription:			Aumenta tu resistencia a control durante {0} s.
+SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Área que regenera {0}% de salud, maná y aguante de aliados cercanos.
+SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Cura 1000 de salud al objetivo a costa de {0}% de tu vida.
+SpellDescription.Warlord.CoweringBellow.MainDescription:		Asusta a mascotas enemigas controladas en {0} de radio y reduce su eficacia.
+SpellDescription.Warlord.Critical.MainDescription1:				Aumenta en {1}% la probabilidad de crítico de los aliados de tu {0} para su siguiente ataque.
+SpellDescription.Warlord.Critical.MainDescription2:				Aumenta en {0}% la probabilidad de crítico del objetivo para su siguiente ataque.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Reduce la eficacia de DoTs en aliados en {0} de radio un {1}%. Si el daño llega a cero, el efecto termina.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Reduce la eficacia de DoTs en el objetivo un {0}%. Si el daño llega a cero, termina.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Aumenta la efectividad de aliados en {0} de alcance un {1}% (hechizos y cuerpo a cuerpo).
+SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Aumenta la efectividad del objetivo un {1}% (hechizos y cuerpo a cuerpo).
+SpellDescription.Warlord.MLABSBuff.MainDescription1:			Aumenta la absorción de armadura de aliados en {0} de radio un {1}%.
+SpellDescription.Warlord.MLABSBuff.MainDescription2:			Aumenta la absorción de armadura del objetivo un {1}%.
+SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription:	Destruye la runa objetivo y las cercanas en un radio de {0}.
+SpellDescription.Sojourner.AncientTransmuter.MainDescription:	Invoca a un mercader para comprar/vender suministros básicos.
+SpellDescription.Sojourner.Port.MainDescription1:				Te teletransporta a tu piedra de alma. No funciona en combate ni en RvR.
+SpellDescription.Sojourner.Port.MainDescription2:				Teletransporta a {0} jugadores en {1} de radio a su piedra de alma. No en combate ni en RvR.
+SpellDescription.Sojourner.EssenceResist.MainDescription:		Aumenta la resistencia al daño natural (esencia) un {0}%.
+SpellDescription.Sojourner.Zephyr.MainDescription1:				Invoca una ráfaga que arrastra a un enemigo en dirección aleatoria haciéndolo invulnerable mientras dura.
+SpellDescription.Sojourner.Zephyr.MainDescription2:				El jugador afectado por un Céfiro es inmune a otro durante {0} min.
+SpellDescription.Sojourner.Phaseshift.MainDescription:			Mejora personal que te hace casi invulnerable a hechizos y cuerpo a cuerpo durante {0} s.
+SpellDescription.Sojourner.Groupport.MainDescription:			Devuelve a todo tu grupo a tu piedra de alma. Si alguien está en combate, falla.
+SpellDescription.Stormlord.DazzlingArray.MainDescription1:		Aplica un efecto que reduce la probabilidad de acierto de enemigos en la zona un {0}%.
+SpellDescription.Stormlord.DazzlingArray.MainDescription2:		Solo aplica a hechizos de aturdimiento; excluye RA y estilos.
+SpellDescription.Stormlord.StormMissHit.MainDescription:		Reduce la precisión del objetivo un {0}%.
+SpellDescription.Stormlord.VacuumVortex.MainDescription:		Objetivo de suelo que desplaza tormentas cercanas a un punto aleatorio del borde.
+SpellDescription.Stormlord.EnervatingGas.MainDescription:		Emite gas que reduce el aguante de enemigos en {0}%.
+SpellDescription.Stormlord.StormEndudrain.MainDescription:		Tormenta que drena {0} de aguante a enemigos dentro.
+SpellDescription.Stormlord.InebriatingFumes.MainDescription:	Reduce gradualmente Destreza y Rapidez un {0}% a quienes permanezcan dentro.
+SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription:	Reduce Destreza y Rapidez del objetivo un {0}%.
+SpellDescription.Stormlord.MentalSiphon.MainDescription:		Tormenta que drena {0} de maná a enemigos dentro.
+SpellDescription.Stormlord.PowerDrainStorm.MainDescription:		Drena {0} de maná al objetivo.
+SpellDescription.Stormlord.FocusingWinds.MainDescription:		Crea una tormenta aliada y la fija. Termina si te mueves.
+SpellDescription.Stormlord.ChokingVapors.MainDescription:		Reduce gradualmente Fuerza y Constitución un {0}% a quienes permanezcan dentro.
+SpellDescription.Stormlord.StormStrConstDebuff.MainDescription:	Reduce Fuerza y Constitución del objetivo un {0}%.
+SpellDescription.Stormlord.SenseDullingCloud.MainDescription:	Tormenta que embota los sentidos reduciendo la Lucidez un {0}%.
+SpellDescription.Stormlord.StormAcuityDebuff.MainDescription:	Reduce la Lucidez del objetivo un {0}%.
+SpellDescription.Stormlord.EnergyTempest.MainDescription:		Tormenta que inflige daño de Esencia a enemigos dentro.
+SpellDescription.Stormlord.StormEnergyTempest.MainDescription:	Inflige {0} de {1} durante {2} s a enemigos dentro.
+SpellDescription.MLBase.TargetModifier.MainDescription:			Mejora personal que permite modificar o ampliar el radio del próximo hechizo (único o de área).
+SpellDescription.MLBase.BanelordSnare.MainDescription:			Área de corta distancia que ralentiza un {0}% y aturde al lanzador.
+
+# AblativeArmor
+AblativeArmor.DelveInfo.Function:			Función: amortiguador de golpes cuerpo a cuerpo
+AblativeArmor.DelveInfo.Absorption1:			Absorción: {0}%
+AblativeArmor.DelveInfo.Absorption2:			Absorción: 100%
+AblativeArmor.DelveInfo.Absorption3:			Absorción: 25%
+AblativeArmor.DelveInfo.CastingTime:			Instantáneo
+
+# DamageSpeedDecrease
+DamageSpeedDecrease.DelveInfo.Decrease:			Reducción de velocidad: {0}%
+DamageSpeedDecrease.DelveInfo.Function:			Función: Reducción de velocidad + daño
+
+# ResistDebuff
+ResistDebuff.DelveInfo.Decrease:			Reduce resistencia a {0}: {1}
+ResistDebuff.DelveInfo.Function:			Función: Reducción de resistencias
+
+#CharmSpellHandler
+CharmSpellHandler.DelveInfo.Function:			Función: {0}
+CharmSpellHandler.Species.Humanoid:				Humanoide
+CharmSpellHandler.Species.Animal:				Animal
+CharmSpellHandler.Species.Insect:				Insecto
+CharmSpellHandler.Species.Reptile:				Reptil
+CharmSpellHandler.Species.HumanoidAnimal:		Humanoide o Animal
+CharmSpellHandler.Species.HumanoidAnimalInsect:					Humanoide, Animal e Insecto
+CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			Humanoide, Animal, Insecto y Mágico
+CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	Humanoide, Animal, Insecto, Mágico y No‑muerto
+
+#IllusionSpell SpellHandler
+IllusionSpell.Arrangement.Random:		aleatorio
+IllusionSpell.Arrangement.Circle:		en círculo
+IllusionSpell.Arrangement.Line:			en línea
+
+#WarlockSpeedDecrease SpellHandler Appearances
+WarlockSpeedDecrease.Appearance.Frog:			Rana
+WarlockSpeedDecrease.Appearance.Worm:			Gusano
+WarlockSpeedDecrease.Appearance.Lizard:			Lagarto
+WarlockSpeedDecrease.Appearance.Wisp:			Fulgor
+WarlockSpeedDecrease.Appearance.Fairy:			Hada
+WarlockSpeedDecrease.Appearance.Scarab:			Escarabajo
+WarlockSpeedDecrease.Appearance.Spider:			Araña
+WarlockSpeedDecrease.Appearance.Cyclop:			Cíclope
+WarlockSpeedDecrease.Appearance.Mantis:			Mantis
+WarlockSpeedDecrease.Appearance.Flame:			Fuego fatuo
+WarlockSpeedDecrease.Appearance.Bird:			Golondrina
+WarlockSpeedDecrease.Appearance.Simulacrum:		Simulacro
+
+# DamageAddAndShield
+DamageAddAndShield.EventHandlerDA.DamageToYou:		¡{0} te golpea por {1} de daño adicional!
+DamageAddAndShield.EventHandlerDA.YouHitExtra:		¡Golpeas a {0} por {1} de daño adicional!
+DamageAddAndShield.EventHandlerDA.YouHitFor:		¡Golpeas a {0} por {1} de daño adicional!
+DamageAddAndShield.EventHandlerDA.YourHitFor:		¡Tu {0} golpea a {1} por {2} de daño adicional!
+DamageAddAndShield.EventHandlerDS.DamageToYou:		¡{0} te golpea por {1} de daño adicional!
+DamageAddAndShield.EventHandlerDS.YouHitFor:		¡Golpeas a {0} por {1} de daño adicional!
+DamageAddAndShield.EventHandlerDS.YourHitFor:		¡Tu {0} golpea a {1} por {2} de daño adicional!
+
+# DirectDamageDebuffSpellHandler
+DirectDamageDebuffSpellHandler.DelveInfo.Decrease:	Reducción de resistencia ({0}): {1}%
+DirectDamageDebuffSpellHandler.DelveInfo.Function:	Función: Daño/Reducción de resistencias
+
+# DoTSpellHandler
+DoTSpellHandler.SendDamageMessages.YouHitFor:		¡Golpeas a {0} por {1} de daño!
+DoTSpellHandler.SendDamageMessages.YourCriticallyHits:	¡Tu {0} golpea críticamente a {1} y causa {2} de daño adicional!
+DoTSpellHandler.SendDamageMessages.YourHitsFor:		Tu {0} golpea a {1} por {2} de daño.
+
+# NearsightSpellHandler
+NearsightSpellHandler.DelveInfo.Function:		Función: Reducción de alcance {0}
+
+# ProcSpellHandler
+ProcSpellHandler.DelveInfo.Function:			Función: {0}
+
+Summon.CheckBeginCast.AlreadyHaveaPet:			Ya controlas a una criatura.
+
+# SummonCommanderPet
+SummonCommanderPet.CheckBeginCast.Text:			¡Ya controlas a un Comandante!
+SummonCommanderPet.DelveInfo.Text1:			Función: Invocación
+SummonCommanderPet.DelveInfo.Text2:			Invoca a una mascota Comandante.
+SummonCommanderPet.DelveInfo.Text3:			Objetivo: {0}
+SummonCommanderPet.DelveInfo.Text4:			Coste de maná: {0}%
+SummonCommanderPet.DelveInfo.Text5:			Tiempo de lanzamiento: {0}
+
+#SummonMinionHandler
+SummonMinionHandler.CheckBeginCast.Text1:		¡Debes controlar ya a un Comandante para invocar un súbdito al grupo!
+SummonMinionHandler.CheckBeginCast.Text2:		¡Tu Comandante ya controla el máximo de súbditos!
+SummonMinionHandler.DelveInfo.Text1:			Objetivo: {0}
+SummonMinionHandler.DelveInfo.Text2:			Coste de maná: {0}%
+SummonMinionHandler.DelveInfo.Text3:			Tiempo de lanzamiento: {0}
+
+#PetPBAOE
+PetPBAOE.CheckBeginCast.NoPet:				No puedes lanzar este hechizo sobre una criatura que no controlas.
+
+#SummonAnimistFnF
+SummonAnimistFnF.CheckBeginCast.NoGroundTarget:		¡Debes fijar un objetivo de suelo para este hechizo!
+SummonAnimistFnF.CheckBeginCast.TurretAreaCap:		¡No puedes controlar más torretas en esta zona!
+SummonAnimistFnF.CheckBeginCast.TurretPlayerCap:	¡No puedes controlar más torretas!
+
+#SummonAnimistPet
+SummonAnimistPet.CheckBeginCast.AlreadyHaveaPet:	¡Ya controlas a una criatura!
+SummonAnimistPet.CheckBeginCast.GroundTargetNull:	¡Debes fijar un objetivo de suelo para este hechizo!
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInView:	No tienes a la vista tu objetivo de suelo.
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange:	Debes elegir un objetivo de suelo más cercano.
+
+#TurretsRelease
+TurretsRelease.CheckBeginCast.NoSelectedTarget:		Solo puedes lanzar este hechizo sobre una criatura que controlas.
+TurretsRelease.CheckBeginCast.TargetTooFarAway:		Tu objetivo está demasiado lejos.
+
+#PetSpellHandler
+PetSpellHandler.CheckBeginCast.NoControlledBrainForCast:	¡Necesitas una mascota para lanzar este hechizo!
+
+#SummonNecromancerPet
+SummonNecromancerPet.CheckBeginCast.ShadeEffectIsNotNull:	¡Ya estás en forma de Sombra!
+SummonNecromancerPet.DelveInfo.Function:			Función: Invocar mascota
+SummonNecromancerPet.DelveInfo.Description:			Invoca una mascota no‑muerta que sirve al lanzador. El lanzador adopta forma de Sombra y actúa a través de su mascota.
+SummonNecromancerPet.DelveInfo.Target:				Objetivo: {0}
+SummonNecromancerPet.DelveInfo.Power:				Coste de maná: {0}%
+SummonNecromancerPet.DelveInfo.CastingTime:			Tiempo de lanzamiento: {0}
+
+#SavageEnduranceHeal
+SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:		¡No tienes suficiente salud para lanzar este hechizo!
+
+#AblativeArmorSpellHandler
+AblativeArmor.Target:	Tu escudo absorbe {0} de daño.
+AblativeArmor.Attacker:	¡Un escudo absorbe {0} de tu daño!
+
+#Amnesia
+Amnesia.MessageToTarget:	¡Tu mente se enreda y olvidas lo que estabas haciendo!
+
+# Petrify
+Petrify.Target.Absorbs:		{0} está petrificado y absorbe {1} de daño.
+Petrify.Target.Resist:		{0} está petrificado e inmune a este hechizo.
+Petrify.Self.Message:		{0} está petrificado.
+Petrify.Self.Absorb:		Estás petrificado y absorbes {0} de daño.
+Petrify.Self.Unpetrify:		Recuperas tu estado normal.
+
+# Damnation
+Damnation.Self.Message:			Tu objetivo está maldito.
+Damnation.Self.Message2:		¡Aún no lo sabes, pero ya estás muerto!
+Damnation.Target.Resist:		{0} está maldito e inmune a este hechizo.
+Damnation.Self.Absorb:			¡Estás maldito y absorbes {0} de daño!
+Damnation.Target.Absorbs:		{0} está maldito y absorbe {1} de daño.
+Damnation.Self.SpellAbsorb:		Tu maldición te permite absorber {0} de daño mágico gracias a tu equipo.
+Damnation.Target.SpellAbsorbs:	La maldición de {0} absorbe {1} de daño mágico gracias a su equipo.
+Damnation.Self.Resist:			Estás maldito y resistes el hechizo.
+Damnation.Target.Resist:		{0} está maldito y resiste el hechizo.
+Damnation.Kill.SelfHeal:		¡El cadáver de tu enemigo te revitaliza {0} de salud!
+Damnation.Kill.DurationExtended:	Tu existencia maldita se prolonga {0} s al arrebatar otra alma, pero el final es inevitable.
+Damnation.Self.CannotBeHealed:	¡Estás maldito y no puedes ser curado!
+
+# Adrenaline
+Adrenaline.Target.Immune:		¡{0} está en fiebre de batalla y resiste por completo!
+Adrenaline.Target.Absorbs:		Tu objetivo absorbe {0} de daño de tu ataque.
+Adrenaline.Self.Immune:			¡Tu fiebre de batalla te protege de este hechizo!
+Adrenaline.Self.Absorb:			¡Absorbes {0} de daño del hechizo!
+
+# DebuffImmunity
+DebuffImmunity.You.Resisted:			¡Resistes gracias a tu inmunidad a debilitaciones!
+DebuffImmunity.Target.Resisted:			{0} resiste gracias a su inmunidad a debilitaciones.
+
+# HealDebuff
+HealDebuffSpellHandler.EffectStart.Target:		La efectividad de las curas recibidas se reduce por {0}.
+HealDebuffSpellHandler.EffectStart.Area:		La efectividad de las curas recibidas por {0} se reduce por {1}.
+HealDebuffSpellHandler.EffectExpires.Target:	La efectividad de las curas vuelve a la normalidad.
+HealDebuffSpellHandler.EffectExpires.Area:		La efectividad de las curas de {0} vuelve a la normalidad.
+
+# NecroSummonWeapon
+Spells.NecroSumonWeap.Icebrand.You:				Invocas la espada Icebrand.
+Spells.NecroSumonWeap.Icebrand.Target:			{0} invoca la espada Icebrand.
+Spells.NecroSumonWeap.Nethersbane.You:			Invocas la espada Nethersbane.
+Spells.NecroSumonWeap.Nethersbane.Target:		{0} invoca la espada Nethersbane.
+
+# StyleHandler
+StyleHandler.StyleNotFound:						Estilo de combate no encontrado.
+StyleHandler.UseStyle:							Usas el estilo {0} para tus ataques.
+StyleHandler.NeedsRequirement:					Requiere {0} para ejecutar este estilo.
+StyleHandler.NeedsWeapon:						Necesitas {0} para ejecutar este estilo.
+StyleHandler.AllWeaponTypes:					Todos los tipos de armas son compatibles con este estilo.
+StyleHandler.UnknownWeaponType:					Tipo de arma requerido desconocido.
+StyleHandler.StyleNotImplemented:				¡Este estilo aún no está implementado!
+StyleHandler.Opening.DefensiveActionUsing:		una acción defensiva con {0}
+StyleHandler.Opening.DefensiveAction:			una acción defensiva
+StyleHandler.Opening.Positional.Back:			estar detrás del enemigo
+StyleHandler.Opening.Positional.Side:			estar al costado del enemigo
+StyleHandler.Opening.Positional.Front:			estar frente al enemigo
+StyleHandler.Opening.Positional.Specific:		una posición específica respecto al enemigo
+StyleHandler.Opening.Default:					una condición de apertura especial
+

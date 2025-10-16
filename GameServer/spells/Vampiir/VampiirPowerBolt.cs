@@ -17,7 +17,9 @@
  *
  */
 using System;
+using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -25,6 +27,9 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("VampiirBolt")]
     public class VampiirBoltSpellHandler : SpellHandler
     {
+        private const string MYTH_REFLECT_ABSORB_FLAG = "MYTH_REFLECT_ABSORB_PCT_THIS_HIT";
+        private const string MYTH_REFLECT_ABSORB_TICK = "MYTH_REFLECT_ABSORB_TICK";
+
         public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster.InCombat == true)
@@ -89,19 +94,58 @@ namespace DOL.GS.Spells
                 if (target == null || target.CurrentRegionID != caster.CurrentRegionID || target.ObjectState != GameObject.eObjectState.Active || !target.IsAlive)
                     return;
 
+                if (m_handler.Spell.Value > 0 && target.Level > (m_handler.Spell.Value + 5))
+                {
+                    foreach (GamePlayer pl in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                        pl.Out.SendSpellEffectAnimation(caster, target, 13130, 0, false, 0);
+
+                    if (caster is GamePlayer cp)
+                        cp.Out.SendMessage(LanguageMgr.GetTranslation(cp.Client, "SpellHandler.VampiirBolt.TargetTooHigh"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+
+                    return;
+                }
+
                 int power = 0;
                 if (target.Mana > 0)
                 {
-                    if (target is GameNPC)
+                    /*if (target is GameNPC)
                         power = (int)Math.Round(((double)(target.Level) * (double)(m_handler.Spell.Value) * 2) / 100);
                     else
-                        power = (int)Math.Round((double)(target.MaxMana) * (((double)m_handler.Spell.Value) / 250));
+                        power = (int)Math.Round((double)(target.MaxMana) * (((double)m_handler.Spell.Value) / 250));*/
 
-                    if (target.Mana < power)
+                    power = (int)Math.Round(target.MaxMana * (m_handler.Spell.SharedTimerGroup / 100.0));
+                    if (power > target.Mana)
                         power = target.Mana;
 
-                    caster.Mana += power;
+                    if (power > 0)
+                    {
+                        int mythAbsorb = target.TempProperties.getProperty<int>(MYTH_REFLECT_ABSORB_FLAG, 0);
+                        if (mythAbsorb > 0)
+                        {
+                            int absorbed = (int)Math.Round(power * (mythAbsorb / 100.0));
+                            if (absorbed > 0)
+                                power = Math.Max(0, power - absorbed);
 
+                            target.TempProperties.removeProperty(MYTH_REFLECT_ABSORB_FLAG);
+                            target.TempProperties.removeProperty(MYTH_REFLECT_ABSORB_TICK);
+                        }
+
+                        GameSpellEffect reflectEff = FindEffectOnTarget(target, "SpellReflection");
+                        if (reflectEff != null)
+                        {
+                            double absorbPct = Math.Max(0, Math.Min(100, reflectEff.Spell.LifeDrainReturn));
+                            if (absorbPct > 0)
+                            {
+                                int absorbed = (int)Math.Round(power * (absorbPct / 100.0));
+                                if (absorbed > 0)
+                                {
+                                    power -= absorbed;
+                                }
+                            }
+                        }
+                    }
+
+                    caster.Mana += power;
                     target.Mana -= power;
                 }
                 if (power > 0 && target is GamePlayer targetPlayer)
@@ -140,5 +184,19 @@ namespace DOL.GS.Spells
         }
 
         public VampiirBoltSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string GetDelveDescription(GameClient delveClient)
+        {
+            string lang = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string description = LanguageMgr.GetTranslation(lang, "SpellDescription.VampiirBolt.MainDescription", Spell.SharedTimerGroup);
+
+            if (Spell.Value > 0)
+            {
+                string desc2 = LanguageMgr.GetTranslation(lang, "SpellDescription.VampiirBolt.MainDescription2", Spell.Value + 5);
+                description += "\n\n" + desc2;
+            }
+
+            return description;
+        }
     }
 }

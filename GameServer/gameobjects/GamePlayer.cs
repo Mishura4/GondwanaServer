@@ -9570,11 +9570,7 @@ namespace DOL.GS
                     int ascAmnesia = ascEff.Spell?.AmnesiaChance ?? 0;
                     if (ascAmnesia <= 0 && IsAscendanceBlockedSpell(spell))
                     {
-                        Out.SendMessage(
-                            LanguageMgr.GetTranslation(Client.Account.Language, "SpellDescription.Ascendance.CannotCast", spell.Name)
-                            ?? $"Ascendance forbids casting {spell.Name}.",
-                            eChatType.CT_SpellResisted,
-                            eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "SpellHandler.Cleric.Ascendance.CannotCast", spell.Name), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                 }

@@ -10,6 +10,9 @@ namespace DOL.GS.Spells
     [SpellHandler("OmniHarm")]
     public class OmniHarmSpellHandler : DirectDamageSpellHandler
     {
+        const string MYTH_REFLECT_ABSORB_TICK = "MYTH_REFLECT_ABSORB_TICK";
+        const string MYTH_REFLECT_ABSORB_FLAG = "MYTH_REFLECT_ABSORB_PCT_THIS_HIT";
+
         public OmniHarmSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         { }
@@ -32,6 +35,35 @@ namespace DOL.GS.Spells
 
             if (endDrain <= 0 && powerDrain <= 0)
                 return;
+
+            var reflectEff = FindEffectOnTarget(target, "SpellReflection");
+            if (reflectEff != null)
+            {
+                double absorbPct = Math.Max(0, Math.Min(100, reflectEff.Spell.LifeDrainReturn));
+
+                if (absorbPct > 0)
+                {
+                    if (endDrain > 0)
+                    {
+                        int absorbedEnd = (int)Math.Round(endDrain * (absorbPct / 100.0));
+                        endDrain = Math.Max(0, endDrain - absorbedEnd);
+                    }
+                    if (powerDrain > 0)
+                    {
+                        int absorbedPow = (int)Math.Round(powerDrain * (absorbPct / 100.0));
+                        powerDrain = Math.Max(0, powerDrain - absorbedPow);
+                    }
+                }
+            }
+
+            int mythAbsorb = target.TempProperties.getProperty<int>(MYTH_REFLECT_ABSORB_FLAG, 0);
+            if (mythAbsorb > 0)
+            {
+                endDrain = Math.Max(0, endDrain - (int)Math.Round(endDrain * mythAbsorb / 100.0));
+                powerDrain = Math.Max(0, powerDrain - (int)Math.Round(powerDrain * mythAbsorb / 100.0));
+                target.TempProperties.removeProperty(MYTH_REFLECT_ABSORB_FLAG);
+                target.TempProperties.removeProperty(MYTH_REFLECT_ABSORB_TICK);
+            }
 
             int changedEnd = 0;
             int changedMana = 0;

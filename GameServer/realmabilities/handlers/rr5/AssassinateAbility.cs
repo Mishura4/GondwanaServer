@@ -42,7 +42,7 @@ namespace DOL.GS.RealmAbilities
             if (target.IsAlive && _spell != null)
             {
                 dd = ScriptMgr.CreateSpellHandler(_player, _spell, _spellline) as AssassinateHandler;
-                dd.IgnoreDamageCap = true;
+                dd!.IgnoreDamageCap = true;
                 return dd.CastSpell(target);
             }
             return false;
@@ -57,7 +57,7 @@ namespace DOL.GS.RealmAbilities
             _player = living as GamePlayer;
 
             CreateSpell();
-            if (_player.TargetObject is GameLiving)
+            if (_player!.TargetObject is GameLiving)
             {
                 CastSpell(_player.TargetObject as GameLiving);
             }
@@ -75,11 +75,11 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("The Assassin selects a target within a 750-unit range and spends 15 seconds, without moving, preparing the assassination attempt.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AssassinateAbility.AddEffectsInfo.Info1"));
             list.Add("");
-            list.Add("The attempt will fail if the assassin takes any action during those 15 seconds, or if the target moves more than 750 units away from the target and the recast timer is not refunded.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AssassinateAbility.AddEffectsInfo.Info2"));
             list.Add("");
-            list.Add("Once prepared, the next attack on that target by the assassin will not break stealth.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AssassinateAbility.AddEffectsInfo.Info3"));
         }
     }
 }

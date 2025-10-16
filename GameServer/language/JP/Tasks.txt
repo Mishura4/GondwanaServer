@@ -1,0 +1,71 @@
+
+Tasks.SystemDisabled: タスクシステムは現在無効になっています。
+Tasks.PvPRvRGvGTasks: ======= PvP/RvR/GvG タスク =======
+Tasks.PvETasks: ======== PvE タスク ========
+Tasks.CraftingTasks: == 製作タスク（最小レベル: {0}） ==
+Tasks.SpecialTasks: ======== 特別タスク ========
+Tasks.TaskCompletionTokenInfo: PvP、RvR、GvG、PvE、または製作タスクの完了トークンは、報酬を受け取るためタスクマスターに提出してください。
+Tasks.SpecialTaskCompletionTokenInfo: 特別タスクの完了トークンはタスクごとに異なります。これらのトークンは新しいプレイヤー称号を解除し、その称号に関連する特別なボーナスを付与します。
+Tasks.SnapshotTitle: タスク
+Tasks.KillEnemyPlayersGroup: 敵プレイヤー撃破（グループ）
+Tasks.KillEnemyPlayersAlone: 敵プレイヤー撃破（ソロ）
+Tasks.KillKeepGuards: 要塞の警備兵を撃破
+Tasks.TakeKeeps: 要塞を占領
+Tasks.RvRChampionOfTheDay: 本日の RvR チャンピオンになる
+Tasks.KillTerritoryGuards: 領地の警備兵を撃破
+Tasks.KillTerritoryBoss: 領地占領
+Tasks.TurnInPvPGvGTaskToken: PvP/RvR/GvG タスク完了トークンを提出
+Tasks.KillCreaturesInDungeons: ダンジョンのクリーチャーを撃破
+Tasks.KillOutdoorsCreatures: 屋外のクリーチャーを撃破
+Tasks.KillAnimalCreatures: 動物系を撃破
+Tasks.KillDemonCreatures: 悪魔系を撃破
+Tasks.KillDragonCreatures: ドラゴン系を撃破
+Tasks.KillElementalCreatures: エレメンタル系を撃破
+Tasks.KillGiantCreatures: 巨人系を撃破
+Tasks.KillHumanoidCreatures: 人型を撃破
+Tasks.KillInsectCreatures: 昆虫系を撃破
+Tasks.KillMagicalCreatures: 魔法生物を撃破
+Tasks.KillReptileCreatures: 爬虫類系を撃破
+Tasks.KillPlantCreatures: 植物系を撃破
+Tasks.KillUndeadCreatures: アンデッドを撃破
+Tasks.TurnInPvETaskToken: PvE タスク完了トークンを提出
+Tasks.SuccessfulItemCombinations: アイテム合成成功
+Tasks.MasteredCrafts: 熟練の製作
+Tasks.MasterpieceCrafted: 傑作を製作
+Tasks.TurnInCraftingTaskToken: 製作タスク完了トークンを提出
+Tasks.EpicBossesSlaughtered: エピックボス討伐
+Tasks.ItemsSoldToPlayers: 市場取引成功
+Tasks.SuccessfulPvPThefts: プレイヤーからの盗み成功
+Tasks.OutlawPlayersSentToJail: 無法者プレイヤーを撃破
+Tasks.EnemiesKilledInAdrenalineMode: アドレナリン状態で撃破した敵
+Tasks.EnemyKilledInDuel: 決闘勝利
+Tasks.QuestsCompleted: 完了したクエスト
+Tasks.MaxLevelReached: 最大レベル
+Tasks.Level: レベル {0}
+
+Tasks.KillEnemyPlayersGroupLog: 敵プレイヤー撃破（グループ）：{0}/{1}
+Tasks.KillEnemyPlayersAloneLog: 敵プレイヤー撃破（ソロ）：{0}/{1}
+Tasks.KillKeepGuardsLog: 要塞の警備兵を撃破：{0}/{1}
+Tasks.TakeKeepsLog: 要塞を占領：{0}/{1}
+Tasks.KillTerritoryGuardsLog: 領地の警備兵を撃破：{0}/{1}
+Tasks.KillTerritoryBossLog: 領地占領：{0}/{1}
+Tasks.SuccessfulItemCombinationsLog: アイテム合成成功：{0}/{1}
+Tasks.MasteredCraftsLog: 熟練の製作：{0}/{1}
+Tasks.MasterpieceCraftedLog: 傑作を製作：{0}/{1}
+Tasks.EpicBossesSlaughteredLog: エピックボス討伐：{0}/{1}
+Tasks.ItemsSoldToPlayersLog: 市場取引成功：{0}/{1}
+Tasks.SuccessfulPvPTheftsLog: プレイヤーからの盗み成功：{0}/{1}
+Tasks.OutlawPlayersSentToJailLog: 無法者プレイヤーを撃破：{0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: アドレナリン状態で撃破した敵：{0}/{1}
+Tasks.EnemyKilledInDuelLog: 決闘勝利：{0}/{1}
+Tasks.QuestsCompletedLog: 完了したクエスト：{0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: タスク：PvP/RvR/GvG タスク完了トークンを獲得 — レベル {0}
+Tasks.TurnInPvETaskTokenMessage: タスク：PvE タスク完了トークンを獲得 — レベル {0}
+Tasks.TurnInCraftingTaskTokenMessage: タスク：製作タスク完了トークンを獲得 — レベル {0}
+Tasks.EpicBossesSlaughteredSpecialToken: タスク：特別トークン『Demon Slayer』を獲得 — レベル {0}
+Tasks.ItemsSoldToPlayersSpecialToken: タスク：特別トークン『Trader』を獲得 — レベル {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: タスク：特別トークン『Thief』を獲得 — レベル {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: タスク：特別トークン『Bounty Hunter』を獲得 — レベル {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: タスク：特別トークン『Wrath』を獲得 — レベル {0}
+Tasks.EnemyKilledInDuelSpecialToken: タスク：デュエリスト・トークンを獲得 — レベル {0}
+Tasks.QuestsCompletedSpecialToken: タスク：特別トークン『Adventurer』を獲得 — レベル {0}

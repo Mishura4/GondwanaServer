@@ -1,0 +1,71 @@
+
+Tasks.SystemDisabled: Система заданий в настоящее время отключена.
+Tasks.PvPRvRGvGTasks: ======= ЗАДАНИЯ PvP/RvR/GvG =======
+Tasks.PvETasks: ======== ЗАДАНИЯ PvE ========
+Tasks.CraftingTasks: == РЕМИСЛЕННЫЕ ЗАДАНИЯ (Мин. уровень: {0}) ==
+Tasks.SpecialTasks: ======== ОСОБЫЕ ЗАДАНИЯ ========
+Tasks.TaskCompletionTokenInfo: Каждый жетон завершения задания для PvP, RvR, GvG, PvE или ремесленных заданий необходимо сдавать Мастеру заданий для получения награды.
+Tasks.SpecialTaskCompletionTokenInfo: Жетоны завершения особых заданий уникальны для каждого задания. Эти жетоны открывают новые игровые титулы и дают особые бонусы, связанные с этими титулами.
+Tasks.SnapshotTitle: ЗАДАНИЯ
+Tasks.KillEnemyPlayersGroup: Убить вражеских игроков в группе
+Tasks.KillEnemyPlayersAlone: Убить вражеских игроков в одиночку
+Tasks.KillKeepGuards: Убить стражей крепости
+Tasks.TakeKeeps: Захватить крепости
+Tasks.RvRChampionOfTheDay: Стать чемпионом RvR дня
+Tasks.KillTerritoryGuards: Убить стражей территории
+Tasks.KillTerritoryBoss: Захват территории
+Tasks.TurnInPvPGvGTaskToken: Сдать жетон завершения задания PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: Убить существ в подземельях
+Tasks.KillOutdoorsCreatures: Убить существ на открытой местности
+Tasks.KillAnimalCreatures: Убить животных
+Tasks.KillDemonCreatures: Убить демонов
+Tasks.KillDragonCreatures: Убить драконов
+Tasks.KillElementalCreatures: Убить элементалей
+Tasks.KillGiantCreatures: Убить великанов
+Tasks.KillHumanoidCreatures: Убить гуманоидов
+Tasks.KillInsectCreatures: Убить насекомых
+Tasks.KillMagicalCreatures: Убить магических существ
+Tasks.KillReptileCreatures: Убить рептилий
+Tasks.KillPlantCreatures: Убить растений
+Tasks.KillUndeadCreatures: Убить нежить
+Tasks.TurnInPvETaskToken: Сдать жетон завершения задания PvE
+Tasks.SuccessfulItemCombinations: Удачные комбинации предметов
+Tasks.MasteredCrafts: Освоенные ремёсла
+Tasks.MasterpieceCrafted: Созданные шедевры
+Tasks.TurnInCraftingTaskToken: Сдать жетон завершения ремесленного задания
+Tasks.EpicBossesSlaughtered: Убито эпических боссов
+Tasks.ItemsSoldToPlayers: Успешные сделки на рынке
+Tasks.SuccessfulPvPThefts: Успешные кражи у игроков
+Tasks.OutlawPlayersSentToJail: Убить игроков‑изгоев
+Tasks.EnemiesKilledInAdrenalineMode: Убито врагов в режиме Адреналина
+Tasks.EnemyKilledInDuel: Победы в дуэлях
+Tasks.QuestsCompleted: Выполненные квесты
+Tasks.MaxLevelReached: Максимальный уровень
+Tasks.Level: Уровень {0}
+
+Tasks.KillEnemyPlayersGroupLog: Убить вражеских игроков в группе: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Убить вражеских игроков в одиночку: {0}/{1}
+Tasks.KillKeepGuardsLog: Убить стражей крепости: {0}/{1}
+Tasks.TakeKeepsLog: Захватить крепости: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Убить стражей территории: {0}/{1}
+Tasks.KillTerritoryBossLog: Захват территории: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Удачные комбинации предметов: {0}/{1}
+Tasks.MasteredCraftsLog: Освоенные ремёсла: {0}/{1}
+Tasks.MasterpieceCraftedLog: Созданные шедевры: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Убито эпических боссов: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Успешные сделки на рынке: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Успешные кражи у игроков: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Убить игроков‑изгоев: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Убито врагов в режиме Адреналина: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Победы в дуэлях: {0}/{1}
+Tasks.QuestsCompletedLog: Выполненные квесты: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Задание: Вы получаете жетон завершения задания PvP/RvR/GvG — уровень {0}
+Tasks.TurnInPvETaskTokenMessage: Задание: Вы получаете жетон завершения задания PvE — уровень {0}
+Tasks.TurnInCraftingTaskTokenMessage: Задание: Вы получаете жетон завершения ремесленного задания — уровень {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Задание: Вы получаете особый жетон «Demon Slayer» — уровень {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Задание: Вы получаете особый жетон «Trader» — уровень {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Задание: Вы получаете особый жетон «Thief» — уровень {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Задание: Вы получаете особый жетон «Bounty Hunter» — уровень {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Задание: Вы получаете особый жетон «Wrath» — уровень {0}
+Tasks.EnemyKilledInDuelSpecialToken: Задание: Вы получили жетон Duelist — уровень {0}
+Tasks.QuestsCompletedSpecialToken: Задание: Вы получаете особый жетон «Adventurer» — уровень {0}

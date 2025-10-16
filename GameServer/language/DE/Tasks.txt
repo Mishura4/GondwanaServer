@@ -1,0 +1,70 @@
+Tasks.SystemDisabled: Das Aufgabensystem ist derzeit deaktiviert.
+Tasks.PvPRvRGvGTasks: ======= AUFGABEN PvP/RvR/GvG =======
+Tasks.PvETasks: ======== PvE‑AUFGABEN ========
+Tasks.CraftingTasks: == HANDWERKS‑AUFGABEN (Mindeststufe: {0}) ==
+Tasks.SpecialTasks: ======== SPEZIALAUFGABEN ========
+Tasks.TaskCompletionTokenInfo: Jeder PvP-, RvR-, GvG-, PvE- oder Handwerks-Aufgabentoken muss beim Aufgabenmeister abgegeben werden, um Belohnungen zu erhalten.
+Tasks.SpecialTaskCompletionTokenInfo: Spezial-Aufgabentoken sind auf die jeweilige Aufgabe zugeschnitten. Diese Token schalten neue Spielertitel mit besonderen Boni frei.
+Tasks.SnapshotTitle: AUFGABEN
+Tasks.KillEnemyPlayersGroup: Tötet feindliche Spieler in der Gruppe
+Tasks.KillEnemyPlayersAlone: Tötet feindliche Spieler alleine
+Tasks.KillKeepGuards: Tötet Festungswachen
+Tasks.TakeKeeps: Erobert Festungen
+Tasks.RvRChampionOfTheDay: Seid Champion des Tages im RvR
+Tasks.KillTerritoryGuards: Tötet Gebietswachen
+Tasks.KillTerritoryBoss: Gebietseroberungen
+Tasks.TurnInPvPGvGTaskToken: PvP/RvR/GvG‑Aufgabentoken
+Tasks.KillCreaturesInDungeons: Tötet Dungeon‑Kreaturen
+Tasks.KillOutdoorsCreatures: Tötet Außenwelt‑Kreaturen
+Tasks.KillAnimalCreatures: Tötet tierische Kreaturen
+Tasks.KillDemonCreatures: Tötet dämonische Kreaturen
+Tasks.KillDragonCreatures: Tötet drachenartige Kreaturen
+Tasks.KillElementalCreatures: Tötet elementare Kreaturen
+Tasks.KillGiantCreatures: Tötet riesige Kreaturen
+Tasks.KillHumanoidCreatures: Tötet humanoide Kreaturen
+Tasks.KillInsectCreatures: Tötet insektoide Kreaturen
+Tasks.KillMagicalCreatures: Tötet magische Kreaturen
+Tasks.KillReptileCreatures: Tötet reptilienartige Kreaturen
+Tasks.KillPlantCreatures: Tötet pflanzliche Kreaturen
+Tasks.KillUndeadCreatures: Tötet untote Kreaturen
+Tasks.TurnInPvETaskToken: PvE‑Aufgabentoken
+Tasks.SuccessfulItemCombinations: Erfolgreiche Objektkombinationen
+Tasks.MasteredCrafts: Über Handwerk hergestellte Gegenstände
+Tasks.MasterpieceCrafted: Herstellte Meisterwerke
+Tasks.TurnInCraftingTaskToken: Handwerks‑Aufgabentoken
+Tasks.EpicBossesSlaughtered: Epische Bosse besiegt
+Tasks.ItemsSoldToPlayers: Handelsabschlüsse über den Markt
+Tasks.SuccessfulPvPThefts: Erfolgreiche Diebstähle an Spielern
+Tasks.OutlawPlayersSentToJail: Setzt Gesetzlose außer Gefecht
+Tasks.EnemiesKilledInAdrenalineMode: Im Adrenalinmodus getötete Feinde
+Tasks.EnemyKilledInDuel: Duelle gewonnen
+Tasks.QuestsCompleted: Abgeschlossene Quests
+Tasks.MaxLevelReached: Maximalstufe
+Tasks.Level: Stufe {0}
+
+Tasks.KillEnemyPlayersGroupLog: Tötet feindliche Spieler in der Gruppe: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Tötet feindliche Spieler alleine: {0}/{1}
+Tasks.KillKeepGuardsLog: Tötet Festungswachen: {0}/{1}
+Tasks.TakeKeepsLog: Erobert Festungen: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Tötet Gebietswachen: {0}/{1}
+Tasks.KillTerritoryBossLog: Gebietseroberungen: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Erfolgreiche Objektkombinationen: {0}/{1}
+Tasks.MasteredCraftsLog: Über Handwerk hergestellte Gegenstände: {0}/{1}
+Tasks.MasterpieceCraftedLog: Herstellte Meisterwerke: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Epische Bosse besiegt: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Handelsabschlüsse über den Markt: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Erfolgreiche Diebstähle an Spielern: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Setzt Gesetzlose außer Gefecht: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Im Adrenalinmodus getötete Feinde: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Duelle gewonnen: {0}/{1}
+Tasks.QuestsCompletedLog: Abgeschlossene Quests: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Aufgabe: Ihr erhaltet ein PvP/RvR/GvG‑Aufgabentoken – Stufe {0}
+Tasks.TurnInPvETaskTokenMessage: Aufgabe: Ihr erhaltet ein PvE‑Aufgabentoken – Stufe {0}
+Tasks.TurnInCraftingTaskTokenMessage: Aufgabe: Ihr erhaltet ein Handwerks‑Aufgabentoken – Stufe {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Aufgabe: Ihr erhaltet ein Spezialtoken „Dämonentöter“ – Stufe {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Aufgabe: Ihr erhaltet ein Spezialtoken „Händler“ – Stufe {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Aufgabe: Ihr erhaltet ein Spezialtoken „Dieb“ – Stufe {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Aufgabe: Ihr erhaltet ein Spezialtoken „Kopfgeldjäger“ – Stufe {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Aufgabe: Ihr erhaltet ein Spezialtoken „Kampffieber“ – Stufe {0}
+Tasks.EnemyKilledInDuelSpecialToken: Aufgabe: Ihr habt ein Duellanten‑Token erhalten – Stufe {0}
+Tasks.QuestsCompletedSpecialToken: Aufgabe: Ihr erhaltet ein Spezialtoken „Abenteurer“ – Stufe {0}

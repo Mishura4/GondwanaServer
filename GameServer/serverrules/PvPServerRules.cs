@@ -62,9 +62,9 @@ namespace DOL.GS.ServerRules
             if (player.Client.IsPlaying == false) return;
 
             if (player.Level < m_safetyLevel && player.SafetyFlag)
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.PvpRules.InvTimerExpFlagON"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.PvPServerRules.InvTimerExpFlagON"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             else
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.PvpRules.InvTimerExp"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.PvPServerRules.InvTimerExp"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             return;
         }
@@ -172,7 +172,7 @@ namespace DOL.GS.ServerRules
             // can't attack self
             if (attacker == defender)
             {
-                if (quiet == false) MessageToLiving(attacker, "You can't attack yourself!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.PvPServerRules.AttackSelf"));
                 return false;
             }
 
@@ -184,7 +184,7 @@ namespace DOL.GS.ServerRules
                 //check group
                 if (playerAttacker.Group != null && playerAttacker.Group.IsInTheGroup(playerDefender))
                 {
-                    if (!quiet) MessageToLiving(playerAttacker, "You can't attack your group members.");
+                    if (!quiet) MessageToLiving(playerAttacker, LanguageMgr.GetTranslation(playerAttacker.Client, "ServerRules.PvPServerRules.AttackGroupMember"));
                     return false;
                 }
 
@@ -193,7 +193,7 @@ namespace DOL.GS.ServerRules
                     //check guild
                     if (playerAttacker.Guild != null && playerAttacker.Guild == playerDefender.Guild)
                     {
-                        if (!quiet) MessageToLiving(playerAttacker, "You can't attack your guild members.");
+                        if (!quiet) MessageToLiving(playerAttacker, LanguageMgr.GetTranslation(playerAttacker.Client, "ServerRules.PvPServerRules.AttackGuildMember"));
                         return false;
                     }
 
@@ -202,7 +202,7 @@ namespace DOL.GS.ServerRules
 
                     if (mybattlegroup != null && mybattlegroup.IsInTheBattleGroup(playerDefender))
                     {
-                        if (!quiet) MessageToLiving(playerAttacker, "You can't attack a member of your battlegroup.");
+                        if (!quiet) MessageToLiving(playerAttacker, LanguageMgr.GetTranslation(playerAttacker.Client, "ServerRules.PvPServerRules.AttackBattleGroupMember"));
                         return false;
                     }
 
@@ -212,7 +212,7 @@ namespace DOL.GS.ServerRules
                         foreach (int reg in m_safeRegions)
                             if (playerAttacker.CurrentRegionID == reg)
                             {
-                                if (quiet == false) MessageToLiving(playerAttacker, "You're currently in a safe zone, you can't attack other players here.");
+                                if (quiet == false) MessageToLiving(playerAttacker, LanguageMgr.GetTranslation(playerAttacker.Client, "ServerRules.PvPServerRules.SafeZoneNoAttack"));
                                 return false;
                             }
                     }
@@ -221,7 +221,7 @@ namespace DOL.GS.ServerRules
                     // Players with safety flag can not attack other players
                     if (playerAttacker.Level < m_safetyLevel && playerAttacker.SafetyFlag)
                     {
-                        if (quiet == false) MessageToLiving(attacker, "Your PvP safety flag is ON.");
+                        if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation(playerAttacker.Client, "ServerRules.PvPServerRules.SafetyFlagOnSelf"));
                         return false;
                     }
 
@@ -239,8 +239,13 @@ namespace DOL.GS.ServerRules
                         }
                         if (unsafeRegion == false)
                         {
-                            //"PLAYER has his safety flag on and is in a safe area, you can't attack him here."
-                            if (quiet == false) MessageToLiving(attacker, playerDefender.Name + " has " + playerDefender.GetPronoun(1, false) + " safety flag on and is in a safe area, you can't attack " + playerDefender.GetPronoun(2, false) + " here.");
+                            if (!quiet)
+                                MessageToLiving(attacker,
+                                    LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client,
+                                        "ServerRules.PvPServerRules.SafetyFlagTargetInSafeArea",
+                                        playerDefender.Name,
+                                        playerDefender.GetPronoun(1, false),
+                                        playerDefender.GetPronoun(2, false)));
                             return false;
                         }
                     }
@@ -259,7 +264,7 @@ namespace DOL.GS.ServerRules
             // "friendly" NPCs can't attack "friendly" players
             if (defender is GameNPC && defender.Realm != 0 && attacker.Realm != 0 && defender is GameKeepGuard == false && defender is GameFont == false)
             {
-                if (quiet == false) MessageToLiving(attacker, "You can't attack a friendly NPC!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.PvPServerRules.AttackFriendlyNPC"));
                 return false;
             }
             // "friendly" NPCs can't be attacked by "friendly" players
@@ -283,7 +288,7 @@ namespace DOL.GS.ServerRules
             if (defender is GameKeepGuard && attacker is GamePlayer
                 && GameServer.KeepManager.IsEnemy(defender as GameKeepGuard, attacker as GamePlayer) == false)
             {
-                if (quiet == false) MessageToLiving(attacker, "You can't attack a friendly NPC!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.PvPServerRules.AttackFriendlyNPC"));
                 return false;
             }
 
@@ -322,7 +327,7 @@ namespace DOL.GS.ServerRules
                     // PBAE/GTAE doesn't need a target so we check spell type as well
                     if (caster != target || spell.Target == "area" || spell.Target == "enemy" || (spell.Target == "group" && spell.SpellType != "SpeedEnhancement"))
                     {
-                        MessageToLiving(caster, "You can only cast spells on yourself until your PvP invulnerability timer wears off!", eChatType.CT_Important);
+                        MessageToLiving(caster, LanguageMgr.GetTranslation((caster as GamePlayer)?.Client, "ServerRules.PvPServerRules.OnlySelfCastWhileInvulnerable"), eChatType.CT_Important);
                         return false;
                     }
                 }
@@ -424,7 +429,7 @@ namespace DOL.GS.ServerRules
             if (sourcePlayer != null && target is GameNPC && target.Realm != 0)
                 return true;
 
-            if (quiet == false) MessageToLiving(source, target.GetName(0, true) + " is not a member of your realm!");
+            if (quiet == false) MessageToLiving(source, LanguageMgr.GetTranslation((source as GamePlayer)?.Client, "ServerRules.PvPServerRules.TargetNotSameRealm", target.GetName(0, true)));
             return false;
         }
 

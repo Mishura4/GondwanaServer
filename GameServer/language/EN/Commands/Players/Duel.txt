@@ -53,5 +53,5 @@ Commands.Players.Duel.Linkdead:					You cannot start a duel while you or your ta
 Commands.Players.Duel.AFKSelf:					You cannot start a duel while AFK.
 Commands.Players.Duel.AFKTarget:				{0} is AFK and can't start a duel yet.
 Commands.Players.Duel.WarlockMorphSelf:			You cannot start a duel while under the "{0}" enchantment!
-Commands.Players.Duel.WarlockMorphTarget:		{0} is under the "{1}" enchantment and can’t start a duel!
+Commands.Players.Duel.WarlockMorphTarget:		{0} is under the "{1}" enchantment and can't start a duel!
 Commands.Players.Duel.DistanceTooFar:			Duel cancelled: you are too far apart.

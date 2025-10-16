@@ -1,0 +1,510 @@
+# GAMEPLAYER (NL)
+GameObjects.GamePlayer.AddAbility.YouLearn:            Je leert de vaardigheid {0}.
+GameObjects.GamePlayer.AddSpecialisation.YouLearn:     Je leert de specialisatie {0}.
+GameObjects.GamePlayer.AddSpellLine.YouLearn:          Je leert de spreukenlijn {0}.
+
+GameObjects.GamePlayer.ApplyPoison.CantApplyRecentCombat:   Je was recent in gevecht en kunt nu geen gif aanbrengen.
+GameObjects.GamePlayer.ApplyPoison.CantPoisonWeapon:        Je kunt geen gif op dit wapen gebruiken.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoison:           Je kunt dit gif niet gebruiken.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Je kunt deze giffen niet gebruiken.
+GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Giffen kunnen alleen op wapens worden aangebracht.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Je kunt geen gif opnieuw aanbrengen op dit wapen.
+GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Je kunt je {0} niet vergiftigen!
+
+GameObjects.GamePlayer.AblativeArmor.Target:        Je pantser absorbeert {0} extra schade dankzij je ablatieve bonus!
+GameObjects.GamePlayer.AblativeArmor.Attacker:      Het pantser van {0} absorbeert {1} extra schade dankzij zijn/haar ablatieve bonus!
+
+GameObjects.GamePlayer.Attack.AlreadyDead:          {0} is al dood.
+GameObjects.GamePlayer.Attack.Blocked:              {0} blokkeert je aanval.
+GameObjects.GamePlayer.Attack.CantBeAttacked:       Dit kan niet worden aangevallen.
+GameObjects.GamePlayer.Attack.CantCritical:         Je kunt geen kritieke treffer op je doel landen; je voert een normale slag uit.
+GameObjects.GamePlayer.Attack.CantSeeTarget:        Je kunt je doel niet zien.
+GameObjects.GamePlayer.Attack.CantUseQuiver:        Je kunt de gekozen munitie niet met dit wapen gebruiken.
+GameObjects.GamePlayer.Attack.CouldRepair:          Je {0} kan gerepareerd worden.
+GameObjects.GamePlayer.Attack.Critical:             Je landt een kritieke treffer op {0} en richt {1} extra schade aan!
+GameObjects.GamePlayer.Attack.Evade:                {0} valt je aan, maar jij ontwijkt!
+GameObjects.GamePlayer.Attack.Evaded:               {0} ontwijkt je aanval!
+GameObjects.GamePlayer.Attack.Fumble:               Je struikelt en hebt even nodig om je te herstellen!
+GameObjects.GamePlayer.Attack.Fumbled:              {0} struikelt!
+GameObjects.GamePlayer.Attack.HitsYour:             {0} raakt je {1} voor {2}{3} schade!
+GameObjects.GamePlayer.Attack.HitsYou:              {0} raakt jou voor {1}{2} schade!
+GameObjects.GamePlayer.Attack.HitsYouCritical:      {0} raakt je kritisch voor {1} extra schade!
+GameObjects.GamePlayer.Attack.Intercepted:          {0} stapt voor {1} en onderschept de slag!
+GameObjects.GamePlayer.Attack.InterceptedHit:       {0} {1}{2}, maar je raakt {3} voor {4}{5} schade!
+GameObjects.GamePlayer.Attack.InterceptHit:         {0} {1}{2} en je raakt voor {3}{4} schade!
+GameObjects.GamePlayer.Attack.Interrupted:          {0} valt je aan en je {1} wordt onderbroken!
+GameObjects.GamePlayer.Attack.InterruptedCrafting:  Je onderbreekt het maken van het voorwerp.
+GameObjects.GamePlayer.Attack.Location.Arm:         Arm
+GameObjects.GamePlayer.Attack.Location.Foot:        Voet
+GameObjects.GamePlayer.Attack.Location.Hand:        Hand
+GameObjects.GamePlayer.Attack.Location.Head:        Hoofd
+GameObjects.GamePlayer.Attack.Location.Leg:         Been
+GameObjects.GamePlayer.Attack.Location.Torso:       Romp
+GameObjects.GamePlayer.Attack.Miss:                 Je mist.
+GameObjects.GamePlayer.Attack.Missed:               {0} valt je aan, maar mist.
+GameObjects.GamePlayer.Attack.MustSelectQuiver:     Je moet een vak in je pijlkoker selecteren.
+GameObjects.GamePlayer.Attack.NeedRepair:           Je {0} moet worden gerepareerd.
+GameObjects.GamePlayer.Attack.NeedRepairDire:       Je {0} moet dringend worden gerepareerd.
+GameObjects.GamePlayer.Attack.NeedTarget:           Je moet een doel selecteren om aan te vallen.
+GameObjects.GamePlayer.Attack.NotInView:            {0} is niet in zicht.
+GameObjects.GamePlayer.Attack.Parried:              {0} pareert je aanval.
+GameObjects.GamePlayer.Attack.Parry:                {0} valt je aan, maar jij pareert de slag!
+GameObjects.GamePlayer.Attack.ReadyToFire:          Je bent klaar om te vuren.
+GameObjects.GamePlayer.Attack.StrafMiss:            Door je zijwaartse beweging miste je.
+GameObjects.GamePlayer.Attack.TooFarAway:           {0} is te ver weg om aan te vallen.
+GameObjects.GamePlayer.Attack.TooTired:             Je bent te vermoeid om je schot langer vast te houden.
+GameObjects.GamePlayer.Attack.Type.Shot:            Schot
+GameObjects.GamePlayer.Attack.Type.Throw:           Worp
+GameObjects.GamePlayer.Attack.WithYour:             met je
+GameObjects.GamePlayer.Attack.YouAttack:            Je valt aan
+GameObjects.GamePlayer.Attack.YouShot:              Je schiet op
+GameObjects.GamePlayer.Attack.CounterAttackSuccess: Je gebruikt {0} om te tegenaanvallen.
+GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:   Tegenaanval-stijl kan niet met het huidige wapen worden gebruikt.
+GameObjects.GamePlayer.Attack.CounterAttackNoStyle:       Geen tegenaanval-stijl voor je klasse gevonden.
+GameObjects.GamePlayer.Attack.CounterAttackByEnemy:       {0} voert een tegenaanval uit!
+
+GameObjects.GamePlayer.Bind.Bound:          Je geest is nu aan deze zielensteen gebonden.
+GameObjects.GamePlayer.Bind.CantBindDead:   De dood verhindert je je geest aan de zielensteen te binden.
+GameObjects.GamePlayer.Bind.CantHere:       Er is geen zielensteen in de buurt waaraan je je kunt binden.
+GameObjects.GamePlayer.Bind.LastBindPoint:  Laatste bindpunt: {0}.
+GameObjects.GamePlayer.Bind.MustWait:       Je moet {0} seconden wachten voordat je je opnieuw kunt binden.
+
+GameObjects.GamePlayer.CastSpell.AlreadyCastFollow:     Je bent al een spreuk aan het uitspreken! Deze spreuk is in de wachtrij geplaatst.
+GameObjects.GamePlayer.CastSpell.AlreadyCastNoQueue:    Je bent al een spreuk aan het uitspreken. Gebruik “/noqueue” om de spreukenwachtrij te activeren.
+GameObjects.GamePlayer.CastSpell.AlreadyChosenSpells:   Je hebt je spreuken voor deze kamer al gekozen.
+GameObjects.GamePlayer.CastSpell.AlreadyPlaySong:       Je speelt al een melodie.
+GameObjects.GamePlayer.CastSpell.CantCastMezzed:        Je kunt geen spreuken uitspreken terwijl je gehypnotiseerd bent.
+GameObjects.GamePlayer.CastSpell.CantCastStunned:       Je kunt geen spreuken uitspreken terwijl je bedwelmd bent.
+GameObjects.GamePlayer.CastSpell.CantCastFumblingWords: Je bezwering mislukt; je kunt je spreuk niet uitspreken!
+GameObjects.GamePlayer.CastSpell.CantSpellDirectly:     Je kunt deze spreuk niet rechtstreeks uitspreken!
+GameObjects.GamePlayer.CastSpell.FollowSpell:           Je hebt een {0} als vervolgspreuk voorbereid!
+GameObjects.GamePlayer.CastSpell.NotAFollowSpell:       Je kunt deze spreuk niet als vervolgspreuk voorbereiden!
+GameObjects.GamePlayer.CastSpell.PrimarySpellFirst:     Je moet eerst een hoofdspreuk opslaan!
+GameObjects.GamePlayer.CastSpell.PrepareSecondarySpell: Je bereidt dit als secundaire spreuk voor!
+GameObjects.GamePlayer.CastSpell.SelectSecondSpell:     Kies de tweede spreuk voor je {0}.
+GameObjects.GamePlayer.CastSpell.SpellInChamber:        Je laadt {0} in je {1}.
+GameObjects.GamePlayer.CastSpell.SpellNotInChamber:     Deze spreuk kan niet in deze kamer worden opgeslagen.
+GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:   Alleen een secundaire spreuk kan de uitgesproken spreuk opvolgen!
+GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:   Je bent al een spreuk aan het uitspreken.
+GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast:    Je moet {0} seconden wachten om een spreuk uit te spreken!
+
+GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:          Je doel is te ver weg voor je gezel om aan te vallen.
+GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:   Je moet een bestemming kiezen voor je wezen.
+GameObjects.GamePlayer.CommandNpcAttack.KillTarget:                Je beveelt {0} om je doel te doden!
+GameObjects.GamePlayer.CommandNpcAttack.IsConfused:                Je {0} is in de war!
+GameObjects.GamePlayer.CommandNpcAttack.FollowYou:                 Je beveelt {0} om je te volgen!
+GameObjects.GamePlayer.CommandNpcAttack.Stay:                      Je beveelt {0} om hier te blijven!
+GameObjects.GamePlayer.CommandNpcAttack.ComeHere:                  Je beveelt {0} om naar je toe te komen.
+GameObjects.GamePlayer.CommandNpcAttack.GoToTarget:                Je beveelt {0} om naar je doel te gaan.
+GameObjects.GamePlayer.CommandNpcAttack.Passive:                   Je beveelt {0} zich uit de strijd terug te trekken!
+GameObjects.GamePlayer.CommandNpcAttack.Aggressive:                Je beveelt {0} om alle vijanden aan te vallen!
+GameObjects.GamePlayer.CommandNpcAttack.Denfensive:                Je beveelt {0} om je te verdedigen!
+
+GameObjects.GamePlayer.CraftItem.DontHaveAbilityMake:              Je mist de vereiste vaardigheid om dit voorwerp te maken.
+GameObjects.GamePlayer.CurrentTitle.TitleCleared:                  Je titel is verwijderd.
+
+GameObjects.GamePlayer.Die.CorpseLies:             {0} is gestorven. Zijn/Haar lijk ligt op de grond.
+GameObjects.GamePlayer.Die.DeadRVR:                Je bent gevallen in de strijd voor je rijk en verliest geen ervaring.
+GameObjects.GamePlayer.Die.DeathN1:                Dit is je eerste dood op dit niveau. Je verlies aan ervaring en constitutie is sterk verminderd.
+GameObjects.GamePlayer.Die.DeathN2:                Dit is je tweede dood op dit niveau. Je verlies aan ervaring en constitutie is verminderd.
+GameObjects.GamePlayer.Die.DuelDefeated:           {0} is in een duel verslagen door {1}!
+GameObjects.GamePlayer.Die.DuelWinner:             {0} wint het duel!
+GameObjects.GamePlayer.Die.Killed:                 {0} is zojuist gedood.
+GameObjects.GamePlayer.Die.KilledBy:               {0} is zojuist gedood door {1}.
+GameObjects.GamePlayer.Die.KilledByLocation:       {0} is zojuist gedood door {1} bij {2}.
+GameObjects.GamePlayer.Die.KilledLocation:         {0} is zojuist gedood bij {1}.
+GameObjects.GamePlayer.Die.LoseExperience:         Je verliest ervaring.
+GameObjects.GamePlayer.Die.ReleaseToReturn:        Je bent dood. Typ “/release” om terug te keren naar je zielensteen.
+GameObjects.GamePlayer.Die.YouKilled:              Je hebt {0} gedood.
+
+GameObjects.GamePlayer.DrowningTimerCallback.CannotBreath:  Je kunt onder water niet ademen en slikt water!
+GameObjects.GamePlayer.DrowningTimerCallback.Take5%Damage:  Je verliest 5% van je maximale gezondheidspunten.
+
+GameObjects.GamePlayer.DuelStop.DuelEnds:                     Je duel eindigt.
+
+GameObjects.GamePlayer.GainBountyPoints.YouGet:               Je ontvangt {0} premiepunt(en).
+GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus:       Je ontvangt een bonus van {0} premiepunt(en) dankzij je territoria.
+
+GameObjects.GamePlayer.GainCraftingSkill.GainSkill:           Je krijgt een vaardigheidsstijging in {0}. ({1})
+GameObjects.GamePlayer.GainCraftingSkill.ReachedSkill:        {0} heeft de titel “Legendarisch” (1000 vaardigheidspunten) bereikt in {1}.
+
+GameObjects.GamePlayer.GainExperience.CampBonus:              ({0} kampbonus)
+GameObjects.GamePlayer.GainExperience.CannotRaise:            Je kunt niveau 6 niet bereiken voordat je een specialisatie hebt gekozen.
+GameObjects.GamePlayer.GainExperience.GroupBonus:             ({0} groepsbonus)
+GameObjects.GamePlayer.GainExperience.OutpostBonus:           ({0} buitenpostbonus)
+GameObjects.GamePlayer.GainExperience.RoyaumesouspeupleBonus: Je ontvangt een bonus van {0} voor onderbevolkte rijken!
+GameObjects.GamePlayer.GainExperience.TalkToTrainer:          Praat met je trainer voor meer informatie.
+GameObjects.GamePlayer.GainExperience.YouGet:                 Je ontvangt {0} ervaringspunt(en).
+GameObjects.GamePlayer.GainExperience.BonusRenaissance:       waarvan {0} bonuspunten uit Wedergeboorte
+GameObjects.GamePlayer.GainExperience.BonusTerritory:         waarvan {0} bonuspunten uit Territoria
+GameObjects.GamePlayer.GainExperience.BonusGameEvent:         waarvan {0} bonuspunten uit Evenementen
+
+GameObjects.GamePlayer.GainRealmPoints.Earned:                {0} heeft 1.000.000 rijkspunten verdiend in {1}.
+GameObjects.GamePlayer.GainRealmPoints.GainBonus:             Je ontvangt een bonus van +{0} op al je specialisaties!
+GameObjects.GamePlayer.GainRealmPoints.GainedLevel:           Je hebt een rijk-niveau gewonnen!
+GameObjects.GamePlayer.GainRealmPoints.GainedRank:            Je hebt een nieuwe rijkrang en -titel ontvangen!
+GameObjects.GamePlayer.GainRealmPoints.NewRealmTitle:         Je nieuwe rijkstitel is {0}.
+GameObjects.GamePlayer.GainRealmPoints.ReachedRank:           Je hebt rijkrang {0}L0 bereikt!
+GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:       {0} heeft rijkrang {1:#L#} bereikt in {2}!
+GameObjects.GamePlayer.GainRealmPoints.YouGet:                Je ontvangt {0} rijkspunten!
+GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:           Je ontvangt {0} extra rijkspunten dankzij gebiedsbonussen!
+GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP:      Je ontvangt {0} rijkspunten voor de verdediging van je territorium!
+GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:     Je ontvangt {0} rijkspunten voor het genezen van een lid van je rijk!
+
+GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:   Je bekijkt {0}. {1} is lid van een vijandig rijk!
+GameObjects.GamePlayer.GetExamineMessages.NeutralMember:      Je bekijkt {0}. {1} behoort tot geen enkele gilde.
+GameObjects.GamePlayer.GetExamineMessages.OtherGuildMember:   Je bekijkt {0}. {1} is lid van de gilde: {2}.
+GameObjects.GamePlayer.GetExamineMessages.RealmMember:        Je bekijkt {0}. {1} is een {2} van je rijk.
+GameObjects.GamePlayer.GetExamineMessages.YouExamine:         Je bekijkt {0}.
+GameObjects.GamePlayer.GetExamineMessages.YourGuildMember:    Je bekijkt {0}. {1} is een {2} van je gilde.
+
+GameObjects.GamePlayer.IsCloakHoodUp.NowWear:                 Je draagt je capuchon nu omhoog.
+GameObjects.GamePlayer.IsCloakHoodUp.NoLongerWear:            Je draagt je capuchon nu omlaag.
+
+GameObjects.GamePlayer.IsCloakInvisible.Invisible:            Je ziet je mantel nu niet meer.
+GameObjects.GamePlayer.IsCloakInvisible.Visible:              Je ziet je mantel nu weer.
+
+GameObjects.GamePlayer.IsHelmInvisible.Invisible:             Je ziet je helm nu niet meer.
+GameObjects.GamePlayer.IsHelmInvisible.Visible:               Je ziet je helm nu weer.
+
+GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Je stapt van je rijdier af.
+GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Je stijgt op je rijdier.
+GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Je moet met een paard zijn uitgerust.
+GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Je moet op je paard zitten om deze inventaris te gebruiken.
+
+GameObjects.GamePlayer.ItemBonusName.Bonus1:    Kracht
+GameObjects.GamePlayer.ItemBonusName.Bonus2:    Handigheid
+GameObjects.GamePlayer.ItemBonusName.Bonus3:    Constitutie
+GameObjects.GamePlayer.ItemBonusName.Bonus4:    Behendigheid
+GameObjects.GamePlayer.ItemBonusName.Bonus5:    Intelligentie
+GameObjects.GamePlayer.ItemBonusName.Bonus6:    Vroomheid
+GameObjects.GamePlayer.ItemBonusName.Bonus7:    Empathie
+GameObjects.GamePlayer.ItemBonusName.Bonus8:    Charisma
+GameObjects.GamePlayer.ItemBonusName.Bonus9:    Mana
+GameObjects.GamePlayer.ItemBonusName.Bonus10:   LP (Levenpunten)
+GameObjects.GamePlayer.ItemBonusName.Bonus11:   Weerstand Lichaam
+GameObjects.GamePlayer.ItemBonusName.Bonus12:   Weerstand Koude
+GameObjects.GamePlayer.ItemBonusName.Bonus13:   Weerstand Slaand
+GameObjects.GamePlayer.ItemBonusName.Bonus14:   Weerstand Energie
+GameObjects.GamePlayer.ItemBonusName.Bonus15:   Weerstand Hitte
+GameObjects.GamePlayer.ItemBonusName.Bonus16:   Weerstand Materie
+GameObjects.GamePlayer.ItemBonusName.Bonus17:   Weerstand Snijdend
+GameObjects.GamePlayer.ItemBonusName.Bonus18:   Weerstand Geest
+GameObjects.GamePlayer.ItemBonusName.Bonus19:   Weerstand Stekend
+GameObjects.GamePlayer.ItemBonusName.Bonus119:  Opbouwsnelheid spanning
+GameObjects.GamePlayer.ItemBonusName.Bonus147:  maximale concentratiesnelheid
+GameObjects.GamePlayer.ItemBonusName.Bonus148:  Pantserfactor-bonus (PF)
+GameObjects.GamePlayer.ItemBonusName.Bonus149:  Absorptie-bonus (Abs)
+GameObjects.GamePlayer.ItemBonusName.Bonus150:  Herstelsnelheid LP
+GameObjects.GamePlayer.ItemBonusName.Bonus151:  Herstelsnelheid mana
+GameObjects.GamePlayer.ItemBonusName.Bonus152:  Herstelsnelheid uithouding
+GameObjects.GamePlayer.ItemBonusName.Bonus153:  Spreukbereik
+GameObjects.GamePlayer.ItemBonusName.Bonus154:  Bereik afstandswapens
+GameObjects.GamePlayer.ItemBonusName.Bonus155:  Snelheid mêleegevecht
+GameObjects.GamePlayer.ItemBonusName.Bonus156:  Wilskracht
+GameObjects.GamePlayer.ItemBonusName.Bonus169:  Ontwijkkans
+GameObjects.GamePlayer.ItemBonusName.Bonus170:  Blokkeer­kans (Schilden)
+GameObjects.GamePlayer.ItemBonusName.Bonus171:  Paréérkans
+GameObjects.GamePlayer.ItemBonusName.Bonus175:  Trefferskans in gevecht
+GameObjects.GamePlayer.ItemBonusName.Bonus181:  Succesratio spreuken
+GameObjects.GamePlayer.ItemBonusName.Bonus197:  Weerstand tegen doorborende aanvallen
+GameObjects.GamePlayer.ItemBonusName.Bonus249:  Weerstand tegen essentie
+
+GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Je staat in lava en je loopt schade op!
+GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Je loopt schade op gelijk aan 34% van je maximale levenpunten.
+
+GameObjects.GamePlayer.OnItemEquipped.Increased:      Je {0} is verhoogd.
+GameObjects.GamePlayer.OnItemEquipped.Magic:          De magie van {0} stroomt door je aderen.
+GameObjects.GamePlayer.OnItemEquipped.WieldBothHands: Je hanteert je {0} met beide handen.
+GameObjects.GamePlayer.OnItemEquipped.WieldLeftHand:  Je hanteert je {0} in je linkerhand.
+GameObjects.GamePlayer.OnItemEquipped.WieldRightHand: Je hanteert je {0} in je rechterhand.
+
+GameObjects.GamePlayer.OnItemUnequipped.Decreased:    Je {0} is verlaagd.
+GameObjects.GamePlayer.OnItemUnequipped.BothHandsFree: Je bergt {0} weg. Je handen zijn nu vrij.
+GameObjects.GamePlayer.OnItemUnequipped.LeftHandFree:  Je bergt {0} weg uit je linkerhand.
+GameObjects.GamePlayer.OnItemUnequipped.RightHandFree: Je bergt {0} weg uit je rechterhand.
+
+GameObjects.GamePlayer.OnLevelUp.AttainedRank:        Je hebt rang {0} bereikt!
+GameObjects.GamePlayer.OnLevelUp.FreeLevelEligible:   Je hebt recht op een gratis level! Klik op je trainer om het te ontvangen (of typ “/freelevel decline” om te weigeren).
+GameObjects.GamePlayer.OnLevelUp.HitsRaise:           Je levenpunten zijn met {0} gestegen.
+GameObjects.GamePlayer.OnLevelUp.PowerRaise:          Je manapunten zijn met {0} gestegen.
+GameObjects.GamePlayer.OnLevelUp.Reached:             {0} heeft niveau {1} in {2} bereikt!
+GameObjects.GamePlayer.OnLevelUp.SecondStage:         Je hebt de tweede fase van je niveau {0} bereikt!
+GameObjects.GamePlayer.OnLevelUp.StatRaise:           Je statistieken stijgen!
+GameObjects.GamePlayer.OnLevelUp.YouAchieved:         Je hebt niveau {0} voltooid!
+GameObjects.GamePlayer.OnLevelUp.YouGetSpec:          Je ontvangt {0} specialisatiepunten om op dit niveau te besteden!
+GameObjects.GamePlayer.OnLevelUp.YouRaise:            Je bent gestegen naar niveau {0}!
+GameObjects.GamePlayer.OnRenaissance:                 Je hebt zojuist je Wedergeboorte voltooid!
+
+GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} is van de server losgekoppeld!
+
+GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Je bent in beweging en kunt je rijdier niet roepen!
+GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Je beweegt en onderbreekt je vervaardiging.
+
+GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} traint in verschillende specialisaties.
+GameObjects.GamePlayer.OnSkillTrained.YouHave:         Je hebt nog {0} specialisatiepunt(en) op dit niveau.
+GameObjects.GamePlayer.OnSkillTrained.YouSpend:        Je besteedt {0} punt(en) en verhoogt je specialisatie in {1}.
+
+GameObjects.GamePlayer.OpenSelfCraft.AlreadySelfCrafting: Je bent al iets aan het betoveren.
+GameObjects.GamePlayer.OpenSelfCraft.CanOnlyCraftBackpack: Je kunt alleen voorwerpen in je rugzak combineren.
+
+GameObjects.GamePlayer.PickupObject.Autosplit:             (Autosplit) {0} gaat naar {1}.
+GameObjects.GamePlayer.PickupObject.BackpackFull:          Je inventaris is vol; je moet ruimte maken.
+GameObjects.GamePlayer.PickupObject.CantGetThat:           Dat kun je niet oppakken.
+GameObjects.GamePlayer.PickupObject.GroupMemberPicksUp:    {0} raapt {1} op.
+GameObjects.GamePlayer.PickupObject.ItemBelowBGThreshold:  Dit voorwerp ligt onder het niveau van je slag­groep.
+GameObjects.GamePlayer.PickupObject.LootDoesntBelongYou:   Deze buit is niet van jou — je kunt het niet nemen.
+GameObjects.GamePlayer.PickupObject.MustHaveTarget:        Je hebt een doel nodig om iets op te pakken.
+GameObjects.GamePlayer.PickupObject.NoOneGroupWantsMoney:  Niemand in de groep wil het geld.
+GameObjects.GamePlayer.PickupObject.NoOneWantsThis:        Niemand in de groep wil {0}.
+GameObjects.GamePlayer.PickupObject.ObjectTooFarAway:      {0} is te ver weg om op te pakken.
+GameObjects.GamePlayer.PickupObject.TooFarFromBoat:        Je bent te ver van de boot om aan boord te gaan.
+GameObjects.GamePlayer.PickupObject.YouGet:                Je raapt {0} op en stopt het in je rugzak.
+GameObjects.GamePlayer.PickupObject.YouPickUp:             Je raapt {0} op.
+GameObjects.GamePlayer.PickupObject.YourLootShare:         Jouw aandeel van de buit is {0}.
+GameObjects.GamePlayer.PickupObject.GuildDueTax:           Je belasting van {0} gaat naar de gildedeposito.
+GameObjects.GamePlayer.PickupObject.CannotDepositHere:     {0} kan hier niet worden gedeponeerd!
+GameObjects.GamePlayer.PickupObject.WaitToPickup:          Je moet {0} seconde(n) wachten om {1} op te pakken!
+GameObjects.GamePlayer.PickupObject.HeadPickedUp:          Je hebt het hoofd van {0} geborgen.
+GameObjects.GamePlayer.PickupObject.HeadInventoryFull:     Je kon het hoofd van {0} niet bergen; je inventaris is vol!
+
+GameObjects.GamePlayer.Pray.AlreadyPraying:            Je bent al aan het bidden.
+GameObjects.GamePlayer.Pray.Begin:                     Je begint te bidden.
+GameObjects.GamePlayer.Pray.CantPrayNow:               Je kunt nu niet bidden.
+GameObjects.GamePlayer.Pray.GainBack:                  Je gebeden zijn verhoord; je krijgt ervaring terug.
+GameObjects.GamePlayer.Pray.MustGetCloser:             Je moet dichter bij je graf komen om te bidden.
+GameObjects.GamePlayer.Pray.MustStandingStill:         Je moet stil staan om te bidden.
+GameObjects.GamePlayer.Pray.NeedTarget:                Je moet een graf selecteren om te bidden.
+GameObjects.GamePlayer.Pray.SelectGrave:               Selecteer je graf om te bidden.
+GameObjects.GamePlayer.Pray.CantPrayRiding:            Je kunt niet bidden te paard!
+
+GameObjects.GamePlayer.Pronoun.Female.Objective:       haar
+GameObjects.GamePlayer.Pronoun.Female.Possessive:      haar
+GameObjects.GamePlayer.Pronoun.Female.Subjective:      zij
+GameObjects.GamePlayer.Pronoun.Male.Objective:         hem
+GameObjects.GamePlayer.Pronoun.Male.Possessive:        zijn
+GameObjects.GamePlayer.Pronoun.Male.Subjective:        hij
+
+GameObjects.GamePlayer.Quit.CantQuitCrafting:          Je kunt niet uitloggen tijdens het vervaardigen.
+GameObjects.GamePlayer.Quit.CantQuitDead:              Je kunt niet uitloggen na je plotselinge dood! Typ “/release” om te herleven.
+GameObjects.GamePlayer.Quit.CantQuitInInstance:        Je kunt niet uitloggen terwijl je in een instance bent!
+GameObjects.GamePlayer.Quit.CantQuitMount:             Je kunt niet uitloggen terwijl je te paard zit.
+GameObjects.GamePlayer.Quit.RecentlyInCombat:          Je was recent in gevecht; je moet langer wachten om uit te loggen.
+GameObjects.GamePlayer.Quit.CantQuitStanding:          Je moet stil staan om uit te loggen.
+GameObjects.GamePlayer.Quit.YouWillQuit1:              Je verlaat het spel over {0} seconden.
+GameObjects.GamePlayer.Quit.YouWillQuit2:              Je verlaat het spel over {0} seconden. Typ “/stand” of beweeg om te annuleren.
+GameObjects.GamePlayer.Quit.CanTQuitDamned:            Je kunt niet uitloggen; je bent verdoemd.
+GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease: Je kunt niet uitloggen zolang je onder de spreuk “{0}” staat.
+GameObjects.GamePlayer.Quit.CanTQuitStunned:           Je kunt niet uitloggen; je bent door een spreuk onbeweeglijk gemaakt.
+GameObjects.GamePlayer.Quit.CanTQuitMezzed:            Je kunt niet uitloggen; je slaapt.
+
+GameObjects.GamePlayer.RealmTitle.UnknownRealm:        Onbekend rijk.
+
+GameObjects.GamePlayer.ReceiveItem.Receive:            Je ontvangt {0}.
+GameObjects.GamePlayer.ReceiveItem.ReceiveFrom:        Je ontvangt {0} van {1}.
+
+GameObjects.GamePlayer.ReceiveTradeItem.CantTrade:         Je kunt dit voorwerp niet verhandelen.
+GameObjects.GamePlayer.ReceiveTradeItem.StillSelfcrafting: Je bent nog steeds aan het betoveren.
+
+GameObjects.GamePlayer.RefreshSpec.AfterBlocked:       Deze stijl is het beste nadat je laatste aanval is geblokkeerd.
+GameObjects.GamePlayer.RefreshSpec.AfterEvaded:        Deze stijl is het beste nadat je laatste aanval is ontweken.
+GameObjects.GamePlayer.RefreshSpec.AfterFumbles:       Deze stijl is het beste nadat je laatste aanval volledig is mislukt.
+GameObjects.GamePlayer.RefreshSpec.AfterMissed:        Deze stijl is het beste nadat je laatste aanval heeft gemist.
+GameObjects.GamePlayer.RefreshSpec.AfterParried:       Deze stijl is het beste nadat je laatste aanval is gepareerd.
+GameObjects.GamePlayer.RefreshSpec.AfterStyle:         Deze stijl kan alleen na stijl {0} worden gebruikt.
+GameObjects.GamePlayer.RefreshSpec.TargetBlocked:      Deze stijl is het beste nadat de laatste aanval van je doel is geblokkeerd.
+GameObjects.GamePlayer.RefreshSpec.TargetEvaded:       Deze stijl is het beste nadat de laatste aanval van je doel is ontweken.
+GameObjects.GamePlayer.RefreshSpec.TargetFumbles:      Deze stijl is het beste nadat de laatste aanval van je doel volledig is mislukt.
+GameObjects.GamePlayer.RefreshSpec.TargetMisses:       Deze stijl is het beste nadat de laatste aanval van je doel heeft gemist.
+GameObjects.GamePlayer.RefreshSpec.TargetHits:         Deze stijl is het beste nadat de laatste aanval van je doel raak was.
+GameObjects.GamePlayer.RefreshSpec.TargetParried:      Deze stijl is het beste nadat de laatste aanval van je doel is gepareerd.
+GameObjects.GamePlayer.RefreshSpec.TargetStyle:        Deze stijl is het beste nadat de laatste aanval van je doel een stijl was.
+GameObjects.GamePlayer.RefreshSpec.YouLearn:           Je leert de gevechtsstijl {0}.
+
+GameObjects.GamePlayer.Release.CantReleaseDuel:        Je kunt je wederopstanding voor een duel-dood niet wijzigen!
+GameObjects.GamePlayer.Release.GraveErected:           Op de plek van je dood is een graf verschenen.
+GameObjects.GamePlayer.Release.LostConstitution:       Je hebt constitutiepunten verloren. Zoek een genezer om ze te herstellen.
+GameObjects.GamePlayer.Release.NoLongerReleaseAuto:    Je wordt niet langer automatisch herleefd ({0} seconden resterend).
+GameObjects.GamePlayer.Release.NotDead:                Je bent nog niet dood.
+GameObjects.GamePlayer.Release.NoValidBindpoint:       Je bent niet aan een geldige zielensteen gebonden en wordt hier herleefd.
+GameObjects.GamePlayer.Release.ReturnToPray:           Keer terug naar je graf (/pray) om ervaring terug te krijgen.
+GameObjects.GamePlayer.Release.SurroundingChange:      Je omgeving verandert plotseling.
+GameObjects.GamePlayer.Release.WillReleaseAuto:        Je wordt automatisch herleefd over {0} seconden.
+GameObjects.GamePlayer.Release.WillReleaseAutoCity:    Je wordt automatisch in de stad herleefd over {0} seconden.
+GameObjects.GamePlayer.Release.WillReleaseIn:          Je wordt herleefd over {0} seconden.
+GameObjects.GamePlayer.Release.YouRelease:             Je brengt je lichaam terug tot leven.
+GameObjects.GamePlayer.Release.ReleaseToPortalKeep:    Je wordt over {0} seconden herleefd bij het dichtstbijzijnde grensfort.
+GameObjects.GamePlayer.Release.ReleaseToHouse:         Je wordt herleefd in je huis over {0} seconden!
+
+GameObjects.GamePlayer.RemoveAbility.YouLose:          Je verliest de vaardigheid {0}.
+GameObjects.GamePlayer.RemoveSpecialization.YouLose:   Je verliest de specialisatie {0}.
+GameObjects.GamePlayer.RemoveSpellLine.YouLose:        Je verliest de spreukenlijn {0}.
+
+GameObjects.GamePlayer.SaveIntoDatabase.CharacterSaved: Je personage is opgeslagen.
+
+GameObjects.GamePlayer.Say.YouSay:                     Je zegt: “{0}”
+GameObjects.GamePlayer.SayReceive.Says:                {0} zegt: “{1}”
+GameObjects.GamePlayer.SayReceive.FalseLanguage:       {0} zegt iets in een taal die je niet begrijpt.
+
+GameObjects.GamePlayer.SendReceive.Sends:              {0} stuurt: “{1}”
+GameObjects.GamePlayer.SendReceive.FalseLanguage:      {0} stuurt iets in een taal die je niet begrijpt.
+GameObjects.GamePlayer.SendReceive.Afk:                {0} is AFK.
+GameObjects.GamePlayer.SendReceive.AfkMessage:         <AFK> {0} stuurt: “{1}”
+GameObjects.GamePlayer.Send.target.DontUnderstandYou:  {0} begrijpt je niet.
+GameObjects.GamePlayer.Send.YouSendTo:                 Je stuurt “{0}” naar {1}.
+
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget: Je laat de controle over je doel los.
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget2: Je verliest de controle over je {0}.
+
+GameObjects.GamePlayer.Shade.AlreadyShade:             Je bent al verborgen!
+GameObjects.GamePlayer.Shade.NoLongerShade:            Je bent niet langer verborgen!
+
+GameObjects.GamePlayer.Sit.AlreadySitting:             Je zit al.
+GameObjects.GamePlayer.Sit.CantSitDead:                Je kunt niet zitten terwijl je dood bent.
+GameObjects.GamePlayer.Sit.CantSitMezzed:              Je kunt niet zitten terwijl je gehypnotiseerd bent.
+GameObjects.GamePlayer.Sit.CantSitStunned:             Je kunt niet zitten terwijl je bedwelmd bent.
+GameObjects.GamePlayer.Sit.InterruptCallMount:         Je gaat zitten en stopt met je rijdier roepen.
+GameObjects.GamePlayer.Sit.MustDismount:               Je moet eerst afstijgen.
+GameObjects.GamePlayer.Sit.MustStandingStill:          Je moet stil staan om te gaan zitten.
+GameObjects.GamePlayer.Sit.NoLongerWaitingQuit:        Je wacht niet langer om uit te loggen.
+GameObjects.GamePlayer.Sit.NotSitting:                 Je zit niet.
+GameObjects.GamePlayer.Sit.YouSitDown:                 Je gaat zitten. Typ “/stand” of beweeg om op te staan.
+GameObjects.GamePlayer.Sit.YouStandUp:                 Je staat op.
+
+GameObjects.GamePlayer.Spell.NotEnoughPowerful:        Je bent niet machtig genoeg om de spreuk van dit voorwerp te gebruiken.
+GameObjects.GamePlayer.Spell.NotImplemented:           {0} ({1}) is op deze server nog niet geïmplementeerd.
+GameObjects.GamePlayer.Spell.Proc.NotImplemented:      Reactief effect met ID {0} is op deze server nog niet geïmplementeerd.
+GameObjects.GamePlayer.Spell.ResurrectionIllness:      Ziekte van de wederopstanding
+
+GameObjects.GamePlayer.Sprint.CantSprintDead:          Je kunt niet sprinten; je bent dood.
+GameObjects.GamePlayer.Sprint.CantSprintHidden:        Je kunt niet sprinten terwijl je verborgen bent.
+GameObjects.GamePlayer.Sprint.NoLongerReady:           Je bent niet langer klaar om te sprinten.
+GameObjects.GamePlayer.Sprint.PrepareSprint:           Je maakt je klaar om te sprinten.
+GameObjects.GamePlayer.Sprint.TooFatigued:             Je bent te vermoeid om te sprinten.
+
+GameObjects.GamePlayer.StartAttack.CannotMelee:            Je kunt niet met een instrument slaan.
+GameObjects.GamePlayer.StartAttack.CannotWithoutWeapon:    Je kunt niet aanvallen zonder wapen.
+GameObjects.GamePlayer.StartAttack.CantAttackmesmerized:   Je kunt niet aanvallen terwijl je slaapt.
+GameObjects.GamePlayer.StartAttack.CantAttackStunned:      Je kunt niet aanvallen terwijl je bedwelmd bent.
+GameObjects.GamePlayer.StartAttack.CantDisarmed:           Je bent ontwapend en kunt niet aanvallen!
+GameObjects.GamePlayer.StartAttack.CantDisarmed2:          Je bent ontwapend en kunt deze spreuk niet uitspreken!
+GameObjects.GamePlayer.StartAttack.CantInShadeMode:        Je kunt geen gevecht beginnen in schaduwmodus!
+GameObjects.GamePlayer.StartAttack.CantUseQuiver:          Je kunt deze pijlkoker niet met je huidige wapen selecteren.
+GameObjects.GamePlayer.StartAttack.CombatNoTarget:         Je gaat het gevecht in, maar hebt geen doel.
+GameObjects.GamePlayer.StartAttack.CombatTarget:           Je gaat het gevecht in en focust op [{0}]
+GameObjects.GamePlayer.StartAttack.SelectQuiver:           Je moet een pijlkoker selecteren.
+GameObjects.GamePlayer.StartAttack.SpellCancelled:         Je spreuk is geannuleerd.
+GameObjects.GamePlayer.StartAttack.TargetInRange:          , doel binnen bereik
+GameObjects.GamePlayer.StartAttack.TargetOutOfRange:       , doel buiten bereik
+GameObjects.GamePlayer.StartAttack.TiredShot:              Je bent te vermoeid om een kritisch schot te proberen.
+GameObjects.GamePlayer.StartAttack.TiredUse:               Je bent te vermoeid om je {0} te gebruiken.
+GameObjects.GamePlayer.StartAttack.YouCantCombat:          Je kunt niet aanvallen als je dood bent.
+GameObjects.GamePlayer.StartAttack.YouMustWait:            Je moet {0} seconden wachten om een aanval te proberen.
+GameObjects.GamePlayer.StartAttack.YouMustWaitAgain:       Je moet {0} seconden wachten om nog een aanval te proberen.
+GameObjects.GamePlayer.StartAttack.YouPrepare:             Je bereidt je {0} voor ({1}.{2}s tot schot {3})
+
+GameObjects.GamePlayer.Stealth.NoLongerHidden:         Je bent niet langer verborgen.
+GameObjects.GamePlayer.Stealth.NowHidden:              Je bent nu verborgen.
+
+GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Je hebt geen munitie meer in je pijlkoker.
+GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Je zult je pijlkoker niet gebruiken.
+GameObjects.GamePlayer.SwitchQuiver.ShootWith:         Je zult aanvallen met: {0}.
+GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Je spreuk is geannuleerd.
+
+GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Je kunt niet met deze speler handelen omdat je vogelvrij bent.
+GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Je kunt niet met een/een vogelvrije handelen.
+
+GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Je bent overbelast.
+GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Je bent overbelast en beweegt langzaam.
+
+GameObjects.GamePlayer.UpdateSpellLine.GainPower:      Je wint macht in de spreukenlijn {0}.
+
+GameObjects.GamePlayer.UseSlot.AttemptToUse:           Je probeert {0} te gebruiken.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShot:        Je zult nu automatisch schieten.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShotReload:  Je zult nu automatisch schieten en herladen.
+GameObjects.GamePlayer.UseSlot.CantCallMountSeated:    Je kunt je rijdier niet roepen terwijl je zit.
+GameObjects.GamePlayer.UseSlot.CantFire:               Je kunt dit voorwerp niet werpen of gebruiken.
+GameObjects.GamePlayer.UseSlot.CantMountCombat:        Je bent in gevecht en kunt je rijdier niet roepen.
+GameObjects.GamePlayer.UseSlot.CantMountHere:          Je kunt hier geen rijdier oproepen!
+GameObjects.GamePlayer.UseSlot.CantCallMountRVR:       Je kunt hier geen rijdier oproepen!
+GameObjects.GamePlayer.UseSlot.CantMountInDungeon:     Je kunt geen rijdier oproepen in een kerker!
+GameObjects.GamePlayer.UseSlot.CantMountMoving:        Je kunt niet opstijgen terwijl je beweegt.
+GameObjects.GamePlayer.UseSlot.CantMountStealthed:     Je kunt niet opstijgen terwijl je in stealth bent.
+GameObjects.GamePlayer.UseSlot.CantMountDamned:        Je kunt niet opstijgen terwijl je verdoemd bent!
+GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Je kunt niet opstijgen terwijl je versteend bent!
+GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Je kunt in deze gedaante niet opstijgen!
+GameObjects.GamePlayer.UseSlot.CantMountMorph:         Je kunt niet opstijgen zolang de spreuk “{0}” op je ligt!
+GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Je kunt niet op je paard stappen; je bent dood.
+GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Je kunt dit rijdier niet gebruiken terwijl je een relikwie draagt!
+GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Je kunt je doel niet zien.
+GameObjects.GamePlayer.UseSlot.CantSummonRvR:          Je kunt geen rijdier oproepen in een RvR-gebied.
+GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:    Je kunt dit voorwerp niet rechtstreeks in de rugzak gebruiken. Rust het eerst uit.
+GameObjects.GamePlayer.UseSlot.CantUseInCombat:        Je kunt dit voorwerp niet in gevecht gebruiken.
+GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:    Je kunt dit voorwerp niet zittend gebruiken!
+GameObjects.GamePlayer.UseSlot.CantUseHere:            Dat kun je hier niet gebruiken!
+GameObjects.GamePlayer.UseSlot.IllegalSourceObject:    Ongeldig bronvoorwerp. {0} is klaar!
+GameObjects.GamePlayer.UseSlot.MustDismountBefore:     Je moet eerst afstijgen.
+GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload: Je zult niet langer automatisch schieten of herladen.
+GameObjects.GamePlayer.UseSlot.NotEnouthPower:         Je bent niet machtig genoeg om de spreuk van dit voorwerp te gebruiken.
+GameObjects.GamePlayer.UseSlot.OutOfCharges:           {0} heeft geen ladingen meer.
+GameObjects.GamePlayer.UseSlot.StopCallingMount:       Je stopt met je rijdier roepen.
+GameObjects.GamePlayer.UseSlot.SummonHorseLevel:       Je moet niveau {0} zijn om dit paard op te roepen.
+GameObjects.GamePlayer.UseSlot.WhistleMount:           Je fluit naar je rijdier.
+GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:      Je moet {0} seconde(n) wachten voordat je dit voorwerp gebruikt.
+GameObjects.GamePlayer.UseSlot.CantUseState:           Je kunt {0} niet gebruiken in je huidige toestand.
+GameObjects.GamePlayer.UseSlot.Used:                   Je gebruikt {0}.
+GameObjects.GamePlayer.UseSlot.CantUseCast:            Je moet je huidige actie beëindigen om je {0} te gebruiken.
+GameObjects.GamePlayer.UseSlot.WrongTarget:            Je hebt een doel nodig om deze vaardigheid te gebruiken!
+GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:        Vak {0} van de pijlkoker is leeg!
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:   Voorwerp-effect met ID {0} is nog niet geïmplementeerd.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:     Spreukenlijn van het voorwerp niet gevonden.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:    Spreuk van voorwerp met ID {0} niet gevonden.
+GameObjects.GamePlayer.UseSlot.CantDischargeInState:   In je huidige toestand kun je geen voorwerp ontladen.
+GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:    Je moet {0} seconde(n) wachten voordat je {1} ontlaadt!
+GameObjects.GamePlayer.UseSlot.Cooldown:               Je moet {0} wachten om dit voorwerp te gebruiken!
+GameObjects.GamePlayer.UseSlot.Cooldown.Seconds:       nog {0} seconden
+GameObjects.GamePlayer.UseSlot.Cooldown.MinutesAndSeconds:  nog {0} minuten en {1} seconden
+GameObjects.GamePlayer.UseSlot.NoMagicItemZone:        Het gebruik van magische voorwerpen is in dit gebied niet toegestaan.
+GameObjects.GamePlayer.UseSlot.CannotUseInState:       In je toestand kun je niets gebruiken.
+GameObjects.GamePlayer.UseSlot.NotPowerfulEnough:      Je bent niet machtig genoeg om de spreuk van dit voorwerp te gebruiken.
+GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Je kunt deze inventaris niet gebruiken.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Laad-effect met ID {0} is nog niet geïmplementeerd.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Laad-effect met ID {0} niet gevonden.
+
+GameObjects.GamePlayer.Whisper.SelectTarget:           Selecteer een doel om te fluisteren.
+GameObjects.GamePlayer.Murder:                         Je hebt 1 reputatiepunt verloren omdat je {0} hebt gedood.
+GameObjects.GamePlayer.Multiplekills:                  Je hebt 1 reputatiepunt verloren wegens meerdere moorden op {0}.
+GameObjects.GamePlayer.GuardKill:                      Je hebt 1 reputatiepunt verloren wegens het doden van een wachter.
+GameObjects.GamePlayer.Wanted:                         {0} wordt nu gezocht voor zijn/haar misdaden.
+GameObjects.GamePlayer.Jailed:                         {0} is door {1} in de gevangenis gegooid.
+GameObjects.GamePlayer.Jailed.Unknown:                 {0} is door de wachters in de gevangenis gegooid.
+GameObjects.GamePlayer.Released:                       {0} is uit de gevangenis vrijgelaten.
+
+GameObjects.GamePlayer.RvR:                            – Totaal gedode spelers: {0} –
+GameObjects.GamePlayer.RvR.Champion:                   – Totaal gedode spelers: {0} – Kampioen van de dag: {1} ({2} gedode vijandelijke aanvallers)
+GameObjects.GamePlayer.RvR.Control:                    De RvR {1} staat onder de controle van {0}!
+GameObjects.GamePlayer.RvR.Open.Claimable:             Wil je [de controle opeisen]?
+GameObjects.GamePlayer.RvR.Open.UnClaimble:            Je moet {0} seconden wachten voordat je de controle kunt opeisen.
+GameObjects.GamePlayer.RvR.Closed:                     Het overnemen van het fort is tijdelijk niet beschikbaar.
+GameObjects.GamePlayer.RvR.In.Combat:                  Je kunt het fort niet overnemen tijdens gevecht.
+GameObjects.GamePlayer.RvR.Occupied:                   Ik ben nu bezig, kom later terug.
+GameObjects.GamePlayer.RvR.Interrupt:                  Je bent onderbroken.
+GameObjects.GamePlayer.RvR.Too.Far:                    Je bent te ver weggelopen.
+GameObjects.GamePlayer.RvR.Capture.Timer:              Fortoverneming
+GameObjects.GamePlayer.RvR.Capture.Start:              {0} begint de controle over het fort over te nemen!
+GameObjects.GamePlayer.PvP.DieDropItem:                Je dood heeft {0} van je schatten verspreid!
+
+GameObjects.GamePlayer.Champion.LevelUp:               Je hebt een extra Kampioensniveau ontvangen!
+GameObjects.GamePlayer.Champion.NeedToBeChampion:      Je moet Kampioen zijn om deze inventaris te gebruiken.
+
+GameObjects.GamePlayer.SaddleBag.CL2:                  Deze zadeltas vereist Kampioensniveau 2!
+GameObjects.GamePlayer.SaddleBag.CL3:                  Deze zadeltas vereist Kampioensniveau 3!
+GameObjects.GamePlayer.SaddleBag.CL4:                  Deze zadeltas vereist Kampioensniveau 4!
+GameObjects.GamePlayer.SaddleBag.CL5:                  Deze zadeltas vereist Kampioensniveau 5!
+GameObjects.GamePlayer.SaddleBag.Activated:            Je hebt een zadeltas geactiveerd!
+GameObjects.GamePlayer.SaddleBag.ActivateError:        Er is een fout opgetreden bij het activeren van deze zadeltas!
+GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Je hebt deze zadeltas al geactiveerd!
+
+GameObjects.GamePlayer.Reputation.Zero:                Je reputatie is nu neutraal.
+
+GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Het totaal van je specialisatiepunten was onjuist. Nu gecorrigeerd — train alsjeblieft opnieuw.

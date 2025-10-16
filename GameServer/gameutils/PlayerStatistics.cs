@@ -35,7 +35,7 @@ namespace DOL.GS
 {
     public class PlayerStatistics : IPlayerStatistics
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private const int TIME_BETWEEN_UPDATES = 60000; // 1 minute
 
@@ -388,7 +388,7 @@ namespace DOL.GS.GameEvents
 {
     public class PlayerStatisticsEvent
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private static bool m_handlersLoaded = false;
 
@@ -487,7 +487,7 @@ namespace DOL.GS.GameEvents
         public static void HealthChangedCallback(DOLEvent e, object sender, EventArgs args)
         {
             HealthChangedEventArgs hargs = args as HealthChangedEventArgs;
-            if (hargs.ChangeType == GameLiving.eHealthChangeType.Spell)
+            if (hargs!.ChangeType == GameLiving.eHealthChangeType.Spell)
             {
                 GamePlayer player = hargs.ChangeSource as GamePlayer;
                 if (player == null)

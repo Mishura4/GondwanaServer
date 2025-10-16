@@ -1,0 +1,122 @@
+# HOUSING (NL)
+House.DBHousePermissions.AccessLevel:			Toegangsniveau {0}
+House.Edit.NotEnoughMoney:				Je hebt niet genoeg geld om dat te doen!
+House.Edit.PayForChanges:				Betaal {0} voor de wijzigingen.
+House.Enter.EnteredHouse:				Je bent huis nummer {0} binnengegaan.
+House.Exit.LeftHouse:					Je hebt huis nummer {0} verlaten.
+House.SendHouseInfo.DoorMaterial:			-Deur: {0}	
+House.SendHouseInfo.ExteriorMaterials:			Exterieurmaterialen:
+House.SendHouseInfo.ExteriorUpgrades:			Exterieur-upgrades:	
+House.SendHouseInfo.HouseOwner:				Huis van {0}
+House.SendHouseInfo.IndoorGuildBanner:			-Banners: {0}	
+House.SendHouseInfo.IndoorGuildShield:			-Schilden: {0}	
+House.SendHouseInfo.InteriorCarpets:			Interieurkleden:	
+House.SendHouseInfo.InteriorUpgrades:			Interieur-upgrades:	
+House.SendHouseInfo.Level:					Niveau: {0}
+House.SendHouseInfo.Lockbox:					Kluis: {0}
+House.SendHouseInfo.Lotnum:					Kavelnummer: {0}
+House.SendHouseInfo.MaxLockbox:				Maximale inhoud in kluis: {0}
+House.SendHouseInfo.OutdoorGuildBanner:			-Banners: {0}	
+House.SendHouseInfo.OutdoorGuildShield:			-Schilden: {0}	
+House.SendHouseInfo.Owner:					Eigenaar: {0}
+House.SendHouseInfo.Owners:					Eigenaars:
+House.SendHouseInfo.Porch:					Veranda:
+House.SendHouseInfo.PorchEnabled:				-Beschikbaar: {0}	
+House.SendHouseInfo.PorchMaterial:				-Veranda: {0}	
+House.SendHouseInfo.PorchRoofColor:				-Kleur: {0}	
+House.SendHouseInfo.RentalPrice:				Huur: {0}	
+House.SendHouseInfo.RentDueIn:				Vervalt over: {0} dagen, {1} uur
+House.SendHouseInfo.RoofMaterial:				-Dak: {0}	
+House.SendHouseInfo.Rug1Color:					-Kleur 1: {0}
+House.SendHouseInfo.Rug2Color:					-Kleur 2: {0}
+House.SendHouseInfo.Rug3Color:					-Kleur 3: {0}
+House.SendHouseInfo.Rug4Color:					-Kleur 4: {0}
+House.SendHouseInfo.TrussMaterial:				-Spanten: {0}	
+House.SendHouseInfo.WallMaterial:				-Muren: {0}	
+House.SendHouseInfo.WindowMaterial:				-Ramen: {0}	
+
+HouseEnterLeave.TooFarAway:					Je bent te ver weg om huis {0} binnen te gaan.
+HouseEnterLeave.CantEnter:					Je kunt huis {0} niet betreden.
+
+HousingDecorationRotate.Rotated:			Het interieurobject is gedraaid van {0} graden naar {1} graden.
+
+# /HousingPlaceItemHandler
+HousingPickupItemHandler.GardenRemoved:			Tuinobject verwijderd.
+HousingPickupItemHandler.PickUp:				Plaats {0} in je inventaris.
+HousingPlaceItemHandler.30objects:				Je hebt al 30 objecten geplaatst. Je kunt er geen meer plaatsen.
+HousingPlaceItemHandler.40objects:				Je hebt al 40 objecten geplaatst. Je kunt er geen meer plaatsen.
+HousingPlaceItemHandler.CantFloor:				Dit object kan niet op de vloer worden geplaatst!
+HousingPlaceItemHandler.CantWall:				Dit object kan niet op een muur worden geplaatst!
+HousingPlaceItemHandler.DropOnFloor:				Laat het object {0} op de vloer van je huis.
+HousingPlaceItemHandler.DropOnGarden:				Laat het object {0} in je tuin.
+HousingPlaceItemHandler.DropOnWall:				Bevestig het object {0} aan de muur van je huis.
+HousingPlaceItemHandler.GardenObjectPlaced:			Tuinobject geplaatst. {0} plaatsen over.
+HousingPlaceItemHandler.HasPorch:				Dit huis heeft al een veranda!
+HousingPlaceItemHandler.HasNoPorch:				Dit huis heeft geen veranda!
+HousingPlaceItemHandler.IndoorObjectPlaced:			Interieurobject geplaatst. {0} plaatsen over.
+HousingPlaceItemHandler.NoHookpoint:				Geen bevestigingspunt meer beschikbaar!
+HousingPlaceItemHandler.PutMoney:				Stort geld op de huisrekening.
+
+# /Housing LotMarker
+Housing.LotMarker.TargetLotNumber:				Je richt op kavel nummer {0}.
+Housing.LotMarker.ItCanBeBoughtFor:				Kan gekocht worden voor {0}.
+Housing.LotMarker.ItIsOwnedBy:				Deze kavel is eigendom van {0}.
+Housing.LotMarker.YouAlreadyOwnAHouse:			Je bezit al een huis!
+Housing.LotMarker.DoYouWantToBuyThisLot1:			Wil je deze kavel kopen?
+Housing.LotMarker.DoYouWantToBuyThisLot2:			De kostprijs is {0}.
+Housing.LotMarker.YouDoNotOwnThisLot:				Je bent niet de eigenaar van deze kavel!
+Housing.LotMarker.YouAlreadyOwnAnotherLotOrHouse:	Je bezit al een andere kavel of een huis (nr. {0}).
+Housing.LotMarker.YouJustBoughtThisLotFor:			Je hebt zojuist deze kavel gekocht voor {0}.
+Housing.LotMarker.YouDontHaveEnoughMoney:			Onvoldoende middelen!
+Housing.LotMarker.ThisItemCantBeSold:				Dit object kan niet worden verkocht.
+
+Scripts.Player.Housing.BadShieldBanner:			Dit is geen geldig object of banner.
+Scripts.Player.Housing.CantBeSold:				Dit object kan niet worden verkocht!
+Scripts.Player.Housing.CarpetsRemoved:			Je kleed is verwijderd.
+Scripts.Player.Housing.ClearHookPoint:			Wil je het object van het bevestigingspunt verwijderen?
+Scripts.Player.Housing.EnteredHouse:				Je betreedt huis nummer {0}.
+Scripts.Player.Housing.GardenItemPlaced:			Tuinobjecten geplaatst. {0} plaatsen over.
+Scripts.Player.Housing.GardenItemPlacedName:		Laat het object {0} in je tuin.
+Scripts.Player.Housing.GardenMaxObjects:			Je hebt 30 objecten in je tuin geplaatst. Geen ruimte meer.
+Scripts.Player.Housing.GuildNowOwns:				[Gilde] {0} bezit nu een gildehuis van {1}!
+Scripts.Player.Housing.HookPointAdded:			Dit object is aan je huis toegevoegd.
+Scripts.Player.Housing.HookPointAlready:			Dat bevestigingspunt heeft al een object!
+Scripts.Player.Housing.HookPointCleared:			Het bevestigingspunt is nu leeg.
+Scripts.Player.Housing.HookPointCloser:			Ga zo dicht mogelijk bij de gewenste kavel staan en druk op “accepteren”.
+Scripts.Player.Housing.HookPointID:				Het ID van het bevestigingspunt is: {0}
+Scripts.Player.Housing.HookPointLogged:			Positie van bevestigingspunt {0} gelogd!
+Scripts.Player.Housing.HookPointLogLoc:			Bevestigingspunten weergeven?
+Scripts.Player.Housing.HookPointNot:				Dit is geen object dat op bevestigingspunten kan worden gebruikt!
+Scripts.Player.Housing.HookPointNotPlaced:			Het object is niet op dat bevestigingspunt geplaatst.
+Scripts.Player.Housing.HouseUseMaterial:			Gebruik Shift+rechtermuisklik in je huis om het uiterlijk te wijzigen.
+Scripts.Player.Housing.HouseUseMaterial:			Gebruik Shift+rechtermuisklik in je huis om de kleden te wijzigen.
+Scripts.Player.Housing.IndoorFloorPlaced:			Je hebt {0} op de verdieping van je huis geplaatst.
+Scripts.Player.Housing.IndoorItemPlaced:			Interieurobject geplaatst. {0} plek over.
+Scripts.Player.Housing.IndoorMaxItems:			Je hebt momenteel {0} objecten in je huis geplaatst. Je kunt er geen meer plaatsen.
+Scripts.Player.Housing.IndoorWallPlaced:			Je hebt zojuist {0} aan de muur van je huis bevestigd.
+Scripts.Player.Housing.InteriorBannersAdded:		De binnenste gildebanner is gewijzigd.
+Scripts.Player.Housing.InteriorBannersRemoved:		De binnenste gildebanner is verwijderd.
+Scripts.Player.Housing.InteriorShieldsAdded:		Het binnenste gildeschild is gewijzigd.
+Scripts.Player.Housing.InteriorShieldsRemoved:		Het binnenste gildeschild is verwijderd.
+Scripts.Player.Housing.LeftHouse:				Je verlaat huis {0}.
+Scripts.Player.Housing.LotAlready:				Je bezit al een andere kavel of een huis (nr. {0})
+Scripts.Player.Housing.LotBought:				Je hebt zojuist deze kavel gekocht voor {0}!
+Scripts.Player.Housing.LotCost:					Kan gekocht worden voor {0}.
+Scripts.Player.Housing.LotNotItem:				Dit is geen geldig eigendomsdocument.
+Scripts.Player.Housing.LotNotYours:				Je bezit deze kavel niet!
+Scripts.Player.Housing.LotOffer:				Wil je deze kavel kopen? Het kost {0}.
+Scripts.Player.Housing.LotTargeted:				Je richt op kavel nummer {0}.
+Scripts.Player.Housing.NotFloorObject:			Dit object kan niet op de bovenverdieping worden geplaatst!
+Scripts.Player.Housing.NotHookPoint:				Dit object kan niet op een bevestigingspunt worden geplaatst!
+Scripts.Player.Housing.NotWallObject:				Dit object kan niet op de muur worden geplaatst!
+Scripts.Player.Housing.OutdoorBannersAdded:		De buitenste gildebanner is gewijzigd.
+Scripts.Player.Housing.OutdoorBannersRemoved:		De buitenste gildebanner is verwijderd.
+Scripts.Player.Housing.OutdoorShieldsAdded:		Het buitenste gildeschild is gewijzigd.
+Scripts.Player.Housing.OutdoorShieldsRemoved:		Het buitenste gildeschild is verwijderd.
+Scripts.Player.Housing.PaidChanges:				Je betaalt {0} om de wijzigingen door te voeren.
+Scripts.Player.Housing.PaidNotEnough:			Je hebt niet genoeg geld om dat te doen!
+Scripts.Player.Housing.PorchAlready:				Dit huis heeft al een veranda!
+Scripts.Player.Housing.PorchNone:				Dit huis heeft geen veranda!
+Scripts.Player.Housing.PorchNotItem:				Dit is geen veranda-object!
+Scripts.Player.Housing.TransferToGuild:			Wil je dit huis overdragen aan {0}?
+

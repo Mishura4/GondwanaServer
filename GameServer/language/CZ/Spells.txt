@@ -1,0 +1,570 @@
+# DelveInfo
+DelveInfo.CastingTime:          Čas sesílání: {0}
+DelveInfo.ConcentrationCost:    Náklady na soustředění: {0}
+DelveInfo.Damage:               Poškození: {0}
+DelveInfo.DamageType:           Typ poškození: {0}
+DelveInfo.Duration:             Trvání: 
+DelveInfo.Focus:                Kanálové kouzlo. Přeruší se při první akci.
+DelveInfo.Frequency:            Frekvence: {0}
+DelveInfo.HealthReturned:       Vrácené zdraví: {0}% z uděleného poškození
+DelveInfo.InstrumentRequire:    Vyžadovaný nástroj: {0}
+DelveInfo.PowerCost:            Náklady many: {0}
+DelveInfo.HealthCost:           Náklady zdraví: {0}
+DelveInfo.Radius:               Poloměr: {0}
+DelveInfo.Range:                Dosah: {0}
+DelveInfo.RangeModified:	    Dosah: {0} {1}
+DelveInfo.RecastTime:           Obnovení: 
+DelveInfo.Target:               Cíl: {0}
+DelveInfo.Value:                Hodnota: {0}
+DelveInfo.ValueNegative:        Hodnota: -{0}
+DelveInfo.Destination:		    Cíl cesty: {0}
+
+# Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Uděluje {0} {1} cíli.
+SpellDescription.DoT.MainDescription:				Cíl utrpí {0} {1} každých {2} s.
+SpellDescription.BoltSpell.MainDescription:			Magický šíp zasáhne a exploduje pro {0} {1}. Lze zablokovat.
+SpellDescription.LifeDrain.MainDescription:			Uděluje {0} {1} a vyléčí sesílatele o {2}% uděleného poškození.
+SpellDescription.DirectDamageWithDebuff.MainDescription:	Uděluje {0} {1} a snižuje {2} cíle o {3}%.
+SpellDescription.Nearsight.MainDescription1:		Snižuje efektivní dosah dálkových útoků cíle o {0}%.
+SpellDescription.Nearsight.MainDescription2:		Kouzla krátkozrakosti zasahující sesílatelovu skupinu působí o {0}% méně účinně, případně mohou být zcela odolána.
+SpellDescription.SpreadHeal.MainDescription:		Plošné léčení za {0}.
+SpellDescription.RegenHeal.MainDescription:			Cíl regeneruje {0} dodatečných bodů zdraví.
+SpellDescription.RegenPower.MainDescription:		Cíl regeneruje {0} dodatečných bodů many.
+SpellDescription.RegenEndu.MainDescription:			Cíl regeneruje {0} dodatečných bodů výdrže.
+SpellDescription.SpeedDecrease.MainDescription:		Snižuje rychlost cíle o {0}%.
+SpellDescription.SpeedDecrease.Rooted:				Cíl je znehybněn.
+SpellDescription.Slow.MainDescription:				Snižuje rychlost cíle o {0}%. Nevytváří imunitu a nepřerušuje se zásahy.
+SpellDescription.Bladeturn.MainDescription:			Vytvoří „bublinu“, která pohltí poškození jednoho zásahu na blízko.
+SpellDescription.Demi.MainDescription:				{0} sníží zdraví nepřítele na polovinu.
+SpellDescription.Quarter.MainDescription:			{0} sníží zdraví nepřítele na čtvrtinu.
+SpellDescription.DemiQuarter.AmnesiaDescription:	Neúčinkuje na slabé tvory ani na cíle nad úroveň {0}.
+SpellDescription.DemiQuarter.EndDescription:		Toto kouzlo zřídka působí na duchy, démony, nekromanty, banshee a upíry.
+SpellDescription.LifeTransfer.MainDescription:		Přenese {0} zdraví ze sesílatele na jeho cíl.
+SpellDescription.Heal.MainDescription:				Vyléčí cíl o {0} zdraví.
+SpellDescription.HealEnemy.MainDescription:			Vyléčí nepřítele o {0} zdraví při zásahu (proc).
+SpellDescription.Disease.MainDescription:			Aplikuje nemoc, která zpomalí o {0}%, sníží sílu o {1}% a oslabí léčení o {2}%.
+SpellDescription.Petrify.MainDescription:			Učiní cíl kamenem – promění ho ve sochu. Je paralyzován a pohlcuje 50% fyzického a 75% magického poškození, když je napadán.
+SpellDescription.Unpetrify.MainDescription:			Odstraní stav „Petrifikován“ z cíle.
+SpellDescription.HealDebuff.MainDescription:		Snižuje účinnost léčení o {0}%. Skládá se s „Nemocí“.
+SpellDescription.DebuffImmunity.MainDescription:	Uděluje imunitu vůči oslabujícím efektům a +{0}% šanci odolat po dobu {1} s.
+SpellDescription.MagicHealAbsorb.MainDescription:	Další magický útok proti tobě pohltí a převede {0}% poškození na léčení a {1}% na manu a výdrž.
+SpellDescription.Trigger.MainDescription:			Aplikuje magický efekt (proc) jako posílení. {0} se spustí, když je cíl zasažen.
+SpellDescription.WaterBreathing.MainDescription:	Umožní dýchat pod vodou a pohybovat se {0}% rychlosti na souši.
+SpellDescription.TensionDebuff.MainDescription:		Snižuje přírůstky napětí cíle o {1}%.
+SpellDescription.TensionBuff.MainDescription:		Zvyšuje přírůstky napětí cíle o {1}%.
+SpellDescription.Teleport.MainDescription:			{0} teleportuje cíl do {1}.
+SpellDescription.PlayerPortal.MainDescription:		Otevře jednorázový obousměrný portál napojený na návratový bod vyvolávače. Funguje v {0}.
+SpellDescription.Earthquake.MainDescription1:		Vyvolá zemětřesení síly {0}, které udělí až {1} poškození u epicentra a klesá na {2} na okrajích.
+SpellDescription.Earthquake.MainDescription2:		Nepůsobí na létající či plavající monstra, ani na vznášející se banshee či upíry.
+SpellDescription.HoT.MainDescription:				Cíl získá {0} zdraví každých {1} s.
+SpellDescription.DDWithDebuff.MainDescription:		Uděluje {0} {1} a snižuje odolnost cíle vůči {1} o {2}%.
+SpellDescription.AfHitsBuff.MainDescription:		Zvyšuje faktor zbroje a zdraví o {0}%, dokud stojíš v dosahu aury.
+SpellDescription.AllStatsBuff.MainDescription:		Zvyšuje všechny atributy cíle o {0}.
+SpellDescription.PowerDrain.MainDescription:		Uděluje {0} {1}; sesílatel získá {2}% poškození zpět jako manu.
+SpellDescription.RealPowerDrain.MainDescription:	Uděluje {0} {1}; sesílatel získá {2}% jako manu a cíl ztratí {3}% své celkové many.
+SpellDescription.PowerLock.MainDescription1:		Připoutá tebe i tvůj cíl na místě a vysává {0}% jeho základní many každých {1}s po dobu {2} s.
+SpellDescription.PowerLock.MainDescription2:		Během efektu nikdo z vás nemůže utrpět poškození na blízko.
+SpellDescription.PowerLock.MainDescription3:		Použitelné jen proti hráčům nebo hráčsky ovládaným mazlíčkům.
+SpellDescription.Damnation.MainDescription1:		Cíl je proklet, mění se v zombie a ztrácí pozitivní efekty. Získá {0}% odolnost proti poškození na blízko, ale nevyhnutelně zemře po {1} s. Žádné léčení to nevrátí.
+SpellDescription.Damnation.MainDescription2:		Léčení je drasticky sníženo na {0}%.
+SpellDescription.Damnation.MainDescription3:		Léčení nemá na prokletého žádný účinek.
+SpellDescription.Damnation.MainDescription4:		Léčení se z {0}% mění v poškození.
+SpellDescription.Damnation.MainDescription5:		Neúčinkuje na nemrtvé.
+SpellDescription.MonsterRez.MainDescription:		Vzkřísí jako nemrtvý a obnoví {0}% zdraví a {1}% many a výdrže bez ztráty zkušeností či konstituce.
+SpellDescription.MonsterRez.DamageMain:				Uděluje {1} {0} cíli
+SpellDescription.MonsterRez.DamageRadius:			a v jeho okolí
+SpellDescription.MonsterRez.DamageFrequency:		každých {0} s
+SpellDescription.MonsterRez.DamageDuration:			po dobu {0} s
+SpellDescription.SummonMonster.MainDescription:		Vzkříšení z mrtvoly.
+SpellDescription.DamageAdd.MainDescription:			Útoky na blízko cíle udělují navíc {0} {1}.
+SpellDescription.DamageShield.MainDescription:		Uděluje {0} {1} nepřátelům, kteří tě zasáhnou na blízko.
+SpellDescription.SpellReflection.MainDescription1:	Odrazí kouzla s {0}% šancí na {1}% poškození a pohltí {2}% způsobeného poškození.
+SpellDescription.SpellReflection.MainDescription2:	Neodráží bojové styly ani střely lučištníků.
+SpellDescription.SpellReflectionDebuff.MainDescription:		Odstraní magický odkláněcí štít cíle.
+SpellDescription.PowerShield.MainDescription:		Pokud tvé zdraví klesne pod {0}%, převádí manu na zdraví až do {1}% tvého maxima.
+SpellDescription.PowerTransfer.MainDescription:		Přenese {0} many ze sesílatele na cíl.
+SpellDescription.Resurrect.MainDescription:			Vzkřísí a obnoví {0}% zdraví a {1}% many (a výdrže) bez ztráty zkušeností či konstituce.
+SpellDescription.OffensiveProc.MainDescription:		{0} dává {1}% šanci spustit sekundární kouzlo tvými útoky na blízko:
+SpellDescription.DefensiveProc.MainDescription:		{0} dává {1}% šanci spustit sekundární kouzlo, když jsi zasažen na blízko:
+SpellDescription.SpeedEnhancement.MainDescription:	Zvyšuje rychlost na {0}% normálu.
+SpellDescription.SpellShield.MainDescription:		{0} pohltí 100% magického poškození a 70% DoT poškození, když zdraví klesne na {1}% nebo méně.
+SpellDescription.StyleBleeding.MainDescription:		Cíl utrpí {0} {1} každých {2} s.
+SpellDescription.StyleTaunt.Increase:				Provokuje cíl a zvyšuje tvou hrozbu vůči němu o {0}.
+SpellDescription.StyleTaunt.Decrease:				Snižuje provokaci a snižuje tvou hrozbu o -{0}.
+SpellDescription.Taunt.MainDescription:				Provokuje cíl a zvyšuje tvou hrozbu o {0}.
+SpellDescription.SummonSpell.MainDescription:		Vyvolá mazlíčka sloužícího vyvolávači. Působí na tvory do {0}% tvé úrovně, max. {1}.
+SpellDescription.MeleeAblativeArmor.MainDescription:		Uděluje dočasný štít pohlcující {0}% fyzického poškození až do {1}.
+SpellDescription.MagicAblativeArmor.MainDescription:		Uděluje dočasný štít pohlcující {0}% magického poškození až do {1}.
+SpellDescription.BothAblativeArmor.MainDescription:	Uděluje dočasný štít pohlcující {0}% veškerého poškození až do {1}.
+SpellDescription.BattleFeverDurationBuff.MainDescription:	Prodlužuje trvání Bojové horečky o {0}%.
+SpellDescription.TankAdrenaline.MainDescription:	Pohlcuje tě bojová horečka! Tvé zásahy na blízko nemíjí protivníky tvé úrovně a tvá obrana i síla na blízko výrazně rostou.
+SpellDescription.MageAdrenaline.MainDescription:	Pohlcuje tě bojová horečka! Obrana, šance zásahu kouzly i rychlost sesílání výrazně rostou a zásahy tě nepřeruší.
+SpellDescription.StealthAdrenaline.MainDescription:	Pohlcuje tě bojová horečka! Zásahy na blízko nemíjí nepřátele tvé úrovně a obrana, nenápadnost i síla na dálku i na blízko výrazně rostou.
+SpellDescription.Amnesia.MainDescription:			Smaže mysl nestvůry, aby zapomněla, koho napadala. Přeruší probíhající nepřátelská kouzla bez omráčení, pokud neodolá.
+SpellDescription.Mesmerize.MainDescription:			Cíl je zhypnotizován a neschopen akce.
+SpellDescription.Stun.MainDescription:				Omráčí cíl na {0} s.
+SpellDescription.Charm.MainDescription1:			Pokusí se ovládnout tvora {0}.
+SpellDescription.Charm.MainDescription2:			Působí na monstra do {0}% tvé úrovně, max. {1}.
+SpellDescription.CombatHeal.MainDescription:		Léčí {0} poškození každých {1} s.
+SpellDescription.Confusion.MainDescriptionPositive:	Tvor má {0}% šanci změnit cíl.
+SpellDescription.Confusion.MainDescriptionNegative:	100% šance změnit cíl a 75% šance zaútočit na spojence.
+SpellDescription.PetConversion.MainDescription:		Propustí cíl i všechny tvé věžičky v oblasti. Získáš zpět {0}% many vynaložené na vyvolání mazlíčka.
+SpellDescription.CraftingSpeedBuff.MainDescription:	Zvyšuje rychlost řemesla o {0}%.
+SpellDescription.CureDisease.MainDescription:		Odstraní všechny nemoci z cíle.
+SpellDescription.CureMezz.MainDescription:			Odstraní všechny efekty hypnózy z cíle.
+SpellDescription.CureNearsight.MainDescription:		Odstraní veškeré efekty krátkozrakosti.
+SpellDescription.CurePoison.MainDescription:		Odstraní všechny efekty poškození v čase (např. jedy) z cíle.
+SpellDescription.DamageSpeedDecrease.MainDescription:		Snižuje rychlost o {0}% a uděluje {1} {2}.
+SpellDescription.DamageToPower.MainDescription:		Převádí {0}% přijatého kouzelnického poškození na cíli na manu.
+SpellDescription.DeathClaw.MainDescription:			{0} sníží zdraví nepřítele o 90%. Neúčinkuje na duchy, slabé tvory ani nad úroveň {1}; snížený účinek na nemrtvé a bossy.
+SpellDescription.EnduranceDrain.MainDescription:	{0}% výdrže cíle je vysáto a převedeno na sesílatele.
+SpellDescription.EnduranceHeal.MainDescription:		Obnoví {0} výdrže.
+SpellDescription.Disarm.MainDescription1:			Od-zbrojí cíl na {0} s.
+SpellDescription.Disarm.MainDescription2:			Nelze znovu aplikovat dříve než za {0} s.
+SpellDescription.GroundArea.MainDescription1:		Vytvoří „mrak“, který zasáhne všechny v oblasti.
+SpellDescription.GroundArea.MainDescription2:		Plošný efekt:
+SpellDescription.CloudsongFall.MainDescription:		Snižuje poškození z pádu o {0}%.
+SpellDescription.DoomHammer.MainDescription:		Uděluje {0} {1}.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Uděluje {0} {1} při každém pulzu cíli. Zvyšuje se o {2}% na pulz až do {3}%. Stojí {4}% many na pulz.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Uděluje {0} {1} na pulz a snižuje rychlost o {5}%. Zvyšuje se o {2}% až do {3}%. Stojí {4}% many na pulz.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Uděluje {0} {1} na pulz v oblasti. Zvyšuje se o {2}% až do {3}%. Stojí {4}% many na pulz.
+SpellDescription.RampingDamageFocus.AoESnare:				Uděluje {0} {1} na pulz v oblasti a snižuje rychlost o {5}%. Zvyšuje se o {2}% až do {3}%. Stojí {4}% many na pulz.
+SpellDescription.HereticPiercingMagic.MainDescription:		Zvyšuje účinnost kouzel cíle o {0}% a snižuje úplná odolání proti vyšším úrovním.
+SpellDescription.SummonNethersbane.MainDescription1:		Vyvolá Nethersbane, nečistý meč Arawna.
+SpellDescription.SummonNethersbane.MainDescription2:		Jeho typ poškození je chlad.
+SpellDescription.SummonIcebrand.MainDescription1:			Vyvolá Icebrand, nečistý meč napuštěný stíny.
+SpellDescription.SummonIcebrand.MainDescription2:			Jeho typ poškození je chlad.
+SpellDescription.GoldenSpearJavelin.MainDescription:		Vyvolá 5 magických oštěpů.
+SpellDescription.OmniHeal.MainDescription:					Navrátí {0}% zdraví, výdrž i manu.
+SpellDescription.OmniHarm.MainDescription:					Cíl ztratí {0} výdrže a {1} many.
+SpellDescription.OmniLifeDrain.MainDescription:				Udělí poškození; vrátí sesílateli {0}% jako zdraví, {1}% jako manu a {2}% jako výdrž.
+SpellDescription.PowerHeal.MainDescription:					Obnoví {0}% many cíle.
+SpellDescription.Silence.MainDescription:					Umlčí nepřítele na {0} s.
+SpellDescription.IllusionSpell.MainDescription1:			Vyvolávač vytvoří {0} {1} iluzí, které jej obklopí a matou nepřátele.
+SpellDescription.IllusionSpell.MainDescription2:			Iluzí způsobují {0}% poškození vyvolávače, mají {1}% jeho maxima zdraví a zmizí po {2} s.
+SpellDescription.IllusionSpell.SubDescription1:				Vyvolávač přijme podobu tvora a {0} iluzí sdílí jeho vzhled.
+SpellDescription.IllusionSpell.SubDescription2a:			Iluzí se pohybují se svým pánem a napodobují jeho pohyby, styly i kouzla.
+SpellDescription.IllusionSpell.SubDescription2b:			Pokud se sesílatel pohne, iluzí zmizí a kouzlo skončí.
+SpellDescription.Bump.MainDescriptionSingle:		Odmrští nepřítele o {0} jednotek vzhůru a vymrští jej vpřed na {1}%–{2}% max. vzdálenosti; ve vzduchu je omráčen.
+SpellDescription.Bump.MainDescriptionArea:			Postrčí všechny nepřátele v poloměru {3} jednotek {0} vzhůru a {1}%–{2}% vpřed; ve vzduchu jsou omráčeni.
+SpellDescription.Bump.MainDescriptionCone:			Postrčí nepřátele v kuželu {0} vzhůru a {1}%–{2}% vpřed; ve vzduchu jsou omráčeni.
+SpellDescription.Conversion.MainDescription:		Převádí {0}% veškerého přijatého poškození na zdraví, výdrž a manu.
+SpellDescription.MagicConversion.MainDescription:	Převádí {0}% veškerého přijatého magického poškození na zdraví, výdrž a manu.
+SpellDescription.Fury.MainDescription:				Dává {0}% šanci odolat ovládacím efektům a zvyšuje všechny magické odolnosti o {0}%.
+SpellDescription.HealthToFatigue.MainDescription:	Spotřebuje {0}% tvého zdraví a obnoví {1}% ztracené výdrže.
+SpellDescription.Chamber.MainDescription:			Umožní před-nabití komory primárním a sekundárním kouzlem a jejich okamžité vypuštění na cíl.
+SpellDescription.Chamber.CanContainBolts:			Může obsahovat blesky/bolt kouzla.
+SpellDescription.Chamber.CannotContainBolts:		Nemůže obsahovat bolt kouzla.
+SpellDescription.FocusShell.MainDescription:		Snižuje přijaté poškození zblízka i od kouzel o {0}%.
+SpellDescription.FocusShell.OnlyInPvPORvR:			Použitelné pouze v RvR či PvP zónách.
+SpellDescription.Powerless.MainDescription:			Umožní seslat sekundární kouzlo bez nákladů many.
+SpellDescription.Range.MainDescription:				Umožní seslat sekundární kouzlo s {0}% dosahem.
+SpellDescription.Uninterruptable.MainDescription:	Umožní seslat sekundární kouzlo bez přerušení, ale sníží jeho účinnost o {0}%.
+SpellDescription.Agony.ConditionDescription:		Vyžaduje, aby byl cíl pod „Dread“ a „Anguish“.
+SpellDescription.Doom.ConditionDescription:			Vyžaduje „Dread“, „Anguish“ a „Agony“.
+SpellDescription.Doom.Expires:						Po vypršení:
+SpellDescription.BuffShear.Str:						Odstraní posílení zvyšující Sílu.
+SpellDescription.BuffShear.Dex:						Odstraní posílení zvyšující Obratnost.
+SpellDescription.BuffShear.Con:						Odstraní posílení zvyšující Konstituci.
+SpellDescription.BuffShear.Acuity:					Odstraní posílení zvyšující Bystrost.
+SpellDescription.BuffShear.StrCon:					Odstraní posílení Síla/Konstituce.
+SpellDescription.BuffShear.DexQui:					Odstraní posílení Obratnost/Rychlost.
+SpellDescription.BuffShear.Random:					Náhodně odstraní jeden pozitivní buff.
+SpellDescription.BuffShear.Ablative:				Odstraní všechny ablativní štíty.
+SpellDescription.ResistBuff.MainDescription:				Zvyšuje odolnost vůči {0} o {1}%.
+SpellDescription.BodySpiritEnergyBuff.MainDescription:		Zvyšuje odolnost vůči Tělo, Duch a Energie o {0}%.
+SpellDescription.HeatColdMatterBuff.MainDescription:		Zvyšuje odolnost vůči Oheň, Chlad a Hmota o {0}%.
+SpellDescription.AllMagicResistsBuff.MainDescription:		Zvyšuje všechny magické odolnosti o {0}%.
+SpellDescription.SecondaryMagicResistsBuff.MainDescription:	Zvyšuje sekundární magické odolnosti o {0}%.
+SpellDescription.AllMeleeResistsBuff.MainDescription:		Zvyšuje odolnosti proti poškození na blízko o {0}%.
+SpellDescription.AllResistsBuff.MainDescription:			Zvyšuje všechny odolnosti o {0}%.
+SpellDescription.EssenceBuff.MainDescription:				Zvyšuje odolnost proti poškození „Esence“ o {0}%.
+SpellDescription.ResistDebuff.MainDescription:				Snižuje odolnost cíle vůči {0} o {1}%.
+SpellDescription.CrushSlashThrustDebuff.MainDescription:	Snižuje odolnosti proti poškození na blízko o {0}%.
+SpellDescription.EssenceDebuff.MainDescription:				Snižuje odolnost proti poškození „Esence“.
+SpellDescription.DualStatDebuff.MainDescription:			Snižuje {0} a {1} cíle o {2}.
+SpellDescription.DualStatBuff.MainDescription:				Zvyšuje {0} a {1} o {2}.
+SpellDescription.SingleStatBuff.MainDescription:			Zvyšuje {0} o {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Zvyšuje rychlost útoku o {0}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	Akce spotřebují o {0}% méně výdrže.
+SpellDescription.DPSBuff.MainDescription:					Zvyšuje DPS o {0}%.
+SpellDescription.MeleeDamageBuff.MainDescription:			Uděluješ o {0}% více poškození na blízko.
+SpellDescription.MesmerizeDurationBuff.MainDescription:		Snižuje účinnost hypnózních kouzel o {0}%.
+SpellDescription.EvadeChanceBuff.MainDescription:			Dává {0}% šanci uhnout.
+SpellDescription.ParryChanceBuff.MainDescription:			Dává {0}% šanci vykrýt.
+SpellDescription.WeaponSkillBuff.MainDescription:			Zvyšuje dovednost s {0} o {1}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Zvyšuje dovednost Nenápadnost {0} o {1}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Zvyšuje dovednost Flexibilní {0} o {1}%.
+SpellDescription.ResiPierceBuff.MainDescription:			Dává {0}% šanci prorazit magické odolnosti.
+SpellDescription.CriticalMagicalBuff.MainDescription:		Zvyšuje šanci na kritický zásah kouzly o {0}%.
+SpellDescription.CriticalMeleeBuff.MainDescription:			Zvyšuje šanci na kritický zásah na blízko o {0}%.
+SpellDescription.SingleStatDebuff.MainDescription:			Snižuje {0} o {1}.
+SpellDescription.CombatSpeedDebuff.MainDescription:			Snižuje rychlost útoku cíle o {0}%.
+SpellDescription.MeleeDamageDebuff.MainDescription:			Cíl uděluje o {0}% méně poškození na blízko.
+SpellDescription.FatigueConsumptionDebuff.MainDescription:	Zvyšuje spotřebu výdrže cíle v boji o {0}%.
+SpellDescription.FumbleChanceDebuff.MainDescription:		Zvyšuje šanci cíle na chybu (fumble) o {0}%.
+SpellDescription.DPSDebuff.MainDescription:					Snižuje DPS o {0}%.
+SpellDescription.SkillsDebuff.MainDescription:				Snižuje dovednosti o {0}%.
+SpellDescription.Warlock.SecondarySpell:					Toto je sekundární kouzlo.
+SpellDescription.Warlock.PrimarySpell:						Toto je primární kouzlo.
+SpellDescription.AllStatsDebuff.MainDescription:			Snižuje všechny atributy cíle o {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:		Snižuje všechny atributy cíle o {0}%.
+SpellDescription.Morph.MainDescription:						Cíl byl proměněn v {0}.
+SpellDescription.PowerRend.MainDescription:					Cíl ztrácí {0}% své many.
+SpellDescription.SummonAnimistFnF.MainDescription:		Vyvolá stacionární věžičku na tvém pozemním cíli, která útočí na nepřátele v dosahu.
+SpellDescription.Bomber.MainDescription:				Vyvolá elementárního ducha, který letí k cíli, exploduje a při dopadu sesílá své kouzlo.
+SpellDescription.SavageParryBuff.MainDescription:		Zvyšuje tvou šanci vykrýt o {0}%.
+SpellDescription.SavageEvadeBuff.MainDescription:		Zvyšuje tvou šanci uhnout o {0}%.
+SpellDescription.SavageCombatSpeedBuff.MainDescription:	Zvyšuje tvou rychlost útoku o {0}%.
+SpellDescription.SavageDPSBuff.MainDescription:			Zvyšuje tvé poškození na blízko o {0}.
+SpellDescription.SavageEnduranceHeal.MainDescription:	Obnovíš {0} výdrže za cenu části svého zdraví.
+SpellDescription.Archery.SingleTarget:					Uděluje {0} {1} cíli.
+SpellDescription.Archery.AreaTarget:					Uděluje {0} {1} cíli a okolí.
+SpellDescription.Archery.SecondaryEffectiveness:		Účinnost výstřelu se zvyšuje o {0}%.
+SpellDescription.WarlockSpeedDecrease.Frog:				Promění cíl v žábu!
+SpellDescription.MaidenKiss.MainDescription:			Léčí stav „Žába“ z cíle.
+SpellDescription.ArawnCure.MainDescription:				Léčí jed, nemoc a res-sickness.
+SpellDescription.Fear.SingleTarget:						Vyvolá strach ve zvoleném nepříteli. Neúčinkuje na mazlíčky ani na cíle nad úroveň {0}.
+SpellDescription.Fear.AreaTarget:						Vyvolá strach v nepřátelských nestvůrách v poloměru {1} okolo sesílatele. Neúčinkuje nad úroveň {0}.
+SpellDescription.FearServant.SingleTarget:				Vyvolá strach v nepřátelském mazlíčkovi. Neúčinkuje nad úroveň {0}.
+SpellDescription.FearServant.AreaTarget:				Vyvolá strach v nepřátelských mazlíčcích v poloměru {1}. Neúčinkuje nad úroveň {0}.
+SpellDescription.FearServant.SingleTarget&Npc:			Vyvolá strach ve zvoleném nepříteli. Neúčinkuje nad úroveň {0}.
+SpellDescription.FearServant.AreaTarget&Npc:			Vyvolá strach v nepřátelích v poloměru {1}. Neúčinkuje nad úroveň {0}.
+SpellDescription.FearServant.PetDescription:			Pod strachem nelze mazlíčky ovládat ani propustit.
+SpellDescription.BainsheePulseDmg.MainDescription:		Cíl utrpí {0} {1}.
+SpellDescription.BainsheePulseDmg.AreaDescription:		Zasáhne všechny nepřátele poblíž sesílatele.
+SpellDescription.BainsheePulseDmg.SecondaryDescription:	Opětovné seslání během trvání efekt ruší. Končí, pokud se sesílatel pohne.
+SpellDescription.BeFriend.MainDescriptionArea:			Dočasně (až do úrovně {0}) očaruje blízké nestvůry, aby byly přátelské a spojenci.
+SpellDescription.BeFriend.MainDescriptionSingle:		Dočasně (až do úrovně {0}) očaruje vybranou nestvůru, aby byla přátelská a spojenec.
+SpellDescription.VampiirStealthDetection.MainDescription:	Zvyšuje odhalování nenápadných nepřátel o {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Snižuje dočasně bonusy dovedností cíle o {0}%.
+SpellDescription.VampiirMeleeResistance.MainDescription:	Zvyšuje odolnosti proti poškození na blízko o {0}%.
+SpellDescription.VampiirMagicResistance.MainDescription:	Zvyšuje šanci odolat magickému poškození o {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Snižuje dočasně efektivitu cíle o {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:	Lze seslat v boji.
+SpellDescription.VampiirArmorDebuff.MainDescription:		Dočasně snižuje absorpci a faktor zbroje náhodného kusu (helma, trup nebo nohy) o {0}%.
+SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Působí pouze na helmu, trup nebo nohy.
+SpellDescription.VampiirBolt.MainDescription:			Vysaje {0}% many cíle a převede ji na sesílatele.
+SpellDescription.VampiirBolt.MainDescription2:			Neúčinkuje na cíle nad úroveň {0}.
+SpellDescription.IllusionBlade.Part1:					Vyvolá spektrální zbraň, která po tvém boku krátce bojuje, než se rozplyne.
+SpellDescription.IllusionBlade.Part2:					Jedná samostatně a nelze ji ovládat, propustit ani léčit.
+SpellDescription.RangeShield.MainDescription:			Chrání skupinu sesílatele před fyzickými útoky lučištníků.
+SpellDescription.PetSpell.MainDescription1:				Kouzla mazlíčků:
+SpellDescription.PetSpell.MainDescription2:				Zvyšuje uvedené hodnoty cíle.
+SpellDescription.Ascendance.MainDescription:			Výrazně zvyšuje účinnost tvých kouzel a dovedností o {0}%.
+SpellDescription.Ascendance.Restrictions:				Během „Vzestupu“ nelze sesílat léčení ani vzkříšení.
+SpellDescription.Ascendance.Interaction:				„Mistr soustředění“ ruší „Vzestup“ a naopak.  
+SpellDescription.Occultist.ConditionDescription1:		 Nelze seslat v Chtonické podobě.
+SpellDescription.Occultist.ConditionDescription2:		Nelze seslat v podobě Ducha ani Šílence.
+SpellDescription.Occultist.Summon.UmbralAegis1:			Vyvolá Obrace-nou Aegis. Výtečná pro tankování a pohlcování poškození.
+SpellDescription.Occultist.Summon.UmbralAegis2:			Podoba Ducha: Aegis získá DD s poloměrem 200, více zbroje, magickou absorpci a vyšší rychlost boje.
+SpellDescription.Occultist.Summon.Soultorn1:			Vyvolá Rozervanou duši. Uděluje poškození Hmotou, ale je křehká vůči magii i fyziku.
+SpellDescription.Occultist.Summon.Soultorn2:			Podoba Ducha: navíc aplikuje debuff Hmota a Nemoc.
+SpellDescription.Occultist.Summon.UmbralHulk1:			Vyvolá Obrace-ného Kolosa, odborníka na fyzické poškození.
+SpellDescription.Occultist.Summon.UmbralHulk2:			Podoba Ducha: získá 5 s výpad, 3 s omráčení zezadu a vyšší šanci off-hand.
+SpellDescription.Occultist.Summon.ImageOfArawn1:		Vyvolá Obraz Arawna. Léčí spojence jednotlivými léčeními o 12%.
+SpellDescription.Occultist.Summon.ImageOfArawn2:		Podoba Ducha: přidává léčbu jedu, nemoci a res-sickness a může odstranit krátkozrakost.  
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Vyvolá démonickou Sukkubu, která hypnotizuje svůj cíl.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Podoba Ducha: Arcdémon získá silný Dex/Qui debuff a může odstranit krátkozrakost.
+SpellDescription.Occultist.SpiritShapeShift1:			Přijmeš podobu Ducha. {0}% přijatého poškození se pohltí a převede na manu.
+SpellDescription.Occultist.SpiritShapeShift2:			Regenerace many +{0} na úroveň a odhalování nenápadných +{1}%.
+SpellDescription.Occultist.SpiritShapeShift3:			Tví služebníci jsou odolnější a získají další schopnosti.
+SpellDescription.Occultist.ChtonicShapeShift1:			Ztělesníš Chtonického jezdce. AF +{0} na úroveň; zdraví, AF a zbraně +{1}%, absorpce na blízko +{2}% a sekundární magické odolnosti +{3}%.  
+SpellDescription.Occultist.ChtonicShapeShift2:			Získáš také schopnost krytí (Parry).
+SpellDescription.Occultist.DecrepitShapeShift1:			Ztělesníš Zchátralého mága. Magické poškození +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift2:			Absorpce zbroje +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift3:			Útočníci na blízko mají {0}% šanci aplikovat Nemoc; tvé hnijící tělo regeneruje a regenerace zdraví +{1}.
+SpellDescription.Occultist.BringerOfDeath1:				Ztělesníš Nosiče smrti. Tvá kouzla nelze přerušit, ale fungují na {0}%; přijímáš o {1}% méně magického i fyzického poškození.
+SpellDescription.Occultist.BringerOfDeath2:				Rychlost pohybu +{0}% i ve speedwarpu či v boji. Aktivní jsou i regenerační bonusy a Nemoc z Decrepit podoby.
+SpellDescription.DamageReturn.MainDescription:			Vrací {0}% přímého magického (ne DoT), melee i projektilového poškození v {1} útočníkovi po dobu trvání.
+SpellDescription.OffProcShear.Main1:					Odstraní aktivní ofenzivní proky z cíle.
+SpellDescription.OffProcShear.Main2:					Ap likuje prok prokletí náhrady, jehož podkouzla léčí nepřátele cíle, když zasáhnou.
+SpellDescription.OffProcShear.ReplacementHeader:		Náhradní proc:
+
+
+# ML Spells ShortDescriptions
+SpellDescription.Convoker.SummonWood.MainDescription:			Náhodně vyvolá 100 prken k vyztužení a opravě bran a zdí pevností.
+SpellDescription.Convoker.PrescienceNode.MainDescription1:		Pozemní runa (poloměr 1000), která odhaluje skryté nepřátele, aniž by zrušila jejich neviditelnost.
+SpellDescription.Convoker.PrescienceNode.MainDescription2:		Runu lze napadnout a má {0} zdraví.
+SpellDescription.Convoker.Prescience.MainDescription1:			Runa přítomnosti tě odhalila!
+SpellDescription.Convoker.Prescience.MainDescription2:			Propůjčí předtuchu k předvídání pohybů nepřítele.
+SpellDescription.Convoker.PowerTrap.MainDescription:			Umístí runu, která při odpálení odčerpá 20% many nepřátelům (jen těm, kteří mají manu).
+SpellDescription.Convoker.SpeedWrap.MainDescription:			Runa, která zruší rychlostní posílení nepřátel, kteří jí projdou. 6 s po opuštění nemohou přijmout kouzla rychlosti.
+SpellDescription.Convoker.SummonWarcrystal.MainDescription:		Vyvolá a vloží obléhací munici (broky, koule, led či kameny) do tvého inventáře.
+SpellDescription.Convoker.Battlewarder.MainDescription1:		Vyvolá Strážce bitvy k zachytávání nepřátelských útoků. Zůstává nehybný a spotřebovává manu, dokud je aktivní.
+SpellDescription.Convoker.Battlewarder.MainDescription2:		Pozemní cíl. Může koexistovat s dalšími mazlíčky; lze vyvolat více strážců.
+SpellDescription.Convoker.DissonanceTrap.MainDescription:		Umístí runu, která při odpálení udělí {0} {1}.
+SpellDescription.Convoker.BrittleGuard.MainDescription1:		Vyvolá „Křehkého strážce“, který za tebe zablokuje jeden zásah na blízko.
+SpellDescription.Convoker.BrittleGuard.MainDescription2:		Má jeden život a zemře po zachycení zásahu. Pouze jeden aktivní.
+SpellDescription.Convoker.SummonMastery.MainDescription:		Zvyšuje efektivní úroveň tvých mazlíčků a zlepšuje jejich poškození i absorpci.
+SpellDescription.Convoker.SummonTitan.MainDescription1:			Vyvolá Titána, jenž roste na velikosti a síle a udeří drtivě.
+SpellDescription.Convoker.SummonTitan.MainDescription2:			Zůstává nehybný a útočí jen na nepřátele v dosahu na blízko.
+SpellDescription.Spymaster.Decoy.MainDescription:				Vyvolá návnadového spojence s epickým vybavením, 1 životem a bez útočných schopností k odvedení pozornosti.
+SpellDescription.Spymaster.Sabotage.MainDescription:			Sabotuje cíl (runu či obléhací stroj) a činí ho nepoužitelným.
+SpellDescription.Spymaster.TangleSnare.MainDescription:			Umístí runu, která při odpálení zpomalí nepřátele v dosahu o {0}%. Při použití zruší nenápadnost.
+SpellDescription.Spymaster.PoisonSpike.MainDescription:			Umístí jedovatou runu, která udělí {0} {1} blízkým nepřátelům. Zruší nenápadnost.
+SpellDescription.Spymaster.Loockout.MainDescription1:			Stacionární hlídka odhaluje skryté nepřátele v {0}. Zůstává skryta, pokud se nepohybuje.
+SpellDescription.Spymaster.Loockout.MainDescription2:			Cíl musí sedět a být nehybný; při pohybu efekt končí.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Runa, která udělí velké poškození obléhacím strojům.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		Uděluje {0} poškození při aktivaci.
+SpellDescription.Spymaster.EssenceFlare.MainDescription:		Aplikuje jed, který ponechá nepřátele 15 s v přítmí.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Skryje tvou skupinu. Pohyb, sesílání či zpěv zruší efekt u ne-skrývajících se.
+SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Vysaje {0} výdrže blízkým nepřátelům.
+SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Uděluje {0}% bonusového poškození proti obléhacím strojům a strukturám.
+SpellDescription.Battlemaster.MLManadrain.MainDescription:		Vysaje {0} many blízkým nepřátelům.
+SpellDescription.Battlemaster.Grapple.MainDescription1:			Krátkodosahový efekt, který znehybní na {0} s a zruší efekty.
+SpellDescription.Battlemaster.Grapple.MainDescription2:			Připne cíl; nemůže se hýbat ani útočit na blízko, ale může 10 s sesílat/zpívat.
+SpellDescription.Battlemaster.Grapple.MainDescription3:			Připnutý cíl nelze zasáhnout na blízko.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	{0}% šance aktivovat dodatečné poškození Esencí útoky na blízko.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		Útok na dálku využívající vzorce poškození na blízko.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Útoky na blízko jsou po použití 10 s zakázány.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Snižuje odolnost Esence blízkým nepřátelům o {0}%.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription2:	Snižuje odolnost Esence cíle o {0}%.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Chrání blízkého spojence před útoky na blízko. Dokud je ochránce naživu nebo v dosahu, spojenec nemůže být cílen.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	Efekt trvá pouze pokud chráněný zůstane nehybný.
+SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Snižuje pohyblivost cíle o {0}%.
+SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:		Snižuje rychlost sesílání nepřátel o {0}%.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Snižuje manu, zdraví a výdrž nepřátel v oblasti o {0}%.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Snižuje zdroje v oblasti o {0}% a stojí tě {1}% tvého zdraví.
+SpellDescription.Banelord.Oppression.MainDescription:			Snižuje maximální nosnost blízkých nepřátel o {0}%.
+SpellDescription.Banelord.FatDebuff.MainDescription:			Zvyšuje spotřebu výdrže nepřátelských útoků o {0}%.
+SpellDescription.Banelord.MissHit.MainDescription:				Snižuje šanci zásahu blízkých nepřátel o {0}%.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Krátkodosahové AO E zpomalení o {0}% a omráčí sesílatele.
+SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:	Omráčí na {0} s a zabrání činnosti.
+SpellDescription.Banelord.ToHitBuff.MainDescription:			Zvyšuje šanci zásahu blízkých spojenců o {0}%.
+SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Snižuje efektivitu nepřátel (kouzla i melee) o {0}%.
+SpellDescription.Banelord.Banespike.MainDescription:			Zvyšuje poškození blízkých spojenců o {0}%.
+SpellDescription.Banelord.NbTargetAffected.MainDescription:		Až {0} nepřátel může být zasaženo.
+SpellDescription.Perfector.FOH.MainDescription1:				Vytvoří kouli u tvých nohou, která postupně obnoví {0} zdraví spojencům (až 40).
+SpellDescription.Perfector.FOH.MainDescription2:				V PvE přitáhne pozornost nepřátel na sesílatele.
+SpellDescription.Perfector.FOP.MainDescription1:				Vytvoří kouli u tvých nohou, která postupně regeneruje {0} many spojencům (až 40).
+SpellDescription.Perfector.FOP.MainDescription2:				Spojenci, kteří v PvE bojovali v posledních 10 s, nejsou ovlivněni.
+SpellDescription.Perfector.FOR.MainDescription:					Runa, která zkrátí trvání řízení davu na blízkých spojencích o {0}%.
+SpellDescription.Perfector.SickHeal.MainDescription:			Umožní překonat efekty spojené se vzkříšením.
+SpellDescription.Perfector.FOD.MainDescription:					Obranná runa, která vysaje {0}% many nepřátelům v dosahu.
+SpellDescription.Perfector.PoT.MainDescription:					Udržovací regenerace, která zvyšuje manu za tik o {0}%.
+SpellDescription.Perfector.CCResist.MainDescription:			Zvyšuje tvou odolnost vůči ovládání po dobu {0} s.
+SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Plocha, která regeneruje {0}% zdraví, manu a výdrž blízkým spojencům.
+SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Vyléčí cíl o 1000 zdraví za cenu {0}% tvého života.
+SpellDescription.Warlord.CoweringBellow.MainDescription:		Vyvolá strach u ovládaných mazlíčků v {0} a sníží jejich efektivitu.
+SpellDescription.Warlord.Critical.MainDescription1:				Zvyšuje šanci na kritický zásah spojenců ve tvé {0} o {1}% pro jejich další útok.
+SpellDescription.Warlord.Critical.MainDescription2:				Zvyšuje šanci na kritický zásah cíle o {0}% pro další útok.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Snižuje účinnost DoT na spojence v {0} o {1}%. Jakmile poškození klesne na nulu, efekt končí.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Snižuje účinnost DoT na cíl o {0}%. Končí při nulovém poškození.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Zvyšuje efektivitu spojenců v {0} o {1}% (kouzla i melee).
+SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Zvyšuje efektivitu cíle o {1}% (kouzla i melee).
+SpellDescription.Warlord.MLABSBuff.MainDescription1:			Zvyšuje absorpci zbroje spojenců v {0} o {1}%.
+SpellDescription.Warlord.MLABSBuff.MainDescription2:			Zvyšuje absorpci zbroje cíle o {1}%.
+SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription:	Zničí cílovou runu a blízké runy v poloměru {0}.
+SpellDescription.Sojourner.AncientTransmuter.MainDescription:	Vyvolá kupce pro nákup/prodej základních zásob.
+SpellDescription.Sojourner.Port.MainDescription1:				Teleportuje tě k tvému kameni duše. Nepracuje v boji ani v RvR.
+SpellDescription.Sojourner.Port.MainDescription2:				Teleportuje {0} hráčů v {1} ke svému kameni duše. Ne v boji/RvR.
+SpellDescription.Sojourner.EssenceResist.MainDescription:		Zvyšuje odolnost proti přírodní (Esence) škodě o {0}%.
+SpellDescription.Sojourner.Zephyr.MainDescription1:				Vyvolá závan, který odnese nepřítele náhodným směrem a učiní jej po dobu trvání nezranitelným.
+SpellDescription.Sojourner.Zephyr.MainDescription2:				Hráč zasažený Zefýrem je {0} min imunní vůči dalšímu.
+SpellDescription.Sojourner.Phaseshift.MainDescription:			Osobní posílení, které tě učiní téměř nezranitelným vůči kouzlům i melee po dobu {0} s.
+SpellDescription.Sojourner.Groupport.MainDescription:			Vrátí celou tvou skupinu k tvému kameni duše. Pokud je někdo v boji, selže.
+SpellDescription.Stormlord.DazzlingArray.MainDescription1:		Aplikuje efekt, který sníží šanci zásahu nepřátel v oblasti o {0}%.
+SpellDescription.Stormlord.DazzlingArray.MainDescription2:		Platí pouze pro omračující kouzla; vylučuje RA a bojové styly.
+SpellDescription.Stormlord.StormMissHit.MainDescription:		Snižuje přesnost cíle o {0}%.
+SpellDescription.Stormlord.VacuumVortex.MainDescription:		Pozemní cíl, který přesune blízké bouře na náhodný bod okraje.
+SpellDescription.Stormlord.EnervatingGas.MainDescription:		Vypouští plyn, který snižuje výdrž nepřátel o {0}%.
+SpellDescription.Stormlord.StormEndudrain.MainDescription:		Bouře, která vysaje {0} výdrže nepřátelům uvnitř.
+SpellDescription.Stormlord.InebriatingFumes.MainDescription:	Postupně snižuje Obratnost a Rychlost o {0}% těm, kdo zůstávají uvnitř.
+SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription:	Snižuje Obratnost a Rychlost cíle o {0}%.
+SpellDescription.Stormlord.MentalSiphon.MainDescription:		Bouře, která vysaje {0} many nepřátelům uvnitř.
+SpellDescription.Stormlord.PowerDrainStorm.MainDescription:		Vysaje {0} many cíli.
+SpellDescription.Stormlord.FocusingWinds.MainDescription:		Vytvoří spojeneckou bouři a fixuje ji. Končí při tvém pohybu.
+SpellDescription.Stormlord.ChokingVapors.MainDescription:		Postupně snižuje Sílu a Konstituci o {0}% těm, kdo zůstávají uvnitř.
+SpellDescription.Stormlord.StormStrConstDebuff.MainDescription:	Snižuje Sílu a Konstituci cíle o {0}%.
+SpellDescription.Stormlord.SenseDullingCloud.MainDescription:	Bouře, která otupuje smysly a snižuje Bystrost o {0}%.
+SpellDescription.Stormlord.StormAcuityDebuff.MainDescription:	Snižuje Bystrost cíle o {0}%.
+SpellDescription.Stormlord.EnergyTempest.MainDescription:		Bouře, která uděluje poškození Esencí nepřátelům uvnitř.
+SpellDescription.Stormlord.StormEnergyTempest.MainDescription:	Uděluje {0} {1} po dobu {2} s nepřátelům uvnitř.
+SpellDescription.MLBase.TargetModifier.MainDescription:			Osobní posílení umožňující změnit či rozšířit dosah příštího kouzla (jednotlivého i plošného).
+SpellDescription.MLBase.BanelordSnare.MainDescription:			Krátkodosahové AO E zpomalení o {0}% a omráčí sesílatele.
+
+# AblativeArmor
+AblativeArmor.DelveInfo.Function:			Funkce: tlumič zásahů na blízko
+AblativeArmor.DelveInfo.Absorption1:			Absorpce: {0}%
+AblativeArmor.DelveInfo.Absorption2:			Absorpce: 100%
+AblativeArmor.DelveInfo.Absorption3:			Absorpce: 25%
+AblativeArmor.DelveInfo.CastingTime:			Okamžité
+
+# DamageSpeedDecrease
+DamageSpeedDecrease.DelveInfo.Decrease:			Snížení rychlosti: {0}%
+DamageSpeedDecrease.DelveInfo.Function:			Funkce: Snížení rychlosti + poškození
+
+# ResistDebuff
+ResistDebuff.DelveInfo.Decrease:			Snížení odolnosti {0}: {1}
+ResistDebuff.DelveInfo.Function:			Funkce: Snížení odolností
+
+#CharmSpellHandler
+CharmSpellHandler.DelveInfo.Function:			Funkce: {0}
+CharmSpellHandler.Species.Humanoid:				Humanoid
+CharmSpellHandler.Species.Animal:				Zvíře
+CharmSpellHandler.Species.Insect:				Hmyz
+CharmSpellHandler.Species.Reptile:				Plaz
+CharmSpellHandler.Species.HumanoidAnimal:		Humanoid nebo Zvíře
+CharmSpellHandler.Species.HumanoidAnimalInsect:					Humanoid, Zvíře a Hmyz
+CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			Humanoid, Zvíře, Hmyz a Magické
+CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	Humanoid, Zvíře, Hmyz, Magické a Nemrtvé
+
+#IllusionSpell SpellHandler
+IllusionSpell.Arrangement.Random:		náhodně
+IllusionSpell.Arrangement.Circle:		v kruhu
+IllusionSpell.Arrangement.Line:			v řadě
+
+#WarlockSpeedDecrease SpellHandler Appearances
+WarlockSpeedDecrease.Appearance.Frog:			Žába
+WarlockSpeedDecrease.Appearance.Worm:			Červ
+WarlockSpeedDecrease.Appearance.Lizard:			Ještěr
+WarlockSpeedDecrease.Appearance.Wisp:			Bludička
+WarlockSpeedDecrease.Appearance.Fairy:			Víla
+WarlockSpeedDecrease.Appearance.Scarab:			Skarab
+WarlockSpeedDecrease.Appearance.Spider:			Pavouk
+WarlockSpeedDecrease.Appearance.Cyclop:			Kyklop
+WarlockSpeedDecrease.Appearance.Mantis:			Kudlanka
+WarlockSpeedDecrease.Appearance.Flame:			Plamínek
+WarlockSpeedDecrease.Appearance.Bird:			Vlaštovka
+WarlockSpeedDecrease.Appearance.Simulacrum:		Simulakrum
+
+# DamageAddAndShield
+DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} tě zasahuje za {1} dodatečného poškození!
+DamageAddAndShield.EventHandlerDA.YouHitExtra:		Zasahuješ {0} za {1} dodatečného poškození!
+DamageAddAndShield.EventHandlerDA.YouHitFor:		Zasahuješ {0} za {1} dodatečného poškození!
+DamageAddAndShield.EventHandlerDA.YourHitFor:		Tvé {0} zasahuje {1} za {2} dodatečného poškození!
+DamageAddAndShield.EventHandlerDS.DamageToYou:		{0} tě zasahuje za {1} dodatečného poškození!
+DamageAddAndShield.EventHandlerDS.YouHitFor:		Zasahuješ {0} za {1} dodatečného poškození!
+DamageAddAndShield.EventHandlerDS.YourHitFor:		Tvé {0} zasahuje {1} za {2} dodatečného poškození!
+
+# DirectDamageDebuffSpellHandler
+DirectDamageDebuffSpellHandler.DelveInfo.Decrease:	Snížení odolnosti ({0}): {1}%
+DirectDamageDebuffSpellHandler.DelveInfo.Function:	Funkce: Poškození/Snížení odolnosti
+
+# DoTSpellHandler
+DoTSpellHandler.SendDamageMessages.YouHitFor:		Zasáhl jsi {0} za {1} poškození!
+DoTSpellHandler.SendDamageMessages.YourCriticallyHits:	Tvé {0} kriticky zasáhne {1} a způsobí {2} dodatečného poškození!
+DoTSpellHandler.SendDamageMessages.YourHitsFor:		Tvé {0} zasáhne {1} za {2} poškození!
+
+# NearsightSpellHandler
+NearsightSpellHandler.DelveInfo.Function:		Funkce: Zkrácení dosahu {0}
+
+# ProcSpellHandler
+ProcSpellHandler.DelveInfo.Function:			Funkce: {0}
+
+Summon.CheckBeginCast.AlreadyHaveaPet:			Už ovládáš tvora.
+
+# SummonCommanderPet
+SummonCommanderPet.CheckBeginCast.Text:			Už ovládáš Velitele!
+SummonCommanderPet.DelveInfo.Text1:			Funkce: Vyvolání
+SummonCommanderPet.DelveInfo.Text2:			Vyvolá mazlíčka Velitele.
+SummonCommanderPet.DelveInfo.Text3:			Cíl: {0}
+SummonCommanderPet.DelveInfo.Text4:			Náklady many: {0}%
+SummonCommanderPet.DelveInfo.Text5:			Čas sesílání: {0}
+
+#SummonMinionHandler
+SummonMinionHandler.CheckBeginCast.Text1:		Pro vyvolání služebníka do skupiny musíš již ovládat Velitele!
+SummonMinionHandler.CheckBeginCast.Text2:		Tvůj Velitel už ovládá maximum služebníků!
+SummonMinionHandler.DelveInfo.Text1:			Cíl: {0}
+SummonMinionHandler.DelveInfo.Text2:			Náklady many: {0}%
+SummonMinionHandler.DelveInfo.Text3:			Čas sesílání: {0}
+
+#PetPBAOE
+PetPBAOE.CheckBeginCast.NoPet:				Tohle kouzlo nemůžeš seslat na tvora, kterého neovládáš.
+
+#SummonAnimistFnF
+SummonAnimistFnF.CheckBeginCast.NoGroundTarget:		Musíš nastavit pozemní cíl pro toto kouzlo!
+SummonAnimistFnF.CheckBeginCast.TurretAreaCap:		V této oblasti nemůžeš ovládat více věžiček!
+SummonAnimistFnF.CheckBeginCast.TurretPlayerCap:	Nemůžeš ovládat další věžičky!
+
+#SummonAnimistPet
+SummonAnimistPet.CheckBeginCast.AlreadyHaveaPet:	Už ovládáš tvora!
+SummonAnimistPet.CheckBeginCast.GroundTargetNull:	Musíš nastavit pozemní cíl pro toto kouzlo!
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInView:	Nemáš v dohledu svůj pozemní cíl.
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange:	Zvol blíže položený pozemní cíl.
+
+#TurretsRelease
+TurretsRelease.CheckBeginCast.NoSelectedTarget:		Toto kouzlo lze seslat jen na tvora, kterého ovládáš.
+TurretsRelease.CheckBeginCast.TargetTooFarAway:		Tvůj cíl je příliš daleko.
+
+#PetSpellHandler
+PetSpellHandler.CheckBeginCast.NoControlledBrainForCast:	Pro seslání tohoto kouzla potřebuješ mazlíčka!
+
+#SummonNecromancerPet
+SummonNecromancerPet.CheckBeginCast.ShadeEffectIsNotNull:	Už jsi ve stínové podobě!
+SummonNecromancerPet.DelveInfo.Function:			Funkce: Vyvolání mazlíčka
+SummonNecromancerPet.DelveInfo.Description:			Vyvolá nemrtvého mazlíčka sloužícího sesílateli. Sesílatel přijme stínovou podobu a jedná skrze svého mazlíčka.
+SummonNecromancerPet.DelveInfo.Target:				Cíl: {0}
+SummonNecromancerPet.DelveInfo.Power:				Náklady many: {0}%
+SummonNecromancerPet.DelveInfo.CastingTime:			Čas sesílání: {0}
+
+#SavageEnduranceHeal
+SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:		Nemáš dost zdraví na seslání tohoto kouzla!
+
+#AblativeArmorSpellHandler
+AblativeArmor.Target:	Tvůj štít pohlcuje {0} poškození.
+AblativeArmor.Attacker:	Štít pohlcuje {0} z tvého poškození!
+
+#Amnesia
+Amnesia.MessageToTarget:	Tvoje mysl se zamotá a zapomínáš, co jsi dělal!
+
+# Petrify
+Petrify.Target.Absorbs:		{0} je petrifikován a pohlcuje {1} poškození.
+Petrify.Target.Resist:		{0} je petrifikován a imunní vůči tomuto kouzlu.
+Petrify.Self.Message:		{0} je petrifikován.
+Petrify.Self.Absorb:		Jsi petrifikován a pohlcuješ {0} poškození.
+Petrify.Self.Unpetrify:		Vracíš se do normálního stavu.
+
+# Damnation
+Damnation.Self.Message:			Tvůj cíl je proklet.
+Damnation.Self.Message2:		Zatím to nevíš, ale už jsi mrtvý!
+Damnation.Target.Resist:		{0} je proklet a imunní vůči tomuto kouzlu.
+Damnation.Self.Absorb:			Jsi proklet a pohlcuješ {0} poškození!
+Damnation.Target.Absorbs:		{0} je proklet a pohlcuje {1} poškození.
+Damnation.Self.SpellAbsorb:		Tvé prokletí ti umožňuje pohltit {0} magického poškození díky tvé výbavě.
+Damnation.Target.SpellAbsorbs:	Prokletí {0} pohlcuje {1} magického poškození díky jeho výbavě.
+Damnation.Self.Resist:			Jsi proklet a odoláváš kouzlu.
+Damnation.Target.Resist:		{0} je proklet a odolává kouzlu.
+Damnation.Kill.SelfHeal:		Mrtvola nepřítele tě oživí o {0} zdraví!
+Damnation.Kill.DurationExtended:	Tvé prokleté bytí se prodlužuje o {0} s za uloupení další duše, ale konec je nevyhnutelný.
+Damnation.Self.CannotBeHealed:	Jsi proklet a nelze tě léčit!
+
+# Adrenaline
+Adrenaline.Target.Immune:		{0} je v bojové horečce a zcela odolá!
+Adrenaline.Target.Absorbs:		Tvůj cíl pohlcuje {0} poškození z tvého útoku.
+Adrenaline.Self.Immune:			Tvá bojová horečka tě chrání před tímto kouzlem!
+Adrenaline.Self.Absorb:			Pohlcuješ {0} poškození z kouzla!
+
+# DebuffImmunity
+DebuffImmunity.You.Resisted:			Odoláváš díky imunitě vůči oslabujícím efektům!
+DebuffImmunity.Target.Resisted:			{0} odolává díky imunitě vůči oslabujícím efektům!
+
+# HealDebuff
+HealDebuffSpellHandler.EffectStart.Target:		Účinnost přijímaného léčení je snížena kvůli {0}.
+HealDebuffSpellHandler.EffectStart.Area:		Účinnost léčení přijímaného {0} je snížena kvůli {1}.
+HealDebuffSpellHandler.EffectExpires.Target:	Účinnost léčení se vrací k normálu.
+HealDebuffSpellHandler.EffectExpires.Area:		Účinnost léčení u {0} se vrací k normálu.
+
+# NecroSummonWeapon
+Spells.NecroSumonWeap.Icebrand.You:				Vyvoláváš meč Icebrand.
+Spells.NecroSumonWeap.Icebrand.Target:			{0} vyvolává meč Icebrand.
+Spells.NecroSumonWeap.Nethersbane.You:			Vyvoláváš meč Nethersbane.
+Spells.NecroSumonWeap.Nethersbane.Target:		{0} vyvolává meč Nethersbane.
+
+# StyleHandler
+StyleHandler.StyleNotFound:						Bojový styl nenalezen.
+StyleHandler.UseStyle:							Používáš styl {0} pro své útoky.
+StyleHandler.NeedsRequirement:					Vyžaduje {0} pro provedení tohoto stylu.
+StyleHandler.NeedsWeapon:						Potřebuješ {0} pro provedení tohoto stylu.
+StyleHandler.AllWeaponTypes:					Všechny typy zbraní jsou s tímto stylem kompatibilní.
+StyleHandler.UnknownWeaponType:					Požadovaný typ zbraně neznámý.
+StyleHandler.StyleNotImplemented:				Tento styl ještě není implementován!
+StyleHandler.Opening.DefensiveActionUsing:		obranou akci s {0}
+StyleHandler.Opening.DefensiveAction:			obranou akci
+StyleHandler.Opening.Positional.Back:			být za nepřítelem
+StyleHandler.Opening.Positional.Side:			být po boku nepřítele
+StyleHandler.Opening.Positional.Front:			být před nepřítelem
+StyleHandler.Opening.Positional.Specific:		konkrétní pozici vůči nepříteli
+StyleHandler.Opening.Default:					speciální otevírací podmínku
+

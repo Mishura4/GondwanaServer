@@ -1,0 +1,5 @@
+# Relics/GameRelicPad (RO)
+GameRelicPad.MountRelic.Captured:			{0} a capturat: {1}.
+GameRelicPad.MountRelic.Stored:				{0} din {1} a capturat {2} la {3}.
+GameRelicPad.OnPlayerEnter.EmptyRelicPad:		Trebuie să găsiți un soclu de relicvă {0} gol pentru a plasa această relicvă.
+GameRelicPad.RemoveRelic.Removed:			{0} din {1} a îndepărtat {2} din {3}.

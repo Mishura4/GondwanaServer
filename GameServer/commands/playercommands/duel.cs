@@ -234,7 +234,7 @@ namespace DOL.GS.Commands
             target.Out.SendMessage(LanguageMgr.GetTranslation(target.Client, "Commands.Players.Duel.ChallengesYou", starter.GetPersonalizedName(target)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             // Custom dialog on target (OK = Accept, Cancel = Decline)
-            string dialogText = LanguageMgr.GetTranslation(target.Client, "Commands.Players.Duel.Dialog.InvitePrompt1", starter.GetPersonalizedName(target)) + "\n" + LanguageMgr.GetTranslation(target.Client, "Commands.Players.Duel.Dialog.InvitePrompt2");
+            string dialogText = LanguageMgr.GetTranslation(target.Client, "Commands.Players.Duel.Dialog.InvitePrompt1", starter.GetPersonalizedName(starter)) + " " + LanguageMgr.GetTranslation(target.Client, "Commands.Players.Duel.Dialog.InvitePrompt2");
             target.Out.SendCustomDialog(dialogText, new CustomDialogResponse(DuelInviteResponse));
         }
 

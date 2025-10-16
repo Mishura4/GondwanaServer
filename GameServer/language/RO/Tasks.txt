@@ -1,0 +1,70 @@
+Tasks.SystemDisabled: Sistemul de sarcini este în prezent dezactivat.
+Tasks.PvPRvRGvGTasks: ======= SARCINI PvP/RvR/GvG =======
+Tasks.PvETasks: ======== SARCINI PvE ========
+Tasks.CraftingTasks: == SARCINI DE MEȘTEȘUG (Nivel min: {0}) ==
+Tasks.SpecialTasks: ======== SARCINI SPECIALE ========
+Tasks.TaskCompletionTokenInfo: Fiecare jeton de sarcini PvP, RvR, GvG, PvE sau de Meșteșug trebuie predat Maestrului Sarcinilor pentru a primi recompense.
+Tasks.SpecialTaskCompletionTokenInfo: Jetoanele de sarcini speciale sunt specifice fiecărei sarcini. Aceste jetoane deblochează titluri noi de jucător cărora li se asociază bonusuri speciale.
+Tasks.SnapshotTitle: SARCINI
+Tasks.KillEnemyPlayersGroup: Ucideți jucători inamici fiind în grup
+Tasks.KillEnemyPlayersAlone: Ucideți jucători inamici singur
+Tasks.KillKeepGuards: Ucideți gardieni ai forturilor
+Tasks.TakeKeeps: Cuceriri de forturi
+Tasks.RvRChampionOfTheDay: Fiți Campionul Zilei în RvR
+Tasks.KillTerritoryGuards: Ucideți gardieni ai teritoriilor
+Tasks.KillTerritoryBoss: Capturi de teritorii
+Tasks.TurnInPvPGvGTaskToken: Jeton de Sarcină PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: Ucideți creaturi din temnițe
+Tasks.KillOutdoorsCreatures: Ucideți creaturi din exterior
+Tasks.KillAnimalCreatures: Ucideți creaturi animale
+Tasks.KillDemonCreatures: Ucideți creaturi demonice
+Tasks.KillDragonCreatures: Ucideți creaturi draconice
+Tasks.KillElementalCreatures: Ucideți creaturi elementale
+Tasks.KillGiantCreatures: Ucideți creaturi uriașe
+Tasks.KillHumanoidCreatures: Ucideți creaturi umanoide
+Tasks.KillInsectCreatures: Ucideți creaturi insectoide
+Tasks.KillMagicalCreatures: Ucideți creaturi magice
+Tasks.KillReptileCreatures: Ucideți creaturi reptiliene
+Tasks.KillPlantCreatures: Ucideți creaturi vegetale
+Tasks.KillUndeadCreatures: Ucideți creaturi nemortoare
+Tasks.TurnInPvETaskToken: Jeton de Sarcină PvE
+Tasks.SuccessfulItemCombinations: Combinații de obiecte reușite
+Tasks.MasteredCrafts: Obiecte fabricate prin Meșteșug
+Tasks.MasterpieceCrafted: Capodopere fabricate
+Tasks.TurnInCraftingTaskToken: Jeton de Sarcină de Meșteșug
+Tasks.EpicBossesSlaughtered: Șefi epici doborâți
+Tasks.ItemsSoldToPlayers: Tranzacții prin piață
+Tasks.SuccessfulPvPThefts: Furturi PvP reușite
+Tasks.OutlawPlayersSentToJail: Neutralizați Nelegiuiți
+Tasks.EnemiesKilledInAdrenalineMode: Inamici uciși în Adrenalină
+Tasks.EnemyKilledInDuel: Victorii în duel
+Tasks.QuestsCompleted: Misiuni finalizate
+Tasks.MaxLevelReached: Nivel maxim
+Tasks.Level: Nivel {0}
+
+Tasks.KillEnemyPlayersGroupLog: Ucideți jucători inamici fiind în grup: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Ucideți jucători inamici singur: {0}/{1}
+Tasks.KillKeepGuardsLog: Ucideți gardieni ai forturilor: {0}/{1}
+Tasks.TakeKeepsLog: Cuceriri de forturi: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Ucideți gardieni ai teritoriilor: {0}/{1}
+Tasks.KillTerritoryBossLog: Capturi de teritorii: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Combinații de obiecte reușite: {0}/{1}
+Tasks.MasteredCraftsLog: Obiecte fabricate prin Meșteșug: {0}/{1}
+Tasks.MasterpieceCraftedLog: Capodopere fabricate: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Șefi epici doborâți: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Tranzacții prin piață: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Furturi PvP reușite: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Neutralizați Nelegiuiți: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Inamici uciși în Adrenalină: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Dueluri câștigate: {0}/{1}
+Tasks.QuestsCompletedLog: Misiuni finalizate: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Sarcină: Primiți un jeton de sarcină PvP/RvR/GvG - nivel {0}
+Tasks.TurnInPvETaskTokenMessage: Sarcină: Primiți un jeton de sarcină PvE - nivel {0}
+Tasks.TurnInCraftingTaskTokenMessage: Sarcină: Primiți un jeton de sarcină de Meșteșug - nivel {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Sarcină: Primiți un jeton special „Ucigaș de Demoni” - nivel {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Sarcină: Primiți un jeton special „Negustor” - nivel {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Sarcină: Primiți un jeton special „Hoț” - nivel {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Sarcină: Primiți un jeton special „Vânător de Recompense” - nivel {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Sarcină: Primiți un jeton special „Febra Luptei” - nivel {0}
+Tasks.EnemyKilledInDuelSpecialToken: Sarcină: Ați primit un jeton de duel - nivel {0}
+Tasks.QuestsCompletedSpecialToken: Sarcină: Primiți un jeton special „Aventurier” - nivel {0}

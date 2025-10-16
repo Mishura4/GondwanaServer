@@ -1,0 +1,570 @@
+# DelveInfo
+DelveInfo.CastingTime:          Spreektijd: {0}
+DelveInfo.ConcentrationCost:    Concentratiekost: {0}
+DelveInfo.Damage:               Schade: {0}
+DelveInfo.DamageType:           Schadetype: {0}
+DelveInfo.Duration:             Duur: 
+DelveInfo.Focus:                Kanaalspreuk. Wordt onderbroken bij de eerste actie.
+DelveInfo.Frequency:            Frequentie: {0}
+DelveInfo.HealthReturned:       Gezondheid terug: {0}% van de toegebrachte schade
+DelveInfo.InstrumentRequire:    Vereist instrument: {0}
+DelveInfo.PowerCost:            Manakosten: {0}
+DelveInfo.HealthCost:           Gezondheidskost: {0}
+DelveInfo.Radius:               Straal: {0}
+DelveInfo.Range:                Bereik: {0}
+DelveInfo.RangeModified:	    Bereik: {0} {1}
+DelveInfo.RecastTime:           Herlaadtijd: 
+DelveInfo.Target:               Doelwit: {0}
+DelveInfo.Value:                Waarde: {0}
+DelveInfo.ValueNegative:        Waarde: -{0}
+DelveInfo.Destination:		    Bestemming: {0}
+
+# Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Brengt {0} {1} toe aan het doelwit.
+SpellDescription.DoT.MainDescription:				Het doelwit lijdt {0} {1} elke {2} s.
+SpellDescription.BoltSpell.MainDescription:			Een magische pijl treft en ontploft voor {0} {1}. Kan geblokkeerd worden.
+SpellDescription.LifeDrain.MainDescription:			Brengt {0} {1} toe en heelt de spreker met {2}% van de schade.
+SpellDescription.DirectDamageWithDebuff.MainDescription:	Brengt {0} {1} toe en verlaagt {2} van het doelwit met {3}%.
+SpellDescription.Nearsight.MainDescription1:		Verlaagt het effectieve bereik van afstandsaanvallen van het doelwit met {0}%.
+SpellDescription.Nearsight.MainDescription2:		Nabijzicht‑spreuken die de groep van de spreker treffen werken met {0}% minder doeltreffendheid of kunnen volledig worden weerstaan.
+SpellDescription.SpreadHeal.MainDescription:		Genezing over gebied voor {0}.
+SpellDescription.RegenHeal.MainDescription:			Het doelwit regenereert {0} extra gezondheidspunten.
+SpellDescription.RegenPower.MainDescription:		Het doelwit regenereert {0} extra manapunten.
+SpellDescription.RegenEndu.MainDescription:			Het doelwit regenereert {0} extra uithoudingspunten.
+SpellDescription.SpeedDecrease.MainDescription:		Verlaagt de snelheid van het doelwit met {0}%.
+SpellDescription.SpeedDecrease.Rooted:				Het doelwit is geworteld.
+SpellDescription.Slow.MainDescription:				Verlaagt de snelheid van het doelwit met {0}%. Veroorzaakt geen immuniteit en wordt niet onderbroken door treffers.
+SpellDescription.Bladeturn.MainDescription:			Creëert een “bubbel” die de schade van één melee‑treffer absorbeert.
+SpellDescription.Demi.MainDescription:				{0} halveert de gezondheid van de vijand.
+SpellDescription.Quarter.MainDescription:			{0} reduceert de gezondheid van de vijand tot een kwart.
+SpellDescription.DemiQuarter.AmnesiaDescription:	Raakt geen zwakke wezens en geen doelen boven niveau {0}.
+SpellDescription.DemiQuarter.EndDescription:		Deze spreuk treft zelden geesten, demonen, necromancers, banshees en vampiers.
+SpellDescription.LifeTransfer.MainDescription:		Verplaatst {0} gezondheid van de spreker naar het doelwit.
+SpellDescription.Heal.MainDescription:				Heelt {0} gezondheid bij het doelwit.
+SpellDescription.HealEnemy.MainDescription:			Heelt je vijand voor {0} gezondheid bij treffer (proc).
+SpellDescription.Disease.MainDescription:			Brengt een ziekte aan die {0}% vertraagt, kracht met {1}% verlaagt en genezingen met {2}% remt.
+SpellDescription.Petrify.MainDescription:			Versteent het doelwit en maakt er een standbeeld van. Het is verlamd en absorbeert 50% fysieke en 75% magische schade terwijl het wordt aangevallen.
+SpellDescription.Unpetrify.MainDescription:			Heelt de toestand “Versteend” van het doelwit.
+SpellDescription.HealDebuff.MainDescription:		Verlaagt de effectiviteit van genezingen met {0}%. Stapelt met “Ziekte”.
+SpellDescription.DebuffImmunity.MainDescription:	Verleent immuniteit tegen verzwakkingen en +{0}% weersta‑kans gedurende {1} s.
+SpellDescription.MagicHealAbsorb.MainDescription:	De volgende magische aanval tegen jou absorbeert en zet {0}% van de schade om in genezing en {1}% in mana en uithouding.
+SpellDescription.Trigger.MainDescription:			Brengt een magisch effect (proc) als buff aan. {0} triggert wanneer het doelwit geraakt wordt.
+SpellDescription.WaterBreathing.MainDescription:	Maakt onderwater ademen mogelijk en bewegen met {0}% van de loopsnelheid.
+SpellDescription.TensionDebuff.MainDescription:		Verlaagt de spanningsopbouw van het doelwit met {1}%.
+SpellDescription.TensionBuff.MainDescription:		Verhoogt de spanningsopbouw van het doelwit met {1}%.
+SpellDescription.Teleport.MainDescription:			{0} teleporteert het doelwit naar {1}.
+SpellDescription.PlayerPortal.MainDescription:		Opent een eenmalige heen‑en‑terug‑poort gekoppeld aan het terugkeerpunt van de oproeper. Werkt in {0}.
+SpellDescription.Earthquake.MainDescription1:		Creëert een aardbeving van magnitude {0} die tot {1} schade veroorzaakt nabij het epicentrum, aflopend tot {2} aan de randen.
+SpellDescription.Earthquake.MainDescription2:		Raakt geen vliegende of zwemmende monsters, noch zwevende banshees of vampiers.
+SpellDescription.HoT.MainDescription:				Het doelwit herstelt {0} gezondheid elke {1} s.
+SpellDescription.DDWithDebuff.MainDescription:		Brengt {0} {1} toe en verlaagt de weerstand tegen {1} van het doelwit met {2}%.
+SpellDescription.AfHitsBuff.MainDescription:		Verhoogt pantserscore en gezondheid met {0}% zolang je binnen de aurastraal blijft.
+SpellDescription.AllStatsBuff.MainDescription:		Verhoogt alle attributen van het doelwit met {0}.
+SpellDescription.PowerDrain.MainDescription:		Brengt {0} {1} toe; de spreker krijgt {2}% van de schade terug als mana.
+SpellDescription.RealPowerDrain.MainDescription:	Brengt {0} {1} toe; de spreker krijgt {2}% terug als mana en het doelwit verliest {3}% van zijn totale mana.
+SpellDescription.PowerLock.MainDescription1:		Zet jou en je doelwit vast op de plek en draineert {0}% van zijn basismana elke {1}s gedurende {2} s.
+SpellDescription.PowerLock.MainDescription2:		Tijdens het effect kan geen van beiden melee‑schade ontvangen.
+SpellDescription.PowerLock.MainDescription3:		Alleen te gebruiken tegen spelers of door spelers bestuurde pets.
+SpellDescription.Damnation.MainDescription1:		Het doelwit is verdoemd, wordt een zombie en verliest positieve effecten. Krijgt {0}% weerstand tegen melee‑schade maar zal onherroepelijk sterven na {1} s. Geen enkele genezing draait dit terug.
+SpellDescription.Damnation.MainDescription2:		Genezingen worden drastisch verlaagd tot {0}%.
+SpellDescription.Damnation.MainDescription3:		Genezingen hebben geen effect op de verdoemde.
+SpellDescription.Damnation.MainDescription4:		Genezingen veranderen voor {0}% in schade.
+SpellDescription.Damnation.MainDescription5:		Raakt geen ondoden.
+SpellDescription.MonsterRez.MainDescription:		Verreist als ondode en herstelt {0}% gezondheid en {1}% mana en uithouding zonder verlies van ervaring of constitutie.
+SpellDescription.MonsterRez.DamageMain:				Brengt {1} {0} toe aan het doelwit
+SpellDescription.MonsterRez.DamageRadius:			en de omgeving
+SpellDescription.MonsterRez.DamageFrequency:		elke {0} s
+SpellDescription.MonsterRez.DamageDuration:			gedurende {0} s
+SpellDescription.SummonMonster.MainDescription:		Wederkeer uit het lijk.
+SpellDescription.DamageAdd.MainDescription:			De melee‑aanvallen van het doelwit doen {0} extra {1}.
+SpellDescription.DamageShield.MainDescription:		Brengt {0} {1} toe aan vijanden die je in melee raken.
+SpellDescription.SpellReflection.MainDescription1:	Weerkaatst spreuken met {0}% kans aan {1}% van de schade en absorbeert {2}% van de veroorzaakte schade.
+SpellDescription.SpellReflection.MainDescription2:	Weerkaatst geen melee‑stijlen of schoten van boogschutters.
+SpellDescription.SpellReflectionDebuff.MainDescription:		Verwijdert het magische afbuigschild van het doelwit.
+SpellDescription.PowerShield.MainDescription:		Als je gezondheid onder {0}% zakt, zet mana om in gezondheid tot {1}% van je maximale leven.
+SpellDescription.PowerTransfer.MainDescription:		Verplaatst {0} mana van de spreker naar het doelwit.
+SpellDescription.Resurrect.MainDescription:			Verreist en herstelt {0}% gezondheid en {1}% mana (en uithouding) zonder verlies van ervaring of constitutie.
+SpellDescription.OffensiveProc.MainDescription:		{0} geeft {1}% kans om een secundaire spreuk te activeren met je melee‑aanvallen:
+SpellDescription.DefensiveProc.MainDescription:		{0} geeft {1}% kans om een secundaire spreuk te activeren wanneer je in melee geraakt wordt:
+SpellDescription.SpeedEnhancement.MainDescription:	Verhoogt snelheid tot {0}% van normaal.
+SpellDescription.SpellShield.MainDescription:		{0} absorbeert 100% magische schade en 70% DoT‑schade wanneer de gezondheid {1}% of lager is.
+SpellDescription.StyleBleeding.MainDescription:		Het doelwit lijdt {0} {1} elke {2} s.
+SpellDescription.StyleTaunt.Increase:				Daagt het doelwit uit en verhoogt je dreiging met {0}.
+SpellDescription.StyleTaunt.Decrease:				Verlaagt de uitdaging en vermindert je dreiging met -{0}.
+SpellDescription.Taunt.MainDescription:				Daagt het doelwit uit en verhoogt je dreiging met {0}.
+SpellDescription.SummonSpell.MainDescription:		Roept een dienaar op die de oproeper dient. Werkt op wezens tot {0}% van je niveau, max. {1}.
+SpellDescription.MeleeAblativeArmor.MainDescription:		Verleent een tijdelijk schild dat {0}% fysieke schade absorbeert tot een maximum van {1}.
+SpellDescription.MagicAblativeArmor.MainDescription:		Verleent een tijdelijk schild dat {0}% magische schade absorbeert tot een maximum van {1}.
+SpellDescription.BothAblativeArmor.MainDescription:	Verleent een tijdelijk schild dat {0}% van alle schade absorbeert tot een maximum van {1}.
+SpellDescription.BattleFeverDurationBuff.MainDescription:	Verlengt de duur van Strijdkoorts met {0}%.
+SpellDescription.TankAdrenaline.MainDescription:	Strijdkoorts overspoelt je! Je melee‑slagen missen niet tegen vijanden van jouw niveau en je verdediging en melee‑kracht nemen sterk toe.
+SpellDescription.MageAdrenaline.MainDescription:	Strijdkoorts overspoelt je! Verdediging, trefkans van spreuken en spreektijd nemen flink toe en treffers onderbreken je niet.
+SpellDescription.StealthAdrenaline.MainDescription:	Strijdkoorts overspoelt je! Je melee‑slagen missen niet tegen vijanden van jouw niveau; verdediging, stealth en kracht op afstand en in melee nemen sterk toe.
+SpellDescription.Amnesia.MainDescription:			Doet het monster vergeten wie het aanviel. Onderbreekt vijandige spreuken zonder te verdoven, tenzij weerstaan.
+SpellDescription.Mesmerize.MainDescription:			Het doelwit wordt gehypnotiseerd en kan niet handelen.
+SpellDescription.Stun.MainDescription:				Verdooft het doelwit gedurende {0} s.
+SpellDescription.Charm.MainDescription1:			Poging om een {0} wezen te betoveren.
+SpellDescription.Charm.MainDescription2:			Raakt monsters tot {0}% van je niveau, max. {1}.
+SpellDescription.CombatHeal.MainDescription:		Heelt {0} schade elke {1} s.
+SpellDescription.Confusion.MainDescriptionPositive:	Het wezen heeft {0}% kans om van doelwit te wisselen.
+SpellDescription.Confusion.MainDescriptionNegative:	100% kans om van doelwit te wisselen en 75% kans om een bondgenoot aan te vallen.
+SpellDescription.PetConversion.MainDescription:		Bevrijdt het doelwit en al je torens in het gebied. Je krijgt {0}% van de mana terug die aan de oproep is besteed.
+SpellDescription.CraftingSpeedBuff.MainDescription:	Verhoogt de ambachtssnelheid met {0}%.
+SpellDescription.CureDisease.MainDescription:		Verwijdert alle ziekten van het doelwit.
+SpellDescription.CureMezz.MainDescription:			Verwijdert alle hypnose‑effecten van het doelwit.
+SpellDescription.CureNearsight.MainDescription:		Verwijdert alle nabijzicht‑effecten.
+SpellDescription.CurePoison.MainDescription:		Verwijdert alle schade‑over‑tijd‑effecten (zoals gif) van het doelwit.
+SpellDescription.DamageSpeedDecrease.MainDescription:		Verlaagt de snelheid met {0}% en brengt {1} {2} toe.
+SpellDescription.DamageToPower.MainDescription:		Zet {0}% van ontvangen spreukschade op het doelwit om in mana.
+SpellDescription.DeathClaw.MainDescription:			{0} reduceert de gezondheid van de vijand met 90%. Raakt geen geesten, zwakke wezens of doelen boven niveau {1}; verminderd effect op ondoden en bazen.
+SpellDescription.EnduranceDrain.MainDescription:	{0}% uithouding wordt van het doelwit gedraineerd en naar de spreker overgezet.
+SpellDescription.EnduranceHeal.MainDescription:		Herstelt {0} uithouding.
+SpellDescription.Disarm.MainDescription1:			Ontwapent het doelwit gedurende {0} s.
+SpellDescription.Disarm.MainDescription2:			Kan niet opnieuw toegepast worden tot na {0} s.
+SpellDescription.GroundArea.MainDescription1:		Creëert een “wolk” die iedereen in het gebied treft.
+SpellDescription.GroundArea.MainDescription2:		Area‑effect:
+SpellDescription.CloudsongFall.MainDescription:		Verlaagt valschade met {0}%.
+SpellDescription.DoomHammer.MainDescription:		Brengt {0} {1} toe.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Brengt {0} {1} per puls toe aan het doelwit. Neemt toe met {2}% per puls tot {3}%. Kost {4}% mana per puls.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Brengt {0} {1} per puls toe en verlaagt snelheid met {5}%. Neemt toe met {2}% tot {3}%. Kost {4}% mana per puls.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Brengt {0} {1} per puls toe in een gebied. Neemt toe met {2}% tot {3}%. Kost {4}% mana per puls.
+SpellDescription.RampingDamageFocus.AoESnare:				Brengt {0} {1} per puls toe in een gebied en verlaagt snelheid met {5}%. Neemt toe met {2}% tot {3}%. Kost {4}% mana per puls.
+SpellDescription.HereticPiercingMagic.MainDescription:		Verhoogt de effectiviteit van de spreuken van het doelwit met {0}% en vermindert volledige resists tegen hogere niveaus.
+SpellDescription.SummonNethersbane.MainDescription1:		Roept Nethersbane, de onheilige kling van Arawn, op.
+SpellDescription.SummonNethersbane.MainDescription2:		Doet koudeschade.
+SpellDescription.SummonIcebrand.MainDescription1:			Roept Icebrand, de schaduw‑doordrenkte onheilige kling, op.
+SpellDescription.SummonIcebrand.MainDescription2:			Doet koudeschade.
+SpellDescription.GoldenSpearJavelin.MainDescription:		Roept 5 magische werpsperen op.
+SpellDescription.OmniHeal.MainDescription:					Geeft {0}% gezondheid, uithouding en mana terug.
+SpellDescription.OmniHarm.MainDescription:					Het doelwit verliest {0} uithouding en {1} mana.
+SpellDescription.OmniLifeDrain.MainDescription:				Brengt schade toe; geeft de spreker {0}% als gezondheid, {1}% als mana en {2}% als uithouding terug.
+SpellDescription.PowerHeal.MainDescription:					Herstelt {0}% van de mana van het doelwit.
+SpellDescription.Silence.MainDescription:					Maakt de vijand het zwijgen op voor {0} s.
+SpellDescription.IllusionSpell.MainDescription1:			De oproeper creëert {0} {1} illusies die hem omringen en vijanden verwarren.
+SpellDescription.IllusionSpell.MainDescription2:			Illusies doen {0}% van de schade van de oproeper, hebben {1}% van zijn maximale gezondheid en verdwijnen na {2} s.
+SpellDescription.IllusionSpell.SubDescription1:				De oproeper neemt de vorm van een wezen aan en de {0} illusies delen zijn uiterlijk.
+SpellDescription.IllusionSpell.SubDescription2a:			Illusies bewegen met de oproeper mee en bootsen zijn bewegingen, stijlen en spreuken na.
+SpellDescription.IllusionSpell.SubDescription2b:			Als de spreker beweegt, verdwijnen de illusies en eindigt de spreuk.
+SpellDescription.Bump.MainDescriptionSingle:		Slingert de vijand {0} eenheden omhoog en duwt hem {1}%–{2}% van de maximale afstand vooruit, waardoor hij in de lucht verbluft raakt.
+SpellDescription.Bump.MainDescriptionArea:			Duwt alle vijanden binnen {3} eenheden {0} omhoog en {1}%–{2}% vooruit, waarbij ze in de lucht verbluft raken.
+SpellDescription.Bump.MainDescriptionCone:			Duwt vijanden in een kegel {0} omhoog en {1}%–{2}% vooruit, waarbij ze in de lucht verbluft raken.
+SpellDescription.Conversion.MainDescription:		Zet {0}% van alle ontvangen schade om in gezondheid, uithouding en mana.
+SpellDescription.MagicConversion.MainDescription:	Zet {0}% van alle ontvangen magische schade om in gezondheid, uithouding en mana.
+SpellDescription.Fury.MainDescription:				Verleent {0}% kans om crowd‑control te weerstaan en verhoogt alle magische weerstanden met {0}%.
+SpellDescription.HealthToFatigue.MainDescription:	Verbruikt {0}% van je gezondheid en herstelt {1}% van verloren uithouding.
+SpellDescription.Chamber.MainDescription:			Staat toe een kamer voor te laden met een primaire en secundaire spreuk om ze onmiddellijk op het doelwit los te laten.
+SpellDescription.Chamber.CanContainBolts:			Kan bliksems/bolts bevatten.
+SpellDescription.Chamber.CannotContainBolts:		Kan geen bolts bevatten.
+SpellDescription.FocusShell.MainDescription:		Verlaagt ontvangen melee‑ en spreukschade met {0}%.
+SpellDescription.FocusShell.OnlyInPvPORvR:			Alleen te gebruiken in RvR‑ of PvP‑zones.
+SpellDescription.Powerless.MainDescription:			Staat toe een secundaire spreuk zonder manakosten te werpen.
+SpellDescription.Range.MainDescription:				Staat toe een secundaire spreuk met {0}% bereik te werpen.
+SpellDescription.Uninterruptable.MainDescription:	Staat toe een secundaire spreuk ononderbreekbaar te werpen, maar vermindert de effectiviteit met {0}%.
+SpellDescription.Agony.ConditionDescription:		Vereist dat het doelwit onder “Dread” en “Anguish” staat.
+SpellDescription.Doom.ConditionDescription:			Vereist “Dread”, “Anguish” en “Agony”.
+SpellDescription.Doom.Expires:						Bij afloop:
+SpellDescription.BuffShear.Str:						Verwijdert buffs die Kracht verhogen.
+SpellDescription.BuffShear.Dex:						Verwijdert buffs die Behendigheid verhogen.
+SpellDescription.BuffShear.Con:						Verwijdert buffs die Constitutie verhogen.
+SpellDescription.BuffShear.Acuity:					Verwijdert buffs die Scherpzinnigheid verhogen.
+SpellDescription.BuffShear.StrCon:					Verwijdert Kracht/Constitutie‑buffs.
+SpellDescription.BuffShear.DexQui:					Verwijdert Behendigheid/Snelheid‑buffs.
+SpellDescription.BuffShear.Random:					Verwijdert willekeurig één positieve buff.
+SpellDescription.BuffShear.Ablative:				Verwijdert alle ablatieven schilden.
+SpellDescription.ResistBuff.MainDescription:				Verhoogt weerstand tegen {0} met {1}%.
+SpellDescription.BodySpiritEnergyBuff.MainDescription:		Verhoogt weerstand tegen Lichaam, Geest en Energie met {0}%.
+SpellDescription.HeatColdMatterBuff.MainDescription:		Verhoogt weerstand tegen Hitte, Koude en Materie met {0}%.
+SpellDescription.AllMagicResistsBuff.MainDescription:		Verhoogt alle magische weerstanden met {0}%.
+SpellDescription.SecondaryMagicResistsBuff.MainDescription:	Verhoogt secundaire magische weerstanden met {0}%.
+SpellDescription.AllMeleeResistsBuff.MainDescription:		Verhoogt weerstanden tegen melee‑schade met {0}%.
+SpellDescription.AllResistsBuff.MainDescription:			Verhoogt alle weerstanden met {0}%.
+SpellDescription.EssenceBuff.MainDescription:				Verhoogt weerstand tegen “Essentie”‑schade met {0}%.
+SpellDescription.ResistDebuff.MainDescription:				Verlaagt weerstand tegen {0} van het doelwit met {1}%.
+SpellDescription.CrushSlashThrustDebuff.MainDescription:	Verlaagt weerstanden tegen melee‑schade met {0}%.
+SpellDescription.EssenceDebuff.MainDescription:				Verlaagt weerstanden tegen “Essentie”‑schade.
+SpellDescription.DualStatDebuff.MainDescription:			Verlaagt {0} en {1} van het doelwit met {2}.
+SpellDescription.DualStatBuff.MainDescription:				Verhoogt {0} en {1} met {2}.
+SpellDescription.SingleStatBuff.MainDescription:			Verhoogt {0} met {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Verhoogt aanvalsnelheid met {0}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	Acties verbruiken {0}% minder uithouding.
+SpellDescription.DPSBuff.MainDescription:					Verhoogt DPS met {0}%.
+SpellDescription.MeleeDamageBuff.MainDescription:			Je doet {0}% meer melee‑schade.
+SpellDescription.MesmerizeDurationBuff.MainDescription:		Verlaagt de effectiviteit van hypnose‑spreuken met {0}%.
+SpellDescription.EvadeChanceBuff.MainDescription:			Verleent {0}% kans om te ontwijken.
+SpellDescription.ParryChanceBuff.MainDescription:			Verleent {0}% kans om te pareren.
+SpellDescription.WeaponSkillBuff.MainDescription:			Verhoogt vaardigheid met {0} met {1}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Verhoogt Stealth‑vaardigheid {0} met {1}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Verhoogt Flexibel‑vaardigheid {0} met {1}%.
+SpellDescription.ResiPierceBuff.MainDescription:			Verleent {0}% kans om magische weerstanden te doorboren.
+SpellDescription.CriticalMagicalBuff.MainDescription:		Verhoogt crit‑kans van spreuken met {0}%.
+SpellDescription.CriticalMeleeBuff.MainDescription:			Verhoogt crit‑kans in melee met {0}%.
+SpellDescription.SingleStatDebuff.MainDescription:			Verlaagt {0} met {1}.
+SpellDescription.CombatSpeedDebuff.MainDescription:			Verlaagt aanvalsnelheid van het doelwit met {0}%.
+SpellDescription.MeleeDamageDebuff.MainDescription:			Het doelwit doet {0}% minder melee‑schade.
+SpellDescription.FatigueConsumptionDebuff.MainDescription:	Verhoogt uithoudingsverbruik in gevecht van het doelwit met {0}%.
+SpellDescription.FumbleChanceDebuff.MainDescription:		Verhoogt de kans op uitglijden/fumble van het doelwit met {0}%.
+SpellDescription.DPSDebuff.MainDescription:					Verlaagt DPS met {0}%.
+SpellDescription.SkillsDebuff.MainDescription:				Verlaagt vaardigheden met {0}%.
+SpellDescription.Warlock.SecondarySpell:					Dit is een secundaire spreuk.
+SpellDescription.Warlock.PrimarySpell:						Dit is een primaire spreuk.
+SpellDescription.AllStatsDebuff.MainDescription:			Verlaagt alle attributen van het doelwit met {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:		Verlaagt alle attributen van het doelwit met {0}%.
+SpellDescription.Morph.MainDescription:						Het doelwit is veranderd in {0}.
+SpellDescription.PowerRend.MainDescription:					Het doelwit verliest {0}% van zijn mana.
+SpellDescription.SummonAnimistFnF.MainDescription:		Roept een stationaire toren op op je grond‑doel dat vijanden binnen bereik aanvalt.
+SpellDescription.Bomber.MainDescription:				Roept een elementaire geest op die naar het doelwit vliegt, ontploft en zijn spreuk bij aankomst werpt.
+SpellDescription.SavageParryBuff.MainDescription:		Verhoogt je parreekans met {0}%.
+SpellDescription.SavageEvadeBuff.MainDescription:		Verhoogt je ontwijkkans met {0}%.
+SpellDescription.SavageCombatSpeedBuff.MainDescription:	Verhoogt je aanvalsnelheid met {0}%.
+SpellDescription.SavageDPSBuff.MainDescription:			Verhoogt je melee‑schade met {0}.
+SpellDescription.SavageEnduranceHeal.MainDescription:	Je herstelt {0} uithouding ten koste van een deel van je gezondheid.
+SpellDescription.Archery.SingleTarget:					Brengt {0} {1} toe aan het doelwit.
+SpellDescription.Archery.AreaTarget:					Brengt {0} {1} toe aan het doelwit en omgeving.
+SpellDescription.Archery.SecondaryEffectiveness:		De doeltreffendheid van het schot stijgt met {0}%.
+SpellDescription.WarlockSpeedDecrease.Frog:				Verandert het doelwit in een kikker!
+SpellDescription.MaidenKiss.MainDescription:			Heelt de toestand “Kikker” bij het doelwit.
+SpellDescription.ArawnCure.MainDescription:				Heelt gif, ziekte en res‑sickness.
+SpellDescription.Fear.SingleTarget:						Zaait angst bij de geselecteerde vijand. Raakt geen pets of doelen boven niveau {0}.
+SpellDescription.Fear.AreaTarget:						Zaait angst bij vijandelijke monsters binnen een straal van {1} rond de spreker. Raakt niet boven niveau {0}.
+SpellDescription.FearServant.SingleTarget:				Zaait angst bij een vijandelijke pet. Raakt niet boven niveau {0}.
+SpellDescription.FearServant.AreaTarget:				Zaait angst bij vijandelijke pets binnen {1}. Raakt niet boven niveau {0}.
+SpellDescription.FearServant.SingleTarget&Npc:			Zaait angst bij de geselecteerde vijand. Raakt niet boven niveau {0}.
+SpellDescription.FearServant.AreaTarget&Npc:			Zaait angst bij vijanden binnen {1}. Raakt niet boven niveau {0}.
+SpellDescription.FearServant.PetDescription:			Onder angst kunnen pets niet bestuurd of vrijgelaten worden door hun meester.
+SpellDescription.BainsheePulseDmg.MainDescription:		Het doelwit lijdt {0} {1}.
+SpellDescription.BainsheePulseDmg.AreaDescription:		Raakt alle vijanden nabij de spreker.
+SpellDescription.BainsheePulseDmg.SecondaryDescription:	Opnieuw werpen tijdens het effect annuleert het. Eindigt als de spreker beweegt.
+SpellDescription.BeFriend.MainDescriptionArea:			Betover tijdelijk (tot niveau {0}) nabije monsters zodat ze vriendelijk en bondgenoten worden.
+SpellDescription.BeFriend.MainDescriptionSingle:		Betover tijdelijk (tot niveau {0}) het geselecteerde monster zodat het vriendelijk en bondgenoot wordt.
+SpellDescription.VampiirStealthDetection.MainDescription:	Verhoogt detectie van sluipende vijanden met {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Verlaagt tijdelijk de vaardigheidsbonussen van het doelwit met {0}%.
+SpellDescription.VampiirMeleeResistance.MainDescription:	Verhoogt weerstanden tegen melee‑schade met {0}%.
+SpellDescription.VampiirMagicResistance.MainDescription:	Verhoogt de kans om magische schade te weerstaan met {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Verlaagt tijdelijk de effectiviteit van het doelwit met {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:	In gevecht te werpen.
+SpellDescription.VampiirArmorDebuff.MainDescription:		Verlaagt tijdelijk absorptie en pantserscore van een willekeurig stuk (helm, torso of benen) met {0}%.
+SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Treft alleen helm, torso of benen.
+SpellDescription.VampiirBolt.MainDescription:			Absorbeert {0}% van de mana van het doelwit en zet die om naar de spreker.
+SpellDescription.VampiirBolt.MainDescription2:			Raakt geen doelen boven niveau {0}.
+SpellDescription.IllusionBlade.Part1:					Roept een spectraal wapen op dat even aan je zijde vecht voordat het verdwijnt.
+SpellDescription.IllusionBlade.Part2:					Handelt zelfstandig en kan niet bestuurd, vrijgelaten of geheeld worden.
+SpellDescription.RangeShield.MainDescription:			Beschermt de groep van de spreker tegen fysieke aanvallen van boogschutters.
+SpellDescription.PetSpell.MainDescription1:				Pet‑spreuken:
+SpellDescription.PetSpell.MainDescription2:				Verhoogt de vermelde waarden van het doelwit.
+SpellDescription.Ascendance.MainDescription:			Verhoogt de effectiviteit van je spreuken en vaardigheden aanzienlijk met {0}%.
+SpellDescription.Ascendance.Restrictions:				Tijdens “Opstijging” kun je geen genezingen of verrijzenissen werpen.
+SpellDescription.Ascendance.Interaction:				“Meester van Concentratie” annuleert “Opstijging” en andersom.  
+SpellDescription.Occultist.ConditionDescription1:		Kan niet worden geworpen in Chtonische vorm.
+SpellDescription.Occultist.ConditionDescription2:		Kan niet worden geworpen in Geest‑ of Krankzinnige vorm.
+SpellDescription.Occultist.Summon.UmbralAegis1:			Roept een Gepantserde Aegis op. Uitstekend om te tanken en schade te absorberen.
+SpellDescription.Occultist.Summon.UmbralAegis2:			Geestvorm: Aegis krijgt 200‑straal DD, meer pantser, magische absorptie en hogere vechtsnelheid.
+SpellDescription.Occultist.Summon.Soultorn1:			Roept een Zielgescheurde op. Doet materieschade maar is kwetsbaar voor magie en fysiek.
+SpellDescription.Occultist.Summon.Soultorn2:			Geestvorm: voegt ook materie‑debuff en ziekte toe.
+SpellDescription.Occultist.Summon.UmbralHulk1:			Roept een Gepantserde Kolos op, expert in fysieke schade.
+SpellDescription.Occultist.Summon.UmbralHulk2:			Geestvorm: krijgt 5 s charge, 3 s rug‑stun en hogere kans op off‑hand.
+SpellDescription.Occultist.Summon.ImageOfArawn1:		Roept een Beeltenis van Arawn op. Heelt bondgenoten met enkele heals van 12%.
+SpellDescription.Occultist.Summon.ImageOfArawn2:		Geestvorm: voegt genezing van gif, ziekte en res‑sickness toe en kan nabijzicht verwijderen.  
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Roept een demonische Succubus op die haar doel hypnotiseert.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Geestvorm: de Aartsdemon krijgt een sterke Dex/Qui‑debuff en kan nabijzicht verwijderen.
+SpellDescription.Occultist.SpiritShapeShift1:			Neemt geestvorm aan. {0}% van ontvangen schade wordt geabsorbeerd en omgezet in mana.
+SpellDescription.Occultist.SpiritShapeShift2:			Manaregeneratie +{0} per niveau en stealth‑detectie +{1}%.
+SpellDescription.Occultist.SpiritShapeShift3:			Jouw dienaren worden taaier en krijgen extra vaardigheden.
+SpellDescription.Occultist.ChtonicShapeShift1:			Belichaamt de Chtonische Ridder. AF +{0} per niveau; gezondheid, AF en wapens +{1}%, melee‑absorptie +{2}% en secundaire magische weerstanden +{3}%.  
+SpellDescription.Occultist.ChtonicShapeShift2:			Krijgt ook de vaardigheid Pareren.
+SpellDescription.Occultist.DecrepitShapeShift1:			Belichaamt de Kreupele Magiër. Magische schade +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift2:			Pansterabsorptie +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift3:			Melee‑aanvallers hebben {0}% kans om Ziekte toe te passen; je rottend vlees regenereert en gezondheidsregeneratie +{1}.
+SpellDescription.Occultist.BringerOfDeath1:				Belichaamt de Brenger van de Dood. Je spreuken zijn niet te onderbreken maar werken op {0}% en je ontvangt {1}% minder magische en fysieke schade.
+SpellDescription.Occultist.BringerOfDeath2:				Bewegingssnelheid +{0}% ook in speedwarps of in gevecht. Ook de regen‑bonussen en Ziekte van de Kreupele vorm zijn actief.
+SpellDescription.DamageReturn.MainDescription:			Kaast {0}% van directe magische (geen DoT), melee‑ en projectielschade terug in {1} naar de aanvaller zolang actief.
+SpellDescription.OffProcShear.Main1:					Verwijdert actieve offensieve procs van het doelwit.
+SpellDescription.OffProcShear.Main2:					Brengt een vervloekte vervangende proc aan waarvan de subspreuken de vijanden van het doelwit healen wanneer zij raken.
+SpellDescription.OffProcShear.ReplacementHeader:		Vervangings‑proc:
+
+
+# ML Spells ShortDescriptions
+SpellDescription.Convoker.SummonWood.MainDescription:			Roept willekeurig 100 planken op om poorten en muren van forten te versterken en te repareren.
+SpellDescription.Convoker.PrescienceNode.MainDescription1:		Grondrune (straal 1000) die verborgen vijanden detecteert zonder hun onzichtbaarheid te breken.
+SpellDescription.Convoker.PrescienceNode.MainDescription2:		De rune kan aangevallen worden en heeft {0} gezondheid.
+SpellDescription.Convoker.Prescience.MainDescription1:			Een Aanwezigheidsrune heeft je gedetecteerd!
+SpellDescription.Convoker.Prescience.MainDescription2:			Verleent voorgevoel om vijandelijke bewegingen te voorzien.
+SpellDescription.Convoker.PowerTrap.MainDescription:			Plaats een rune die bij detonatie 20% mana van vijanden draineert (alleen wie mana heeft).
+SpellDescription.Convoker.SpeedWrap.MainDescription:			Rune die snelheidsverhogingen van vijanden die erdoor lopen opheft. 6 s na het verlaten kunnen zij geen snelheids‑spreuken ontvangen.
+SpellDescription.Convoker.SummonWarcrystal.MainDescription:		Roept belegeringsmunitie (hagel, bollen, ijs of rotsen) op en plaatst het in je inventaris.
+SpellDescription.Convoker.Battlewarder.MainDescription1:		Roept een Gevechtswachter op die vijandelijke aanvallen onderschept. Blijft staan en verbruikt mana zolang actief.
+SpellDescription.Convoker.Battlewarder.MainDescription2:		Grond‑doel. Kan naast andere pets bestaan; meerdere wachters kunnen worden opgeroepen.
+SpellDescription.Convoker.DissonanceTrap.MainDescription:		Plaats een rune die bij detonatie {0} {1} toebrengt.
+SpellDescription.Convoker.BrittleGuard.MainDescription1:		Roept een “Brosse Wacht” op die één melee‑treffer voor je kan blokkeren.
+SpellDescription.Convoker.BrittleGuard.MainDescription2:		Heeft één levenspunt en sterft na een treffer. Slechts één tegelijk actief.
+SpellDescription.Convoker.SummonMastery.MainDescription:		Verhoogt het effectieve niveau van je pets en verbetert hun schade en absorptie.
+SpellDescription.Convoker.SummonTitan.MainDescription1:			Roept een Titaan op die groeit in grootte en kracht en verpletterend slaat.
+SpellDescription.Convoker.SummonTitan.MainDescription2:			Blijft staan en valt alleen vijanden binnen melee‑bereik aan.
+SpellDescription.Spymaster.Decoy.MainDescription:				Roept een lokbondgenoot op met epische uitrusting, 1 leven en geen offensieve vaardigheden om af te leiden.
+SpellDescription.Spymaster.Sabotage.MainDescription:			Saboteert een doel (rune of belegeringsmachine) zodat het onbruikbaar wordt.
+SpellDescription.Spymaster.TangleSnare.MainDescription:			Plaats een rune die vijanden in de straal bij detonatie met {0}% vertraagt. Breekt stealth bij gebruik.
+SpellDescription.Spymaster.PoisonSpike.MainDescription:			Plaats een giftige rune die {0} {1} toebrengt aan nabije vijanden. Breekt stealth.
+SpellDescription.Spymaster.Loockout.MainDescription1:			Een stationaire uitkijk detecteert sluipende vijanden binnen {0}. Blijft verborgen als hij niet beweegt.
+SpellDescription.Spymaster.Loockout.MainDescription2:			Het doel moet zittend en onbeweeglijk zijn; bij beweging eindigt het effect.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Rune die zware schade aan belegeringsmachines toebrengt.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		Brengt {0} schade toe bij activatie.
+SpellDescription.Spymaster.EssenceFlare.MainDescription:		Brengt een gif aan dat vijanden 15 s in schemer plaatst.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Verbergt je groep. Bewegen, spreuken of gezang verwijdert het effect voor niet‑sluipenden.
+SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Draineert {0} uithouding van nabije vijanden.
+SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Verleent {0}% extra schade tegen belegeringsmachines en structuren.
+SpellDescription.Battlemaster.MLManadrain.MainDescription:		Draineert {0} mana van nabije vijanden.
+SpellDescription.Battlemaster.Grapple.MainDescription1:			Kort‑bereik effect dat {0} s immobiliseert en effecten opheft.
+SpellDescription.Battlemaster.Grapple.MainDescription2:			Pint het doel vast; kan niet bewegen of melee gebruiken, maar mag 10 s casten/chanteren.
+SpellDescription.Battlemaster.Grapple.MainDescription3:			Een vastgepind doel kan niet in melee worden aangevallen.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	{0}% kans om extra Essentie‑schade met melee te activeren.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		Afstandsaanval die melee‑schadeformules gebruikt.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Melee‑aanvallen zijn 10 s uitgeschakeld na gebruik.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Verlaagt Essentie‑weerstand van nabije vijanden met {0}%.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription2:	Verlaagt Essentie‑weerstand van het doel met {0}%.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Beschermt een bondgenoot nabij tegen melee‑aanvallen. Zolang de beschermer leeft of in bereik is, kan de bondgenoot niet gericht worden.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	Blijft alleen actief als de beschermde stil blijft.
+SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Verlaagt de mobiliteit van het doel met {0}%.
+SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:		Verlaagt de spreeksnelheid van vijanden met {0}%.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Verlaagt mana, gezondheid en uithouding van vijanden in gebied met {0}%.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Verlaagt hulpbronnen in gebied met {0}% en kost jou {1}% van je gezondheid.
+SpellDescription.Banelord.Oppression.MainDescription:			Verlaagt de maximale draagcapaciteit van nabije vijanden met {0}%.
+SpellDescription.Banelord.FatDebuff.MainDescription:			Verhoogt het uithoudingsverbruik van vijandelijke aanvallen met {0}%.
+SpellDescription.Banelord.MissHit.MainDescription:				Verlaagt trefkans van nabije vijanden met {0}%.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Kort‑bereik gebied dat met {0}% vertraagt en de spreker verdovt.
+SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:	Verdooft {0} s en verhindert actie.
+SpellDescription.Banelord.ToHitBuff.MainDescription:			Verhoogt trefkans van nabije bondgenoten met {0}%.
+SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Verlaagt effectiviteit van vijanden (spreuken en melee) met {0}%.
+SpellDescription.Banelord.Banespike.MainDescription:			Verhoogt schade van nabije bondgenoten met {0}%.
+SpellDescription.Banelord.NbTargetAffected.MainDescription:		Tot {0} vijanden kunnen getroffen worden.
+SpellDescription.Perfector.FOH.MainDescription1:				Creëert een sfeer aan je voeten die {0} gezondheid over tijd herstelt bij bondgenoten (tot 40).
+SpellDescription.Perfector.FOH.MainDescription2:				In PvE trekt het de aandacht van vijanden naar de spreker.
+SpellDescription.Perfector.FOP.MainDescription1:				Creëert een sfeer aan je voeten die {0} mana over tijd regenereert bij bondgenoten (tot 40).
+SpellDescription.Perfector.FOP.MainDescription2:				Bondgenoten die in de laatste 10 s vochten in PvE, profiteren niet.
+SpellDescription.Perfector.FOR.MainDescription:					Rune die crowd‑controlduur op nabije bondgenoten met {0}% verkort.
+SpellDescription.Perfector.SickHeal.MainDescription:			Stelt je in staat effecten gerelateerd aan verrijzenis te overwinnen.
+SpellDescription.Perfector.FOD.MainDescription:					Defensieve rune die {0}% mana draineert van vijanden binnen de straal.
+SpellDescription.Perfector.PoT.MainDescription:					Onderhoudende regeneratie die mana per tik met {0}% verhoogt.
+SpellDescription.Perfector.CCResist.MainDescription:			Verhoogt je weerstand tegen controle gedurende {0} s.
+SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Gebied dat {0}% gezondheid, mana en uithouding van nabije bondgenoten regenereert.
+SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Heelt 1000 gezondheid op het doel ten koste van {0}% van je leven.
+SpellDescription.Warlord.CoweringBellow.MainDescription:		Zaait angst bij door spelers bestuurde pets binnen {0} en verlaagt hun effectiviteit.
+SpellDescription.Warlord.Critical.MainDescription1:				Verhoogt de crit‑kans van bondgenoten in je {0} met {1}% voor hun volgende aanval.
+SpellDescription.Warlord.Critical.MainDescription2:				Verhoogt de crit‑kans van het doel met {0}% voor de volgende aanval.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Verlaagt effectiviteit van DoT’s op bondgenoten binnen {0} met {1}%. Als de schade nul wordt, eindigt het effect.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Verlaagt effectiviteit van DoT’s op het doel met {0}%. Eindigt bij nul schade.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Verhoogt effectiviteit van bondgenoten binnen {0} met {1}% (spreuken en melee).
+SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Verhoogt effectiviteit van het doel met {1}% (spreuken en melee).
+SpellDescription.Warlord.MLABSBuff.MainDescription1:			Verhoogt pantserabsorptie van bondgenoten binnen {0} met {1}%.
+SpellDescription.Warlord.MLABSBuff.MainDescription2:			Verhoogt pantserabsorptie van het doel met {1}%.
+SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription:	Vernietigt de doelrune en nabije runen binnen {0}.
+SpellDescription.Sojourner.AncientTransmuter.MainDescription:	Roept een handelaar op voor basisvoorraad kopen/verkopen.
+SpellDescription.Sojourner.Port.MainDescription1:				Teleporteert naar je zielsteen. Werkt niet in gevecht of RvR.
+SpellDescription.Sojourner.Port.MainDescription2:				Teleporteert {0} spelers binnen {1} naar hun zielsteen. Niet in gevecht/RvR.
+SpellDescription.Sojourner.EssenceResist.MainDescription:		Verhoogt weerstand tegen natuurlijke (Essentie) schade met {0}%.
+SpellDescription.Sojourner.Zephyr.MainDescription1:				Roept een zucht op die een vijand in willekeurige richting meevoert en hem onkwetsbaar maakt zolang het duurt.
+SpellDescription.Sojourner.Zephyr.MainDescription2:				Een speler getroffen door een Zefier is {0} min immuun voor een volgende.
+SpellDescription.Sojourner.Phaseshift.MainDescription:			Persoonlijke buff die je bijna onkwetsbaar maakt voor spreuken en melee gedurende {0} s.
+SpellDescription.Sojourner.Groupport.MainDescription:			Brengt je hele groep terug naar je zielsteen. Mislukt als iemand in gevecht is.
+SpellDescription.Stormlord.DazzlingArray.MainDescription1:		Brengt een effect aan dat trefkans van vijanden in het gebied met {0}% verlaagt.
+SpellDescription.Stormlord.DazzlingArray.MainDescription2:		Alleen voor stun‑spreuken; sluit RA en stijlen uit.
+SpellDescription.Stormlord.StormMissHit.MainDescription:		Verlaagt nauwkeurigheid van het doel met {0}%.
+SpellDescription.Stormlord.VacuumVortex.MainDescription:		Grond‑doel dat nabije stormen naar een willekeurig punt aan de rand verplaatst.
+SpellDescription.Stormlord.EnervatingGas.MainDescription:		Stoot gas uit dat uithouding van vijanden met {0}% verlaagt.
+SpellDescription.Stormlord.StormEndudrain.MainDescription:		Storm die {0} uithouding draineert van vijanden binnenin.
+SpellDescription.Stormlord.InebriatingFumes.MainDescription:	Verlaagt geleidelijk Behendigheid en Snelheid met {0}% bij wie binnen blijft.
+SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription:	Verlaagt Behendigheid en Snelheid van het doel met {0}%.
+SpellDescription.Stormlord.MentalSiphon.MainDescription:		Storm die {0} mana draineert van vijanden binnenin.
+SpellDescription.Stormlord.PowerDrainStorm.MainDescription:		Draineert {0} mana van het doel.
+SpellDescription.Stormlord.FocusingWinds.MainDescription:		Creëert een bondige storm en fixeert deze. Eindigt als je beweegt.
+SpellDescription.Stormlord.ChokingVapors.MainDescription:		Verlaagt geleidelijk Kracht en Constitutie met {0}% bij wie binnen blijft.
+SpellDescription.Stormlord.StormStrConstDebuff.MainDescription:	Verlaagt Kracht en Constitutie van het doel met {0}%.
+SpellDescription.Stormlord.SenseDullingCloud.MainDescription:	Storm die de zintuigen afstompt en Scherpzinnigheid met {0}% verlaagt.
+SpellDescription.Stormlord.StormAcuityDebuff.MainDescription:	Verlaagt Scherpzinnigheid van het doel met {0}%.
+SpellDescription.Stormlord.EnergyTempest.MainDescription:		Storm die Essentie‑schade toebrengt aan vijanden binnenin.
+SpellDescription.Stormlord.StormEnergyTempest.MainDescription:	Brengt {0} {1} gedurende {2} s toe aan vijanden binnenin.
+SpellDescription.MLBase.TargetModifier.MainDescription:			Persoonlijke buff die toelaat het bereik van je volgende spreuk (enkel of areaal) te wijzigen of te vergroten.
+SpellDescription.MLBase.BanelordSnare.MainDescription:			Kort‑bereik gebied dat met {0}% vertraagt en de spreker verdovt.
+
+# AblativeArmor
+AblativeArmor.DelveInfo.Function:			Functie: schokdemper tegen melee‑slagen
+AblativeArmor.DelveInfo.Absorption1:			Absorptie: {0}%
+AblativeArmor.DelveInfo.Absorption2:			Absorptie: 100%
+AblativeArmor.DelveInfo.Absorption3:			Absorptie: 25%
+AblativeArmor.DelveInfo.CastingTime:			Instant
+
+# DamageSpeedDecrease
+DamageSpeedDecrease.DelveInfo.Decrease:			Snelheidsverlaging: {0}%
+DamageSpeedDecrease.DelveInfo.Function:			Functie: Snelheidsverlaging + schade
+
+# ResistDebuff
+ResistDebuff.DelveInfo.Decrease:			Verlaagt weerstand {0}: {1}
+ResistDebuff.DelveInfo.Function:			Functie: Weerstandsverlaging
+
+#CharmSpellHandler
+CharmSpellHandler.DelveInfo.Function:			Functie: {0}
+CharmSpellHandler.Species.Humanoid:				Humanoïde
+CharmSpellHandler.Species.Animal:				Dier
+CharmSpellHandler.Species.Insect:				Insect
+CharmSpellHandler.Species.Reptile:				Reptiel
+CharmSpellHandler.Species.HumanoidAnimal:		Humanoïde of Dier
+CharmSpellHandler.Species.HumanoidAnimalInsect:					Humanoïde, Dier en Insect
+CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			Humanoïde, Dier, Insect en Magisch
+CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	Humanoïde, Dier, Insect, Magisch en Ondood
+
+#IllusionSpell SpellHandler
+IllusionSpell.Arrangement.Random:		willekeurig
+IllusionSpell.Arrangement.Circle:		in cirkel
+IllusionSpell.Arrangement.Line:			in lijn
+
+#WarlockSpeedDecrease SpellHandler Appearances
+WarlockSpeedDecrease.Appearance.Frog:			Kikker
+WarlockSpeedDecrease.Appearance.Worm:			Worm
+WarlockSpeedDecrease.Appearance.Lizard:			Hagedis
+WarlockSpeedDecrease.Appearance.Wisp:			Dwaallicht
+WarlockSpeedDecrease.Appearance.Fairy:			Feë
+WarlockSpeedDecrease.Appearance.Scarab:			Scharabee
+WarlockSpeedDecrease.Appearance.Spider:			Spin
+WarlockSpeedDecrease.Appearance.Cyclop:			Cycloop
+WarlockSpeedDecrease.Appearance.Mantis:			Bidsprinkhaan
+WarlockSpeedDecrease.Appearance.Flame:			Vlammetje
+WarlockSpeedDecrease.Appearance.Bird:			Zwaluw
+WarlockSpeedDecrease.Appearance.Simulacrum:		Simulacrum
+
+# DamageAddAndShield
+DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} raakt jou voor {1} extra schade!
+DamageAddAndShield.EventHandlerDA.YouHitExtra:		Jij raakt {0} voor {1} extra schade!
+DamageAddAndShield.EventHandlerDA.YouHitFor:		Jij raakt {0} voor {1} extra schade!
+DamageAddAndShield.EventHandlerDA.YourHitFor:		Jouw {0} raakt {1} voor {2} extra schade!
+DamageAddAndShield.EventHandlerDS.DamageToYou:		{0} raakt jou voor {1} extra schade!
+DamageAddAndShield.EventHandlerDS.YouHitFor:		Jij raakt {0} voor {1} extra schade!
+DamageAddAndShield.EventHandlerDS.YourHitFor:		Jouw {0} raakt {1} voor {2} extra schade!
+
+# DirectDamageDebuffSpellHandler
+DirectDamageDebuffSpellHandler.DelveInfo.Decrease:	Weerstandsverlaging ({0}): {1}%
+DirectDamageDebuffSpellHandler.DelveInfo.Function:	Functie: Schade/Weerstandsverlaging
+
+# DoTSpellHandler
+DoTSpellHandler.SendDamageMessages.YouHitFor:		Je raakt {0} voor {1} schade!
+DoTSpellHandler.SendDamageMessages.YourCriticallyHits:	Jouw {0} treft {1} kritisch en doet {2} extra schade!
+DoTSpellHandler.SendDamageMessages.YourHitsFor:		Jouw {0} raakt {1} voor {2} schade!
+
+# NearsightSpellHandler
+NearsightSpellHandler.DelveInfo.Function:		Functie: Bereiksverlaging {0}
+
+# ProcSpellHandler
+ProcSpellHandler.DelveInfo.Function:			Functie: {0}
+
+Summon.CheckBeginCast.AlreadyHaveaPet:			Je bestuurt al een wezen.
+
+# SummonCommanderPet
+SummonCommanderPet.CheckBeginCast.Text:			Je bestuurt al een Commandant!
+SummonCommanderPet.DelveInfo.Text1:			Functie: Oproepen
+SummonCommanderPet.DelveInfo.Text2:			Roept een Commandant‑pet op.
+SummonCommanderPet.DelveInfo.Text3:			Doelwit: {0}
+SummonCommanderPet.DelveInfo.Text4:			Manakosten: {0}%
+SummonCommanderPet.DelveInfo.Text5:			Spreektijd: {0}
+
+#SummonMinionHandler
+SummonMinionHandler.CheckBeginCast.Text1:		Je moet al een Commandant besturen om een onderdaan voor de groep op te roepen!
+SummonMinionHandler.CheckBeginCast.Text2:		Jouw Commandant bestuurt al het maximum aantal onderdanen!
+SummonMinionHandler.DelveInfo.Text1:			Doelwit: {0}
+SummonMinionHandler.DelveInfo.Text2:			Manakosten: {0}%
+SummonMinionHandler.DelveInfo.Text3:			Spreektijd: {0}
+
+#PetPBAOE
+PetPBAOE.CheckBeginCast.NoPet:				Je kunt deze spreuk niet werpen op een wezen dat je niet bestuurt.
+
+#SummonAnimistFnF
+SummonAnimistFnF.CheckBeginCast.NoGroundTarget:		Je moet een grond‑doel instellen voor deze spreuk!
+SummonAnimistFnF.CheckBeginCast.TurretAreaCap:		Je kunt geen extra torens in dit gebied besturen!
+SummonAnimistFnF.CheckBeginCast.TurretPlayerCap:	Je kunt geen extra torens besturen!
+
+#SummonAnimistPet
+SummonAnimistPet.CheckBeginCast.AlreadyHaveaPet:	Je bestuurt al een wezen!
+SummonAnimistPet.CheckBeginCast.GroundTargetNull:	Je moet een grond‑doel instellen voor deze spreuk!
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInView:	Je hebt je grond‑doel niet in zicht.
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange:	Kies een grond‑doel dat dichterbij is.
+
+#TurretsRelease
+TurretsRelease.CheckBeginCast.NoSelectedTarget:		Je kunt deze spreuk alleen op een door jou bestuurd wezen werpen.
+TurretsRelease.CheckBeginCast.TargetTooFarAway:		Je doelwit is te ver weg.
+
+#PetSpellHandler
+PetSpellHandler.CheckBeginCast.NoControlledBrainForCast:	Je hebt een pet nodig om deze spreuk te werpen!
+
+#SummonNecromancerPet
+SummonNecromancerPet.CheckBeginCast.ShadeEffectIsNotNull:	Je bent al in Schaduw‑vorm!
+SummonNecromancerPet.DelveInfo.Function:			Functie: Pet oproepen
+SummonNecromancerPet.DelveInfo.Description:			Roept een ondode pet op die de spreker dient. De spreker neemt Schaduw‑vorm aan en handelt via zijn pet.
+SummonNecromancerPet.DelveInfo.Target:				Doelwit: {0}
+SummonNecromancerPet.DelveInfo.Power:				Manakosten: {0}%
+SummonNecromancerPet.DelveInfo.CastingTime:			Spreektijd: {0}
+
+#SavageEnduranceHeal
+SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:		Je hebt niet genoeg gezondheid om deze spreuk te werpen!
+
+#AblativeArmorSpellHandler
+AblativeArmor.Target:	Jouw schild absorbeert {0} schade.
+AblativeArmor.Attacker:	Een schild absorbeert {0} van jouw schade!
+
+#Amnesia
+Amnesia.MessageToTarget:	Je geest raakt in de knoop en je vergeet wat je aan het doen was!
+
+# Petrify
+Petrify.Target.Absorbs:		{0} is versteend en absorbeert {1} schade.
+Petrify.Target.Resist:		{0} is versteend en immuun voor deze spreuk.
+Petrify.Self.Message:		{0} is versteend.
+Petrify.Self.Absorb:		Je bent versteend en absorbeert {0} schade.
+Petrify.Self.Unpetrify:		Je keert terug naar de normale toestand.
+
+# Damnation
+Damnation.Self.Message:			Je doelwit is verdoemd.
+Damnation.Self.Message2:		Je weet het nog niet, maar je bent al dood!
+Damnation.Target.Resist:		{0} is verdoemd en immuun voor deze spreuk.
+Damnation.Self.Absorb:			Je bent verdoemd en absorbeert {0} schade!
+Damnation.Target.Absorbs:		{0} is verdoemd en absorbeert {1} schade.
+Damnation.Self.SpellAbsorb:		Jouw verdoemenis laat je {0} magische schade absorberen dankzij je uitrusting.
+Damnation.Target.SpellAbsorbs:	De verdoemenis van {0} absorbeert {1} magische schade dankzij zijn uitrusting.
+Damnation.Self.Resist:			Je bent verdoemd en weerstaat de spreuk.
+Damnation.Target.Resist:		{0} is verdoemd en weerstaat de spreuk.
+Damnation.Kill.SelfHeal:		Het lijk van je vijand revitaliseert je met {0} gezondheid!
+Damnation.Kill.DurationExtended:	Je verdoemde bestaan wordt met {0} s verlengd door een andere ziel te nemen, maar het einde is onvermijdelijk.
+Damnation.Self.CannotBeHealed:	Je bent verdoemd en kunt niet genezen worden!
+
+# Adrenaline
+Adrenaline.Target.Immune:		{0} is in Strijdkoorts en weerstaat volledig!
+Adrenaline.Target.Absorbs:		Je doelwit absorbeert {0} schade van je aanval.
+Adrenaline.Self.Immune:			Jouw Strijdkoorts beschermt je tegen deze spreuk!
+Adrenaline.Self.Absorb:			Je absorbeert {0} schade van de spreuk!
+
+# DebuffImmunity
+DebuffImmunity.You.Resisted:			Je weerstaat dankzij je immuniteit tegen verzwakkingen!
+DebuffImmunity.Target.Resisted:			{0} weerstaat dankzij zijn immuniteit tegen verzwakkingen!
+
+# HealDebuff
+HealDebuffSpellHandler.EffectStart.Target:		De effectiviteit van ontvangen genezingen wordt verlaagd door {0}.
+HealDebuffSpellHandler.EffectStart.Area:		De effectiviteit van genezingen ontvangen door {0} wordt verlaagd door {1}.
+HealDebuffSpellHandler.EffectExpires.Target:	De effectiviteit van genezingen keert terug naar normaal.
+HealDebuffSpellHandler.EffectExpires.Area:		De effectiviteit van genezingen van {0} keert terug naar normaal.
+
+# NecroSummonWeapon
+Spells.NecroSumonWeap.Icebrand.You:				Je roept het zwaard Icebrand op.
+Spells.NecroSumonWeap.Icebrand.Target:			{0} roept het zwaard Icebrand op.
+Spells.NecroSumonWeap.Nethersbane.You:			Je roept het zwaard Nethersbane op.
+Spells.NecroSumonWeap.Nethersbane.Target:		{0} roept het zwaard Nethersbane op.
+
+# StyleHandler
+StyleHandler.StyleNotFound:						Gevechtsstijl niet gevonden.
+StyleHandler.UseStyle:							Je gebruikt de stijl {0} voor je aanvallen.
+StyleHandler.NeedsRequirement:					Vereist {0} om deze stijl uit te voeren.
+StyleHandler.NeedsWeapon:						Je hebt {0} nodig om deze stijl uit te voeren.
+StyleHandler.AllWeaponTypes:					Alle wapentypes zijn compatibel met deze stijl.
+StyleHandler.UnknownWeaponType:					Onbekend vereist wapentype.
+StyleHandler.StyleNotImplemented:				Deze stijl is nog niet geïmplementeerd!
+StyleHandler.Opening.DefensiveActionUsing:		een verdedigende actie met {0}
+StyleHandler.Opening.DefensiveAction:			een verdedigende actie
+StyleHandler.Opening.Positional.Back:			achter de vijand staan
+StyleHandler.Opening.Positional.Side:			aan de zijkant van de vijand staan
+StyleHandler.Opening.Positional.Front:			voor de vijand staan
+StyleHandler.Opening.Positional.Specific:		een specifieke positie t.o.v. de vijand
+StyleHandler.Opening.Default:					een speciale openingsvoorwaarde
+

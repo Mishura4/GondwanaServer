@@ -11,14 +11,6 @@ namespace DOL.GS.Spells
     /// <summary>
     /// Shears any active OffensiveProc effects from the target and, if configured,
     /// immediately applies a replacement OffensiveProc buff whose sub-spell heals the enemy.
-    ///
-    /// Usage/DB:
-    /// - Create an OffensiveProc BUFF spell in DB (e.g. "Cursed Heal Enemy Proc") with:
-    ///     SpellType = "OffensiveProc"
-    ///     Frequency = your proc chance * 100 (e.g. 1000 = 10%)
-    ///     Value     = SpellID of your "HealEnemy" sub-spell (see handler above)
-    /// - In the OffProcShear spell row, set SubSpellID = SpellID of that OffensiveProc BUFF.
-    /// - Cast OffProcShear on an enemy to rip their current offensive proc(s) and replace.
     /// </summary>
     [SpellHandler("OffProcShear")]
     public class OffProcShear : SpellHandler
@@ -39,7 +31,6 @@ namespace DOL.GS.Spells
             if (target == null || !target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active)
                 return false;
 
-            // Standard interrupt/aggro behavior similar to shear spells
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
             if (target is GameNPC npc && npc.Brain is IOldAggressiveBrain aggro)
                 aggro.AddToAggroList(Caster, 1);
@@ -47,12 +38,10 @@ namespace DOL.GS.Spells
             bool removedAny = false;
             var toCancel = new List<GameSpellEffect>();
 
-            // Find any proc-buff effects with SpellType "OffensiveProc"
             foreach (GameSpellEffect eff in target.EffectList.GetAllOfType<GameSpellEffect>())
             {
                 if (eff?.Spell == null) continue;
 
-                // Prefer exact type check; also check SpellType name as a fallback.
                 bool isOffProcType =
                     eff.SpellHandler is OffensiveProcSpellHandler ||
                     eff.SpellHandler is OffensiveProcPvESpellHandler ||
@@ -71,10 +60,8 @@ namespace DOL.GS.Spells
                     removedAny = true;
                 }
 
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.OffProcShear.Removed"),
-                                eChatType.CT_Spell);
-                MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.OffProcShear.YourProcRipped"),
-                                eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Cleric.OffProcShear.Removed"), eChatType.CT_Spell);
+                MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.Cleric.OffProcShear.YourProcRipped"), eChatType.CT_Spell);
             }
 
             // Apply replacement cursed proc if we have one configured in SubSpellID
@@ -92,10 +79,8 @@ namespace DOL.GS.Spells
                         h.StartSpell(target);
                         appliedReplacement = true;
 
-                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.OffProcShear.AppliedCursedProc"),
-                                        eChatType.CT_Spell);
-                        MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.OffProcShear.YouAreCursed"),
-                                        eChatType.CT_Important);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Cleric.OffProcShear.AppliedCursedProc"), eChatType.CT_Spell);
+                        MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.Cleric.OffProcShear.YouAreCursed"), eChatType.CT_Important);
                     }
                 }
             }
@@ -103,12 +88,10 @@ namespace DOL.GS.Spells
             if (!removedAny)
             {
                 SendEffectAnimation(target, 0, false, 0);
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.NoEnhancementFound"),
-                                eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Cleric.OffProcShear.NoEnhancementFound"), eChatType.CT_SpellResisted);
                 return false;
             }
 
-            // If we removed but couldn't apply replacement, still succeed as a shear
             return true;
         }
 
@@ -119,22 +102,54 @@ namespace DOL.GS.Spells
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
         }
 
-        public override IList<string> DelveInfo
+        public override string GetDelveDescription(GameClient delveClient)
         {
-            get
+            int recastSeconds = Spell.RecastDelay / 1000;
+
+            string main1 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.OffProcShear.Main1");
+            string main2 = LanguageMgr.GetTranslation(delveClient, "SpellDescription.OffProcShear.Main2");
+
+            var subIds = new List<int>();
+            if (Spell.SubSpellID > 0) subIds.Add(Spell.SubSpellID);
+            if (Spell.MultipleSubSpells != null) subIds.AddRange(Spell.MultipleSubSpells);
+
+            string subBlock = string.Empty;
+            if (subIds.Count > 0)
             {
-                var list = new List<string>();
-                list.Add("Function: Rip active Offensive Proc(s) from the target.");
-                list.Add(" "); // empty line
-                list.Add("On success: removes any active offensive proc buffs on the target.");
-                list.Add("If configured, applies a cursed replacement proc that heals the target’s enemies on their hits.");
-                if (Spell.Range != 0) list.Add("Range: " + Spell.Range);
-                if (Spell.Power != 0) list.Add("Power cost: " + Spell.Power.ToString("0;0'%'"));
-                list.Add("Casting time: " + (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'"));
-                if (Spell.Radius != 0) list.Add("Radius: " + Spell.Radius);
-                if (Spell.SubSpellID > 0) list.Add("Replacement proc spell ID: " + Spell.SubSpellID);
-                return list;
+                var sb = new System.Text.StringBuilder();
+                string header = LanguageMgr.GetTranslation(delveClient, "SpellDescription.OffProcShear.ReplacementHeader");
+
+                foreach (int sid in subIds)
+                {
+                    Spell sub = SkillBase.GetSpellByID(sid);
+                    if (sub == null) continue;
+
+                    ISpellHandler subHandler = ScriptMgr.CreateSpellHandler(m_caster, sub, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+
+                    if (subHandler == null) continue;
+
+                    string subDesc = subHandler.GetDelveDescription(delveClient);
+                    if (string.IsNullOrWhiteSpace(subDesc)) continue;
+
+                    if (sb.Length > 0) sb.Append('\n');
+                    sb.Append(subDesc);
+                }
+
+                if (sb.Length > 0)
+                    subBlock = header + "\n" + sb.ToString();
             }
+
+            string body = main1 + "\n" + main2;
+            if (!string.IsNullOrEmpty(subBlock))
+                body += "\n\n" + subBlock;
+
+            if (Spell.RecastDelay > 0)
+            {
+                string cd = LanguageMgr.GetTranslation(delveClient, "SpellDescription.Disarm.MainDescription2", recastSeconds);
+                body += "\n\n" + cd;
+            }
+
+            return body;
         }
     }
 }

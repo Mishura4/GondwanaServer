@@ -1,0 +1,5 @@
+# Relics/GameRelicPad (ES)
+GameRelicPad.MountRelic.Captured:			{0} ha capturado: {1}.
+GameRelicPad.MountRelic.Stored:				{0} de {1} ha almacenado {2} en {3}.
+GameRelicPad.OnPlayerEnter.EmptyRelicPad:		Debes encontrar un pedestal de reliquia {0} vacío para colocar esta reliquia.
+GameRelicPad.RemoveRelic.Removed:			{0} de {1} ha retirado {2} de {3}.

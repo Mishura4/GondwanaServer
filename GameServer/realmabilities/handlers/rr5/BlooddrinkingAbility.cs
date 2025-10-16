@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -63,13 +64,12 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("Cause the Shadowblade to be healed for 20% of all damage he does for 30 seconds");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BloodDrinkingAbility.AddEffectsInfo.Info1"));
             list.Add("");
-            list.Add("Target: Self");
-            list.Add("Duration: 30 sec");
-            list.Add("Casting time: Instant");
-            list.Add("Re-use : 5 minutes");
-
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BloodDrinkingAbility.AddEffectsInfo.Info2"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BloodDrinkingAbility.AddEffectsInfo.Info3"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BloodDrinkingAbility.AddEffectsInfo.Info4"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "BloodDrinkingAbility.AddEffectsInfo.Info5"));
         }
 
     }

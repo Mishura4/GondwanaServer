@@ -6,6 +6,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.PropertyCalc;
 using DOL.GS.Spells;
 using System.Collections.Generic;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -96,25 +97,25 @@ namespace DOL.GS.RealmAbilities
         {
             if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
             {
-                list.Add("Level 1: Heals 100 / tick");
-                list.Add("Level 2: Heals 175 / tick");
-                list.Add("Level 3: Heals 250 / tick");
-                list.Add("Level 4: Heals 325 / tick");
-                list.Add("Level 5: Heals 400 / tick");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo3"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo4"));
                 list.Add("");
-                list.Add("Target: Group, except the user");
-                list.Add("Duration: 30 sec");
-                list.Add("Casting time: instant");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info5"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info6"));
             }
             else
             {
-                list.Add("Level 1: Heals 100 / tick");
-                list.Add("Level 2: Heals 250 / tick");
-                list.Add("Level 3: Heals 400 / tick");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info3"));
                 list.Add("");
-                list.Add("Target: Group, except the user");
-                list.Add("Duration: 30 sec");
-                list.Add("Casting time: instant");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info5"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AmelioratingMelodiesAbility.AddEffectsInfo.Info6"));
             }
         }
     }

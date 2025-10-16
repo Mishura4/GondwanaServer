@@ -1,0 +1,5 @@
+# Relics/GameRelicPad (VI)
+GameRelicPad.MountRelic.Captured:			{0} đã chiếm: {1}.
+GameRelicPad.MountRelic.Stored:				{0} của {1} đã cất {2} tại {3}.
+GameRelicPad.OnPlayerEnter.EmptyRelicPad:		Bạn phải tìm một bệ thánh tích {0} trống để đặt thánh tích này.
+GameRelicPad.RemoveRelic.Removed:			{0} của {1} đã gỡ {2} khỏi {3}.

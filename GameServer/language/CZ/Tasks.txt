@@ -1,0 +1,71 @@
+
+Tasks.SystemDisabled: Systém úkolů je momentálně vypnutý.
+Tasks.PvPRvRGvGTasks: ======= ÚKOLY PvP/RvR/GvG =======
+Tasks.PvETasks: ======== ÚKOLY PvE ========
+Tasks.CraftingTasks: == ŘEMESLNÉ ÚKOLY (min. úroveň: {0}) ==
+Tasks.SpecialTasks: ======== SPECIÁLNÍ ÚKOLY ========
+Tasks.TaskCompletionTokenInfo: Každý žeton za splnění úkolu pro PvP, RvR, GvG, PvE či řemeslo je nutné odevzdat Mistrovi úkolů, abyste získali odměnu.
+Tasks.SpecialTaskCompletionTokenInfo: Žetony za splnění speciálních úkolů jsou jedinečné pro každý úkol. Odemknou nové hráčské tituly a poskytnou zvláštní bonusy spojené s těmito tituly.
+Tasks.SnapshotTitle: ÚKOLY
+Tasks.KillEnemyPlayersGroup: Zabít nepřátelské hráče (ve skupině)
+Tasks.KillEnemyPlayersAlone: Zabít nepřátelské hráče (solo)
+Tasks.KillKeepGuards: Zabít stráže pevnosti
+Tasks.TakeKeeps: Dobýt pevnosti
+Tasks.RvRChampionOfTheDay: Stát se RvR šampionem dne
+Tasks.KillTerritoryGuards: Zabít stráže území
+Tasks.KillTerritoryBoss: Dobytí území
+Tasks.TurnInPvPGvGTaskToken: Odevzdat žeton za splnění úkolu PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: Zabít bytosti v kobkách
+Tasks.KillOutdoorsCreatures: Zabít bytosti ve volné přírodě
+Tasks.KillAnimalCreatures: Zabít zvířata
+Tasks.KillDemonCreatures: Zabít démony
+Tasks.KillDragonCreatures: Zabít draky
+Tasks.KillElementalCreatures: Zabít elementály
+Tasks.KillGiantCreatures: Zabít obry
+Tasks.KillHumanoidCreatures: Zabít humanoidy
+Tasks.KillInsectCreatures: Zabít hmyz
+Tasks.KillMagicalCreatures: Zabít magické bytosti
+Tasks.KillReptileCreatures: Zabít plazy
+Tasks.KillPlantCreatures: Zabít rostlinné bytosti
+Tasks.KillUndeadCreatures: Zabít nemrtvé
+Tasks.TurnInPvETaskToken: Odevzdat žeton za splnění úkolu PvE
+Tasks.SuccessfulItemCombinations: Úspěšné kombinace předmětů
+Tasks.MasteredCrafts: Zvládnutá řemesla
+Tasks.MasterpieceCrafted: Vytvořená mistrovská díla
+Tasks.TurnInCraftingTaskToken: Odevzdat žeton za splnění řemeslného úkolu
+Tasks.EpicBossesSlaughtered: Zabito epických bossů
+Tasks.ItemsSoldToPlayers: Úspěšné tržní obchody
+Tasks.SuccessfulPvPThefts: Úspěšné krádeže hráčům
+Tasks.OutlawPlayersSentToJail: Zabít psance
+Tasks.EnemiesKilledInAdrenalineMode: Nepřátelé zabití ve stavu Adrenalinu
+Tasks.EnemyKilledInDuel: Vítězství v duelech
+Tasks.QuestsCompleted: Splněné úkoly
+Tasks.MaxLevelReached: Maximální úroveň
+Tasks.Level: Úroveň {0}
+
+Tasks.KillEnemyPlayersGroupLog: Zabít nepřátelské hráče (ve skupině): {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Zabít nepřátelské hráče (solo): {0}/{1}
+Tasks.KillKeepGuardsLog: Zabít stráže pevnosti: {0}/{1}
+Tasks.TakeKeepsLog: Dobýt pevnosti: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Zabít stráže území: {0}/{1}
+Tasks.KillTerritoryBossLog: Dobytí území: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Úspěšné kombinace předmětů: {0}/{1}
+Tasks.MasteredCraftsLog: Zvládnutá řemesla: {0}/{1}
+Tasks.MasterpieceCraftedLog: Vytvořená mistrovská díla: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Zabito epických bossů: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Úspěšné tržní obchody: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Úspěšné krádeže hráčům: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Zabít psance: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Nepřátelé zabití ve stavu Adrenalinu: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Vítězství v duelech: {0}/{1}
+Tasks.QuestsCompletedLog: Splněné úkoly: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Úkol: Získáváš žeton za splnění úkolu PvP/RvR/GvG — úroveň {0}
+Tasks.TurnInPvETaskTokenMessage: Úkol: Získáváš žeton za splnění úkolu PvE — úroveň {0}
+Tasks.TurnInCraftingTaskTokenMessage: Úkol: Získáváš žeton za splnění řemeslného úkolu — úroveň {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Úkol: Získáváš speciální žeton „Demon Slayer“ — úroveň {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Úkol: Získáváš speciální žeton „Trader“ — úroveň {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Úkol: Získáváš speciální žeton „Thief“ — úroveň {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Úkol: Získáváš speciální žeton „Bounty Hunter“ — úroveň {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Úkol: Získáváš speciální žeton „Wrath“ — úroveň {0}
+Tasks.EnemyKilledInDuelSpecialToken: Úkol: Získal(a) jsi žeton Duelisty — úroveň {0}
+Tasks.QuestsCompletedSpecialToken: Úkol: Získáváš speciální žeton „Adventurer“ — úroveň {0}

@@ -28,19 +28,13 @@ namespace DOL.GS.Spells
                 if (moc != null && Spell.AmnesiaChance <= 0)
                 {
                     moc.Cancel(false);
-                    player.Out.SendMessage(
-                        LanguageMgr.GetTranslation(player.Client, "SpellDescription.Ascendance.CanceledMoC")
-                        ?? "Your Mastery of Concentration fades as Ascendance takes over.",
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Cleric.Ascendance.CanceledMoC"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
 
                 player.Out.SendUpdateWeaponAndArmorStats();
                 player.Out.SendStatusUpdate();
 
-                MessageToLiving(player,
-                    LanguageMgr.GetTranslation(player.Client, "SpellDescription.Ascendance.OnStart", (int)Spell.Value)
-                    ?? $"You ascend, increasing effectiveness by {(int)Spell.Value}%.",
-                    eChatType.CT_Spell);
+                MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.Cleric.Ascendance.OnStart"), eChatType.CT_Spell);
             }
         }
 
@@ -60,10 +54,7 @@ namespace DOL.GS.Spells
 
                 if (!noMessages)
                 {
-                    MessageToLiving(player,
-                        LanguageMgr.GetTranslation(player.Client, "SpellDescription.Ascendance.OnEnd")
-                        ?? "Your ascended state fades.",
-                        eChatType.CT_Spell);
+                    MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.Cleric.Ascendance.OnEnd"), eChatType.CT_Spell);
                 }
             }
 

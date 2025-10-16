@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -48,10 +49,10 @@ namespace DOL.GS.RealmAbilities
             GamePlayer player = living as GamePlayer;
             if (player != null)
             {
-                if (healed > 0) player.Out.SendMessage("You gain " + healed + " mana.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                if (healed > 0) player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MysticCrystalLoreAbility.YouGainMana", healed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 if (heal > healed)
                 {
-                    player.Out.SendMessage("You have full mana.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MysticCrystalLoreAbility.YouFullMana"), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
             }
             if (healed > 0) DisableSkill(living);
@@ -66,23 +67,27 @@ namespace DOL.GS.RealmAbilities
         {
             if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
             {
-                list.Add("Level 1: Value: 25%");
-                list.Add("Level 2: Value: 40%");
-                list.Add("Level 3: Value: 60%");
-                list.Add("Level 4: Value: 80%");
-                list.Add("Level 5: Value: 100%");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo3"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo5"));
                 list.Add("");
-                list.Add("Target: Self");
-                list.Add("Casting time: instant");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info5"));
+                list.Add("");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info6"));
             }
             else
             {
-                list.Add("Level 1: Value: 25%");
-                list.Add("Level 2: Value: 60%");
-                list.Add("Level 3: Value: 100%");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info3"));
                 list.Add("");
-                list.Add("Target: Self");
-                list.Add("Casting time: instant");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info5"));
+                list.Add("");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "MysticCrystalLoreAbility.AddEffectsInfo.Info6"));
             }
         }
     }

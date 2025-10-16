@@ -4,8 +4,8 @@
 # /DashingDefenseAbility
 DashingDefenseAbility.AddEffectsInfo.Info1:		
 DashingDefenseAbility.AddEffectsInfo.Info2:		Target: Self
-DashingDefenseAbility.AddEffectsInfo.Info3:		Casting time: instant
-DashingDefenseAbility.Execute.AlreadyEffect:		You already an effect of that type!
+DashingDefenseAbility.AddEffectsInfo.Info3:		Casting time: Instant
+DashingDefenseAbility.Execute.AlreadyEffect:	You already have an effect of that type!
 DashingDefenseAbility.Execute.MustInGroup:		You must be in a group to use this ability!
 
 # /FirstAidAbility
@@ -13,86 +13,190 @@ FirstAidAbility.AddEffectsInfo.Info1:			Level 1: Value: 25%
 FirstAidAbility.AddEffectsInfo.Info2:			Level 2: Value: 60%
 FirstAidAbility.AddEffectsInfo.Info3:			Level 3: Value: 100%
 FirstAidAbility.AddEffectsInfo.Info4:			Target: Self
-FirstAidAbility.AddEffectsInfo.Info5:			Casting time: instant
+FirstAidAbility.AddEffectsInfo.Info5:			Casting time: Instant
 FirstAidAbility.AddEffectsInfo.Info6:			
 FirstAidAbility.Execute.FullyHealed:			You are fully healed.
 FirstAidAbility.Execute.HealYourself:			You heal yourself for {0} hit points.
 
 # /PurgeAbility
-PurgeAbility.AddEffectsInfo.Info1:			Level 1 of this ability has a five second delay when triggering this ability before it activates. Higher levels of Purge do not have this delay.
-PurgeAbility.AddEffectsInfo.Info2:			Target: Self
-PurgeAbility.AddEffectsInfo.Info3:			Casting time: instant
-PurgeAbility.OnTick.PurgeActivate:			Purge activates in {0} seconds!
+PurgeAbility.AddEffectsInfo.Info1:					Level 1 of this ability has a five second delay when triggering this ability before it activates. Higher levels of Purge do not have this delay.
+PurgeAbility.AddEffectsInfo.Info2:					Target: Self
+PurgeAbility.AddEffectsInfo.Info3:					Casting time: instant
+PurgeAbility.OnTick.PurgeActivate:					Purge activates in {0} seconds!
 PurgeAbility.RemoveNegativeEffects.FallFromYou:		All negative effects fall from you.
 
 # /RealmAbility
 RealmAbility.AddReUseDelayInfo.Every:			Level {0}: Can use every: {1}
 RealmAbility.CheckPreconditions.BeInCombat:		You must be in combat recently to use this ability!
 RealmAbility.CheckPreconditions.BeInGroup:		You must be in a group use this ability!
-RealmAbility.CheckPreconditions.Combat:		You have been in combat recently and cannot use this ability!
+RealmAbility.CheckPreconditions.Combat:			You have been in combat recently and cannot use this ability!
 RealmAbility.CheckPreconditions.Dead:			You cannot use this ability while dead!
 RealmAbility.CheckPreconditions.Mesmerized:		You cannot use this ability while mesmerized!
 RealmAbility.CheckPreconditions.Sitting:		You cannot use this ability while sitting!
 RealmAbility.CheckPreconditions.Stealthed:		You cannot use this ability while stealthed!
 RealmAbility.CheckPreconditions.Stunned:		You cannot use this ability while stunned!
 
-RealmAbility.SendCasterSpellEffectAndCastMessage.Caster:{0} casts a spell!
-RealmAbility.SendCasterSpellEffectAndCastMessage.You:	You cast a {0} Spell!
-RealmAbility.SendCastMessage.PlayerCasts:		{0} casts a spell!
-RealmAbility.SendCastMessage.YouCast:			You cast a {0} Spell!
+RealmAbility.SendCasterSpellEffectAndCastMessage.Caster:	{0} casts a spell!
+RealmAbility.SendCasterSpellEffectAndCastMessage.You:		You cast a {0} Spell!
+RealmAbility.SendCastMessage.PlayerCasts:					{0} casts a spell!
+RealmAbility.SendCastMessage.YouCast:						You cast a {0} Spell!
 
 # /AdrenalineRushAbility
-AdrenalineRushAbility.AddEffectsInfo.Info1:		
-AdrenalineRushAbility.AddEffectsInfo.Info2:		
-AdrenalineRushAbility.AddEffectsInfo.Info3:		
-AdrenalineRushAbility.AddEffectsInfo.Info4:		
-AdrenalineRushAbility.AddEffectsInfo.Info5:		
+AdrenalineRushAbility.AddEffectsInfo.Info1:		Level 1: Duration: 20 Seconds
+AdrenalineRushAbility.AddEffectsInfo.Info2:		Level 2: Duration: 20 Seconds
+AdrenalineRushAbility.AddEffectsInfo.Info3:		Level 3: Duration: 20 Seconds
+AdrenalineRushAbility.AddEffectsInfo.Info4:		Target: Self
+AdrenalineRushAbility.AddEffectsInfo.Info5:		Casting time: Instant
 
 # /BedazzlingAuraAbility
-BedazzlingAuraAbility.AddEffectsInfo.Info1:
-BedazzlingAuraAbility.AddEffectsInfo.Info2:
-BedazzlingAuraAbility.AddEffectsInfo.Info3:
-BedazzlingAuraAbility.AddEffectsInfo.Info4:
-BedazzlingAuraAbility.AddEffectsInfo.Info5:
+BedazzlingAuraAbility.AddEffectsInfo.Info1:		Level 1: Duration: 30 Seconds
+BedazzlingAuraAbility.AddEffectsInfo.Info2:		Level 2: Duration: 30 Seconds
+BedazzlingAuraAbility.AddEffectsInfo.Info3:		Level 3: Duration: 30 Seconds
+BedazzlingAuraAbility.AddEffectsInfo.Info4:		Target: Group
+BedazzlingAuraAbility.AddEffectsInfo.Info5:		Casting time: Instant
 
 # /ConcentrationAbility
 ConcentrationAbility.AddEffectsInfo.Info1:	Level 1: Value: 25%
 ConcentrationAbility.AddEffectsInfo.Info2:	Level 2: Value: 60%
 ConcentrationAbility.AddEffectsInfo.Info3:	Level 3: Value: 100%
 ConcentrationAbility.AddEffectsInfo.Info4:	Target: Self
-ConcentrationAbility.AddEffectsInfo.Info5:	Casting time: instant
+ConcentrationAbility.AddEffectsInfo.Info5:	Casting time: Instant
 
 # /JuggernautAbility
-JuggernautAbility.AddEffectsInfo.Info1:
-JuggernautAbility.AddEffectsInfo.Info2:
-JuggernautAbility.AddEffectsInfo.Info3:
-JuggernautAbility.AddEffectsInfo.Info4:
-JuggernautAbility.AddEffectsInfo.Info5:
+JuggernautAbility.AddEffectsInfo.Info1:			Level 1: Duration: 1:00 Minute
+JuggernautAbility.AddEffectsInfo.Info2:			Level 2: Duration: 1:00 Minute
+JuggernautAbility.AddEffectsInfo.Info3:			Level 3: Duration: 1:00 Minute
+JuggernautAbility.AddEffectsInfo.Info4:			Target: Controlled Pet
+JuggernautAbility.AddEffectsInfo.Info5:			Casting time: Instant
+JuggernautAbility.CannotUse.Dead:				You cannot use this ability while dead!
+JuggernautAbility.CannotUse.Mez:				You cannot use this ability while mesmerized!
+JuggernautAbility.CannotUse.Stunned:			You cannot use this ability while stunned!
+JuggernautAbility.CannotUse.Sitting:			You cannot use this ability while sitting!
+JuggernautAbility.Require.PetControlled:		You must have a pet controlled to use this ability!
+JuggernautAbility.Require.PetInRange:			Your pet is too far away!
+JuggernautAbility.AlreadyActive:				Your Pet already has an ability of this type active.
 
 # /MasteryofConcentrationAbility
-MasteryofConcentrationAbility.AddEffectsInfo.Info1:
-MasteryofConcentrationAbility.AddEffectsInfo.Info2:
-MasteryofConcentrationAbility.AddEffectsInfo.Info3:
-MasteryofConcentrationAbility.AddEffectsInfo.Info4:
-MasteryofConcentrationAbility.AddEffectsInfo.Info5:
+MasteryofConcentrationAbility.AddEffectsInfo.Info1:		Level 1: Duration: 30 Seconds
+MasteryofConcentrationAbility.AddEffectsInfo.Info2:		Level 2: Duration: 30 Seconds
+MasteryofConcentrationAbility.AddEffectsInfo.Info3:		Level 3: Duration: 30 Seconds
+MasteryofConcentrationAbility.AddEffectsInfo.Info4:		Target: Self
+MasteryofConcentrationAbility.AddEffectsInfo.Info5:		Casting time: Instant
+MasteryofConcentrationAbility.BlockedByShield:			You cannot currently use this ability.
+MasteryofConcentrationAbility.Self.Cast:				You cast {0}!
+MasteryofConcentrationAbility.Self.Steadier:			You become steadier in your casting abilities!
+MasteryofConcentrationAbility.Area.CastsSpell:			{0} casts a spell!
+MasteryofConcentrationAbility.Area.Poise:				{0}'s castings have perfect poise!
 
 # /MysticCrystalLoreAbility
-MysticCrystalLoreAbility.AddEffectsInfo.Info1:	Level 1: Value: 25%
-MysticCrystalLoreAbility.AddEffectsInfo.Info2:	Level 2: Value: 60%
-MysticCrystalLoreAbility.AddEffectsInfo.Info3:	Level 3: Value: 90%
-MysticCrystalLoreAbility.AddEffectsInfo.Info4:	Target: Self
-MysticCrystalLoreAbility.AddEffectsInfo.Info5:	Casting time: instant
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo1:	Level 1: Value: 25%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo2:	Level 2: Value: 40%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo3:	Level 3: Value: 60%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo4:	Level 3: Value: 80%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo5:	Level 3: Value: 100%
+MysticCrystalLoreAbility.AddEffectsInfo.Info1:			Level 1: Value: 25%
+MysticCrystalLoreAbility.AddEffectsInfo.Info2:			Level 2: Value: 60%
+MysticCrystalLoreAbility.AddEffectsInfo.Info3:			Level 3: Value: 90%
+MysticCrystalLoreAbility.AddEffectsInfo.Info4:			Target: Self
+MysticCrystalLoreAbility.AddEffectsInfo.Info5:			Casting time: Instant
+MysticCrystalLoreAbility.AddEffectsInfo.Info6:			This spell cannot be cast during combat.
+MysticCrystalLoreAbility.YouGainMana:					You gain {0} mana.
+MysticCrystalLoreAbility.YouFullMana:					You have full mana.
 
 # /NegativeMaelstromAbility
-NegativeMaelstromAbility.AddEffectsInfo.Info1:
-NegativeMaelstromAbility.AddEffectsInfo.Info2:
-NegativeMaelstromAbility.AddEffectsInfo.Info3:
-NegativeMaelstromAbility.AddEffectsInfo.Info4:
-NegativeMaelstromAbility.AddEffectsInfo.Info5:
-NegativeMaelstromAbility.AddEffectsInfo.Info6:
-NegativeMaelstromAbility.AddEffectsInfo.Info7:
-NegativeMaelstromAbility.AddEffectsInfo.Info8:
-NegativeMaelstromAbility.AddEffectsInfo.Info9:
+NegativeMaelstromAbility.AddEffectsInfo.Info1:			Level 1: Duration: 30 Seconds
+NegativeMaelstromAbility.AddEffectsInfo.Info2:			Level 2: Duration: 30 Seconds
+NegativeMaelstromAbility.AddEffectsInfo.Info3:			Level 3: Duration: 30 Seconds
+NegativeMaelstromAbility.AddEffectsInfo.Info4:			Target: Area
+NegativeMaelstromAbility.AddEffectsInfo.Info5:			Range: 1500
+NegativeMaelstromAbility.AddEffectsInfo.Info6:			Frequency: 4.5 Seconds
+NegativeMaelstromAbility.AddEffectsInfo.Info7:			Casting time: 2.0 Seconds
+NegativeMaelstromAbility.AddEffectsInfo.Info8:			Radius: 350
+NegativeMaelstromAbility.AddEffectsInfo.Info9:			Damage Type: Cold
+NegativeMaelstromAbility.Require.StandingStill:			You must be standing still to use this ability!
+NegativeMaelstromAbility.Require.GroundTargetInRange:	You ground target is too far away to use this ability!
+NegativeMaelstromAbility.AlreadyCasting:				You are already casting an ability.
+NegativeMaelstromAbility.Self.Cast:						You cast {0}!
+NegativeMaelstromAbility.Area.CastsSpell:				{0} casts a spell!
+
+# /ArmsLengthAbility
+ArmsLengthAbility.AddEffectsInfo.Info1:					10 second unbreakable burst of extreme speed.
+ArmsLengthAbility.AddEffectsInfo.Info2:					Target: Self
+ArmsLengthAbility.AddEffectsInfo.Info3:					Duration: 10 sec
+ArmsLengthAbility.AddEffectsInfo.Info4:					Casting time: Instant
+
+# /DecimationTrapAbility
+DecimationTrapAbility.AddEffectsInfo.Info1:             Trap that deals the following damage in an 350 radius
+DecimationTrapAbility.AddEffectsInfo.Info2:             Level 1: 300 Damage
+DecimationTrapAbility.AddEffectsInfo.Info3:             Level 2: 600 Damage
+DecimationTrapAbility.AddEffectsInfo.Info4:             Level 3: 900 Damage
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo1:      Level 2: 450 Damage
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo2:      Level 3: 600 Damage
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo3:      Level 4: 750 Damage
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo4:      Level 5: 900 Damage
+DecimationTrapAbility.AddEffectsInfo.Info5:             Range: 1500
+DecimationTrapAbility.AddEffectsInfo.Info6:             Target: Ground Target
+DecimationTrapAbility.AddEffectsInfo.Info7:             Radius: 350
+DecimationTrapAbility.AddEffectsInfo.Info8:             Casting time: 2 seconds
+DecimationTrapAbility.CancelCast:						You cancel your Spell!
+DecimationTrapAbility.Hit.Enemy:						You hit {0} for {1} ({2}) points of damage!
+
+# /BoilingCauldronAbility
+BoilingCauldronAbility.AddEffectsInfo.Info1:            Summon a cauldron that boil in place for 3.5s before spilling and doing damage to all those nearby. 15min RUT.
+BoilingCauldronAbility.AddEffectsInfo.Info2:            Target: Enemy
+BoilingCauldronAbility.AddEffectsInfo.Info3:            Duration: 3.5s
+BoilingCauldronAbility.AddEffectsInfo.Info4:            Casting time: Instant
+
+# /AmelioratingMelodiesAbility
+AmelioratingMelodiesAbility.AddEffectsInfo.Info1:       Level 1: Heals 100 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.Info2:       Level 2: Heals 250 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.Info3:       Level 3: Heals 400 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo1:       Level 2: Heals 175 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo2:       Level 3: Heals 250 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo3:       Level 4: Heals 325 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo4:       Level 5: Heals 400 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.Info4:       Target: Group, except the user
+AmelioratingMelodiesAbility.AddEffectsInfo.Info5:       Duration: 30 sec
+AmelioratingMelodiesAbility.AddEffectsInfo.Info6:       Casting time: Instant
+
+# /AngerOfTheGodsAbility
+AngerOfTheGodsAbility.AddEffectsInfo.Info1:             Level 1: Adds 10 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.Info2:             Level 2: Adds 20 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.Info3:             Level 3: Adds 30 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo1:		Level 2: Adds 15 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo2:		Level 3: Adds 20 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo3:		Level 4: Adds 25 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo4:		Level 5: Adds 30 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.Info4:             Target: Group
+AngerOfTheGodsAbility.AddEffectsInfo.Info5:             Duration: 30 sec
+AngerOfTheGodsAbility.AddEffectsInfo.Info6:             Casting time: Instant
+
+# /BloodDrinkingAbility
+BloodDrinkingAbility.AddEffectsInfo.Info1:				Cause the Shadowblade to be healed for 20% of all damage he does for 30 seconds
+BloodDrinkingAbility.AddEffectsInfo.Info2:				Target: Self
+BloodDrinkingAbility.AddEffectsInfo.Info3:				Duration: 30 sec
+BloodDrinkingAbility.AddEffectsInfo.Info4:				Casting time: Instant
+BloodDrinkingAbility.AddEffectsInfo.Info5:				Re-use : 5 minutes
+
+# /SoldiersCitadelAbility
+SoldiersCitadelAbility.AddEffectsInfo.Info1:            +50% block/parry 30s, -10% block/parry 15s.
+SoldiersCitadelAbility.AddEffectsInfo.Info2:            Target: Self
+SoldiersCitadelAbility.AddEffectsInfo.Info3:            Duration: 45 sec
+SoldiersCitadelAbility.AddEffectsInfo.Info4:            Casting time: Instant
+
+# /SputinsLegacyAbility
+SputinsLegacyAbility.AddEffectsInfo.Info1:              The Healer won't die for 30sec.
+SputinsLegacyAbility.AddEffectsInfo.Info2:              Target: Self
+SputinsLegacyAbility.AddEffectsInfo.Info3:              Duration: 30 sec
+SputinsLegacyAbility.AddEffectsInfo.Info4:              Casting time: Instant
+
+# /TestudoAbility
+TestudoAbility.AddEffectsInfo.Info1:    Warrior with shield equipped covers up and takes 90% less damage for all attacks for 45 seconds.
+TestudoAbility.AddEffectsInfo.Info2:    Can only move at reduced speed (speed buffs have no effect) and cannot attack.
+TestudoAbility.AddEffectsInfo.Info3:    Using a style will break testudo form. This ability is only effective versus realm enemies.
+TestudoAbility.AddEffectsInfo.Info4:    Target: Self
+TestudoAbility.AddEffectsInfo.Info5:    Duration: 45 sec
+TestudoAbility.AddEffectsInfo.Info6:	Casting time: Instant
 
 # /RAPropertyEnhancer
 RAPropertyEnhancer.DelveInfo.Info1:		Level {0}: Amount: {1}{2}
@@ -101,20 +205,45 @@ RAPropertyEnhancer.DelveInfo.Info1:		Level {0}: Amount: {1}{2}
 RAStatEnhancer.DelveInfo.Info1:			Level {0}: Amount: {1}
 
 # /SecondWindAbility
-SecondWindAbility.AddEffectsInfo.Info1:			
-SecondWindAbility.AddEffectsInfo.Info4:			
-SecondWindAbility.AddEffectsInfo.Info5:	
+SecondWindAbility.AddEffectsInfo.Info1:		Value: 100%
+SecondWindAbility.AddEffectsInfo.Info4:		Target: Self
+SecondWindAbility.AddEffectsInfo.Info5:		Casting time: Instant
 
-# /ShadowStrikeAbility		
-ShadowStrikeAbility.Moving:				You move and interrupt your shadow strike!
-ShadowStrikeAbility.Attacked:			You're attacked and interrupt your shadow strike!
-ShadowStrikeAbility.Target:				You need to target a living object to use this ability.
+# /ShadowStrikeAbility
+ShadowStrikeAbility.AddEffectsInfo.Info1:   The Assassin takes 10 seconds to disappear in the shadows.
+ShadowStrikeAbility.AddEffectsInfo.Info2:   Once in the shadows the Assassin will automatically teleport to and perform perforate artery to any enemy they choose within 1000 radius.
+ShadowStrikeAbility.AddEffectsInfo.Info3:   This ability cannot be used to enter a locked keep or tower.
+ShadowStrikeAbility.Moving:					You move and interrupt your shadow strike!
+ShadowStrikeAbility.Attacked:				You're attacked and interrupt your shadow strike!
+ShadowStrikeAbility.Target:					You need a living target to use this ability.
 
-# /Assassinate		
-AssassinateAbility.Moving:				You move and interrupt your action!
-AssassinateAbility.Attacked:			You're attacked and interrupt your action!
-AssassinateAbility.Target:				You need to target a living object to use this ability.
-AssassinateAbility.Preparing:			You're preparing to assassinate
+# /Assassinate
+AssassinateAbility.AddEffectsInfo.Info1:	The Assassin selects a target within a 750-unit range and spends 15 seconds, without moving, preparing the assassination attempt.
+AssassinateAbility.AddEffectsInfo.Info2:	The attempt will fail if the assassin takes any action during those 15 seconds, or if the target moves more than 750 units away from the target and the recast timer is not refunded.
+AssassinateAbility.AddEffectsInfo.Info3:	Once prepared, the next attack on that target by the assassin will not break stealth.
+AssassinateAbility.Moving:					You move and interrupt your action!
+AssassinateAbility.Attacked:				You're attacked and interrupt your action!
+AssassinateAbility.Target:					You need a living target to use this ability.
+AssassinateAbility.Preparing:				You're preparing to assassinate
+
+# /CallOfDarknessAbility
+CallOfDarknessAbility.AddEffectsInfo.Info1: Summon pet in 3 seconds, 1 minute duration, 15 minute RUT.
+CallOfDarknessAbility.AddEffectsInfo.Info2: Target: Self
+CallOfDarknessAbility.AddEffectsInfo.Info3: Duration: 1 min
+CallOfDarknessAbility.AddEffectsInfo.Info4: Casting time: Instant
+
+# /CallOfShadowsAbility
+CallOfShadowsAbility.AddEffectsInfo.Info1:  Become a demon of the void for 30 seconds.
+CallOfShadowsAbility.AddEffectsInfo.Info2:	You gain the benefits of both Decrepit and Chthonic forms, with their bonuses increased by 10%.
+CallOfShadowsAbility.AddEffectsInfo.Info3:	You inflict a wasting disease on the target, slowing its movement.
+CallOfShadowsAbility.AddEffectsInfo.Info4:	Pets become more powerful, as if under Spirit form.
+CallOfShadowsAbility.AddEffectsInfo.Info5:	Your spells cannot be interrupted.
 
 # /TrueShot		
 TrueshotAbility.PrepareTrueshot:		You prepare a Trueshot!
+
+# /ArrowSummoning
+ArrowSummoningAbility.NoSpaceInventory:	You do not have enough inventory space to place this item!
+
+# /ChargeAbility
+ChargeAbility.CheckPreconditions.Snared:				You may not use this ability while snared!

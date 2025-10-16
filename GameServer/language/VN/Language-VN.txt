@@ -1,0 +1,96 @@
+# LANGUAGEMGR (VI)
+System.LanguagesName.EN:				Tiếng Anh
+System.LanguagesName.FR:				Tiếng Pháp
+System.LanguagesName.DE:				Tiếng Đức
+System.LanguagesName.ES:				Tiếng Tây Ban Nha
+System.LanguagesName.CZ:				Tiếng Séc
+System.LanguagesName.IT:				Tiếng Ý
+
+# Miscellaneous Language
+Language.Hours.Short:					{0}g
+Language.Minutes.Short:					{0}p
+Language.Seconds.Short:					{0}g
+Language.Hours.Long:						{0} giờ
+Language.Minutes.Short:					{0} phút
+Language.Seconds.Short:					{0} giây
+Language.NotApplicable:					không áp dụng
+
+Language.Time.Long:						0 giây
+Language.Time.LongH:						{0:%h} giờ
+Language.Time.Longh:						{0:%h} giờ
+Language.Time.LongHM:					{0:%h} giờ và {0:%m} phút
+Language.Time.LongHm:					{0:%h} giờ và {0:%m} phút
+Language.Time.LonghM:					{0:%h} giờ và {0:%m} phút
+Language.Time.Longhm:					{0:%h} giờ và {0:%m} phút
+Language.Time.LongHMS:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.LongHMs:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.LongHmS:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.LongHms:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.LonghMS:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.LonghMs:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.LonghmS:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.Longhms:					{0:%h} giờ, {0:%m} phút và {0:%s} giây
+Language.Time.LongM:						{0:%m} phút
+Language.Time.Longm:						{0:%m} phút
+Language.Time.LongMS:					{0:%m} phút và {0:%s} giây
+Language.Time.LongMs:					{0:%m} phút và {0:%s} giây
+Language.Time.LongmS:					{0:%m} phút và {0:%s} giây
+Language.Time.Longms:					{0:%m} phút và {0:%s} giây
+Language.Time.LongS:						{0:%s} giây
+Language.Time.Longs:						{0:%s} giây
+
+Language.Mithril.Amount:					{0} Mithril
+Language.Platinum.Amount:					{0} Bạch kim
+Language.Gold.Amount:						{0} Vàng
+Language.Silver.Amount:						{0} Bạc
+Language.Copper.Amount:						{0} Đồng
+
+Language.Systems.Spell:					Phép thuật
+
+# Stats
+Language.Resists:						Kháng
+Language.DamageType.Natural.Noun:			Tự nhiên
+Language.DamageType.Crush.Noun:				Nghiền
+Language.DamageType.Slash.Noun:				Chém
+Language.DamageType.Thrust.Noun:			Đâm
+Language.DamageType.Body.Noun:				Thể xác
+Language.DamageType.Cold.Noun:				Băng giá
+Language.DamageType.Energy.Noun:			Năng lượng
+Language.DamageType.Heat.Noun:				Nhiệt
+Language.DamageType.Matter.Noun:			Vật chất
+Language.DamageType.Spirit.Noun:			Tinh linh
+Language.DamageType.Falling.Noun:			Rơi
+Language.DamageType.GM.Noun:				Thô
+
+Language.DamageType.Melee.Noun:				Mọi sát thương cận chiến
+Language.DamageType.Spell.Noun:				Mọi sát thương phép
+Language.DamageType.DoT.Noun:				Sát thương theo thời gian
+
+Language.DamageType.Natural.Damage:			sát thương tự nhiên
+Language.DamageType.Crush.Damage:			sát thương nghiền
+Language.DamageType.Slash.Damage:			sát thương chém
+Language.DamageType.Thrust.Damage:			sát thương đâm
+Language.DamageType.Body.Damage:			sát thương thể xác
+Language.DamageType.Cold.Damage:			sát thương băng
+Language.DamageType.Energy.Damage:			sát thương năng lượng
+Language.DamageType.Heat.Damage:			sát thương nhiệt
+Language.DamageType.Matter.Damage:			sát thương vật chất
+Language.DamageType.Spirit.Damage:			sát thương tinh linh
+Language.DamageType.Falling.Damage:			sát thương do rơi
+Language.DamageType.GM.Damage:				sát thương thô
+
+Language.DamageType.Melee.Damage:			sát thương cận chiến
+Language.DamageType.Spell.Damage:			sát thương phép
+Language.DamageType.DoT.Damage:				sát thương theo thời gian
+
+# Target
+Language.SpellTarget.Realm:					vương quốc
+Language.SpellTarget.Self:					bản thân
+Language.SpellTarget.Enemy:					kẻ địch
+Language.SpellTarget.Pet:						thú triệu hồi
+Language.SpellTarget.Group:					nhóm
+Language.SpellTarget.Area:					khu vực
+Language.SpellTarget.Corpse:					xác
+Language.SpellTarget.Unknown:					mục tiêu không rõ
+
+Language.InternalError:						Đã xảy ra lỗi máy chủ khi thực hiện hành động này; vui lòng liên hệ đội ngũ máy chủ.

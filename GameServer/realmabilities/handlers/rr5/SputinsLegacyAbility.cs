@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -39,11 +40,11 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("The Healer won't die for 30sec.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SputinsLegacyAbility.AddEffectsInfo.Info1"));
             list.Add("");
-            list.Add("Target: Self");
-            list.Add("Duration: 30 sec");
-            list.Add("Casting time: instant");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SputinsLegacyAbility.AddEffectsInfo.Info2"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SputinsLegacyAbility.AddEffectsInfo.Info3"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SputinsLegacyAbility.AddEffectsInfo.Info4"));
         }
 
     }

@@ -1,0 +1,96 @@
+# LANGUAGEMGR (ES)
+System.LanguagesName.EN:				Inglés
+System.LanguagesName.FR:				Francés
+System.LanguagesName.DE:				Alemán
+System.LanguagesName.ES:				Español
+System.LanguagesName.CZ:				Checo
+System.LanguagesName.IT:				Italiano
+
+# Miscellaneous Language
+Language.Hours.Short:					{0}h
+Language.Minutes.Short:					{0}min
+Language.Seconds.Short:					{0}s
+Language.Hours.Long:						{0} horas
+Language.Minutes.Short:					{0} minutos
+Language.Seconds.Short:					{0} segundos
+Language.NotApplicable:					N/D
+
+Language.Time.Long:						0 segundos
+Language.Time.LongH:						{0:%h} horas
+Language.Time.Longh:						{0:%h} hora
+Language.Time.LongHM:					{0:%h} horas y {0:%m} minutos
+Language.Time.LongHm:					{0:%h} horas y {0:%m} minuto
+Language.Time.LonghM:					{0:%h} hora y {0:%m} minutos
+Language.Time.Longhm:					{0:%h} hora y {0:%m} minuto
+Language.Time.LongHMS:					{0:%h} horas, {0:%m} minutos y {0:%s} segundos
+Language.Time.LongHMs:					{0:%h} horas, {0:%m} minutos y {0:%s} segundo
+Language.Time.LongHmS:					{0:%h} horas, {0:%m} minuto y {0:%s} segundos
+Language.Time.LongHms:					{0:%h} horas, {0:%m} minuto y {0:%s} segundo
+Language.Time.LonghMS:					{0:%h} hora, {0:%m} minutos y {0:%s} segundos
+Language.Time.LonghMs:					{0:%h} hora, {0:%m} minutos y {0:%s} segundo
+Language.Time.LonghmS:					{0:%h} hora, {0:%m} minuto y {0:%s} segundos
+Language.Time.Longhms:					{0:%h} hora, {0:%m} minuto y {0:%s} segundo
+Language.Time.LongM:						{0:%m} minutos
+Language.Time.Longm:						{0:%m} minuto
+Language.Time.LongMS:					{0:%m} minutos y {0:%s} segundos
+Language.Time.LongMs:					{0:%m} minutos y {0:%s} segundo
+Language.Time.LongmS:					{0:%m} minuto y {0:%s} segundos
+Language.Time.Longms:					{0:%m} minuto y {0:%s} segundo
+Language.Time.LongS:						{0:%s} segundos
+Language.Time.Longs:						{0:%s} segundo
+
+Language.Mithril.Amount:					{0} Mithril
+Language.Platinum.Amount:					{0} Platino
+Language.Gold.Amount:						{0} Oro
+Language.Silver.Amount:						{0} Plata
+Language.Copper.Amount:						{0} Cobre
+
+Language.Systems.Spell:					Hechizo
+
+# Stats
+Language.Resists:						Resistencias
+Language.DamageType.Natural.Noun:			Natural
+Language.DamageType.Crush.Noun:				Contundente
+Language.DamageType.Slash.Noun:				Corte
+Language.DamageType.Thrust.Noun:			Perforación
+Language.DamageType.Body.Noun:				Cuerpo
+Language.DamageType.Cold.Noun:				Frío
+Language.DamageType.Energy.Noun:			Energía
+Language.DamageType.Heat.Noun:				Calor
+Language.DamageType.Matter.Noun:			Materia
+Language.DamageType.Spirit.Noun:			Espíritu
+Language.DamageType.Falling.Noun:			Caída
+Language.DamageType.GM.Noun:				Bruto
+
+Language.DamageType.Melee.Noun:				Todo el daño cuerpo a cuerpo
+Language.DamageType.Spell.Noun:				Todo el daño de hechizos
+Language.DamageType.DoT.Noun:				Daño con el tiempo
+
+Language.DamageType.Natural.Damage:			daño natural
+Language.DamageType.Crush.Damage:			daño contundente
+Language.DamageType.Slash.Damage:			daño de corte
+Language.DamageType.Thrust.Damage:			daño de perforación
+Language.DamageType.Body.Damage:			daño de cuerpo
+Language.DamageType.Cold.Damage:			daño de frío
+Language.DamageType.Energy.Damage:			daño de energía
+Language.DamageType.Heat.Damage:			daño de calor
+Language.DamageType.Matter.Damage:			daño de materia
+Language.DamageType.Spirit.Damage:			daño de espíritu
+Language.DamageType.Falling.Damage:			daño de caída
+Language.DamageType.GM.Damage:				daño bruto
+
+Language.DamageType.Melee.Damage:			daño cuerpo a cuerpo
+Language.DamageType.Spell.Damage:			daño de hechizos
+Language.DamageType.DoT.Damage:				daño con el tiempo
+
+# Target
+Language.SpellTarget.Realm:					reino
+Language.SpellTarget.Self:					sí mismo
+Language.SpellTarget.Enemy:					enemigo
+Language.SpellTarget.Pet:						mascota
+Language.SpellTarget.Group:					grupo
+Language.SpellTarget.Area:					zona
+Language.SpellTarget.Corpse:					cadáver
+Language.SpellTarget.Unknown:					destino desconocido
+
+Language.InternalError:						Se produjo un error del servidor al ejecutar esta acción; por favor contacta al equipo del servidor.

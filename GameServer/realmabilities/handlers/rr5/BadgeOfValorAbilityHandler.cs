@@ -5,6 +5,8 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using log4net;
+using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -21,8 +23,8 @@ namespace DOL.GS.RealmAbilities
 
             if (living.EffectList.CountOfType<BadgeOfValorEffect>() > 0)
             {
-                if (living is GamePlayer)
-                    (living as GamePlayer).Out.SendMessage("You already an effect of that type!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                if (living is GamePlayer gp)
+                    gp.Out.SendMessage(LanguageMgr.GetTranslation(gp.Client, "DashingDefenseAbility.Execute.AlreadyEffect"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return;
             }
 

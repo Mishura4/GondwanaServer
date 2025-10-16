@@ -5,12 +5,13 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.GS.Spells;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
     public class JuggernautAbility : TimedRealmAbility
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public JuggernautAbility(DBAbility dba, int level) : base(dba, level) { }
 
@@ -31,44 +32,44 @@ namespace DOL.GS.RealmAbilities
             if (!(living.IsAlive))
             {
                 if (player != null)
-                    player.Out.SendMessage("You cannot use this ability while dead!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "JuggernautAbility.CannotUse.Dead"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (living.IsMezzed)
             {
                 if (player != null)
-                    player.Out.SendMessage("You cannot use this ability while mesmerized!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "JuggernautAbility.CannotUse.Mez"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (living.IsStunned)
             {
                 if (player != null)
-                    player.Out.SendMessage("You cannot use this ability while stunned!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "JuggernautAbility.CannotUse.Stunned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (living.IsSitting)
             {
                 if (player != null)
-                    player.Out.SendMessage("You cannot use this ability while sitting!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "JuggernautAbility.CannotUse.Sitting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (living.ControlledBrain == null)
             {
                 if (player != null)
-                    player.Out.SendMessage("You must have a pet controlled to use this ability!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "JuggernautAbility.Require.PetControlled"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
-            if (!living.IsWithinRadius(player.ControlledBrain.Body, m_range))
+            if (!living.IsWithinRadius(player!.ControlledBrain.Body, m_range))
             {
                 if (player != null)
-                    player.Out.SendMessage("Your pet is too far away!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "JuggernautAbility.Require.PetInRange"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             GameSpellEffect ml9 = SpellHandler.FindEffectOnTarget(living.ControlledBrain.Body, "SummonMastery");
             if (ml9 != null)
             {
                 if (player != null)
-                    player.Out.SendMessage("Your Pet already has an ability of this type active", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "JuggernautAbility.AlreadyActive"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return;
             }
 

@@ -158,6 +158,7 @@ SpellHandler.VampiirBolt.CannotCastInCombat:	You cannot cast this spell in comba
 SpellHandler.VampiirBolt.PowerTaken:		{0} takes {1} power!
 SpellHandler.VampiirBolt.PowerReceived:		You receive {0} power from {1}!
 SpellHandler.VampiirBolt.NoPowerReceived:	You did not receive any power from {0}!
+SpellHandler.VampiirBolt.TargetTooHigh:		The target's level is too high to be affected by this spell!
 
 SpellHandler.WrathofChampions.CastSpell:	You cast {0}!
 SpellHandler.WrathofChampions.CastSpellFromArea:	{0} casts a spell!
@@ -298,6 +299,21 @@ SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		You are already preparing 
 SpellHandler.Warlock.MustFinishCastingRange:				You must finish casting Range before you can cast it again.
 SpellHandler.Warlock.MustFinishCastingUninterruptable:		You must finish casting Uninterruptable before you can cast it again.
 SpellHandler.Warlock.MustFinishCastingPowerless:			You must finish casting Powerless before you can cast it again.
+
+SpellHandler.Cleric.Ascendance.OnEnd:						Your ascended state fades.
+SpellHandler.Cleric.Ascendance.OnStart:						You ascend, greatly enhancing your effectiveness.
+SpellHandler.Cleric.Ascendance.CanceledMoC:					Your Mastery of Concentration dissipates as Ascendance activates.
+SpellHandler.Cleric.Ascendance.CannotCast:					Ascendance prevents you from casting {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:		Your Ascendance fades as you focus your concentration.
+SpellHandler.Cleric.DamageReturn.Active:					A powerful relective aura surrounds you.
+SpellHandler.Cleric.DamageReturn.WornOff:					Your relective aura has worn off.
+SpellHandler.Cleric.DamageReturn.VictimReflect:				Your barrier returns {0} {1} back to the attacker.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:				You take {0} {1} from reflection.
+SpellHandler.Cleric.OffProcShear.Removed:					The target's offensive proc effect(s) have been purged.
+SpellHandler.Cleric.OffProcShear.YourProcRipped:			Your offensive proc effect(s) have been removed.
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:			A cursed replacement proc has been applied to the target.
+SpellHandler.Cleric.OffProcShear.YouAreCursed:				You are cursed: your hits now heal your enemies.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:		No removable offensive proc found on the target.
 
 SpellHandler.Occultist.CastCondition1:						You can only cast this spell while under Chthonic form.
 SpellHandler.Occultist.CastCondition2:						This spell can't be cast while under Chthonic form.

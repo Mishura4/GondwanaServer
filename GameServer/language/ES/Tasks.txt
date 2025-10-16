@@ -1,0 +1,70 @@
+Tasks.SystemDisabled: El sistema de tareas está desactivado actualmente.
+Tasks.PvPRvRGvGTasks: ======= TAREAS PvP/RvR/GvG =======
+Tasks.PvETasks: ======== TAREAS PvE ========
+Tasks.CraftingTasks: == TAREAS DE ARTESANÍA (Nivel mín.: {0}) ==
+Tasks.SpecialTasks: ======== TAREAS ESPECIALES ========
+Tasks.TaskCompletionTokenInfo: Cada ficha de tarea de PvP, RvR, GvG, PvE o Artesanía debe entregarse al Maestro de Tareas para recibir recompensas.
+Tasks.SpecialTaskCompletionTokenInfo: Las fichas de tareas especiales son específicas de cada tarea. Estas fichas desbloquean nuevos títulos de jugador con bonificaciones especiales.
+Tasks.SnapshotTitle: TAREAS
+Tasks.KillEnemyPlayersGroup: Matad jugadores enemigos en grupo
+Tasks.KillEnemyPlayersAlone: Matad jugadores enemigos en solitario
+Tasks.KillKeepGuards: Matad guardias de fortalezas
+Tasks.TakeKeeps: Tomad fortalezas
+Tasks.RvRChampionOfTheDay: Sed Campeón del Día en RvR
+Tasks.KillTerritoryGuards: Matad guardias de territorio
+Tasks.KillTerritoryBoss: Capturad territorios
+Tasks.TurnInPvPGvGTaskToken: Ficha de Tarea PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: Matad criaturas de mazmorras
+Tasks.KillOutdoorsCreatures: Matad criaturas de exterior
+Tasks.KillAnimalCreatures: Matad criaturas animales
+Tasks.KillDemonCreatures: Matad criaturas demoníacas
+Tasks.KillDragonCreatures: Matad criaturas dracónicas
+Tasks.KillElementalCreatures: Matad criaturas elementales
+Tasks.KillGiantCreatures: Matad criaturas gigantes
+Tasks.KillHumanoidCreatures: Matad criaturas humanoides
+Tasks.KillInsectCreatures: Matad criaturas insectoides
+Tasks.KillMagicalCreatures: Matad criaturas mágicas
+Tasks.KillReptileCreatures: Matad criaturas reptilianas
+Tasks.KillPlantCreatures: Matad criaturas vegetales
+Tasks.KillUndeadCreatures: Matad criaturas no muertas
+Tasks.TurnInPvETaskToken: Ficha de Tarea PvE
+Tasks.SuccessfulItemCombinations: Combinaciones de objetos exitosas
+Tasks.MasteredCrafts: Objetos creados por Artesanía
+Tasks.MasterpieceCrafted: Obras maestras creadas
+Tasks.TurnInCraftingTaskToken: Ficha de Tarea de Artesanía
+Tasks.EpicBossesSlaughtered: Jefes épicos abatidos
+Tasks.ItemsSoldToPlayers: Transacciones en el mercado
+Tasks.SuccessfulPvPThefts: Robos a jugadores exitosos
+Tasks.OutlawPlayersSentToJail: Neutralizad forajidos
+Tasks.EnemiesKilledInAdrenalineMode: Enemigos eliminados en modo Adrenalina
+Tasks.EnemyKilledInDuel: Victorias en duelo
+Tasks.QuestsCompleted: Misiones completadas
+Tasks.MaxLevelReached: Nivel máximo
+Tasks.Level: Nivel {0}
+
+Tasks.KillEnemyPlayersGroupLog: Matad jugadores enemigos en grupo: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Matad jugadores enemigos en solitario: {0}/{1}
+Tasks.KillKeepGuardsLog: Matad guardias de fortalezas: {0}/{1}
+Tasks.TakeKeepsLog: Tomad fortalezas: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Matad guardias de territorio: {0}/{1}
+Tasks.KillTerritoryBossLog: Capturad territorios: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Combinaciones de objetos exitosas: {0}/{1}
+Tasks.MasteredCraftsLog: Objetos creados por Artesanía: {0}/{1}
+Tasks.MasterpieceCraftedLog: Obras maestras creadas: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Jefes épicos abatidos: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Transacciones en el mercado: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Robos a jugadores exitosos: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Neutralizad forajidos: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Enemigos eliminados en modo Adrenalina: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Victorias en duelo: {0}/{1}
+Tasks.QuestsCompletedLog: Misiones completadas: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Tarea: Obtienes una ficha de tarea PvP/RvR/GvG - nivel {0}
+Tasks.TurnInPvETaskTokenMessage: Tarea: Obtienes una ficha de tarea PvE - nivel {0}
+Tasks.TurnInCraftingTaskTokenMessage: Tarea: Obtienes una ficha de tarea de Artesanía - nivel {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Tarea: Obtienes una ficha especial «Asesino de Demonios» - nivel {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Tarea: Obtienes una ficha especial «Comerciante» - nivel {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Tarea: Obtienes una ficha especial «Ladrón» - nivel {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Tarea: Obtienes una ficha especial «Cazarrecompensas» - nivel {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Tarea: Obtienes una ficha especial «Fiebre de Combate» - nivel {0}
+Tasks.EnemyKilledInDuelSpecialToken: Tarea: Has recibido una ficha de «Duelista» - nivel {0}
+Tasks.QuestsCompletedSpecialToken: Tarea: Obtienes una ficha especial «Aventurero» - nivel {0}

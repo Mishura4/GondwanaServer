@@ -1,0 +1,122 @@
+# HOUSING (IT)
+House.DBHousePermissions.AccessLevel:			Livello di accesso {0}
+House.Edit.NotEnoughMoney:				Non hai abbastanza denaro per farlo!
+House.Edit.PayForChanges:				Paga {0} per le modifiche.
+House.Enter.EnteredHouse:				Sei entrato nella casa numero {0}.
+House.Exit.LeftHouse:					Hai lasciato la casa numero {0}.
+House.SendHouseInfo.DoorMaterial:			-Porta: {0}	
+House.SendHouseInfo.ExteriorMaterials:			Materiali esterni:
+House.SendHouseInfo.ExteriorUpgrades:			Migliorie esterne:	
+House.SendHouseInfo.HouseOwner:				Casa di {0}
+House.SendHouseInfo.IndoorGuildBanner:			-Stendardi: {0}	
+House.SendHouseInfo.IndoorGuildShield:			-Scudi: {0}	
+House.SendHouseInfo.InteriorCarpets:			Tappeti interni:	
+House.SendHouseInfo.InteriorUpgrades:			Migliorie interne:	
+House.SendHouseInfo.Level:					Livello: {0}
+House.SendHouseInfo.Lockbox:					Cassa di sicurezza: {0}
+House.SendHouseInfo.Lotnum:					Numero lotto: {0}
+House.SendHouseInfo.MaxLockbox:				Capacità massima in cassa: {0}
+House.SendHouseInfo.OutdoorGuildBanner:			-Stendardi: {0}	
+House.SendHouseInfo.OutdoorGuildShield:			-Scudi: {0}	
+House.SendHouseInfo.Owner:					Proprietario: {0}
+House.SendHouseInfo.Owners:					Proprietari:
+House.SendHouseInfo.Porch:					Veranda:
+House.SendHouseInfo.PorchEnabled:				-Disponibile: {0}	
+House.SendHouseInfo.PorchMaterial:				-Veranda: {0}	
+House.SendHouseInfo.PorchRoofColor:				-Colore: {0}	
+House.SendHouseInfo.RentalPrice:				Affitto: {0}	
+House.SendHouseInfo.RentDueIn:				Scadenza tra: {0} giorni, {1} ore
+House.SendHouseInfo.RoofMaterial:				-Tetto: {0}	
+House.SendHouseInfo.Rug1Color:					-Colore 1: {0}
+House.SendHouseInfo.Rug2Color:					-Colore 2: {0}
+House.SendHouseInfo.Rug3Color:					-Colore 3: {0}
+House.SendHouseInfo.Rug4Color:					-Colore 4: {0}
+House.SendHouseInfo.TrussMaterial:				-Capriate: {0}	
+House.SendHouseInfo.WallMaterial:				-Pareti: {0}	
+House.SendHouseInfo.WindowMaterial:				-Finestre: {0}	
+
+HouseEnterLeave.TooFarAway:					Sei troppo lontano per entrare nella casa {0}.
+HouseEnterLeave.CantEnter:					Non puoi entrare nella casa {0}.
+
+HousingDecorationRotate.Rotated:			L'oggetto interno è stato ruotato da {0} gradi a {1} gradi.
+
+# /HousingPlaceItemHandler
+HousingPickupItemHandler.GardenRemoved:			Oggetto da giardino rimosso.
+HousingPickupItemHandler.PickUp:				Metti {0} nel tuo inventario.
+HousingPlaceItemHandler.30objects:				Hai già posizionato 30 oggetti. Non puoi posizionarne altri.
+HousingPlaceItemHandler.40objects:				Hai già posizionato 40 oggetti. Non puoi posizionarne altri.
+HousingPlaceItemHandler.CantFloor:				Questo oggetto non può essere posizionato sul pavimento!
+HousingPlaceItemHandler.CantWall:				Questo oggetto non può essere posizionato su una parete!
+HousingPlaceItemHandler.DropOnFloor:				Lascia l'oggetto {0} sul pavimento della tua casa.
+HousingPlaceItemHandler.DropOnGarden:				Lascia l'oggetto {0} nel tuo giardino.
+HousingPlaceItemHandler.DropOnWall:				Lascia l'oggetto {0} sulla parete della tua casa.
+HousingPlaceItemHandler.GardenObjectPlaced:			Oggetto da giardino posizionato. {0} posti rimanenti.
+HousingPlaceItemHandler.HasPorch:				Questa casa ha già una veranda!
+HousingPlaceItemHandler.HasNoPorch:				Questa casa non ha una veranda!
+HousingPlaceItemHandler.IndoorObjectPlaced:			Oggetto interno posizionato. {0} posti rimanenti.
+HousingPlaceItemHandler.NoHookpoint:				Nessun punto di ancoraggio disponibile!
+HousingPlaceItemHandler.PutMoney:				Deposita denaro nel conto della tua casa.
+
+# /Housing LotMarker
+Housing.LotMarker.TargetLotNumber:				Stai mirando al lotto numero {0}.
+Housing.LotMarker.ItCanBeBoughtFor:				Può essere acquistato per {0}.
+Housing.LotMarker.ItIsOwnedBy:				Questo lotto appartiene a {0}.
+Housing.LotMarker.YouAlreadyOwnAHouse:			Possiedi già una casa!
+Housing.LotMarker.DoYouWantToBuyThisLot1:			Vuoi acquistare questo lotto?
+Housing.LotMarker.DoYouWantToBuyThisLot2:			Il costo è {0}.
+Housing.LotMarker.YouDoNotOwnThisLot:				Non sei il proprietario di questo lotto!
+Housing.LotMarker.YouAlreadyOwnAnotherLotOrHouse:	Possiedi già un altro lotto o una casa (n. {0}).
+Housing.LotMarker.YouJustBoughtThisLotFor:			Hai appena acquistato questo lotto per {0}.
+Housing.LotMarker.YouDontHaveEnoughMoney:			Fondi insufficienti!
+Housing.LotMarker.ThisItemCantBeSold:				Questo oggetto non può essere venduto.
+
+Scripts.Player.Housing.BadShieldBanner:			Questo non è un oggetto o uno stendardo valido.
+Scripts.Player.Housing.CantBeSold:				Questo oggetto non può essere venduto!
+Scripts.Player.Housing.CarpetsRemoved:			Il tuo tappeto è stato rimosso.
+Scripts.Player.Housing.ClearHookPoint:			Vuoi rimuovere l'oggetto dal punto di ancoraggio?
+Scripts.Player.Housing.EnteredHouse:				Entri nella casa numero {0}.
+Scripts.Player.Housing.GardenItemPlaced:			Oggetti da giardino posizionati. {0} posti rimanenti.
+Scripts.Player.Housing.GardenItemPlacedName:		Lascia l'oggetto {0} nel tuo giardino.
+Scripts.Player.Housing.GardenMaxObjects:			Hai depositato 30 oggetti nel tuo giardino. Spazio esaurito.
+Scripts.Player.Housing.GuildNowOwns:				[Gilda] {0} ora possiede una casa di gilda di {1}!
+Scripts.Player.Housing.HookPointAdded:			Questo oggetto è stato aggiunto alla tua casa.
+Scripts.Player.Housing.HookPointAlready:			Quel punto di ancoraggio ha già un oggetto!
+Scripts.Player.Housing.HookPointCleared:			Il punto di ancoraggio ora è vuoto.
+Scripts.Player.Housing.HookPointCloser:			Avvicinati il più possibile al lotto desiderato e premi “accetta”.
+Scripts.Player.Housing.HookPointID:				L'ID del punto di ancoraggio è: {0}
+Scripts.Player.Housing.HookPointLogged:			Posizione del punto di ancoraggio {0} registrata!
+Scripts.Player.Housing.HookPointLogLoc:			Mostrare i punti di ancoraggio?
+Scripts.Player.Housing.HookPointNot:				Questo non è un oggetto utilizzabile sui punti di ancoraggio!
+Scripts.Player.Housing.HookPointNotPlaced:			L'oggetto non è stato posizionato su quel punto di ancoraggio.
+Scripts.Player.Housing.HouseUseMaterial:			Usa Maiusc+clic destro nella tua casa per modificare l'aspetto.
+Scripts.Player.Housing.HouseUseMaterial:			Usa Maiusc+clic destro nella tua casa per cambiare i tappeti.
+Scripts.Player.Housing.IndoorFloorPlaced:			Hai posizionato {0} al piano della tua casa.
+Scripts.Player.Housing.IndoorItemPlaced:			Oggetto interno posizionato. {0} posto rimanente.
+Scripts.Player.Housing.IndoorMaxItems:			Attualmente hai posizionato {0} oggetti nella tua casa. Non puoi posizionarne altri.
+Scripts.Player.Housing.IndoorWallPlaced:			Hai appena posizionato {0} sulla parete della tua casa.
+Scripts.Player.Housing.InteriorBannersAdded:		Lo stendardo di gilda interno è stato cambiato.
+Scripts.Player.Housing.InteriorBannersRemoved:		Lo stendardo di gilda interno è stato rimosso.
+Scripts.Player.Housing.InteriorShieldsAdded:		Lo scudo di gilda interno è stato cambiato.
+Scripts.Player.Housing.InteriorShieldsRemoved:		Lo scudo di gilda interno è stato rimosso.
+Scripts.Player.Housing.LeftHouse:				Esci dalla casa {0}.
+Scripts.Player.Housing.LotAlready:				Possiedi già un altro lotto o una casa (n. {0})
+Scripts.Player.Housing.LotBought:				Hai appena acquistato questo lotto per {0}!
+Scripts.Player.Housing.LotCost:					Può essere acquistato per {0}.
+Scripts.Player.Housing.LotNotItem:				Questo non è un valido atto di proprietà.
+Scripts.Player.Housing.LotNotYours:				Non possiedi questo lotto!
+Scripts.Player.Housing.LotOffer:				Vuoi acquistare questo lotto? Costa {0}.
+Scripts.Player.Housing.LotTargeted:				Prendi di mira il lotto numero {0}.
+Scripts.Player.Housing.NotFloorObject:			Questo oggetto non può essere posizionato al piano superiore!
+Scripts.Player.Housing.NotHookPoint:				Questo oggetto non può essere posizionato su un punto di ancoraggio!
+Scripts.Player.Housing.NotWallObject:				Questo oggetto non può essere posizionato sulla parete!
+Scripts.Player.Housing.OutdoorBannersAdded:		Lo stendardo di gilda esterno è stato cambiato.
+Scripts.Player.Housing.OutdoorBannersRemoved:		Lo stendardo di gilda esterno è stato rimosso.
+Scripts.Player.Housing.OutdoorShieldsAdded:		Lo scudo di gilda esterno è stato cambiato.
+Scripts.Player.Housing.OutdoorShieldsRemoved:		Lo scudo di gilda esterno è stato rimosso.
+Scripts.Player.Housing.PaidChanges:				Paghi {0} per effettuare le modifiche.
+Scripts.Player.Housing.PaidNotEnough:			Non hai abbastanza denaro per farlo!
+Scripts.Player.Housing.PorchAlready:				Questa casa ha già una veranda!
+Scripts.Player.Housing.PorchNone:				Questa casa non possiede una veranda!
+Scripts.Player.Housing.PorchNotItem:				Questo non è un oggetto da veranda!
+Scripts.Player.Housing.TransferToGuild:			Vuoi trasferire questa casa a {0}?
+

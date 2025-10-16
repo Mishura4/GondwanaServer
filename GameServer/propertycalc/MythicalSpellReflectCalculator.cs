@@ -83,13 +83,17 @@ namespace DOL.GS.PropertyCalc
             int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.Damage + ad.CriticalDamage));
 
             ad.Damage -= damageAbsorbed;
-            if (living is GamePlayer player)
+
+            if (damageAbsorbed > 0)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MythicalSpellReflect.Self.Absorb", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-            }
-            if (ad.Attacker is GamePlayer attacker)
-            {
-                attacker.Out.SendMessage(LanguageMgr.GetTranslation(attacker.Client, "MythicalSpellReflect.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                if (living is GamePlayer player)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MythicalSpellReflect.Self.Absorb", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                }
+                if (ad.Attacker is GamePlayer attacker)
+                {
+                    attacker.Out.SendMessage(LanguageMgr.GetTranslation(attacker.Client, "MythicalSpellReflect.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                }
             }
 
             ushort clientEffect = ad.DamageType switch
@@ -113,6 +117,11 @@ namespace DOL.GS.PropertyCalc
             {
                 bomberSpell.ReduceSubSpellDamage = 30;
             }
+
+            const string MYTH_REFLECT_ABSORB_FLAG = "MYTH_REFLECT_ABSORB_PCT_THIS_HIT";
+            living.TempProperties.setProperty(MYTH_REFLECT_ABSORB_FLAG, 30);
+            living.TempProperties.setProperty("MYTH_REFLECT_ABSORB_TICK", living.CurrentRegion.Time);
+
             spellHandler.StartSpell(ad.Attacker, false);
         }
     }

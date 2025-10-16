@@ -69,14 +69,18 @@ namespace DOL.GS.Spells
                 spellToCast.Power = cost;
 
                 double absorbPercent = Spell.LifeDrainReturn;
-
                 int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.Damage + ad.CriticalDamage));
 
                 ad.Damage -= damageAbsorbed;
-                if (player != null)
-                    MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellReflection.Self.Absorb", damageAbsorbed), eChatType.CT_Spell);
-                if (ad.Attacker is GamePlayer attacker)
-                    MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "SpellReflection.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell);
+
+                if (damageAbsorbed > 0)
+                {
+                    if (player != null)
+                        MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellReflection.Self.Absorb", damageAbsorbed), eChatType.CT_Spell);
+
+                    if (ad.Attacker is GamePlayer attacker)
+                        MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "SpellReflection.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell);
+                }
 
                 spellToCast.Damage = spellToCast.Damage * Spell.AmnesiaChance / 100;
                 spellToCast.Value = spellToCast.Value * Spell.AmnesiaChance / 100;

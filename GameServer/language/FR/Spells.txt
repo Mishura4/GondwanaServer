@@ -42,6 +42,7 @@ SpellDescription.DemiQuarter.AmnesiaDescription:	N'affecte pas les ennemis faibl
 SpellDescription.DemiQuarter.EndDescription:		Ce sort affecte rarement les fantômes, démons, nécromanciens, banshees et vampiirs.
 SpellDescription.LifeTransfer.MainDescription:		Transfère {0} points de vie de l'incantateur vers sa cible.
 SpellDescription.Heal.MainDescription:				La cible est soignée de {0} points de vie.
+SpellDescription.HealEnemy.MainDescription:			Soigne votre ennemi de {0} points de vie lorsqu'il est touché (via proc).
 SpellDescription.Disease.MainDescription:			Inflige une maladie invalidante qui ralentit la cible de {0}%, réduisant sa force de {1}% et inhibant les effets de soins de {2}%.
 SpellDescription.Petrify.MainDescription:			Pétrifie la cible et la transforme en statue. La cible est complètement paralysée et absorbe 50% des dégâts physiques ainsi que 75% des dégâts magiques qu'elle pourrait subir si elle est attaquée.
 SpellDescription.Unpetrify.MainDescription:			Guérit la cible de l'état « pétrifié ».
@@ -114,7 +115,7 @@ SpellDescription.CureDisease.MainDescription:		Tous les effets de maladie sont s
 SpellDescription.CureMezz.MainDescription:			Tous les effets d'hypnose sont supprimés de la cible.
 SpellDescription.CureNearsight.MainDescription:		Tous les effets de vision réduite sont supprimés de la cible.
 SpellDescription.CurePoison.MainDescription:		Tous les effets de dégâts sur la durée (tels que les poisons) sont supprimés de la cible.
-SpellDescription.DamageSpeedDecrease.MainDescription:		La cible est ralentie de {0}%. Inflige {1} dégâts de {2} à la cible.
+SpellDescription.DamageSpeedDecrease.MainDescription:		La cible est ralentie de {0}%. Inflige {1} {2} à la cible.
 SpellDescription.DamageToPower.MainDescription:		{0}% de tous les dégâts de sorts infligés à la cible sont convertis en puissance.
 SpellDescription.DeathClaw.MainDescription:			{0} réduit la vie de l'ennemi de 90%. Cela n'affecte pas les fantômes, les ennemis faibles, ou les ennemis de niveau supérieur à {1}, et a un effet réduit sur les morts-vivants et les boss.
 SpellDescription.EnduranceDrain.MainDescription:	{0}% d'endurance est volée à la cible et transférée au lanceur.
@@ -244,11 +245,16 @@ SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Réduit temporairem
 SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Peut être lancé en combat.
 SpellDescription.VampiirArmorDebuff.MainDescription:		Réduit temporairement l'absorption et le facteur d'armure d'une pièce d'armure aléatoire de la cible de {0}%.
 SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Cela n'affectera que le heaume, le torse ou les jambes de la cible.
+SpellDescription.VampiirBolt.MainDescription:			Siphonne {0} % de la mana de la cible et la restitue au lanceur.
+SpellDescription.VampiirBolt.MainDescription2:			Cet effet n'affecte pas les ennemis de niveau supérieur à {0}.
 SpellDescription.IllusionBlade.Part1:					Invoque une arme spectrale qui combat brièvement à vos côtés avant de disparaître.
 SpellDescription.IllusionBlade.Part2:					La lame agit de son propre chef et ne peut être contrôlée, libérée ou soignée.
 SpellDescription.RangeShield.MainDescription:			Protège le groupe de l'incantateur contre les attaques physiques d'archerie.
 SpellDescription.PetSpell.MainDescription1:				Sort de familier :
 SpellDescription.PetSpell.MainDescription2:				Augmente les statistiques listés de la cible.
+SpellDescription.Ascendance.MainDescription:			Augmente considérablement l'efficacité de vos sorts et capacités de {0}%.
+SpellDescription.Ascendance.Restrictions:				Tant que l'Ascension est activée, vous ne pouvez pas lancer de sorts de Soin ou de Résurrection.
+SpellDescription.Ascendance.Interaction:				L'usage de « Maîtrise de la Concentration » annule l'Ascension, et vice versa.  
 SpellDescription.Occultist.ConditionDescription1:		Ne peut être lancé sous la forme Chtonique.
 SpellDescription.Occultist.ConditionDescription2:		Ne peut être lancé sous la forme Esprit ou Décrépit.
 SpellDescription.Occultist.Summon.UmbralAegis1:			Invoquez un Égide Cuirassé à votre service. Ce démon excelle dans la provocation et l'encaissement des dégâts.
@@ -270,7 +276,11 @@ SpellDescription.Occultist.DecrepitShapeShift1:			Incarnez un Mage Décrépit. V
 SpellDescription.Occultist.DecrepitShapeShift2:			Votre absorption d'armure est augmentée de {0}%.
 SpellDescription.Occultist.DecrepitShapeShift3:			Les attaquants en mêlée ont {0}% de chance d'être affectés par une maladie lorsqu'ils vous frappent, et votre chair putréfiée se régénère, augmentant la régénération de santé de {1}.
 SpellDescription.Occultist.BringerOfDeath1:				Incarnez le Porteur de Mort. Vos sorts ne peuvent être interrompus mais n'atteignent que {0}% de leur puissance, et vous subissez {1}% de dégâts en moins qu'ils soient magiques ou physiques.
-SpellDescription.Occultist.BringerOfDeath2:				Votre vitesse de mouvement augmente de {0}%, même en speedwarps ou en combat. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.  
+SpellDescription.Occultist.BringerOfDeath2:				Votre vitesse de mouvement augmente de {0}%, même en speedwarps ou en combat. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.
+SpellDescription.DamageReturn.MainDescription:			Renvoie {0}% des dégâts magiques directs (hors DoTs), de mêlée, et d'archerie vers l'attaquant en {1} tant que l'effet est actif.
+SpellDescription.OffProcShear.Main1:					Remove any active Offensive Proc(s) from the target.
+SpellDescription.OffProcShear.Main2:					Applies a cursed replacement proc whose subspell heals the target's enemies on their hits.
+SpellDescription.OffProcShear.ReplacementHeader:		Replacement proc:
 
 
 # ML Spells ShortDescriptions

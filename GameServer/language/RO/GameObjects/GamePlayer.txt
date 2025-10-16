@@ -1,0 +1,510 @@
+# GAMEPLAYER (RO)
+GameObjects.GamePlayer.AddAbility.YouLearn:            Înveți abilitatea {0}.
+GameObjects.GamePlayer.AddSpecialisation.YouLearn:     Înveți specializarea {0}.
+GameObjects.GamePlayer.AddSpellLine.YouLearn:          Înveți linia de vrăji {0}.
+
+GameObjects.GamePlayer.ApplyPoison.CantApplyRecentCombat:   Ai fost recent în luptă și nu poți aplica otravă deocamdată.
+GameObjects.GamePlayer.ApplyPoison.CantPoisonWeapon:        Nu poți folosi otravă pe această armă.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoison:           Nu poți folosi această otravă.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Nu poți folosi aceste otrăvuri.
+GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Otrăvurile pot fi aplicate doar pe arme.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Nu poți reaplica otrava pe această armă.
+GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Nu îți poți otrăvi {0}!
+
+GameObjects.GamePlayer.AblativeArmor.Target:        Armura ta absoarbe {0} daune suplimentare datorită bonusului ablațiv!
+GameObjects.GamePlayer.AblativeArmor.Attacker:      Armura lui/ei {0} absoarbe {1} daune suplimentare datorită bonusului ablațiv!
+
+GameObjects.GamePlayer.Attack.AlreadyDead:          {0} este deja mort.
+GameObjects.GamePlayer.Attack.Blocked:              {0} îți blochează atacul.
+GameObjects.GamePlayer.Attack.CantBeAttacked:       Acest lucru nu poate fi atacat.
+GameObjects.GamePlayer.Attack.CantCritical:         Nu poți da o lovitură critică țintei; execuți o lovitură normală.
+GameObjects.GamePlayer.Attack.CantSeeTarget:        Nu îți poți vedea ținta.
+GameObjects.GamePlayer.Attack.CantUseQuiver:        Nu poți folosi muniția selectată cu această armă.
+GameObjects.GamePlayer.Attack.CouldRepair:          {0} al tău/a ta poate fi reparat(ă).
+GameObjects.GamePlayer.Attack.Critical:             Lovești critic {0} și provoci {1} daune suplimentare!
+GameObjects.GamePlayer.Attack.Evade:                {0} te atacă, dar tu eschivezi!
+GameObjects.GamePlayer.Attack.Evaded:               {0} îți eschivează atacul!
+GameObjects.GamePlayer.Attack.Fumble:               Te împiedici și ai nevoie de un moment să-ți revii!
+GameObjects.GamePlayer.Attack.Fumbled:              {0} se împiedică!
+GameObjects.GamePlayer.Attack.HitsYour:             {0} îți lovește {1} pentru {2}{3} daune!
+GameObjects.GamePlayer.Attack.HitsYou:              {0} te lovește pentru {1}{2} daune!
+GameObjects.GamePlayer.Attack.HitsYouCritical:      {0} te lovește critic pentru {1} daune suplimentare!
+GameObjects.GamePlayer.Attack.Intercepted:          {0} se pune în fața lui/ei {1} și interceptează lovitura!
+GameObjects.GamePlayer.Attack.InterceptedHit:       {0} {1}{2}, dar îl/o lovești pe {3} pentru {4}{5} daune.
+GameObjects.GamePlayer.Attack.InterceptHit:         {0} {1}{2} și lovești pentru {3}{4} daune.
+GameObjects.GamePlayer.Attack.Interrupted:          {0} te atacă și {1} îți este întrerupt(ă)!
+GameObjects.GamePlayer.Attack.InterruptedCrafting:  Îți întrerupi fabricarea obiectului.
+GameObjects.GamePlayer.Attack.Location.Arm:         Braț
+GameObjects.GamePlayer.Attack.Location.Foot:        Picior
+GameObjects.GamePlayer.Attack.Location.Hand:        Mână
+GameObjects.GamePlayer.Attack.Location.Head:        Cap
+GameObjects.GamePlayer.Attack.Location.Leg:         Picior
+GameObjects.GamePlayer.Attack.Location.Torso:       Torace
+GameObjects.GamePlayer.Attack.Miss:                 Ratezi.
+GameObjects.GamePlayer.Attack.Missed:               {0} te atacă, dar ratează.
+GameObjects.GamePlayer.Attack.MustSelectQuiver:     Trebuie să selectezi un compartiment din tolbă.
+GameObjects.GamePlayer.Attack.NeedRepair:           {0} al tău/a ta are nevoie de reparații.
+GameObjects.GamePlayer.Attack.NeedRepairDire:       {0} al tău/a ta are urgent nevoie de reparații.
+GameObjects.GamePlayer.Attack.NeedTarget:           Trebuie să selectezi o țintă pe care să o ataci.
+GameObjects.GamePlayer.Attack.NotInView:            {0} nu este la vedere.
+GameObjects.GamePlayer.Attack.Parried:              {0} îți parează atacul.
+GameObjects.GamePlayer.Attack.Parry:                {0} te atacă, dar tu parezi lovitura!
+GameObjects.GamePlayer.Attack.ReadyToFire:          Ești gata să tragi.
+GameObjects.GamePlayer.Attack.StrafMiss:            Mișcarea laterală te-a făcut să ratezi.
+GameObjects.GamePlayer.Attack.TooFarAway:           {0} este prea departe pentru a fi atacat(ă).
+GameObjects.GamePlayer.Attack.TooTired:             Ești prea obosit pentru a menține mai mult timp ținta.
+GameObjects.GamePlayer.Attack.Type.Shot:            Foc
+GameObjects.GamePlayer.Attack.Type.Throw:           Aruncare
+GameObjects.GamePlayer.Attack.WithYour:             cu {0} tău/ta
+GameObjects.GamePlayer.Attack.YouAttack:            Ataci
+GameObjects.GamePlayer.Attack.YouShot:              Tragi asupra
+GameObjects.GamePlayer.Attack.CounterAttackSuccess: Folosești {0} pentru a contraataca.
+GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:   Nu poți folosi stilul de contraatac cu arma curentă.
+GameObjects.GamePlayer.Attack.CounterAttackNoStyle:       Nu s-a găsit niciun stil de contraatac pentru clasa ta.
+GameObjects.GamePlayer.Attack.CounterAttackByEnemy:       {0} lansează un contraatac!
+
+GameObjects.GamePlayer.Bind.Bound:          Spiritul tău este legat de această piatră a sufletelor.
+GameObjects.GamePlayer.Bind.CantBindDead:   Moartea te împiedică să-ți legi spiritul de piatra sufletelor.
+GameObjects.GamePlayer.Bind.CantHere:       Nu există nicio piatră a sufletelor în apropiere la care să te poți lega.
+GameObjects.GamePlayer.Bind.LastBindPoint:  Ultimul punct de legare: {0}.
+GameObjects.GamePlayer.Bind.MustWait:       Trebuie să aștepți {0} secunde înainte de a te putea lega din nou.
+
+GameObjects.GamePlayer.CastSpell.AlreadyCastFollow:     Deja lansezi o vrajă! Această vrajă a fost pusă în coadă.
+GameObjects.GamePlayer.CastSpell.AlreadyCastNoQueue:    Deja lansezi o vrajă. Pentru a activa coada de vrăji, folosește „/noqueue”.
+GameObjects.GamePlayer.CastSpell.AlreadyChosenSpells:   Ți-ai ales deja vrăjile pentru această cameră.
+GameObjects.GamePlayer.CastSpell.AlreadyPlaySong:       Deja cânți o melodie.
+GameObjects.GamePlayer.CastSpell.CantCastMezzed:        Nu poți lansa vrăji cât timp ești hipnotizat.
+GameObjects.GamePlayer.CastSpell.CantCastStunned:       Nu poți lansa vrăji cât timp ești uluit.
+GameObjects.GamePlayer.CastSpell.CantCastFumblingWords: Incantația ta eșuează; nu poți lansa vraja!
+GameObjects.GamePlayer.CastSpell.CantSpellDirectly:     Nu poți lansa această vrajă direct!
+GameObjects.GamePlayer.CastSpell.FollowSpell:           Ai pregătit un {0} ca vrajă de urmărire!
+GameObjects.GamePlayer.CastSpell.NotAFollowSpell:       Nu poți pregăti această vrajă ca vrajă de urmărire!
+GameObjects.GamePlayer.CastSpell.PrimarySpellFirst:     Trebuie să salvezi mai întâi o vrajă principală!
+GameObjects.GamePlayer.CastSpell.PrepareSecondarySpell: O pregătești ca vrajă secundară!
+GameObjects.GamePlayer.CastSpell.SelectSecondSpell:     Alege a doua vrajă pentru {0} al tău/a ta.
+GameObjects.GamePlayer.CastSpell.SpellInChamber:        Încarci {0} în {1} al tău/a ta.
+GameObjects.GamePlayer.CastSpell.SpellNotInChamber:     Această vrajă nu poate fi salvată în această cameră.
+GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:   Doar o vrajă secundară poate urma după vraja lansată!
+GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:   Deja lansezi o vrajă.
+GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast:    Trebuie să aștepți {0} secunde pentru a lansa o vrajă!
+
+GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:          Ținta ta este prea departe pentru ca tovarășul tău să o atace.
+GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:   Trebuie să selectezi o destinație pentru creatura ta.
+GameObjects.GamePlayer.CommandNpcAttack.KillTarget:                Îi poruncești lui/ei {0} să-ți ucidă ținta!
+GameObjects.GamePlayer.CommandNpcAttack.IsConfused:                {0} al tău/a ta este confuz(ă)!
+GameObjects.GamePlayer.CommandNpcAttack.FollowYou:                 Îi poruncești lui/ei {0} să te urmeze!
+GameObjects.GamePlayer.CommandNpcAttack.Stay:                      Îi poruncești lui/ei {0} să rămână!
+GameObjects.GamePlayer.CommandNpcAttack.ComeHere:                  Îi poruncești lui/ei {0} să vină la tine.
+GameObjects.GamePlayer.CommandNpcAttack.GoToTarget:                Îi poruncești lui/ei {0} să meargă la ținta ta.
+GameObjects.GamePlayer.CommandNpcAttack.Passive:                   Îi poruncești lui/ei {0} să se retragă din luptă!
+GameObjects.GamePlayer.CommandNpcAttack.Aggressive:                Îi poruncești lui/ei {0} să atace toți inamicii!
+GameObjects.GamePlayer.CommandNpcAttack.Denfensive:                Îi poruncești lui/ei {0} să te apere!
+
+GameObjects.GamePlayer.CraftItem.DontHaveAbilityMake:              Nu ai abilitatea necesară pentru a fabrica acest obiect.
+GameObjects.GamePlayer.CurrentTitle.TitleCleared:                  Titlul tău a fost eliminat.
+
+GameObjects.GamePlayer.Die.CorpseLies:             {0} a murit. Cadavrul lui/ei zace pe pământ.
+GameObjects.GamePlayer.Die.DeadRVR:                Ai căzut în luptă pentru regatul tău și nu pierzi experiență.
+GameObjects.GamePlayer.Die.DeathN1:                Aceasta este prima ta moarte la acest nivel. Pierderile de experiență și constituție sunt mult reduse.
+GameObjects.GamePlayer.Die.DeathN2:                Aceasta este a doua ta moarte la acest nivel. Pierderile de experiență și constituție sunt reduse.
+GameObjects.GamePlayer.Die.DuelDefeated:           {0} a fost învins(ă) de {1} într-un duel!
+GameObjects.GamePlayer.Die.DuelWinner:             {0} câștigă duelul!
+GameObjects.GamePlayer.Die.Killed:                 {0} tocmai a fost ucis(ă).
+GameObjects.GamePlayer.Die.KilledBy:               {0} tocmai a fost ucis(ă) de {1}.
+GameObjects.GamePlayer.Die.KilledByLocation:       {0} tocmai a fost ucis(ă) de {1} la {2}.
+GameObjects.GamePlayer.Die.KilledLocation:         {0} tocmai a fost ucis(ă) la {1}.
+GameObjects.GamePlayer.Die.LoseExperience:         Pierzi experiență.
+GameObjects.GamePlayer.Die.ReleaseToReturn:        Ai murit. Tastează „/release” pentru a te întoarce la piatra sufletelor.
+GameObjects.GamePlayer.Die.YouKilled:              L-ai/ai ucis-o pe {0}.
+
+GameObjects.GamePlayer.DrowningTimerCallback.CannotBreath:  Nu poți respira sub apă și înghiți apă!
+GameObjects.GamePlayer.DrowningTimerCallback.Take5%Damage:  Pierzi 5% din punctele tale de viață maxime.
+
+GameObjects.GamePlayer.DuelStop.DuelEnds:                     Duelul tău se încheie.
+
+GameObjects.GamePlayer.GainBountyPoints.YouGet:               Primești {0} puncte de recompensă.
+GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus:       Primești un bonus de {0} puncte de recompensă datorită teritoriilor tale.
+
+GameObjects.GamePlayer.GainCraftingSkill.GainSkill:           Primești o creștere de abilitate în {0}. ({1})
+GameObjects.GamePlayer.GainCraftingSkill.ReachedSkill:        {0} a atins titlul „Legendar” (1000 puncte de abilitate) în {1}.
+
+GameObjects.GamePlayer.GainExperience.CampBonus:              ({0} bonus de tabără)
+GameObjects.GamePlayer.GainExperience.CannotRaise:            Nu poți atinge nivelul 6 înainte de a alege o specializare.
+GameObjects.GamePlayer.GainExperience.GroupBonus:             ({0} bonus de grup)
+GameObjects.GamePlayer.GainExperience.OutpostBonus:           ({0} bonus de avanpost)
+GameObjects.GamePlayer.GainExperience.RoyaumesouspeupleBonus: Primești un bonus de {0} pentru regatele subpopulate!
+GameObjects.GamePlayer.GainExperience.TalkToTrainer:          Vorbește cu instructorul tău pentru mai multe informații.
+GameObjects.GamePlayer.GainExperience.YouGet:                 Primești {0} puncte de experiență.
+GameObjects.GamePlayer.GainExperience.BonusRenaissance:       dintre care {0} puncte bonus din Renaștere
+GameObjects.GamePlayer.GainExperience.BonusTerritory:         dintre care {0} puncte bonus din Teritorii
+GameObjects.GamePlayer.GainExperience.BonusGameEvent:         dintre care {0} puncte bonus din Evenimente
+
+GameObjects.GamePlayer.GainRealmPoints.Earned:                {0} a câștigat 1.000.000 puncte de regat în {1}.
+GameObjects.GamePlayer.GainRealmPoints.GainBonus:             Primești un bonus de +{0} la toate specializările!
+GameObjects.GamePlayer.GainRealmPoints.GainedLevel:           Ai câștigat un nivel de regat!
+GameObjects.GamePlayer.GainRealmPoints.GainedRank:            Ai obținut un nou rang și titlu de regat!
+GameObjects.GamePlayer.GainRealmPoints.NewRealmTitle:         Noul tău titlu de regat este {0}.
+GameObjects.GamePlayer.GainRealmPoints.ReachedRank:           Ai atins rangul de regat {0}L0!
+GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:       {0} a atins rangul de regat {1:#L#} în {2}!
+GameObjects.GamePlayer.GainRealmPoints.YouGet:                Primești {0} puncte de regat!
+GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:           Primești {0} puncte de regat în plus datorită bonusurilor de zonă!
+GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP:      Primești {0} puncte de regat pentru apărarea teritoriului tău!
+GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:     Primești {0} puncte de regat pentru vindecarea unui membru al regatului tău!
+
+GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:   Îl/o observi pe {0}. {1} este membru al unui regat inamic!
+GameObjects.GamePlayer.GetExamineMessages.NeutralMember:      Îl/o observi pe {0}. {1} nu aparține niciunui clan.
+GameObjects.GamePlayer.GetExamineMessages.OtherGuildMember:   Îl/o observi pe {0}. {1} este membru al clanului: {2}.
+GameObjects.GamePlayer.GetExamineMessages.RealmMember:        Îl/o observi pe {0}. {1} este un/o {2} din regatul tău.
+GameObjects.GamePlayer.GetExamineMessages.YouExamine:         Îl/o observi pe {0}.
+GameObjects.GamePlayer.GetExamineMessages.YourGuildMember:    Îl/o observi pe {0}. {1} este un/o {2} din clanul tău.
+
+GameObjects.GamePlayer.IsCloakHoodUp.NowWear:                 Acum porți gluga ridicată.
+GameObjects.GamePlayer.IsCloakHoodUp.NoLongerWear:            Acum porți gluga lăsată.
+
+GameObjects.GamePlayer.IsCloakInvisible.Invisible:            Acum nu îți mai vezi mantia.
+GameObjects.GamePlayer.IsCloakInvisible.Visible:              Îți vezi din nou mantia.
+
+GameObjects.GamePlayer.IsHelmInvisible.Invisible:             Acum nu îți mai vezi coiful.
+GameObjects.GamePlayer.IsHelmInvisible.Visible:               Îți vezi din nou coiful.
+
+GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Te dai jos de pe armăsar.
+GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Te urci în șa.
+GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Trebuie să fii echipat cu un cal.
+GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Trebuie să fii călare pentru a folosi acest inventar.
+
+GameObjects.GamePlayer.ItemBonusName.Bonus1:    Forță
+GameObjects.GamePlayer.ItemBonusName.Bonus2:    Dexteritate
+GameObjects.GamePlayer.ItemBonusName.Bonus3:    Constituție
+GameObjects.GamePlayer.ItemBonusName.Bonus4:    Agilitate
+GameObjects.GamePlayer.ItemBonusName.Bonus5:    Inteligență
+GameObjects.GamePlayer.ItemBonusName.Bonus6:    Pietate
+GameObjects.GamePlayer.ItemBonusName.Bonus7:    Empatie
+GameObjects.GamePlayer.ItemBonusName.Bonus8:    Carismă
+GameObjects.GamePlayer.ItemBonusName.Bonus9:    Mană
+GameObjects.GamePlayer.ItemBonusName.Bonus10:   PV (Puncte de Viață)
+GameObjects.GamePlayer.ItemBonusName.Bonus11:   Rezistență Corp
+GameObjects.GamePlayer.ItemBonusName.Bonus12:   Rezistență Rece
+GameObjects.GamePlayer.ItemBonusName.Bonus13:   Rezistență Încovoiere
+GameObjects.GamePlayer.ItemBonusName.Bonus14:   Rezistență Energie
+GameObjects.GamePlayer.ItemBonusName.Bonus15:   Rezistență Căldură
+GameObjects.GamePlayer.ItemBonusName.Bonus16:   Rezistență Materie
+GameObjects.GamePlayer.ItemBonusName.Bonus17:   Rezistență Tăiere
+GameObjects.GamePlayer.ItemBonusName.Bonus18:   Rezistență Spirit
+GameObjects.GamePlayer.ItemBonusName.Bonus19:   Rezistență Înjunghiere
+GameObjects.GamePlayer.ItemBonusName.Bonus119:  Viteză de acumulare a tensiunii
+GameObjects.GamePlayer.ItemBonusName.Bonus147:  Rată maximă de concentrare
+GameObjects.GamePlayer.ItemBonusName.Bonus148:  Bonus factor de armură (FA)
+GameObjects.GamePlayer.ItemBonusName.Bonus149:  Bonus absorbție (Abs)
+GameObjects.GamePlayer.ItemBonusName.Bonus150:  Rată de regenerare PV
+GameObjects.GamePlayer.ItemBonusName.Bonus151:  Rată de regenerare mană
+GameObjects.GamePlayer.ItemBonusName.Bonus152:  Rată de regenerare rezistență
+GameObjects.GamePlayer.ItemBonusName.Bonus153:  Distanță vrăji
+GameObjects.GamePlayer.ItemBonusName.Bonus154:  Distanță arme la distanță
+GameObjects.GamePlayer.ItemBonusName.Bonus155:  Viteză luptă corp la corp
+GameObjects.GamePlayer.ItemBonusName.Bonus156:  Voință
+GameObjects.GamePlayer.ItemBonusName.Bonus169:  Șansă de eschivă
+GameObjects.GamePlayer.ItemBonusName.Bonus170:  Șansă de blocare (Scuturi)
+GameObjects.GamePlayer.ItemBonusName.Bonus171:  Șansă de parare
+GameObjects.GamePlayer.ItemBonusName.Bonus175:  Șansă de lovire în luptă
+GameObjects.GamePlayer.ItemBonusName.Bonus181:  Rată de reușită a vrăjilor
+GameObjects.GamePlayer.ItemBonusName.Bonus197:  Rezistență la atacuri perforante
+GameObjects.GamePlayer.ItemBonusName.Bonus249:  Rezistență la esență
+
+GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Ești în lavă și primești daune!
+GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Primești daune egale cu 34% din punctele tale de viață maxime.
+
+GameObjects.GamePlayer.OnItemEquipped.Increased:      {0} al tău/a ta a crescut.
+GameObjects.GamePlayer.OnItemEquipped.Magic:          Magia lui/ei {0} îți străbate venele.
+GameObjects.GamePlayer.OnItemEquipped.WieldBothHands: Îți mânuiești {0} cu ambele mâini.
+GameObjects.GamePlayer.OnItemEquipped.WieldLeftHand:  Îți mânuiești {0} în mâna stângă.
+GameObjects.GamePlayer.OnItemEquipped.WieldRightHand: Îți mânuiești {0} în mâna dreaptă.
+
+GameObjects.GamePlayer.OnItemUnequipped.Decreased:    {0} al tău/a ta a scăzut.
+GameObjects.GamePlayer.OnItemUnequipped.BothHandsFree: Pui {0} la loc. Acum ai mâinile libere.
+GameObjects.GamePlayer.OnItemUnequipped.LeftHandFree:  Pui la loc {0} din mâna stângă.
+GameObjects.GamePlayer.OnItemUnequipped.RightHandFree: Pui la loc {0} din mâna dreaptă.
+
+GameObjects.GamePlayer.OnLevelUp.AttainedRank:        Ai atins rangul {0}!
+GameObjects.GamePlayer.OnLevelUp.FreeLevelEligible:   Ai dreptul la un nivel gratuit! Dă clic pe instructorul tău pentru a-l primi (sau tastează „/freelevel decline” pentru a refuza).
+GameObjects.GamePlayer.OnLevelUp.HitsRaise:           Punctele tale de viață au crescut cu {0}.
+GameObjects.GamePlayer.OnLevelUp.PowerRaise:          Punctele tale de mană au crescut cu {0}.
+GameObjects.GamePlayer.OnLevelUp.Reached:             {0} a atins nivelul {1} în {2}!
+GameObjects.GamePlayer.OnLevelUp.SecondStage:         Ai atins etapa a doua a nivelului {0}!
+GameObjects.GamePlayer.OnLevelUp.StatRaise:           Atributele tale cresc!
+GameObjects.GamePlayer.OnLevelUp.YouAchieved:         Ai finalizat nivelul {0}!
+GameObjects.GamePlayer.OnLevelUp.YouGetSpec:          Primești {0} puncte de specializare de cheltuit la acest nivel!
+GameObjects.GamePlayer.OnLevelUp.YouRaise:            Ai urcat la nivelul {0}!
+GameObjects.GamePlayer.OnRenaissance:                 Tocmai ți-ai încheiat Renașterea!
+
+GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} a fost deconectat(ă) de la server!
+
+GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Te miști și nu îți poți chema montura!
+GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Te miști și îți întrerupi fabricarea.
+
+GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} se antrenează în diverse specializări.
+GameObjects.GamePlayer.OnSkillTrained.YouHave:         Îți mai rămân {0} puncte de specializare la acest nivel.
+GameObjects.GamePlayer.OnSkillTrained.YouSpend:        Cheltuiești {0} puncte și îți mărești specializarea în {1}.
+
+GameObjects.GamePlayer.OpenSelfCraft.AlreadySelfCrafting: Deja încântezi ceva.
+GameObjects.GamePlayer.OpenSelfCraft.CanOnlyCraftBackpack: Poți combina obiecte doar în rucsacul tău.
+
+GameObjects.GamePlayer.PickupObject.Autosplit:             (Împărțire automată) {0} merge la {1}.
+GameObjects.GamePlayer.PickupObject.BackpackFull:          Inventarul tău este plin; trebuie să eliberezi spațiu.
+GameObjects.GamePlayer.PickupObject.CantGetThat:           Nu poți ridica asta.
+GameObjects.GamePlayer.PickupObject.GroupMemberPicksUp:    {0} ridică {1}.
+GameObjects.GamePlayer.PickupObject.ItemBelowBGThreshold:  Acest obiect este sub nivelul grupului tău de luptă.
+GameObjects.GamePlayer.PickupObject.LootDoesntBelongYou:   Această pradă nu îți aparține — nu o poți lua.
+GameObjects.GamePlayer.PickupObject.MustHaveTarget:        Ai nevoie de o țintă pentru a ridica ceva.
+GameObjects.GamePlayer.PickupObject.NoOneGroupWantsMoney:  Nimeni din grup nu vrea banii.
+GameObjects.GamePlayer.PickupObject.NoOneWantsThis:        Nimeni din grup nu vrea {0}.
+GameObjects.GamePlayer.PickupObject.ObjectTooFarAway:      {0} este prea departe pentru a fi ridicat.
+GameObjects.GamePlayer.PickupObject.TooFarFromBoat:        Ești prea departe de barcă pentru a te îmbarca.
+GameObjects.GamePlayer.PickupObject.YouGet:                Ridici {0} și îl pui în rucsac.
+GameObjects.GamePlayer.PickupObject.YouPickUp:             Ridici {0}.
+GameObjects.GamePlayer.PickupObject.YourLootShare:         Partea ta de pradă este {0}.
+GameObjects.GamePlayer.PickupObject.GuildDueTax:           Taxa ta de {0} merge în banca clanului.
+GameObjects.GamePlayer.PickupObject.CannotDepositHere:     {0} nu poate fi depus aici!
+GameObjects.GamePlayer.PickupObject.WaitToPickup:          Trebuie să aștepți {0} secunde pentru a ridica {1}!
+GameObjects.GamePlayer.PickupObject.HeadPickedUp:          Ai recuperat capul lui/ei {0}.
+GameObjects.GamePlayer.PickupObject.HeadInventoryFull:     Nu ai putut recupera capul lui/ei {0}; inventarul tău este plin!
+
+GameObjects.GamePlayer.Pray.AlreadyPraying:            Deja te rogi.
+GameObjects.GamePlayer.Pray.Begin:                     Începi să te rogi.
+GameObjects.GamePlayer.Pray.CantPrayNow:               Nu te poți ruga acum.
+GameObjects.GamePlayer.Pray.GainBack:                  Rugăciunile tale au fost ascultate; recuperezi experiență.
+GameObjects.GamePlayer.Pray.MustGetCloser:             Trebuie să te apropii de mormântul tău pentru a te ruga.
+GameObjects.GamePlayer.Pray.MustStandingStill:         Trebuie să stai nemișcat pentru a te ruga.
+GameObjects.GamePlayer.Pray.NeedTarget:                Trebuie să selectezi un mormânt pentru a te ruga.
+GameObjects.GamePlayer.Pray.SelectGrave:               Selectează-ți mormântul pentru a te ruga.
+GameObjects.GamePlayer.Pray.CantPrayRiding:            Nu te poți ruga călare!
+
+GameObjects.GamePlayer.Pronoun.Female.Objective:       pe ea
+GameObjects.GamePlayer.Pronoun.Female.Possessive:      ei
+GameObjects.GamePlayer.Pronoun.Female.Subjective:      ea
+GameObjects.GamePlayer.Pronoun.Male.Objective:         pe el
+GameObjects.GamePlayer.Pronoun.Male.Possessive:        lui
+GameObjects.GamePlayer.Pronoun.Male.Subjective:        el
+
+GameObjects.GamePlayer.Quit.CantQuitCrafting:          Nu te poți deconecta în timpul fabricării.
+GameObjects.GamePlayer.Quit.CantQuitDead:              Nu te poți deconecta după moartea ta bruscă! Tastează „/release” pentru a învia.
+GameObjects.GamePlayer.Quit.CantQuitInInstance:        Nu te poți deconecta în timp ce ești într-o instanță!
+GameObjects.GamePlayer.Quit.CantQuitMount:             Nu te poți deconecta cât timp ești călare.
+GameObjects.GamePlayer.Quit.RecentlyInCombat:          Ai fost recent în luptă; trebuie să aștepți mai mult pentru a te deconecta.
+GameObjects.GamePlayer.Quit.CantQuitStanding:          Trebuie să stai nemișcat pentru a te deconecta.
+GameObjects.GamePlayer.Quit.YouWillQuit1:              Vei părăsi jocul în {0} secunde.
+GameObjects.GamePlayer.Quit.YouWillQuit2:              Vei părăsi jocul în {0} secunde. Tastează „/stand” sau mișcă-te pentru a anula.
+GameObjects.GamePlayer.Quit.CanTQuitDamned:            Nu te poți deconecta; ești blestemat.
+GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease: Nu te poți deconecta cât timp ești sub vraja „{0}”.
+GameObjects.GamePlayer.Quit.CanTQuitStunned:           Nu te poți deconecta; ești imobilizat de o vrajă.
+GameObjects.GamePlayer.Quit.CanTQuitMezzed:            Nu te poți deconecta; dormi.
+
+GameObjects.GamePlayer.RealmTitle.UnknownRealm:        Regat necunoscut.
+
+GameObjects.GamePlayer.ReceiveItem.Receive:            Primești {0}.
+GameObjects.GamePlayer.ReceiveItem.ReceiveFrom:        Primești {0} de la {1}.
+
+GameObjects.GamePlayer.ReceiveTradeItem.CantTrade:         Nu poți tranzacționa acest obiect.
+GameObjects.GamePlayer.ReceiveTradeItem.StillSelfcrafting: Încă încântezi.
+
+GameObjects.GamePlayer.RefreshSpec.AfterBlocked:       Acest stil este cel mai bun după ce ultimul tău atac a fost blocat.
+GameObjects.GamePlayer.RefreshSpec.AfterEvaded:        Acest stil este cel mai bun după ce ultimul tău atac a fost eschivat.
+GameObjects.GamePlayer.RefreshSpec.AfterFumbles:       Acest stil este cel mai bun după ce ultimul tău atac a eșuat complet.
+GameObjects.GamePlayer.RefreshSpec.AfterMissed:        Acest stil este cel mai bun după ce ultimul tău atac a ratat.
+GameObjects.GamePlayer.RefreshSpec.AfterParried:       Acest stil este cel mai bun după ce ultimul tău atac a fost parat.
+GameObjects.GamePlayer.RefreshSpec.AfterStyle:         Acest stil poate fi folosit doar după stilul {0}.
+GameObjects.GamePlayer.RefreshSpec.TargetBlocked:      Acest stil este cel mai bun după ce ultimul atac al țintei tale a fost blocat.
+GameObjects.GamePlayer.RefreshSpec.TargetEvaded:       Acest stil este cel mai bun după ce ultimul atac al țintei tale a fost eschivat.
+GameObjects.GamePlayer.RefreshSpec.TargetFumbles:      Acest stil este cel mai bun după ce ultimul atac al țintei tale a eșuat complet.
+GameObjects.GamePlayer.RefreshSpec.TargetMisses:       Acest stil este cel mai bun după ce ultimul atac al țintei tale a ratat.
+GameObjects.GamePlayer.RefreshSpec.TargetHits:         Acest stil este cel mai bun după ce ultimul atac al țintei tale a nimerit.
+GameObjects.GamePlayer.RefreshSpec.TargetParried:      Acest stil este cel mai bun după ce ultimul atac al țintei tale a fost parat.
+GameObjects.GamePlayer.RefreshSpec.TargetStyle:        Acest stil este cel mai bun după ce ultimul atac al țintei tale a fost un stil.
+GameObjects.GamePlayer.RefreshSpec.YouLearn:           Învăță stilul de luptă {0}.
+
+GameObjects.GamePlayer.Release.CantReleaseDuel:        Nu îți poți schimba învierea pentru o moarte în duel!
+GameObjects.GamePlayer.Release.GraveErected:           Apare un mormânt acolo unde ai murit.
+GameObjects.GamePlayer.Release.LostConstitution:       Ai pierdut puncte de constituție. Caută un vindecător pentru a le recupera.
+GameObjects.GamePlayer.Release.NoLongerReleaseAuto:    Nu vei mai fi înviat automat ({0} secunde rămase).
+GameObjects.GamePlayer.Release.NotDead:                Nu ești încă mort.
+GameObjects.GamePlayer.Release.NoValidBindpoint:       Nu ești legat de o piatră a sufletelor validă; vei fi înviat aici.
+GameObjects.GamePlayer.Release.ReturnToPray:           Întoarce-te la mormântul tău (/pray) pentru a recupera experiență.
+GameObjects.GamePlayer.Release.SurroundingChange:      Împrejurimile tale se schimbă brusc.
+GameObjects.GamePlayer.Release.WillReleaseAuto:        Vei fi înviat automat în {0} secunde.
+GameObjects.GamePlayer.Release.WillReleaseAutoCity:    Vei fi înviat automat în oraș în {0} secunde.
+GameObjects.GamePlayer.Release.WillReleaseIn:          Vei fi înviat în {0} secunde.
+GameObjects.GamePlayer.Release.YouRelease:             Îți readuci corpul la viață.
+GameObjects.GamePlayer.Release.ReleaseToPortalKeep:    Vei fi înviat în {0} secunde la cel mai apropiat fort de frontieră.
+GameObjects.GamePlayer.Release.ReleaseToHouse:         Vei fi înviat în casa ta în {0} secunde!
+
+GameObjects.GamePlayer.RemoveAbility.YouLose:          Pierzi abilitatea {0}.
+GameObjects.GamePlayer.RemoveSpecialization.YouLose:   Pierzi specializarea {0}.
+GameObjects.GamePlayer.RemoveSpellLine.YouLose:        Pierzi linia de vrăji {0}.
+
+GameObjects.GamePlayer.SaveIntoDatabase.CharacterSaved: Personajul tău a fost salvat.
+
+GameObjects.GamePlayer.Say.YouSay:                     Spui: „{0}”
+GameObjects.GamePlayer.SayReceive.Says:                {0} spune: „{1}”
+GameObjects.GamePlayer.SayReceive.FalseLanguage:       {0} spune ceva într-o limbă pe care nu o înțelegi.
+
+GameObjects.GamePlayer.SendReceive.Sends:              {0} trimite: „{1}”
+GameObjects.GamePlayer.SendReceive.FalseLanguage:      {0} trimite ceva într-o limbă pe care nu o înțelegi.
+GameObjects.GamePlayer.SendReceive.Afk:                {0} este AFK.
+GameObjects.GamePlayer.SendReceive.AfkMessage:         <AFK> {0} trimite: „{1}”
+GameObjects.GamePlayer.Send.target.DontUnderstandYou:  {0} nu te înțelege.
+GameObjects.GamePlayer.Send.YouSendTo:                 Trimiți „{0}” către {1}.
+
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget: Renunți la controlul asupra țintei tale.
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget2: Pierzi controlul asupra {0} al tău/a ta.
+
+GameObjects.GamePlayer.Shade.AlreadyShade:             Ești deja ascuns!
+GameObjects.GamePlayer.Shade.NoLongerShade:            Nu mai ești ascuns!
+
+GameObjects.GamePlayer.Sit.AlreadySitting:             Ești deja așezat.
+GameObjects.GamePlayer.Sit.CantSitDead:                Nu te poți așeza cât timp ești mort.
+GameObjects.GamePlayer.Sit.CantSitMezzed:              Nu te poți așeza cât timp ești hipnotizat.
+GameObjects.GamePlayer.Sit.CantSitStunned:             Nu te poți așeza cât timp ești uluit.
+GameObjects.GamePlayer.Sit.InterruptCallMount:         Te așezi și încetezi să-ți chemi montura.
+GameObjects.GamePlayer.Sit.MustDismount:               Trebuie să descăleci mai întâi.
+GameObjects.GamePlayer.Sit.MustStandingStill:          Trebuie să stai nemișcat pentru a te așeza.
+GameObjects.GamePlayer.Sit.NoLongerWaitingQuit:        Nu mai aștepți să ieși din joc.
+GameObjects.GamePlayer.Sit.NotSitting:                 Nu ești așezat.
+GameObjects.GamePlayer.Sit.YouSitDown:                 Te așezi. Tastează „/stand” sau mișcă-te pentru a te ridica.
+GameObjects.GamePlayer.Sit.YouStandUp:                 Te ridici în picioare.
+
+GameObjects.GamePlayer.Spell.NotEnoughPowerful:        Nu ești suficient de puternic pentru a folosi vraja acestui obiect.
+GameObjects.GamePlayer.Spell.NotImplemented:           {0} ({1}) nu este încă implementat pe acest server.
+GameObjects.GamePlayer.Spell.Proc.NotImplemented:      Efectul reactiv cu ID {0} nu este încă implementat pe acest server.
+GameObjects.GamePlayer.Spell.ResurrectionIllness:      Boala învierii
+
+GameObjects.GamePlayer.Sprint.CantSprintDead:          Nu poți sprinta; ești mort.
+GameObjects.GamePlayer.Sprint.CantSprintHidden:        Nu poți sprinta cât timp ești ascuns.
+GameObjects.GamePlayer.Sprint.NoLongerReady:           Nu mai ești pregătit să sprintezi.
+GameObjects.GamePlayer.Sprint.PrepareSprint:           Te pregătești să sprintezi.
+GameObjects.GamePlayer.Sprint.TooFatigued:             Ești prea obosit pentru a sprinta.
+
+GameObjects.GamePlayer.StartAttack.CannotMelee:            Nu poți lovi cu un instrument.
+GameObjects.GamePlayer.StartAttack.CannotWithoutWeapon:    Nu poți ataca fără o armă.
+GameObjects.GamePlayer.StartAttack.CantAttackmesmerized:   Nu poți ataca în timp ce dormi.
+GameObjects.GamePlayer.StartAttack.CantAttackStunned:      Nu poți ataca cât timp ești uluit.
+GameObjects.GamePlayer.StartAttack.CantDisarmed:           Ești dezarmat și nu poți ataca!
+GameObjects.GamePlayer.StartAttack.CantDisarmed2:          Ești dezarmat și nu poți lansa această vrajă!
+GameObjects.GamePlayer.StartAttack.CantInShadeMode:        Nu poți începe lupta în modul Umbră!
+GameObjects.GamePlayer.StartAttack.CantUseQuiver:          Nu poți selecta această tolbă cu arma curentă.
+GameObjects.GamePlayer.StartAttack.CombatNoTarget:         Intri în luptă, dar nu ai țintă.
+GameObjects.GamePlayer.StartAttack.CombatTarget:           Intri în luptă și fixezi focusul pe [{0}]
+GameObjects.GamePlayer.StartAttack.SelectQuiver:           Trebuie să selectezi o tolbă.
+GameObjects.GamePlayer.StartAttack.SpellCancelled:         Vraja ta a fost anulată.
+GameObjects.GamePlayer.StartAttack.TargetInRange:          , țintă în rază
+GameObjects.GamePlayer.StartAttack.TargetOutOfRange:       , țintă în afara razei
+GameObjects.GamePlayer.StartAttack.TiredShot:              Ești prea obosit pentru a încerca un foc critic.
+GameObjects.GamePlayer.StartAttack.TiredUse:               Ești prea obosit pentru a-ți folosi {0}.
+GameObjects.GamePlayer.StartAttack.YouCantCombat:          Nu poți ataca dacă ești mort.
+GameObjects.GamePlayer.StartAttack.YouMustWait:            Trebuie să aștepți {0} secunde pentru a încerca un atac.
+GameObjects.GamePlayer.StartAttack.YouMustWaitAgain:       Trebuie să aștepți {0} secunde pentru a încerca un alt atac.
+GameObjects.GamePlayer.StartAttack.YouPrepare:             Îți pregătești {0} ({1}.{2}s până la focul {3})
+
+GameObjects.GamePlayer.Stealth.NoLongerHidden:         Nu mai ești ascuns.
+GameObjects.GamePlayer.Stealth.NowHidden:              Acum ești ascuns.
+
+GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Nu mai ai muniție în tolbă.
+GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Nu îți vei folosi tolba.
+GameObjects.GamePlayer.SwitchQuiver.ShootWith:         Vei ataca cu: {0}.
+GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Vraja ta a fost anulată.
+
+GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Nu poți face comerț cu acest jucător deoarece ești proscris.
+GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Nu poți face comerț cu un/ o proscris(ă).
+
+GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Ești supraîncărcat.
+GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Ești supraîncărcat și te miști încet.
+
+GameObjects.GamePlayer.UpdateSpellLine.GainPower:      Câștigi putere în linia de vrăji {0}.
+
+GameObjects.GamePlayer.UseSlot.AttemptToUse:           Încerci să folosești {0}.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShot:        Vei trage acum automat.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShotReload:  Vei trage și reîncărca automat.
+GameObjects.GamePlayer.UseSlot.CantCallMountSeated:    Nu îți poți chema montura în timp ce stai jos.
+GameObjects.GamePlayer.UseSlot.CantFire:               Nu poți arunca sau folosi acest obiect.
+GameObjects.GamePlayer.UseSlot.CantMountCombat:        Ești în luptă și nu îți poți chema montura.
+GameObjects.GamePlayer.UseSlot.CantMountHere:          Nu poți invoca o montură aici!
+GameObjects.GamePlayer.UseSlot.CantCallMountRVR:       Nu poți invoca o montură aici!
+GameObjects.GamePlayer.UseSlot.CantMountInDungeon:     Nu poți invoca o montură într-un dungeon!
+GameObjects.GamePlayer.UseSlot.CantMountMoving:        Nu poți încăleca în timp ce te miști.
+GameObjects.GamePlayer.UseSlot.CantMountStealthed:     Nu poți încăleca cât timp ești în furtivitate.
+GameObjects.GamePlayer.UseSlot.CantMountDamned:        Nu poți încăleca cât timp ești blestemat!
+GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Nu poți încăleca cât timp ești împietrit!
+GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Nu poți încăleca în această formă!
+GameObjects.GamePlayer.UseSlot.CantMountMorph:         Nu poți încăleca cât timp vraja „{0}” este asupra ta!
+GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Nu poți încăleca; ești mort.
+GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Nu poți folosi această montură cât timp porți o relicvă!
+GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Nu îți poți vedea ținta.
+GameObjects.GamePlayer.UseSlot.CantSummonRvR:          Nu poți invoca o montură într-o zonă RvR.
+GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:    Nu poți folosi acest obiect direct din rucsac. Echipază-l mai întâi.
+GameObjects.GamePlayer.UseSlot.CantUseInCombat:        Nu poți folosi acest obiect în luptă.
+GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:    Nu poți folosi acest obiect stând jos!
+GameObjects.GamePlayer.UseSlot.CantUseHere:            Nu poți folosi asta aici!
+GameObjects.GamePlayer.UseSlot.IllegalSourceObject:    Obiect de sursă nevalid. {0} este gata!
+GameObjects.GamePlayer.UseSlot.MustDismountBefore:     Trebuie să descăleci mai întâi.
+GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload: Nu vei mai trage sau reîncărca automat.
+GameObjects.GamePlayer.UseSlot.NotEnouthPower:         Nu ești suficient de puternic pentru a folosi vraja acestui obiect.
+GameObjects.GamePlayer.UseSlot.OutOfCharges:           {0} a rămas fără încărcături.
+GameObjects.GamePlayer.UseSlot.StopCallingMount:       Încetezi să-ți chemi montura.
+GameObjects.GamePlayer.UseSlot.SummonHorseLevel:       Trebuie să ai nivelul {0} pentru a invoca acest cal.
+GameObjects.GamePlayer.UseSlot.WhistleMount:           Fluieri la montura ta.
+GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:      Trebuie să aștepți {0} secunde înainte de a folosi acest obiect.
+GameObjects.GamePlayer.UseSlot.CantUseState:           Nu poți folosi {0} în starea ta actuală.
+GameObjects.GamePlayer.UseSlot.Used:                   Folosești {0}.
+GameObjects.GamePlayer.UseSlot.CantUseCast:            Trebuie să îți termini acțiunea curentă pentru a folosi {0} al tău/a ta.
+GameObjects.GamePlayer.UseSlot.WrongTarget:            Ai nevoie de o țintă pentru a folosi această abilitate!
+GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:        Compartimentul {0} al tolbii este gol!
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:   Efectul obiectului cu ID {0} nu este încă implementat.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:     Linia de vrăji a obiectului nu a fost găsită.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:    Vraja obiectului cu ID {0} nu a fost găsită.
+GameObjects.GamePlayer.UseSlot.CantDischargeInState:   Nu poți descărca un obiect în starea ta actuală.
+GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:    Trebuie să aștepți {0} secundă(e) înainte de a descărca {1}!
+GameObjects.GamePlayer.UseSlot.Cooldown:               Trebuie să aștepți {0} pentru a folosi acest obiect!
+GameObjects.GamePlayer.UseSlot.Cooldown.Seconds:       mai sunt {0} secunde
+GameObjects.GamePlayer.UseSlot.Cooldown.MinutesAndSeconds:  mai sunt {0} minute și {1} secunde
+GameObjects.GamePlayer.UseSlot.NoMagicItemZone:        Folosirea obiectelor magice nu este permisă în această zonă.
+GameObjects.GamePlayer.UseSlot.CannotUseInState:       În starea ta nu poți folosi nimic.
+GameObjects.GamePlayer.UseSlot.NotPowerfulEnough:      Nu ești suficient de puternic pentru a folosi vraja acestui obiect.
+GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Nu poți folosi acest inventar.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Efectul de încărcare cu ID {0} nu este încă implementat.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Efectul de încărcare cu ID {0} nu a fost găsit.
+
+GameObjects.GamePlayer.Whisper.SelectTarget:           Selectează o țintă pentru a șopti.
+GameObjects.GamePlayer.Murder:                         Ai pierdut 1 punct de reputație pentru că l-ai/ai ucis-o pe {0}.
+GameObjects.GamePlayer.Multiplekills:                  Ai pierdut 1 punct de reputație pentru multiple ucideri ale lui/ei {0}.
+GameObjects.GamePlayer.GuardKill:                      Ai pierdut 1 punct de reputație pentru uciderea unui gardian.
+GameObjects.GamePlayer.Wanted:                         {0} este acum căutat(ă) pentru crimele sale.
+GameObjects.GamePlayer.Jailed:                         {0} a fost încarcerat(ă) de {1}.
+GameObjects.GamePlayer.Jailed.Unknown:                 {0} a fost încarcerat(ă) de gardieni.
+GameObjects.GamePlayer.Released:                       {0} a fost eliberat(ă) din închisoare.
+
+GameObjects.GamePlayer.RvR:                            – Jucători uciși în total: {0} –
+GameObjects.GamePlayer.RvR.Champion:                   – Jucători uciși în total: {0} – Campionul zilei: {1} ({2} atacatori inamici uciși)
+GameObjects.GamePlayer.RvR.Control:                    RvR {1} este sub controlul lui/ei {0}!
+GameObjects.GamePlayer.RvR.Open.Claimable:             Dorești să [reivendici controlul]?
+GameObjects.GamePlayer.RvR.Open.UnClaimble:            Trebuie să aștepți {0} secunde înainte de a putea revendica controlul.
+GameObjects.GamePlayer.RvR.Closed:                     Cucerirea fortului este temporar indisponibilă.
+GameObjects.GamePlayer.RvR.In.Combat:                  Nu poți cuceri fortul în luptă.
+GameObjects.GamePlayer.RvR.Occupied:                   Sunt ocupat acum, reveniți mai târziu.
+GameObjects.GamePlayer.RvR.Interrupt:                  Ai fost întrerupt.
+GameObjects.GamePlayer.RvR.Too.Far:                    Te-ai îndepărtat prea mult.
+GameObjects.GamePlayer.RvR.Capture.Timer:              Cucerirea fortului
+GameObjects.GamePlayer.RvR.Capture.Start:              {0} începe să preia controlul asupra fortului!
+GameObjects.GamePlayer.PvP.DieDropItem:                Moartea ta a împrăștiat {0} dintre comorile tale!
+
+GameObjects.GamePlayer.Champion.LevelUp:               Ai primit un nivel suplimentar de Campion!
+GameObjects.GamePlayer.Champion.NeedToBeChampion:      Trebuie să fii Campion pentru a folosi acest inventar.
+
+GameObjects.GamePlayer.SaddleBag.CL2:                  Această geantă de șa necesită nivel Campion 2!
+GameObjects.GamePlayer.SaddleBag.CL3:                  Această geantă de șa necesită nivel Campion 3!
+GameObjects.GamePlayer.SaddleBag.CL4:                  Această geantă de șa necesită nivel Campion 4!
+GameObjects.GamePlayer.SaddleBag.CL5:                  Această geantă de șa necesită nivel Campion 5!
+GameObjects.GamePlayer.SaddleBag.Activated:            Ai activat o geantă de șa!
+GameObjects.GamePlayer.SaddleBag.ActivateError:        A apărut o eroare la activarea acestei genți de șa!
+GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Ai activat deja această geantă de șa!
+
+GameObjects.GamePlayer.Reputation.Zero:                Reputația ta este acum neutră.
+
+GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Totalul punctelor tale de specializare era incorect. Acum a fost corectat — te rugăm să te antrenezi din nou.

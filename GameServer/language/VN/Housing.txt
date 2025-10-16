@@ -1,0 +1,122 @@
+# HOUSING (VI)
+House.DBHousePermissions.AccessLevel:			Mức quyền truy cập {0}
+House.Edit.NotEnoughMoney:				Bạn không có đủ tiền để thực hiện điều đó!
+House.Edit.PayForChanges:				Trả {0} cho các thay đổi.
+House.Enter.EnteredHouse:				Bạn đã vào ngôi nhà số {0}.
+House.Exit.LeftHouse:					Bạn đã rời ngôi nhà số {0}.
+House.SendHouseInfo.DoorMaterial:			-Cửa: {0}	
+House.SendHouseInfo.ExteriorMaterials:			Vật liệu bên ngoài:
+House.SendHouseInfo.ExteriorUpgrades:			Nâng cấp ngoại thất:	
+House.SendHouseInfo.HouseOwner:				Nhà của {0}
+House.SendHouseInfo.IndoorGuildBanner:			-Cờ hiệu: {0}	
+House.SendHouseInfo.IndoorGuildShield:			-Khiên: {0}	
+House.SendHouseInfo.InteriorCarpets:			Thảm nội thất:	
+House.SendHouseInfo.InteriorUpgrades:			Nâng cấp nội thất:	
+House.SendHouseInfo.Level:					Cấp: {0}
+House.SendHouseInfo.Lockbox:					Két: {0}
+House.SendHouseInfo.Lotnum:					Số lô: {0}
+House.SendHouseInfo.MaxLockbox:				Sức chứa tối đa trong két: {0}
+House.SendHouseInfo.OutdoorGuildBanner:			-Cờ hiệu: {0}	
+House.SendHouseInfo.OutdoorGuildShield:			-Khiên: {0}	
+House.SendHouseInfo.Owner:					Chủ sở hữu: {0}
+House.SendHouseInfo.Owners:					Đồng chủ sở hữu:
+House.SendHouseInfo.Porch:					Hiên nhà:
+House.SendHouseInfo.PorchEnabled:				-Khả dụng: {0}	
+House.SendHouseInfo.PorchMaterial:				-Hiên: {0}	
+House.SendHouseInfo.PorchRoofColor:				-Màu: {0}	
+House.SendHouseInfo.RentalPrice:				Tiền thuê: {0}	
+House.SendHouseInfo.RentDueIn:				Đến hạn sau: {0} ngày, {1} giờ
+House.SendHouseInfo.RoofMaterial:				-Mái: {0}	
+House.SendHouseInfo.Rug1Color:					-Màu 1: {0}
+House.SendHouseInfo.Rug2Color:					-Màu 2: {0}
+House.SendHouseInfo.Rug3Color:					-Màu 3: {0}
+House.SendHouseInfo.Rug4Color:					-Màu 4: {0}
+House.SendHouseInfo.TrussMaterial:				-Xà mái: {0}	
+House.SendHouseInfo.WallMaterial:				-Tường: {0}	
+House.SendHouseInfo.WindowMaterial:				-Cửa sổ: {0}	
+
+HouseEnterLeave.TooFarAway:					Bạn ở quá xa để vào nhà {0}.
+HouseEnterLeave.CantEnter:					Bạn không thể vào nhà {0}.
+
+HousingDecorationRotate.Rotated:			Vật dụng nội thất đã được xoay từ {0} độ sang {1} độ.
+
+# /HousingPlaceItemHandler
+HousingPickupItemHandler.GardenRemoved:			Đã gỡ vật dụng trong vườn.
+HousingPickupItemHandler.PickUp:				Đặt {0} vào túi đồ của bạn.
+HousingPlaceItemHandler.30objects:				Bạn đã đặt 30 vật dụng rồi. Không thể đặt thêm.
+HousingPlaceItemHandler.40objects:				Bạn đã đặt 40 vật dụng rồi. Không thể đặt thêm.
+HousingPlaceItemHandler.CantFloor:				Vật dụng này không thể đặt trên sàn!
+HousingPlaceItemHandler.CantWall:				Vật dụng này không thể gắn lên tường!
+HousingPlaceItemHandler.DropOnFloor:				Đặt vật dụng {0} trên sàn nhà của bạn.
+HousingPlaceItemHandler.DropOnGarden:				Đặt vật dụng {0} trong khu vườn của bạn.
+HousingPlaceItemHandler.DropOnWall:				Gắn vật dụng {0} lên tường nhà của bạn.
+HousingPlaceItemHandler.GardenObjectPlaced:			Đã đặt vật dụng vườn. Còn {0} chỗ.
+HousingPlaceItemHandler.HasPorch:				Ngôi nhà này đã có hiên!
+HousingPlaceItemHandler.HasNoPorch:				Ngôi nhà này không có hiên!
+HousingPlaceItemHandler.IndoorObjectPlaced:			Đã đặt vật dụng nội thất. Còn {0} chỗ.
+HousingPlaceItemHandler.NoHookpoint:				Không còn điểm móc nào khả dụng!
+HousingPlaceItemHandler.PutMoney:				Nạp tiền vào tài khoản ngôi nhà của bạn.
+
+# /Housing LotMarker
+Housing.LotMarker.TargetLotNumber:				Bạn đang nhắm tới lô số {0}.
+Housing.LotMarker.ItCanBeBoughtFor:				Có thể mua với giá {0}.
+Housing.LotMarker.ItIsOwnedBy:				Lô này thuộc sở hữu của {0}.
+Housing.LotMarker.YouAlreadyOwnAHouse:			Bạn đã sở hữu một ngôi nhà!
+Housing.LotMarker.DoYouWantToBuyThisLot1:			Bạn có muốn mua lô này không?
+Housing.LotMarker.DoYouWantToBuyThisLot2:			Chi phí là {0}.
+Housing.LotMarker.YouDoNotOwnThisLot:				Bạn không sở hữu lô này!
+Housing.LotMarker.YouAlreadyOwnAnotherLotOrHouse:	Bạn đã sở hữu lô hoặc nhà khác (số {0}).
+Housing.LotMarker.YouJustBoughtThisLotFor:			Bạn vừa mua lô này với giá {0}.
+Housing.LotMarker.YouDontHaveEnoughMoney:			Không đủ tiền!
+Housing.LotMarker.ThisItemCantBeSold:				Vật dụng này không thể bán.
+
+Scripts.Player.Housing.BadShieldBanner:			Đây không phải là vật dụng hoặc cờ hiệu hợp lệ.
+Scripts.Player.Housing.CantBeSold:				Vật dụng này không thể bán!
+Scripts.Player.Housing.CarpetsRemoved:			Thảm của bạn đã bị gỡ.
+Scripts.Player.Housing.ClearHookPoint:			Bạn có muốn tháo vật dụng khỏi điểm móc không?
+Scripts.Player.Housing.EnteredHouse:				Bạn vào ngôi nhà số {0}.
+Scripts.Player.Housing.GardenItemPlaced:			Đã đặt vật dụng vườn. Còn {0} chỗ.
+Scripts.Player.Housing.GardenItemPlacedName:		Đặt vật dụng {0} trong khu vườn của bạn.
+Scripts.Player.Housing.GardenMaxObjects:			Bạn đã đặt 30 vật dụng trong vườn. Hết chỗ.
+Scripts.Player.Housing.GuildNowOwns:				[Bang hội] {0} hiện sở hữu một nhà bang hội cỡ {1}!
+Scripts.Player.Housing.HookPointAdded:			Vật dụng đã được thêm vào ngôi nhà của bạn.
+Scripts.Player.Housing.HookPointAlready:			Điểm móc đó đã có vật dụng!
+Scripts.Player.Housing.HookPointCleared:			Điểm móc giờ trống.
+Scripts.Player.Housing.HookPointCloser:			Hãy đứng càng gần lô mong muốn càng tốt và nhấn “chấp nhận”.
+Scripts.Player.Housing.HookPointID:				ID điểm móc: {0}
+Scripts.Player.Housing.HookPointLogged:			Đã ghi lại vị trí điểm móc {0}!
+Scripts.Player.Housing.HookPointLogLoc:			Hiển thị các điểm móc?
+Scripts.Player.Housing.HookPointNot:				Đây không phải là vật dụng dùng được trên điểm móc!
+Scripts.Player.Housing.HookPointNotPlaced:			Vật dụng không được đặt lên điểm móc đó.
+Scripts.Player.Housing.HouseUseMaterial:			Dùng Shift+nhấp phải trong nhà để thay đổi diện mạo.
+Scripts.Player.Housing.HouseUseMaterial:			Dùng Shift+nhấp phải trong nhà để thay đổi thảm.
+Scripts.Player.Housing.IndoorFloorPlaced:			Bạn đã đặt {0} trên tầng của ngôi nhà.
+Scripts.Player.Housing.IndoorItemPlaced:			Đã đặt vật dụng nội thất. Còn {0} chỗ.
+Scripts.Player.Housing.IndoorMaxItems:			Bạn đã đặt {0} vật dụng trong nhà. Không thể đặt thêm.
+Scripts.Player.Housing.IndoorWallPlaced:			Bạn vừa gắn {0} lên tường nhà.
+Scripts.Player.Housing.InteriorBannersAdded:		Đã thay đổi cờ hiệu bang hội bên trong.
+Scripts.Player.Housing.InteriorBannersRemoved:		Đã gỡ cờ hiệu bang hội bên trong.
+Scripts.Player.Housing.InteriorShieldsAdded:		Đã thay đổi khiên bang hội bên trong.
+Scripts.Player.Housing.InteriorShieldsRemoved:		Đã gỡ khiên bang hội bên trong.
+Scripts.Player.Housing.LeftHouse:				Bạn rời ngôi nhà {0}.
+Scripts.Player.Housing.LotAlready:				Bạn đã sở hữu lô hoặc nhà khác (số {0})
+Scripts.Player.Housing.LotBought:				Bạn vừa mua lô này với giá {0}!
+Scripts.Player.Housing.LotCost:					Có thể mua với giá {0}.
+Scripts.Player.Housing.LotNotItem:				Đây không phải là giấy chứng nhận sở hữu hợp lệ.
+Scripts.Player.Housing.LotNotYours:				Bạn không sở hữu lô này!
+Scripts.Player.Housing.LotOffer:				Bạn muốn mua lô này chứ? Giá {0}.
+Scripts.Player.Housing.LotTargeted:				Bạn đang nhắm tới lô số {0}.
+Scripts.Player.Housing.NotFloorObject:			Vật dụng này không thể đặt ở tầng trên!
+Scripts.Player.Housing.NotHookPoint:				Vật dụng này không thể đặt lên điểm móc!
+Scripts.Player.Housing.NotWallObject:				Vật dụng này không thể gắn lên tường!
+Scripts.Player.Housing.OutdoorBannersAdded:		Đã thay đổi cờ hiệu bang hội bên ngoài.
+Scripts.Player.Housing.OutdoorBannersRemoved:		Đã gỡ cờ hiệu bang hội bên ngoài.
+Scripts.Player.Housing.OutdoorShieldsAdded:		Đã thay đổi khiên bang hội bên ngoài.
+Scripts.Player.Housing.OutdoorShieldsRemoved:		Đã gỡ khiên bang hội bên ngoài.
+Scripts.Player.Housing.PaidChanges:				Bạn trả {0} để áp dụng thay đổi.
+Scripts.Player.Housing.PaidNotEnough:			Bạn không có đủ tiền để thực hiện điều đó!
+Scripts.Player.Housing.PorchAlready:				Ngôi nhà này đã có hiên!
+Scripts.Player.Housing.PorchNone:				Ngôi nhà này không có hiên!
+Scripts.Player.Housing.PorchNotItem:				Đây không phải là vật dụng hiên nhà!
+Scripts.Player.Housing.TransferToGuild:			Bạn có muốn chuyển ngôi nhà này cho {0} không?
+

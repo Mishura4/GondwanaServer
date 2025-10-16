@@ -302,7 +302,7 @@ namespace DOL.GS.ServerRules
             if (player.ObjectState != GameObject.eObjectState.Active) return;
             if (player.Client.IsPlaying == false) return;
 
-            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.PvpRules.InvTimerExp"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.PvPServerRules.InvTimerExp"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             return;
         }
@@ -424,7 +424,7 @@ namespace DOL.GS.ServerRules
             if (playerDefender != null && (playerDefender.Client.ClientState == GameClient.eClientState.WorldEnter || playerDefender.IsInvulnerableToAttack))
             {
                 if (!quiet)
-                    MessageToLiving(attacker, defender.Name + " is entering the game and is temporarily immune to PvP attacks!");
+                    MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.PvpDefenderEntering", defender.Name));
                 return false;
             }
 
@@ -433,14 +433,14 @@ namespace DOL.GS.ServerRules
                 // Attacker immunity
                 if (playerAttacker.IsInvulnerableToAttack)
                 {
-                    if (quiet == false) MessageToLiving(attacker, "You can't attack players until your PvP invulnerability timer wears off!");
+                    if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.PvpAttackerImmune"));
                     return false;
                 }
 
                 // Defender immunity
                 if (playerDefender.IsInvulnerableToAttack)
                 {
-                    if (quiet == false) MessageToLiving(attacker, defender.Name + " is temporarily immune to PvP attacks!");
+                    if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.PvpDefenderImmuneName", defender.Name));
                     return false;
                 }
             }
@@ -457,7 +457,7 @@ namespace DOL.GS.ServerRules
             {
                 if ((defender is GameNPC) && (playerAttacker.IsInvulnerableToAttack))
                 {
-                    if (quiet == false) MessageToLiving(attacker, "You can't attack until your PvP invulnerability timer wears off!");
+                    if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.PvpAttackerImmuneAny"));
                     return false;
                 }
             }
@@ -478,7 +478,7 @@ namespace DOL.GS.ServerRules
 
                 if (defender is GamePlayer)
                 {
-                    if (quiet == false) MessageToLiving(attacker, "You can't attack someone in a safe area!");
+                    if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.SafeAreaAttackForbidden"));
                     return false;
                 }
             }
@@ -488,7 +488,7 @@ namespace DOL.GS.ServerRules
             {
                 if ((area.IsSafeArea) && (defender is GamePlayer) && (attacker is GamePlayer))
                 {
-                    if (quiet == false) MessageToLiving(attacker, "You can't attack someone in a safe area!");
+                    if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.SafeAreaAttackForbidden"));
                     return false;
                 }
             }
@@ -502,7 +502,7 @@ namespace DOL.GS.ServerRules
                 if (defender.ControlledBrain.Body != null)
                     if (defender.ControlledBrain.Body is NecromancerPet)
                     {
-                        if (quiet == false) MessageToLiving(attacker, "You can't attack a shadowed necromancer!");
+                        if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.CannotAttackShadowedNecro"));
                         return false;
                     }
 
@@ -644,7 +644,7 @@ namespace DOL.GS.ServerRules
         {
             if (source.IsAlive == false)
             {
-                MessageToLiving(source, "Hmmmm...you can't " + communicationType + " while dead!");
+                MessageToLiving(source, LanguageMgr.GetTranslation(source.Client, "ServerRules.AbstractServerRules.CantSpeakWhileDead", communicationType));
                 return false;
             }
             return true;
@@ -1241,9 +1241,9 @@ namespace DOL.GS.ServerRules
             if (!killedNPC.IsWorthReward)
             {
                 //"This monster has been charmed recently and is worth no experience."
-                string message = "You gain no experience from this kill!";
+                string message = "ServerRules.AbstractServerRules.NpcNoXPGeneric";
                 if (killedNPC.CurrentRegion == null || killedNPC.CurrentRegion.Time - GameNPC.CHARMED_NOEXP_TIMEOUT < killedNPC.TempProperties.getProperty<long>(GameNPC.CHARMED_TICK_PROP))
-                    message = "This monster has been charmed recently and is worth no experience.";
+                    message = "ServerRules.AbstractServerRules.NoXPKill";
 
                 foreach (var de in gainers)
                     if (de.Key is GamePlayer player)
@@ -1707,7 +1707,7 @@ namespace DOL.GS.ServerRules
                     if (gainerPlayer.Client.Account.PrivLevel > 1)
                     {
                         if (Properties.ENABLE_DEBUG)
-                            gainerPlayer.SendMessage("Rewards are enabled because the server is in DEBUG mode.");
+                            gainerPlayer.SendMessage(LanguageMgr.GetTranslation(gainerPlayer.Client, "ServerRules.AbstractServerRules.DebugRewardsEnabled"));
                         else
                             dealNoXP = true;
                         break;
@@ -1888,7 +1888,7 @@ namespace DOL.GS.ServerRules
 
                     //long money = (long)(Money.GetMoney(0, 0, 17, 85, 0) * damagePercent * killedPlayer.Level / 50);
                     player.AddMoney(Currency.Copper.Mint(money));
-                    player.SendSystemMessage(string.Format("You receive {0}", Money.GetString(money)));
+                    player.SendSystemMessage(LanguageMgr.GetTranslation(player.Client, "ServerRules.AbstractServerRules.ReceiveMoney", Money.GetString(money)));
                     InventoryLogging.LogInventoryAction(killer, player, eInventoryActionType.Other, money);
                 }
 
@@ -2486,7 +2486,7 @@ namespace DOL.GS.ServerRules
                     player.Out.SendMerchantWindow(/* TODO */HouseTemplateMgr.OutdoorMenuItems.Catalog, eMerchantWindowType.HousingDeedMenu);
                     break;
                 default:
-                    player.Out.SendMessage("Unknown merchant type!", eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "ServerRules.AbstractServerRules.Housing.UnknownMerchantType"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
                     log.ErrorFormat("Unknown merchant type {0}", merchantType);
                     break;
             }
@@ -2648,6 +2648,7 @@ namespace DOL.GS.ServerRules
         public virtual GameConsignmentMerchant CreateHousingConsignmentMerchant(House house)
         {
             var m = new GameConsignmentMerchant();
+            //m.Name = LanguageMgr.GetTranslation(house?.Owner?.Client, "ServerRules.AbstractServerRules.Housing.ConsignmentMerchantName");
             m.Name = "Consignment Merchant";
             return m;
         }

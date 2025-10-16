@@ -1,0 +1,328 @@
+# SpellHandler (ES)
+SpellHandler.CancelEffect:			Desactivas tu efecto.
+SpellHandler.PulsingSpellCancelled:		Tu hechizo se ha desactivado.
+SpellHandler.PulsingSpellNoMana:		No tienes suficiente maná y tu hechizo se ha desactivado.
+SpellHandler.NoMoreMana:			Has gastado todo tu maná y no puedes lanzar más hechizos.
+SpellHandler.StopPlayingSong:			Dejas de interpretar tu melodía.
+SpellHandler.TooFarStopPlayingSong:		Estás demasiado lejos del objetivo. Dejas de interpretar tu melodía.
+SpellHandler.CasterMove:			Te mueves e interrumpes tu lanzamiento.
+SpellHandler.BeginCasting:			Empiezas a lanzar un hechizo de {0}.
+SpellHandler.BeginPlaying:			Empiezas a tocar {0}.
+SpellHandler.SpellInterrupted:			{0} te ataca y tu hechizo es interrumpido.
+SpellHandler.DamageImmunity:			{0} es inmune a este efecto.
+SpellHandler.Target.TooFast:			{0} se mueve demasiado rápido para que este hechizo tenga efecto.
+SpellHandler.DeadCantCast:			Estás muerto y no puedes lanzar hechizos.
+SpellHandler.CantCastInSiegeram:			No puedes lanzar hechizos dentro de un ariete.
+SpellHandler.SilencedCantCast:			Estás silenciado y no puedes lanzar hechizos por ahora.
+SpellHandler.PhaseshiftedCantCast:		Estás bajo "Cambio de Fase" y no puedes lanzar hechizos.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} está bajo "Cambio de Fase" y no puede verse afectado por este hechizo.
+SpellHandler.OnlyWorksOnDead:			Este hechizo solo funciona sobre miembros caídos de tu reino.
+SpellHandler.CantAttackSelf:			No puedes atacarte a ti mismo.
+SpellHandler.TargetNotInView:			Tu objetivo no está a la vista.
+SpellHandler.TargetNotInViewSpellFail:		Tu objetivo está fuera de tu campo de visión. El hechizo falla.
+SpellHandler.TargetNotVisible:			Tu objetivo no es visible.
+SpellHandler.TargetInvalid:			El objetivo no es válido.
+SpellHandler.MustSelectTarget:			Debes seleccionar un objetivo para este hechizo.
+SpellHandler.TargetTooFar:			Ese objetivo está demasiado lejos.
+SpellHandler.AreaTargetOutOfRange:		Tu objetivo de área está fuera de alcance. Elige un punto más cercano.
+SpellHandler.MustCastOnControlled:		Debes lanzar este hechizo sobre una criatura que controles.
+SpellHandler.SpellRequiresConcentration:	Este hechizo requiere {0} puntos de concentración.
+SpellHandler.MaxConcentrationSpells:		Solo puedes tener 50 hechizos de concentración activos a la vez.
+SpellHandler.WrongInstrument:			No llevas el tipo de instrumento correcto.
+SpellHandler.CantCastWhileSitting:		No puedes lanzar hechizos mientras estás sentado.
+SpellHandler.CantCastWhileSitting2:		No puedes lanzar este hechizo mientras estás sentado.
+SpellHandler.CantCastWhileMoving:		Debes permanecer quieto para lanzar este hechizo.
+SpellHandler.CantCastOnDead:			No puedes lanzar este hechizo sobre un muerto.
+SpellHandler.MustWaitBeforeUse:			Debes esperar {0} segundos antes de volver a usar este hechizo.
+SpellHandler.InteruptWaitBeforeCast:		Has sido interrumpido y debes esperar {0} segundos antes de volver a lanzar hechizos.
+SpellHandler.NotEnoughPower:			No tienes suficiente maná para lanzar este hechizo.
+SpellHandler.GroundTargetNotInView:		Tu objetivo en el suelo no está a la vista.
+SpellHandler.OnlyWorksOnFriendlyTargets:	Este hechizo solo funciona sobre objetivos aliados.
+SpellHandler.LostFocusOnSpell:			Pierdes la concentración en tu hechizo {0}.
+SpellHandler.InterruptFocus:			Te mueves e interrumpes tu concentración.
+SpellHandler.YouResistEffect:			Resistes el efecto.
+SpellHandler.TargetResistsEffect:		{0} resiste el efecto.
+SpellHandler.PetResistsEffect:			Tu {0} resiste el efecto.
+SpellHandler.NoEffectOnKeepComponent:		Tu hechizo no tiene efecto sobre el componente de la fortaleza.
+SpellHandler.NoEffectOnTarget:			Tu hechizo no tiene efecto sobre {0}.
+SpellHandler.TargetAlreadyMezz:			Tu objetivo ya está afectado por un control mental.
+SpellHandler.CantHaveEffectAgainYet:		Aún no puedes recibir de nuevo este efecto.
+SpellHandler.AlreadyHaveEffectWait:		Ya tienes este efecto. ¡Espera a que termine! El hechizo ha fallado.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} aún no puede recibir de nuevo este efecto.
+SpellHandler.TargetAlreadyHasEffect:		{0} ya tiene este efecto.
+SpellHandler.WaitUntilExpires:			Espera a que expire. El hechizo ha fallado.
+SpellHandler.TargetImmune:			Tu objetivo es inmune.
+SpellHandler.MezIntercepted:			Tu efecto defensivo de objeto intercepta el hechizo de control y se disipa.
+SpellHandler.CeremonialBracerInterceptMez:	El Brazalete Ceremonial intercepta tu control.
+SpellHandler.StunIntercepted:			Tu efecto defensivo de objeto intercepta el aturdimiento y se disipa.
+SpellHandler.YouMiss:				Fallas tu objetivo.
+SpellHandler.TargetMissed:			{0} ha fallado su objetivo.
+SpellHandler.EngageCannotBeUsed:			{0} fue atacado recientemente y no puedes engancharlo.
+SpellHandler.NotEnoughEndurance:			Te concentras en bloquear el golpe.
+SpellHandler.MustTargetPlayer:			Debes apuntar a un jugador.
+SpellHandler.BuffNoEffectOnVampiir:		Tu mejora no tiene efecto sobre el Vampiir.
+SpellHandler.BuffNoEffectOnYou:			Esta mejora no tiene efecto sobre ti.
+SpellHandler.AlreadyHasEffect:			Ya tienes este efecto.
+SpellHandler.AlreadyHasThisEffect:		{0} ya tiene este efecto.
+SpellHandler.TargetIsStealthed:			Este hechizo no puede aplicarse a un objetivo en sigilo.
+SpellHandler.DefaultDescription:			{0} tiene un valor de {1} y un daño de {2}.
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Tu mascota no está a la vista.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Interrupción de línea de visión en CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	No puedes ver tu objetivo desde aquí.
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Interrupción de línea de visión en CheckLOSNPCToTarget
+
+SpellHandler.HitTarget:			Golpeas a {0} por {1}{2} de daño.
+SpellHandler.NPCHitTarget:			Tu {0} golpea a {1} por {2}{3} de daño.
+SpellHandler.CriticalHit:			Asestas un golpe crítico e infliges {0} de daño adicional.
+SpellHandler.TargetPronoun.Your:		Tu
+SpellHandler.TargetPronoun.Targets:		El objetivo
+
+SpellHandler.MustBeStealthedBow:		Debes estar en sigilo y portar un arco para usar esta habilidad.
+SpellHandler.MustWieldBow:			Debes portar un arco para usar esta habilidad.
+SpellHandler.Archery.Prepare:			Preparas un {0}.
+SpellHandler.Archery.DisarmedCantCast:		No puedes lanzar hechizos porque estás desarmado.
+SpellHandler.ChamberSpell.YouInvulnerable:	Ahora mismo eres invulnerable y no puedes lanzar este hechizo.
+SpellHandler.ChamberSpell.TargetInvulnerable:	Tu objetivo es invulnerable por ahora y no puede ser atacado.
+SpellHandler.SiegeArrow.InvalidTarget:		Debes fijar como objetivo un componente de fortaleza para este hechizo.
+SpellHandler.SiegeArrow.InvalidComponentTarget:	Tu objetivo debe ser un componente de fortaleza.
+SpellHandler.SiegeArrow.PrepareSpell:		Preparas {0}.
+SpellHandler.BumpSpell.TargetHurled:		{0} es lanzado por los aires.
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Tu objetivo ya tiene un efecto de este tipo.
+
+SpellHandler.Convoker.AreaTargetOutOfRange:	Tu objetivo de área está fuera de alcance. Elige un punto en el suelo más cercano.
+SpellHandler.Convoker.AreaTargetNotInView:	Tu objetivo de área no está a la vista.
+SpellHandler.Convoker.MustSetGroundTarget:	Debes fijar un objetivo en el suelo.
+
+SpellHandler.IchorOfTheDeep.NoTarget:		Necesitas un objetivo para esta habilidad.
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} está demasiado lejos.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	Ya estás usando esta habilidad.
+SpellHandler.IchorOfTheDeep.CastMessage:	Lanzas {0}.
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} lanza un hechizo.
+SpellHandler.IchorOfTheDeep.HitMob:		Golpeas a {0} por {1} de daño.
+SpellHandler.IchorOfTheDeep.HitPlayer:		Golpeas a {0} por {1} de daño.
+
+SpellHandler.OmniHeal.SelfHealed:		Recuperas {0} puntos de aguante y {1} puntos de maná.
+SpellHandler.OmniHeal.TargetHealed:		Curas a {0} por {1} puntos de aguante y {2} puntos de maná.
+SpellHandler.OmniHeal.YouAreHealed:		{0} te cura por {1} puntos de aguante y {2} puntos de maná.
+SpellHandler.OmniHarm.InflictLossesToTarget:	También infliges a {2} una pérdida de {0} de aguante y {1} de maná.
+SpellHandler.OmniHarm.InflictLossesToYou:		{0} te inflige una pérdida de {1} de aguante y {2} de maná.
+
+SpellHandler.HealSpell.TargetDead:		{0} está muerto.
+SpellHandler.HealSpell.NoHelp:			Este jugador no desea ayuda.
+SpellHandler.HealSpell.FullyHealedSelf:		Estás completamente curado.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} está completamente curado.
+SpellHandler.HealSpell.RealmPointsGained:	Ganas {0} puntos de reino por curar a un miembro de tu reino.
+SpellHandler.HealSpell.SelfHealed:		Te curas {0} puntos de vida.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} se cura {1} puntos de vida.
+SpellHandler.HealSpell.TargetHealed:		Curas a {0} por {1} puntos de vida.
+SpellHandler.HealSpell.TargetDamageToHeal:		Curas a {0} por {1} puntos de vida en lugar de infligir daño debido a su escudo mágico.
+SpellHandler.HealSpell.YouAreHealed:		{0} te cura por {1} puntos de vida.
+SpellHandler.HealSpell.CriticalHeal:		Realizas una curación crítica y restauras {0} puntos de vida adicionales.
+SpellHandler.HealSpell.EfficientHealingBuff:	Tu mejora de eficiencia de curación te otorga {0} puntos de curación adicionales.
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Tu mejora de eficiencia de aguante te otorga {0} puntos de aguante adicionales al curar.
+SpellHandler.HealSpell.TargetDamnedDamaged:		¡Estás maldito! El hechizo de curación te inflige {0} de daño en lugar de curarte.
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	La curación es menos efectiva porque estás maldito.
+SpellHandler.HealSpell.DamnedNoHeal:		El hechizo de curación no surte efecto sobre ti porque estás maldito.
+SpellHandler.HealSpell.YouDiseased:			Estás enfermo, la curación se reduce en un {0}%.
+SpellHandler.HealSpell.HealingReduced:		La curación se reduce en un {0}% debido a efectos de inhibición de curación.
+SpellHandler.HealSpell.HealingReducedShield:		La curación se reduce en un {0}% debido a la barrera protectora de {1}.
+SpellHandler.HealSpell.HealingNull:			Tu hechizo no cura al objetivo debido a la inhibición de curación.
+SpellHandler.HealSpell.HealingNullYou:		La curación falla debido a tus efectos de inhibición.
+SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	El drenaje de vida no tiene efecto porque tanto tú como tu objetivo estáis malditos.
+SpellHandler.LifeDrain.TargetDamnedDamaged:		¡Estás maldito! El drenaje de vida te inflige {0} de daño en lugar de curarte.
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	El drenaje de vida es menos efectivo porque {0} está maldito.
+SpellHandler.LifeDrain.DamnedNoHeal:		El drenaje de vida no te cura porque estás maldito.
+SpellHandler.LifeDrain.DamnedTargetHealed:		{0} es curado y recupera {1} puntos de vida.
+SpellHandler.LifeDrain.DamnedTargetCriticallyHealed:	{0} recibe una curación crítica y recupera {1} puntos de vida.
+SpellHandler.LifeDrain.DamnedYouHealed:		Eres curado y recuperas {0} puntos de vida.
+SpellHandler.LifeDrain.DamnedYouCriticallyHealed:	Recibes una curación crítica y recuperas {0} puntos de vida.
+SpellHandler.SpreadHeal.GroupFullyHealed:	Tu grupo ya está completamente curado.
+
+SpellHandler.Zephyr.NoAttackInZephyr:		Estás siendo llevado por un Céfiro y no puedes ser atacado.
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Tu objetivo está siendo llevado por un Céfiro y no puede ser atacado.
+SpellHandler.Zephyr.PickedUpByZephyr:		Un poderoso Céfiro te levanta por los aires.
+SpellHandler.Phaseshift.NotEnoughEndurance:	Necesitas un 50% de aguante para usar este hechizo.
+SpellHandler.Groupport.CannotUseAbilityHere:	No puedes usar esta habilidad aquí.
+SpellHandler.Groupport.BindInAnotherRegion:	Vínculate en otra región para usar esta habilidad.
+SpellHandler.Groupport.GroupInCombat:		No puedes teletransportar a un grupo que está en combate.
+SpellHandler.Groupport.NotInGroup:		No estás en un grupo.
+SpellHandler.TargetNoLongerInRange:		Tu objetivo ya no está a rango.
+SpellHandler.TargetNoLongerInView:		Tu objetivo ya no está a la vista.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} se mueve demasiado rápido para que este hechizo tenga efecto.
+SpellHandler.Earthquake.Ending:			El terremoto ha terminado.
+SpellHandler.YouDamnedResistEffect:		Estás maldito y resistes el efecto.
+SpellHandler.TargetDamnedResistsEffect:		{0} está maldito y resiste el efecto.
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	No puedes lanzar este hechizo en combate.
+SpellHandler.VampiirBolt.PowerTaken:		{0} te drena {1} de maná.
+SpellHandler.VampiirBolt.PowerReceived:		Recibes {0} de maná de {1}.
+SpellHandler.VampiirBolt.NoPowerReceived:	No recuperaste maná de {0}.
+SpellHandler.VampiirBolt.TargetTooHigh:		El objetivo no puede verse afectado por este hechizo porque su nivel es demasiado alto.
+
+SpellHandler.WrathofChampions.CastSpell:	Lanzas {0}.
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} lanza un hechizo.
+SpellHandler.WrathofChampions.HitMob:		Golpeas a {0} por {1} de daño.
+SpellHandler.WrathofChampions.HitPlayer:		Golpeas a {0} por {1} de daño.
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} te golpea por {1} de daño.
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		¿Permitir que {0} te resucite con {1} por ciento de vida?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Nadie está intentando resucitarte ahora mismo.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Rechazas una resurrección.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Has sido resucitado por {0}.
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	Una fuerza milagrosa te devuelve a la vida.
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	Una fuerza milagrosa te devuelve a la vida. Recuperas {0}% de vida.
+SpellHandler.ResurrectSpellHandler.RezExpired:		Tu hechizo de resurrección ha expirado.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Tu objetivo ya está considerando una resurrección.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		El jugador que resucitaste no otorgó puntos de reino al morir.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		Por lo tanto, no obtienes puntos de reino por su resurrección.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Tu concentración disminuye.
+SpellHandler.Battlewarder.WarderFallen:		¡Tu Guardián de Batalla ha caído!
+SpellHandler.Convoker.TemplateNotFound:		NPCTemplate {0} no encontrado.
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Tu mascota ya tiene una habilidad activa de este tipo.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	No puedes usar esta habilidad sobre tu propia mascota.
+
+SpellHandler.BoltSpell.PartialBlock:		Bloqueas parcialmente el hechizo de {0}.
+SpellHandler.BoltSpell.Blocked:			{0} bloquea.
+
+SpellHandler.Arrow.Block:			Bloqueas la flecha de {0}.
+SpellHandler.Arrow.ArrowBlocked:			{0} bloquea tu flecha.
+SpellHandler.Archery.PenetrateBarrier:		Un disparo ha atravesado tu barrera mágica.
+SpellHandler.Archery.StrikeAbsorbed:		Tu disparo fue absorbido por una barrera mágica.
+SpellHandler.Archery.BlowAbsorbed:		El golpe fue absorbido por una barrera mágica.
+SpellHandler.Archery.Interrupted:			{0} te ataca y tu disparo es interrumpido.
+
+SpellHandler.Chamber.CannotUseState:		No puedes usar esto en tu estado actual.
+SpellHandler.Chamber.TargetNotAttackable:	Ese objetivo no puede ser atacado por ahora.
+SpellHandler.Chamber.SelectFirstSpell:		Elige el primer hechizo para tu {0}.
+SpellHandler.Chamber.NoSpellsLoaded:		No hay hechizos cargados en {0}.
+SpellHandler.Chamber.ReadyForUse:		Tu {0} está listo para usarse.
+SpellHandler.Chamber.CastsSpell:			{0} lanza un hechizo.
+
+SpellHandler.Lifedrain.Heal:			Robas {0} punto{1} de vida.
+SpellHandler.Lifedrain.NoAbsorb:		No puedes absorber más vida.
+SpellHandler.PowerDrain.PowerGain:		Sifonas {0} de maná del objetivo.
+SpellHandler.PowerDrain.PowerLoss:		El {0}% de tu maná ha sido drenado por {1}.
+SpellHandler.PowerDrain.NoAbsorb:		No puedes absorber más maná.
+SpellHandler.PowerLock.SpellHit:			{0} te drena {1} de maná.
+SpellHandler.PowerLock.StealSuccess:		Robas {1} de maná a {0}.
+SpellHandler.PowerLock.StealOverflow:		Robas {1} de maná a {0}. ({2} excedente)
+
+SpellHandler.PrimerSpell.EffectExpired:		El efecto de tu hechizo modificador ha expirado.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	Te mueves y rompes tu hechizo modificador.
+
+SpellHandler.BuffShear.ShearSuccess:		Tu hechizo arranca parte de la magia de mejora de tu objetivo.
+SpellHandler.BuffShear.EnhancingMagicRipped:	Una parte de tu magia de mejora ha sido removida por un hechizo.
+SpellHandler.BuffShear.ConnectionTooStrong:	El vínculo del objetivo con su mejora es demasiado fuerte para ser removido.
+SpellHandler.BuffShear.NoEnhancementFound:	No se encontró una mejora de este tipo en el objetivo.
+SpellHandler.AblativeShear.ShearSuccess:		Tu hechizo elimina los escudos ablativos de tu objetivo.
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Tu escudo ablativo ha sido eliminado por un hechizo.
+SpellHandler.AblativeShear.NoEnhancementFound:	El objetivo no posee un escudo ablativo.
+
+SpellHandler.Conversion.MagicalAbsorption:	Un hechizo mágico absorbe {0} de daño de tu ataque.
+SpellHandler.Conversion.ConvertToHealth:	Conviertes {0} de daño en puntos de vida.
+SpellHandler.Conversion.CannotConvertMoreHealth:	No puedes convertir más en vida.
+SpellHandler.Conversion.ConvertToEndurance:	Conviertes {0} de daño en aguante.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	No puedes convertir más en aguante.
+SpellHandler.Conversion.ConvertToMana:		Conviertes {0} de daño en maná.
+SpellHandler.Conversion.CannotConvertMoreMana:	No puedes convertir más en maná.
+SpellHandler.PetConversion.AbsorbPower:		Absorbes {0} puntos de maná.
+SpellHandler.PetConversion.ManaFull:		Tu barra de maná ya está llena.
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	La barrera de reducción de daño absorbe {0} puntos de daño.
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	Una barrera de reducción de daño absorbe {0} puntos de daño de tu ataque.
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	La barrera te devuelve {0} puntos de maná.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	Robas {0} punto{1} de vida.
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	No puedes absorber más vida.
+SpellHandler.DamageToPower.PowerSteal:		Robas {0} punto{1} de maná.
+SpellHandler.DamageToPower.NoMorePower:		No puedes absorber más maná.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} te roba {1} de aguante.
+SpellHandler.EnduranceDrain.StealSuccess:	Robas {1} de aguante a {0}.
+SpellHandler.EnduranceDrain.StealPoints:		Robas {0} punto{1} de aguante.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	No puedes absorber más aguante.
+SpellHandler.EnduranceHeal.CasterFull:		Tu barra de aguante está llena.
+SpellHandler.EnduranceHeal.TargetFull:		{0} tiene la barra de aguante llena.
+SpellHandler.EnduranceHeal.CasterHealed:		Restauras {0} puntos de aguante.
+SpellHandler.EnduranceHeal.TargetHealed:		Restauras {0} puntos de aguante a {1}.
+SpellHandler.EnduranceHeal.TargetRestored:	{0} te restaura {1} puntos de aguante.
+SpellHandler.EnduranceHeal.TargetTooHigh:	No puedes lanzar curación de aguante si el objetivo tiene más del 90% de su barra llena.
+SpellHandler.HealthToEndurance.TransferLife:	Transfieres {0} punto(s) de vida a aguante.
+SpellHandler.HealthToEndurance.InsufficientHealth:	Tu salud es insuficiente para realizar este hechizo.
+SpellHandler.HealthToEndurance.Diseased:		Estás enfermo. ¡La conversión de vida a aguante se reduce!
+SpellHandler.HealthToEndurance.DamnedNoEffect:	Estás maldito. La conversión de vida a aguante falla.
+SpellHandler.HealthToEndurance.DamnedPartialEffect:	Estás maldito. La conversión de vida a aguante se reduce.
+SpellHandler.HealthToEndurance.HealthLost:	Transfieres el {0}% de tus puntos de vida a aguante.
+SpellHandler.HealthToEndurance.EnduranceGained:	Recuperas un {0}% de aguante.
+
+SpellHandler.FocusShell.NoPets:			Este hechizo no puede lanzarse sobre mascotas.
+SpellHandler.FocusShell.SameRealm:		Este hechizo solo funciona sobre miembros de tu reino.
+SpellHandler.FocusShell.MustBeRvR:		Este hechizo solo puede usarse en RvR o PvP.
+SpellHandler.SummonSpell.PetControl:		El/La {0} está ahora bajo tu control.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	No puedes lanzar este hechizo aquí.
+
+SpellHandler.PowerHeal.FullPowerOther:		La barra de maná de {0} está llena.
+SpellHandler.PowerHeal.RestorePowerSelf:	Restauras {0} puntos de maná.
+SpellHandler.PowerHeal.RestorePowerOther:	Restauras {0} puntos de maná a {1}.
+SpellHandler.PowerHeal.PowerRestored:		{0} te restaura {1} puntos de maná.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	No puedes transferirte maná a ti mismo.
+SpellHandler.PowerTransfer.TransferSuccess:	Transfieres {0} puntos de maná a {1}.
+SpellHandler.PowerTransfer.PowerReceived:	{0} te transfiere {1} puntos de maná.
+SpellHandler.PowerRegenBuff.NoEffect:		Este hechizo no tiene efecto en esta clase.
+
+SpellHandler.Silence.AlreadyAffected:		Tu objetivo ya está afectado por un efecto de este tipo.
+SpellHandler.SpeedEnhancement.CombatRecent:	Has estado en combate recientemente; el hechizo no tiene efecto en ti.
+SpellHandler.WaterBreathing.StartEffect:	Puedes moverte libremente y respirar bajo el agua como en el aire.
+SpellHandler.WaterBreathing.EndEffect:		Tragas agua y te das cuenta de que ya no puedes respirar bajo el agua.
+
+SpellHandler.GroundAreaEffect.AlreadyActive:	Ya tienes un efecto de suelo activo y no puedes lanzar otro.
+SpellHandler.PowerShield.EffectStart:		Una magia ancestral refuerza tu esencia vital.
+SpellHandler.PowerShield.EffectStartOthers:	Una magia ancestral refuerza la esencia vital de {0}.
+SpellHandler.PowerShield.EffectExpires:		Tu escudo mágico se ha disipado.
+SpellHandler.PowerShield.EffectExpiresOthers:	El escudo mágico de {0} se ha disipado.
+SpellHandler.PowerShield.InsufficientMana:	No tienes suficiente maná para activar el efecto de curación de tu escudo.
+SpellHandler.DebuffImmunity.Refreshed:		Tu protección contra hechizos debilitantes ha sido renovada.
+SpellHandler.DebuffImmunity.Start:		Tu protección contra hechizos debilitantes aumenta durante la duración del hechizo.
+SpellHandler.DebuffImmunity.GainImmunity:	Obtienes inmunidad a hechizos debilitantes y aumentas tu probabilidad de resistir en un {0}%.
+SpellHandler.DebuffImmunity.WornOff:		Tu inmunidad contra hechizos debilitantes disminuye.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	La probabilidad de {0} de resistir hechizos debilitantes ha aumentado.
+SpellHandler.DebuffImmunity.TargetWornOff:	La inmunidad de {0} contra hechizos debilitantes se ha disipado.
+SpellHandler.GatewayPersonalBind.CantUseHere:	No puedes usar este objeto aquí.
+SpellHandler.GatewayPersonalBind.MustStandStill:	Debes quedarte quieto para usar este objeto.
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	Has estado en combate recientemente y no puedes usar este objeto.
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:		Ya estás preparando un hechizo a distancia.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Ya estás preparando un hechizo ininterrumpible.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		Ya estás preparando un hechizo sin coste de maná.
+SpellHandler.Warlock.MustFinishCastingRange:		Debes terminar de lanzar tu hechizo a distancia antes de volver a lanzarlo.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:	Debes terminar de lanzar tu hechizo ininterrumpible antes de volver a lanzarlo.
+SpellHandler.Warlock.MustFinishCastingPowerless:		Debes terminar de lanzar tu hechizo sin coste de maná antes de volver a lanzarlo.
+
+SpellHandler.Cleric.Ascendance.OnEnd:			Tu estado de Ascendencia termina.
+SpellHandler.Cleric.Ascendance.OnStart:		Alcanzas la Ascendencia y aumentas enormemente tu eficiencia.
+SpellHandler.Cleric.Ascendance.CanceledMoC:		Tu Maestría de la Concentración se disipa al entrar en Ascendencia.
+SpellHandler.Cleric.Ascendance.CannotCast:		La Ascendencia impide lanzar {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:	Tu Ascendencia se disipa mientras enfocas tu concentración.
+SpellHandler.Cleric.DamageReturn.Active:		Una poderosa aura reflectante te envuelve.
+SpellHandler.Cleric.DamageReturn.WornOff:		Tu barrera reflectante se ha disipado.
+SpellHandler.Cleric.DamageReturn.VictimReflect:	Tu barrera refleja {0} {1} al atacante.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:	Sufres {0} {1} debido a la barrera mágica reflectante del oponente.
+SpellHandler.Cleric.OffProcShear.Removed:		Se han eliminado los procs ofensivos del objetivo.
+SpellHandler.Cleric.OffProcShear.YourProcRipped:	Se han eliminado tus procs ofensivos.
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:	Se ha aplicado un proc maldito de reemplazo al objetivo.
+SpellHandler.Cleric.OffProcShear.YouAreCursed:		Estás maldito: tus golpes curan a tus enemigos.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:	No se encontraron procs ofensivos en el objetivo.
+
+SpellHandler.Occultist.CastCondition1:			Debes estar en forma ctónica para lanzar este hechizo.
+SpellHandler.Occultist.CastCondition2:			No puedes lanzar este hechizo mientras estás en forma ctónica.
+SpellHandler.Occultist.CastCondition3:			No puedes lanzar este hechizo mientras estás en forma frágil o en forma espiritual.
+SpellHandler.Occultist.CastCondition4:			Debes abandonar tu forma actual antes de lanzar este hechizo.
+SpellHandler.Occultist.Self.AbsorbToPower:		Sifonas {0} de maná del daño recibido.
+
+SpellHandler.SummonMonster.Target.Resist:			{0} ha sido traído de los Limbus como zombi y permanece inmune a este hechizo.
+SpellHandler.IllusionSpell.Target.Resist:			{0} ha invocado una ilusión y no puede verse afectado por este hechizo.
+SpellHandler.Morphed.Target.Resist:			{0} ha sufrido una metamorfosis y no puede verse afectado por este hechizo.
+
+SpellHandler.DelveInfo.Sec:			seg

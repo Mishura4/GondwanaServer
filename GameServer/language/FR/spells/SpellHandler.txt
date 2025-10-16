@@ -158,6 +158,7 @@ SpellHandler.VampiirBolt.CannotCastInCombat:	Vous ne pouvez pas lancer ce sort e
 SpellHandler.VampiirBolt.PowerTaken:		{0} vous prend {1} de Mana !
 SpellHandler.VampiirBolt.PowerReceived:		Vous recevez {0} de Mana de {1} !
 SpellHandler.VampiirBolt.NoPowerReceived:	Vous n'avez récupéré aucune Mana de {0} !
+SpellHandler.VampiirBolt.TargetTooHigh:		La cible ne peut être affectée par ce sort car son niveau est trop élevé !
 
 SpellHandler.WrathofChampions.CastSpell:	Vous lancez {0} !
 SpellHandler.WrathofChampions.CastSpellFromArea:	{0} lance un sort !
@@ -299,11 +300,26 @@ SpellHandler.Warlock.MustFinishCastingRange:				Vous devez finir d'incanter votr
 SpellHandler.Warlock.MustFinishCastingUninterruptable:		Vous devez finir d'incanter votre sort non-interruptible avant de le relancer.
 SpellHandler.Warlock.MustFinishCastingPowerless:			Vous devez finir d'incanter votre sort sans consommation de mana avant de le relancer.
 
+SpellHandler.Cleric.Ascendance.OnEnd:						Votre état d'ascension s'estompe.
+SpellHandler.Cleric.Ascendance.OnStart:						Vous accédez à l'ascension, augmentant considérablement votre efficacité.
+SpellHandler.Cleric.Ascendance.CanceledMoC:					Votre Maîtrise de la Concentration s'estompe car vous accédez à l'Ascension.
+SpellHandler.Cleric.Ascendance.CannotCast:					L'Ascension empêche le lancement de {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:		Votre Ascension se dissipe alors que vous focalisez votre concentration.
+SpellHandler.Cleric.DamageReturn.Active:					Une aura réflective puissante vous enveloppe.
+SpellHandler.Cleric.DamageReturn.WornOff:					Votre barrière réflective se dissipe.
+SpellHandler.Cleric.DamageReturn.VictimReflect:				Votre barrière renvoie {0} {1} à l'assaillant.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:				Vous subissez {0} {1} en raison de la barrière de renvoi des sorts de l'ennemi.
+SpellHandler.Cleric.OffProcShear.Removed:					Les procs offensifs de la cible ont été retirés !
+SpellHandler.Cleric.OffProcShear.YourProcRipped:			Vos procs offensifs ont été retirés !
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:			Un proc maudit de remplacement a été appliqué à la cible !
+SpellHandler.Cleric.OffProcShear.YouAreCursed:				Vous êtes maudit : vos frappes soignent vos ennemis.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:		Aucun proc offensif détecté sur la cible.
+
 SpellHandler.Occultist.CastCondition1:						Vous devez être sous forme chtonique pour lancer ce sort.
 SpellHandler.Occultist.CastCondition2:						Vous ne pouvez pas lancer ce sort en étant sous forme chtonique.
 SpellHandler.Occultist.CastCondition3:						Vous ne pouvez pas lancer ce sort en étant sous forme décrépit ou esprit.
 SpellHandler.Occultist.CastCondition4:						Vous devez quitter votre forme actuelle avant de lancer ce sort.
-SpellHandler.Occultist.Self.AbsorbToPower:					Vous siphonnez {0} de mana de l’attaque reçue.
+SpellHandler.Occultist.Self.AbsorbToPower:					Vous siphonnez {0} de mana de l'attaque reçue.
 
 SpellHandler.SummonMonster.Target.Resist:					{0} a été ressuscité des limbes sous forme de zombie et reste insensible à ce sort !
 SpellHandler.IllusionSpell.Target.Resist:					{0} a invoqué une illusion et ne peut pas être affecté contre ce sort !

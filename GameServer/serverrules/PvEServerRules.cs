@@ -20,6 +20,7 @@ using System;
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
 using DOL.Database;
+using DOL.Language;
 
 namespace DOL.GS.ServerRules
 {
@@ -57,7 +58,7 @@ namespace DOL.GS.ServerRules
             //"You can't attack yourself!"
             if (attacker == defender)
             {
-                if (quiet == false) MessageToLiving(attacker, "You can't attack yourself!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.NormalServerRules.AttackSelf"));
                 return false;
             }
 
@@ -69,7 +70,7 @@ namespace DOL.GS.ServerRules
             {
                 if (attacker is GamePlayer && ((GamePlayer)attacker).DuelTarget == defender)
                     return true;
-                if (quiet == false) MessageToLiving(attacker, "You can not attack other players on this server!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.PvEServerRules.NoPlayerVsPlayer"));
                 return false;
             }
 
@@ -77,7 +78,7 @@ namespace DOL.GS.ServerRules
             if (attacker.Realm == defender.Realm)
             {
                 //allow confused mobs to attack same realm
-                if (attacker is GameNPC && (attacker as GameNPC).IsConfused)
+                if (attacker is GameNPC && (attacker as GameNPC)!.IsConfused)
                     return true;
 
                 // else, don't allow mobs to attack mobs
@@ -86,7 +87,7 @@ namespace DOL.GS.ServerRules
                     return FactionMgr.CanLivingAttack(attacker, defender);
                 }
 
-                if (quiet == false) MessageToLiving(attacker, "You can't attack a member of your realm!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.NormalServerRules.AttackSameRealm"));
                 return false;
             }
 
@@ -132,7 +133,7 @@ namespace DOL.GS.ServerRules
                 if (((GameNPC)source).IsPeaceful)
                     return true;
 
-            if (quiet == false) MessageToLiving(source, target.GetName(0, true) + " is not a member of your realm!");
+            if (quiet == false) MessageToLiving(source, LanguageMgr.GetTranslation((source as GamePlayer)?.Client, "ServerRules.NormalServerRules.TargetNotSameRealm", target.GetName(0, true)));
             return false;
         }
 

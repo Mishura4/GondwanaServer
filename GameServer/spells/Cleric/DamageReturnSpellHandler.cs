@@ -9,8 +9,6 @@ namespace DOL.GS.Spells
 {
     /// <summary>
     /// Reflects a portion of non-DoT incoming damage back to the attacker.
-    /// Percentage is Spell.Value (0..100). Reflected damage type is Spell.DamageType.
-    /// Shows ClientLaunchEffect on the victim and ClientHitEffect on the attacker when it triggers.
     /// </summary>
     [SpellHandler("DamageReturn")]
     public class DamageReturnSpellHandler : SpellHandler
@@ -27,15 +25,13 @@ namespace DOL.GS.Spells
             GameLiving living = effect.Owner;
             GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
 
-            // Optional start messages (add LanguageMgr keys if you want localized strings)
             if (Caster is GamePlayer casterPlayer)
             {
-                MessageToLiving(casterPlayer,
-                    $"Damage Return active: reflecting {Math.Max(0, Math.Min(100, (int)Spell.Value))}% as {GlobalConstants.DamageTypeToName(Spell.DamageType)}.",
-                    eChatType.CT_Spell);
+                string typeName = LanguageMgr.GetDamageOfType(casterPlayer.Client, Spell.DamageType);
+                int pct = Math.Max(0, Math.Min(100, (int)Spell.Value));
+                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.Cleric.DamageReturn.Active"), eChatType.CT_Spell);
             }
 
-            // Normal “buff up” visual if you have ClientEffect set on the spell row
             SendEffectAnimation(effect.Owner, 0, false, 1);
         }
 
@@ -45,7 +41,7 @@ namespace DOL.GS.Spells
 
             if (!noMessages && Caster is GamePlayer casterPlayer)
             {
-                MessageToLiving(casterPlayer, "Damage Return has worn off.", eChatType.CT_SpellExpires);
+                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.Cleric.DamageReturn.WornOff"), eChatType.CT_SpellExpires);
             }
 
             return base.OnEffectExpires(effect, noMessages);
@@ -57,8 +53,8 @@ namespace DOL.GS.Spells
                 return;
 
             var ad = args.AttackData;
-            var target = ad.Target;      // the victim who has the DamageReturn effect
-            var attacker = ad.Attacker;  // the aggressor who will receive reflected damage
+            var target = ad.Target;
+            var attacker = ad.Attacker;
 
             if (target == null || attacker == null)
                 return;
@@ -67,7 +63,6 @@ namespace DOL.GS.Spells
             if (ad.AttackResult is not (GameLiving.eAttackResult.HitUnstyled or GameLiving.eAttackResult.HitStyle))
                 return;
 
-            // Exclude DoT ticks; accept melee, ranged, direct spell
             if (ad.AttackType == AttackData.eAttackType.DoT)
                 return;
 
@@ -81,7 +76,6 @@ namespace DOL.GS.Spells
             if (!allowedAttackType)
                 return;
 
-            // Prevent weird recursion if server emits AttackedByEnemy on TakeDamage (defensive)
             if (attacker.TempProperties.getProperty<bool>(DR_GUARD, false))
                 return;
 
@@ -113,7 +107,6 @@ namespace DOL.GS.Spells
                     p.Out.SendSpellEffectAnimation(target, attacker, Spell.ClientHitEffect, 0, false, 1);
             }
 
-            // Apply reflected damage as the spell's configured damage type
             var reflectType = Spell.DamageType;
 
             try
@@ -121,19 +114,16 @@ namespace DOL.GS.Spells
                 attacker.TempProperties.setProperty(DR_GUARD, true);
                 attacker.TakeDamage(target, reflectType, reflectDamage, 0);
 
-                // Optional feedback lines; swap to LanguageMgr keys if you maintain translations
                 if (target is GamePlayer victimPlayer)
                 {
-                    MessageToLiving(victimPlayer,
-                        $"Your Damage Return reflects {reflectDamage} {GlobalConstants.DamageTypeToName(reflectType)} damage.",
-                        eChatType.CT_Spell);
+                    string victimTypeName = LanguageMgr.GetDamageOfType(victimPlayer.Client, reflectType);
+                    MessageToLiving(victimPlayer, LanguageMgr.GetTranslation(victimPlayer.Client,"SpellHandler.Cleric.DamageReturn.VictimReflect", reflectDamage, victimTypeName), eChatType.CT_Spell);
                 }
 
                 if (attacker is GamePlayer attackerPlayer)
                 {
-                    MessageToLiving(attackerPlayer,
-                        $"You are hurt by reflected damage ({reflectDamage} {GlobalConstants.DamageTypeToName(reflectType)}).",
-                        eChatType.CT_Damaged);
+                    string attackerTypeName = LanguageMgr.GetDamageOfType(attackerPlayer.Client, reflectType);
+                    MessageToLiving(attackerPlayer, LanguageMgr.GetTranslation(attackerPlayer.Client, "SpellHandler.Cleric.DamageReturn.AttackerHurt", reflectDamage, attackerTypeName), eChatType.CT_Damaged);
                 }
             }
             finally
@@ -144,12 +134,11 @@ namespace DOL.GS.Spells
 
         public override string GetDelveDescription(GameClient delveClient)
         {
-            string typeName = GlobalConstants.DamageTypeToName(Spell.DamageType);
+            string typeName = LanguageMgr.GetDamageOfType(delveClient, Spell.DamageType);
             int pct = Math.Max(0, Math.Min(100, (int)Spell.Value));
             int recastSeconds = Spell.RecastDelay / 1000;
 
-            string description = $"Reflects {pct}% of incoming melee, ranged, and direct spell damage (excluding DoTs) " +
-                          $"back to the attacker as {typeName} damage while active.";
+            string description = LanguageMgr.GetTranslation(delveClient, "SpellDescription.DamageReturn.MainDescription", pct, typeName);
 
             if (Spell.RecastDelay > 0)
             {

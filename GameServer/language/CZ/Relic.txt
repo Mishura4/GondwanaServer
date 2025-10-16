@@ -1,0 +1,5 @@
+# Relics/GameRelicPad (CS)
+GameRelicPad.MountRelic.Captured:			{0} ukořistil(a): {1}.
+GameRelicPad.MountRelic.Stored:				{0} z {1} uložil(a) {2} v {3}.
+GameRelicPad.OnPlayerEnter.EmptyRelicPad:		Musíš najít prázdný relikviář {0}, abys mohl(a) tuto relikvii umístit.
+GameRelicPad.RemoveRelic.Removed:			{0} z {1} odstranil(a) {2} z {3}.

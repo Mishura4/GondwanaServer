@@ -1,20 +1,72 @@
 
 # SERVERRULES
 # /AmtenaelRules
-ServerRules.AmtenaelRules.PveInvTimerExpired:		Votre timer d'invulnérabilité temporaire en PvE a expiré.
-ServerRules.AmtenaelRules.PlayerIsConnecting:		{0} est en train de se connecter, vous ne pouvez pas l'attaquer pour l'instant.
-ServerRules.AmtenaelRules.PvpInvTimerWearsOff:		Vous ne pouvez pas attaquer de joueurs tant que votre timer d'invulnérabilité en PvP n'a pas expiré !
-ServerRules.AmtenaelRules.RPBonusKeepCapture:		Vous obtenez un bonus aux RP de {0}% grâce à votre capture du fort !
+ServerRules.AmtenaelRules.PveInvTimerExpired:						Votre timer d'invulnérabilité temporaire en PvE a expiré.
+ServerRules.AmtenaelRules.PlayerIsConnecting:						{0} est en train de se connecter, vous ne pouvez pas l'attaquer pour l'instant.
+ServerRules.AmtenaelRules.PvpInvTimerWearsOff:						Vous ne pouvez pas attaquer de joueurs tant que votre timer d'invulnérabilité en PvP n'a pas expiré !
+ServerRules.AmtenaelRules.RPBonusKeepCapture:						Vous obtenez un bonus aux RP de {0}% grâce à votre capture du fort !
+ServerRules.AmtenaelRules.PvpImmuneConnecting:						{0} est en train de se connecter ; vous ne pouvez pas l'attaquer pour le moment.
+ServerRules.AmtenaelRules.PvpAttackerImmune:						Vous ne pouvez pas attaquer d'autres joueurs tant que votre invulnérabilité PvP est active !
+ServerRules.AmtenaelRules.PvpDefenderImmune:						{0} est temporairement immunisé(e) contre les attaques PvP !
+ServerRules.AmtenaelRules.TargetHostile:							Cette cible est hostile.
+ServerRules.AmtenaelRules.CannotAttackSelf:							Vous ne pouvez pas vous attaquer vous-même.
+ServerRules.AmtenaelRules.PveAttackerImmune:						Vous ne pouvez pas attaquer de monstres tant que votre invulnérabilité PvE est active !
+ServerRules.AmtenaelRules.CannotAttackShadowedNecro:				Vous ne pouvez pas attaquer un nécromancien sous forme d'Ombre !
+ServerRules.AmtenaelRules.AttackerIsPrisoner:						Vous ne pouvez pas attaquer lorsque vous êtes en prison.
+ServerRules.AmtenaelRules.DefenderIsPrisoner:						Vous ne pouvez pas attaquer un prisonnier.
+ServerRules.AmtenaelRules.SafeAreaAttackForbidden:					Vous ne pouvez pas attaquer quelqu'un dans une zone sécurisée !
+ServerRules.AmtenaelRules.CannotAttackGroupMember:					Vous ne pouvez pas attaquer un membre de votre groupe.
+ServerRules.AmtenaelRules.CannotAttackGuildMember:					Vous ne pouvez pas attaquer un membre de votre guilde.
+ServerRules.AmtenaelRules.CannotAttackBattlegroupMember:			Vous ne pouvez pas attaquer un membre de votre groupe de combat.
+ServerRules.AmtenaelRules.CannotAttackFriendlyNPC:					Vous ne pouvez pas attaquer un PNJ amical.
+ServerRules.AmtenaelRules.DebugRewardsEnabled:						Les récompenses sont activées car le serveur est en mode DEBUG.
+ServerRules.AmtenaelRules.ReceiveMoney:								Vous recevez {0}
 
 # /PvPServerRules
-ServerRules.PvpRules.InvTimerExpFlagON:			Votre timer d'invulnérabilité temporaire a expiré, mais votre indicateur "/safety" est toujours activé.
-ServerRules.PvpRules.InvTimerExp:			Votre timer d'invulnérabilité temporaire a expiré.
+ServerRules.PvPServerRules.InvTimerExpFlagON:						Votre timer d'invulnérabilité temporaire a expiré, mais votre indicateur "/safety" est toujours activé.
+ServerRules.PvPServerRules.InvTimerExp:								Votre timer d'invulnérabilité temporaire a expiré.
+ServerRules.PvPServerRules.AttackSelf:								Vous ne pouvez pas vous attaquer vous-même !
+ServerRules.PvPServerRules.AttackGroupMember:						Vous ne pouvez pas attaquer les membres de votre groupe.
+ServerRules.PvPServerRules.AttackGuildMember:						Vous ne pouvez pas attaquer les membres de votre guilde.
+ServerRules.PvPServerRules.AttackBattleGroupMember:					Vous ne pouvez pas attaquer un membre de votre groupe de combat.
+ServerRules.PvPServerRules.SafeZoneNoAttack:						Vous êtes dans une zone sécurisée : vous ne pouvez pas attaquer d'autres joueurs ici.
+ServerRules.PvPServerRules.SafetyFlagOnSelf:						Votre indicateur de sécurité PvP est activé.
+ServerRules.PvPServerRules.SafetyFlagTargetInSafeArea:				{0} a son indicateur de sécurité activé et se trouve dans une zone sécurisée : vous ne pouvez pas l'attaquer ici.
+ServerRules.PvPServerRules.AttackFriendlyNPC:						Vous ne pouvez pas attaquer un PNJ amical.
+ServerRules.PvPServerRules.OnlySelfCastWhileInvulnerable:			Vous ne pouvez pas lancer de sorts sur vous-même tant que votre invulnérabilité PvP est active !
+ServerRules.PvPServerRules.TargetNotSameRealm:						{0} n'est pas membre de votre royaume !
+
+# /PvEServerRules
+ServerRules.PvEServerRules.NoPlayerVsPlayer:						Vous ne pouvez pas attaquer d'autres joueurs sur ce serveur !
+
+# /NormalServerRules
+ServerRules.NormalServerRules.AttackSelf:							Vous ne pouvez pas vous attaquer vous-même !
+ServerRules.NormalServerRules.AttackSameRealm:						Vous ne pouvez pas attaquer un membre de votre royaume !
+ServerRules.NormalServerRules.TargetNotSameRealm:					{0} n'est pas membre de votre royaume !
+ServerRules.NormalServerRules.InviteOtherRealm:						Vous ne pouvez pas grouper avec un joueur d'un autre royaume.
+ServerRules.NormalServerRules.TradeEnemyRealm:						Vous ne pouvez pas commercer avec un royaume ennemi !
 
 # /AbstractServerRules
-ServerRules.AbstractServerRules.CantCastSpell:		Vous ne pouvez pas lancer ce sort sur le {0}.
-ServerRules.AbstractServerRules.RecentPlayerKillNoRP:	{0} a été tué récemment et ne rapporte aucun point de royaume !
-ServerRules.AbstractServerRules.RecentPlayerKillNoXP:	{0} a été tué récemment et ne rapporte aucune expérience !
-ServerRules.AbstractServerRules.NoXPKill:		Ce combat ne vous rapporte aucune expérience !
+ServerRules.AbstractServerRules.CantCastSpell:						Vous ne pouvez pas lancer ce sort sur le {0}.
+ServerRules.AbstractServerRules.RecentPlayerKillNoRP:				{0} a été tué récemment et ne rapporte aucun point de royaume !
+ServerRules.AbstractServerRules.RecentPlayerKillNoXP:				{0} a été tué récemment et ne rapporte aucune expérience !
+ServerRules.AbstractServerRules.NoXPKill:							Ce combat ne vous rapporte aucune expérience !
+ServerRules.AbstractServerRules.PvpDefenderEntering:				{0} entre en jeu et est temporairement immunisé(e) contre les attaques PvP !
+ServerRules.AbstractServerRules.PvpAttackerImmune:					Vous ne pouvez pas attaquer les joueurs tant que votre invulnérabilité PvP est active !
+ServerRules.AbstractServerRules.PvpDefenderImmuneName:				{0} est temporairement immunisé(e) contre les attaques PvP !
+ServerRules.AbstractServerRules.PvpAttackerImmuneAny:				Vous ne pouvez pas attaquer tant que votre invulnérabilité PvP est active !
+ServerRules.AbstractServerRules.SafeAreaAttackForbidden:			Vous ne pouvez pas attaquer quelqu'un dans une zone sécurisée !
+ServerRules.AbstractServerRules.CannotAttackShadowedNecro:			Vous ne pouvez pas attaquer un nécromancien sous forme d'Ombre !
+ServerRules.AbstractServerRules.NpcNoXPCharmed:						Ce monstre a été charmé récemment et ne rapporte aucune expérience.
+ServerRules.AbstractServerRules.DebugRewardsEnabled:				Les récompenses sont activées car le serveur est en mode DEBUG.
+ServerRules.AbstractServerRules.ReceiveMoney:						Vous recevez {0}
+ServerRules.AbstractServerRules.CantSpeakWhileDead:					Hmmm… vous ne pouvez pas {0} en étant mort·e !
+ServerRules.AbstractServerRules.Housing.UnknownMerchantType:		Type de marchand inconnu !
+ServerRules.AbstractServerRules.Housing.ConsignmentMerchantName:	Commissaire-priseur
 
 # /DemonsBreachJumpPoint
-DemonsBreachJumpPoint.Requirements:			Vous ne remplissez pas les conditions pour entrer dans cette région !
+DemonsBreachJumpPoint.Requirements:									Vous ne remplissez pas les conditions pour entrer dans cette région !
+
+# /AdventureWingJumpPoint
+AdventureWingJumpPoint.InstanceInUse:								Vous avez déjà une autre instance ({0}) en cours contenant des joueurs !
+AdventureWingJumpPoint.CreationFailed:								Un problème est survenu lors de la création de l'instance !

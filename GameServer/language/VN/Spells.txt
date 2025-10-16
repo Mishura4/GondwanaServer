@@ -1,0 +1,569 @@
+# DelveInfo
+DelveInfo.CastingTime:          Thời gian niệm: {0}
+DelveInfo.ConcentrationCost:    Chi phí tập trung: {0}
+DelveInfo.Damage:               Sát thương: {0}
+DelveInfo.DamageType:           Loại sát thương: {0}
+DelveInfo.Duration:             Thời lượng: 
+DelveInfo.Focus:                Phép kênh. Bị gián đoạn ở hành động đầu tiên.
+DelveInfo.Frequency:            Tần suất: {0}
+DelveInfo.HealthReturned:       Máu hoàn lại: {0}% sát thương gây ra
+DelveInfo.InstrumentRequire:    Cần nhạc cụ: {0}
+DelveInfo.PowerCost:            Chi phí mana: {0}
+DelveInfo.HealthCost:           Chi phí máu: {0}
+DelveInfo.Radius:               Bán kính: {0}
+DelveInfo.Range:                Tầm: {0}
+DelveInfo.RangeModified:	    Tầm: {0} {1}
+DelveInfo.RecastTime:           Thời gian hồi: 
+DelveInfo.Target:               Mục tiêu: {0}
+DelveInfo.Value:                Giá trị: {0}
+DelveInfo.ValueNegative:        Giá trị: -{0}
+DelveInfo.Destination:		    Đích đến: {0}
+
+# Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Gây {0} {1} lên mục tiêu.
+SpellDescription.DoT.MainDescription:				Mục tiêu chịu {0} {1} mỗi {2} giây.
+SpellDescription.BoltSpell.MainDescription:			Tia phép đánh trúng và phát nổ gây {0} {1}. Có thể bị đỡ chắn.
+SpellDescription.LifeDrain.MainDescription:			Gây {0} {1} và hồi cho người niệm {2}% sát thương gây ra.
+SpellDescription.DirectDamageWithDebuff.MainDescription:	Gây {0} {1} và giảm {2} của mục tiêu {3}%.
+SpellDescription.Nearsight.MainDescription1:		Giảm tầm hiệu dụng của các đòn tấn công tầm xa của mục tiêu {0}%.
+SpellDescription.Nearsight.MainDescription2:		Các phép cận thị trúng nhóm của người niệm hoạt động kém hiệu quả hơn {0}% hoặc có thể bị kháng hoàn toàn.
+SpellDescription.SpreadHeal.MainDescription:		Hồi máu diện rộng {0}.
+SpellDescription.RegenHeal.MainDescription:			Mục tiêu hồi thêm {0} máu.
+SpellDescription.RegenPower.MainDescription:		Mục tiêu hồi thêm {0} mana.
+SpellDescription.RegenEndu.MainDescription:			Mục tiêu hồi thêm {0} thể lực.
+SpellDescription.SpeedDecrease.MainDescription:		Giảm tốc độ mục tiêu {0}%.
+SpellDescription.SpeedDecrease.Rooted:				Mục tiêu bị trói chân.
+SpellDescription.Slow.MainDescription:				Giảm tốc độ mục tiêu {0}%. Không tạo miễn dịch và không bị ngắt khi bị đánh.
+SpellDescription.Bladeturn.MainDescription:			Tạo “bong bóng” hấp thụ sát thương của một đòn cận chiến.
+SpellDescription.Demi.MainDescription:				{0} giảm một nửa máu kẻ địch.
+SpellDescription.Quarter.MainDescription:			{0} giảm máu kẻ địch xuống còn một phần tư.
+SpellDescription.DemiQuarter.AmnesiaDescription:	Không ảnh hưởng sinh vật yếu và mục tiêu trên cấp {0}.
+SpellDescription.DemiQuarter.EndDescription:		Hiếm khi ảnh hưởng tới linh hồn, ác quỷ, pháp sư gọi hồn, banshee và ma cà rồng.
+SpellDescription.LifeTransfer.MainDescription:		Chuyển {0} máu từ người niệm sang mục tiêu.
+SpellDescription.Heal.MainDescription:				Hồi {0} máu cho mục tiêu.
+SpellDescription.HealEnemy.MainDescription:			Hồi {0} máu cho kẻ địch khi trúng (proc).
+SpellDescription.Disease.MainDescription:			Gây Bệnh: làm chậm {0}%, giảm Sức mạnh {1}% và giảm hiệu quả hồi máu {2}%.
+SpellDescription.Petrify.MainDescription:			Hóa đá mục tiêu, biến thành tượng. Bị tê liệt và hấp thụ 50% sát thương vật lý, 75% sát thương phép khi bị tấn công.
+SpellDescription.Unpetrify.MainDescription:			Xóa trạng thái “Hóa đá” khỏi mục tiêu.
+SpellDescription.HealDebuff.MainDescription:		Giảm hiệu quả hồi máu {0}%. Cộng dồn với “Bệnh”.
+SpellDescription.DebuffImmunity.MainDescription:	Cho miễn nhiễm suy yếu và +{0}% cơ hội kháng trong {1} giây.
+SpellDescription.MagicHealAbsorb.MainDescription:	Đòn phép kế tiếp vào bạn sẽ bị hấp thụ và chuyển {0}% thành hồi máu và {1}% thành mana và thể lực.
+SpellDescription.Trigger.MainDescription:			Áp một hiệu ứng phép (proc) như cường hóa. {0} kích hoạt khi mục tiêu bị đánh.
+SpellDescription.WaterBreathing.MainDescription:	Cho phép thở dưới nước và di chuyển ở {0}% tốc độ trên cạn.
+SpellDescription.TensionDebuff.MainDescription:		Giảm tốc độ tích tụ căng thẳng của mục tiêu {1}%.
+SpellDescription.TensionBuff.MainDescription:		Tăng tốc độ tích tụ căng thẳng của mục tiêu {1}%.
+SpellDescription.Teleport.MainDescription:			{0} dịch chuyển mục tiêu tới {1}.
+SpellDescription.PlayerPortal.MainDescription:		Mở cổng hai chiều dùng một lần nối với điểm hồi của người triệu hồi. Hoạt động tại {0}.
+SpellDescription.Earthquake.MainDescription1:		Gây động đất cường độ {0}, gây tối đa {1} sát thương ở tâm chấn và giảm xuống {2} ở rìa.
+SpellDescription.Earthquake.MainDescription2:		Không ảnh hưởng quái bay, bơi, hay banshee/vampire lơ lửng.
+SpellDescription.HoT.MainDescription:				Mục tiêu nhận {0} máu mỗi {1} giây.
+SpellDescription.DDWithDebuff.MainDescription:		Gây {0} {1} và giảm kháng {1} của mục tiêu {2}%.
+SpellDescription.AfHitsBuff.MainDescription:		Tăng Hệ số Giáp và máu {0}% khi bạn đứng trong tầm hào quang.
+SpellDescription.AllStatsBuff.MainDescription:		Tăng mọi thuộc tính của mục tiêu {0}.
+SpellDescription.PowerDrain.MainDescription:		Gây {0} {1}; người niệm nhận lại {2}% sát thương thành mana.
+SpellDescription.RealPowerDrain.MainDescription:	Gây {0} {1}; người niệm nhận {2}% thành mana và mục tiêu mất {3}% tổng mana.
+SpellDescription.PowerLock.MainDescription1:		Trói bạn và mục tiêu tại chỗ, rút {0}% mana cơ bản mỗi {1} giây trong {2} giây.
+SpellDescription.PowerLock.MainDescription2:		Trong hiệu lực, không ai có thể nhận sát thương cận chiến.
+SpellDescription.PowerLock.MainDescription3:		Chỉ dùng lên người chơi hoặc thú cưng do người chơi điều khiển.
+SpellDescription.Damnation.MainDescription1:		Nguyền rủa mục tiêu thành zombie và xóa hiệu ứng có lợi. Nhận {0}% kháng sát thương cận chiến nhưng chắc chắn chết sau {1} giây. Hồi máu không đảo ngược được.
+SpellDescription.Damnation.MainDescription2:		Hồi máu bị giảm mạnh xuống {0}%.
+SpellDescription.Damnation.MainDescription3:		Hồi máu không có tác dụng lên kẻ bị nguyền.
+SpellDescription.Damnation.MainDescription4:		Hồi máu chuyển thành {0}% sát thương.
+SpellDescription.Damnation.MainDescription5:		Không ảnh hưởng tới xác sống.
+SpellDescription.MonsterRez.MainDescription:		Hồi sinh thành xác sống và hồi {0}% máu, {1}% mana và thể lực, không mất kinh nghiệm hay thể chất.
+SpellDescription.MonsterRez.DamageMain:				Gây {1} {0} lên mục tiêu
+SpellDescription.MonsterRez.DamageRadius:			và khu vực xung quanh
+SpellDescription.MonsterRez.DamageFrequency:		mỗi {0} giây
+SpellDescription.MonsterRez.DamageDuration:			trong {0} giây
+SpellDescription.SummonMonster.MainDescription:		Hồi sinh từ xác.
+SpellDescription.DamageAdd.MainDescription:			Đòn cận chiến của mục tiêu gây thêm {0} {1}.
+SpellDescription.DamageShield.MainDescription:		Gây {0} {1} lên kẻ địch đánh cận bạn.
+SpellDescription.SpellReflection.MainDescription1:	Bật lại phép với {0}% cơ hội ở {1}% sát thương và hấp thụ {2}% sát thương gây ra.
+SpellDescription.SpellReflection.MainDescription2:	Không phản xạ võ học hay mũi tên.
+SpellDescription.SpellReflectionDebuff.MainDescription:		Gỡ khiên lệch hướng phép của mục tiêu.
+SpellDescription.PowerShield.MainDescription:		Khi máu xuống dưới {0}%, chuyển mana thành máu tới {1}% tối đa.
+SpellDescription.PowerTransfer.MainDescription:		Chuyển {0} mana từ người niệm sang mục tiêu.
+SpellDescription.Resurrect.MainDescription:			Hồi sinh và hồi {0}% máu, {1}% mana (và thể lực) không mất kinh nghiệm hay thể chất.
+SpellDescription.OffensiveProc.MainDescription:		{0} cho {1}% cơ hội kích hoạt phép phụ từ các đòn cận chiến của bạn:
+SpellDescription.DefensiveProc.MainDescription:		{0} cho {1}% cơ hội kích hoạt phép phụ khi bạn bị đánh cận:
+SpellDescription.SpeedEnhancement.MainDescription:	Tăng tốc lên {0}% bình thường.
+SpellDescription.SpellShield.MainDescription:		{0} hấp thụ 100% sát thương phép và 70% DoT khi máu ở {1}% hoặc thấp hơn.
+SpellDescription.StyleBleeding.MainDescription:		Mục tiêu chịu {0} {1} mỗi {2} giây.
+SpellDescription.StyleTaunt.Increase:				Khiêu khích mục tiêu và tăng thù hằn của bạn lên nó {0}.
+SpellDescription.StyleTaunt.Decrease:				Giảm khiêu khích và giảm thù hằn của bạn -{0}.
+SpellDescription.Taunt.MainDescription:				Khiêu khích mục tiêu và tăng thù hằn của bạn {0}.
+SpellDescription.SummonSpell.MainDescription:		Triệu gọi thú cưng phục vụ người triệu hồi. Tác dụng lên sinh vật tới {0}% cấp của bạn, tối đa {1}.
+SpellDescription.MeleeAblativeArmor.MainDescription:		Tạo khiên tạm thời hấp thụ {0}% sát thương vật lý tối đa đến {1}.
+SpellDescription.MagicAblativeArmor.MainDescription:		Tạo khiên tạm thời hấp thụ {0}% sát thương phép tối đa đến {1}.
+SpellDescription.BothAblativeArmor.MainDescription:	Tạo khiên tạm thời hấp thụ {0}% mọi sát thương tối đa đến {1}.
+SpellDescription.BattleFeverDurationBuff.MainDescription:	Kéo dài Cơn sốt Chiến trận thêm {0}%.
+SpellDescription.TankAdrenaline.MainDescription:	Cơn sốt chiến trận bùng nổ! Đòn cận của bạn không trượt kẻ cùng cấp; phòng thủ và sức mạnh cận chiến tăng mạnh.
+SpellDescription.MageAdrenaline.MainDescription:	Cơn sốt chiến trận bùng nổ! Phòng thủ, tỷ lệ trúng phép và tốc độ niệm tăng mạnh; bị đánh không làm gián đoạn.
+SpellDescription.StealthAdrenaline.MainDescription:	Cơn sốt chiến trận bùng nổ! Đòn cận không trượt kẻ cùng cấp; phòng thủ, ẩn nấp và sức mạnh xa/cận tăng mạnh.
+SpellDescription.Amnesia.MainDescription:			Làm quái quên kẻ đã tấn công nó. Ngắt phép địch mà không gây choáng nếu không bị kháng.
+SpellDescription.Mesmerize.MainDescription:			Mục tiêu bị thôi miên, không thể hành động.
+SpellDescription.Stun.MainDescription:				Gây choáng mục tiêu {0} giây.
+SpellDescription.Charm.MainDescription1:			Cố gắng thuần hóa sinh vật {0}.
+SpellDescription.Charm.MainDescription2:			Ảnh hưởng quái tới {0}% cấp của bạn, tối đa {1}.
+SpellDescription.CombatHeal.MainDescription:		Hồi {0} sát thương mỗi {1} giây.
+SpellDescription.Confusion.MainDescriptionPositive:	Sinh vật có {0}% cơ hội đổi mục tiêu.
+SpellDescription.Confusion.MainDescriptionNegative:	100% cơ hội đổi mục tiêu và 75% cơ hội đánh đồng minh.
+SpellDescription.PetConversion.MainDescription:		Thả mục tiêu và mọi tháp của bạn trong vùng. Nhận lại {0}% mana đã dùng để triệu hồi.
+SpellDescription.CraftingSpeedBuff.MainDescription:	Tăng tốc độ chế tác {0}%.
+SpellDescription.CureDisease.MainDescription:		Xóa mọi bệnh trên mục tiêu.
+SpellDescription.CureMezz.MainDescription:			Xóa mọi hiệu ứng thôi miên trên mục tiêu.
+SpellDescription.CureNearsight.MainDescription:		Xóa mọi hiệu ứng cận thị.
+SpellDescription.CurePoison.MainDescription:		Xóa mọi hiệu ứng sát thương theo thời gian (ví dụ: độc) trên mục tiêu.
+SpellDescription.DamageSpeedDecrease.MainDescription:		Giảm tốc {0}% và gây {1} {2}.
+SpellDescription.DamageToPower.MainDescription:		Chuyển {0}% sát thương phép nhận vào mục tiêu thành mana.
+SpellDescription.DeathClaw.MainDescription:			{0} giảm 90% máu kẻ địch. Không ảnh hưởng linh hồn, sinh vật yếu hay mục tiêu trên cấp {1}; hiệu lực giảm với xác sống và trùm.
+SpellDescription.EnduranceDrain.MainDescription:	{0}% thể lực của mục tiêu bị rút và chuyển cho người niệm.
+SpellDescription.EnduranceHeal.MainDescription:		Hồi {0} thể lực.
+SpellDescription.Disarm.MainDescription1:			Tước vũ khí mục tiêu trong {0} giây.
+SpellDescription.Disarm.MainDescription2:			Không thể áp lại trước {0} giây.
+SpellDescription.GroundArea.MainDescription1:		Tạo “đám mây” đánh tất cả trong khu vực.
+SpellDescription.GroundArea.MainDescription2:		Hiệu ứng diện rộng:
+SpellDescription.CloudsongFall.MainDescription:		Giảm sát thương ngã {0}%.
+SpellDescription.DoomHammer.MainDescription:		Gây {0} {1}.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Gây {0} {1} mỗi nhịp lên mục tiêu. Tăng {2}% mỗi nhịp tối đa {3}%. Tốn {4}% mana mỗi nhịp.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Gây {0} {1} mỗi nhịp và giảm tốc {5}%. Tăng {2}% tối đa {3}%. Tốn {4}% mana mỗi nhịp.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Gây {0} {1} mỗi nhịp trong vùng. Tăng {2}% tối đa {3}%. Tốn {4}% mana mỗi nhịp.
+SpellDescription.RampingDamageFocus.AoESnare:				Gây {0} {1} mỗi nhịp trong vùng và giảm tốc {5}%. Tăng {2}% tối đa {3}%. Tốn {4}% mana mỗi nhịp.
+SpellDescription.HereticPiercingMagic.MainDescription:		Tăng hiệu quả phép của mục tiêu {0}% và giảm kháng hoàn toàn với cấp cao hơn.
+SpellDescription.SummonNethersbane.MainDescription1:		Triệu hồi Nethersbane, lưỡi kiếm ô uế của Arawn.
+SpellDescription.SummonNethersbane.MainDescription2:		Loại sát thương: Lạnh.
+SpellDescription.SummonIcebrand.MainDescription1:			Triệu hồi Icebrand, lưỡi kiếm ô uế thấm bóng tối.
+SpellDescription.SummonIcebrand.MainDescription2:			Loại sát thương: Lạnh.
+SpellDescription.GoldenSpearJavelin.MainDescription:		Triệu hồi 5 lao phép.
+SpellDescription.OmniHeal.MainDescription:					Hoàn trả {0}% máu, thể lực và mana.
+SpellDescription.OmniHarm.MainDescription:					Mục tiêu mất {0} thể lực và {1} mana.
+SpellDescription.OmniLifeDrain.MainDescription:				Gây sát thương; trả lại cho người niệm {0}% thành máu, {1}% thành mana và {2}% thành thể lực.
+SpellDescription.PowerHeal.MainDescription:					Hồi {0}% mana của mục tiêu.
+SpellDescription.Silence.MainDescription:					Câm lặng kẻ địch trong {0} giây.
+SpellDescription.IllusionSpell.MainDescription1:			Người triệu hồi tạo {0} ảo ảnh {1} bao quanh và gây rối kẻ địch.
+SpellDescription.IllusionSpell.MainDescription2:			Ảo ảnh gây {0}% sát thương của chủ, có {1}% máu tối đa của chủ và biến mất sau {2} giây.
+SpellDescription.IllusionSpell.SubDescription1:				Người triệu hồi hóa thành sinh vật và {0} ảo ảnh chia sẻ ngoại hình đó.
+SpellDescription.IllusionSpell.SubDescription2a:			Ảo ảnh di chuyển theo chủ và bắt chước động tác, võ học và phép.
+SpellDescription.IllusionSpell.SubDescription2b:			Nếu người niệm di chuyển, ảo ảnh biến mất và phép kết thúc.
+SpellDescription.Bump.MainDescriptionSingle:		Hất kẻ địch lên {0} đơn vị và phóng về trước {1}%–{2}% tầm tối đa; bị choáng trên không.
+SpellDescription.Bump.MainDescriptionArea:			Đẩy mọi kẻ địch trong bán kính {3} đơn vị lên {0} và {1}%–{2}% về trước; bị choáng trên không.
+SpellDescription.Bump.MainDescriptionCone:			Đẩy kẻ địch trong hình nón {0} lên và {1}%–{2}% về trước; bị choáng trên không.
+SpellDescription.Conversion.MainDescription:		Chuyển {0}% mọi sát thương nhận vào thành máu, thể lực và mana.
+SpellDescription.MagicConversion.MainDescription:	Chuyển {0}% sát thương phép nhận vào thành máu, thể lực và mana.
+SpellDescription.Fury.MainDescription:				Cho {0}% cơ hội kháng khống chế và tăng mọi kháng phép {0}%.
+SpellDescription.HealthToFatigue.MainDescription:	Tiêu tốn {0}% máu của bạn và hồi {1}% thể lực đã mất.
+SpellDescription.Chamber.MainDescription:			Cho phép nạp buồng với phép chính và phụ rồi phóng tức thì vào mục tiêu.
+SpellDescription.Chamber.CanContainBolts:			Có thể chứa phép tia.
+SpellDescription.Chamber.CannotContainBolts:		Không thể chứa phép tia.
+SpellDescription.FocusShell.MainDescription:		Giảm sát thương nhận từ cận và phép {0}%.
+SpellDescription.FocusShell.OnlyInPvPORvR:			Chỉ dùng trong khu PvP/RvR.
+SpellDescription.Powerless.MainDescription:			Cho phép niệm phép phụ không tốn mana.
+SpellDescription.Range.MainDescription:				Cho phép niệm phép phụ với tầm {0}%.
+SpellDescription.Uninterruptable.MainDescription:	Cho phép niệm phép phụ không thể bị ngắt, nhưng giảm hiệu quả {0}%.
+SpellDescription.Agony.ConditionDescription:		Yêu cầu mục tiêu đang chịu “Dread” và “Anguish”.
+SpellDescription.Doom.ConditionDescription:			Yêu cầu “Dread”, “Anguish” và “Agony”.
+SpellDescription.Doom.Expires:						Hết hiệu lực:
+SpellDescription.BuffShear.Str:						Loại bỏ cường hóa tăng Sức mạnh.
+SpellDescription.BuffShear.Dex:						Loại bỏ cường hóa tăng Khéo léo.
+SpellDescription.BuffShear.Con:						Loại bỏ cường hóa tăng Thể chất.
+SpellDescription.BuffShear.Acuity:					Loại bỏ cường hóa tăng Trí mẫn.
+SpellDescription.BuffShear.StrCon:					Loại bỏ cường hóa Sức mạnh/Thể chất.
+SpellDescription.BuffShear.DexQui:					Loại bỏ cường hóa Khéo léo/Nhanh nhẹn.
+SpellDescription.BuffShear.Random:					Ngẫu nhiên gỡ một buff có lợi.
+SpellDescription.BuffShear.Ablative:				Gỡ mọi khiên hấp thụ.
+SpellDescription.ResistBuff.MainDescription:				Tăng kháng {0} {1}%.
+SpellDescription.BodySpiritEnergyBuff.MainDescription:		Tăng kháng Thể, Linh hồn và Năng lượng {0}%.
+SpellDescription.HeatColdMatterBuff.MainDescription:		Tăng kháng Lửa, Lạnh và Chất {0}%.
+SpellDescription.AllMagicResistsBuff.MainDescription:		Tăng mọi kháng phép {0}%.
+SpellDescription.SecondaryMagicResistsBuff.MainDescription:	Tăng kháng phép thứ cấp {0}%.
+SpellDescription.AllMeleeResistsBuff.MainDescription:		Tăng kháng sát thương cận chiến {0}%.
+SpellDescription.AllResistsBuff.MainDescription:			Tăng mọi kháng {0}%.
+SpellDescription.EssenceBuff.MainDescription:				Tăng kháng sát thương “Bản chất” {0}%.
+SpellDescription.ResistDebuff.MainDescription:				Giảm kháng {0} của mục tiêu {1}%.
+SpellDescription.CrushSlashThrustDebuff.MainDescription:	Giảm kháng sát thương cận chiến {0}%.
+SpellDescription.EssenceDebuff.MainDescription:				Giảm kháng sát thương “Bản chất”.
+SpellDescription.DualStatDebuff.MainDescription:			Giảm {0} và {1} của mục tiêu {2}.
+SpellDescription.DualStatBuff.MainDescription:				Tăng {0} và {1} {2}.
+SpellDescription.SingleStatBuff.MainDescription:			Tăng {0} {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Tăng tốc độ đánh {0}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	Hành động tiêu tốn ít thể lực hơn {0}%.
+SpellDescription.DPSBuff.MainDescription:					Tăng DPS {0}%.
+SpellDescription.MeleeDamageBuff.MainDescription:			Gây thêm {0}% sát thương cận chiến.
+SpellDescription.MesmerizeDurationBuff.MainDescription:		Giảm hiệu quả phép thôi miên {0}%.
+SpellDescription.EvadeChanceBuff.MainDescription:			Cho {0}% cơ hội né.
+SpellDescription.ParryChanceBuff.MainDescription:			Cho {0}% cơ hội đỡ.
+SpellDescription.WeaponSkillBuff.MainDescription:			Tăng kỹ năng {0} {1}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Tăng kỹ năng Ẩn nấp {0} {1}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Tăng kỹ năng Vũ khí mềm dẻo {0} {1}%.
+SpellDescription.ResiPierceBuff.MainDescription:			Cho {0}% cơ hội xuyên kháng phép.
+SpellDescription.CriticalMagicalBuff.MainDescription:		Tăng cơ hội chí mạng phép {0}%.
+SpellDescription.CriticalMeleeBuff.MainDescription:			Tăng cơ hội chí mạng cận {0}%.
+SpellDescription.SingleStatDebuff.MainDescription:			Giảm {0} {1}.
+SpellDescription.CombatSpeedDebuff.MainDescription:			Giảm tốc độ đánh của mục tiêu {0}%.
+SpellDescription.MeleeDamageDebuff.MainDescription:			Mục tiêu gây ít sát thương cận hơn {0}%.
+SpellDescription.FatigueConsumptionDebuff.MainDescription:	Tăng tiêu hao thể lực trong chiến đấu của mục tiêu {0}%.
+SpellDescription.FumbleChanceDebuff.MainDescription:		Tăng cơ hội “trượt tay” của mục tiêu {0}%.
+SpellDescription.DPSDebuff.MainDescription:					Giảm DPS {0}%.
+SpellDescription.SkillsDebuff.MainDescription:				Giảm kỹ năng {0}%.
+SpellDescription.Warlock.SecondarySpell:					Đây là phép phụ.
+SpellDescription.Warlock.PrimarySpell:						Đây là phép chính.
+SpellDescription.AllStatsDebuff.MainDescription:			Giảm mọi thuộc tính của mục tiêu {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:		Giảm mọi thuộc tính của mục tiêu {0}%.
+SpellDescription.Morph.MainDescription:						Mục tiêu biến thành {0}.
+SpellDescription.PowerRend.MainDescription:					Mục tiêu mất {0}% mana.
+SpellDescription.SummonAnimistFnF.MainDescription:		Triệu hồi tháp đứng yên tại mục tiêu mặt đất của bạn tấn công kẻ địch trong tầm.
+SpellDescription.Bomber.MainDescription:				Triệu hồi linh hồn nguyên tố bay tới mục tiêu, nổ và tung phép khi tới nơi.
+SpellDescription.SavageParryBuff.MainDescription:		Tăng cơ hội đỡ của bạn {0}%.
+SpellDescription.SavageEvadeBuff.MainDescription:		Tăng cơ hội né của bạn {0}%.
+SpellDescription.SavageCombatSpeedBuff.MainDescription:	Tăng tốc độ đánh của bạn {0}%.
+SpellDescription.SavageDPSBuff.MainDescription:			Tăng sát thương cận của bạn {0}.
+SpellDescription.SavageEnduranceHeal.MainDescription:	Bạn hồi {0} thể lực với cái giá là một phần máu của mình.
+SpellDescription.Archery.SingleTarget:					Gây {0} {1} lên mục tiêu.
+SpellDescription.Archery.AreaTarget:					Gây {0} {1} lên mục tiêu và khu vực.
+SpellDescription.Archery.SecondaryEffectiveness:		Hiệu quả mũi tên tăng {0}%.
+SpellDescription.WarlockSpeedDecrease.Frog:				Biến mục tiêu thành ếch!
+SpellDescription.MaidenKiss.MainDescription:			Xóa trạng thái “Ếch” khỏi mục tiêu.
+SpellDescription.ArawnCure.MainDescription:				Chữa độc, bệnh và suy yếu sau hồi sinh.
+SpellDescription.Fear.SingleTarget:						Gieo sợ hãi vào kẻ địch đã chọn. Không ảnh hưởng thú cưng hoặc mục tiêu trên cấp {0}.
+SpellDescription.Fear.AreaTarget:						Gieo sợ hãi quái địch trong bán kính {1} quanh người niệm. Không ảnh hưởng trên cấp {0}.
+SpellDescription.FearServant.SingleTarget:				Gieo sợ hãi lên thú cưng địch. Không ảnh hưởng trên cấp {0}.
+SpellDescription.FearServant.AreaTarget:				Gieo sợ hãi lên thú cưng địch trong {1}. Không ảnh hưởng trên cấp {0}.
+SpellDescription.FearServant.SingleTarget&Npc:			Gieo sợ hãi vào kẻ địch đã chọn. Không ảnh hưởng trên cấp {0}.
+SpellDescription.FearServant.AreaTarget&Npc:			Gieo sợ hãi lên kẻ địch trong {1}. Không ảnh hưởng trên cấp {0}.
+SpellDescription.FearServant.PetDescription:			Trong sợ hãi, thú cưng không thể điều khiển hoặc thả.
+SpellDescription.BainsheePulseDmg.MainDescription:		Mục tiêu chịu {0} {1}.
+SpellDescription.BainsheePulseDmg.AreaDescription:		Đánh mọi kẻ địch gần người niệm.
+SpellDescription.BainsheePulseDmg.SecondaryDescription:	Tái niệm trong thời gian hiệu lực sẽ hủy hiệu ứng. Kết thúc nếu người niệm di chuyển.
+SpellDescription.BeFriend.MainDescriptionArea:			Tạm thời (tới cấp {0}) mê hoặc quái gần đó để thân thiện và thành đồng minh.
+SpellDescription.BeFriend.MainDescriptionSingle:		Tạm thời (tới cấp {0}) mê hoặc quái đã chọn để thân thiện và thành đồng minh.
+SpellDescription.VampiirStealthDetection.MainDescription:	Tăng phát hiện kẻ địch ẩn nấp {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Giảm tạm thời cộng kỹ năng của mục tiêu {0}%.
+SpellDescription.VampiirMeleeResistance.MainDescription:	Tăng kháng sát thương cận {0}%.
+SpellDescription.VampiirMagicResistance.MainDescription:	Tăng cơ hội kháng sát thương phép {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Giảm tạm thời hiệu quả của mục tiêu {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:	Có thể niệm trong chiến đấu.
+SpellDescription.VampiirArmorDebuff.MainDescription:		Giảm tạm thời hấp thụ và hệ số giáp của một mảnh ngẫu nhiên (mũ, thân hoặc chân) {0}%.
+SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Chỉ ảnh hưởng mũ, thân hoặc chân.
+SpellDescription.VampiirBolt.MainDescription:			Hút {0}% mana của mục tiêu và chuyển cho người niệm.
+SpellDescription.VampiirBolt.MainDescription2:			Không ảnh hưởng mục tiêu trên cấp {0}.
+SpellDescription.IllusionBlade.Part1:					Triệu hồi vũ khí quang ảnh chiến đấu cạnh bạn một lúc rồi tan biến.
+SpellDescription.IllusionBlade.Part2:					Hành động độc lập; không thể điều khiển, thả hay hồi máu.
+SpellDescription.RangeShield.MainDescription:			Bảo vệ nhóm của người niệm khỏi tấn công vật lý của cung thủ.
+SpellDescription.PetSpell.MainDescription1:				Phép của thú cưng:
+SpellDescription.PetSpell.MainDescription2:				Tăng các chỉ số liệt kê của mục tiêu.
+SpellDescription.Ascendance.MainDescription:			Tăng đáng kể hiệu quả phép và kỹ năng của bạn {0}%.
+SpellDescription.Ascendance.Restrictions:				Trong “Thăng Hoa” không thể niệm hồi máu hay hồi sinh.
+SpellDescription.Ascendance.Interaction:				“Bậc thầy Tập trung” hủy “Thăng Hoa” và ngược lại.  
+SpellDescription.Occultist.ConditionDescription1:		Không thể niệm ở Dạng Chtonic.
+SpellDescription.Occultist.ConditionDescription2:		Không thể niệm ở Dạng Linh Hồn hay Cuồng Nộ.
+SpellDescription.Occultist.Summon.UmbralAegis1:			Triệu hồi Khiên Bóng Tối bọc giáp. Tuyệt vời để đỡ đòn và hấp thụ sát thương.
+SpellDescription.Occultist.Summon.UmbralAegis2:			Dạng Linh Hồn: Khiên nhận DD bán kính 200, nhiều giáp, hấp thụ phép và tốc độ chiến đấu cao hơn.
+SpellDescription.Occultist.Summon.Soultorn1:			Triệu hồi Linh Hồn Rách. Gây sát thương Chất nhưng yếu trước phép và vật lý.
+SpellDescription.Occultist.Summon.Soultorn2:			Dạng Linh Hồn: thêm debuff Chất và Bệnh.
+SpellDescription.Occultist.Summon.UmbralHulk1:			Triệu hồi Khổng Lồ Bóng Tối bọc giáp, chuyên sát thương vật lý.
+SpellDescription.Occultist.Summon.UmbralHulk2:			Dạng Linh Hồn: nhận lao tới 5 giây, choáng 3 giây từ phía sau và tăng cơ hội tay phụ.
+SpellDescription.Occultist.Summon.ImageOfArawn1:		Triệu hồi Ảnh Arawn. Hồi 12% máu đơn mục tiêu cho đồng minh.
+SpellDescription.Occultist.Summon.ImageOfArawn2:		Dạng Linh Hồn: thêm chữa độc, bệnh, suy yếu sau hồi sinh và có thể xóa cận thị.  
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Triệu hồi Nữ Yêu Ma thôi miên mục tiêu.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Dạng Linh Hồn: Ác Ma nhận debuff Dex/Qui mạnh và có thể xóa cận thị.
+SpellDescription.Occultist.SpiritShapeShift1:			Hóa Dạng Linh Hồn. {0}% sát thương nhận vào được hấp thụ và chuyển thành mana.
+SpellDescription.Occultist.SpiritShapeShift2:			Hồi mana +{0} mỗi cấp và phát hiện ẩn nấp +{1}%.
+SpellDescription.Occultist.SpiritShapeShift3:			Đầy tớ bền bỉ hơn và nhận thêm kỹ năng.
+SpellDescription.Occultist.ChtonicShapeShift1:			Nhập thể Kỵ Sĩ Chtonic. AF +{0}/cấp; máu, AF và vũ khí +{1}%, hấp thụ cận +{2}% và kháng phép thứ cấp +{3}%.  
+SpellDescription.Occultist.ChtonicShapeShift2:			Được thêm khả năng Đỡ (Parry).
+SpellDescription.Occultist.DecrepitShapeShift1:			Nhập thể Pháp Sư Tàn Tạ. Sát thương phép +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift2:			Hấp thụ giáp +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift3:			Kẻ tấn công cận có {0}% cơ hội áp Bệnh; thân thể mục rữa hồi phục, hồi máu +{1}.
+SpellDescription.Occultist.BringerOfDeath1:				Nhập thể Kẻ Mang Tử Thần. Phép của bạn không thể bị ngắt nhưng hoạt động ở {0}%; nhận ít hơn {1}% sát thương phép và vật lý.
+SpellDescription.Occultist.BringerOfDeath2:				Tốc độ di chuyển +{0}% kể cả trong speedwarp và giao tranh. Hiệu lực hồi phục và Bệnh từ Dạng Tàn Tạ vẫn hoạt động.
+SpellDescription.DamageReturn.MainDescription:			Phản trả {0}% sát thương trực tiếp phép (không DoT), cận và đạn vào {1} kẻ tấn công trong thời gian hiệu lực.
+SpellDescription.OffProcShear.Main1:					Gỡ các proc tấn công đang hoạt động của mục tiêu.
+SpellDescription.OffProcShear.Main2:					Áp proc thay thế bị nguyền; các tiểu phép của nó sẽ hồi máu cho kẻ địch của mục tiêu khi họ đánh trúng.
+SpellDescription.OffProcShear.ReplacementHeader:		Proc thay thế:
+
+
+# ML Spells ShortDescriptions
+SpellDescription.Convoker.SummonWood.MainDescription:			Triệu hồi ngẫu nhiên 100 tấm ván để gia cố và sửa cổng, tường pháo đài.
+SpellDescription.Convoker.PrescienceNode.MainDescription1:		Phù văn mặt đất (bán kính 1000) phát hiện kẻ địch ẩn mà không phá tàng hình.
+SpellDescription.Convoker.PrescienceNode.MainDescription2:		Phù văn có thể bị tấn công và có {0} máu.
+SpellDescription.Convoker.Prescience.MainDescription1:			Một Phù Văn Hiện Diện đã phát hiện bạn!
+SpellDescription.Convoker.Prescience.MainDescription2:			Ban khả năng linh cảm để đoán trước chuyển động của địch.
+SpellDescription.Convoker.PowerTrap.MainDescription:			Đặt phù văn khi kích nổ sẽ rút 20% mana của kẻ địch (chỉ kẻ có mana).
+SpellDescription.Convoker.SpeedWrap.MainDescription:			Phù văn xóa buff tốc độ của kẻ đi qua. 6 giây sau khi rời không thể nhận phép tốc độ.
+SpellDescription.Convoker.SummonWarcrystal.MainDescription:		Triệu hồi và đặt đạn công thành (đạn chì, cầu, băng hoặc đá) vào túi đồ của bạn.
+SpellDescription.Convoker.Battlewarder.MainDescription1:		Triệu hồi Hộ Vệ Chiến Trận chặn đòn địch. Đứng yên và tiêu hao mana khi hoạt động.
+SpellDescription.Convoker.Battlewarder.MainDescription2:		Mục tiêu mặt đất. Có thể tồn tại cùng thú cưng khác; có thể triệu hồi nhiều hộ vệ.
+SpellDescription.Convoker.DissonanceTrap.MainDescription:		Đặt phù văn khi kích nổ gây {0} {1}.
+SpellDescription.Convoker.BrittleGuard.MainDescription1:		Triệu hồi “Hộ Vệ Mỏng Manh” chặn một đòn cận cho bạn.
+SpellDescription.Convoker.BrittleGuard.MainDescription2:		Có một mạng và biến mất sau khi chặn. Chỉ một cái hoạt động.
+SpellDescription.Convoker.SummonMastery.MainDescription:		Tăng cấp hiệu dụng thú cưng và cải thiện sát thương, hấp thụ của chúng.
+SpellDescription.Convoker.SummonTitan.MainDescription1:			Triệu hồi Titan lớn dần và mạnh dần, tấn công dữ dội.
+SpellDescription.Convoker.SummonTitan.MainDescription2:			Đứng yên và chỉ đánh kẻ trong tầm cận.
+SpellDescription.Spymaster.Decoy.MainDescription:				Triệu hồi đồng minh mồi nhử với trang bị sử thi, 1 mạng và không có khả năng tấn công để đánh lạc hướng.
+SpellDescription.Spymaster.Sabotage.MainDescription:			Phá hoại mục tiêu (phù văn hoặc máy công thành) khiến không thể sử dụng.
+SpellDescription.Spymaster.TangleSnare.MainDescription:			Đặt phù văn khi kích nổ sẽ làm chậm kẻ trong tầm {0}%. Dùng sẽ hủy ẩn nấp.
+SpellDescription.Spymaster.PoisonSpike.MainDescription:			Đặt phù văn độc gây {0} {1} lên kẻ địch gần. Hủy ẩn nấp.
+SpellDescription.Spymaster.Loockout.MainDescription1:			Trạm quan sát cố định phát hiện kẻ địch ẩn trong {0}. Vẫn ẩn nếu không di chuyển.
+SpellDescription.Spymaster.Loockout.MainDescription2:			Phải ngồi và bất động; di chuyển sẽ kết thúc hiệu ứng.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Phù văn gây sát thương lớn lên máy công thành.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		Gây {0} sát thương khi kích hoạt.
+SpellDescription.Spymaster.EssenceFlare.MainDescription:		Áp độc khiến kẻ địch mờ mắt 15 giây.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Che chắn cả nhóm. Di chuyển/niệm/hát sẽ xóa hiệu ứng với người không ẩn nấp.
+SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Rút {0} thể lực của kẻ địch gần.
+SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Tăng {0}% sát thương lên máy công thành và công trình.
+SpellDescription.Battlemaster.MLManadrain.MainDescription:		Rút {0} mana của kẻ địch gần.
+SpellDescription.Battlemaster.Grapple.MainDescription1:			Hiệu ứng cự ly ngắn trói {0} giây và tẩy hiệu ứng.
+SpellDescription.Battlemaster.Grapple.MainDescription2:			Khóa mục tiêu; không thể di chuyển hoặc đánh cận, nhưng có thể niệm/hát 10 giây.
+SpellDescription.Battlemaster.Grapple.MainDescription3:			Mục tiêu bị khóa không thể bị đánh cận.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	{0}% cơ hội kích hoạt sát thương Bản chất bổ sung với đòn cận.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		Đòn tầm xa dùng công thức sát thương cận.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Cấm đánh cận 10 giây sau khi dùng.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Giảm kháng Bản chất của kẻ địch gần {0}%.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription2:	Giảm kháng Bản chất của mục tiêu {0}%.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Bảo vệ đồng minh gần khỏi đòn cận. Khi hộ vệ còn sống hoặc trong tầm, đồng minh không thể bị chọn mục tiêu.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	Chỉ duy trì nếu được bảo vệ đứng yên.
+SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Giảm cơ động của mục tiêu {0}%.
+SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:		Giảm tốc độ niệm của địch {0}%.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Giảm mana, máu và thể lực của địch trong vùng {0}%.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Giảm tài nguyên trong vùng {0}% và tiêu tốn {1}% máu của bạn.
+SpellDescription.Banelord.Oppression.MainDescription:			Giảm sức chở tối đa của kẻ địch gần {0}%.
+SpellDescription.Banelord.FatDebuff.MainDescription:			Tăng tiêu hao thể lực của đòn địch {0}%.
+SpellDescription.Banelord.MissHit.MainDescription:				Giảm cơ hội đánh trúng của kẻ địch gần {0}%.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Vùng ngắn làm chậm {0}% và gây choáng người niệm.
+SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:	Gây choáng {0} giây và ngăn hành động.
+SpellDescription.Banelord.ToHitBuff.MainDescription:			Tăng cơ hội đánh trúng của đồng minh gần {0}%.
+SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Giảm hiệu quả của địch (phép và cận) {0}%.
+SpellDescription.Banelord.Banespike.MainDescription:			Tăng sát thương của đồng minh gần {0}%.
+SpellDescription.Banelord.NbTargetAffected.MainDescription:		Tối đa {0} kẻ địch bị ảnh hưởng.
+SpellDescription.Perfector.FOH.MainDescription1:				Tạo cầu tại chân bạn, dần hồi {0} máu cho đồng minh (tối đa 40).
+SpellDescription.Perfector.FOH.MainDescription2:				Trong PvE, kéo sự chú ý của địch về người niệm.
+SpellDescription.Perfector.FOP.MainDescription1:				Tạo cầu tại chân bạn, dần hồi {0} mana cho đồng minh (tối đa 40).
+SpellDescription.Perfector.FOP.MainDescription2:				Đồng minh vừa chiến đấu trong 10 giây gần đây ở PvE không được hưởng.
+SpellDescription.Perfector.FOR.MainDescription:					Phù văn rút ngắn thời gian khống chế trên đồng minh gần {0}%.
+SpellDescription.Perfector.SickHeal.MainDescription:			Cho phép vượt qua hiệu ứng sau hồi sinh.
+SpellDescription.Perfector.FOD.MainDescription:					Phù văn phòng thủ rút {0}% mana kẻ địch trong tầm.
+SpellDescription.Perfector.PoT.MainDescription:					Hiệu ứng hồi duy trì tăng mana mỗi tick {0}%.
+SpellDescription.Perfector.CCResist.MainDescription:			Tăng kháng khống chế của bạn trong {0} giây.
+SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Vùng hồi {0}% máu, mana và thể lực cho đồng minh gần.
+SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Hồi 1000 máu cho mục tiêu với giá {0}% máu của bạn.
+SpellDescription.Warlord.CoweringBellow.MainDescription:		Gieo sợ hãi lên thú cưng do người chơi điều khiển trong {0} và giảm hiệu quả của chúng.
+SpellDescription.Warlord.Critical.MainDescription1:				Tăng cơ hội chí mạng của đồng minh trong {0} thêm {1}% cho đòn kế tiếp.
+SpellDescription.Warlord.Critical.MainDescription2:				Tăng cơ hội chí mạng của mục tiêu {0}% cho đòn kế tiếp.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Giảm hiệu quả DoT trên đồng minh trong {0} {1}%. Khi sát thương về 0, hiệu ứng kết thúc.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Giảm hiệu quả DoT trên mục tiêu {0}%. Kết thúc khi sát thương về 0.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Tăng hiệu quả của đồng minh trong {0} {1}% (phép và cận).
+SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Tăng hiệu quả của mục tiêu {1}% (phép và cận).
+SpellDescription.Warlord.MLABSBuff.MainDescription1:			Tăng hấp thụ giáp của đồng minh trong {0} {1}%.
+SpellDescription.Warlord.MLABSBuff.MainDescription2:			Tăng hấp thụ giáp của mục tiêu {1}%.
+SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription:	Phá hủy phù văn mục tiêu và phù văn gần trong {0}.
+SpellDescription.Sojourner.AncientTransmuter.MainDescription:	Triệu hồi thương nhân mua/bán vật tư cơ bản.
+SpellDescription.Sojourner.Port.MainDescription1:				Dịch chuyển bạn đến đá linh hồn. Không hoạt động khi giao tranh hay RvR.
+SpellDescription.Sojourner.Port.MainDescription2:				Dịch chuyển {0} người chơi trong {1} đến đá linh hồn của họ. Không khi giao tranh/RvR.
+SpellDescription.Sojourner.EssenceResist.MainDescription:		Tăng kháng sát thương tự nhiên (Bản chất) {0}%.
+SpellDescription.Sojourner.Zephyr.MainDescription1:				Gọi luồng gió cuốn kẻ địch theo hướng ngẫu nhiên và khiến nó bất khả xâm phạm trong thời gian hiệu lực.
+SpellDescription.Sojourner.Zephyr.MainDescription2:				Người chơi bị Zephyr tác động sẽ miễn nhiễm {0} phút trước lần kế tiếp.
+SpellDescription.Sojourner.Phaseshift.MainDescription:			Buff cá nhân giúp gần như bất tử trước phép và cận trong {0} giây.
+SpellDescription.Sojourner.Groupport.MainDescription:			Đưa cả nhóm của bạn về đá linh hồn của bạn. Thất bại nếu ai đó đang giao tranh.
+SpellDescription.Stormlord.DazzlingArray.MainDescription1:		Áp hiệu ứng giảm cơ hội đánh trúng của kẻ địch trong vùng {0}%.
+SpellDescription.Stormlord.DazzlingArray.MainDescription2:		Chỉ áp cho phép choáng; loại trừ RA và võ học.
+SpellDescription.Stormlord.StormMissHit.MainDescription:		Giảm độ chính xác của mục tiêu {0}%.
+SpellDescription.Stormlord.VacuumVortex.MainDescription:		Mục tiêu mặt đất, kéo bão gần tới điểm ngẫu nhiên ở rìa.
+SpellDescription.Stormlord.EnervatingGas.MainDescription:		Phát tán khí làm giảm thể lực của kẻ địch {0}%.
+SpellDescription.Stormlord.StormEndudrain.MainDescription:		Bão rút {0} thể lực của kẻ địch bên trong.
+SpellDescription.Stormlord.InebriatingFumes.MainDescription:	Giảm dần Khéo léo và Nhanh nhẹn {0}% với những ai ở trong.
+SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription:	Giảm Khéo léo và Nhanh nhẹn của mục tiêu {0}%.
+SpellDescription.Stormlord.MentalSiphon.MainDescription:		Bão rút {0} mana của kẻ địch bên trong.
+SpellDescription.Stormlord.PowerDrainStorm.MainDescription:		Rút {0} mana của mục tiêu.
+SpellDescription.Stormlord.FocusingWinds.MainDescription:		Tạo bão đồng minh và ghim tại chỗ. Kết thúc nếu bạn di chuyển.
+SpellDescription.Stormlord.ChokingVapors.MainDescription:		Giảm dần Sức mạnh và Thể chất {0}% với những ai ở trong.
+SpellDescription.Stormlord.StormStrConstDebuff.MainDescription:	Giảm Sức mạnh và Thể chất của mục tiêu {0}%.
+SpellDescription.Stormlord.SenseDullingCloud.MainDescription:	Bão làm cùn mòn giác quan, giảm Trí mẫn {0}%.
+SpellDescription.Stormlord.StormAcuityDebuff.MainDescription:	Giảm Trí mẫn của mục tiêu {0}%.
+SpellDescription.Stormlord.EnergyTempest.MainDescription:		Bão gây sát thương Bản chất lên kẻ địch bên trong.
+SpellDescription.Stormlord.StormEnergyTempest.MainDescription:	Gây {0} {1} trong {2} giây lên kẻ địch bên trong.
+SpellDescription.MLBase.TargetModifier.MainDescription:			Buff cá nhân cho phép chỉnh/sửa tầm của phép kế tiếp (đơn hoặc diện rộng).
+SpellDescription.MLBase.BanelordSnare.MainDescription:			Vùng ngắn làm chậm {0}% và gây choáng người niệm.
+
+# AblativeArmor
+AblativeArmor.DelveInfo.Function:			Chức năng: giảm xóc đòn cận chiến
+AblativeArmor.DelveInfo.Absorption1:			Hấp thụ: {0}%
+AblativeArmor.DelveInfo.Absorption2:			Hấp thụ: 100%
+AblativeArmor.DelveInfo.Absorption3:			Hấp thụ: 25%
+AblativeArmor.DelveInfo.CastingTime:			Lập tức
+
+# DamageSpeedDecrease
+DamageSpeedDecrease.DelveInfo.Decrease:			Giảm tốc: {0}%
+DamageSpeedDecrease.DelveInfo.Function:			Chức năng: Giảm tốc + sát thương
+
+# ResistDebuff
+ResistDebuff.DelveInfo.Decrease:			Giảm kháng {0}: {1}
+ResistDebuff.DelveInfo.Function:			Chức năng: Giảm kháng
+
+#CharmSpellHandler
+CharmSpellHandler.DelveInfo.Function:			Chức năng: {0}
+CharmSpellHandler.Species.Humanoid:				Người hình
+CharmSpellHandler.Species.Animal:				Thú
+CharmSpellHandler.Species.Insect:				Côn trùng
+CharmSpellHandler.Species.Reptile:				Bò sát
+CharmSpellHandler.Species.HumanoidAnimal:		Người hình hoặc Thú
+CharmSpellHandler.Species.HumanoidAnimalInsect:					Người hình, Thú và Côn trùng
+CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			Người hình, Thú, Côn trùng và Ma pháp
+CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	Người hình, Thú, Côn trùng, Ma pháp và Xác sống
+
+#IllusionSpell SpellHandler
+IllusionSpell.Arrangement.Random:		ngẫu nhiên
+IllusionSpell.Arrangement.Circle:		theo vòng tròn
+IllusionSpell.Arrangement.Line:			theo hàng
+
+#WarlockSpeedDecrease SpellHandler Appearances
+WarlockSpeedDecrease.Appearance.Frog:			Ếch
+WarlockSpeedDecrease.Appearance.Worm:			Sâu
+WarlockSpeedDecrease.Appearance.Lizard:			Thằn lằn
+WarlockSpeedDecrease.Appearance.Wisp:			Đốm lửa ma
+WarlockSpeedDecrease.Appearance.Fairy:			Tiên
+WarlockSpeedDecrease.Appearance.Scarab:			Bọ hung
+WarlockSpeedDecrease.Appearance.Spider:			Nhện
+WarlockSpeedDecrease.Appearance.Cyclop:			Cyclops
+WarlockSpeedDecrease.Appearance.Mantis:			Bọ ngựa
+WarlockSpeedDecrease.Appearance.Flame:			Ngọn lửa
+WarlockSpeedDecrease.Appearance.Bird:			Chim én
+WarlockSpeedDecrease.Appearance.Simulacrum:		Ảnh nhân
+
+# DamageAddAndShield
+DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} đánh bạn gây thêm {1} sát thương!
+DamageAddAndShield.EventHandlerDA.YouHitExtra:		Bạn đánh {0} gây thêm {1} sát thương!
+DamageAddAndShield.EventHandlerDA.YouHitFor:		Bạn đánh {0} gây thêm {1} sát thương!
+DamageAddAndShield.EventHandlerDA.YourHitFor:		{0} của bạn đánh {1} gây thêm {2} sát thương!
+DamageAddAndShield.EventHandlerDS.DamageToYou:		{0} đánh bạn gây thêm {1} sát thương!
+DamageAddAndShield.EventHandlerDS.YouHitFor:		Bạn đánh {0} gây thêm {1} sát thương!
+DamageAddAndShield.EventHandlerDS.YourHitFor:		{0} của bạn đánh {1} gây thêm {2} sát thương!
+
+# DirectDamageDebuffSpellHandler
+DirectDamageDebuffSpellHandler.DelveInfo.Decrease:	Giảm kháng ({0}): {1}%
+DirectDamageDebuffSpellHandler.DelveInfo.Function:	Chức năng: Sát thương/Giảm kháng
+
+# DoTSpellHandler
+DoTSpellHandler.SendDamageMessages.YouHitFor:		Bạn đánh {0} gây {1} sát thương!
+DoTSpellHandler.SendDamageMessages.YourCriticallyHits:	{0} của bạn chí mạng {1}, gây thêm {2} sát thương!
+DoTSpellHandler.SendDamageMessages.YourHitsFor:		{0} của bạn đánh {1} gây {2} sát thương!
+
+# NearsightSpellHandler
+NearsightSpellHandler.DelveInfo.Function:		Chức năng: Rút ngắn tầm {0}
+
+# ProcSpellHandler
+ProcSpellHandler.DelveInfo.Function:			Chức năng: {0}
+
+Summon.CheckBeginCast.AlreadyHaveaPet:			Bạn đã điều khiển một sinh vật rồi.
+
+# SummonCommanderPet
+SummonCommanderPet.CheckBeginCast.Text:			Bạn đã điều khiển Chỉ huy!
+SummonCommanderPet.DelveInfo.Text1:			Chức năng: Triệu hồi
+SummonCommanderPet.DelveInfo.Text2:			Triệu hồi thú cưng Chỉ huy.
+SummonCommanderPet.DelveInfo.Text3:			Mục tiêu: {0}
+SummonCommanderPet.DelveInfo.Text4:			Chi phí mana: {0}%
+SummonCommanderPet.DelveInfo.Text5:			Thời gian niệm: {0}
+
+#SummonMinionHandler
+SummonMinionHandler.CheckBeginCast.Text1:		Bạn phải đang điều khiển Chỉ huy để triệu hồi đầy tớ nhóm!
+SummonMinionHandler.CheckBeginCast.Text2:		Chỉ huy của bạn đã điều khiển tối đa đầy tớ!
+SummonMinionHandler.DelveInfo.Text1:			Mục tiêu: {0}
+SummonMinionHandler.DelveInfo.Text2:			Chi phí mana: {0}%
+SummonMinionHandler.DelveInfo.Text3:			Thời gian niệm: {0}
+
+#PetPBAOE
+PetPBAOE.CheckBeginCast.NoPet:				Bạn không thể niệm phép này lên sinh vật bạn không điều khiển.
+
+#SummonAnimistFnF
+SummonAnimistFnF.CheckBeginCast.NoGroundTarget:		Bạn phải đặt mục tiêu mặt đất cho phép này!
+SummonAnimistFnF.CheckBeginCast.TurretAreaCap:		Bạn không thể điều khiển thêm tháp trong khu vực này!
+SummonAnimistFnF.CheckBeginCast.TurretPlayerCap:	Bạn không thể điều khiển thêm tháp!
+
+#SummonAnimistPet
+SummonAnimistPet.CheckBeginCast.AlreadyHaveaPet:	Bạn đã điều khiển sinh vật!
+SummonAnimistPet.CheckBeginCast.GroundTargetNull:	Bạn phải đặt mục tiêu mặt đất cho phép này!
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInView:	Bạn không nhìn thấy mục tiêu mặt đất.
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange:	Chọn mục tiêu mặt đất gần hơn.
+
+#TurretsRelease
+TurretsRelease.CheckBeginCast.NoSelectedTarget:		Chỉ có thể niệm lên sinh vật bạn điều khiển.
+TurretsRelease.CheckBeginCast.TargetTooFarAway:		Mục tiêu của bạn quá xa.
+
+#PetSpellHandler
+PetSpellHandler.CheckBeginCast.NoControlledBrainForCast:	Bạn cần thú cưng để niệm phép này!
+
+#SummonNecromancerPet
+SummonNecromancerPet.CheckBeginCast.ShadeEffectIsNotNull:	Bạn đang ở Dạng Bóng!
+SummonNecromancerPet.DelveInfo.Function:			Chức năng: Triệu hồi thú cưng
+SummonNecromancerPet.DelveInfo.Description:			Triệu hồi thú cưng xác sống phục vụ người niệm. Người niệm vào Dạng Bóng và hành động qua thú cưng.
+SummonNecromancerPet.DelveInfo.Target:				Mục tiêu: {0}
+SummonNecromancerPet.DelveInfo.Power:				Chi phí mana: {0}%
+SummonNecromancerPet.DelveInfo.CastingTime:			Thời gian niệm: {0}
+
+#SavageEnduranceHeal
+SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:		Bạn không đủ máu để niệm phép này!
+
+#AblativeArmorSpellHandler
+AblativeArmor.Target:		Khiên của bạn hấp thụ {0} sát thương.
+AblativeArmor.Attacker:		Khiên hấp thụ {0} sát thương của bạn!
+
+#Amnesia
+Amnesia.MessageToTarget:	Tâm trí bạn rối loạn và quên việc đang làm!
+
+# Petrify
+Petrify.Target.Absorbs:		{0} bị hóa đá và hấp thụ {1} sát thương.
+Petrify.Target.Resist:		{0} bị hóa đá và miễn nhiễm phép này.
+Petrify.Self.Message:		{0} bị hóa đá.
+Petrify.Self.Absorb:		Bạn bị hóa đá và hấp thụ {0} sát thương.
+Petrify.Self.Unpetrify:		Trở lại trạng thái bình thường.
+
+# Damnation
+Damnation.Self.Message:			Mục tiêu của bạn bị nguyền rủa.
+Damnation.Self.Message2:		Bạn chưa biết, nhưng bạn đã chết!
+Damnation.Target.Resist:		{0} bị nguyền và miễn nhiễm phép này.
+Damnation.Self.Absorb:			Bạn bị nguyền và hấp thụ {0} sát thương!
+Damnation.Target.Absorbs:		{0} bị nguyền và hấp thụ {1} sát thương.
+Damnation.Self.SpellAbsorb:		Lời nguyền cho phép bạn hấp thụ {0} sát thương phép nhờ trang bị.
+Damnation.Target.SpellAbsorbs:	Lời nguyền của {0} hấp thụ {1} sát thương phép nhờ trang bị.
+Damnation.Self.Resist:			Bạn bị nguyền và kháng phép.
+Damnation.Target.Resist:		{0} bị nguyền và kháng phép.
+Damnation.Kill.SelfHeal:		Xác kẻ địch tiếp sức cho bạn {0} máu!
+Damnation.Kill.DurationExtended:	Tồn tại bị nguyền của bạn kéo dài thêm {0} giây khi đoạt thêm linh hồn, nhưng kết cục không thể tránh.
+Damnation.Self.CannotBeHealed:	Bạn bị nguyền và không thể hồi máu!
+
+# Adrenaline
+Adrenaline.Target.Immune:		{0} đang trong Cơn sốt Chiến trận và kháng hoàn toàn!
+Adrenaline.Target.Absorbs:		Mục tiêu của bạn hấp thụ {0} sát thương từ đòn của bạn.
+Adrenaline.Self.Immune:			Cơn sốt Chiến trận bảo vệ bạn khỏi phép này!
+Adrenaline.Self.Absorb:			Bạn hấp thụ {0} sát thương từ phép!
+
+# DebuffImmunity
+DebuffImmunity.You.Resisted:			Bạn kháng nhờ miễn nhiễm suy yếu!
+DebuffImmunity.Target.Resisted:			{0} kháng nhờ miễn nhiễm suy yếu!
+
+# HealDebuff
+HealDebuffSpellHandler.EffectStart.Target:		Hiệu quả hồi máu nhận vào bị giảm do {0}.
+HealDebuffSpellHandler.EffectStart.Area:		Hiệu quả hồi máu nhận vào của {0} bị giảm do {1}.
+HealDebuffSpellHandler.EffectExpires.Target:	Hiệu quả hồi máu trở lại bình thường.
+HealDebuffSpellHandler.EffectExpires.Area:		Hiệu quả hồi máu của {0} trở lại bình thường.
+
+# NecroSummonWeapon
+Spells.NecroSumonWeap.Icebrand.You:				Bạn triệu hồi kiếm Icebrand.
+Spells.NecroSumonWeap.Icebrand.Target:			{0} triệu hồi kiếm Icebrand.
+Spells.NecroSumonWeap.Nethersbane.You:			Bạn triệu hồi kiếm Nethersbane.
+Spells.NecroSumonWeap.Nethersbane.Target:		{0} triệu hồi kiếm Nethersbane.
+
+# StyleHandler
+StyleHandler.StyleNotFound:						Không tìm thấy thế võ.
+StyleHandler.UseStyle:							Bạn dùng thế {0} cho các đòn tấn công.
+StyleHandler.NeedsRequirement:					Cần {0} để thi triển thế này.
+StyleHandler.NeedsWeapon:						Cần {0} để thi triển thế này.
+StyleHandler.AllWeaponTypes:					Mọi loại vũ khí đều dùng được thế này.
+StyleHandler.UnknownWeaponType:					Loại vũ khí yêu cầu không rõ.
+StyleHandler.StyleNotImplemented:				Thế này chưa được triển khai!
+StyleHandler.Opening.DefensiveActionUsing:		hành động phòng thủ với {0}
+StyleHandler.Opening.DefensiveAction:			hành động phòng thủ
+StyleHandler.Opening.Positional.Back:			đứng sau lưng kẻ địch
+StyleHandler.Opening.Positional.Side:			đứng bên hông kẻ địch
+StyleHandler.Opening.Positional.Front:			đứng trước mặt kẻ địch
+StyleHandler.Opening.Positional.Specific:		vị trí cụ thể so với kẻ địch
+StyleHandler.Opening.Default:					điều kiện mở đầu đặc biệt

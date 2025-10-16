@@ -1,0 +1,328 @@
+# SpellHandler (VI)
+SpellHandler.CancelEffect:			Bạn tắt hiệu ứng của mình.
+SpellHandler.PulsingSpellCancelled:		Phép của bạn đã bị tắt.
+SpellHandler.PulsingSpellNoMana:		Bạn không đủ mana và phép của bạn đã bị tắt.
+SpellHandler.NoMoreMana:			Bạn đã dùng hết mana và không thể tiếp tục niệm phép!
+SpellHandler.StopPlayingSong:			Bạn ngừng chơi giai điệu của mình.
+SpellHandler.TooFarStopPlayingSong:		Bạn ở quá xa mục tiêu. Bạn ngừng chơi giai điệu của mình.
+SpellHandler.CasterMove:			Bạn di chuyển và làm gián đoạn việc niệm phép!
+SpellHandler.BeginCasting:			Bạn bắt đầu niệm một phép {0}!
+SpellHandler.BeginPlaying:			Bạn bắt đầu chơi {0}!
+SpellHandler.SpellInterrupted:			{0} tấn công bạn và phép của bạn bị gián đoạn!
+SpellHandler.DamageImmunity:			{0} miễn nhiễm với hiệu ứng này!
+SpellHandler.Target.TooFast:			{0} di chuyển quá nhanh để phép này có tác dụng!
+SpellHandler.DeadCantCast:			Bạn đã chết và không thể niệm phép!
+SpellHandler.CantCastInSiegeram:			Bạn không thể niệm phép bên trong cừu phá thành!
+SpellHandler.SilencedCantCast:			Bạn đang bị câm lặng và hiện không thể niệm phép.
+SpellHandler.PhaseshiftedCantCast:		Bạn đang ở trạng thái “Dịch Chuyển Pha” và không thể niệm phép.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} đang ở trạng thái “Dịch Chuyển Pha” và không thể bị ảnh hưởng bởi phép này!
+SpellHandler.OnlyWorksOnDead:			Phép này chỉ hoạt động trên thành viên đã ngã xuống của vương quốc bạn!
+SpellHandler.CantAttackSelf:			Bạn không thể tự tấn công mình!
+SpellHandler.TargetNotInView:			Mục tiêu của bạn không nằm trong tầm nhìn!
+SpellHandler.TargetNotInViewSpellFail:		Mục tiêu ở ngoài tầm nhìn của bạn. Phép thất bại!
+SpellHandler.TargetNotVisible:			Mục tiêu của bạn không thể nhìn thấy!
+SpellHandler.TargetInvalid:			Mục tiêu không hợp lệ.
+SpellHandler.MustSelectTarget:			Bạn phải chọn một mục tiêu cho phép này!
+SpellHandler.TargetTooFar:			Mục tiêu đó quá xa!
+SpellHandler.AreaTargetOutOfRange:		Mục tiêu khu vực nằm ngoài tầm. Hãy chọn một điểm gần hơn.
+SpellHandler.MustCastOnControlled:		Bạn phải niệm phép này lên sinh vật do bạn điều khiển.
+SpellHandler.SpellRequiresConcentration:	Phép này yêu cầu {0} điểm tập trung!
+SpellHandler.MaxConcentrationSpells:		Bạn chỉ có thể duy trì tối đa 50 phép tập trung cùng lúc!
+SpellHandler.WrongInstrument:			Bạn không trang bị đúng loại nhạc cụ!
+SpellHandler.CantCastWhileSitting:		Bạn không thể niệm phép khi đang ngồi!
+SpellHandler.CantCastWhileSitting2:		Bạn không thể niệm phép này khi đang ngồi!
+SpellHandler.CantCastWhileMoving:		Bạn phải đứng yên để niệm phép này!
+SpellHandler.CantCastOnDead:			Bạn không thể niệm phép này lên người đã chết!
+SpellHandler.MustWaitBeforeUse:			Bạn phải đợi {0} giây trước khi có thể dùng lại phép này!
+SpellHandler.InteruptWaitBeforeCast:		Bạn bị gián đoạn và phải đợi {0} giây trước khi có thể niệm lại!
+SpellHandler.NotEnoughPower:			Bạn không đủ mana để niệm phép này!
+SpellHandler.GroundTargetNotInView:		Mục tiêu trên mặt đất không nằm trong tầm nhìn!
+SpellHandler.OnlyWorksOnFriendlyTargets:	Phép này chỉ hoạt động trên mục tiêu đồng minh!
+SpellHandler.LostFocusOnSpell:			Bạn mất tập trung vào phép {0} của mình.
+SpellHandler.InterruptFocus:			Bạn di chuyển và làm gián đoạn sự tập trung!
+SpellHandler.YouResistEffect:			Bạn kháng lại hiệu ứng!
+SpellHandler.TargetResistsEffect:		{0} kháng lại hiệu ứng!
+SpellHandler.PetResistsEffect:			{0} của bạn kháng lại hiệu ứng!
+SpellHandler.NoEffectOnKeepComponent:		Phép của bạn không có tác dụng lên bộ phận thành trì!
+SpellHandler.NoEffectOnTarget:			Phép của bạn không có tác dụng lên {0}!
+SpellHandler.TargetAlreadyMezz:			Mục tiêu của bạn đã bị ảnh hưởng bởi hiệu ứng khống chế (mez)!
+SpellHandler.CantHaveEffectAgainYet:		Bạn chưa thể nhận lại hiệu ứng này!
+SpellHandler.AlreadyHaveEffectWait:		Bạn đã có hiệu ứng này. Hãy đợi nó kết thúc! Phép đã thất bại.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} chưa thể nhận lại hiệu ứng này!
+SpellHandler.TargetAlreadyHasEffect:		{0} đã có hiệu ứng này.
+SpellHandler.WaitUntilExpires:			Hãy đợi đến khi hết hiệu lực. Phép thất bại.
+SpellHandler.TargetImmune:			Mục tiêu của bạn miễn nhiễm!
+SpellHandler.MezIntercepted:			Hiệu ứng phòng thủ từ vật phẩm của bạn chặn phép khống chế và tự tiêu tan!
+SpellHandler.CeremonialBracerInterceptMez:	Vòng Tay Nghi Lễ chặn phép khống chế của bạn!
+SpellHandler.StunIntercepted:			Hiệu ứng phòng thủ từ vật phẩm của bạn chặn choáng và tự tiêu tan!
+SpellHandler.YouMiss:				Bạn đánh trượt mục tiêu!
+SpellHandler.TargetMissed:			{0} đã đánh trượt mục tiêu!
+SpellHandler.EngageCannotBeUsed:			{0} vừa bị tấn công gần đây và bạn không thể ghìm mục tiêu.
+SpellHandler.NotEnoughEndurance:			Bạn tập trung để đỡ đòn!
+SpellHandler.MustTargetPlayer:			Bạn phải chọn mục tiêu là người chơi.
+SpellHandler.BuffNoEffectOnVampiir:		Cường hóa của bạn không có tác dụng với Vampiir!
+SpellHandler.BuffNoEffectOnYou:			Cường hóa này không có tác dụng với bạn!
+SpellHandler.AlreadyHasEffect:			Bạn đã có hiệu ứng này!
+SpellHandler.AlreadyHasThisEffect:		{0} đã có hiệu ứng này.
+SpellHandler.TargetIsStealthed:			Phép này không thể áp dụng lên mục tiêu đang tàng hình!
+SpellHandler.DefaultDescription:			{0} có giá trị {1} và gây sát thương {2}.
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Bè bạn của bạn không nằm trong tầm nhìn.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Gián đoạn đường ngắm trong CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	Bạn không thể thấy mục tiêu từ đây!
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Gián đoạn đường ngắm trong CheckLOSNPCToTarget
+
+SpellHandler.HitTarget:			Bạn đánh trúng {0} gây {1}{2} sát thương!
+SpellHandler.NPCHitTarget:			{0} của bạn đánh trúng {1} gây {2}{3} sát thương!
+SpellHandler.CriticalHit:			Bạn gây chí mạng và thêm {0} sát thương!
+SpellHandler.TargetPronoun.Your:		Của bạn
+SpellHandler.TargetPronoun.Targets:		Mục tiêu
+
+SpellHandler.MustBeStealthedBow:		Bạn phải đang tàng hình và trang bị cung để dùng kỹ năng này!
+SpellHandler.MustWieldBow:			Bạn phải trang bị cung để dùng kỹ năng này!
+SpellHandler.Archery.Prepare:			Bạn chuẩn bị một {0}.
+SpellHandler.Archery.DisarmedCantCast:		Bạn không thể niệm phép vì đang bị tước vũ khí.
+SpellHandler.ChamberSpell.YouInvulnerable:	Hiện bạn bất tử và không thể niệm phép này!
+SpellHandler.ChamberSpell.TargetInvulnerable:	Mục tiêu của bạn đang bất tử và không thể bị tấn công!
+SpellHandler.SiegeArrow.InvalidTarget:		Bạn phải chọn bộ phận thành trì làm mục tiêu cho phép này!
+SpellHandler.SiegeArrow.InvalidComponentTarget:	Mục tiêu của bạn phải là một bộ phận thành trì!
+SpellHandler.SiegeArrow.PrepareSpell:		Bạn chuẩn bị {0}.
+SpellHandler.BumpSpell.TargetHurled:		{0} bị hất văng lên không!
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Mục tiêu của bạn đã có hiệu ứng loại này!
+
+SpellHandler.Convoker.AreaTargetOutOfRange:	Mục tiêu khu vực nằm ngoài tầm. Hãy chọn một điểm gần hơn trên mặt đất.
+SpellHandler.Convoker.AreaTargetNotInView:	Mục tiêu khu vực không nằm trong tầm nhìn.
+SpellHandler.Convoker.MustSetGroundTarget:	Bạn phải đặt mục tiêu trên mặt đất!
+
+SpellHandler.IchorOfTheDeep.NoTarget:		Bạn cần một mục tiêu cho kỹ năng này!
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} ở quá xa.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	Bạn đã đang sử dụng kỹ năng này.
+SpellHandler.IchorOfTheDeep.CastMessage:	Bạn niệm {0}!
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} niệm một phép!
+SpellHandler.IchorOfTheDeep.HitMob:		Bạn đánh trúng {0} gây {1} sát thương.
+SpellHandler.IchorOfTheDeep.HitPlayer:		Bạn đánh trúng {0} gây {1} sát thương.
+
+SpellHandler.OmniHeal.SelfHealed:		Bạn hồi {0} điểm thể lực và {1} điểm mana.
+SpellHandler.OmniHeal.TargetHealed:		Bạn chữa {0} hồi {1} điểm thể lực và {2} điểm mana.
+SpellHandler.OmniHeal.YouAreHealed:		{0} chữa bạn hồi {1} điểm thể lực và {2} điểm mana.
+SpellHandler.OmniHarm.InflictLossesToTarget:	Bạn còn gây cho {2} mất {0} thể lực và {1} mana!
+SpellHandler.OmniHarm.InflictLossesToYou:		{0} khiến bạn mất {1} thể lực và {2} mana!
+
+SpellHandler.HealSpell.TargetDead:		{0} đã chết!
+SpellHandler.HealSpell.NoHelp:			Người chơi này không muốn được giúp đỡ.
+SpellHandler.HealSpell.FullyHealedSelf:		Bạn đã được hồi phục hoàn toàn.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} đã được hồi phục hoàn toàn.
+SpellHandler.HealSpell.RealmPointsGained:	Bạn nhận {0} điểm vương quốc vì đã chữa một thành viên cùng vương quốc.
+SpellHandler.HealSpell.SelfHealed:		Bạn tự hồi {0} điểm sinh lực.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} tự hồi {1} điểm sinh lực.
+SpellHandler.HealSpell.TargetHealed:		Bạn chữa {0} hồi {1} điểm sinh lực!
+SpellHandler.HealSpell.TargetDamageToHeal:		Bạn chữa {0} hồi {1} điểm sinh lực thay vì gây sát thương do lá chắn phép của họ!
+SpellHandler.HealSpell.YouAreHealed:		{0} chữa bạn hồi {1} điểm sinh lực.
+SpellHandler.HealSpell.CriticalHeal:		Bạn chữa chí mạng và hồi thêm {0} điểm sinh lực!
+SpellHandler.HealSpell.EfficientHealingBuff:	Cường hóa hiệu suất hồi máu cho bạn thêm {0} điểm hồi máu!
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Cường hóa hiệu suất thể lực cho bạn thêm {0} điểm thể lực khi chữa!
+SpellHandler.HealSpell.TargetDamnedDamaged:		Bạn bị nguyền! Phép hồi máu gây {0} sát thương thay vì chữa lành!
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	Hồi máu kém hiệu quả vì bạn đang bị nguyền!
+SpellHandler.HealSpell.DamnedNoHeal:		Phép hồi máu không có tác dụng với bạn vì bạn đang bị nguyền!
+SpellHandler.HealSpell.YouDiseased:			Bạn bị bệnh; hồi máu giảm {0}%!
+SpellHandler.HealSpell.HealingReduced:		Hồi máu giảm {0}% do hiệu ứng ức chế hồi máu.
+SpellHandler.HealSpell.HealingReducedShield:		Hồi máu giảm {0}% do hàng rào bảo hộ của {1}.
+SpellHandler.HealSpell.HealingNull:			Phép của bạn không chữa lành mục tiêu vì bị ức chế hồi máu.
+SpellHandler.HealSpell.HealingNullYou:		Hồi máu thất bại do các hiệu ứng ức chế của bạn.
+SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	Hút Sinh Lực không có tác dụng vì cả bạn và mục tiêu đều bị nguyền!
+SpellHandler.LifeDrain.TargetDamnedDamaged:		Bạn bị nguyền! Hút Sinh Lực gây {0} sát thương lên bạn thay vì hồi máu!
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	Hút Sinh Lực kém hiệu quả vì {0} đang bị nguyền!
+SpellHandler.LifeDrain.DamnedNoHeal:		Hút Sinh Lực không chữa bạn vì bạn đang bị nguyền!
+SpellHandler.LifeDrain.DamnedTargetHealed:		{0} được chữa lành và hồi {1} điểm sinh lực!
+SpellHandler.LifeDrain.DamnedTargetCriticallyHealed:	{0} được chữa chí mạng và hồi {1} điểm sinh lực!
+SpellHandler.LifeDrain.DamnedYouHealed:		Bạn được chữa lành và hồi {0} điểm sinh lực!
+SpellHandler.LifeDrain.DamnedYouCriticallyHealed:	Bạn được chữa chí mạng và hồi {0} điểm sinh lực!
+SpellHandler.SpreadHeal.GroupFullyHealed:	Nhóm của bạn đã được hồi phục hoàn toàn!
+
+SpellHandler.Zephyr.NoAttackInZephyr:		Bạn đang được Zephyr nâng đỡ và không thể bị tấn công!
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Mục tiêu của bạn đang được Zephyr nâng đỡ và không thể bị tấn công!
+SpellHandler.Zephyr.PickedUpByZephyr:		Một cơn Zephyr mạnh mẽ nhấc bổng bạn lên!
+SpellHandler.Phaseshift.NotEnoughEndurance:	Bạn cần 50% thể lực để dùng phép này!
+SpellHandler.Groupport.CannotUseAbilityHere:	Bạn không thể dùng kỹ năng này ở đây!
+SpellHandler.Groupport.BindInAnotherRegion:	Hãy liên kết tại vùng khác để dùng kỹ năng này!
+SpellHandler.Groupport.GroupInCombat:		Bạn không thể dịch chuyển một nhóm đang giao chiến!
+SpellHandler.Groupport.NotInGroup:		Bạn không ở trong nhóm!
+SpellHandler.TargetNoLongerInRange:		Mục tiêu của bạn không còn trong tầm.
+SpellHandler.TargetNoLongerInView:		Mục tiêu của bạn không còn trong tầm nhìn.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} di chuyển quá nhanh để phép này có tác dụng!
+SpellHandler.Earthquake.Ending:			Trận động đất đã kết thúc.
+SpellHandler.YouDamnedResistEffect:		Bạn bị nguyền và kháng lại hiệu ứng!
+SpellHandler.TargetDamnedResistsEffect:		{0} bị nguyền và kháng lại hiệu ứng!
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	Bạn không thể niệm phép này trong giao chiến!
+SpellHandler.VampiirBolt.PowerTaken:		{0} rút {1} mana của bạn!
+SpellHandler.VampiirBolt.PowerReceived:		Bạn nhận {0} mana từ {1}!
+SpellHandler.VampiirBolt.NoPowerReceived:	Bạn không hồi được mana từ {0}!
+SpellHandler.VampiirBolt.TargetTooHigh:		Mục tiêu không thể bị ảnh hưởng bởi phép này vì cấp quá cao!
+
+SpellHandler.WrathofChampions.CastSpell:	Bạn niệm {0}!
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} niệm một phép!
+SpellHandler.WrathofChampions.HitMob:		Bạn đánh trúng {0} gây {1} sát thương.
+SpellHandler.WrathofChampions.HitPlayer:		Bạn đánh trúng {0} gây {1} sát thương.
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} đánh trúng bạn gây {1} sát thương.
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Cho phép {0} hồi sinh bạn với {1} phần trăm sinh lực?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Hiện không ai đang cố gắng hồi sinh bạn.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Bạn từ chối một lần hồi sinh.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Bạn đã được hồi sinh bởi {0}!
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	Một sức mạnh kỳ diệu đưa bạn trở lại sự sống!
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	Một sức mạnh kỳ diệu đưa bạn trở lại sự sống! Bạn hồi {0}% sinh lực.
+SpellHandler.ResurrectSpellHandler.RezExpired:		Phép hồi sinh của bạn đã hết hiệu lực.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Mục tiêu của bạn đã cân nhắc hồi sinh!
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		Người chơi bạn hồi sinh không mang lại điểm vương quốc khi chết.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		Vì vậy, bạn không nhận điểm vương quốc từ việc hồi sinh đó.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Sự tập trung của bạn giảm dần.
+SpellHandler.Battlewarder.WarderFallen:		Hộ Vệ Chiến Trường của bạn đã ngã xuống!
+SpellHandler.Convoker.TemplateNotFound:		Không tìm thấy NPCTemplate {0}!
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Đồng minh của bạn đã có một kỹ năng hoạt động thuộc loại này.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	Bạn không thể dùng kỹ năng này lên đồng minh của chính mình.
+
+SpellHandler.BoltSpell.PartialBlock:		Bạn chặn một phần phép của {0}!
+SpellHandler.BoltSpell.Blocked:			{0} chặn được!
+
+SpellHandler.Arrow.Block:			Bạn chặn mũi tên của {0}!
+SpellHandler.Arrow.ArrowBlocked:			{0} chặn mũi tên của bạn!
+SpellHandler.Archery.PenetrateBarrier:		Một phát bắn đã xuyên qua hàng rào ma thuật của bạn!
+SpellHandler.Archery.StrikeAbsorbed:		Phát bắn của bạn bị hấp thụ bởi một hàng rào ma thuật!
+SpellHandler.Archery.BlowAbsorbed:		Đòn đánh bị hấp thụ bởi một hàng rào ma thuật!
+SpellHandler.Archery.Interrupted:			{0} tấn công bạn và phát bắn của bạn bị gián đoạn!
+
+SpellHandler.Chamber.CannotUseState:		Bạn không thể dùng thứ này trong trạng thái hiện tại.
+SpellHandler.Chamber.TargetNotAttackable:	Mục tiêu đó hiện không thể bị tấn công!
+SpellHandler.Chamber.SelectFirstSpell:		Hãy chọn phép đầu tiên cho {0} của bạn.
+SpellHandler.Chamber.NoSpellsLoaded:		Không có phép nào được nạp vào {0}.
+SpellHandler.Chamber.ReadyForUse:		{0} của bạn đã sẵn sàng sử dụng.
+SpellHandler.Chamber.CastsSpell:			{0} niệm một phép!
+
+SpellHandler.Lifedrain.Heal:			Bạn hút {0} điểm sinh lực.
+SpellHandler.Lifedrain.NoAbsorb:		Bạn không thể hấp thụ thêm sinh lực.
+SpellHandler.PowerDrain.PowerGain:		Bạn siphon {0} mana từ mục tiêu!
+SpellHandler.PowerDrain.PowerLoss:		{0}% mana của bạn đã bị rút bởi {1}!
+SpellHandler.PowerDrain.NoAbsorb:		Bạn không thể hấp thụ thêm mana.
+SpellHandler.PowerLock.SpellHit:			{0} rút {1} mana của bạn.
+SpellHandler.PowerLock.StealSuccess:		Bạn đánh cắp {1} mana từ {0}!
+SpellHandler.PowerLock.StealOverflow:		Bạn đánh cắp {1} mana từ {0}! ({2} dư)
+
+SpellHandler.PrimerSpell.EffectExpired:		Hiệu ứng phép biến đổi của bạn đã hết.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	Bạn di chuyển và phá vỡ phép biến đổi.
+
+SpellHandler.BuffShear.ShearSuccess:		Phép của bạn xé bỏ một phần ma pháp cường hóa của mục tiêu.
+SpellHandler.BuffShear.EnhancingMagicRipped:	Một phần ma pháp cường hóa của bạn đã bị gỡ bỏ bởi một phép!
+SpellHandler.BuffShear.ConnectionTooStrong:	Liên kết của mục tiêu với cường hóa quá mạnh để gỡ bỏ.
+SpellHandler.BuffShear.NoEnhancementFound:	Không tìm thấy cường hóa loại này trên mục tiêu.
+SpellHandler.AblativeShear.ShearSuccess:		Phép của bạn loại bỏ các lá chắn hấp thụ (ablative) của mục tiêu.
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Lá chắn hấp thụ của bạn đã bị gỡ bỏ bởi một phép!
+SpellHandler.AblativeShear.NoEnhancementFound:	Mục tiêu không có lá chắn hấp thụ.
+
+SpellHandler.Conversion.MagicalAbsorption:	Một phép thuật hấp thụ {0} sát thương từ đòn tấn công của bạn!
+SpellHandler.Conversion.ConvertToHealth:	Bạn chuyển {0} sát thương thành điểm sinh lực.
+SpellHandler.Conversion.CannotConvertMoreHealth:	Bạn không thể chuyển thêm sang sinh lực!
+SpellHandler.Conversion.ConvertToEndurance:	Bạn chuyển {0} sát thương thành thể lực.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	Bạn không thể chuyển thêm sang thể lực!
+SpellHandler.Conversion.ConvertToMana:		Bạn chuyển {0} sát thương thành mana.
+SpellHandler.Conversion.CannotConvertMoreMana:	Bạn không thể chuyển thêm sang mana!
+SpellHandler.PetConversion.AbsorbPower:		Bạn hấp thụ {0} điểm mana.
+SpellHandler.PetConversion.ManaFull:		Thanh mana của bạn đã đầy!
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	Hàng rào giảm sát thương hấp thụ {0} sát thương!
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	Một hàng rào giảm sát thương hấp thụ {0} sát thương từ đòn của bạn!
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	Hàng rào hoàn trả cho bạn {0} điểm mana.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	Bạn hút {0} điểm sinh lực.
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	Bạn không thể hấp thụ thêm sinh lực.
+SpellHandler.DamageToPower.PowerSteal:		Bạn hút {0} điểm mana.
+SpellHandler.DamageToPower.NoMorePower:		Bạn không thể hấp thụ thêm mana.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} đánh cắp của bạn {1} thể lực!
+SpellHandler.EnduranceDrain.StealSuccess:	Bạn đánh cắp {1} thể lực từ {0}!
+SpellHandler.EnduranceDrain.StealPoints:		Bạn đánh cắp {0} điểm thể lực.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	Bạn không thể hấp thụ thêm thể lực.
+SpellHandler.EnduranceHeal.CasterFull:		Thanh thể lực của bạn đã đầy.
+SpellHandler.EnduranceHeal.TargetFull:		{0} có thanh thể lực đầy.
+SpellHandler.EnduranceHeal.CasterHealed:		Bạn hồi {0} điểm thể lực.
+SpellHandler.EnduranceHeal.TargetHealed:		Bạn hồi {0} điểm thể lực cho {1}.
+SpellHandler.EnduranceHeal.TargetRestored:	Thể lực của bạn được {0} hồi {1} điểm.
+SpellHandler.EnduranceHeal.TargetTooHigh:	Không thể niệm hồi thể lực nếu mục tiêu có hơn 90% thanh thể lực!
+SpellHandler.HealthToEndurance.TransferLife:	Bạn chuyển {0} điểm sinh lực sang thể lực!
+SpellHandler.HealthToEndurance.InsufficientHealth:	Sinh lực của bạn không đủ để thực hiện phép này!
+SpellHandler.HealthToEndurance.Diseased:		Bạn đang mắc bệnh! Chuyển đổi sinh lực sang thể lực bị giảm!
+SpellHandler.HealthToEndurance.DamnedNoEffect:	Bạn bị nguyền! Chuyển đổi sinh lực sang thể lực thất bại!
+SpellHandler.HealthToEndurance.DamnedPartialEffect:	Bạn bị nguyền! Chuyển đổi sinh lực sang thể lực bị giảm!
+SpellHandler.HealthToEndurance.HealthLost:	Bạn chuyển {0}% sinh lực của mình sang thể lực!
+SpellHandler.HealthToEndurance.EnduranceGained:	Bạn nhận lại {0}% thể lực!
+
+SpellHandler.FocusShell.NoPets:			Phép này không thể niệm lên thú/đồng minh triệu hồi!
+SpellHandler.FocusShell.SameRealm:		Phép này chỉ tác dụng lên thành viên cùng vương quốc!
+SpellHandler.FocusShell.MustBeRvR:		Phép này chỉ dùng trong RvR hoặc PvP.
+SpellHandler.SummonSpell.PetControl:		{0} giờ nằm dưới quyền điều khiển của bạn.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	Bạn không thể niệm phép này ở đây!
+
+SpellHandler.PowerHeal.FullPowerOther:		Thanh mana của {0} đã đầy!
+SpellHandler.PowerHeal.RestorePowerSelf:	Bạn hồi {0} điểm mana.
+SpellHandler.PowerHeal.RestorePowerOther:	Bạn hồi {0} điểm mana cho {1}!
+SpellHandler.PowerHeal.PowerRestored:		{0} hồi cho bạn {1} điểm mana.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	Bạn không thể chuyển mana cho chính mình!
+SpellHandler.PowerTransfer.TransferSuccess:	Bạn chuyển {0} điểm mana cho {1}!
+SpellHandler.PowerTransfer.PowerReceived:	{0} chuyển cho bạn {1} điểm mana!
+SpellHandler.PowerRegenBuff.NoEffect:		Phép này không có tác dụng với lớp này!
+
+SpellHandler.Silence.AlreadyAffected:		Mục tiêu của bạn đã bị ảnh hưởng bởi hiệu ứng loại này!
+SpellHandler.SpeedEnhancement.CombatRecent:	Bạn vừa tham chiến gần đây; phép không có tác dụng với bạn!
+SpellHandler.WaterBreathing.StartEffect:	Bạn có thể di chuyển tự do và thở dưới nước như trên không!
+SpellHandler.WaterBreathing.EndEffect:		Bạn sặc nước và nhận ra mình không còn thở dưới nước được nữa!
+
+SpellHandler.GroundAreaEffect.AlreadyActive:	Bạn đã có một hiệu ứng mặt đất đang hoạt động và không thể niệm thêm cái khác!
+SpellHandler.PowerShield.EffectStart:		Ma pháp cổ xưa cường hóa bản thể sinh mệnh của bạn.
+SpellHandler.PowerShield.EffectStartOthers:	Ma pháp cổ xưa cường hóa bản thể sinh mệnh của {0}.
+SpellHandler.PowerShield.EffectExpires:		Lá chắn phép của bạn đã tiêu tan!
+SpellHandler.PowerShield.EffectExpiresOthers:	Lá chắn phép của {0} đã tiêu tan!
+SpellHandler.PowerShield.InsufficientMana:	Bạn không đủ mana để kích hoạt hiệu ứng hồi phục của lá chắn.
+SpellHandler.DebuffImmunity.Refreshed:		Kháng cự với phép suy yếu của bạn đã được làm mới.
+SpellHandler.DebuffImmunity.Start:		Kháng cự với phép suy yếu của bạn được tăng lên trong thời gian hiệu lực!
+SpellHandler.DebuffImmunity.GainImmunity:	Bạn nhận miễn nhiễm với phép suy yếu và tăng cơ hội kháng thêm {0}%.
+SpellHandler.DebuffImmunity.WornOff:		Miễn nhiễm với phép suy yếu của bạn suy giảm.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	Cơ hội kháng phép suy yếu của {0} đã tăng.
+SpellHandler.DebuffImmunity.TargetWornOff:	Miễn nhiễm phép suy yếu của {0} đã tiêu tan.
+SpellHandler.GatewayPersonalBind.CantUseHere:	Bạn không thể dùng vật phẩm này ở đây!
+SpellHandler.GatewayPersonalBind.MustStandStill:	Bạn phải đứng yên để sử dụng vật phẩm này!
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	Bạn vừa tham chiến gần đây và không thể dùng vật phẩm này!
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:		Bạn đã chuẩn bị một phép tầm xa.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Bạn đã chuẩn bị một phép không thể bị gián đoạn.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		Bạn đã chuẩn bị một phép không tốn mana.
+SpellHandler.Warlock.MustFinishCastingRange:		Bạn phải niệm xong phép tầm xa trước khi niệm lại.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:	Bạn phải niệm xong phép không thể bị gián đoạn trước khi niệm lại.
+SpellHandler.Warlock.MustFinishCastingPowerless:		Bạn phải niệm xong phép không tốn mana trước khi niệm lại.
+
+SpellHandler.Cleric.Ascendance.OnEnd:			Trạng thái “Thăng Hoa” của bạn kết thúc.
+SpellHandler.Cleric.Ascendance.OnStart:		Bạn đạt “Thăng Hoa” và tăng mạnh hiệu suất.
+SpellHandler.Cleric.Ascendance.CanceledMoC:		“Làm Chủ Tập Trung” của bạn tiêu tan khi bước vào Thăng Hoa.
+SpellHandler.Cleric.Ascendance.CannotCast:		Thăng Hoa ngăn bạn niệm {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:	Thăng Hoa của bạn tiêu tan khi bạn dồn tập trung.
+SpellHandler.Cleric.DamageReturn.Active:		Một hào quang phản xạ mạnh mẽ bao bọc bạn.
+SpellHandler.Cleric.DamageReturn.WornOff:		Hàng rào phản xạ của bạn đã tiêu tan.
+SpellHandler.Cleric.DamageReturn.VictimReflect:	Hàng rào của bạn phản lại {0} {1} lên kẻ tấn công.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:	Bạn chịu {0} {1} do hàng rào ma thuật phản xạ của đối thủ.
+SpellHandler.Cleric.OffProcShear.Removed:		Các proc tấn công của mục tiêu đã bị loại bỏ!
+SpellHandler.Cleric.OffProcShear.YourProcRipped:	Các proc tấn công của bạn đã bị loại bỏ!
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:	Đã áp dụng một proc “nguyền rủa” thay thế lên mục tiêu!
+SpellHandler.Cleric.OffProcShear.YouAreCursed:		Bạn bị nguyền: các đòn đánh của bạn hồi máu cho kẻ địch.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:	Không tìm thấy proc tấn công nào trên mục tiêu.
+
+SpellHandler.Occultist.CastCondition1:			Bạn phải ở dạng cthonic để niệm phép này.
+SpellHandler.Occultist.CastCondition2:			Bạn không thể niệm phép này khi đang ở dạng cthonic.
+SpellHandler.Occultist.CastCondition3:			Bạn không thể niệm phép này khi ở dạng mong manh hoặc dạng linh thể.
+SpellHandler.Occultist.CastCondition4:			Bạn phải rời bỏ dạng hiện tại trước khi niệm phép này.
+SpellHandler.Occultist.Self.AbsorbToPower:		Bạn siphon {0} mana từ sát thương nhận vào.
+
+SpellHandler.SummonMonster.Target.Resist:			{0} đã được gọi từ Limbus dưới dạng xác sống và miễn nhiễm với phép này!
+SpellHandler.IllusionSpell.Target.Resist:			{0} đã triệu hồi ảo ảnh và không thể bị ảnh hưởng bởi phép này!
+SpellHandler.Morphed.Target.Resist:			{0} đã biến hình và không thể bị ảnh hưởng bởi phép này!
+
+SpellHandler.DelveInfo.Sec:			giây

@@ -1,0 +1,570 @@
+# DelveInfo
+DelveInfo.CastingTime:          Timp de incantare: {0}
+DelveInfo.ConcentrationCost:    Cost de concentrare: {0}
+DelveInfo.Damage:               Daune: {0}
+DelveInfo.DamageType:           Tip de daune: {0}
+DelveInfo.Duration:             Durata: 
+DelveInfo.Focus:                Vrăjire canalizată. Se întrerupe la prima acțiune.
+DelveInfo.Frequency:            Frecvență: {0}
+DelveInfo.HealthReturned:       Viață returnată: {0}% din daunele provocate
+DelveInfo.InstrumentRequire:    Instrument necesar: {0}
+DelveInfo.PowerCost:            Cost de mană: {0}
+DelveInfo.HealthCost:           Cost de viață: {0}
+DelveInfo.Radius:               Rază: {0}
+DelveInfo.Range:                Distanță: {0}
+DelveInfo.RangeModified:	    Distanță: {0} {1}
+DelveInfo.RecastTime:           Reîncărcare: 
+DelveInfo.Target:               Țintă: {0}
+DelveInfo.Value:                Valoare: {0}
+DelveInfo.ValueNegative:        Valoare: -{0}
+DelveInfo.Destination:		    Destinație: {0}
+
+# Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Provoacă {0} {1} țintei.
+SpellDescription.DoT.MainDescription:				Ținta suferă {0} {1} la fiecare {2} s.
+SpellDescription.BoltSpell.MainDescription:			Un bolt magic lovește și explodează pentru {0} {1}. Poate fi blocat.
+SpellDescription.LifeDrain.MainDescription:			Provoacă {0} {1} și vindecă incantatorul cu {2}% din daune.
+SpellDescription.DirectDamageWithDebuff.MainDescription:	Provoacă {0} {1} și reduce {2} țintei cu {3}%.
+SpellDescription.Nearsight.MainDescription1:		Reduce raza efectivă a atacurilor la distanță ale țintei cu {0}%.
+SpellDescription.Nearsight.MainDescription2:		Vrăjile de miopie care afectează grupul incantatorului funcționează cu {0}% eficiență mai mică sau pot fi complet rezistate.
+SpellDescription.SpreadHeal.MainDescription:		Vindecare de zonă pentru {0}.
+SpellDescription.RegenHeal.MainDescription:			Ținta regenerează {0} puncte de viață suplimentare.
+SpellDescription.RegenPower.MainDescription:		Ținta regenerează {0} puncte de mană suplimentare.
+SpellDescription.RegenEndu.MainDescription:			Ținta regenerează {0} puncte de anduranță suplimentare.
+SpellDescription.SpeedDecrease.MainDescription:		Scade viteza țintei cu {0}%.
+SpellDescription.SpeedDecrease.Rooted:				Ținta este înrădăcinată.
+SpellDescription.Slow.MainDescription:				Scade viteza țintei cu {0}%. Nu generează imunitate și nu se întrerupe la lovituri.
+SpellDescription.Bladeturn.MainDescription:			Creează o „bulă” care absoarbe daunele unei lovituri corp-la-corp.
+SpellDescription.Demi.MainDescription:				{0} înjumătățește viața inamicului.
+SpellDescription.Quarter.MainDescription:			{0} reduce viața inamicului la un sfert.
+SpellDescription.DemiQuarter.AmnesiaDescription:	Nu afectează creaturi slabe și ținte peste nivelul {0}.
+SpellDescription.DemiQuarter.EndDescription:		Această vrajă rareori afectează spirite, demoni, necromanți, banshee și vampiri.
+SpellDescription.LifeTransfer.MainDescription:		Transferă {0} viață de la incantator la țintă.
+SpellDescription.Heal.MainDescription:				Vindecă ținta cu {0} viață.
+SpellDescription.HealEnemy.MainDescription:			Vindecă inamicul cu {0} viață la lovitură (proc).
+SpellDescription.Disease.MainDescription:			Aplică o boală care încetinește cu {0}%, reduce forța cu {1}% și slăbește vindecările cu {2}%.
+SpellDescription.Petrify.MainDescription:			Pietrifică ținta, transformând-o în statuie. Este paralizată și absoarbe 50% daune fizice și 75% magice în timp ce este atacată.
+SpellDescription.Unpetrify.MainDescription:			Înlătură starea „Pietrificat” de pe țintă.
+SpellDescription.HealDebuff.MainDescription:		Reduce eficiența vindecărilor cu {0}%. Se cumulează cu „Boală”.
+SpellDescription.DebuffImmunity.MainDescription:	Acordă imunitate la debuff-uri și +{0}% șansă de rezist timp de {1} s.
+SpellDescription.MagicHealAbsorb.MainDescription:	Următorul atac magic împotriva ta absoarbe și convertește {0}% din daune în vindecare și {1}% în mană și anduranță.
+SpellDescription.Trigger.MainDescription:			Aplică un efect magic (proc) ca buff. {0} se declanșează când ținta este lovită.
+SpellDescription.WaterBreathing.MainDescription:	Permite respirația sub apă și mișcarea la {0}% din viteza de mers.
+SpellDescription.TensionDebuff.MainDescription:		Scade acumularea de tensiune a țintei cu {1}%.
+SpellDescription.TensionBuff.MainDescription:		Creste acumularea de tensiune a țintei cu {1}%.
+SpellDescription.Teleport.MainDescription:			{0} teleportează ținta la {1}.
+SpellDescription.PlayerPortal.MainDescription:		Deschide un portal dus-întors de unică folosință legat de punctul de întoarcere al invocatorului. Funcționează în {0}.
+SpellDescription.Earthquake.MainDescription1:		Generează un cutremur de magnitudinea {0} care provoacă până la {1} daune lângă epicentru, scăzând la {2} la margini.
+SpellDescription.Earthquake.MainDescription2:		Nu afectează monștri zburători sau înotători, nici banshee sau vampiri levitanți.
+SpellDescription.HoT.MainDescription:				Ținta recuperează {0} viață la fiecare {1} s.
+SpellDescription.DDWithDebuff.MainDescription:		Provoacă {0} {1} și reduce rezistența țintei la {1} cu {2}%.
+SpellDescription.AfHitsBuff.MainDescription:		Mărește factorul de armură și viața cu {0}% cât timp rămâi în raza aurei.
+SpellDescription.AllStatsBuff.MainDescription:		Mărește toate atributele țintei cu {0}.
+SpellDescription.PowerDrain.MainDescription:		Provoacă {0} {1}; incantatorul primește {2}% din daune înapoi ca mană.
+SpellDescription.RealPowerDrain.MainDescription:	Provoacă {0} {1}; incantatorul primește {2}% ca mană și ținta pierde {3}% din mana totală.
+SpellDescription.PowerLock.MainDescription1:		Te blochează pe tine și ținta pe loc și drenează {0}% din mana de bază la fiecare {1}s timp de {2} s.
+SpellDescription.PowerLock.MainDescription2:		Pe durata efectului, niciunul nu poate primi daune corp-la-corp.
+SpellDescription.PowerLock.MainDescription3:		Doar împotriva jucătorilor sau a pet-urilor controlate de jucători.
+SpellDescription.Damnation.MainDescription1:		Ținta este osândită, devine zombie și pierde efectele pozitive. Primește {0}% rezistență la daune corp-la-corp, dar va muri inevitabil după {1} s. Nicio vindecare nu inversează asta.
+SpellDescription.Damnation.MainDescription2:		Vindecările sunt drastic reduse la {0}%.
+SpellDescription.Damnation.MainDescription3:		Vindecările nu au efect asupra osânditului.
+SpellDescription.Damnation.MainDescription4:		Vindecările se transformă în {0}% daune.
+SpellDescription.Damnation.MainDescription5:		Nu afectează nemorții.
+SpellDescription.MonsterRez.MainDescription:		Înviază ca nemort și restaurează {0}% viață și {1}% mană și anduranță fără pierdere de experiență sau constituție.
+SpellDescription.MonsterRez.DamageMain:				Provoacă {1} {0} țintei
+SpellDescription.MonsterRez.DamageRadius:			și în zonă
+SpellDescription.MonsterRez.DamageFrequency:		la fiecare {0} s
+SpellDescription.MonsterRez.DamageDuration:			pe durata a {0} s
+SpellDescription.SummonMonster.MainDescription:		Revenire din cadavru.
+SpellDescription.DamageAdd.MainDescription:			Atacurile corp-la-corp ale țintei provoacă {0} {1} suplimentare.
+SpellDescription.DamageShield.MainDescription:		Provoacă {0} {1} dușmanilor care te lovesc în corp-la-corp.
+SpellDescription.SpellReflection.MainDescription1:	Ricosează vrăji cu {0}% șansă la {1}% din daune și absoarbe {2}% din daunele cauzate.
+SpellDescription.SpellReflection.MainDescription2:	Nu reflectă stiluri melee sau săgeți de arcași.
+SpellDescription.SpellReflectionDebuff.MainDescription:		Înlătură scutul de deviere magică al țintei.
+SpellDescription.PowerShield.MainDescription:		Când viața ta scade sub {0}%, convertește mana în viață până la {1}% din maxim.
+SpellDescription.PowerTransfer.MainDescription:		Transferă {0} mană de la incantator la țintă.
+SpellDescription.Resurrect.MainDescription:			Înviază și restaurează {0}% viață și {1}% mană (și anduranță) fără pierderi de exp sau constituție.
+SpellDescription.OffensiveProc.MainDescription:		{0} oferă {1}% șansă să declanșezi o vrajă secundară cu atacurile tale corp-la-corp:
+SpellDescription.DefensiveProc.MainDescription:		{0} oferă {1}% șansă să declanșezi o vrajă secundară când ești lovit în corp-la-corp:
+SpellDescription.SpeedEnhancement.MainDescription:	Creste viteza până la {0}% din normal.
+SpellDescription.SpellShield.MainDescription:		{0} absoarbe 100% din daunele magice și 70% din DoT când viața este la {1}% sau mai jos.
+SpellDescription.StyleBleeding.MainDescription:		Ținta suferă {0} {1} la fiecare {2} s.
+SpellDescription.StyleTaunt.Increase:				Provoacă ținta și îți crește amenințarea cu {0}.
+SpellDescription.StyleTaunt.Decrease:				Reduce provocarea și îți scade amenințarea cu -{0}.
+SpellDescription.Taunt.MainDescription:				Provoacă ținta și îți crește amenințarea cu {0}.
+SpellDescription.SummonSpell.MainDescription:		Chemează un slujitor care îl servește pe invocator. Funcționează pe creaturi până la {0}% din nivelul tău, max. {1}.
+SpellDescription.MeleeAblativeArmor.MainDescription:		Acordă un scut temporar care absoarbe {0}% daune fizice până la un maxim de {1}.
+SpellDescription.MagicAblativeArmor.MainDescription:		Acordă un scut temporar care absoarbe {0}% daune magice până la un maxim de {1}.
+SpellDescription.BothAblativeArmor.MainDescription:	Acordă un scut temporar care absoarbe {0}% din toate daunele până la un maxim de {1}.
+SpellDescription.BattleFeverDurationBuff.MainDescription:	Extinde durata Febrei de Luptă cu {0}%.
+SpellDescription.TankAdrenaline.MainDescription:	Febra de luptă te cuprinde! Loviturile tale melee nu ratează inamicii de nivelul tău, iar apărarea și puterea melee cresc mult.
+SpellDescription.MageAdrenaline.MainDescription:	Febra de luptă te cuprinde! Apărarea, șansa de lovire a vrăjilor și viteza de incantare cresc considerabil, iar loviturile nu te întrerup.
+SpellDescription.StealthAdrenaline.MainDescription:	Febra de luptă te cuprinde! Loviturile tale melee nu ratează inamicii de nivelul tău; apărarea, stealth-ul și puterea la distanță și melee cresc mult.
+SpellDescription.Amnesia.MainDescription:			Face monstrul să uite cine l-a atacat. Întrerupe vrăjile ostile fără a ameți, decât dacă se rezistă.
+SpellDescription.Mesmerize.MainDescription:			Ținta este hipnotizată și incapabilă să acționeze.
+SpellDescription.Stun.MainDescription:				Asurzește/amețește ținta pentru {0} s.
+SpellDescription.Charm.MainDescription1:			Încearcă să încânte o creatură {0}.
+SpellDescription.Charm.MainDescription2:			Afectează monștri până la {0}% din nivelul tău, max. {1}.
+SpellDescription.CombatHeal.MainDescription:		Vindecă {0} daune la fiecare {1} s.
+SpellDescription.Confusion.MainDescriptionPositive:	Creatura are {0}% șansă să își schimbe ținta.
+SpellDescription.Confusion.MainDescriptionNegative:	100% șansă să își schimbe ținta și 75% șansă să atace un aliat.
+SpellDescription.PetConversion.MainDescription:		Eliberează ținta și toate turnurile tale din zonă. Primești înapoi {0}% din mana cheltuită la chemare.
+SpellDescription.CraftingSpeedBuff.MainDescription:	Mărește viteza de meșteșugărit cu {0}%.
+SpellDescription.CureDisease.MainDescription:		Înlătură toate bolile de pe țintă.
+SpellDescription.CureMezz.MainDescription:			Înlătură toate efectele de hipnoză de pe țintă.
+SpellDescription.CureNearsight.MainDescription:		Înlătură toate efectele de miopie.
+SpellDescription.CurePoison.MainDescription:		Înlătură toate efectele de tip daune-în-timp (precum otrava) de pe țintă.
+SpellDescription.DamageSpeedDecrease.MainDescription:		Scade viteza cu {0}% și provoacă {1} {2}.
+SpellDescription.DamageToPower.MainDescription:		Convertește {0}% din daunele de vraji primite pe țintă în mană.
+SpellDescription.DeathClaw.MainDescription:			{0} reduce viața inamicului cu 90%. Nu afectează spirite, creaturi slabe sau ținte peste nivelul {1}; efect redus pe nemorți și șefi.
+SpellDescription.EnduranceDrain.MainDescription:	{0}% anduranță este drenată de la țintă și transferată incantatorului.
+SpellDescription.EnduranceHeal.MainDescription:		Restabilește {0} anduranță.
+SpellDescription.Disarm.MainDescription1:			Dezarmează ținta pentru {0} s.
+SpellDescription.Disarm.MainDescription2:			Nu poate fi reaplicat până după {0} s.
+SpellDescription.GroundArea.MainDescription1:		Creează un „nor” care lovește pe toți din zonă.
+SpellDescription.GroundArea.MainDescription2:		Efect de zonă:
+SpellDescription.CloudsongFall.MainDescription:		Reduce daunele de cădere cu {0}%.
+SpellDescription.DoomHammer.MainDescription:		Provoacă {0} {1}.
+SpellDescription.RampingDamageFocus.SingleTargetNoSnare:	Provoacă {0} {1} pe puls țintei. Crește cu {2}% pe puls până la {3}%. Costă {4}% mană pe puls.
+SpellDescription.RampingDamageFocus.SingleTargetSnare:		Provoacă {0} {1} pe puls și reduce viteza cu {5}%. Crește cu {2}% până la {3}%. Costă {4}% mană pe puls.
+SpellDescription.RampingDamageFocus.AoENoSnare:				Provoacă {0} {1} pe puls într-o zonă. Crește cu {2}% până la {3}%. Costă {4}% mană pe puls.
+SpellDescription.RampingDamageFocus.AoESnare:				Provoacă {0} {1} pe puls în zonă și reduce viteza cu {5}%. Crește cu {2}% până la {3}%. Costă {4}% mană pe puls.
+SpellDescription.HereticPiercingMagic.MainDescription:		Mărește eficiența vrăjilor țintei cu {0}% și reduce rezistențele totale împotriva nivelelor superioare.
+SpellDescription.SummonNethersbane.MainDescription1:		Chemează Nethersbane, lama necurată a lui Arawn.
+SpellDescription.SummonNethersbane.MainDescription2:		Face daune de frig.
+SpellDescription.SummonIcebrand.MainDescription1:			Chemează Icebrand, lama necurată îmbibată în umbre.
+SpellDescription.SummonIcebrand.MainDescription2:			Face daune de frig.
+SpellDescription.GoldenSpearJavelin.MainDescription:		Chemează 5 sulițe magice de aruncat.
+SpellDescription.OmniHeal.MainDescription:					Îți returnează {0}% viață, anduranță și mană.
+SpellDescription.OmniHarm.MainDescription:					Ținta pierde {0} anduranță și {1} mană.
+SpellDescription.OmniLifeDrain.MainDescription:				Provoacă daune; returnează incantatorului {0}% ca viață, {1}% ca mană și {2}% ca anduranță.
+SpellDescription.PowerHeal.MainDescription:					Restabilește {0}% din mana țintei.
+SpellDescription.Silence.MainDescription:					Reduce la tăcere inamicul pentru {0} s.
+SpellDescription.IllusionSpell.MainDescription1:			Invocatorul creează {0} iluzii {1} care îl înconjoară și zăpăcesc inamicii.
+SpellDescription.IllusionSpell.MainDescription2:			Iluziile fac {0}% din daunele invocatorului, au {1}% din viața lui maximă și dispar după {2} s.
+SpellDescription.IllusionSpell.SubDescription1:				Invocatorul ia forma unei creaturi, iar cele {0} iluzii îi împărtășesc înfățișarea.
+SpellDescription.IllusionSpell.SubDescription2a:			Iluziile se mișcă odată cu invocatorul și îi imită mișcările, stilurile și vrăjile.
+SpellDescription.IllusionSpell.SubDescription2b:			Dacă incantatorul se mișcă, iluziile dispar și vraja se termină.
+SpellDescription.Bump.MainDescriptionSingle:		Aruncă inamicul {0} unități în sus și îl împinge {1}%–{2}% din distanța maximă în față, amețindu-l în aer.
+SpellDescription.Bump.MainDescriptionArea:			Împinge toți inamicii din {3} unități {0} în sus și {1}%–{2}% înainte, amețindu-i în aer.
+SpellDescription.Bump.MainDescriptionCone:			Împinge inamicii într-un con {0} în sus și {1}%–{2}% înainte, amețindu-i în aer.
+SpellDescription.Conversion.MainDescription:		Convertește {0}% din toate daunele primite în viață, anduranță și mană.
+SpellDescription.MagicConversion.MainDescription:	Convertește {0}% din daunele magice primite în viață, anduranță și mană.
+SpellDescription.Fury.MainDescription:				Acordă {0}% șansă de a rezista controlului mulțimii și crește toate rezistențele magice cu {0}%.
+SpellDescription.HealthToFatigue.MainDescription:	Consumă {0}% din viața ta și restabilește {1}% din anduranța pierdută.
+SpellDescription.Chamber.MainDescription:			Permite preîncărcarea unei camere cu o vrajă primară și secundară pentru a le elibera instant asupra țintei.
+SpellDescription.Chamber.CanContainBolts:			Poate conține fulgere/bolts.
+SpellDescription.Chamber.CannotContainBolts:		Nu poate conține bolts.
+SpellDescription.FocusShell.MainDescription:		Reduce daunele primite din melee și vrăji cu {0}%.
+SpellDescription.FocusShell.OnlyInPvPORvR:			Utilizabil doar în zone RvR sau PvP.
+SpellDescription.Powerless.MainDescription:			Poți lansa o vrajă secundară fără cost de mană.
+SpellDescription.Range.MainDescription:				Poți lansa o vrajă secundară cu {0}% distanță.
+SpellDescription.Uninterruptable.MainDescription:	Poți lansa o vrajă secundară neîntreruptibilă, dar eficiența scade cu {0}%.
+SpellDescription.Agony.ConditionDescription:		Necesită ca ținta să fie sub „Dread” și „Anguish”.
+SpellDescription.Doom.ConditionDescription:			Necesită „Dread”, „Anguish” și „Agony”.
+SpellDescription.Doom.Expires:						La expirare:
+SpellDescription.BuffShear.Str:						Înlătură buffurile care cresc Forța.
+SpellDescription.BuffShear.Dex:						Înlătură buffurile care cresc Dexteritatea.
+SpellDescription.BuffShear.Con:						Înlătură buffurile care cresc Constituția.
+SpellDescription.BuffShear.Acuity:					Înlătură buffurile care cresc Acuitatea.
+SpellDescription.BuffShear.StrCon:					Înlătură buffurile Forță/Constituție.
+SpellDescription.BuffShear.DexQui:					Înlătură buffurile Dexteritate/Viteza (Qui).
+SpellDescription.BuffShear.Random:					Înlătură aleator un buff pozitiv.
+SpellDescription.BuffShear.Ablative:				Înlătură toate scuturile ablative.
+SpellDescription.ResistBuff.MainDescription:				Creste rezistența la {0} cu {1}%.
+SpellDescription.BodySpiritEnergyBuff.MainDescription:		Creste rezistența la Trup, Spirit și Energie cu {0}%.
+SpellDescription.HeatColdMatterBuff.MainDescription:		Creste rezistența la Foc, Rece și Materie cu {0}%.
+SpellDescription.AllMagicResistsBuff.MainDescription:		Creste toate rezistențele magice cu {0}%.
+SpellDescription.SecondaryMagicResistsBuff.MainDescription:	Creste rezistențele magice secundare cu {0}%.
+SpellDescription.AllMeleeResistsBuff.MainDescription:		Creste rezistențele la daune corp-la-corp cu {0}%.
+SpellDescription.AllResistsBuff.MainDescription:			Creste toate rezistențele cu {0}%.
+SpellDescription.EssenceBuff.MainDescription:				Creste rezistența la daune „Esență” cu {0}%.
+SpellDescription.ResistDebuff.MainDescription:				Reduce rezistența țintei la {0} cu {1}%.
+SpellDescription.CrushSlashThrustDebuff.MainDescription:	Reduce rezistențele la daune corp-la-corp cu {0}%.
+SpellDescription.EssenceDebuff.MainDescription:				Reduce rezistența la daune „Esență”.
+SpellDescription.DualStatDebuff.MainDescription:			Reduce {0} și {1} ale țintei cu {2}.
+SpellDescription.DualStatBuff.MainDescription:				Creste {0} și {1} cu {2}.
+SpellDescription.SingleStatBuff.MainDescription:			Creste {0} cu {1}.
+SpellDescription.CombatSpeedBuff.MainDescription:			Creste viteza de atac cu {0}%.
+SpellDescription.FatigueConsumptionBuff.MainDescription:	Acțiunile consumă cu {0}% mai puțină anduranță.
+SpellDescription.DPSBuff.MainDescription:					Creste DPS cu {0}%.
+SpellDescription.MeleeDamageBuff.MainDescription:			Provoci cu {0}% mai multe daune melee.
+SpellDescription.MesmerizeDurationBuff.MainDescription:		Reduce eficiența vrăjilor de hipnoză cu {0}%.
+SpellDescription.EvadeChanceBuff.MainDescription:			Acordă {0}% șansă de eschivă.
+SpellDescription.ParryChanceBuff.MainDescription:			Acordă {0}% șansă de parare.
+SpellDescription.WeaponSkillBuff.MainDescription:			Creste abilitatea cu {0} cu {1}%.
+SpellDescription.StealthSkillBuff.MainDescription:			Creste abilitatea de Furtivitate {0} cu {1}%.
+SpellDescription.FlexibleSkillBuff.MainDescription:			Creste abilitatea Flexibil {0} cu {1}%.
+SpellDescription.ResiPierceBuff.MainDescription:			Acordă {0}% șansă de penetrare a rezistențelor magice.
+SpellDescription.CriticalMagicalBuff.MainDescription:		Creste șansa de critic la vrăji cu {0}%.
+SpellDescription.CriticalMeleeBuff.MainDescription:			Creste șansa de critic în melee cu {0}%.
+SpellDescription.SingleStatDebuff.MainDescription:			Reduce {0} cu {1}.
+SpellDescription.CombatSpeedDebuff.MainDescription:			Reduce viteza de atac a țintei cu {0}%.
+SpellDescription.MeleeDamageDebuff.MainDescription:			Ținta provoacă cu {0}% mai puține daune melee.
+SpellDescription.FatigueConsumptionDebuff.MainDescription:	Creste consumul de anduranță al țintei în luptă cu {0}%.
+SpellDescription.FumbleChanceDebuff.MainDescription:		Creste șansa țintei de stângație (fumble) cu {0}%.
+SpellDescription.DPSDebuff.MainDescription:					Reduce DPS cu {0}%.
+SpellDescription.SkillsDebuff.MainDescription:				Reduce abilitățile cu {0}%.
+SpellDescription.Warlock.SecondarySpell:					Aceasta este o vrajă secundară.
+SpellDescription.Warlock.PrimarySpell:						Aceasta este o vrajă primară.
+SpellDescription.AllStatsDebuff.MainDescription:			Reduce toate atributele țintei cu {0}.
+SpellDescription.AllStatsPercentDebuff.MainDescription:		Reduce toate atributele țintei cu {0}%.
+SpellDescription.Morph.MainDescription:						Ținta a fost transformată în {0}.
+SpellDescription.PowerRend.MainDescription:					Ținta pierde {0}% din mana sa.
+SpellDescription.SummonAnimistFnF.MainDescription:		Chemează o turelă staționară pe ținta ta de sol care atacă inamicii din rază.
+SpellDescription.Bomber.MainDescription:				Chemează un spirit elemental care zboară către țintă, explodează și își lansează vraja la sosire.
+SpellDescription.SavageParryBuff.MainDescription:		Creste șansa ta de parare cu {0}%.
+SpellDescription.SavageEvadeBuff.MainDescription:		Creste șansa ta de eschivă cu {0}%.
+SpellDescription.SavageCombatSpeedBuff.MainDescription:	Creste viteza ta de atac cu {0}%.
+SpellDescription.SavageDPSBuff.MainDescription:			Creste daunele tale melee cu {0}.
+SpellDescription.SavageEnduranceHeal.MainDescription:	Recuperezi {0} anduranță cu prețul unei părți din viața ta.
+SpellDescription.Archery.SingleTarget:					Provoacă {0} {1} țintei.
+SpellDescription.Archery.AreaTarget:					Provoacă {0} {1} țintei și zonei.
+SpellDescription.Archery.SecondaryEffectiveness:		Eficiența săgeții crește cu {0}%.
+SpellDescription.WarlockSpeedDecrease.Frog:				Transformă ținta într-o broască!
+SpellDescription.MaidenKiss.MainDescription:			Vindecă starea „Broască” de pe țintă.
+SpellDescription.ArawnCure.MainDescription:				Vindecă otravă, boală și res-sickness.
+SpellDescription.Fear.SingleTarget:						Însuflă frică în inamicul selectat. Nu afectează pet-uri sau ținte peste nivelul {0}.
+SpellDescription.Fear.AreaTarget:						Însuflă frică monștrilor inamici într-o rază de {1} în jurul incantatorului. Nu afectează peste nivelul {0}.
+SpellDescription.FearServant.SingleTarget:				Însuflă frică unui pet inamic. Nu afectează peste nivelul {0}.
+SpellDescription.FearServant.AreaTarget:				Însuflă frică pet-urilor inamice în {1}. Nu afectează peste nivelul {0}.
+SpellDescription.FearServant.SingleTarget&Npc:			Însuflă frică inamicului selectat. Nu afectează peste nivelul {0}.
+SpellDescription.FearServant.AreaTarget&Npc:			Însuflă frică inamicilor în {1}. Nu afectează peste nivelul {0}.
+SpellDescription.FearServant.PetDescription:			Sublinfluenta fricii, pet-urile nu pot fi controlate sau eliberate.
+SpellDescription.BainsheePulseDmg.MainDescription:		Ținta suferă {0} {1}.
+SpellDescription.BainsheePulseDmg.AreaDescription:		Lovește toți inamicii aproape de incantator.
+SpellDescription.BainsheePulseDmg.SecondaryDescription:	Relansarea în timpul efectului îl anulează. Se termină dacă incantatorul se mișcă.
+SpellDescription.BeFriend.MainDescriptionArea:			Farmeacă temporar (până la nivelul {0}) monștrii apropiați pentru a deveni prietenoși și aliați.
+SpellDescription.BeFriend.MainDescriptionSingle:		Farmeacă temporar (până la nivelul {0}) monstrul selectat pentru a deveni prietenos și aliat.
+SpellDescription.VampiirStealthDetection.MainDescription:	Creste detectarea inamicilor furiși cu {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Reduce temporar bonusurile de abilități ale țintei cu {0}%.
+SpellDescription.VampiirMeleeResistance.MainDescription:	Creste rezistențele la daune melee cu {0}%.
+SpellDescription.VampiirMagicResistance.MainDescription:	Creste șansa de a rezista daunelor magice cu {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Reduce temporar eficiența țintei cu {0}%.
+SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:	Se poate lansa în luptă.
+SpellDescription.VampiirArmorDebuff.MainDescription:		Reduce temporar absorbția și factorul de armură al unei piese aleatoare (coif, trunchi sau picioare) cu {0}%.
+SpellDescription.VampiirArmorDebuff.AdditionalInfo:			Afectează doar coiful, trunchiul sau picioarele.
+SpellDescription.VampiirBolt.MainDescription:			Absoarbe {0}% din mana țintei și o convertește către incantator.
+SpellDescription.VampiirBolt.MainDescription2:			Nu afectează ținte peste nivelul {0}.
+SpellDescription.IllusionBlade.Part1:					Chemează o armă spectrală care luptă scurt timp alături de tine înainte de a se risipi.
+SpellDescription.IllusionBlade.Part2:					Acționează independent și nu poate fi controlată, eliberată sau vindecată.
+SpellDescription.RangeShield.MainDescription:			Protejează grupul incantatorului de atacurile fizice ale arcașilor.
+SpellDescription.PetSpell.MainDescription1:				Vrăji pentru pet:
+SpellDescription.PetSpell.MainDescription2:				Creste valorile listate ale țintei.
+SpellDescription.Ascendance.MainDescription:			Creste semnificativ eficiența vrăjilor și abilităților tale cu {0}%.
+SpellDescription.Ascendance.Restrictions:				În timpul „Înălțării” nu poți lansa vindecări sau reînvieri.
+SpellDescription.Ascendance.Interaction:				„Maestru al Concentrației” anulează „Înălțarea” și invers.  
+SpellDescription.Occultist.ConditionDescription1:		Nu poate fi lansată în forma Chtonică.
+SpellDescription.Occultist.ConditionDescription2:		Nu poate fi lansată în forma Spirit sau Dement.
+SpellDescription.Occultist.Summon.UmbralAegis1:			Chemează o Egidă Umbrală blindată. Excelentă pentru a tanka și a absorbi daune.
+SpellDescription.Occultist.Summon.UmbralAegis2:			Forma Spirit: Egida obține DD cu rază 200, armură mărită, absorbție magică și viteză de luptă crescută.
+SpellDescription.Occultist.Summon.Soultorn1:			Chemează o Sfâșiată de Suflet. Face daune de materie, dar este fragilă la magie și fizic.
+SpellDescription.Occultist.Summon.Soultorn2:			Forma Spirit: adaugă debuff de Materie și Boală.
+SpellDescription.Occultist.Summon.UmbralHulk1:			Chemează un Colos Umbral blindat, expert în daune fizice.
+SpellDescription.Occultist.Summon.UmbralHulk2:			Forma Spirit: obține charge 5 s, stun de spate 3 s și șansă crescută de off-hand.
+SpellDescription.Occultist.Summon.ImageOfArawn1:		Chemează o Icoană a lui Arawn. Vindecă aliații cu vindecări de 12%.
+SpellDescription.Occultist.Summon.ImageOfArawn2:		Forma Spirit: adaugă vindecare pentru otravă, boală și res-sickness și poate elimina miopia.  
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Chemează o Sucubă demonică ce hipnotizează ținta.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Forma Spirit: Arhidemonul primește un debuff puternic Dex/Qui și poate elimina miopia.
+SpellDescription.Occultist.SpiritShapeShift1:			Adopți forma Spiritului. {0}% din daunele primite sunt absorbite și convertite în mană.
+SpellDescription.Occultist.SpiritShapeShift2:			Regenerare de mană +{0} pe nivel și detectare stealth +{1}%.
+SpellDescription.Occultist.SpiritShapeShift3:			Slujitorii tăi devin mai rezistenți și obțin abilități suplimentare.
+SpellDescription.Occultist.ChtonicShapeShift1:			Întrupezi Cavalerul Chtonic. AF +{0} pe nivel; viață, AF și arme +{1}%, absorbție melee +{2}% și rezistențe magice secundare +{3}%.  
+SpellDescription.Occultist.ChtonicShapeShift2:			Primești și abilitatea de Parare.
+SpellDescription.Occultist.DecrepitShapeShift1:			Întrupezi Magul Decăzut. Daune magice +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift2:			Absorbția armurii +{0}%.
+SpellDescription.Occultist.DecrepitShapeShift3:			Atacatorii melee au {0}% șansă să aplice Boală; trupul tău putrezit regenerează și regenerarea vieții +{1}.
+SpellDescription.Occultist.BringerOfDeath1:				Întrupezi Aducătorul Morții. Vrăjile tale nu pot fi întrerupte, dar funcționează la {0}% și primești cu {1}% mai puține daune magice și fizice.
+SpellDescription.Occultist.BringerOfDeath2:				Viteza de mișcare +{0}% și în speedwarps sau în luptă. Active și bonusurile de regen și Boala din forma Decrepită.
+SpellDescription.DamageReturn.MainDescription:			Ricosează {0}% din daunele directe magice (nu DoT), melee și de proiectil în {1} către atacator cât timp este activ.
+SpellDescription.OffProcShear.Main1:					Înlătură proc-urile ofensive active ale țintei.
+SpellDescription.OffProcShear.Main2:					Aplică un proc blestemat de înlocuire ale cărui sub-vrăji îi vindecă pe inamicii țintei când lovesc.
+SpellDescription.OffProcShear.ReplacementHeader:		Proc de înlocuire:
+
+
+# ML Spells ShortDescriptions
+SpellDescription.Convoker.SummonWood.MainDescription:			Chemează aleator 100 scânduri pentru a întări și repara porțile și zidurile forturilor.
+SpellDescription.Convoker.PrescienceNode.MainDescription1:		Rună de sol (rază 1000) care detectează inamici ascunși fără a le rupe invizibilitatea.
+SpellDescription.Convoker.PrescienceNode.MainDescription2:		Runa poate fi atacată și are {0} viață.
+SpellDescription.Convoker.Prescience.MainDescription1:			O Rună a Prezenței te-a detectat!
+SpellDescription.Convoker.Prescience.MainDescription2:			Acordă presentiment pentru a anticipa mișcările inamicilor.
+SpellDescription.Convoker.PowerTrap.MainDescription:			Plasează o rună care la detonare drenează 20% mană de la inamici (doar cei cu mană).
+SpellDescription.Convoker.SpeedWrap.MainDescription:			Rună care anulează buffurile de viteză ale inamicilor ce trec prin ea. 6 s după părăsire nu pot primi vrăji de viteză.
+SpellDescription.Convoker.SummonWarcrystal.MainDescription:		Chemează muniție de asediu (alice, bile, gheață sau pietre) în inventarul tău.
+SpellDescription.Convoker.Battlewarder.MainDescription1:		Chemează un Gardian de Bătălie care interceptează atacurile inamice. Stă pe loc și consumă mană cât timp e activ.
+SpellDescription.Convoker.Battlewarder.MainDescription2:		Țintă de sol. Poate coexista cu alte pet-uri; pot fi chemați mai mulți gardieni.
+SpellDescription.Convoker.DissonanceTrap.MainDescription:		Plasează o rună care la detonare provoacă {0} {1}.
+SpellDescription.Convoker.BrittleGuard.MainDescription1:		Chemează un „Străjer Fragil” care îți poate bloca o singură lovitură melee.
+SpellDescription.Convoker.BrittleGuard.MainDescription2:		Are o singură viață și moare după o lovitură. Doar unul activ.
+SpellDescription.Convoker.SummonMastery.MainDescription:		Creste nivelul efectiv al pet-urilor și le îmbunătățește daunele și absorbția.
+SpellDescription.Convoker.SummonTitan.MainDescription1:			Chemează un Titan care crește în dimensiune și putere și lovește năprasnic.
+SpellDescription.Convoker.SummonTitan.MainDescription2:			Stă pe loc și atacă doar inamicii în raza melee.
+SpellDescription.Spymaster.Decoy.MainDescription:				Chemează un aliat momeală cu echipament epic, 1 viață și fără abilități ofensive pentru a deruta.
+SpellDescription.Spymaster.Sabotage.MainDescription:			Sabotează o țintă (rună sau mașină de asediu) făcând-o inutilizabilă.
+SpellDescription.Spymaster.TangleSnare.MainDescription:			Plasează o rună care la detonare încetinește inamicii din rază cu {0}%. Folosirea rupe stealth-ul.
+SpellDescription.Spymaster.PoisonSpike.MainDescription:			Plasează o rună otrăvită care provoacă {0} {1} inamicilor apropiați. Rupe stealth-ul.
+SpellDescription.Spymaster.Loockout.MainDescription1:			Un observator staționar detectează dușmani furiși în {0}. Rămâne ascuns dacă nu se mișcă.
+SpellDescription.Spymaster.Loockout.MainDescription2:			Ținta trebuie să stea jos și nemișcată; la mișcare efectul se încheie.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription1:		Rună care provoacă daune mari mașinilor de asediu.
+SpellDescription.Spymaster.SiegeWrecker.MainDescription2:		Provoacă {0} daune la activare.
+SpellDescription.Spymaster.EssenceFlare.MainDescription:		Aplică otravă care lasă inamicii 15 s în amurg.
+SpellDescription.Spymaster.BlanketOfCamouflage.MainDescription:	Ascunde grupul tău. Mișcarea, vrăjile sau cântatul îndepărtează efectul pentru non-furtivi.
+SpellDescription.Battlemaster.MLEndudrain.MainDescription:		Drenează {0} anduranță de la inamicii apropiați.
+SpellDescription.Battlemaster.KeepDamageBuff.MainDescription:	Acordă {0}% daune bonus împotriva mașinilor de asediu și structurilor.
+SpellDescription.Battlemaster.MLManadrain.MainDescription:		Drenează {0} mană de la inamicii apropiați.
+SpellDescription.Battlemaster.Grapple.MainDescription1:			Efect cu rază scurtă ce imobilizează {0} s și curăță efecte.
+SpellDescription.Battlemaster.Grapple.MainDescription2:			Înfășoară ținta; nu se poate mișca sau lovi melee, dar poate 10 s lansa/cânta.
+SpellDescription.Battlemaster.Grapple.MainDescription3:			O țintă prinsă nu poate fi lovită melee.
+SpellDescription.Battlemaster.EssenceFlamesProc.MainDescription:	{0}% șansă să activezi daune suplimentare de Esență cu atacuri melee.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription1:		Atac la distanță ce folosește formule de daune melee.
+SpellDescription.Battlemaster.ThrowWeapon.MainDescription2:		Atacurile melee sunt dezactivate 10 s după folosire.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription1:	Reduce rezistența la Esență a inamicilor apropiați cu {0}%.
+SpellDescription.Battlemaster.EssenceSearHandler.MainDescription2:	Reduce rezistența la Esență a țintei cu {0}%.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription1:	Protejează un aliat apropiat de atacurile melee. Cât timp protectorul trăiește sau e în rază, aliatul nu poate fi țintit.
+SpellDescription.Battlemaster.BodyguardHandler.MainDescription2:	Efectul se menține doar dacă protejatul stă nemișcat.
+SpellDescription.Battlemaster.EssenceDampenHandler.MainDescription:	Reduce mobilitatea țintei cu {0}%.
+SpellDescription.Banelord.CastingSpeedDebuff.MainDescription:		Reduce viteza de incantare a dușmanilor cu {0}%.
+SpellDescription.Banelord.PBAEDamage.ML2.MainDescription:		Reduce mana, viața și anduranța dușmanilor din zonă cu {0}%.
+SpellDescription.Banelord.PBAEDamage.ML8.MainDescription:		Reduce resursele în zonă cu {0}% și te costă {1}% din viața ta.
+SpellDescription.Banelord.Oppression.MainDescription:			Reduce capacitatea maximă de încărcare a inamicilor apropiați cu {0}%.
+SpellDescription.Banelord.FatDebuff.MainDescription:			Creste consumul de anduranță al atacurilor inamice cu {0}%.
+SpellDescription.Banelord.MissHit.MainDescription:				Reduce șansa de lovire a inamicilor apropiați cu {0}%.
+SpellDescription.Banelord.MLUnbreakableSnare.MainDescription:	Zonă scurtă care încetinește cu {0}% și îl amețește pe incantator.
+SpellDescription.Banelord.UnrresistableNonImunityStun.MainDescription:	Amețește {0} s și împiedică acțiunea.
+SpellDescription.Banelord.ToHitBuff.MainDescription:			Creste șansa de lovire a aliaților apropiați cu {0}%.
+SpellDescription.Banelord.EffectivenessDeBuff.MainDescription:	Reduce eficiența dușmanilor (vrăji și melee) cu {0}%.
+SpellDescription.Banelord.Banespike.MainDescription:			Creste daunele aliaților apropiați cu {0}%.
+SpellDescription.Banelord.NbTargetAffected.MainDescription:		Până la {0} inamici pot fi afectați.
+SpellDescription.Perfector.FOH.MainDescription1:				Crează o sferă la picioarele tale care vindecă în timp {0} viață aliaților (până la 40).
+SpellDescription.Perfector.FOH.MainDescription2:				În PvE atrage atenția inamicilor către incantator.
+SpellDescription.Perfector.FOP.MainDescription1:				Crează o sferă la picioarele tale care regenerează în timp {0} mană aliaților (până la 40).
+SpellDescription.Perfector.FOP.MainDescription2:				Aliații care au luptat în ultimele 10 s în PvE nu beneficiază.
+SpellDescription.Perfector.FOR.MainDescription:					Rună care scurtează durata controlului pe aliații apropiați cu {0}%.
+SpellDescription.Perfector.SickHeal.MainDescription:			Îți permite să depășești efectele asociate reînvierii.
+SpellDescription.Perfector.FOD.MainDescription:					Rună defensivă care drenează {0}% mana inamicilor din rază.
+SpellDescription.Perfector.PoT.MainDescription:					Regen menținut care crește mana pe tick cu {0}%.
+SpellDescription.Perfector.CCResist.MainDescription:			Creste rezistența ta la control timp de {0} s.
+SpellDescription.Warlord.PBAEHeal.ML2.MainDescription:			Zonă care regenerează {0}% viață, mană și anduranță aliaților apropiați.
+SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Vindecă 1000 viață țintei la costul a {0}% din viața ta.
+SpellDescription.Warlord.CoweringBellow.MainDescription:		Însuflă frică pet-urilor controlate de jucători în {0} și le reduce eficiența.
+SpellDescription.Warlord.Critical.MainDescription1:				Creste șansa de critic a aliaților din {0} cu {1}% pentru următorul atac.
+SpellDescription.Warlord.Critical.MainDescription2:				Creste șansa de critic a țintei cu {0}% pentru următorul atac.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Reduce eficiența DoT-urilor pe aliații din {0} cu {1}%. Când daunele ajung la zero, efectul se încheie.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Reduce eficiența DoT-urilor pe țintă cu {0}%. Se încheie la zero daune.
+SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Creste eficiența aliaților din {0} cu {1}% (vrăji și melee).
+SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Creste eficiența țintei cu {1}% (vrăji și melee).
+SpellDescription.Warlord.MLABSBuff.MainDescription1:			Creste absorbția armurii aliaților din {0} cu {1}%.
+SpellDescription.Warlord.MLABSBuff.MainDescription2:			Creste absorbția armurii țintei cu {1}%.
+SpellDescription.Sojourner.UnmakeCrystalseed.MainDescription:	Distruge runa țintă și runele apropiate în {0}.
+SpellDescription.Sojourner.AncientTransmuter.MainDescription:	Chemează un negustor pentru cumpărarea/vânzarea proviziilor de bază.
+SpellDescription.Sojourner.Port.MainDescription1:				Te teleportează la piatra sufletului tău. Nu funcționează în luptă sau RvR.
+SpellDescription.Sojourner.Port.MainDescription2:				Teleportează {0} jucători în {1} la pietrele lor. Nu în luptă/RvR.
+SpellDescription.Sojourner.EssenceResist.MainDescription:		Creste rezistența la daune naturale (Esență) cu {0}%.
+SpellDescription.Sojourner.Zephyr.MainDescription1:				Chemează un zefir care poartă un inamic într-o direcție aleatoare și îl face invulnerabil pe durata efectului.
+SpellDescription.Sojourner.Zephyr.MainDescription2:				Un jucător afectat de Zefir este imun {0} min la următorul.
+SpellDescription.Sojourner.Phaseshift.MainDescription:			Buff personal care te face aproape invulnerabil la vrăji și melee pentru {0} s.
+SpellDescription.Sojourner.Groupport.MainDescription:			Aduce întregul tău grup înapoi la piatra sufletului tău. Eșuează dacă cineva este în luptă.
+SpellDescription.Stormlord.DazzlingArray.MainDescription1:		Aplică un efect care reduce șansa de lovire a inamicilor din zonă cu {0}%.
+SpellDescription.Stormlord.DazzlingArray.MainDescription2:		Numai pentru vrăji de stun; exclude RA și stilurile.
+SpellDescription.Stormlord.StormMissHit.MainDescription:		Reduce acuratețea țintei cu {0}%.
+SpellDescription.Stormlord.VacuumVortex.MainDescription:		Țintă de sol care mută furtunile apropiate într-un punct aleator de pe margine.
+SpellDescription.Stormlord.EnervatingGas.MainDescription:		Eliberează gaz care scade anduranța inamicilor cu {0}%.
+SpellDescription.Stormlord.StormEndudrain.MainDescription:		Furtună care drenează {0} anduranță inamicilor din interior.
+SpellDescription.Stormlord.InebriatingFumes.MainDescription:	Scade treptat Dexteritatea și Viteza cu {0}% celor ce rămân în interior.
+SpellDescription.Stormlord.StormDexQuickDebuff.MainDescription:	Reduce Dexteritatea și Viteza țintei cu {0}%.
+SpellDescription.Stormlord.MentalSiphon.MainDescription:		Furtună care drenează {0} mană inamicilor din interior.
+SpellDescription.Stormlord.PowerDrainStorm.MainDescription:		Drenează {0} mană țintei.
+SpellDescription.Stormlord.FocusingWinds.MainDescription:		Creează o furtună aliată și o fixează. Se termină dacă te miști.
+SpellDescription.Stormlord.ChokingVapors.MainDescription:		Scade treptat Forța și Constituția cu {0}% celor ce rămân în interior.
+SpellDescription.Stormlord.StormStrConstDebuff.MainDescription:	Reduce Forța și Constituția țintei cu {0}%.
+SpellDescription.Stormlord.SenseDullingCloud.MainDescription:	Furtună care tocește simțurile și reduce Acuitatea cu {0}%.
+SpellDescription.Stormlord.StormAcuityDebuff.MainDescription:	Reduce Acuitatea țintei cu {0}%.
+SpellDescription.Stormlord.EnergyTempest.MainDescription:		Furtună care provoacă daune de Esență inamicilor din interior.
+SpellDescription.Stormlord.StormEnergyTempest.MainDescription:	Provoacă {0} {1} timp de {2} s inamicilor din interior.
+SpellDescription.MLBase.TargetModifier.MainDescription:			Buff personal care permite modificarea sau extinderea razei următoarei vrăji (țintă unică sau zonă).
+SpellDescription.MLBase.BanelordSnare.MainDescription:			Zonă scurtă care încetinește cu {0}% și îl amețește pe incantator.
+
+# AblativeArmor
+AblativeArmor.DelveInfo.Function:			Funcție: amortizor împotriva loviturilor melee
+AblativeArmor.DelveInfo.Absorption1:			Absorbție: {0}%
+AblativeArmor.DelveInfo.Absorption2:			Absorbție: 100%
+AblativeArmor.DelveInfo.Absorption3:			Absorbție: 25%
+AblativeArmor.DelveInfo.CastingTime:			Instant
+
+# DamageSpeedDecrease
+DamageSpeedDecrease.DelveInfo.Decrease:			Scădere viteză: {0}%
+DamageSpeedDecrease.DelveInfo.Function:			Funcție: Scădere viteză + daune
+
+# ResistDebuff
+ResistDebuff.DelveInfo.Decrease:			Scădere rezistență {0}: {1}
+ResistDebuff.DelveInfo.Function:			Funcție: Reducere rezistențe
+
+#CharmSpellHandler
+CharmSpellHandler.DelveInfo.Function:			Funcție: {0}
+CharmSpellHandler.Species.Humanoid:				Umanoid
+CharmSpellHandler.Species.Animal:				Animal
+CharmSpellHandler.Species.Insect:				Insectă
+CharmSpellHandler.Species.Reptile:				Reptilă
+CharmSpellHandler.Species.HumanoidAnimal:		Umanoid sau Animal
+CharmSpellHandler.Species.HumanoidAnimalInsect:					Umanoid, Animal și Insectă
+CharmSpellHandler.Species.HumanoidAnimalInsectMagical:			Umanoid, Animal, Insectă și Magic
+CharmSpellHandler.Species.HumanoidAnimalInsectMagicalUndead:	Umanoid, Animal, Insectă, Magic și Mort-Viu
+
+#IllusionSpell SpellHandler
+IllusionSpell.Arrangement.Random:		aleator
+IllusionSpell.Arrangement.Circle:		în cerc
+IllusionSpell.Arrangement.Line:			în linie
+
+#WarlockSpeedDecrease SpellHandler Appearances
+WarlockSpeedDecrease.Appearance.Frog:			Broască
+WarlockSpeedDecrease.Appearance.Worm:			Vierme
+WarlockSpeedDecrease.Appearance.Lizard:			Șopârlă
+WarlockSpeedDecrease.Appearance.Wisp:			Will-o'-the-wisp
+WarlockSpeedDecrease.Appearance.Fairy:			Zână
+WarlockSpeedDecrease.Appearance.Scarab:			Scarab
+WarlockSpeedDecrease.Appearance.Spider:			Păianjen
+WarlockSpeedDecrease.Appearance.Cyclop:			Ciclop
+WarlockSpeedDecrease.Appearance.Mantis:			Călugăriță
+WarlockSpeedDecrease.Appearance.Flame:			Flăcăruie
+WarlockSpeedDecrease.Appearance.Bird:			Rândunică
+WarlockSpeedDecrease.Appearance.Simulacrum:		Simulacru
+
+# DamageAddAndShield
+DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} te lovește pentru {1} daune suplimentare!
+DamageAddAndShield.EventHandlerDA.YouHitExtra:		Îl lovești pe {0} pentru {1} daune suplimentare!
+DamageAddAndShield.EventHandlerDA.YouHitFor:		Îl lovești pe {0} pentru {1} daune suplimentare!
+DamageAddAndShield.EventHandlerDA.YourHitFor:		{0}-ul tău lovește {1} pentru {2} daune suplimentare!
+DamageAddAndShield.EventHandlerDS.DamageToYou:		{0} te lovește pentru {1} daune suplimentare!
+DamageAddAndShield.EventHandlerDS.YouHitFor:		Îl lovești pe {0} pentru {1} daune suplimentare!
+DamageAddAndShield.EventHandlerDS.YourHitFor:		{0}-ul tău lovește {1} pentru {2} daune suplimentare!
+
+# DirectDamageDebuffSpellHandler
+DirectDamageDebuffSpellHandler.DelveInfo.Decrease:	Reducere rezistență ({0}): {1}%
+DirectDamageDebuffSpellHandler.DelveInfo.Function:	Funcție: Daune/Reducere rezistență
+
+# DoTSpellHandler
+DoTSpellHandler.SendDamageMessages.YouHitFor:		Îl lovești pe {0} pentru {1} daune!
+DoTSpellHandler.SendDamageMessages.YourCriticallyHits:	{0}-ul tău îl lovește critic pe {1} și provoacă {2} daune suplimentare!
+DoTSpellHandler.SendDamageMessages.YourHitsFor:		{0}-ul tău îl lovește pe {1} pentru {2} daune!
+
+# NearsightSpellHandler
+NearsightSpellHandler.DelveInfo.Function:		Funcție: Reducere rază {0}
+
+# ProcSpellHandler
+ProcSpellHandler.DelveInfo.Function:			Funcție: {0}
+
+Summon.CheckBeginCast.AlreadyHaveaPet:			Controlezi deja o creatură.
+
+# SummonCommanderPet
+SummonCommanderPet.CheckBeginCast.Text:			Controlezi deja un Comandant!
+SummonCommanderPet.DelveInfo.Text1:			Funcție: Chemare
+SummonCommanderPet.DelveInfo.Text2:			Chemează un pet Comandant.
+SummonCommanderPet.DelveInfo.Text3:			Țintă: {0}
+SummonCommanderPet.DelveInfo.Text4:			Cost mană: {0}%
+SummonCommanderPet.DelveInfo.Text5:			Timp de incantare: {0}
+
+#SummonMinionHandler
+SummonMinionHandler.CheckBeginCast.Text1:		Trebuie să controlezi deja un Comandant pentru a chema un slujitor de grup!
+SummonMinionHandler.CheckBeginCast.Text2:		Comandantul tău controlează deja numărul maxim de slujitori!
+SummonMinionHandler.DelveInfo.Text1:			Țintă: {0}
+SummonMinionHandler.DelveInfo.Text2:			Cost mană: {0}%
+SummonMinionHandler.DelveInfo.Text3:			Timp de incantare: {0}
+
+#PetPBAOE
+PetPBAOE.CheckBeginCast.NoPet:				Nu poți lansa această vrajă pe o creatură pe care nu o controlezi.
+
+#SummonAnimistFnF
+SummonAnimistFnF.CheckBeginCast.NoGroundTarget:		Trebuie să setezi o țintă de sol pentru această vrajă!
+SummonAnimistFnF.CheckBeginCast.TurretAreaCap:		Nu poți controla mai multe turele în această zonă!
+SummonAnimistFnF.CheckBeginCast.TurretPlayerCap:	Nu poți controla turele suplimentare!
+
+#SummonAnimistPet
+SummonAnimistPet.CheckBeginCast.AlreadyHaveaPet:	Controlezi deja o creatură!
+SummonAnimistPet.CheckBeginCast.GroundTargetNull:	Trebuie să setezi o țintă de sol pentru această vrajă!
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInView:	Nu ai ținta de sol în câmpul vizual.
+SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange:	Alege o țintă de sol mai aproape.
+
+#TurretsRelease
+TurretsRelease.CheckBeginCast.NoSelectedTarget:		Poți lansa această vrajă doar pe o creatură pe care o controlezi.
+TurretsRelease.CheckBeginCast.TargetTooFarAway:		Ținta ta este prea departe.
+
+#PetSpellHandler
+PetSpellHandler.CheckBeginCast.NoControlledBrainForCast:	Îți trebuie un pet pentru a lansa această vrajă!
+
+#SummonNecromancerPet
+SummonNecromancerPet.CheckBeginCast.ShadeEffectIsNotNull:	Ești deja în Formă de Umbră!
+SummonNecromancerPet.DelveInfo.Function:			Funcție: Chemare pet
+SummonNecromancerPet.DelveInfo.Description:			Chemează un pet nemort care îl servește pe incantator. Incantatorul ia Forma de Umbră și acționează prin pet.
+SummonNecromancerPet.DelveInfo.Target:				Țintă: {0}
+SummonNecromancerPet.DelveInfo.Power:				Cost mană: {0}%
+SummonNecromancerPet.DelveInfo.CastingTime:			Timp de incantare: {0}
+
+#SavageEnduranceHeal
+SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:		Nu ai suficientă viață pentru a lansa această vrajă!
+
+#AblativeArmorSpellHandler
+AblativeArmor.Target:		Scutul tău absoarbe {0} daune.
+AblativeArmor.Attacker:		Un scut absoarbe {0} din daunele tale!
+
+#Amnesia
+Amnesia.MessageToTarget:	Mintea ți se încurcă și uiți ce făceai!
+
+# Petrify
+Petrify.Target.Absorbs:		{0} este pietrificat și absoarbe {1} daune.
+Petrify.Target.Resist:		{0} este pietrificat și imun la această vrajă.
+Petrify.Self.Message:		{0} este pietrificat.
+Petrify.Self.Absorb:		Ești pietrificat și absoarbe {0} daune.
+Petrify.Self.Unpetrify:		Revii la starea normală.
+
+# Damnation
+Damnation.Self.Message:			Ținta ta este osândită.
+Damnation.Self.Message2:		Încă nu știi, dar ești deja mort!
+Damnation.Target.Resist:		{0} este osândit și imun la această vrajă.
+Damnation.Self.Absorb:			Ești osândit și absoarbe {0} daune!
+Damnation.Target.Absorbs:		{0} este osândit și absoarbe {1} daune.
+Damnation.Self.SpellAbsorb:		Osânda ta îți permite să absorbi {0} daune magice datorită echipamentului.
+Damnation.Target.SpellAbsorbs:	Osânda lui {0} absoarbe {1} daune magice datorită echipamentului.
+Damnation.Self.Resist:			Ești osândit și reziști vrăjii.
+Damnation.Target.Resist:		{0} este osândit și reziști vrăjii.
+Damnation.Kill.SelfHeal:		Cadavrul inamicului te revitalizează cu {0} viață!
+Damnation.Kill.DurationExtended:	Existența ta osândită este extinsă cu {0} s luând o altă suflet, dar sfârșitul este inevitabil.
+Damnation.Self.CannotBeHealed:	Ești osândit și nu poți fi vindecat!
+
+# Adrenaline
+Adrenaline.Target.Immune:		{0} este în Febra de Luptă și rezistă complet!
+Adrenaline.Target.Absorbs:		Ținta ta absoarbe {0} daune din atacul tău.
+Adrenaline.Self.Immune:			Febra ta de Luptă te protejează de această vrajă!
+Adrenaline.Self.Absorb:			Absoarbe {0} daune din vrajă!
+
+# DebuffImmunity
+DebuffImmunity.You.Resisted:			Reziști datorită imunității la debuff-uri!
+DebuffImmunity.Target.Resisted:			{0} reziști datorită imunității la debuff-uri!
+
+# HealDebuff
+HealDebuffSpellHandler.EffectStart.Target:		Eficiența vindecărilor primite este redusă din cauza {0}.
+HealDebuffSpellHandler.EffectStart.Area:		Eficiența vindecărilor primite de {0} este redusă din cauza {1}.
+HealDebuffSpellHandler.EffectExpires.Target:	Eficiența vindecărilor revine la normal.
+HealDebuffSpellHandler.EffectExpires.Area:		Eficiența vindecărilor lui {0} revine la normal.
+
+# NecroSummonWeapon
+Spells.NecroSumonWeap.Icebrand.You:				Chemezi sabia Icebrand.
+Spells.NecroSumonWeap.Icebrand.Target:			{0} cheamă sabia Icebrand.
+Spells.NecroSumonWeap.Nethersbane.You:			Chemezi sabia Nethersbane.
+Spells.NecroSumonWeap.Nethersbane.Target:		{0} cheamă sabia Nethersbane.
+
+# StyleHandler
+StyleHandler.StyleNotFound:						Stil de luptă negăsit.
+StyleHandler.UseStyle:							Folosești stilul {0} pentru atacurile tale.
+StyleHandler.NeedsRequirement:					Necesită {0} pentru a executa acest stil.
+StyleHandler.NeedsWeapon:						Ai nevoie de {0} pentru a executa acest stil.
+StyleHandler.AllWeaponTypes:					Toate tipurile de arme sunt compatibile cu acest stil.
+StyleHandler.UnknownWeaponType:					Tip de armă necesar necunoscut.
+StyleHandler.StyleNotImplemented:				Acest stil nu este încă implementat!
+StyleHandler.Opening.DefensiveActionUsing:		o acțiune defensivă folosind {0}
+StyleHandler.Opening.DefensiveAction:			o acțiune defensivă
+StyleHandler.Opening.Positional.Back:			să fii în spatele inamicului
+StyleHandler.Opening.Positional.Side:			să fii în lateralul inamicului
+StyleHandler.Opening.Positional.Front:			să fii în fața inamicului
+StyleHandler.Opening.Positional.Specific:		o poziție specifică față de inamic
+StyleHandler.Opening.Default:					o condiție specială de deschidere
+

@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -60,11 +61,11 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("Summon pet in 3 seconds, 1 minute duration, 15 minute RUT.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfDarknessAbility.AddEffectsInfo.Info1"));
             list.Add("");
-            list.Add("Target: Self");
-            list.Add("Duration: 1 min");
-            list.Add("Casting time: Instant");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfDarknessAbility.AddEffectsInfo.Info2"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfDarknessAbility.AddEffectsInfo.Info3"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfDarknessAbility.AddEffectsInfo.Info4"));
         }
 
     }

@@ -20,6 +20,7 @@
 using DOL.Database;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,7 +34,7 @@ namespace DOL.GS.ServerRules
     public class AdventureWingJumpPoint : IJumpPointHandler
     {
 
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Decides whether player can jump to the target point.
@@ -99,7 +100,7 @@ namespace DOL.GS.ServerRules
                     if (previousInstance.NumPlayers > 0)
                     {
                         //We can't jump !
-                        player.Out.SendMessage("You have another instance (" + previousInstance.Description + ") running with people in it !", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "AdventureWingJumpPoint.InstanceInUse", previousInstance.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                     else
@@ -197,7 +198,7 @@ namespace DOL.GS.ServerRules
                 return false;
             }
 
-            player.Out.SendMessage("Something went Wrong when creating Instance !", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "AdventureWingJumpPoint.CreationFailed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return false;
         }
     }

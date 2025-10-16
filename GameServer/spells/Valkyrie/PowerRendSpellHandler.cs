@@ -55,6 +55,7 @@ namespace DOL.GS.spells
             bool targetIsGameplayer = target is GamePlayer;
             bool targetIsGameLiving = target is GameLiving;
             var necroPet = target as NecromancerPet;
+            GameLiving drainFrom = necroPet == null ? target : necroPet.Owner;
 
             if (targetIsGameplayer || targetIsGameLiving || necroPet != null)
             {
@@ -65,6 +66,16 @@ namespace DOL.GS.spells
                     powerRendValue = (int)(target.MaxMana * Spell.Value * GetVariance());
                     if (powerRendValue > target.Mana)
                         powerRendValue = target.Mana;
+
+                    var reflectEff = FindEffectOnTarget(target, "SpellReflection");
+                    if (reflectEff != null && powerRendValue > 0)
+                    {
+                        double absorbPct = Math.Max(0, Math.Min(100, reflectEff.Spell.LifeDrainReturn));
+                        int absorbed = (int)Math.Round(powerRendValue * (absorbPct / 100.0));
+                        if (absorbed > 0)
+                            powerRendValue -= absorbed;
+                    }
+
                     target.Mana -= powerRendValue;
                     target.MessageToSelf(string.Format(m_spell.Message2, powerRendValue), eChatType.CT_Spell);
                 }
@@ -73,6 +84,16 @@ namespace DOL.GS.spells
                     powerRendValue = (int)(necroPet.Owner.MaxMana * Spell.Value * GetVariance());
                     if (powerRendValue > necroPet.Owner.Mana)
                         powerRendValue = necroPet.Owner.Mana;
+
+                    var reflectEff = FindEffectOnTarget(drainFrom, "SpellReflection");
+                    if (reflectEff != null && powerRendValue > 0)
+                    {
+                        double absorbPct = Math.Max(0, Math.Min(100, reflectEff.Spell.LifeDrainReturn));
+                        int absorbed = (int)Math.Round(powerRendValue * (absorbPct / 100.0));
+                        if (absorbed > 0)
+                            powerRendValue -= absorbed;
+                    }
+
                     necroPet.Owner.Mana -= powerRendValue;
                     necroPet.Owner.MessageToSelf(string.Format(m_spell.Message2, powerRendValue), eChatType.CT_Spell);
                 }

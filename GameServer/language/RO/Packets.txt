@@ -1,0 +1,255 @@
+# /packets/Client/168 (RO)
+# /DetailDisplayHandler
+DetailDisplayHandler.HandlePacket.UniqueObject:	Obiect Unic
+
+DetailDisplayHandler.GetShortItemInfo.CrafterName:		Meșter: {0}
+DetailDisplayHandler.GetShortItemInfo.NoDrop:			Nu poate fi aruncat.
+
+DetailDisplayHandler.HandlePacket.Any:				Toate
+DetailDisplayHandler.HandlePacket.Back:				(Spate)
+DetailDisplayHandler.HandlePacket.BonusLevel:			Nivel bonus: {0}
+DetailDisplayHandler.HandlePacket.CannotDestroyed:		Nu poate fi distrus.
+DetailDisplayHandler.HandlePacket.CannotDropped:		Nu poate fi aruncat sau pus în ladă.
+DetailDisplayHandler.HandlePacket.CannotSold:			Nu poate fi vândut.
+DetailDisplayHandler.HandlePacket.CannotPick:			Nu poate fi ridicat.
+DetailDisplayHandler.HandlePacket.CannotTraded:			Nu poate fi schimbat cu jucători.
+DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR:		Nu poate fi folosit în RvR.
+DetailDisplayHandler.HandlePacket.EffectWhenSitting:		Efecte resimțite numai dacă stați jos.
+DetailDisplayHandler.HandlePacket.ChampionLevel:			- Necesar: Nivel de Campion {0}
+DetailDisplayHandler.HandlePacket.ChatItem:				[Chat] {0}/Obiect: "{1}"
+DetailDisplayHandler.HandlePacket.CrafterName:			Meșter: {0}
+DetailDisplayHandler.HandlePacket.Damage:				Daune:
+DetailDisplayHandler.HandlePacket.Defense:				Apărare:
+DetailDisplayHandler.HandlePacket.Devastating:			Devastator
+DetailDisplayHandler.HandlePacket.DontBelongGuild:		Nu aparțineți unei bresle.
+DetailDisplayHandler.HandlePacket.FatigueCost:			Cost de anduranță:
+DetailDisplayHandler.HandlePacket.FollowupStyle:			Stil de urmat: {0}
+DetailDisplayHandler.HandlePacket.Front:				(Față)	
+DetailDisplayHandler.HandlePacket.GuildItem:				[Breaslă] {0}/Obiect: "{1}"
+DetailDisplayHandler.HandlePacket.High:					Ridicat
+DetailDisplayHandler.HandlePacket.HighBonus:				Bonus ridicat
+DetailDisplayHandler.HandlePacket.HighPenalty:			Penalizare ridicată
+DetailDisplayHandler.HandlePacket.Item:					{0}/obiect: "{1}
+DetailDisplayHandler.HandlePacket.LevName:				Niv   Nume
+DetailDisplayHandler.HandlePacket.Low:					Scăzut
+DetailDisplayHandler.HandlePacket.LowBonus:				Bonus scăzut
+DetailDisplayHandler.HandlePacket.LowPenalty:				Penalizare scăzută
+DetailDisplayHandler.HandlePacket.Medium:				Mediu
+DetailDisplayHandler.HandlePacket.MediumBonus:			Bonus mediu
+DetailDisplayHandler.HandlePacket.MediumPenalty:			Penalizare medie
+DetailDisplayHandler.HandlePacket.MustBeInChatGroup:		Trebuie să fiți într-un grup de discuții.
+DetailDisplayHandler.HandlePacket.MustBeInBattleGroup:		Trebuie să fiți într-un grup de luptă.
+DetailDisplayHandler.HandlePacket.NoBonus:				Niciunul
+DetailDisplayHandler.HandlePacket.NoGroup:				Nu faceți parte dintr-un grup.
+DetailDisplayHandler.HandlePacket.NoInformation:			Nicio informație specială!
+DetailDisplayHandler.HandlePacket.None:					Niciunul
+DetailDisplayHandler.HandlePacket.NoPermissionToSpeak:		Nu aveți permisiunea de a vorbi pe canalul breslei.
+DetailDisplayHandler.HandlePacket.OnlyModerator:			Numai moderatorii pot vorbi pe acest canal.
+DetailDisplayHandler.HandlePacket.Opening:				Deschidere:
+DetailDisplayHandler.HandlePacket.OpeningStyle:			Stil de deschidere:
+DetailDisplayHandler.HandlePacket.Or:					sau {0}
+DetailDisplayHandler.HandlePacket.Positional:			Pozițional
+DetailDisplayHandler.HandlePacket.Side:					(lateral)
+DetailDisplayHandler.HandlePacket.TargetBlocks:			Ținta blochează
+DetailDisplayHandler.HandlePacket.TargetEffect:			Efect asupra țintei:
+DetailDisplayHandler.HandlePacket.TargetEvades:			Ținta evită
+DetailDisplayHandler.HandlePacket.TargetFumbles:			Ținta greșește lamentabil
+DetailDisplayHandler.HandlePacket.TargetHits:				Ținta lovește
+DetailDisplayHandler.HandlePacket.TargetMisses:			Ținta ratează
+DetailDisplayHandler.HandlePacket.TargetParrys:			Ținta parează
+DetailDisplayHandler.HandlePacket.TargetStyle:			Ținta execută un stil
+DetailDisplayHandler.HandlePacket.ToHit:					Lovire:
+DetailDisplayHandler.HandlePacket.VeryHigh:				Foarte ridicat
+DetailDisplayHandler.HandlePacket.VeryHighBonus:			Bonus foarte ridicat
+DetailDisplayHandler.HandlePacket.VeryHighPenalty:		Penalizare foarte ridicată
+DetailDisplayHandler.HandlePacket.VeryLow:				Foarte scăzut
+DetailDisplayHandler.HandlePacket.VeryLowBonus:			Bonus foarte scăzut
+DetailDisplayHandler.HandlePacket.VeryLowPenalty:			Penalizare foarte scăzută
+DetailDisplayHandler.HandlePacket.VeryStrange:			Este foarte ciudat, nu recunosc acest tip de obiecte.
+DetailDisplayHandler.HandlePacket.WeaponType:			Tip de arme: {0}
+DetailDisplayHandler.HandlePacket.YouBlock:				Blocați
+DetailDisplayHandler.HandlePacket.YouEvade:				Evitați
+DetailDisplayHandler.HandlePacket.YouFumble:				Vă împiedicați
+DetailDisplayHandler.HandlePacket.YouHit:				Loviti
+DetailDisplayHandler.HandlePacket.YouMiss:				Ratați
+DetailDisplayHandler.HandlePacket.YouParry:				Parezați
+DetailDisplayHandler.WriteBonusLine.Points:				pct
+DetailDisplayHandler.WriteBonusLine.PowerPool:			% rezervor magic.
+DetailDisplayHandler.WriteClassicArmorInfos.Absorption:	- {0}% Absorbție
+DetailDisplayHandler.WriteClassicArmorInfos.ArmorMod:		Modificator de armură:
+DetailDisplayHandler.WriteClassicArmorInfos.BaseFactor:	- {0} Armură de bază
+DetailDisplayHandler.WriteClassicArmorInfos.ClampFact:	- {0} Armură reală
+DetailDisplayHandler.WriteClassicArmorInfos.Condition:	- {0}% Condiție
+DetailDisplayHandler.WriteClassicArmorInfos.EffArmor:		Armură:
+DetailDisplayHandler.WriteClassicArmorInfos.Factor:		- {0} Armură
+DetailDisplayHandler.WriteClassicArmorInfos.Quality:		- {0}% Calitate
+DetailDisplayHandler.WriteClassicShieldInfos.BaseDPS:		- {0} DPS de bază
+DetailDisplayHandler.WriteClassicShieldInfos.ClampDPS:		- {0} DPS real
+DetailDisplayHandler.WriteClassicShieldInfos.DamageMod:		Modificator de daune (când este folosit cu stilurile Scut):
+DetailDisplayHandler.WriteClassicShieldInfos.Large:		- Mărimea scutului: Mare
+DetailDisplayHandler.WriteClassicShieldInfos.Medium:		- Mărimea scutului: Mediu
+DetailDisplayHandler.WriteClassicShieldInfos.Small:		- Mărimea scutului: Mic
+DetailDisplayHandler.WriteClassicShieldInfos.SPD:			- {0} Viteza scutului
+DetailDisplayHandler.WriteClassicWeaponInfos.BaseDPS:		- {0} DPS de bază
+DetailDisplayHandler.WriteClassicWeaponInfos.ClampDPS:		- {0} DPS real
+DetailDisplayHandler.WriteClassicWeaponInfos.Condition:	- {0}% Condiție
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageMod:		Modificator de daune:
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageType:	Tip de daune: {0}
+DetailDisplayHandler.WriteClassicWeaponInfos.EffDamage:	Daune efective:
+DetailDisplayHandler.WriteClassicWeaponInfos.Quality:		- {0}% Calitate
+DetailDisplayHandler.WriteClassicWeaponInfos.SPD:			- {0} Viteza armei
+DetailDisplayHandler.WriteHorseInfo.AdvancedHorse:		Este o montură avansată.
+DetailDisplayHandler.WriteHorseInfo.Armor:				- Armură: {0}
+DetailDisplayHandler.WriteHorseInfo.Barding:				- Împodobire: Niciuna
+DetailDisplayHandler.WriteHorseInfo.BasicHorse:			Este o montură clasică.
+DetailDisplayHandler.WriteHorseInfo.Food:				- Mâncare preferată: Fân și ocazional un măr.
+DetailDisplayHandler.WriteHorseInfo.MountWindow:			Pentru a face această montură activă, mutați pictograma în slotul dedicat din fereastra de montură.
+DetailDisplayHandler.WriteHorseInfo.Name:				- Nume: {0}.
+DetailDisplayHandler.WriteHorseInfo.NameMount:			(Folosiți /namemount pentru a da un nume monturii.)
+DetailDisplayHandler.WriteHorseInfo.Quickbar:			Pentru a invoca această montură, din fereastra de montură mutați pictograma pe bara rapidă și apăsați butonul creare.
+DetailDisplayHandler.WriteHorseInfo.RvRZzones:			Nu poate fi invocată în zone RvR.
+DetailDisplayHandler.WriteHorseInfo.Speed1:				(+35% viteză)
+DetailDisplayHandler.WriteHorseInfo.Speed2:				(+45% viteză)
+DetailDisplayHandler.WriteHorseInfo.Summon:				Faceți clic pe această pictogramă din bara de lansare pentru a invoca (sau respinge) montura.
+DetailDisplayHandler.WriteMagicalBonuses.ChargedMagic:	Capacitate Magică Încărcată:
+DetailDisplayHandler.WriteMagicalBonuses.Charges:		- {0} Încărcări
+DetailDisplayHandler.WriteMagicalBonuses.FocusBonus:		Bonus la focus:
+DetailDisplayHandler.WriteMagicalBonuses.Level:			- {0} Nivel
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired:	Nivel necesar:
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired2:	Nivel necesar: {0} Nivel
+DetailDisplayHandler.WriteMagicalBonuses.MagicAbility:	Capacitate magică:
+DetailDisplayHandler.WriteMagicalBonuses.MagicBonus:		Bonusuri magice:
+DetailDisplayHandler.WriteMagicalBonuses.MaxCharges:		- {0} Maxim
+DetailDisplayHandler.WriteMagicalBonuses.StrikeArmor:		- Vrăja are o șansă să fie lansată când un inamic lovește această armură.
+DetailDisplayHandler.WriteMagicalBonuses.StrikeEnemy:		- Vrăja are o șansă să fie lansată când această armă lovește un inamic.
+DetailDisplayHandler.WriteMagicalBonuses.UsedItem:		- Vrăja are o șansă să fie lansată când obiectul este utilizat.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem1:		Poate fi folosit la fiecare: {0} secunde.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem2:		Poate fi folosit la fiecare: {0}:{1} min.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem3:		Poate fi reutilizat în: {0}.
+DetailDisplayHandler.WriteMagicalBonuses.Inactive:		(inactiv)
+DetailDisplayHandler.WriteBonusConditions.Title:		Condiții de Bonus:
+DetailDisplayHandler.WriteBonusConditions.Renaissance:	Trebuie să fie „Renaissance”
+DetailDisplayHandler.WritePoisonInfo.Charges:			- {0} Încărcări
+DetailDisplayHandler.WritePoisonInfo.Level:				- {0} Nivel
+DetailDisplayHandler.WritePoisonInfo.LevelRequired:		Nivel necesar:
+DetailDisplayHandler.WritePoisonInfo.MaxCharges:			- {0} Maxim
+DetailDisplayHandler.WritePoisonInfo.ProcAbility:		Efect ofensiv:
+DetailDisplayHandler.WritePotionInfo.ChargedMagic:		Capacitate magică încărcată:
+DetailDisplayHandler.WritePotionInfo.Charges:			- {0} Încărcări
+DetailDisplayHandler.WritePotionInfo.Level:				- {0} Nivel
+DetailDisplayHandler.WritePotionInfo.LevelRequired:		Condiție de nivel
+DetailDisplayHandler.WritePotionInfo.MaxCharges:			- {0} Maxim
+DetailDisplayHandler.WritePotionInfo.NoUseInCombat:		Nu poate fi folosită în luptă.
+DetailDisplayHandler.WritePotionInfo.UseItem2:			Poate fi folosită la fiecare: 1:00 min
+DetailDisplayHandler.WritePotionInfo.UseItem3:			Poate fi reutilizată în: {0}
+DetailDisplayHandler.WritePotionInfo.Type:				Funcție: {0}
+DetailDisplayHandler.WritePotionInfo.Value:				Valoare: {0}
+DetailDisplayHandler.WritePotionInfo.Target:				Țintă: {0}
+DetailDisplayHandler.WritePotionInfo.Range:				Rază: {0}
+DetailDisplayHandler.WriteUsableClasses.UsableBy:		Utilizabil de către:
+
+# /DoorRequestHandler.cs
+DoorRequestHandler.OnTick.TooFarAway:			Sunteți prea departe de {0}!
+
+# /PlayerBonusesListRequestHandler
+PlayerBonusesListRequestHandler.HandlePacket.Bonuses:	Bonusuri curente
+PlayerBonusesListRequestHandler.HandlePacket.Magic:		Bonus magic: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Melee:		Bonus corp la corp: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Outpost:	Bonus Fortăreață
+PlayerBonusesListRequestHandler.HandlePacket.Realm:		Prime de Regat:
+PlayerBonusesListRequestHandler.HandlePacket.Relic:		Bonus Relică:
+PlayerBonusesListRequestHandler.HandlePacket.Resist:		Rezistențe
+PlayerBonusesListRequestHandler.HandlePacket.Special:		Bonusuri obiecte speciale
+PlayerBonusesListRequestHandler.HandlePacket.Specs:		+{0} toate competențele
+
+# /PlayerInitRequestHandler
+PlayerInitRequestHandler.AllianceMessage:			Mesaj Alianță: {0}
+PlayerInitRequestHandler.FreeLevel:				Sunteți eligibil pentru un nivel gratuit! Faceți clic pe instructor pentru a-l primi (sau tastați „/freelevel decline” pentru a refuza nivelul gratuit).
+PlayerInitRequestHandler.GuildMessage:				Mesaj Breslă:
+PlayerInitRequestHandler.LevelCap:					Ați depășit limita de nivel pentru acest câmp de luptă!
+PlayerInitRequestHandler.OfficerMessage:				Mesaj Ofițeri: {0}
+PlayerInitRequestHandler.SaferLocation:				Această zonă nu este în prezent sigură și sunteți transportat(ă) într-un loc mai sigur.
+
+# /PlayerMoveItemRequestHandler
+PlayerMoveItemRequestHandler.InvalidTradeTarget:	Țintă de schimb invalidă. ({0})
+PlayerMoveItemRequestHandler.CantTradeInactive:		Nu puteți schimba cu jucători inactivi.
+PlayerMoveItemRequestHandler.CantTradeYourself:		Nu puteți schimba cu dvs. înșivă, haideți!
+PlayerMoveItemRequestHandler.CantRemoveItem:			Nu puteți elimina acest obiect!
+PlayerMoveItemRequestHandler.InvalidItem:				Obiect invalid (slot# {0}).
+PlayerMoveItemRequestHandler.CantDropItem:			Nu puteți arunca acest obiect pe jos!
+PlayerMoveItemRequestHandler.YouDropItem:				Lăsați {0} pe jos!
+PlayerMoveItemRequestHandler.TooFarAway:				Sunteți prea departe pentru a da ceva lui {0}.
+
+# /PlayerPickUpRequestHandler
+PlayerPickUpRequestHandler.HandlePacket.InvalidTarget:	Ținta dvs. este invalidă!
+PlayerPickUpRequestHandler.HandlePacket.Target:		Trebuie să selectați o țintă pentru a obține ceva!
+
+# /PlayerPositionUpdateHandler
+PlayerPositionUpdateHandler.Endurance:				Pierdți anduranță!
+PlayerPositionUpdateHandler.Entered:					Ați intrat în {0}.
+PlayerPositionUpdateHandler.FallingDamage:			Primiți daune de cădere!
+PlayerPositionUpdateHandler.FallPercent:				Pierdți {0}% din totalul punctelor de viață.
+PlayerPositionUpdateHandler.SafeFall:				Daunele au fost reduse datorită abilității de cădere controlată!
+PlayerPositionUpdateHandler.CloudsongFall:			Greutatea dumneavoastră ușoară a atenuat puternic impactul!
+PlayerPositionUpdateHandler.MythSafeFall:			Daunele au fost reduse datorită echipamentului dvs.!
+PlayerPositionUpdateHandler.UnknownZone:			Zonă necunoscută! Sunteți readus(ă) la piatra sufletului.
+
+# /PlayerTrainRequestHandler
+PlayerTrainRequestHandler.MustSelectValidTrainer:	Trebuie să selectați un instructor valid pentru clasa dvs.
+PlayerTrainRequestHandler.AlreadyHaveAbility:		Aveți deja această abilitate!
+PlayerTrainRequestHandler.DoNotMeetRequirements:		Nu îndepliniți cerințele pentru această abilitate!
+PlayerTrainRequestHandler.NotEnoughChampionPoints:	Nu aveți destule puncte de specializare de campion pentru această abilitate!
+PlayerTrainRequestHandler.CouldNotFindChampionSpec:	Nu s-a putut găsi specializarea de campion!
+PlayerTrainRequestHandler.CantTrainSpecAgainThisLevel:	Nu vă mai puteți antrena în această specializare la acest nivel!
+PlayerTrainRequestHandler.SpecializationCostsPoints:	Această specializare costă {0} puncte de specializare!
+PlayerTrainRequestHandler.NotEnoughSpecPoints:		Nu mai aveți suficiente puncte de specializare pentru acest nivel.
+PlayerTrainRequestHandler.RealmAbilityCostsPoints:	{0} costă {1} puncte de abilitate de regat!
+PlayerTrainRequestHandler.NotEnoughRealmAbilityPoints:	Nu aveți destule puncte de abilitate de regat pentru a obține aceasta.
+PlayerTrainRequestHandler.NotExperiencedEnoughForAbility:	Nu aveți suficientă experiență pentru a obține {0} acum. Revenți mai târziu.
+PlayerTrainRequestHandler.TrainingFailed:			Din păcate, antrenamentul a eșuat. Vă rugăm să raportați administratorilor sau maestrului de joc. Mulțumim.
+
+# /PlayerTargetHandler
+PlayerTargetHandler.Gravestone:					Ați încetat să vă țintiți mormântul. Rugăciunile vă eșuează.
+
+# /DestroyItemRequestHandler
+DestroyItemRequestHandler.CantDestroyItem:		Nu puteți distruge {0}!
+DestroyItemRequestHandler.CantDestroyRelic:		Nu puteți distruge o relicvă!
+DestroyItemRequestHandler.CantDestroyEquippedItem:	Nu puteți distruge un obiect echipat!
+DestroyItemRequestHandler.ItemDestroyed:			Distrugeți {0}.
+DestroyItemRequestHandler.CantDestroyPvPFlag:		Steagul PvP nu poate fi distrus!
+
+# /DialogResponseHandler
+DialogResponseHandler.SameRegionGuildLeaderToAccept:	Trebuie să fiți în aceeași regiune cu liderul breslei pentru a accepta o invitație.
+DialogResponseHandler.StillInGuild:				Încă sunteți într-o breaslă, trebuie să părăsiți mai întâi.
+DialogResponseHandler.GuildLeaderNotInGuild:		Jucătorul care invită nu este într-o breaslă!
+DialogResponseHandler.GuildInviteDeclined:			{0} a refuzat invitația dvs.
+DialogResponseHandler.NotInGuild:					Nu sunteți într-o breaslă.
+DialogResponseHandler.InviteExpired:				Această invitație a expirat.
+DialogResponseHandler.GuildDeclineQuit:			Refuzați să părăsiți breasla.
+DialogResponseHandler.StillInGroup:				Încă sunteți în grup.
+DialogResponseHandler.CannotJoinGroupInCombat:		Nu puteți intra într-un grup în timpul luptei!
+DialogResponseHandler.GroupFull:					Grupul este plin.
+DialogResponseHandler.MustBeGuildMemberToUseCommands:	Trebuie să fiți membru al unei bresle înainte de a putea folosi aceste comenzi!
+DialogResponseHandler.NearKeepToClaim:			Trebuie să fiți aproape de fort pentru a-l revendica.
+DialogResponseHandler.DepositInLockbox:			Depuneți {0} în cutia de depozit.
+DialogResponseHandler.LockboxHasMoneyWeeklyPayment:	Cutia de depozit conține acum {0}. Plata săptămânală este {1}.
+DialogResponseHandler.HousePrepaidForPayments:		Casa este acum plătită în avans pentru următoarele {0} plăți.
+
+# /InviteToGroupHandler
+InviteToGroupHandler.InvalidTarget:				Trebuie să alegeți un jucător valid ca țintă.
+InviteToGroupHandler.NotLeader:					Nu sunteți liderul grupului.
+InviteToGroupHandler.GroupFull:					Grupul este deja plin.
+InviteToGroupHandler.TargetInGroup:				Acest jucător face deja parte dintr-un grup.
+InviteToGroupHandler.Invited:					L-ați invitat pe {0} să se alăture grupului.
+InviteToGroupHandler.InvitePrompt1:				{0} v-a invitat să vă alăturați grupului său.
+InviteToGroupHandler.InvitePrompt2:				Acceptați?
+InviteToGroupHandler.InviteNotification:			{0} v-a invitat să vă alăturați grupului său.
+
+# /PlayerAttackRequestHandler
+PlayerAttackRequestHandler.CantEnterMelee:		Nu puteți lupta corp la corp cu o armă de foc activată!
+
+# /PlayerDismountRequestHandler
+PlayerDismountRequestHandler.NoRidingSteed:		Nu sunteți pe o montură!
+
+# /EmblemDialogReponseHandler
+EmblemDialogReponseHandler.EmblemAlreadyInUse:	Acest emblemă este deja folosită de o altă breaslă, vă rugăm să alegeți alta!

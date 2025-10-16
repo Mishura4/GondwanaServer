@@ -42,6 +42,7 @@ SpellDescription.DemiQuarter.AmnesiaDescription:	It doesn't affect weak enemies 
 SpellDescription.DemiQuarter.EndDescription:		This spell has a lower chance to affect ghosts, demons, necromancers, bainshees, and vampiirs.
 SpellDescription.LifeTransfer.MainDescription:		Transfers {0} health from the caster to the target.
 SpellDescription.Heal.MainDescription:				The target regains {0} hit points.
+SpellDescription.HealEnemy.MainDescription:			Heals your enemy on hit by {0} points (off proc).
 SpellDescription.Disease.MainDescription:			Inflicts a wasting disease that slows the target by {0}%, reduces its strength by {1}% and inhibits healing by {2}%.
 SpellDescription.Petrify.MainDescription:			Petrifies the target and turns it into a statue. The target is completely paralyzed and absorbs 50% of physical damage as well as 75% of magical damage it might suffer if attacked.
 SpellDescription.Unpetrify.MainDescription:			Cures the target from Petrification.
@@ -114,7 +115,7 @@ SpellDescription.CureDisease.MainDescription:		All disease effects are removed f
 SpellDescription.CureMezz.MainDescription:			All mesmerization effects are removed from the target.
 SpellDescription.CureNearsight.MainDescription:		All nearsight effects are removed from the target.
 SpellDescription.CurePoison.MainDescription:		All damage over time effects (such as poisons) are removed from the target.
-SpellDescription.DamageSpeedDecrease.MainDescription:		The target is slowed by {0}%. Deals {1} {2} damage to the target.
+SpellDescription.DamageSpeedDecrease.MainDescription:		The target is slowed by {0}%. Deals {1} {2} to the target.
 SpellDescription.DamageToPower.MainDescription:		{0}% of any spell damage done to the target is converted into power.
 SpellDescription.DeathClaw.MainDescription:			{0} reduces the enemy's life by 90%. It does not affect ghosts, weak enemies, or enemies above level {1}, and has a reduced effect on undead and bosses.
 SpellDescription.EnduranceDrain.MainDescription:	{0}% endurance is stolen from the target and transferred to the caster.
@@ -244,6 +245,8 @@ SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Temporarily reduces
 SpellDescription.VampiirEffectivenessDeBuff.CombatCastable:		Can be cast while in combat.
 SpellDescription.VampiirArmorDebuff.MainDescription:		Temporarily debuffs the absorption and armor factor of one random piece of armor on the target by {0}%.
 SpellDescription.VampiirArmorDebuff.AdditionalInfo:			This will only affect the Head, Torso, or Legs armor of the target.
+SpellDescription.VampiirBolt.MainDescription:			Steals {0}% of the target's power and returns it to the caster.
+SpellDescription.VampiirBolt.MainDescription2:			This spell does not affect target(s) above level {0}.
 SpellDescription.IllusionBlade.Part1:					Summons a spectral weapon that fights briefly at your side then vanishes.
 SpellDescription.IllusionBlade.Part2:					The blade acts on its own and cannot be controlled, released or healed.
 SpellDescription.RangeShield.MainDescription:			Shields the caster's group from ranged physical attacks.
@@ -274,6 +277,10 @@ SpellDescription.Occultist.DecrepitShapeShift2:			Your armor absorption is incre
 SpellDescription.Occultist.DecrepitShapeShift3:			Melee attackers have a {0}% chance to become diseased when they strike you, and your rotted flesh regenerates, increasing health regeneration by {1}.
 SpellDescription.Occultist.BringerOfDeath1:				Become the Bringer of Death. Your spell casts ignore interruption but reach only {0}% of their potency and you take {1}% less damage from all sources.
 SpellDescription.Occultist.BringerOfDeath2:				Your movement speed increases by {0}%, even in speedwarps and while in combat. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.
+SpellDescription.DamageReturn.MainDescription:			Reflects {0}% of incoming melee, ranged, and direct spell damage (excluding DoTs) back to the attacker as {1} while active.
+SpellDescription.OffProcShear.Main1:					Retire tout proc offensif actif de la cible.
+SpellDescription.OffProcShear.Main2:					Applique un proc de remplacement maudit dont le sous-sort soigne les ennemis de la cible lorsqu'elle frappe.
+SpellDescription.OffProcShear.ReplacementHeader:		Proc de remplacement :
 
 
 # ML Spells ShortDescriptions

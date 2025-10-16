@@ -1,0 +1,69 @@
+Tasks.SystemDisabled: ប្រព័ន្ធភារៈការត្រូវបានបិទបច្ចុប្បន្ន។
+Tasks.PvPRvRGvGTasks: ======= ភារៈការ PvP/RvR/GvG =======
+Tasks.PvETasks: ======== ភារៈការ PvE ========
+Tasks.CraftingTasks: == ភារៈការដូរតាមជំនាញ (កម្រិតអប្បបរមា: {0}) ==
+Tasks.SpecialTasks: ======== ភារៈការពិសេស ========
+Tasks.TaskCompletionTokenInfo: សំបុត្របញ្ចប់ភារៈការ សម្រាប់ PvP, RvR, GvG, PvE ឬ ភារៈការជំនាញ គួរត្រូវតែយកត្រឡប់ឲ្យអ្នកគ្រប់គ្រងភារៈការ ដើម្បីទទួលរង្វាន់។
+Tasks.SpecialTaskCompletionTokenInfo: សំបុត្របញ្ចប់ភារៈការពិសេស គឺជាសំបុត្រពិសេសសម្រាប់ភារៈការនីមួយៗ។ សំបុត្រទាំងនេះបើកចំណងជើងអ្នកលេងថ្មីៗ ហើយផ្តល់ប្រាក់រង្វាន់ពិសេសដែលពាក់ព័ន្ធនឹងចំណងជើងនោះ។
+Tasks.SnapshotTitle: ភារៈការ
+Tasks.KillEnemyPlayersGroup: សម្លាប់អ្នកលេងសត្រូវពេលនៅក្នុងក្រុម
+Tasks.KillEnemyPlayersAlone: សម្លាប់អ្នកលេងសត្រូវតែម្នាក់ឯង
+Tasks.KillKeepGuards: សម្លាប់យាមបន្ទាយ
+Tasks.TakeKeeps: កាន់កាប់បន្ទាយ
+Tasks.RvRChampionOfTheDay: ក្លាយជាចៅឆ្លង RvR នៃថ្ងៃ
+Tasks.KillTerritoryGuards: សម្លាប់យាមទឹកដី
+Tasks.KillTerritoryBoss: ចាប់យកទឹកដី
+Tasks.TurnInPvPGvGTaskToken: ដាក់សំបុត្របញ្ចប់ភារៈការ PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: សម្លាប់សត្វអន្ទាក់នៅក្នុងរូង
+Tasks.KillOutdoorsCreatures: សម្លាប់សត្វនៅខាងក្រៅ
+Tasks.KillAnimalCreatures: សម្លាប់សត្វចំណោម
+Tasks.KillDemonCreatures: សម្លាប់អារក្ស
+Tasks.KillDragonCreatures: សម្លាប់ដ្រ៉ាកុង
+Tasks.KillElementalCreatures: សម្លាប់អាទិធាស
+Tasks.KillGiantCreatures: សម្លាប់រូបកាយមហិមា
+Tasks.KillHumanoidCreatures: សម្លាប់មនុស្សស្រដៀង
+Tasks.KillInsectCreatures: សម្លាប់សត្វល្អិត
+Tasks.KillMagicalCreatures: សម្លាប់សត្វវេទមន្ត
+Tasks.KillReptileCreatures: សម្លាប់សត្វល្វា
+Tasks.KillPlantCreatures: សម្លាប់រុក្ខជាតិ
+Tasks.KillUndeadCreatures: សម្លាប់អស់កំពស់
+Tasks.TurnInPvETaskToken: ដាក់សំបុត្របញ្ចប់ភារៈការ PvE
+Tasks.SuccessfulItemCombinations: រួមបញ្ចូលវត្ថុជោគជ័យ
+Tasks.MasteredCrafts: ជំនាញឯកទេស
+Tasks.MasterpieceCrafted: ស្នាដៃអស្ចារ្យបានផលិត
+Tasks.TurnInCraftingTaskToken: ដាក់សំបុត្របញ្ចប់ភារៈការជំនាញ
+Tasks.EpicBossesSlaughtered: ថ្នាក់មេអេពីកត្រូវបានសម្លាប់
+Tasks.ItemsSoldToPlayers: ពាណិជ្ជកម្មទីផ្សារជោគជ័យ
+Tasks.SuccessfulPvPThefts: ការលួចពីអ្នកលេងជោគជ័យ
+Tasks.OutlawPlayersSentToJail: សម្លាប់អ្នកលេងបួសច្បាប់
+Tasks.EnemiesKilledInAdrenalineMode: សត្រូវត្រូវបានសម្លាប់ក្រោមស្ថានភាព Adrenaline
+Tasks.EnemyKilledInDuel: ឈ្នះប្រកួតប្រជែង
+Tasks.QuestsCompleted: បេសកកម្មបានបញ្ចប់
+Tasks.MaxLevelReached: កម្រិតអតិបរមា
+Tasks.Level: កម្រិត {0}
+Tasks.KillEnemyPlayersGroupLog: សម្លាប់អ្នកលេងសត្រូវពេលនៅក្នុងក្រុម: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: សម្លាប់អ្នកលេងសត្រូវតែម្នាក់ឯង: {0}/{1}
+Tasks.KillKeepGuardsLog: សម្លាប់យាមបន្ទាយ: {0}/{1}
+Tasks.TakeKeepsLog: កាន់កាប់បន្ទាយ: {0}/{1}
+Tasks.KillTerritoryGuardsLog: សម្លាប់យាមទឹកដី: {0}/{1}
+Tasks.KillTerritoryBossLog: ចាប់យកទឹកដី: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: រួមបញ្ចូលវត្ថុជោគជ័យ: {0}/{1}
+Tasks.MasteredCraftsLog: ជំនាញឯកទេស: {0}/{1}
+Tasks.MasterpieceCraftedLog: ស្នាដៃអស្ចារ្យបានផលិត: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: មេអេពីកត្រូវបានសម្លាប់: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: ពាណិជ្ជកម្មទីផ្សារជោគជ័យ: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: ការលួចពីអ្នកលេងជោគជ័យ: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: សម្លាប់អ្នកលេងបួសច្បាប់: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: សត្រូវត្រូវបានសម្លាប់ក្រោម Adrenaline: {0}/{1}
+Tasks.EnemyKilledInDuelLog: ឈ្នះប្រកួតប្រជែង: {0}/{1}
+Tasks.QuestsCompletedLog: បេសកកម្មបានបញ្ចប់: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: ភារៈការ: អ្នកទទួលបានសំបុត្របញ្ចប់ភារៈការ PvP/RvR/GvG - កម្រិត {0}
+Tasks.TurnInPvETaskTokenMessage: ភារៈការ: អ្នកទទួលបានសំបុត្របញ្ចប់ភារៈការ PvE - កម្រិត {0}
+Tasks.TurnInCraftingTaskTokenMessage: ភារៈការ: អ្នកទទួលបានសំបុត្របញ្ចប់ភារៈការជំនាញ - កម្រិត {0}
+Tasks.EpicBossesSlaughteredSpecialToken: ភារៈការ: អ្នកទទួលបានសំបុត្រពិសេស 'Demon Slayer' - កម្រិត {0}
+Tasks.ItemsSoldToPlayersSpecialToken: ភារៈការ: អ្នកទទួលបានសំបុត្រពិសេស 'Trader' - កម្រិត {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: ភារៈការ: អ្នកទទួលបានសំបុត្រពិសេស 'Thief' - កម្រិត {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: ភារៈការ: អ្នកទទួលបានសំបុត្រពិសេស 'Bounty Hunter' - កម្រិត {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: ភារៈការ: អ្នកទទួលបានសំបុត្រពិសេស 'Wrath' - កម្រិត {0}
+Tasks.EnemyKilledInDuelSpecialToken: ភារៈការ: អ្នកទទួលបានសំបុត្រ Duelist - កម្រិត {0}
+Tasks.QuestsCompletedSpecialToken: ភារៈការ: អ្នកទទួលបានសំបុត្រពិសេស 'Adventurer' - កម្រិត {0}

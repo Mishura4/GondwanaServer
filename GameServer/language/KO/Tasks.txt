@@ -1,0 +1,71 @@
+
+Tasks.SystemDisabled: 현재 임무 시스템이 비활성화되어 있습니다.
+Tasks.PvPRvRGvGTasks: ======= PvP/RvR/GvG 임무 =======
+Tasks.PvETasks: ======== PvE 임무 ========
+Tasks.CraftingTasks: == 제작 임무 (최소 레벨: {0}) ==
+Tasks.SpecialTasks: ======== 특별 임무 ========
+Tasks.TaskCompletionTokenInfo: PvP, RvR, GvG, PvE 또는 제작 임무의 완료 토큰은 보상을 받기 위해 임무 담당자에게 제출해야 합니다.
+Tasks.SpecialTaskCompletionTokenInfo: 특별 임무 완료 토큰은 임무별로 다릅니다. 이 토큰은 새로운 칭호를 해금하고, 해당 칭호와 연계된 특별 보너스를 제공합니다.
+Tasks.SnapshotTitle: 임무
+Tasks.KillEnemyPlayersGroup: 적 플레이어 처치 (파티)
+Tasks.KillEnemyPlayersAlone: 적 플레이어 처치 (솔로)
+Tasks.KillKeepGuards: 성채 경비 처치
+Tasks.TakeKeeps: 성채 점령
+Tasks.RvRChampionOfTheDay: 오늘의 RvR 챔피언 되기
+Tasks.KillTerritoryGuards: 영토 경비 처치
+Tasks.KillTerritoryBoss: 영토 점령
+Tasks.TurnInPvPGvGTaskToken: PvP/RvR/GvG 임무 완료 토큰 제출
+Tasks.KillCreaturesInDungeons: 던전 내 생물 처치
+Tasks.KillOutdoorsCreatures: 야외 생물 처치
+Tasks.KillAnimalCreatures: 동물 처치
+Tasks.KillDemonCreatures: 악마 처치
+Tasks.KillDragonCreatures: 용 처치
+Tasks.KillElementalCreatures: 정령 처치
+Tasks.KillGiantCreatures: 거인 처치
+Tasks.KillHumanoidCreatures: 휴머노이드 처치
+Tasks.KillInsectCreatures: 곤충 처치
+Tasks.KillMagicalCreatures: 마법 생물 처치
+Tasks.KillReptileCreatures: 파충류 처치
+Tasks.KillPlantCreatures: 식물형 생물 처치
+Tasks.KillUndeadCreatures: 언데드 처치
+Tasks.TurnInPvETaskToken: PvE 임무 완료 토큰 제출
+Tasks.SuccessfulItemCombinations: 아이템 조합 성공
+Tasks.MasteredCrafts: 숙련된 제작
+Tasks.MasterpieceCrafted: 걸작 제작
+Tasks.TurnInCraftingTaskToken: 제작 임무 완료 토큰 제출
+Tasks.EpicBossesSlaughtered: 에픽 보스 처치
+Tasks.ItemsSoldToPlayers: 시장 거래 성공
+Tasks.SuccessfulPvPThefts: 플레이어 절도 성공
+Tasks.OutlawPlayersSentToJail: 무법자 플레이어 처치
+Tasks.EnemiesKilledInAdrenalineMode: 아드레날린 상태에서 처치한 적
+Tasks.EnemyKilledInDuel: 결투 승리
+Tasks.QuestsCompleted: 퀘스트 완료
+Tasks.MaxLevelReached: 최대 레벨
+Tasks.Level: 레벨 {0}
+
+Tasks.KillEnemyPlayersGroupLog: 적 플레이어 처치 (파티): {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: 적 플레이어 처치 (솔로): {0}/{1}
+Tasks.KillKeepGuardsLog: 성채 경비 처치: {0}/{1}
+Tasks.TakeKeepsLog: 성채 점령: {0}/{1}
+Tasks.KillTerritoryGuardsLog: 영토 경비 처치: {0}/{1}
+Tasks.KillTerritoryBossLog: 영토 점령: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: 아이템 조합 성공: {0}/{1}
+Tasks.MasteredCraftsLog: 숙련된 제작: {0}/{1}
+Tasks.MasterpieceCraftedLog: 걸작 제작: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: 에픽 보스 처치: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: 시장 거래 성공: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: 플레이어 절도 성공: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: 무법자 플레이어 처치: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: 아드레날린 상태에서 처치한 적: {0}/{1}
+Tasks.EnemyKilledInDuelLog: 결투 승리: {0}/{1}
+Tasks.QuestsCompletedLog: 퀘스트 완료: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: 임무: PvP/RvR/GvG 임무 완료 토큰 획득 - 레벨 {0}
+Tasks.TurnInPvETaskTokenMessage: 임무: PvE 임무 완료 토큰 획득 - 레벨 {0}
+Tasks.TurnInCraftingTaskTokenMessage: 임무: 제작 임무 완료 토큰 획득 - 레벨 {0}
+Tasks.EpicBossesSlaughteredSpecialToken: 임무: 특별 토큰 'Demon Slayer' 획득 - 레벨 {0}
+Tasks.ItemsSoldToPlayersSpecialToken: 임무: 특별 토큰 'Trader' 획득 - 레벨 {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: 임무: 특별 토큰 'Thief' 획득 - 레벨 {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: 임무: 특별 토큰 'Bounty Hunter' 획득 - 레벨 {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: 임무: 특별 토큰 'Wrath' 획득 - 레벨 {0}
+Tasks.EnemyKilledInDuelSpecialToken: 임무: 결투가 토큰을 획득했습니다 - 레벨 {0}
+Tasks.QuestsCompletedSpecialToken: 임무: 특별 토큰 'Adventurer' 획득 - 레벨 {0}

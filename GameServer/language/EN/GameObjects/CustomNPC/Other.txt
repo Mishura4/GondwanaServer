@@ -3,4 +3,5 @@
 # /GameHousingHastener
 GameHousingHastener.GetExamineMessages.Examine:		You examine {0}. {1} is {2} and is a hastener.
 
-
+# /GuardTraineeController
+GuardTraineeController.Master.Busy:		Can't you see I am busy {0}, please be quiet!

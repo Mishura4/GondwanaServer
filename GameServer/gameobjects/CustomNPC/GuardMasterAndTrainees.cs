@@ -417,7 +417,7 @@ namespace DOL.GS
         {
             if (!base.Interact(player))
                 return false;
-            Say("Can't you see I am busy " + player.Name + ", please be quiet!");
+            Say(Language.LanguageMgr.GetTranslation(player.Client, "GuardTraineeController.Master.Busy", player.Name ?? "soldier"));
             return true;
         }
     }

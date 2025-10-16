@@ -3,6 +3,8 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Database;
+using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -25,7 +27,7 @@ namespace DOL.GS.RealmAbilities
                         if (oEffect.Spell.SpellType.ToLower().IndexOf("speeddecrease") != -1 && oEffect.Spell.Value != 99)
                         {
                             GamePlayer player = living as GamePlayer;
-                            if (player != null) player.Out.SendMessage("You may not use this ability while snared!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            if (player != null) player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "ChargeAbility.CheckPreconditions.Snared"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return true;
                         }
                     }
@@ -42,8 +44,8 @@ namespace DOL.GS.RealmAbilities
             if (living.TempProperties.getProperty("Charging", false)
                 || living.EffectList.CountOfType(typeof(SpeedOfSoundEffect), typeof(ArmsLengthEffect), typeof(ChargeEffect)) > 0)
             {
-                if (living is GamePlayer)
-                    ((GamePlayer)living).Out.SendMessage("You already an effect of that type!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                if (living is GamePlayer gp)
+                    gp.Out.SendMessage(LanguageMgr.GetTranslation(gp.Client, "DashingDefenseAbility.Execute.AlreadyEffect"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return;
             }
 

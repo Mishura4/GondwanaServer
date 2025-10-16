@@ -18,7 +18,7 @@ GameUtils.Player.Statistics.Top20Deathblows:				Top 20 Coups mortels
 GameUtils.Player.Statistics.Top20DeathblowsEntry:			{0}. {1} avec {2} coups mortels
 GameUtils.Player.Statistics.Top20Healers:					Top 20 des guérisseurs
 GameUtils.Player.Statistics.Top20HealersEntry:			{0}. {1} avec {2} PV et {3} RP gagnés grâce aux soins
-GameUtils.Player.Statistics.Top20IRS:						Top 20 "Je tiens debout"
+GameUtils.Player.Statistics.Top20IRS:						Top 20 "Je reste immobile"
 GameUtils.Player.Statistics.Top20IRSEntry:				{0}. {1} avec {2} RP/mort
 GameUtils.Player.Statistics.Top20Killers:					Top 20 Tueurs
 GameUtils.Player.Statistics.Top20KillersEntry:			{0}. {1} avec {2} ennemis tués

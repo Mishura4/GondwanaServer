@@ -59,13 +59,13 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("Become a demon of the void for 30 seconds.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfShadowsAbility.AddEffectsInfo.Info1"));
             list.Add("");
-            list.Add("You gain the benefits of both Decrepit and Chthonic forms, with their bonuses increased by 10%.");
-            list.Add("You inflict a wasting disease on the target, slowing its movement.");
-            list.Add("Pets become more powerful, as if under Spirit form.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfShadowsAbility.AddEffectsInfo.Info2"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfShadowsAbility.AddEffectsInfo.Info3"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfShadowsAbility.AddEffectsInfo.Info4"));
             list.Add("");
-            list.Add("Your spells cannot be interrupted.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CallOfShadowsAbility.AddEffectsInfo.Info5"));
         }
     }
 }

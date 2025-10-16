@@ -1,0 +1,328 @@
+# SpellHandler (CS)
+SpellHandler.CancelEffect:			Deaktivujete svůj efekt.
+SpellHandler.PulsingSpellCancelled:		Váš kouzlo bylo deaktivováno.
+SpellHandler.PulsingSpellNoMana:		Nemáte dost many a vaše kouzlo bylo deaktivováno.
+SpellHandler.NoMoreMana:			Spotřebovali jste všechnu manu a nemůžete dál kouzlit!
+SpellHandler.StopPlayingSong:			Přestáváte hrát svou melodii.
+SpellHandler.TooFarStopPlayingSong:		Jste příliš daleko od cíle. Přestáváte hrát svou melodii.
+SpellHandler.CasterMove:			Pohnete se a přerušíte sesílání!
+SpellHandler.BeginCasting:			Začínáte sesílat kouzlo {0}!
+SpellHandler.BeginPlaying:			Začínáte hrát {0}!
+SpellHandler.SpellInterrupted:			{0} na vás útočí a vaše kouzlo je přerušeno!
+SpellHandler.DamageImmunity:			{0} je vůči tomuto efektu imunní!
+SpellHandler.Target.TooFast:			{0} se pohybuje příliš rychle, než aby toto kouzlo účinkovalo!
+SpellHandler.DeadCantCast:			Jste mrtvý a nemůžete kouzlit!
+SpellHandler.CantCastInSiegeram:			Nemůžete kouzlit uvnitř beranidla!
+SpellHandler.SilencedCantCast:			Jste umlčen a dočasně nemůžete kouzlit.
+SpellHandler.PhaseshiftedCantCast:		Jste pod efektem „Posun fáze“ a nemůžete kouzlit.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} je pod efektem „Posun fáze“ a nemůže být tímto kouzlem zasažen!
+SpellHandler.OnlyWorksOnDead:			Toto kouzlo funguje pouze na padlé členy vašeho království!
+SpellHandler.CantAttackSelf:			Nemůžete útočit sám na sebe!
+SpellHandler.TargetNotInView:			Cíl není v dohledu!
+SpellHandler.TargetNotInViewSpellFail:		Cíl je mimo vaše zorné pole. Kouzlo selhalo!
+SpellHandler.TargetNotVisible:			Cíl není viditelný!
+SpellHandler.TargetInvalid:			Neplatný cíl.
+SpellHandler.MustSelectTarget:			Pro toto kouzlo musíte vybrat cíl!
+SpellHandler.TargetTooFar:			Tento cíl je příliš daleko!
+SpellHandler.AreaTargetOutOfRange:		Plošný cíl je mimo dosah. Zvolte bližší místo.
+SpellHandler.MustCastOnControlled:		Toto kouzlo musíte seslat na tvora, kterého ovládáte.
+SpellHandler.SpellRequiresConcentration:	Toto kouzlo vyžaduje {0} bodů soustředění!
+SpellHandler.MaxConcentrationSpells:		Najednou můžete mít aktivních nejvýše 50 koncentračních kouzel!
+SpellHandler.WrongInstrument:			Nemáte vybaven správný typ nástroje!
+SpellHandler.CantCastWhileSitting:		Nemůžete kouzlit vsedě!
+SpellHandler.CantCastWhileSitting2:		Toto kouzlo nemůžete seslat vsedě!
+SpellHandler.CantCastWhileMoving:		Pro seslání tohoto kouzla musíte stát na místě!
+SpellHandler.CantCastOnDead:			Toto kouzlo nelze seslat na mrtvého!
+SpellHandler.MustWaitBeforeUse:			Musíte počkat {0} s, než můžete toto kouzlo znovu použít!
+SpellHandler.InteruptWaitBeforeCast:		Byli jste přerušeni a musíte počkat {0} s, než můžete znovu kouzlit!
+SpellHandler.NotEnoughPower:			Nemáte dost many k seslání tohoto kouzla!
+SpellHandler.GroundTargetNotInView:		Pozemní cíl není v dohledu!
+SpellHandler.OnlyWorksOnFriendlyTargets:	Toto kouzlo funguje jen na spojenecké cíle!
+SpellHandler.LostFocusOnSpell:			Ztrácíte soustředění na své kouzlo {0}.
+SpellHandler.InterruptFocus:			Pohnete se a přerušíte soustředění!
+SpellHandler.YouResistEffect:			Odoláváte efektu!
+SpellHandler.TargetResistsEffect:		{0} odolává efektu!
+SpellHandler.PetResistsEffect:			Váš {0} odolává efektu!
+SpellHandler.NoEffectOnKeepComponent:		Vaše kouzlo nemá účinek na část pevnosti!
+SpellHandler.NoEffectOnTarget:			Vaše kouzlo nemá účinek na {0}!
+SpellHandler.TargetAlreadyMezz:			Cíl je již zasažen omráčením/mezmerizací!
+SpellHandler.CantHaveEffectAgainYet:		Tento efekt ještě nemůžete znovu získat!
+SpellHandler.AlreadyHaveEffectWait:		Tento efekt už máte. Počkejte, až vyprší! Kouzlo selhalo.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} ještě nemůže tento efekt znovu získat!
+SpellHandler.TargetAlreadyHasEffect:		{0} už má tento efekt.
+SpellHandler.WaitUntilExpires:			Počkejte, až vyprší. Kouzlo selhalo.
+SpellHandler.TargetImmune:			Cíl je imunní!
+SpellHandler.MezIntercepted:			Váš obranný efekt předmětu zachytí kouzlo omráčení a rozptýlí se!
+SpellHandler.CeremonialBracerInterceptMez:	Ceremoniální náramek zachycuje vaše omráčení!
+SpellHandler.StunIntercepted:			Váš obranný efekt předmětu zachycuje omráčení a rozptýlí se!
+SpellHandler.YouMiss:				Minete cíl!
+SpellHandler.TargetMissed:			{0} minul svůj cíl!
+SpellHandler.EngageCannotBeUsed:			{0} byl nedávno napaden a nemůžete ho zapojit do boje.
+SpellHandler.NotEnoughEndurance:			Soustředíte se na zablokování úderu!
+SpellHandler.MustTargetPlayer:			Musíte zaměřit hráče.
+SpellHandler.BuffNoEffectOnVampiir:		Váš posilovací efekt nemá na Vampiira žádný účinek!
+SpellHandler.BuffNoEffectOnYou:			Tento posilovací efekt na vás nemá žádný účinek!
+SpellHandler.AlreadyHasEffect:			Tento efekt už máte!
+SpellHandler.AlreadyHasThisEffect:		{0} má tento efekt již aktivní.
+SpellHandler.TargetIsStealthed:			Toto kouzlo nelze použít na skrytý cíl!
+SpellHandler.DefaultDescription:			{0} má hodnotu {1} a poškození {2}.
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Váš společník není v dohledu.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Přerušení linie dohledu v CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	Odtud svůj cíl nevidíte!
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Přerušení linie dohledu v CheckLOSNPCToTarget
+
+SpellHandler.HitTarget:			Zasahujete {0} za {1}{2} poškození!
+SpellHandler.NPCHitTarget:			Váš {0} zasahuje {1} za {2}{3} poškození!
+SpellHandler.CriticalHit:			Udělíte kritický zásah a způsobíte o {0} více poškození!
+SpellHandler.TargetPronoun.Your:		Váš
+SpellHandler.TargetPronoun.Targets:		Cíl
+
+SpellHandler.MustBeStealthedBow:		Musíte být ve skrytu a mít luk, abyste mohli tuto schopnost použít!
+SpellHandler.MustWieldBow:			Pro použití této schopnosti musíte mít luk!
+SpellHandler.Archery.Prepare:			Připravujete {0}.
+SpellHandler.Archery.DisarmedCantCast:		Nemůžete kouzlit, protože jste odzbrojen.
+SpellHandler.ChamberSpell.YouInvulnerable:	Jste momentálně nezranitelný a nemůžete toto kouzlo seslat!
+SpellHandler.ChamberSpell.TargetInvulnerable:	Cíl je momentálně nezranitelný a nelze na něj útočit!
+SpellHandler.SiegeArrow.InvalidTarget:		Pro toto kouzlo musíte zaměřit součást pevnosti!
+SpellHandler.SiegeArrow.InvalidComponentTarget:	Váš cíl musí být součástí pevnosti!
+SpellHandler.SiegeArrow.PrepareSpell:		Připravujete {0}.
+SpellHandler.BumpSpell.TargetHurled:		{0} je vymrštěn do vzduchu!
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Váš cíl už má efekt tohoto typu!
+
+SpellHandler.Convoker.AreaTargetOutOfRange:	Váš plošný cíl je mimo dosah. Zvolte blíže na zemi.
+SpellHandler.Convoker.AreaTargetNotInView:	Váš plošný cíl není v dohledu.
+SpellHandler.Convoker.MustSetGroundTarget:	Musíte nastavit pozemní cíl!
+
+SpellHandler.IchorOfTheDeep.NoTarget:		Pro tuto schopnost potřebujete cíl!
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} je příliš daleko.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	Tuto schopnost již používáte.
+SpellHandler.IchorOfTheDeep.CastMessage:	Sesíláte {0}!
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} sesílá kouzlo!
+SpellHandler.IchorOfTheDeep.HitMob:		Zasahujete {0} za {1} poškození.
+SpellHandler.IchorOfTheDeep.HitPlayer:		Zasahujete {0} za {1} poškození.
+
+SpellHandler.OmniHeal.SelfHealed:		Obnovujete {0} bodů výdrže a {1} bodů many.
+SpellHandler.OmniHeal.TargetHealed:		Léčíte {0} o {1} bodů výdrže a {2} bodů many.
+SpellHandler.OmniHeal.YouAreHealed:		{0} vás léčí o {1} bodů výdrže a {2} bodů many.
+SpellHandler.OmniHarm.InflictLossesToTarget:	Způsobujete {2} také ztrátu {0} výdrže a {1} many!
+SpellHandler.OmniHarm.InflictLossesToYou:		{0} vám způsobuje ztrátu {1} výdrže a {2} many!
+
+SpellHandler.HealSpell.TargetDead:		{0} je mrtvý!
+SpellHandler.HealSpell.NoHelp:			Tento hráč si nepřeje pomoc.
+SpellHandler.HealSpell.FullyHealedSelf:		Jste plně vyléčen.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} je plně vyléčen.
+SpellHandler.HealSpell.RealmPointsGained:	Získáváte {0} bodů království za vyléčení člena svého království.
+SpellHandler.HealSpell.SelfHealed:		Léčíte se o {0} životů.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} se léčí o {1} životů.
+SpellHandler.HealSpell.TargetHealed:		Léčíte {0} o {1} životů!
+SpellHandler.HealSpell.TargetDamageToHeal:		Léčíte {0} o {1} životů místo způsobení poškození kvůli jeho/jejímu magickému štítu!
+SpellHandler.HealSpell.YouAreHealed:		{0} vás léčí o {1} životů.
+SpellHandler.HealSpell.CriticalHeal:		Provádíte kritické léčení a obnovujete o {0} životů více!
+SpellHandler.HealSpell.EfficientHealingBuff:	Váš efekt „efektivita léčení“ vám poskytuje {0} dodatečných léčivých bodů!
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Váš efekt „efektivita výdrže“ vám při léčení poskytuje {0} dodatečných bodů výdrže!
+SpellHandler.HealSpell.TargetDamnedDamaged:		Jste proklet! Léčivé kouzlo vám způsobí {0} poškození místo léčení!
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	Léčení je méně účinné, protože jste proklet!
+SpellHandler.HealSpell.DamnedNoHeal:		Léčivé kouzlo na vás nepůsobí, protože jste proklet!
+SpellHandler.HealSpell.YouDiseased:			Jste nemocný, léčení je sníženo o {0}%!
+SpellHandler.HealSpell.HealingReduced:		Léčení je sníženo o {0}% kvůli efektům inhibice léčení.
+SpellHandler.HealSpell.HealingReducedShield:		Léčení je sníženo o {0}% kvůli ochranné bariéře {1}.
+SpellHandler.HealSpell.HealingNull:			Vaše kouzlo cíl neléčí kvůli inhibici léčení.
+SpellHandler.HealSpell.HealingNullYou:		Léčení selhalo kvůli vašim inhibičním efektům.
+SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	Vysávání života nemá účinek, protože jste prokletí vy i váš cíl!
+SpellHandler.LifeDrain.TargetDamnedDamaged:		Jste proklet! Vysávání života vám způsobí {0} poškození místo léčení!
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	Vysávání života je méně účinné, protože {0} je proklet!
+SpellHandler.LifeDrain.DamnedNoHeal:		Vysávání života vás neléčí, protože jste proklet!
+SpellHandler.LifeDrain.DamnedTargetHealed:		{0} je vyléčen a obnoví si {1} životů!
+SpellHandler.LifeDrain.DamnedTargetCriticallyHealed:	{0} obdrží kritické léčení a obnoví si {1} životů!
+SpellHandler.LifeDrain.DamnedYouHealed:		Jste vyléčen a obnovíte si {0} životů!
+SpellHandler.LifeDrain.DamnedYouCriticallyHealed:	Obdržíte kritické léčení a obnovíte si {0} životů!
+SpellHandler.SpreadHeal.GroupFullyHealed:	Vaše skupina je již plně vyléčena!
+
+SpellHandler.Zephyr.NoAttackInZephyr:		Jste nesen Zefýrem a nemůžete být napaden!
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Váš cíl je nesen Zefýrem a nemůže být napaden!
+SpellHandler.Zephyr.PickedUpByZephyr:		Mocný Zefýr vás vznese do výše!
+SpellHandler.Phaseshift.NotEnoughEndurance:	K použití tohoto kouzla potřebujete 50 % výdrže!
+SpellHandler.Groupport.CannotUseAbilityHere:	Tuto schopnost zde nemůžete použít!
+SpellHandler.Groupport.BindInAnotherRegion:	Pro použití této schopnosti se svažte v jiném regionu!
+SpellHandler.Groupport.GroupInCombat:		Nemůžete teleportovat skupinu, která je v boji!
+SpellHandler.Groupport.NotInGroup:		Nejste ve skupině!
+SpellHandler.TargetNoLongerInRange:		Váš cíl již není v dosahu.
+SpellHandler.TargetNoLongerInView:		Váš cíl již není v dohledu.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} se pohybuje příliš rychle, než aby toto kouzlo účinkovalo!
+SpellHandler.Earthquake.Ending:			Zemětřesení skončilo.
+SpellHandler.YouDamnedResistEffect:		Jste proklet a odoláváte efektu!
+SpellHandler.TargetDamnedResistsEffect:		{0} je proklet a odolává efektu!
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	Toto kouzlo nemůžete seslat v boji!
+SpellHandler.VampiirBolt.PowerTaken:		{0} vám odčerpává {1} many!
+SpellHandler.VampiirBolt.PowerReceived:		Získáváte {0} many od {1}!
+SpellHandler.VampiirBolt.NoPowerReceived:	Neobnovili jste žádnou manu od {0}!
+SpellHandler.VampiirBolt.TargetTooHigh:		Cíl nemůže být tímto kouzlem zasažen, protože jeho úroveň je příliš vysoká!
+
+SpellHandler.WrathofChampions.CastSpell:	Sesíláte {0}!
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} sesílá kouzlo!
+SpellHandler.WrathofChampions.HitMob:		Zasahujete {0} za {1} poškození.
+SpellHandler.WrathofChampions.HitPlayer:		Zasahujete {0} za {1} poškození.
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} vás zasahuje za {1} poškození.
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Povolit {0}, aby vás vzkřísil s {1} procenty života?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Momentálně se vás nikdo nepokouší vzkřísit.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Vzkříšení odmítáte.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Byl jste vzkříšen {0}!
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	Zázračná síla vás vrací k životu!
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	Zázračná síla vás vrací k životu! Obnovuje vám {0}% života.
+SpellHandler.ResurrectSpellHandler.RezExpired:		Vaše kouzlo vzkříšení vypršelo.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Váš cíl již zvažuje vzkříšení!
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		Hráč, kterého jste vzkřísili, po smrti nepřinesl žádné body království.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		Proto za jeho vzkříšení nezískáte body království.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Vaše soustředění slábne.
+SpellHandler.Battlewarder.WarderFallen:		Váš Strážce bitvy padl!
+SpellHandler.Convoker.TemplateNotFound:		NPCTemplate {0} nebyl nalezen!
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Váš společník již má aktivní schopnost tohoto typu.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	Tuto schopnost nemůžete použít na svého vlastního společníka.
+
+SpellHandler.BoltSpell.PartialBlock:		Částečně blokujete kouzlo od {0}!
+SpellHandler.BoltSpell.Blocked:			{0} blokuje!
+
+SpellHandler.Arrow.Block:			Blokujete šíp od {0}!
+SpellHandler.Arrow.ArrowBlocked:			{0} blokuje váš šíp!
+SpellHandler.Archery.PenetrateBarrier:		Výstřel pronikl vaší magickou bariérou!
+SpellHandler.Archery.StrikeAbsorbed:		Váš výstřel byl pohlcen magickou bariérou!
+SpellHandler.Archery.BlowAbsorbed:		Úder byl pohlcen magickou bariérou!
+SpellHandler.Archery.Interrupted:			{0} na vás útočí a váš výstřel je přerušen!
+
+SpellHandler.Chamber.CannotUseState:		Toto nemůžete použít ve svém současném stavu.
+SpellHandler.Chamber.TargetNotAttackable:	Tento cíl nelze nyní napadnout!
+SpellHandler.Chamber.SelectFirstSpell:		Vyberte první kouzlo pro svůj {0}.
+SpellHandler.Chamber.NoSpellsLoaded:		V {0} nejsou nahrána žádná kouzla.
+SpellHandler.Chamber.ReadyForUse:		Váš {0} je připraven k použití.
+SpellHandler.Chamber.CastsSpell:			{0} sesílá kouzlo!
+
+SpellHandler.Lifedrain.Heal:			Kradete {0} život{1}.
+SpellHandler.Lifedrain.NoAbsorb:		Nemůžete absorbovat další životy.
+SpellHandler.PowerDrain.PowerGain:		Sifonujete {0} many z cíle!
+SpellHandler.PowerDrain.PowerLoss:		{0}% vaší many bylo vysáto {1}!
+SpellHandler.PowerDrain.NoAbsorb:		Nemůžete absorbovat další manu.
+SpellHandler.PowerLock.SpellHit:			{0} vám vysává {1} many.
+SpellHandler.PowerLock.StealSuccess:		Kradete {1} many od {0}!
+SpellHandler.PowerLock.StealOverflow:		Kradete {1} many od {0}! ({2} přebytek)
+
+SpellHandler.PrimerSpell.EffectExpired:		Efekt vašeho modifikačního kouzla vypršel.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	Pohybem rušíte své modifikační kouzlo.
+
+SpellHandler.BuffShear.ShearSuccess:		Vaše kouzlo strhává část posilující magie z cíle.
+SpellHandler.BuffShear.EnhancingMagicRipped:	Část vaší posilující magie byla odstraněna kouzlem!
+SpellHandler.BuffShear.ConnectionTooStrong:	Vazba cíle na jeho posílení je příliš silná na odstranění.
+SpellHandler.BuffShear.NoEnhancementFound:	Na cíli nebylo nalezeno žádné takové posílení.
+SpellHandler.AblativeShear.ShearSuccess:		Vaše kouzlo odstraňuje ablativní štíty cíle.
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Váš ablativní štít byl odstraněn kouzlem!
+SpellHandler.AblativeShear.NoEnhancementFound:	Cíl nemá žádný ablativní štít.
+
+SpellHandler.Conversion.MagicalAbsorption:	Magické kouzlo absorbuje {0} poškození z vašeho útoku!
+SpellHandler.Conversion.ConvertToHealth:	Převádíte {0} poškození na životy.
+SpellHandler.Conversion.CannotConvertMoreHealth:	Nemůžete převést více na životy!
+SpellHandler.Conversion.ConvertToEndurance:	Převádíte {0} poškození na výdrž.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	Nemůžete převést více na výdrž!
+SpellHandler.Conversion.ConvertToMana:		Převádíte {0} poškození na body many.
+SpellHandler.Conversion.CannotConvertMoreMana:	Nemůžete převést více na body many!
+SpellHandler.PetConversion.AbsorbPower:		Absorbujete {0} bodů many.
+SpellHandler.PetConversion.ManaFull:		Váš ukazatel many je již plný!
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	Bariéra snížení poškození absorbuje {0} poškození!
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	Bariéra snížení poškození absorbuje {0} poškození z vašeho útoku!
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	Bariéra vám vrací {0} bodů many.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	Kradete {0} život{1}.
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	Nemůžete absorbovat další životy.
+SpellHandler.DamageToPower.PowerSteal:		Kradete {0} bod{1} many.
+SpellHandler.DamageToPower.NoMorePower:		Nemůžete absorbovat další manu.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} vám krade {1} výdrže!
+SpellHandler.EnduranceDrain.StealSuccess:	Kradete {1} výdrže od {0}!
+SpellHandler.EnduranceDrain.StealPoints:		Kradete {0} bod{1} výdrže.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	Nemůžete absorbovat další výdrž.
+SpellHandler.EnduranceHeal.CasterFull:		Váš ukazatel výdrže je plný.
+SpellHandler.EnduranceHeal.TargetFull:		{0} má plný ukazatel výdrže.
+SpellHandler.EnduranceHeal.CasterHealed:		Obnovujete {0} bodů výdrže.
+SpellHandler.EnduranceHeal.TargetHealed:		Obnovujete {0} bodů výdrže pro {1}.
+SpellHandler.EnduranceHeal.TargetRestored:	Vaši výdrž obnovil {0} o {1} bodů.
+SpellHandler.EnduranceHeal.TargetTooHigh:	Nelze seslat léčení výdrže, pokud má cíl více než 90 % ukazatele naplněno!
+SpellHandler.HealthToEndurance.TransferLife:	Převádíte {0} život(ů) na výdrž!
+SpellHandler.HealthToEndurance.InsufficientHealth:	Vaše zdraví je nedostatečné k provedení tohoto kouzla!
+SpellHandler.HealthToEndurance.Diseased:		Jste nemocný! Převod životů na výdrž je snížen!
+SpellHandler.HealthToEndurance.DamnedNoEffect:	Jste proklet! Převod životů na výdrž selhává!
+SpellHandler.HealthToEndurance.DamnedPartialEffect:	Jste proklet! Převod životů na výdrž je snížen!
+SpellHandler.HealthToEndurance.HealthLost:	Převádíte {0}% svých životů na výdrž!
+SpellHandler.HealthToEndurance.EnduranceGained:	Získáváte zpět {0}% výdrže!
+
+SpellHandler.FocusShell.NoPets:			Toto kouzlo nelze seslat na společníky!
+SpellHandler.FocusShell.SameRealm:		Toto kouzlo funguje jen na členy vašeho království!
+SpellHandler.FocusShell.MustBeRvR:		Toto kouzlo lze použít pouze v RvR nebo PvP.
+SpellHandler.SummonSpell.PetControl:		{0} je nyní pod vaší kontrolou.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	Toto kouzlo zde nemůžete seslat!
+
+SpellHandler.PowerHeal.FullPowerOther:		Ukazatel many {0} je plný!
+SpellHandler.PowerHeal.RestorePowerSelf:	Obnovujete {0} bodů many.
+SpellHandler.PowerHeal.RestorePowerOther:	Obnovujete {0} bodů many pro {1}!
+SpellHandler.PowerHeal.PowerRestored:		Vaši manu obnovil {0} o {1} bodů.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	Nemůžete převádět manu sám na sebe!
+SpellHandler.PowerTransfer.TransferSuccess:	Převádíte {0} bodů many na {1}!
+SpellHandler.PowerTransfer.PowerReceived:	{0} na vás převádí {1} bodů many!
+SpellHandler.PowerRegenBuff.NoEffect:		Toto kouzlo nemá na tuto třídu žádný účinek!
+
+SpellHandler.Silence.AlreadyAffected:		Váš cíl je již zasažen efektem tohoto typu!
+SpellHandler.SpeedEnhancement.CombatRecent:	Nedávno jste byli v boji; kouzlo na vás nepůsobí!
+SpellHandler.WaterBreathing.StartEffect:	Můžete se volně pohybovat a dýchat pod vodou jako na vzduchu!
+SpellHandler.WaterBreathing.EndEffect:		Natahujete vodu a zjišťujete, že již nemůžete dýchat pod vodou!
+
+SpellHandler.GroundAreaEffect.AlreadyActive:	Již máte aktivní pozemní efekt a nemůžete seslat další!
+SpellHandler.PowerShield.EffectStart:		Starobylá magie posiluje vaši životní esenci.
+SpellHandler.PowerShield.EffectStartOthers:	Starobylá magie posiluje životní esenci {0}.
+SpellHandler.PowerShield.EffectExpires:		Váš magický štít se rozplynul!
+SpellHandler.PowerShield.EffectExpiresOthers:	Magický štít {0} se rozplynul!
+SpellHandler.PowerShield.InsufficientMana:	Nemáte dost many k aktivaci léčivého efektu štítu.
+SpellHandler.DebuffImmunity.Refreshed:		Vaše ochrana proti oslabujícím kouzlům byla obnovena.
+SpellHandler.DebuffImmunity.Start:		Vaše ochrana proti oslabujícím kouzlům je po dobu trvání kouzla zvýšena!
+SpellHandler.DebuffImmunity.GainImmunity:	Získáváte imunitu vůči oslabujícím kouzlům a zvyšujete šanci na odolání o {0}%.
+SpellHandler.DebuffImmunity.WornOff:		Vaše imunita vůči oslabujícím kouzlům slábne.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	Šance {0} odolat oslabujícím kouzlům se zvýšila.
+SpellHandler.DebuffImmunity.TargetWornOff:	Imunita {0} vůči oslabujícím kouzlům vypršela.
+SpellHandler.GatewayPersonalBind.CantUseHere:	Tento předmět zde nemůžete použít!
+SpellHandler.GatewayPersonalBind.MustStandStill:	Pro použití tohoto předmětu musíte stát na místě!
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	Nedávno jste byli v boji a tento předmět nelze použít!
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:		Již připravujete dálkové kouzlo.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Již připravujete nepřerušitelné kouzlo.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		Již připravujete kouzlo bez nákladů many.
+SpellHandler.Warlock.MustFinishCastingRange:		Musíte dokončit sesílání dálkového kouzla, než jej budete moci znovu seslat.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:	Musíte dokončit sesílání nepřerušitelného kouzla, než jej znovu seslat.
+SpellHandler.Warlock.MustFinishCastingPowerless:		Musíte dokončit sesílání kouzla bez nákladů many, než jej znovu seslat.
+
+SpellHandler.Cleric.Ascendance.OnEnd:			Stav „Pozdvižení“ končí.
+SpellHandler.Cleric.Ascendance.OnStart:		Dosahujete Pozdvižení a výrazně zvyšujete svou efektivitu.
+SpellHandler.Cleric.Ascendance.CanceledMoC:		Vaše Mistrovství soustředění se při vstupu do Pozdvižení rozptyluje.
+SpellHandler.Cleric.Ascendance.CannotCast:		Pozdvižení znemožňuje sesílat {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:	Vaše Pozdvižení se rozplyne, když soustředíte koncentraci.
+SpellHandler.Cleric.DamageReturn.Active:		Mocná reflektivní aura vás obklopuje.
+SpellHandler.Cleric.DamageReturn.WornOff:		Vaše odrazná bariéra vypršela.
+SpellHandler.Cleric.DamageReturn.VictimReflect:	Vaše bariéra odráží {0} {1} na útočníka.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:	Utrpíte {0} {1} kvůli reflektivní magické bariéře protivníka.
+SpellHandler.Cleric.OffProcShear.Removed:		Útočné proky cíle byly odstraněny!
+SpellHandler.Cleric.OffProcShear.YourProcRipped:	Vaše útočné proky byly odstraněny!
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:	Na cíl byl aplikován náhradní prok „prokletí“!
+SpellHandler.Cleric.OffProcShear.YouAreCursed:		Jste proklet: vaše zásahy léčí nepřátele.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:	Na cíli nebyly nalezeny žádné útočné proky.
+
+SpellHandler.Occultist.CastCondition1:			Pro seslání tohoto kouzla musíte být v chthónské formě.
+SpellHandler.Occultist.CastCondition2:			Toto kouzlo nemůžete seslat, když jste v chthónské formě.
+SpellHandler.Occultist.CastCondition3:			Toto kouzlo nemůžete seslat v křehké nebo duchovní formě.
+SpellHandler.Occultist.CastCondition4:			Před sesláním tohoto kouzla musíte opustit aktuální formu.
+SpellHandler.Occultist.Self.AbsorbToPower:		Sifonujete {0} many z přijatého útoku.
+
+SpellHandler.SummonMonster.Target.Resist:			{0} byl přiveden z Limbus jako zombie a zůstává vůči tomuto kouzlu necitlivý!
+SpellHandler.IllusionSpell.Target.Resist:			{0} vyvolal iluzi a nemůže být tímto kouzlem zasažen!
+SpellHandler.Morphed.Target.Resist:			{0} prošel proměnou a nemůže být tímto kouzlem zasažen!
+
+SpellHandler.DelveInfo.Sec:			s

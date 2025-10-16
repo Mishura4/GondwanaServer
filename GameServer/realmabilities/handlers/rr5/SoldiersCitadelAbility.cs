@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -61,11 +62,11 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("+50% block/parry 30s, -10% block/parry 15s.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SoldiersCitadelAbility.AddEffectsInfo.Info1"));
             list.Add("");
-            list.Add("Target: Self");
-            list.Add("Duration: 45 sec");
-            list.Add("Casting time: Instant");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SoldiersCitadelAbility.AddEffectsInfo.Info2"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SoldiersCitadelAbility.AddEffectsInfo.Info3"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SoldiersCitadelAbility.AddEffectsInfo.Info4"));
         }
 
     }

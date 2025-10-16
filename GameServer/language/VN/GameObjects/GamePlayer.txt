@@ -1,0 +1,510 @@
+# GAMEPLAYER (VI)
+GameObjects.GamePlayer.AddAbility.YouLearn:            Bạn học được kỹ năng {0}.
+GameObjects.GamePlayer.AddSpecialisation.YouLearn:     Bạn học được chuyên môn {0}.
+GameObjects.GamePlayer.AddSpellLine.YouLearn:          Bạn học được dòng phép {0}.
+
+GameObjects.GamePlayer.ApplyPoison.CantApplyRecentCombat:   Bạn vừa chiến đấu gần đây và hiện chưa thể tẩm độc.
+GameObjects.GamePlayer.ApplyPoison.CantPoisonWeapon:        Bạn không thể dùng độc trên vũ khí này.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoison:           Bạn không thể dùng loại độc này.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Bạn không thể dùng các loại độc này.
+GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Chỉ có thể tẩm độc lên vũ khí.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Bạn không thể tẩm lại độc lên vũ khí này.
+GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Bạn không thể tẩm độc cho {0}!
+
+GameObjects.GamePlayer.AblativeArmor.Target:        Giáp của bạn hấp thụ thêm {0} sát thương nhờ hiệu ứng giáp tiêu hao!
+GameObjects.GamePlayer.AblativeArmor.Attacker:      Giáp của {0} hấp thụ thêm {1} sát thương nhờ hiệu ứng giáp tiêu hao!
+
+GameObjects.GamePlayer.Attack.AlreadyDead:          {0} đã chết rồi.
+GameObjects.GamePlayer.Attack.Blocked:              {0} chặn đòn tấn công của bạn.
+GameObjects.GamePlayer.Attack.CantBeAttacked:       Mục tiêu này không thể bị tấn công.
+GameObjects.GamePlayer.Attack.CantCritical:         Bạn không thể gây chí mạng lên mục tiêu; bạn thực hiện một đòn đánh thường.
+GameObjects.GamePlayer.Attack.CantSeeTarget:        Bạn không nhìn thấy mục tiêu.
+GameObjects.GamePlayer.Attack.CantUseQuiver:        Bạn không thể dùng loại đạn đã chọn với vũ khí này.
+GameObjects.GamePlayer.Attack.CouldRepair:          {0} của bạn có thể được sửa.
+GameObjects.GamePlayer.Attack.Critical:             Bạn gây chí mạng vào {0}, gây thêm {1} sát thương!
+GameObjects.GamePlayer.Attack.Evade:                {0} tấn công bạn, nhưng bạn né được!
+GameObjects.GamePlayer.Attack.Evaded:               {0} né đòn tấn công của bạn!
+GameObjects.GamePlayer.Attack.Fumble:               Bạn lỡ tay và cần một lúc để trấn tĩnh!
+GameObjects.GamePlayer.Attack.Fumbled:              {0} lỡ tay!
+GameObjects.GamePlayer.Attack.HitsYour:             {0} đánh trúng {1} của bạn, gây {2}{3} sát thương!
+GameObjects.GamePlayer.Attack.HitsYou:              {0} đánh trúng bạn, gây {1}{2} sát thương!
+GameObjects.GamePlayer.Attack.HitsYouCritical:      {0} đánh chí mạng bạn, gây thêm {1} sát thương!
+GameObjects.GamePlayer.Attack.Intercepted:          {0} lao ra trước {1} và chắn đòn!
+GameObjects.GamePlayer.Attack.InterceptedHit:       {0} {1}{2}, nhưng bạn đánh trúng {3} gây {4}{5} sát thương!
+GameObjects.GamePlayer.Attack.InterceptHit:         {0} {1}{2} và bạn gây {3}{4} sát thương!
+GameObjects.GamePlayer.Attack.Interrupted:          {0} tấn công bạn và hành động {1} của bạn bị gián đoạn!
+GameObjects.GamePlayer.Attack.InterruptedCrafting:  Bạn ngừng chế tạo vật phẩm.
+GameObjects.GamePlayer.Attack.Location.Arm:         Cánh tay
+GameObjects.GamePlayer.Attack.Location.Foot:        Bàn chân
+GameObjects.GamePlayer.Attack.Location.Hand:        Bàn tay
+GameObjects.GamePlayer.Attack.Location.Head:        Đầu
+GameObjects.GamePlayer.Attack.Location.Leg:         Chân
+GameObjects.GamePlayer.Attack.Location.Torso:       Thân
+GameObjects.GamePlayer.Attack.Miss:                 Bạn đánh trượt.
+GameObjects.GamePlayer.Attack.Missed:               {0} tấn công bạn nhưng đánh trượt.
+GameObjects.GamePlayer.Attack.MustSelectQuiver:     Bạn phải chọn một ô trong ống tên.
+GameObjects.GamePlayer.Attack.NeedRepair:           {0} của bạn cần được sửa chữa.
+GameObjects.GamePlayer.Attack.NeedRepairDire:       {0} của bạn cần sửa chữa khẩn cấp.
+GameObjects.GamePlayer.Attack.NeedTarget:           Bạn phải chọn mục tiêu để tấn công.
+GameObjects.GamePlayer.Attack.NotInView:            Không thấy {0} trong tầm mắt.
+GameObjects.GamePlayer.Attack.Parried:              {0} đỡ được đòn của bạn.
+GameObjects.GamePlayer.Attack.Parry:                {0} tấn công bạn, nhưng bạn đỡ được!
+GameObjects.GamePlayer.Attack.ReadyToFire:          Bạn đã sẵn sàng bắn.
+GameObjects.GamePlayer.Attack.StrafMiss:            Di chuyển ngang làm bạn đánh trượt.
+GameObjects.GamePlayer.Attack.TooFarAway:           {0} quá xa để tấn công.
+GameObjects.GamePlayer.Attack.TooTired:             Bạn quá mệt để giữ mũi tên/nỏ lâu hơn.
+GameObjects.GamePlayer.Attack.Type.Shot:            Phát bắn
+GameObjects.GamePlayer.Attack.Type.Throw:           Ném
+GameObjects.GamePlayer.Attack.WithYour:             với
+GameObjects.GamePlayer.Attack.YouAttack:            Bạn tấn công
+GameObjects.GamePlayer.Attack.YouShot:              Bạn bắn vào
+GameObjects.GamePlayer.Attack.CounterAttackSuccess: Bạn dùng {0} để phản công.
+GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:   Không thể dùng kiểu phản công với vũ khí hiện tại.
+GameObjects.GamePlayer.Attack.CounterAttackNoStyle:       Không tìm thấy kiểu phản công cho lớp của bạn.
+GameObjects.GamePlayer.Attack.CounterAttackByEnemy:       {0} thực hiện phản công!
+
+GameObjects.GamePlayer.Bind.Bound:          Linh hồn của bạn đã được gắn với tảng đá linh hồn này.
+GameObjects.GamePlayer.Bind.CantBindDead:   Cái chết ngăn bạn gắn linh hồn vào đá linh hồn.
+GameObjects.GamePlayer.Bind.CantHere:       Không có đá linh hồn gần đó để bạn gắn kết.
+GameObjects.GamePlayer.Bind.LastBindPoint:  Điểm gắn kết cuối: {0}.
+GameObjects.GamePlayer.Bind.MustWait:       Bạn phải chờ {0} giây trước khi gắn kết lại.
+
+GameObjects.GamePlayer.CastSpell.AlreadyCastFollow:     Bạn đang niệm phép! Phép này đã được đưa vào hàng đợi.
+GameObjects.GamePlayer.CastSpell.AlreadyCastNoQueue:    Bạn đang niệm phép. Dùng “/noqueue” để bật hàng đợi phép.
+GameObjects.GamePlayer.CastSpell.AlreadyChosenSpells:   Bạn đã chọn phép cho buồng này rồi.
+GameObjects.GamePlayer.CastSpell.AlreadyPlaySong:       Bạn đã chơi một giai điệu.
+GameObjects.GamePlayer.CastSpell.CantCastMezzed:        Bạn không thể niệm khi đang bị thôi miên.
+GameObjects.GamePlayer.CastSpell.CantCastStunned:       Bạn không thể niệm khi đang bị choáng.
+GameObjects.GamePlayer.CastSpell.CantCastFumblingWords: Thần chú của bạn thất bại; bạn không thể niệm phép!
+GameObjects.GamePlayer.CastSpell.CantSpellDirectly:     Bạn không thể niệm trực tiếp phép này!
+GameObjects.GamePlayer.CastSpell.FollowSpell:           Bạn đã chuẩn bị {0} làm phép tiếp nối!
+GameObjects.GamePlayer.CastSpell.NotAFollowSpell:       Không thể chuẩn bị phép này làm phép tiếp nối!
+GameObjects.GamePlayer.CastSpell.PrimarySpellFirst:     Trước tiên bạn phải lưu phép chính!
+GameObjects.GamePlayer.CastSpell.PrepareSecondarySpell: Bạn chuẩn bị nó làm phép phụ!
+GameObjects.GamePlayer.CastSpell.SelectSecondSpell:     Hãy chọn phép thứ hai cho {0} của bạn.
+GameObjects.GamePlayer.CastSpell.SpellInChamber:        Bạn nạp {0} vào {1} của mình.
+GameObjects.GamePlayer.CastSpell.SpellNotInChamber:     Không thể lưu phép này trong buồng này.
+GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:   Chỉ phép phụ mới có thể theo sau phép đã niệm!
+GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:   Bạn đang niệm phép.
+GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast:    Bạn phải chờ {0} giây trước khi niệm!
+
+GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:          Mục tiêu quá xa để bộc bạch của bạn tấn công.
+GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:   Bạn phải chọn điểm đến cho sinh vật của mình.
+GameObjects.GamePlayer.CommandNpcAttack.KillTarget:                Bạn ra lệnh cho {0} giết mục tiêu!
+GameObjects.GamePlayer.CommandNpcAttack.IsConfused:                {0} của bạn đang bối rối!
+GameObjects.GamePlayer.CommandNpcAttack.FollowYou:                 Bạn ra lệnh cho {0} theo bạn!
+GameObjects.GamePlayer.CommandNpcAttack.Stay:                      Bạn ra lệnh cho {0} ở yên!
+GameObjects.GamePlayer.CommandNpcAttack.ComeHere:                  Bạn ra lệnh cho {0} lại gần bạn.
+GameObjects.GamePlayer.CommandNpcAttack.GoToTarget:                Bạn ra lệnh cho {0} đến mục tiêu.
+GameObjects.GamePlayer.CommandNpcAttack.Passive:                   Bạn ra lệnh cho {0} rút khỏi giao tranh!
+GameObjects.GamePlayer.CommandNpcAttack.Aggressive:                Bạn ra lệnh cho {0} tấn công mọi kẻ địch!
+GameObjects.GamePlayer.CommandNpcAttack.Denfensive:                Bạn ra lệnh cho {0} bảo vệ bạn!
+
+GameObjects.GamePlayer.CraftItem.DontHaveAbilityMake:              Bạn thiếu kỹ năng cần thiết để chế tạo vật phẩm này.
+GameObjects.GamePlayer.CurrentTitle.TitleCleared:                  Danh hiệu của bạn đã bị xóa.
+
+GameObjects.GamePlayer.Die.CorpseLies:             {0} đã chết. Xác của hắn/cô ta nằm trên đất.
+GameObjects.GamePlayer.Die.DeadRVR:                Bạn đã ngã xuống vì vương quốc của mình và không mất kinh nghiệm.
+GameObjects.GamePlayer.Die.DeathN1:                Đây là cái chết đầu tiên của bạn ở cấp này. Mất mát kinh nghiệm và thể chất được giảm mạnh.
+GameObjects.GamePlayer.Die.DeathN2:                Đây là cái chết thứ hai của bạn ở cấp này. Mất mát kinh nghiệm và thể chất được giảm.
+GameObjects.GamePlayer.Die.DuelDefeated:           {0} đã bị {1} đánh bại trong một trận đấu tay đôi!
+GameObjects.GamePlayer.Die.DuelWinner:             {0} thắng cuộc đấu tay đôi!
+GameObjects.GamePlayer.Die.Killed:                 {0} vừa bị giết.
+GameObjects.GamePlayer.Die.KilledBy:               {0} vừa bị {1} giết.
+GameObjects.GamePlayer.Die.KilledByLocation:       {0} vừa bị {1} giết tại {2}.
+GameObjects.GamePlayer.Die.KilledLocation:         {0} vừa bị giết tại {1}.
+GameObjects.GamePlayer.Die.LoseExperience:         Bạn mất kinh nghiệm.
+GameObjects.GamePlayer.Die.ReleaseToReturn:        Bạn đã chết. Gõ “/release” để trở về đá linh hồn.
+GameObjects.GamePlayer.Die.YouKilled:              Bạn đã giết {0}.
+
+GameObjects.GamePlayer.DrowningTimerCallback.CannotBreath:  Bạn không thể thở dưới nước và đang nuốt nước!
+GameObjects.GamePlayer.DrowningTimerCallback.Take5%Damage:  Bạn mất 5% lượng HP tối đa.
+
+GameObjects.GamePlayer.DuelStop.DuelEnds:                     Trận đấu tay đôi của bạn kết thúc.
+
+GameObjects.GamePlayer.GainBountyPoints.YouGet:               Bạn nhận được {0} điểm tiền thưởng.
+GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus:       Bạn nhận thêm {0} điểm tiền thưởng nhờ lãnh thổ của bạn.
+
+GameObjects.GamePlayer.GainCraftingSkill.GainSkill:           Bạn tăng kỹ năng trong {0}. ({1})
+GameObjects.GamePlayer.GainCraftingSkill.ReachedSkill:        {0} đạt danh hiệu “Huyền thoại” (1000 điểm kỹ năng) trong {1}.
+
+GameObjects.GamePlayer.GainExperience.CampBonus:              (Thưởng trại {0})
+GameObjects.GamePlayer.GainExperience.CannotRaise:            Bạn không thể đạt cấp 6 trước khi chọn chuyên môn.
+GameObjects.GamePlayer.GainExperience.GroupBonus:             (Thưởng tổ đội {0})
+GameObjects.GamePlayer.GainExperience.OutpostBonus:           (Thưởng tiền đồn {0})
+GameObjects.GamePlayer.GainExperience.RoyaumesouspeupleBonus: Bạn nhận thêm {0} nhờ vương quốc ít dân!
+GameObjects.GamePlayer.GainExperience.TalkToTrainer:          Hãy nói chuyện với huấn luyện viên của bạn để biết thêm.
+GameObjects.GamePlayer.GainExperience.YouGet:                 Bạn nhận {0} điểm kinh nghiệm.
+GameObjects.GamePlayer.GainExperience.BonusRenaissance:       trong đó {0} điểm thưởng từ Tái Sinh
+GameObjects.GamePlayer.GainExperience.BonusTerritory:         trong đó {0} điểm thưởng từ Lãnh thổ
+GameObjects.GamePlayer.GainExperience.BonusGameEvent:         trong đó {0} điểm thưởng từ Sự kiện
+
+GameObjects.GamePlayer.GainRealmPoints.Earned:                {0} đã kiếm được 1.000.000 điểm vương quốc trong {1}.
+GameObjects.GamePlayer.GainRealmPoints.GainBonus:             Bạn nhận bonus +{0} cho tất cả chuyên môn!
+GameObjects.GamePlayer.GainRealmPoints.GainedLevel:           Bạn tăng một cấp vương quốc!
+GameObjects.GamePlayer.GainRealmPoints.GainedRank:            Bạn nhận cấp bậc và danh hiệu vương quốc mới!
+GameObjects.GamePlayer.GainRealmPoints.NewRealmTitle:         Danh hiệu vương quốc mới của bạn là {0}.
+GameObjects.GamePlayer.GainRealmPoints.ReachedRank:           Bạn đạt cấp bậc vương quốc {0}L0!
+GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:       {0} đã đạt cấp bậc vương quốc {1:#L#} trong {2}!
+GameObjects.GamePlayer.GainRealmPoints.YouGet:                Bạn nhận {0} điểm vương quốc!
+GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:           Bạn nhận thêm {0} điểm vương quốc nhờ bonus khu vực!
+GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP:      Bạn nhận {0} điểm vương quốc khi phòng thủ lãnh thổ!
+GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:     Bạn nhận {0} điểm vương quốc vì đã hồi máu cho đồng minh!
+
+GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:   Bạn quan sát {0}. {1} là thành viên của vương quốc thù địch!
+GameObjects.GamePlayer.GetExamineMessages.NeutralMember:      Bạn quan sát {0}. {1} không thuộc bang hội nào.
+GameObjects.GamePlayer.GetExamineMessages.OtherGuildMember:   Bạn quan sát {0}. {1} là thành viên bang hội: {2}.
+GameObjects.GamePlayer.GetExamineMessages.RealmMember:        Bạn quan sát {0}. {1} là {2} của vương quốc bạn.
+GameObjects.GamePlayer.GetExamineMessages.YouExamine:         Bạn quan sát {0}.
+GameObjects.GamePlayer.GetExamineMessages.YourGuildMember:    Bạn quan sát {0}. {1} là {2} của bang hội bạn.
+
+GameObjects.GamePlayer.IsCloakHoodUp.NowWear:                 Bạn kéo mũ áo choàng lên.
+GameObjects.GamePlayer.IsCloakHoodUp.NoLongerWear:            Bạn hạ mũ áo choàng xuống.
+
+GameObjects.GamePlayer.IsCloakInvisible.Invisible:            Giờ bạn không còn thấy áo choàng của mình.
+GameObjects.GamePlayer.IsCloakInvisible.Visible:              Bạn lại thấy áo choàng của mình.
+
+GameObjects.GamePlayer.IsHelmInvisible.Invisible:             Giờ bạn không còn thấy mũ trụ của mình.
+GameObjects.GamePlayer.IsHelmInvisible.Visible:               Bạn lại thấy mũ trụ của mình.
+
+GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Bạn xuống ngựa.
+GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Bạn lên ngựa.
+GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Bạn cần trang bị một con ngựa.
+GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Bạn phải đang cưỡi ngựa để dùng kho đồ này.
+
+GameObjects.GamePlayer.ItemBonusName.Bonus1:    Sức mạnh
+GameObjects.GamePlayer.ItemBonusName.Bonus2:    Khéo léo
+GameObjects.GamePlayer.ItemBonusName.Bonus3:    Thể chất
+GameObjects.GamePlayer.ItemBonusName.Bonus4:    Nhanh nhẹn
+GameObjects.GamePlayer.ItemBonusName.Bonus5:    Trí tuệ
+GameObjects.GamePlayer.ItemBonusName.Bonus6:    Mộ đạo
+GameObjects.GamePlayer.ItemBonusName.Bonus7:    Đồng cảm
+GameObjects.GamePlayer.ItemBonusName.Bonus8:    Sức hút
+GameObjects.GamePlayer.ItemBonusName.Bonus9:    Mana
+GameObjects.GamePlayer.ItemBonusName.Bonus10:   HP (Điểm Sinh lực)
+GameObjects.GamePlayer.ItemBonusName.Bonus11:   Kháng Vật lý
+GameObjects.GamePlayer.ItemBonusName.Bonus12:   Kháng Băng
+GameObjects.GamePlayer.ItemBonusName.Bonus13:   Kháng Đập
+GameObjects.GamePlayer.ItemBonusName.Bonus14:   Kháng Năng lượng
+GameObjects.GamePlayer.ItemBonusName.Bonus15:   Kháng Lửa
+GameObjects.GamePlayer.ItemBonusName.Bonus16:   Kháng Chất liệu
+GameObjects.GamePlayer.ItemBonusName.Bonus17:   Kháng Chém
+GameObjects.GamePlayer.ItemBonusName.Bonus18:   Kháng Tinh thần
+GameObjects.GamePlayer.ItemBonusName.Bonus19:   Kháng Đâm
+GameObjects.GamePlayer.ItemBonusName.Bonus119:  Tốc độ tích tụ căng thẳng
+GameObjects.GamePlayer.ItemBonusName.Bonus147:  Tốc độ tập trung tối đa
+GameObjects.GamePlayer.ItemBonusName.Bonus148:  Thưởng hệ số giáp (AF)
+GameObjects.GamePlayer.ItemBonusName.Bonus149:  Thưởng hấp thụ (Abs)
+GameObjects.GamePlayer.ItemBonusName.Bonus150:  Tốc độ hồi HP
+GameObjects.GamePlayer.ItemBonusName.Bonus151:  Tốc độ hồi mana
+GameObjects.GamePlayer.ItemBonusName.Bonus152:  Tốc độ hồi thể lực
+GameObjects.GamePlayer.ItemBonusName.Bonus153:  Tầm phép
+GameObjects.GamePlayer.ItemBonusName.Bonus154:  Tầm vũ khí tầm xa
+GameObjects.GamePlayer.ItemBonusName.Bonus155:  Tốc độ cận chiến
+GameObjects.GamePlayer.ItemBonusName.Bonus156:  Ý chí
+GameObjects.GamePlayer.ItemBonusName.Bonus169:  Tỉ lệ né tránh
+GameObjects.GamePlayer.ItemBonusName.Bonus170:  Tỉ lệ chặn (Khiên)
+GameObjects.GamePlayer.ItemBonusName.Bonus171:  Tỉ lệ đỡ/parry
+GameObjects.GamePlayer.ItemBonusName.Bonus175:  Tỉ lệ đánh trúng trong giao tranh
+GameObjects.GamePlayer.ItemBonusName.Bonus181:  Tỉ lệ thành công phép
+GameObjects.GamePlayer.ItemBonusName.Bonus197:  Kháng đòn xuyên
+GameObjects.GamePlayer.ItemBonusName.Bonus249:  Kháng Bản chất
+
+GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Bạn đang đứng trong dung nham và nhận sát thương!
+GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Bạn nhận sát thương bằng 34% HP tối đa.
+
+GameObjects.GamePlayer.OnItemEquipped.Increased:      {0} của bạn đã tăng.
+GameObjects.GamePlayer.OnItemEquipped.Magic:          Ma lực từ {0} chảy trong huyết quản bạn.
+GameObjects.GamePlayer.OnItemEquipped.WieldBothHands: Bạn cầm {0} bằng hai tay.
+GameObjects.GamePlayer.OnItemEquipped.WieldLeftHand:  Bạn cầm {0} ở tay trái.
+GameObjects.GamePlayer.OnItemEquipped.WieldRightHand: Bạn cầm {0} ở tay phải.
+
+GameObjects.GamePlayer.OnItemUnequipped.Decreased:    {0} của bạn đã giảm.
+GameObjects.GamePlayer.OnItemUnequipped.BothHandsFree: Bạn cất {0}. Hai tay bạn giờ trống.
+GameObjects.GamePlayer.OnItemUnequipped.LeftHandFree:  Bạn cất {0} khỏi tay trái.
+GameObjects.GamePlayer.OnItemUnequipped.RightHandFree: Bạn cất {0} khỏi tay phải.
+
+GameObjects.GamePlayer.OnLevelUp.AttainedRank:        Bạn đạt hạng {0}!
+GameObjects.GamePlayer.OnLevelUp.FreeLevelEligible:   Bạn đủ điều kiện nhận một cấp miễn phí! Bấm vào huấn luyện viên để nhận (hoặc gõ “/freelevel decline” để từ chối).
+GameObjects.GamePlayer.OnLevelUp.HitsRaise:           HP của bạn tăng {0}.
+GameObjects.GamePlayer.OnLevelUp.PowerRaise:          Điểm mana của bạn tăng {0}.
+GameObjects.GamePlayer.OnLevelUp.Reached:             {0} đã đạt cấp {1} trong {2}!
+GameObjects.GamePlayer.OnLevelUp.SecondStage:         Bạn đạt giai đoạn hai của cấp {0}!
+GameObjects.GamePlayer.OnLevelUp.StatRaise:           Chỉ số của bạn tăng!
+GameObjects.GamePlayer.OnLevelUp.YouAchieved:         Bạn đã hoàn thành cấp {0}!
+GameObjects.GamePlayer.OnLevelUp.YouGetSpec:          Bạn nhận {0} điểm chuyên môn để dùng ở cấp này!
+GameObjects.GamePlayer.OnLevelUp.YouRaise:            Bạn đã lên cấp {0}!
+GameObjects.GamePlayer.OnRenaissance:                 Bạn vừa hoàn tất Tái Sinh!
+
+GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} đã bị ngắt kết nối khỏi máy chủ!
+
+GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Bạn đang di chuyển và không thể gọi thú cưỡi!
+GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Bạn di chuyển và làm gián đoạn chế tác.
+
+GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} đang huấn luyện trong nhiều chuyên môn.
+GameObjects.GamePlayer.OnSkillTrained.YouHave:         Bạn còn {0} điểm chuyên môn ở cấp này.
+GameObjects.GamePlayer.OnSkillTrained.YouSpend:        Bạn dùng {0} điểm và tăng chuyên môn {1}.
+
+GameObjects.GamePlayer.OpenSelfCraft.AlreadySelfCrafting: Bạn đã và đang phù phép một vật phẩm.
+GameObjects.GamePlayer.OpenSelfCraft.CanOnlyCraftBackpack: Chỉ có thể kết hợp vật phẩm trong ba lô của bạn.
+
+GameObjects.GamePlayer.PickupObject.Autosplit:             (Chia tự động) {0} thuộc về {1}.
+GameObjects.GamePlayer.PickupObject.BackpackFull:          Túi đồ của bạn đã đầy; hãy tạo thêm chỗ trống.
+GameObjects.GamePlayer.PickupObject.CantGetThat:           Bạn không thể nhặt vật đó.
+GameObjects.GamePlayer.PickupObject.GroupMemberPicksUp:    {0} nhặt {1}.
+GameObjects.GamePlayer.PickupObject.ItemBelowBGThreshold:  Vật phẩm này dưới mức của nhóm đánh thuê của bạn.
+GameObjects.GamePlayer.PickupObject.LootDoesntBelongYou:   Chiến lợi phẩm này không thuộc về bạn — bạn không thể lấy.
+GameObjects.GamePlayer.PickupObject.MustHaveTarget:        Bạn cần một mục tiêu để nhặt thứ gì đó.
+GameObjects.GamePlayer.PickupObject.NoOneGroupWantsMoney:  Không ai trong nhóm muốn tiền.
+GameObjects.GamePlayer.PickupObject.NoOneWantsThis:        Không ai trong nhóm muốn {0}.
+GameObjects.GamePlayer.PickupObject.ObjectTooFarAway:      {0} quá xa để nhặt.
+GameObjects.GamePlayer.PickupObject.TooFarFromBoat:        Bạn quá xa thuyền để lên tàu.
+GameObjects.GamePlayer.PickupObject.YouGet:                Bạn nhặt {0} và cho vào ba lô.
+GameObjects.GamePlayer.PickupObject.YouPickUp:             Bạn nhặt {0}.
+GameObjects.GamePlayer.PickupObject.YourLootShare:         Phần chiến lợi phẩm của bạn là {0}.
+GameObjects.GamePlayer.PickupObject.GuildDueTax:           Khoản thu {0} của bạn được chuyển vào ngân khố bang hội.
+GameObjects.GamePlayer.PickupObject.CannotDepositHere:     Không thể gửi {0} ở đây!
+GameObjects.GamePlayer.PickupObject.WaitToPickup:          Bạn phải chờ {0} giây để nhặt {1}!
+GameObjects.GamePlayer.PickupObject.HeadPickedUp:          Bạn đã thu hồi chiếc đầu của {0}.
+GameObjects.GamePlayer.PickupObject.HeadInventoryFull:     Bạn không thể thu hồi đầu của {0}; túi đồ đã đầy!
+
+GameObjects.GamePlayer.Pray.AlreadyPraying:            Bạn đã cầu nguyện rồi.
+GameObjects.GamePlayer.Pray.Begin:                     Bạn bắt đầu cầu nguyện.
+GameObjects.GamePlayer.Pray.CantPrayNow:               Bạn chưa thể cầu nguyện lúc này.
+GameObjects.GamePlayer.Pray.GainBack:                  Lời cầu nguyện của bạn được đáp lại; bạn lấy lại kinh nghiệm.
+GameObjects.GamePlayer.Pray.MustGetCloser:             Hãy tới gần mộ của bạn để cầu nguyện.
+GameObjects.GamePlayer.Pray.MustStandingStill:         Bạn phải đứng yên để cầu nguyện.
+GameObjects.GamePlayer.Pray.NeedTarget:                Bạn phải chọn ngôi mộ để cầu nguyện.
+GameObjects.GamePlayer.Pray.SelectGrave:               Hãy chọn mộ của bạn để cầu nguyện.
+GameObjects.GamePlayer.Pray.CantPrayRiding:            Bạn không thể cầu nguyện khi đang cưỡi!
+
+GameObjects.GamePlayer.Pronoun.Female.Objective:       cô ấy
+GameObjects.GamePlayer.Pronoun.Female.Possessive:      của cô ấy
+GameObjects.GamePlayer.Pronoun.Female.Subjective:      cô ấy
+GameObjects.GamePlayer.Pronoun.Male.Objective:         anh ấy
+GameObjects.GamePlayer.Pronoun.Male.Possessive:        của anh ấy
+GameObjects.GamePlayer.Pronoun.Male.Subjective:        anh ấy
+
+GameObjects.GamePlayer.Quit.CantQuitCrafting:          Bạn không thể thoát khi đang chế tác.
+GameObjects.GamePlayer.Quit.CantQuitDead:              Bạn không thể thoát sau cái chết đột ngột! Gõ “/release” để hồi sinh.
+GameObjects.GamePlayer.Quit.CantQuitInInstance:        Bạn không thể thoát khi đang trong phụ bản!
+GameObjects.GamePlayer.Quit.CantQuitMount:             Bạn không thể thoát khi đang cưỡi.
+GameObjects.GamePlayer.Quit.RecentlyInCombat:          Bạn vừa giao chiến; cần chờ lâu hơn để thoát.
+GameObjects.GamePlayer.Quit.CantQuitStanding:          Bạn phải đứng yên để thoát.
+GameObjects.GamePlayer.Quit.YouWillQuit1:              Bạn sẽ thoát game trong {0} giây.
+GameObjects.GamePlayer.Quit.YouWillQuit2:              Bạn sẽ thoát game trong {0} giây. Gõ “/stand” hoặc di chuyển để hủy.
+GameObjects.GamePlayer.Quit.CanTQuitDamned:            Bạn không thể thoát; bạn đang bị nguyền rủa.
+GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease: Bạn không thể thoát khi đang chịu phép “{0}”.
+GameObjects.GamePlayer.Quit.CanTQuitStunned:           Bạn không thể thoát; bạn bị cố định bởi phép.
+GameObjects.GamePlayer.Quit.CanTQuitMezzed:            Bạn không thể thoát; bạn đang ngủ.
+
+GameObjects.GamePlayer.RealmTitle.UnknownRealm:        Vương quốc không xác định.
+
+GameObjects.GamePlayer.ReceiveItem.Receive:            Bạn nhận {0}.
+GameObjects.GamePlayer.ReceiveItem.ReceiveFrom:        Bạn nhận {0} từ {1}.
+
+GameObjects.GamePlayer.ReceiveTradeItem.CantTrade:         Bạn không thể giao dịch vật phẩm này.
+GameObjects.GamePlayer.ReceiveTradeItem.StillSelfcrafting: Bạn vẫn đang phù phép.
+
+GameObjects.GamePlayer.RefreshSpec.AfterBlocked:       Kiểu này hiệu quả nhất sau khi đòn trước của bạn bị chặn.
+GameObjects.GamePlayer.RefreshSpec.AfterEvaded:        Kiểu này hiệu quả nhất sau khi đòn trước của bạn bị né.
+GameObjects.GamePlayer.RefreshSpec.AfterFumbles:       Kiểu này hiệu quả nhất sau khi đòn trước của bạn hoàn toàn thất bại.
+GameObjects.GamePlayer.RefreshSpec.AfterMissed:        Kiểu này hiệu quả nhất sau khi đòn trước của bạn trượt.
+GameObjects.GamePlayer.RefreshSpec.AfterParried:       Kiểu này hiệu quả nhất sau khi đòn trước của bạn bị đỡ.
+GameObjects.GamePlayer.RefreshSpec.AfterStyle:         Kiểu này chỉ dùng được sau kiểu {0}.
+GameObjects.GamePlayer.RefreshSpec.TargetBlocked:      Kiểu này hiệu quả nhất sau khi đòn trước của mục tiêu bị chặn.
+GameObjects.GamePlayer.RefreshSpec.TargetEvaded:       Kiểu này hiệu quả nhất sau khi đòn trước của mục tiêu bị né.
+GameObjects.GamePlayer.RefreshSpec.TargetFumbles:      Kiểu này hiệu quả nhất sau khi đòn trước của mục tiêu hoàn toàn thất bại.
+GameObjects.GamePlayer.RefreshSpec.TargetMisses:       Kiểu này hiệu quả nhất sau khi đòn trước của mục tiêu trượt.
+GameObjects.GamePlayer.RefreshSpec.TargetHits:         Kiểu này hiệu quả nhất sau khi đòn trước của mục tiêu trúng.
+GameObjects.GamePlayer.RefreshSpec.TargetParried:      Kiểu này hiệu quả nhất sau khi đòn trước của mục tiêu bị đỡ.
+GameObjects.GamePlayer.RefreshSpec.TargetStyle:        Kiểu này hiệu quả nhất sau khi đòn trước của mục tiêu là một kiểu.
+GameObjects.GamePlayer.RefreshSpec.YouLearn:           Bạn học được kiểu chiến đấu {0}.
+
+GameObjects.GamePlayer.Release.CantReleaseDuel:        Bạn không thể thay đổi cách hồi sinh cho cái chết do đấu tay đôi!
+GameObjects.GamePlayer.Release.GraveErected:           Một ngôi mộ xuất hiện tại nơi bạn chết.
+GameObjects.GamePlayer.Release.LostConstitution:       Bạn mất điểm thể chất. Hãy tìm thầy chữa để khôi phục.
+GameObjects.GamePlayer.Release.NoLongerReleaseAuto:    Bạn sẽ không còn tự động hồi sinh nữa (còn {0} giây).
+GameObjects.GamePlayer.Release.NotDead:                Bạn vẫn chưa chết.
+GameObjects.GamePlayer.Release.NoValidBindpoint:       Bạn không gắn với đá linh hồn hợp lệ; bạn sẽ hồi sinh tại đây.
+GameObjects.GamePlayer.Release.ReturnToPray:           Hãy trở lại mộ của bạn (/pray) để lấy lại kinh nghiệm.
+GameObjects.GamePlayer.Release.SurroundingChange:      Môi trường xung quanh bạn bỗng thay đổi.
+GameObjects.GamePlayer.Release.WillReleaseAuto:        Bạn sẽ tự động hồi sinh sau {0} giây.
+GameObjects.GamePlayer.Release.WillReleaseAutoCity:    Bạn sẽ tự động hồi sinh trong thành sau {0} giây.
+GameObjects.GamePlayer.Release.WillReleaseIn:          Bạn sẽ hồi sinh sau {0} giây.
+GameObjects.GamePlayer.Release.YouRelease:             Bạn hồi sinh cơ thể của mình.
+GameObjects.GamePlayer.Release.ReleaseToPortalKeep:    Bạn sẽ hồi sinh sau {0} giây ở pháo đài biên giới gần nhất.
+GameObjects.GamePlayer.Release.ReleaseToHouse:         Bạn sẽ hồi sinh tại nhà sau {0} giây!
+
+GameObjects.GamePlayer.RemoveAbility.YouLose:          Bạn mất kỹ năng {0}.
+GameObjects.GamePlayer.RemoveSpecialization.YouLose:   Bạn mất chuyên môn {0}.
+GameObjects.GamePlayer.RemoveSpellLine.YouLose:        Bạn mất dòng phép {0}.
+
+GameObjects.GamePlayer.SaveIntoDatabase.CharacterSaved: Nhân vật của bạn đã được lưu.
+
+GameObjects.GamePlayer.Say.YouSay:                     Bạn nói: “{0}”
+GameObjects.GamePlayer.SayReceive.Says:                {0} nói: “{1}”
+GameObjects.GamePlayer.SayReceive.FalseLanguage:       {0} nói điều gì đó bằng ngôn ngữ bạn không hiểu.
+
+GameObjects.GamePlayer.SendReceive.Sends:              {0} gửi: “{1}”
+GameObjects.GamePlayer.SendReceive.FalseLanguage:      {0} gửi điều gì đó bằng ngôn ngữ bạn không hiểu.
+GameObjects.GamePlayer.SendReceive.Afk:                {0} đang AFK.
+GameObjects.GamePlayer.SendReceive.AfkMessage:         <AFK> {0} gửi: “{1}”
+GameObjects.GamePlayer.Send.target.DontUnderstandYou:  {0} không hiểu bạn.
+GameObjects.GamePlayer.Send.YouSendTo:                 Bạn gửi “{0}” cho {1}.
+
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget: Bạn thả kiểm soát mục tiêu.
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget2: Bạn mất kiểm soát {0} của mình.
+
+GameObjects.GamePlayer.Shade.AlreadyShade:             Bạn đã đang ẩn!
+GameObjects.GamePlayer.Shade.NoLongerShade:            Bạn không còn ẩn nữa!
+
+GameObjects.GamePlayer.Sit.AlreadySitting:             Bạn đã ngồi rồi.
+GameObjects.GamePlayer.Sit.CantSitDead:                Bạn không thể ngồi khi đã chết.
+GameObjects.GamePlayer.Sit.CantSitMezzed:              Bạn không thể ngồi khi đang bị thôi miên.
+GameObjects.GamePlayer.Sit.CantSitStunned:             Bạn không thể ngồi khi đang bị choáng.
+GameObjects.GamePlayer.Sit.InterruptCallMount:         Bạn ngồi xuống và dừng gọi thú cưỡi.
+GameObjects.GamePlayer.Sit.MustDismount:               Bạn phải xuống ngựa trước.
+GameObjects.GamePlayer.Sit.MustStandingStill:          Bạn phải đứng yên để ngồi.
+GameObjects.GamePlayer.Sit.NoLongerWaitingQuit:        Bạn không còn chờ thoát game.
+GameObjects.GamePlayer.Sit.NotSitting:                 Bạn không ở tư thế ngồi.
+GameObjects.GamePlayer.Sit.YouSitDown:                 Bạn ngồi xuống. Gõ “/stand” hoặc di chuyển để đứng dậy.
+GameObjects.GamePlayer.Sit.YouStandUp:                 Bạn đứng dậy.
+
+GameObjects.GamePlayer.Spell.NotEnoughPowerful:        Bạn không đủ mạnh để dùng phép của vật phẩm này.
+GameObjects.GamePlayer.Spell.NotImplemented:           {0} ({1}) hiện chưa được triển khai trên máy chủ này.
+GameObjects.GamePlayer.Spell.Proc.NotImplemented:      Hiệu ứng kích hoạt với ID {0} hiện chưa được triển khai trên máy chủ này.
+GameObjects.GamePlayer.Spell.ResurrectionIllness:      Chứng bệnh sau hồi sinh
+
+GameObjects.GamePlayer.Sprint.CantSprintDead:          Bạn không thể chạy nước rút; bạn đã chết.
+GameObjects.GamePlayer.Sprint.CantSprintHidden:        Bạn không thể chạy nước rút khi đang ẩn.
+GameObjects.GamePlayer.Sprint.NoLongerReady:           Bạn không còn sẵn sàng để chạy nước rút.
+GameObjects.GamePlayer.Sprint.PrepareSprint:           Bạn chuẩn bị chạy nước rút.
+GameObjects.GamePlayer.Sprint.TooFatigued:             Bạn quá mệt để chạy nước rút.
+
+GameObjects.GamePlayer.StartAttack.CannotMelee:            Bạn không thể đánh bằng nhạc cụ.
+GameObjects.GamePlayer.StartAttack.CannotWithoutWeapon:    Bạn không thể tấn công khi không có vũ khí.
+GameObjects.GamePlayer.StartAttack.CantAttackmesmerized:   Bạn không thể tấn công khi đang ngủ.
+GameObjects.GamePlayer.StartAttack.CantAttackStunned:      Bạn không thể tấn công khi đang bị choáng.
+GameObjects.GamePlayer.StartAttack.CantDisarmed:           Bạn bị tước vũ khí và không thể tấn công!
+GameObjects.GamePlayer.StartAttack.CantDisarmed2:          Bạn bị tước vũ khí và không thể niệm phép này!
+GameObjects.GamePlayer.StartAttack.CantInShadeMode:        Bạn không thể bắt đầu giao tranh ở chế độ Bóng tối!
+GameObjects.GamePlayer.StartAttack.CantUseQuiver:          Bạn không thể chọn ống tên này với vũ khí hiện tại.
+GameObjects.GamePlayer.StartAttack.CombatNoTarget:         Bạn vào giao tranh nhưng chưa có mục tiêu.
+GameObjects.GamePlayer.StartAttack.CombatTarget:           Bạn vào giao tranh và khóa mục tiêu [{0}]
+GameObjects.GamePlayer.StartAttack.SelectQuiver:           Bạn phải chọn ống tên.
+GameObjects.GamePlayer.StartAttack.SpellCancelled:         Phép của bạn đã bị hủy.
+GameObjects.GamePlayer.StartAttack.TargetInRange:          , mục tiêu trong tầm
+GameObjects.GamePlayer.StartAttack.TargetOutOfRange:       , mục tiêu ngoài tầm
+GameObjects.GamePlayer.StartAttack.TiredShot:              Bạn quá mệt để thử một phát bắn chí mạng.
+GameObjects.GamePlayer.StartAttack.TiredUse:               Bạn quá mệt để dùng {0}.
+GameObjects.GamePlayer.StartAttack.YouCantCombat:          Bạn không thể tấn công khi đã chết.
+GameObjects.GamePlayer.StartAttack.YouMustWait:            Bạn phải đợi {0} giây trước khi thử tấn công.
+GameObjects.GamePlayer.StartAttack.YouMustWaitAgain:       Bạn phải đợi {0} giây trước khi thử tấn công lần nữa.
+GameObjects.GamePlayer.StartAttack.YouPrepare:             Bạn chuẩn bị {0} ({1}.{2} giây tới phát bắn {3})
+
+GameObjects.GamePlayer.Stealth.NoLongerHidden:         Bạn không còn ẩn nữa.
+GameObjects.GamePlayer.Stealth.NowHidden:              Bạn đã ẩn mình.
+
+GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Bạn đã hết đạn trong ống tên.
+GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Bạn sẽ không dùng ống tên.
+GameObjects.GamePlayer.SwitchQuiver.ShootWith:         Bạn sẽ tấn công bằng: {0}.
+GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Phép của bạn đã bị hủy.
+
+GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Bạn không thể giao dịch với người chơi này vì bạn là kẻ ngoài vòng pháp luật.
+GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Bạn không thể giao dịch với kẻ ngoài vòng pháp luật.
+
+GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Bạn đang quá tải.
+GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Bạn đang quá tải và di chuyển chậm.
+
+GameObjects.GamePlayer.UpdateSpellLine.GainPower:      Bạn mạnh lên trong dòng phép {0}.
+
+GameObjects.GamePlayer.UseSlot.AttemptToUse:           Bạn cố gắng dùng {0}.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShot:        Bạn sẽ bắn tự động.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShotReload:  Bạn sẽ bắn và nạp lại tự động.
+GameObjects.GamePlayer.UseSlot.CantCallMountSeated:    Bạn không thể gọi thú cưỡi khi đang ngồi.
+GameObjects.GamePlayer.UseSlot.CantFire:               Bạn không thể ném hay dùng vật phẩm này.
+GameObjects.GamePlayer.UseSlot.CantMountCombat:        Bạn đang giao tranh và không thể gọi thú cưỡi.
+GameObjects.GamePlayer.UseSlot.CantMountHere:          Không thể gọi thú cưỡi ở đây!
+GameObjects.GamePlayer.UseSlot.CantCallMountRVR:       Không thể gọi thú cưỡi ở đây!
+GameObjects.GamePlayer.UseSlot.CantMountInDungeon:     Không thể gọi thú cưỡi trong hầm ngục!
+GameObjects.GamePlayer.UseSlot.CantMountMoving:        Không thể lên ngựa khi đang di chuyển.
+GameObjects.GamePlayer.UseSlot.CantMountStealthed:     Không thể lên ngựa khi đang ẩn thân.
+GameObjects.GamePlayer.UseSlot.CantMountDamned:        Không thể lên ngựa khi đang bị nguyền!
+GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Không thể lên ngựa khi đang hóa đá!
+GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Không thể lên ngựa ở hình dạng này!
+GameObjects.GamePlayer.UseSlot.CantMountMorph:         Không thể lên ngựa khi đang chịu phép “{0}”!
+GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Bạn không thể lên ngựa; bạn đã chết.
+GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Bạn không thể dùng thú cưỡi khi đang mang báu vật!
+GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Bạn không nhìn thấy mục tiêu.
+GameObjects.GamePlayer.UseSlot.CantSummonRvR:          Không thể gọi thú cưỡi trong khu vực RvR.
+GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:    Không thể dùng vật phẩm trực tiếp trong ba lô. Hãy trang bị trước.
+GameObjects.GamePlayer.UseSlot.CantUseInCombat:        Không thể dùng vật phẩm này trong giao tranh.
+GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:    Không thể dùng vật phẩm này khi đang ngồi!
+GameObjects.GamePlayer.UseSlot.CantUseHere:            Không thể dùng thứ đó ở đây!
+GameObjects.GamePlayer.UseSlot.IllegalSourceObject:    Vật phẩm nguồn không hợp lệ. {0} đã sẵn sàng!
+GameObjects.GamePlayer.UseSlot.MustDismountBefore:     Bạn phải xuống ngựa trước.
+GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload: Bạn sẽ không còn tự động bắn hoặc nạp.
+GameObjects.GamePlayer.UseSlot.NotEnouthPower:         Bạn không đủ mạnh để dùng phép của vật phẩm này.
+GameObjects.GamePlayer.UseSlot.OutOfCharges:           {0} đã hết lần sử dụng.
+GameObjects.GamePlayer.UseSlot.StopCallingMount:       Bạn ngừng gọi thú cưỡi.
+GameObjects.GamePlayer.UseSlot.SummonHorseLevel:       Bạn phải đạt cấp {0} để gọi con ngựa này.
+GameObjects.GamePlayer.UseSlot.WhistleMount:           Bạn huýt sáo gọi thú cưỡi.
+GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:      Bạn phải chờ {0} giây trước khi dùng vật phẩm.
+GameObjects.GamePlayer.UseSlot.CantUseState:           Bạn không thể dùng {0} trong trạng thái hiện tại.
+GameObjects.GamePlayer.UseSlot.Used:                   Bạn sử dụng {0}.
+GameObjects.GamePlayer.UseSlot.CantUseCast:            Bạn phải kết thúc hành động hiện tại để dùng {0}.
+GameObjects.GamePlayer.UseSlot.WrongTarget:            Bạn cần một mục tiêu để dùng kỹ năng này!
+GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:        Ô {0} trong ống tên đang trống!
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:   Hiệu ứng vật phẩm có ID {0} chưa được triển khai.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:     Không tìm thấy dòng phép của vật phẩm.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:    Không tìm thấy phép của vật phẩm có ID {0}.
+GameObjects.GamePlayer.UseSlot.CantDischargeInState:   Bạn không thể xả vật phẩm trong trạng thái hiện tại.
+GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:    Bạn phải chờ {0} giây trước khi xả {1}!
+GameObjects.GamePlayer.UseSlot.Cooldown:               Bạn phải chờ {0} để dùng vật phẩm này!
+GameObjects.GamePlayer.UseSlot.Cooldown.Seconds:       còn {0} giây
+GameObjects.GamePlayer.UseSlot.Cooldown.MinutesAndSeconds:  còn {0} phút {1} giây
+GameObjects.GamePlayer.UseSlot.NoMagicItemZone:        Không được phép dùng vật phẩm phép thuật trong khu vực này.
+GameObjects.GamePlayer.UseSlot.CannotUseInState:       Ở trạng thái này bạn không thể dùng gì cả.
+GameObjects.GamePlayer.UseSlot.NotPowerfulEnough:      Bạn không đủ mạnh để dùng phép của vật phẩm này.
+GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Bạn không thể dùng kho đồ này.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Hiệu ứng kích hoạt với ID {0} chưa được triển khai.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Không tìm thấy hiệu ứng kích hoạt với ID {0}.
+
+GameObjects.GamePlayer.Whisper.SelectTarget:           Hãy chọn mục tiêu để thì thầm.
+GameObjects.GamePlayer.Murder:                         Bạn mất 1 điểm danh tiếng vì đã giết {0}.
+GameObjects.GamePlayer.Multiplekills:                  Bạn mất 1 điểm danh tiếng vì nhiều lần giết {0}.
+GameObjects.GamePlayer.GuardKill:                      Bạn mất 1 điểm danh tiếng vì giết lính gác.
+GameObjects.GamePlayer.Wanted:                         {0} hiện bị truy nã vì tội ác của hắn/cô ấy.
+GameObjects.GamePlayer.Jailed:                         {0} bị {1} tống vào ngục.
+GameObjects.GamePlayer.Jailed.Unknown:                 {0} bị lính gác tống vào ngục.
+GameObjects.GamePlayer.Released:                       {0} được thả khỏi ngục.
+
+GameObjects.GamePlayer.RvR:                            – Tổng số người chơi đã hạ: {0} –
+GameObjects.GamePlayer.RvR.Champion:                   – Tổng số người chơi đã hạ: {0} – Nhà vô địch trong ngày: {1} ({2} kẻ tấn công địch bị hạ)
+GameObjects.GamePlayer.RvR.Control:                    Khu vực RvR {1} hiện do {0} kiểm soát!
+GameObjects.GamePlayer.RvR.Open.Claimable:             Bạn có muốn [giành quyền kiểm soát]?
+GameObjects.GamePlayer.RvR.Open.UnClaimble:            Bạn phải chờ {0} giây trước khi có thể giành quyền kiểm soát.
+GameObjects.GamePlayer.RvR.Closed:                     Tạm thời không thể chiếm cứ pháo đài.
+GameObjects.GamePlayer.RvR.In.Combat:                  Không thể chiếm pháo đài khi đang giao tranh.
+GameObjects.GamePlayer.RvR.Occupied:                   Ta đang bận, quay lại sau.
+GameObjects.GamePlayer.RvR.Interrupt:                  Bạn bị gián đoạn.
+GameObjects.GamePlayer.RvR.Too.Far:                    Bạn đã đi quá xa.
+GameObjects.GamePlayer.RvR.Capture.Timer:              Chiếm pháo đài
+GameObjects.GamePlayer.RvR.Capture.Start:              {0} bắt đầu giành quyền kiểm soát pháo đài!
+GameObjects.GamePlayer.PvP.DieDropItem:                Cái chết của bạn làm rơi vãi {0} kho báu của bạn!
+
+GameObjects.GamePlayer.Champion.LevelUp:               Bạn nhận thêm một cấp Nhà Vô Địch!
+GameObjects.GamePlayer.Champion.NeedToBeChampion:      Bạn phải là Nhà Vô Địch để dùng kho đồ này.
+
+GameObjects.GamePlayer.SaddleBag.CL2:                  Túi yên này yêu cầu cấp Nhà Vô Địch 2!
+GameObjects.GamePlayer.SaddleBag.CL3:                  Túi yên này yêu cầu cấp Nhà Vô Địch 3!
+GameObjects.GamePlayer.SaddleBag.CL4:                  Túi yên này yêu cầu cấp Nhà Vô Địch 4!
+GameObjects.GamePlayer.SaddleBag.CL5:                  Túi yên này yêu cầu cấp Nhà Vô Địch 5!
+GameObjects.GamePlayer.SaddleBag.Activated:            Bạn đã kích hoạt một túi yên!
+GameObjects.GamePlayer.SaddleBag.ActivateError:        Đã xảy ra lỗi khi kích hoạt túi yên này!
+GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Bạn đã kích hoạt túi yên này rồi!
+
+GameObjects.GamePlayer.Reputation.Zero:                Danh tiếng của bạn hiện là trung lập.
+
+GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Tổng điểm chuyên môn của bạn không chính xác. Đã được sửa — vui lòng huấn luyện lại.

@@ -5,94 +5,198 @@
 DashingDefenseAbility.AddEffectsInfo.Info1:		
 DashingDefenseAbility.AddEffectsInfo.Info2:		Cible: Vous
 DashingDefenseAbility.AddEffectsInfo.Info3:		Temps d'invocation: Instantané
-DashingDefenseAbility.Execute.AlreadyEffect:	Vous êtes déjà sous l'effet d'un tel sort
+DashingDefenseAbility.Execute.AlreadyEffect:	Vous êtes déjà sous l'effet d'un tel sort.
 DashingDefenseAbility.Execute.MustInGroup:		Vous devez être en groupe pour utiliser cette capacité !
 
 # /FirstAidAbility
 FirstAidAbility.AddEffectsInfo.Info1:			Niveau 1: Valeur: 25%
 FirstAidAbility.AddEffectsInfo.Info2:			Niveau 2: Valeur: 60%
 FirstAidAbility.AddEffectsInfo.Info3:			Niveau 3: Valeur: 100%
-FirstAidAbility.AddEffectsInfo.Info4:			Cible: Incantateur
+FirstAidAbility.AddEffectsInfo.Info4:			Cible: Vous
 FirstAidAbility.AddEffectsInfo.Info5:			Temps d'Incantation: Instantané
 FirstAidAbility.AddEffectsInfo.Info6:					
 FirstAidAbility.Execute.FullyHealed:			Vous êtes entièrement soigné.
 FirstAidAbility.Execute.HealYourself:			Vous vous soignez pour {0} points de vie.
 
 # /PurgeAbility
-PurgeAbility.AddEffectsInfo.Info1:			Le niveau 1 de cette compétence comporte un délai de cinq secondes avant son activation. Les niveaux plus élevés de Purge ne subissent pas ce délai.
-PurgeAbility.AddEffectsInfo.Info2:			Cible: Incantateur
-PurgeAbility.AddEffectsInfo.Info3:			Temps d'invocation: Instantané
-PurgeAbility.OnTick.PurgeActivate:			Purge activé dans {0} secondes !
-PurgeAbility.RemoveNegativeEffects.FallFromYou:		Tous les effets negatifs s'estompent.
+PurgeAbility.AddEffectsInfo.Info1:					Le niveau 1 de cette compétence comporte un délai de cinq secondes avant son activation. Les niveaux plus élevés de Purge ne subissent pas ce délai.
+PurgeAbility.AddEffectsInfo.Info2:					Cible: Vous
+PurgeAbility.AddEffectsInfo.Info3:					Temps d'invocation: Instantané
+PurgeAbility.OnTick.PurgeActivate:					Purge activée dans {0} secondes !
+PurgeAbility.RemoveNegativeEffects.FallFromYou:		Tous les effets négatifs s'estompent.
 
 # /RealmAbility
 RealmAbility.AddReUseDelayInfo.Every:			Niveau {0}: peut s'utiliser tout les: {1}
-RealmAbility.CheckPreconditions.BeInCombat:	Pour utiliser cette capacité, vous devez avoir combattu récemment !
+RealmAbility.CheckPreconditions.BeInCombat:		Pour utiliser cette capacité, vous devez avoir combattu récemment !
 RealmAbility.CheckPreconditions.BeInGroup:		Vous devez être en groupe pour utiliser cette capacité !
-RealmAbility.CheckPreconditions.Combat:		Vous avez été en combat recemment et ne pouvez utiliser cette capacité !
+RealmAbility.CheckPreconditions.Combat:			Vous avez été en combat recemment et ne pouvez utiliser cette capacité !
 RealmAbility.CheckPreconditions.Dead:			Vous ne pouvez pas utiliser cette capacité en étant mort !
-RealmAbility.CheckPreconditions.Mesmerized:	Vous ne pouvez pas utiliser cette capacité quand Vous êtes hypnotisé·e !
+RealmAbility.CheckPreconditions.Mesmerized:		Vous ne pouvez pas utiliser cette capacité quand Vous êtes hypnotisé·e !
 RealmAbility.CheckPreconditions.Sitting:		Vous ne pouvez pas utiliser cette capacité en étant assis !
 RealmAbility.CheckPreconditions.Stealthed:		Vous ne pouvez pas utiliser cette capacité en étant furtif !
 RealmAbility.CheckPreconditions.Stunned:		Vous ne pouvez pas utiliser cette capacité en étant étourdi·e !
 
 RealmAbility.SendCasterSpellEffectAndCastMessage.Caster:	{0} lance un sort !
-RealmAbility.SendCasterSpellEffectAndCastMessage.You:	Vous lancez le sort: {0} !
-RealmAbility.SendCastMessage.PlayerCasts:		{0} lance un sort!
-RealmAbility.SendCastMessage.YouCast:			Vous lancez {0}!
+RealmAbility.SendCasterSpellEffectAndCastMessage.You:		Vous lancez le sort: {0} !
+RealmAbility.SendCastMessage.PlayerCasts:					{0} lance un sort!
+RealmAbility.SendCastMessage.YouCast:						Vous lancez {0}!
 
 # /AdrenalineRushAbility
-AdrenalineRushAbility.AddEffectsInfo.Info1:		
-AdrenalineRushAbility.AddEffectsInfo.Info2:		
-AdrenalineRushAbility.AddEffectsInfo.Info3:		
-AdrenalineRushAbility.AddEffectsInfo.Info4:		
-AdrenalineRushAbility.AddEffectsInfo.Info5:		
+AdrenalineRushAbility.AddEffectsInfo.Info1:		Niveau 1: Durée: 20 Secondes
+AdrenalineRushAbility.AddEffectsInfo.Info2:		Niveau 2: Durée: 20 Secondes
+AdrenalineRushAbility.AddEffectsInfo.Info3:		Niveau 3: Durée: 20 Secondes
+AdrenalineRushAbility.AddEffectsInfo.Info4:		Cible: Vous
+AdrenalineRushAbility.AddEffectsInfo.Info5:		Temps d'Incantation: Instantané
 
 # /BedazzlingAuraAbility
-BedazzlingAuraAbility.AddEffectsInfo.Info1:
-BedazzlingAuraAbility.AddEffectsInfo.Info2:
-BedazzlingAuraAbility.AddEffectsInfo.Info3:
-BedazzlingAuraAbility.AddEffectsInfo.Info4:
-BedazzlingAuraAbility.AddEffectsInfo.Info5:
+BedazzlingAuraAbility.AddEffectsInfo.Info1:	Niveau 1: Durée: 30 Secondes
+BedazzlingAuraAbility.AddEffectsInfo.Info2:	Niveau 2: Durée: 30 Secondes
+BedazzlingAuraAbility.AddEffectsInfo.Info3:	Niveau 3: Durée: 30 Secondes
+BedazzlingAuraAbility.AddEffectsInfo.Info4:	Cible: Groupe
+BedazzlingAuraAbility.AddEffectsInfo.Info5:	Temps d'Incantation: Instantané
 
 # /ConcentrationAbility
 ConcentrationAbility.AddEffectsInfo.Info1:	Niveau 1: Valeur: 25%
 ConcentrationAbility.AddEffectsInfo.Info2:	Niveau 2: Valeur: 60%
 ConcentrationAbility.AddEffectsInfo.Info3:	Niveau 3: Valeur: 100%
-ConcentrationAbility.AddEffectsInfo.Info4:	Cible: Incantateur
+ConcentrationAbility.AddEffectsInfo.Info4:	Cible: Vous
 ConcentrationAbility.AddEffectsInfo.Info5:	Temps d'Incantation: Instantané
 
 # /JuggernautAbility
-JuggernautAbility.AddEffectsInfo.Info1:
-JuggernautAbility.AddEffectsInfo.Info2:
-JuggernautAbility.AddEffectsInfo.Info3:
-JuggernautAbility.AddEffectsInfo.Info4:
-JuggernautAbility.AddEffectsInfo.Info5:
+JuggernautAbility.AddEffectsInfo.Info1:			Niveau 1: Durée: 1:00 Minute
+JuggernautAbility.AddEffectsInfo.Info2:			Niveau 2: Durée: 1:00 Minute
+JuggernautAbility.AddEffectsInfo.Info3:			Niveau 3: Durée: 1:00 Minute
+JuggernautAbility.AddEffectsInfo.Info4:			Cible: Familier sous contrôle
+JuggernautAbility.AddEffectsInfo.Info5:			Temps d'Incantation: Instantané
+JuggernautAbility.CannotUse.Dead:				Vous ne pouvez pas utiliser cette capacité en étant mort·e !
+JuggernautAbility.CannotUse.Mez:				Vous ne pouvez pas utiliser cette capacité sous l’effet d’un mezz !
+JuggernautAbility.CannotUse.Stunned:			Vous ne pouvez pas utiliser cette capacité lorsque vous êtes étourdi !
+JuggernautAbility.CannotUse.Sitting:			Vous ne pouvez pas utiliser cette capacité en étant assis !
+JuggernautAbility.Require.PetControlled:		Vous devez contrôler un familier pour utiliser cette capacité !
+JuggernautAbility.Require.PetInRange:			Votre familier est trop éloigné !
+JuggernautAbility.AlreadyActive:				Votre familier bénéficie déjà d'une capacité de ce type.
 
 # /MasteryofConcentrationAbility
-MasteryofConcentrationAbility.AddEffectsInfo.Info1:
-MasteryofConcentrationAbility.AddEffectsInfo.Info2:
-MasteryofConcentrationAbility.AddEffectsInfo.Info3:
-MasteryofConcentrationAbility.AddEffectsInfo.Info4:
-MasteryofConcentrationAbility.AddEffectsInfo.Info5:
+MasteryofConcentrationAbility.AddEffectsInfo.Info1:		Niveau 1: Durée: 30 Secondes
+MasteryofConcentrationAbility.AddEffectsInfo.Info2:		Niveau 2: Durée: 30 Secondes
+MasteryofConcentrationAbility.AddEffectsInfo.Info3:		Niveau 3: Durée: 30 Secondes
+MasteryofConcentrationAbility.AddEffectsInfo.Info4:		Cible: Vous
+MasteryofConcentrationAbility.AddEffectsInfo.Info5:		Temps d'Incantation: Instantané
+MasteryofConcentrationAbility.BlockedByShield:			Vous ne pouvez pas utiliser cette capacité pour le moment.
+MasteryofConcentrationAbility.Self.Cast:				Vous lancez {0} !
+MasteryofConcentrationAbility.Self.Steadier:			Vous gagnez en stabilité dans vos incantations !
+MasteryofConcentrationAbility.Area.CastsSpell:			{0} lance un sort !
+MasteryofConcentrationAbility.Area.Poise:				Les incantations de {0} sont d’un calme parfait !
 
 # /MysticCrystalLoreAbility
-MysticCrystalLoreAbility.AddEffectsInfo.Info1:	Niveau 1: Valeur: 30%
-MysticCrystalLoreAbility.AddEffectsInfo.Info2:	Niveau 2: Valeur: 60%
-MysticCrystalLoreAbility.AddEffectsInfo.Info3:	Niveau 3: Valeur: 90%
-MysticCrystalLoreAbility.AddEffectsInfo.Info4:	Cible: Incantateur
-MysticCrystalLoreAbility.AddEffectsInfo.Info5:	Temps d'Incantation: Instantané
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo1:	Niveau 1: Valeur: 25%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo2:	Niveau 2: Valeur: 40%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo3:	Niveau 3: Valeur: 60%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo4:	Niveau 3: Valeur: 80%
+MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo5:	Niveau 3: Valeur: 100%
+MysticCrystalLoreAbility.AddEffectsInfo.Info1:			Niveau 1: Valeur: 30%
+MysticCrystalLoreAbility.AddEffectsInfo.Info2:			Niveau 2: Valeur: 60%
+MysticCrystalLoreAbility.AddEffectsInfo.Info3:			Niveau 3: Valeur: 90%
+MysticCrystalLoreAbility.AddEffectsInfo.Info4:			Cible: Vous
+MysticCrystalLoreAbility.AddEffectsInfo.Info5:			Temps d'Incantation: Instantané
+MysticCrystalLoreAbility.AddEffectsInfo.Info6:			Ce sort ne peut pas être lancé en combat.
+MysticCrystalLoreAbility.YouGainMana:					Vous récupérez {0} mana.
+MysticCrystalLoreAbility.YouFullMana:					Votre mana est à son maximum.
 
 # /NegativeMaelstromAbility
-NegativeMaelstromAbility.AddEffectsInfo.Info1:
-NegativeMaelstromAbility.AddEffectsInfo.Info2:
-NegativeMaelstromAbility.AddEffectsInfo.Info3:
-NegativeMaelstromAbility.AddEffectsInfo.Info4:
-NegativeMaelstromAbility.AddEffectsInfo.Info5:
-NegativeMaelstromAbility.AddEffectsInfo.Info6:
-NegativeMaelstromAbility.AddEffectsInfo.Info7:
-NegativeMaelstromAbility.AddEffectsInfo.Info8:
-NegativeMaelstromAbility.AddEffectsInfo.Info9:
+NegativeMaelstromAbility.AddEffectsInfo.Info1:			Niveau 1: Durée: 30 Secondes
+NegativeMaelstromAbility.AddEffectsInfo.Info2:			Niveau 2: Durée: 30 Secondes
+NegativeMaelstromAbility.AddEffectsInfo.Info3:			Niveau 3: Durée: 30 Secondes
+NegativeMaelstromAbility.AddEffectsInfo.Info4:			Cible: Zone
+NegativeMaelstromAbility.AddEffectsInfo.Info5:			Portée: 1500
+NegativeMaelstromAbility.AddEffectsInfo.Info6:			Fréquence: 4.5 Secondes
+NegativeMaelstromAbility.AddEffectsInfo.Info7:			Temps d'Incantation: 2.0 Secondes
+NegativeMaelstromAbility.AddEffectsInfo.Info8:			Radius: 350
+NegativeMaelstromAbility.AddEffectsInfo.Info9:			Type de dégâts : Froid
+NegativeMaelstromAbility.Require.StandingStill:			Vous devez rester immobile pour utiliser cette capacité !
+NegativeMaelstromAbility.Require.GroundTargetInRange:	Votre cible au sol est trop éloignée pour utiliser cette capacité !
+NegativeMaelstromAbility.AlreadyCasting:				Une autre capacité est déjà en cours d'incantation.
+NegativeMaelstromAbility.Self.Cast:						Vous lancez {0} !
+NegativeMaelstromAbility.Area.CastsSpell:				{0} lance un sort !
+
+# /ArmsLengthAbility
+ArmsLengthAbility.AddEffectsInfo.Info1:                 Explosion de vitesse fulgurante et instoppable de 10 secondes. 
+ArmsLengthAbility.AddEffectsInfo.Info2:                 Cible: Vous
+ArmsLengthAbility.AddEffectsInfo.Info3:                 Durée: 10 Secondes
+ArmsLengthAbility.AddEffectsInfo.Info4:                 Temps d'Incantation: Instantané
+
+# /DecimationTrapAbility
+DecimationTrapAbility.AddEffectsInfo.Info1:             Piège qui inflige les dégâts suivants dans un rayon de 350 unités:
+DecimationTrapAbility.AddEffectsInfo.Info2:             Niveau 1: 300 Dommages
+DecimationTrapAbility.AddEffectsInfo.Info3:             Niveau 2: 600 Dommages
+DecimationTrapAbility.AddEffectsInfo.Info4:             Niveau 3: 900 Dommages
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo1:      Niveau 2: 450 Dommages
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo2:      Niveau 3: 600 Dommages
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo3:      Niveau 4: 750 Dommages
+DecimationTrapAbility.AddEffectsInfo.NoScaleInfo4:      Niveau 5: 900 Dommages
+DecimationTrapAbility.AddEffectsInfo.Info5:             Portée: 1500
+DecimationTrapAbility.AddEffectsInfo.Info6:             Cible: Cible au Sol
+DecimationTrapAbility.AddEffectsInfo.Info7:             Rayon: 350
+DecimationTrapAbility.AddEffectsInfo.Info8:             Temps d'Incantation: 2 Secondes
+DecimationTrapAbility.CancelCast:						Vous interrompez votre sort !
+DecimationTrapAbility.Hit.Enemy:						Vous touchez {0} pour {1} points de dégâts ({2}).
+
+# /BoilingCauldronAbility
+BoilingCauldronAbility.AddEffectsInfo.Info1:            Invoque un chaudron qui bouillonne 3.5 secondes sur place avant de se renverser et d'infliger des dégâts à tous les ennemis à proximité. Temps de recharge 15 min.
+BoilingCauldronAbility.AddEffectsInfo.Info2:            Cible: Ennemi
+BoilingCauldronAbility.AddEffectsInfo.Info3:            Durée: 3.5s
+BoilingCauldronAbility.AddEffectsInfo.Info4:            Temps d'Incantation: Instantané
+
+# /AmelioratingMelodiesAbility
+AmelioratingMelodiesAbility.AddEffectsInfo.Info1:       Niveau 1: Soigne 400 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.Info2:       Niveau 2: Soigne 250 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.Info3:       Niveau 3: Soigne 400 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo1:       Niveau 2: Soigne 175 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo2:       Niveau 3: Soigne 250 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo3:       Niveau 4: Soigne 325 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.NoScaleInfo4:       Niveau 5: Soigne 400 / tick
+AmelioratingMelodiesAbility.AddEffectsInfo.Info4:       Cible: Groupe, excepté vous-même
+AmelioratingMelodiesAbility.AddEffectsInfo.Info5:       Durée: 30 Secondes
+AmelioratingMelodiesAbility.AddEffectsInfo.Info6:       Temps d'Incantation: Instantané
+
+# /AngerOfTheGodsAbility
+AngerOfTheGodsAbility.AddEffectsInfo.Info1:             Niveau 1: Bonus de 10 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.Info2:             Niveau 2: Bonus de 20 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.Info3:             Niveau 3: Bonus de 30 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo1:		Niveau 2: Bonus de 15 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo2:		Niveau 3: Bonus de 20 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo3:		Niveau 4: Bonus de 25 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo4:		Niveau 5: Bonus de 30 DPS
+AngerOfTheGodsAbility.AddEffectsInfo.Info4:             Cible: Groupe
+AngerOfTheGodsAbility.AddEffectsInfo.Info5:             Durée: 30 Secondes
+AngerOfTheGodsAbility.AddEffectsInfo.Info6:             Temps d'Incantation: Instantané
+
+# /BloodDrinkingAbility
+BloodDrinkingAbility.AddEffectsInfo.Info1:				Permet à l'Assassin de récupérer 20% des dégâts qu'il cause à sa cible durant 30 secondes.
+BloodDrinkingAbility.AddEffectsInfo.Info2:				Cible: Vous
+BloodDrinkingAbility.AddEffectsInfo.Info3:				Durée: 30 Secondes
+BloodDrinkingAbility.AddEffectsInfo.Info4:				Temps d'Incantation: Instantané
+BloodDrinkingAbility.AddEffectsInfo.Info5:				Temps de réutilisation: 5 minutes
+
+# /SoldiersCitadelAbility
+SoldiersCitadelAbility.AddEffectsInfo.Info1:            +50 % blocage/parade pendant 30 s, -10 % blocage/parade pendant 15 s.
+SoldiersCitadelAbility.AddEffectsInfo.Info2:            Cible: Vous
+SoldiersCitadelAbility.AddEffectsInfo.Info3:            Durée: 45 Secondes
+SoldiersCitadelAbility.AddEffectsInfo.Info4:            Temps d'Incantation: Instantané
+
+# /SputinsLegacyAbility
+SputinsLegacyAbility.AddEffectsInfo.Info1:              Le Soigneur est invincible pendant 30 sec.
+SputinsLegacyAbility.AddEffectsInfo.Info2:              Cible: Vous
+SputinsLegacyAbility.AddEffectsInfo.Info3:              Durée: 30 Secondes
+SputinsLegacyAbility.AddEffectsInfo.Info4:              Temps d'Incantation: Instantané
+
+# /TestudoAbility
+TestudoAbility.AddEffectsInfo.Info1:    Le guerrier équipé d'un bouclier adopte une posture défensive, réduisant les dégâts subis de 90% pendant 45 secondes.
+TestudoAbility.AddEffectsInfo.Info2:	Peut seulement se déplacer à vitesse réduite (les buffs de vitesse n'ont aucun effet) et ne peut pas attaquer.
+TestudoAbility.AddEffectsInfo.Info3:    L'utilisation d'un style rompt la forme Testudo. Efficace uniquement contre les ennemis du royaume adverse.
+TestudoAbility.AddEffectsInfo.Info4:    Cible: Vous
+TestudoAbility.AddEffectsInfo.Info5:    Durée: 45 Secondes
+TestudoAbility.AddEffectsInfo.Info6:	Temps d'Incantation: Instantané
 
 # /RAPropertyEnhancer
 RAPropertyEnhancer.DelveInfo.Info1:		Niveau {0}: Valeur: {1}{2}
@@ -101,21 +205,45 @@ RAPropertyEnhancer.DelveInfo.Info1:		Niveau {0}: Valeur: {1}{2}
 RAStatEnhancer.DelveInfo.Info1:			Niveau {0}: Valeur: {1}
 
 # /SecondWindAbility
-SecondWindAbility.AddEffectsInfo.Info1:			
-SecondWindAbility.AddEffectsInfo.Info4:			
-SecondWindAbility.AddEffectsInfo.Info5:			
+SecondWindAbility.AddEffectsInfo.Info1:		Valeur: 100%
+SecondWindAbility.AddEffectsInfo.Info4:		Cible: Vous
+SecondWindAbility.AddEffectsInfo.Info5:		Temps d'Incantation: Instantané
 
-# /ShadowStrikeAbility		
-ShadowStrikeAbility.Moving:				Vous bougez et interrompez shadow strike !
-ShadowStrikeAbility.Attacked:			Vous êtes attaqués et interrompez shadow strike !
-ShadowStrikeAbility.Target:				Vous devez cibler un objet vivant pour utiliser cette compétence.
+# /ShadowStrikeAbility
+ShadowStrikeAbility.AddEffectsInfo.Info1:   L'Assassin prend 10 secondes pour se fondre dans les ténèbres.
+ShadowStrikeAbility.AddEffectsInfo.Info2:   Une fois dissimulé dans l'ombre, l'Assassin se téléporte instantanément vers l'ennemi de son choix dans un rayon de 1000 unités pour réaliser une Perforation artérielle.
+ShadowStrikeAbility.AddEffectsInfo.Info3:   Cette capacité ne peut pas être utilisée pour entrer dans un donjon ou une tour verrouillés.
+ShadowStrikeAbility.Moving:					Vous bougez et interrompez shadow strike !
+ShadowStrikeAbility.Attacked:				Vous êtes attaqués et interrompez shadow strike !
+ShadowStrikeAbility.Target:					Il vous faut une cible vivante pour utiliser cette compétence.
 
-# /Assassinate		
-AssassinateAbility.Moving:				Vous bougez et interrompez votre action !
-AssassinateAbility.Attacked:			Vous êtes attaqués et interrompez votre action !
-AssassinateAbility.Target:				Vous devez cibler un objet vivant pour utiliser cette compétence.
-AssassinateAbility.Preparing:			Vous vous préparez à assassiner
+# /Assassinate
+AssassinateAbility.AddEffectsInfo.Info1:	L'Assassin sélectionne une cible dans un rayon de 750 unités et passe 15 secondes immobile afin de préparer sa tentative d'assassinat.
+AssassinateAbility.AddEffectsInfo.Info2:	La tentative échoue si l'Assassin effectue une action durant ces 15 secondes, ou si la cible s'éloigne de plus de 750 unités et que le temps de recharge n'est pas restitué.  
+AssassinateAbility.AddEffectsInfo.Info3:	Une fois préparé, la prochaine attaque sur cette cible par l'Assassin ne brisera pas le camouflage.
+AssassinateAbility.Moving:					Vous bougez et interrompez votre action !
+AssassinateAbility.Attacked:				Vous êtes attaqués et interrompez votre action !
+AssassinateAbility.Target:					Il vous faut une cible vivante pour utiliser cette compétence.
+AssassinateAbility.Preparing:				Vous vous préparez à assassiner
+
+# /CallOfDarknessAbility
+CallOfDarknessAbility.AddEffectsInfo.Info1: Invoque un familier en 3 secondes, durée 1 minute, temps de recharge 15 min.
+CallOfDarknessAbility.AddEffectsInfo.Info2: Cible: Vous
+CallOfDarknessAbility.AddEffectsInfo.Info3: Durée: 1 minute
+CallOfDarknessAbility.AddEffectsInfo.Info4: Temps d'Incantation: Instantané
+
+# /CallOfShadowsAbility
+CallOfShadowsAbility.AddEffectsInfo.Info1:  Incarnez un démon du Néant pendant 30 secondes.
+CallOfShadowsAbility.AddEffectsInfo.Info2:	Vous bénéficiez des avantages des formes Décrépit et Chtonique avec leurs bonus renforcés de 10%.
+CallOfShadowsAbility.AddEffectsInfo.Info3:	Vous infligez une maladie destructrice à la cible, ralentissant ses mouvements.
+CallOfShadowsAbility.AddEffectsInfo.Info4:	Vos familiers gagnent en puissance, comme sous la forme Esprit.
+CallOfShadowsAbility.AddEffectsInfo.Info5:	Vos sorts ne peuvent être interrompus.
 
 # /TrueShot		
 TrueshotAbility.PrepareTrueshot:		Vous préparez un Tir Précis !
 
+# /ArrowSummoning
+ArrowSummoningAbility.NoSpaceInventory:	Vous n'avez pas assez d'espace dans votre inventaire pour placer cet objet !  
+
+# /ChargeAbility
+ChargeAbility.CheckPreconditions.Snared:				Vous ne pouvez pas utiliser cette capacité pendant que vous êtes entravé !

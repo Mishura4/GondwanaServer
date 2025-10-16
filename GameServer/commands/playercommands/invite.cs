@@ -19,6 +19,8 @@
 using AmteScripts.Managers;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System.Numerics;
+using static DOL.GS.Scripts.GuarksRing;
 
 namespace DOL.GS.Commands
 {
@@ -163,27 +165,9 @@ namespace DOL.GS.Commands
 
             GameClient targetNewClient = target?.Client ?? WorldMgr.GetClientByPlayerNameAndRealm(targetName, 0, true);
 
-            client.Out.SendMessage(
-                    LanguageMgr.GetTranslation(
-                        client.Account.Language,
-                        "Commands.Players.Invite.YouInvite",
-                        client.Player.GetPersonalizedName(target)),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            target!.Out.SendGroupInviteCommand(
-                client.Player,
-                LanguageMgr.GetTranslation(
-                    targetNewClient.Account.Language,
-                    "Commands.Players.Invite.InvitedYouTo",
-                    target.GetPersonalizedName(client.Player),
-                    client.Player.GetPronoun(1, false)));
-            target.Out.SendMessage(
-                LanguageMgr.GetTranslation(
-                    targetNewClient.Account.Language,
-                    "Commands.Players.Invite.InvitedYou",
-                    target.GetPersonalizedName(client.Player),
-                    client.Player.GetPronoun(1, false)),
-                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Invite.YouInvite", client.Player.GetPersonalizedName(target)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            target!.Out.SendGroupInviteCommand(client.Player, LanguageMgr.GetTranslation(targetNewClient.Account.Language, "Commands.Players.Invite.InvitedYou", target.GetPersonalizedName(client.Player), client.Player.GetPronoun(1, false)) + "\n" + LanguageMgr.GetTranslation(targetNewClient.Account.Language, "InviteToGroupHandler.InvitePrompt2"));
+            target.Out.SendMessage(LanguageMgr.GetTranslation(targetNewClient.Account.Language, "Commands.Players.Invite.InvitedYou", target.GetPersonalizedName(client.Player), client.Player.GetPronoun(1, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
     }
 }

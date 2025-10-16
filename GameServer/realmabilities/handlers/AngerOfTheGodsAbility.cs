@@ -5,6 +5,7 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.Database;
 using DOL.GS.Spells;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -93,25 +94,25 @@ namespace DOL.GS.RealmAbilities
         {
             if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
             {
-                list.Add("Level 1: Adds 10 DPS");
-                list.Add("Level 2: Adds 15 DPS");
-                list.Add("Level 3: Adds 20 DPS");
-                list.Add("Level 4: Adds 25 DPS");
-                list.Add("Level 5: Adds 30 DPS");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo3"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.NoScaleInfo4"));
                 list.Add("");
-                list.Add("Target: Group");
-                list.Add("Duration: 30 sec");
-                list.Add("Casting time: instant");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info5"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info6"));
             }
             else
             {
-                list.Add("Level 1: Adds 10 DPS");
-                list.Add("Level 2: Adds 20 DPS");
-                list.Add("Level 3: Adds 30 DPS");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info3"));
                 list.Add("");
-                list.Add("Target: Group");
-                list.Add("Duration: 30 sec");
-                list.Add("Casting time: instant");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info5"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AngerOfTheGodsAbility.AddEffectsInfo.Info6"));
             }
 
         }

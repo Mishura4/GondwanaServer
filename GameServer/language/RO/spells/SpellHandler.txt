@@ -1,0 +1,328 @@
+# SpellHandler (RO)
+SpellHandler.CancelEffect:			Îți dezactivezi efectul.
+SpellHandler.PulsingSpellCancelled:		Vrăja ta a fost dezactivată.
+SpellHandler.PulsingSpellNoMana:		Nu ai suficientă mană și vraja ta a fost dezactivată.
+SpellHandler.NoMoreMana:			Ți-ai consumat toată mana și nu mai poți arunca vrăji!
+SpellHandler.StopPlayingSong:			Te oprești din a-ți interpreta melodia.
+SpellHandler.TooFarStopPlayingSong:		Ești prea departe de țintă. Te oprești din a-ți interpreta melodia.
+SpellHandler.CasterMove:			Te miști și îți întrerupi incantația!
+SpellHandler.BeginCasting:			Începi să arunci o vrajă de {0}!
+SpellHandler.BeginPlaying:			Începi să cânți {0}!
+SpellHandler.SpellInterrupted:			{0} te atacă și vraja îți este întreruptă!
+SpellHandler.DamageImmunity:			{0} este imun la acest efect!
+SpellHandler.Target.TooFast:			{0} se mișcă prea repede pentru ca această vrajă să aibă efect!
+SpellHandler.DeadCantCast:			Ești mort și nu poți arunca vrăji!
+SpellHandler.CantCastInSiegeram:			Nu poți arunca vrăji într-un berbec de asediu!
+SpellHandler.SilencedCantCast:			Ești redus la tăcere și momentan nu poți arunca vrăji.
+SpellHandler.PhaseshiftedCantCast:		Ești sub efectul „Deplasare de fază” și nu poți arunca vrăji.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} este sub efectul „Deplasare de fază” și nu poate fi afectat de această vrajă!
+SpellHandler.OnlyWorksOnDead:			Această vrajă funcționează doar pe membrii căzuți ai regatului tău!
+SpellHandler.CantAttackSelf:			Nu te poți ataca pe tine însuți!
+SpellHandler.TargetNotInView:			Ținta ta nu este în câmpul vizual!
+SpellHandler.TargetNotInViewSpellFail:		Ținta se află în afara câmpului tău vizual. Vraja eșuează!
+SpellHandler.TargetNotVisible:			Ținta ta nu este vizibilă!
+SpellHandler.TargetInvalid:			Țintă invalidă.
+SpellHandler.MustSelectTarget:			Trebuie să selectezi o țintă pentru această vrajă!
+SpellHandler.TargetTooFar:			Acea țintă este prea departe!
+SpellHandler.AreaTargetOutOfRange:		Ținta de zonă este în afara razei. Alege un punct mai apropiat.
+SpellHandler.MustCastOnControlled:		Trebuie să arunci această vrajă pe o creatură aflată sub controlul tău.
+SpellHandler.SpellRequiresConcentration:	Această vrajă necesită {0} puncte de concentrare!
+SpellHandler.MaxConcentrationSpells:		Poți avea cel mult 50 de vrăji de concentrare active simultan!
+SpellHandler.WrongInstrument:			Nu ai echipat tipul corect de instrument!
+SpellHandler.CantCastWhileSitting:		Nu poți arunca vrăji în timp ce stai jos!
+SpellHandler.CantCastWhileSitting2:		Nu poți arunca această vrajă stând jos!
+SpellHandler.CantCastWhileMoving:		Trebuie să stai nemișcat pentru a arunca această vrajă!
+SpellHandler.CantCastOnDead:			Nu poți arunca această vrajă pe un mort!
+SpellHandler.MustWaitBeforeUse:			Trebuie să aștepți {0} secunde înainte de a putea folosi din nou această vrajă!
+SpellHandler.InteruptWaitBeforeCast:		Ai fost întrerupt și trebuie să aștepți {0} secunde înainte de a arunca din nou!
+SpellHandler.NotEnoughPower:			Nu ai suficientă mană pentru a arunca această vrajă!
+SpellHandler.GroundTargetNotInView:		Ținta ta de pe sol nu este în câmpul vizual!
+SpellHandler.OnlyWorksOnFriendlyTargets:	Această vrajă funcționează doar pe ținte aliate!
+SpellHandler.LostFocusOnSpell:			Îți pierzi concentrarea asupra vrăjii {0}.
+SpellHandler.InterruptFocus:			Te miști și îți întrerupi concentrarea!
+SpellHandler.YouResistEffect:			Reziști efectului!
+SpellHandler.TargetResistsEffect:		{0} rezistă efectului!
+SpellHandler.PetResistsEffect:			Companionul tău {0} rezistă efectului!
+SpellHandler.NoEffectOnKeepComponent:		Vraja ta nu are efect asupra componentei fortăreței!
+SpellHandler.NoEffectOnTarget:			Vraja ta nu are efect asupra lui {0}!
+SpellHandler.TargetAlreadyMezz:			Ținta ta este deja afectată de mezz!
+SpellHandler.CantHaveEffectAgainYet:		Nu poți primi din nou acest efect încă!
+SpellHandler.AlreadyHaveEffectWait:		Ai deja acest efect. Așteaptă să se termine! Vraja a eșuat.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} nu poate primi încă din nou acest efect!
+SpellHandler.TargetAlreadyHasEffect:		{0} are deja acest efect.
+SpellHandler.WaitUntilExpires:			Așteaptă să expire. Vraja a eșuat.
+SpellHandler.TargetImmune:			Ținta ta este imună!
+SpellHandler.MezIntercepted:			Efectul defensiv al obiectului tău interceptează vraja de mezz și se disipează!
+SpellHandler.CeremonialBracerInterceptMez:	Brățara Ceremonială îți interceptează mezz-ul!
+SpellHandler.StunIntercepted:			Efectul defensiv al obiectului tău interceptează amețirea și se disipează!
+SpellHandler.YouMiss:				Ratezi ținta!
+SpellHandler.TargetMissed:			{0} și-a ratat ținta!
+SpellHandler.EngageCannotBeUsed:			{0} a fost atacat recent și nu îl poți angaja.
+SpellHandler.NotEnoughEndurance:			Te concentrezi pe blocarea loviturii!
+SpellHandler.MustTargetPlayer:			Trebuie să țintești un jucător.
+SpellHandler.BuffNoEffectOnVampiir:		Îmbunătățirea ta nu are efect asupra Vampiir-ului!
+SpellHandler.BuffNoEffectOnYou:			Această îmbunătățire nu are efect asupra ta!
+SpellHandler.AlreadyHasEffect:			Ai deja acest efect!
+SpellHandler.AlreadyHasThisEffect:		{0} are deja acest efect.
+SpellHandler.TargetIsStealthed:			Această vrajă nu poate fi aplicată pe o țintă camuflată!
+SpellHandler.DefaultDescription:			{0} are o valoare de {1} și un grad de daune de {2}.
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Companionul tău nu este în câmpul vizual.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Întrerupere a liniei vizuale în CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	Nu îți poți vedea ținta de aici!
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Întrerupere a liniei vizuale în CheckLOSNPCToTarget
+
+SpellHandler.HitTarget:			Îl lovești pe {0} pentru {1}{2} daune!
+SpellHandler.NPCHitTarget:			{0}-ul tău îl lovește pe {1} pentru {2}{3} daune!
+SpellHandler.CriticalHit:			Acordezi o lovitură critică și provoci {0} daune suplimentare!
+SpellHandler.TargetPronoun.Your:		Al tău
+SpellHandler.TargetPronoun.Targets:		Ținta
+
+SpellHandler.MustBeStealthedBow:		Trebuie să fii camuflat și să folosești un arc pentru a utiliza această abilitate!
+SpellHandler.MustWieldBow:			Trebuie să folosești un arc pentru a utiliza această abilitate!
+SpellHandler.Archery.Prepare:			Pregătești un {0}.
+SpellHandler.Archery.DisarmedCantCast:		Nu poți arunca vrăji deoarece ești dezarmat.
+SpellHandler.ChamberSpell.YouInvulnerable:	Ești în prezent invulnerabil și nu poți arunca această vrajă!
+SpellHandler.ChamberSpell.TargetInvulnerable:	Ținta ta este în prezent invulnerabilă și nu poate fi atacată!
+SpellHandler.SiegeArrow.InvalidTarget:		Pentru această vrajă trebuie să vizezi o componentă a fortăreței!
+SpellHandler.SiegeArrow.InvalidComponentTarget:	Ținta ta trebuie să fie o componentă a fortăreței!
+SpellHandler.SiegeArrow.PrepareSpell:		Pregătești {0}.
+SpellHandler.BumpSpell.TargetHurled:		{0} este aruncat în aer!
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Ținta ta are deja un efect de acest tip!
+
+SpellHandler.Convoker.AreaTargetOutOfRange:	Ținta de zonă este în afara razei. Alege un punct pe sol mai apropiat.
+SpellHandler.Convoker.AreaTargetNotInView:	Ținta de zonă nu este în câmpul vizual.
+SpellHandler.Convoker.MustSetGroundTarget:	Trebuie să setezi o țintă la sol!
+
+SpellHandler.IchorOfTheDeep.NoTarget:		Ai nevoie de o țintă pentru această abilitate!
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} este prea departe.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	Folosești deja această abilitate.
+SpellHandler.IchorOfTheDeep.CastMessage:	Arunci {0}!
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} aruncă o vrajă!
+SpellHandler.IchorOfTheDeep.HitMob:		Îl lovești pe {0} pentru {1} daune.
+SpellHandler.IchorOfTheDeep.HitPlayer:		Îl lovești pe {0} pentru {1} daune.
+
+SpellHandler.OmniHeal.SelfHealed:		Recuperezi {0} puncte de rezistență și {1} puncte de mană.
+SpellHandler.OmniHeal.TargetHealed:		Îl vindeci pe {0} cu {1} puncte de rezistență și {2} puncte de mană.
+SpellHandler.OmniHeal.YouAreHealed:		{0} te vindecă cu {1} puncte de rezistență și {2} puncte de mană.
+SpellHandler.OmniHarm.InflictLossesToTarget:	Îi provoci lui {2} o pierdere de {0} rezistență și {1} mană!
+SpellHandler.OmniHarm.InflictLossesToYou:		{0} îți provoacă o pierdere de {1} rezistență și {2} mană!
+
+SpellHandler.HealSpell.TargetDead:		{0} este mort!
+SpellHandler.HealSpell.NoHelp:			Acest jucător nu dorește ajutor.
+SpellHandler.HealSpell.FullyHealedSelf:		Ești pe deplin vindecat.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} este pe deplin vindecat.
+SpellHandler.HealSpell.RealmPointsGained:	Primești {0} puncte de regat pentru vindecarea unui membru al regatului tău.
+SpellHandler.HealSpell.SelfHealed:		Te vindeci cu {0} puncte de viață.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} se vindecă cu {1} puncte de viață.
+SpellHandler.HealSpell.TargetHealed:		Îl vindeci pe {0} cu {1} puncte de viață!
+SpellHandler.HealSpell.TargetDamageToHeal:		Îl vindeci pe {0} cu {1} puncte de viață în loc să provoci daune din cauza scutului său magic!
+SpellHandler.HealSpell.YouAreHealed:		{0} te vindecă cu {1} puncte de viață.
+SpellHandler.HealSpell.CriticalHeal:		Efectuezi o vindecare critică și restaurezi {0} puncte de viață suplimentare!
+SpellHandler.HealSpell.EfficientHealingBuff:	Îmbunătățirea ta de eficiență a vindecării îți oferă {0} puncte de vindecare suplimentare!
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Îmbunătățirea ta de eficiență a rezistenței îți oferă {0} puncte de rezistență suplimentare la vindecare!
+SpellHandler.HealSpell.TargetDamnedDamaged:		Ești blestemat! Vraja de vindecare îți provoacă {0} daune în loc să te vindece!
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	Vindecarea este mai puțin eficientă deoarece ești blestemat!
+SpellHandler.HealSpell.DamnedNoHeal:		Vraja de vindecare nu are efect asupra ta deoarece ești blestemat!
+SpellHandler.HealSpell.YouDiseased:			Ești bolnav, vindecarea este redusă cu {0}%!
+SpellHandler.HealSpell.HealingReduced:		Vindecarea este redusă cu {0}% din cauza efectelor de inhibare a vindecării.
+SpellHandler.HealSpell.HealingReducedShield:		Vindecarea este redusă cu {0}% din cauza barierei de protecție a lui {1}.
+SpellHandler.HealSpell.HealingNull:			Vraja ta nu vindecă ținta din cauza inhibării vindecării.
+SpellHandler.HealSpell.HealingNullYou:		Vindecarea eșuează din cauza efectelor tale de inhibare.
+SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	Sustragerea de viață nu are efect deoarece atât tu, cât și ținta sunteți blestemați!
+SpellHandler.LifeDrain.TargetDamnedDamaged:		Ești blestemat! Sustragerea de viață îți provoacă {0} daune în loc să te vindece!
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	Sustragerea de viață este mai puțin eficientă deoarece {0} este blestemat!
+SpellHandler.LifeDrain.DamnedNoHeal:		Sustragerea de viață nu te vindecă deoarece ești blestemat!
+SpellHandler.LifeDrain.DamnedTargetHealed:		{0} este vindecat și recuperează {1} puncte de viață!
+SpellHandler.LifeDrain.DamnedTargetCriticallyHealed:	{0} primește o vindecare critică și recuperează {1} puncte de viață!
+SpellHandler.LifeDrain.DamnedYouHealed:		Ești vindecat și recuperezi {0} puncte de viață!
+SpellHandler.LifeDrain.DamnedYouCriticallyHealed:	Primești o vindecare critică și recuperezi {0} puncte de viață!
+SpellHandler.SpreadHeal.GroupFullyHealed:	Grupul tău este deja pe deplin vindecat!
+
+SpellHandler.Zephyr.NoAttackInZephyr:		Ești purtat de un Zefir și nu poți fi atacat!
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Ținta ta este purtată de un Zefir și nu poate fi atacată!
+SpellHandler.Zephyr.PickedUpByZephyr:		Un Zefir puternic te ridică în aer!
+SpellHandler.Phaseshift.NotEnoughEndurance:	Ai nevoie de 50% rezistență pentru a folosi această vrajă!
+SpellHandler.Groupport.CannotUseAbilityHere:	Nu poți folosi această abilitate aici!
+SpellHandler.Groupport.BindInAnotherRegion:	Leagă-te într-un alt regat pentru a folosi această abilitate!
+SpellHandler.Groupport.GroupInCombat:		Nu poți teleporta un grup aflat în luptă!
+SpellHandler.Groupport.NotInGroup:		Nu ești într-un grup!
+SpellHandler.TargetNoLongerInRange:		Ținta ta nu mai este în rază.
+SpellHandler.TargetNoLongerInView:		Ținta ta nu mai este în câmpul vizual.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} se mișcă prea repede pentru ca această vrajă să aibă efect!
+SpellHandler.Earthquake.Ending:			Cutremurul s-a încheiat.
+SpellHandler.YouDamnedResistEffect:		Ești blestemat și reziști efectului!
+SpellHandler.TargetDamnedResistsEffect:		{0} este blestemat și rezistă efectului!
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	Nu poți arunca această vrajă în luptă!
+SpellHandler.VampiirBolt.PowerTaken:		{0} îți extrage {1} mană!
+SpellHandler.VampiirBolt.PowerReceived:		Primești {0} mană de la {1}!
+SpellHandler.VampiirBolt.NoPowerReceived:	Nu ai recuperat mană de la {0}!
+SpellHandler.VampiirBolt.TargetTooHigh:		Ținta nu poate fi afectată de această vrajă deoarece nivelul ei este prea mare!
+
+SpellHandler.WrathofChampions.CastSpell:	Arunci {0}!
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} aruncă o vrajă!
+SpellHandler.WrathofChampions.HitMob:		Îl lovești pe {0} pentru {1} daune.
+SpellHandler.WrathofChampions.HitPlayer:		Îl lovești pe {0} pentru {1} daune.
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} te lovește pentru {1} daune.
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Permiți ca {0} să te învie cu {1} la sută puncte de viață?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Nimeni nu încearcă în prezent să te învie.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Refuzi o înviere.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Ai fost înviat de {0}!
+SpellHandler.ResurrectSpellHandler.ResurrectedByToken:	O putere miraculoasă te readuce la viață!
+SpellHandler.ResurrectSpellHandler.SelfTokenResurrectDialog:	O putere miraculoasă te readuce la viață! Îți restabilește {0}% viață.
+SpellHandler.ResurrectSpellHandler.RezExpired:		Vraja ta de înviere a expirat.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Ținta ta ia deja în considerare o înviere!
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		Jucătorul pe care l-ai înviat nu a oferit puncte de regat la moarte.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		Prin urmare, nu primești puncte de regat pentru învierea lui.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Concentrarea ta scade.
+SpellHandler.Battlewarder.WarderFallen:		Gardianul tău de Bătălie a căzut!
+SpellHandler.Convoker.TemplateNotFound:		NPCTemplate {0} nu a fost găsit!
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Companionul tău are deja o abilitate activă de acest tip.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	Nu poți folosi această abilitate pe propriul tău companion.
+
+SpellHandler.BoltSpell.PartialBlock:		Blochezi parțial vraja lui {0}!
+SpellHandler.BoltSpell.Blocked:			{0} blochează!
+
+SpellHandler.Arrow.Block:			Blochezi săgeata lui {0}!
+SpellHandler.Arrow.ArrowBlocked:			{0} îți blochează săgeata!
+SpellHandler.Archery.PenetrateBarrier:		Un foc a pătruns prin bariera ta magică!
+SpellHandler.Archery.StrikeAbsorbed:		Focul tău a fost absorbit de o barieră magică!
+SpellHandler.Archery.BlowAbsorbed:		Lovitura a fost absorbită de o barieră magică!
+SpellHandler.Archery.Interrupted:			{0} te atacă și focul îți este întrerupt!
+
+SpellHandler.Chamber.CannotUseState:		Nu poți folosi asta în starea ta actuală.
+SpellHandler.Chamber.TargetNotAttackable:	Această țintă nu poate fi atacată în prezent!
+SpellHandler.Chamber.SelectFirstSpell:		Selectează prima vrajă pentru {0}-ul tău.
+SpellHandler.Chamber.NoSpellsLoaded:		Nu sunt vrăji încărcate în {0}.
+SpellHandler.Chamber.ReadyForUse:		{0}-ul tău este gata de utilizare.
+SpellHandler.Chamber.CastsSpell:			{0} aruncă o vrajă!
+
+SpellHandler.Lifedrain.Heal:			Furi {0} punct{1} de viață.
+SpellHandler.Lifedrain.NoAbsorb:		Nu mai poți absorbi puncte de viață.
+SpellHandler.PowerDrain.PowerGain:		Sifonezi {0} mană de la țintă!
+SpellHandler.PowerDrain.PowerLoss:		{0}% din mana ta a fost drenată de {1}!
+SpellHandler.PowerDrain.NoAbsorb:		Nu mai poți absorbi mană.
+SpellHandler.PowerLock.SpellHit:			{0} îți drenează {1} mană.
+SpellHandler.PowerLock.StealSuccess:		Furi {1} mană de la {0}!
+SpellHandler.PowerLock.StealOverflow:		Furi {1} mană de la {0}! ({2} surplus)
+
+SpellHandler.PrimerSpell.EffectExpired:		Efectul vrăjii tale de modificare a expirat.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	Te miști și îți rupi vraja de modificare.
+
+SpellHandler.BuffShear.ShearSuccess:		Vraja ta smulge o parte din magia de îmbunătățire a țintei.
+SpellHandler.BuffShear.EnhancingMagicRipped:	O parte din magia ta de îmbunătățire a fost înlăturată de o vrajă!
+SpellHandler.BuffShear.ConnectionTooStrong:	Legătura țintei cu îmbunătățirea sa este prea puternică pentru a fi înlăturată.
+SpellHandler.BuffShear.NoEnhancementFound:	Nu s-a găsit nicio îmbunătățire de acest tip pe țintă.
+SpellHandler.AblativeShear.ShearSuccess:		Vraja ta îndepărtează scuturile ablative ale țintei.
+SpellHandler.AblativeShear.EnhancingMagicRipped:	Scutul tău ablativ a fost îndepărtat de o vrajă!
+SpellHandler.AblativeShear.NoEnhancementFound:	Ținta nu are un scut ablativ.
+
+SpellHandler.Conversion.MagicalAbsorption:	O vrajă magică absoarbe {0} daune din atacul tău!
+SpellHandler.Conversion.ConvertToHealth:	Transformi {0} daune în puncte de viață.
+SpellHandler.Conversion.CannotConvertMoreHealth:	Nu poți transforma mai mult în viață!
+SpellHandler.Conversion.ConvertToEndurance:	Transformi {0} daune în rezistență.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	Nu poți transforma mai mult în rezistență!
+SpellHandler.Conversion.ConvertToMana:		Transformi {0} daune în puncte de mană.
+SpellHandler.Conversion.CannotConvertMoreMana:	Nu poți transforma mai mult în puncte de mană!
+SpellHandler.PetConversion.AbsorbPower:		Absorbi {0} puncte de mană.
+SpellHandler.PetConversion.ManaFull:		Bara ta de mană este deja plină!
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	Bariera de reducere a daunelor absoarbe {0} puncte de daune!
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	O barieră de reducere a daunelor absoarbe {0} puncte de daune din atacul tău!
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	Bariera îți returnează {0} puncte de mană.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	Furi {0} punct{1} de viață.
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	Nu mai poți absorbi puncte de viață.
+SpellHandler.DamageToPower.PowerSteal:		Furi {0} punct{1} de mană.
+SpellHandler.DamageToPower.NoMorePower:		Nu mai poți absorbi mană.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} îți fură {1} rezistență!
+SpellHandler.EnduranceDrain.StealSuccess:	Furi {1} rezistență de la {0}!
+SpellHandler.EnduranceDrain.StealPoints:		Furi {0} punct{1} de rezistență.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	Nu mai poți absorbi rezistență.
+SpellHandler.EnduranceHeal.CasterFull:		Bara ta de rezistență este plină.
+SpellHandler.EnduranceHeal.TargetFull:		{0} are bara de rezistență plină.
+SpellHandler.EnduranceHeal.CasterHealed:		Restaurezi {0} puncte de rezistență.
+SpellHandler.EnduranceHeal.TargetHealed:		Îi restaurezi lui {1} {0} puncte de rezistență.
+SpellHandler.EnduranceHeal.TargetRestored:	Rezistența ta a fost restaurată de {0} cu {1} puncte.
+SpellHandler.EnduranceHeal.TargetTooHigh:	Nu poți lansa vindecare a rezistenței dacă ținta are peste 90% din bară plină!
+SpellHandler.HealthToEndurance.TransferLife:	Transferi {0} punct(e) de viață în rezistență!
+SpellHandler.HealthToEndurance.InsufficientHealth:	Sănătatea ta este insuficientă pentru a efectua această vrajă!
+SpellHandler.HealthToEndurance.Diseased:		Ești bolnav! Conversia vieții în rezistență este redusă!
+SpellHandler.HealthToEndurance.DamnedNoEffect:	Ești blestemat! Conversia vieții în rezistență eșuează!
+SpellHandler.HealthToEndurance.DamnedPartialEffect:	Ești blestemat! Conversia vieții în rezistență este redusă!
+SpellHandler.HealthToEndurance.HealthLost:	Transferi {0}% din punctele tale de viață în rezistență!
+SpellHandler.HealthToEndurance.EnduranceGained:	Primești înapoi {0}% rezistență!
+
+SpellHandler.FocusShell.NoPets:			Această vrajă nu poate fi aruncată pe companionii de luptă!
+SpellHandler.FocusShell.SameRealm:		Această vrajă funcționează doar pe membrii regatului tău!
+SpellHandler.FocusShell.MustBeRvR:		Această vrajă poate fi folosită doar în RvR sau PvP.
+SpellHandler.SummonSpell.PetControl:		{0} se află acum sub controlul tău.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	Nu poți arunca această vrajă aici!
+
+SpellHandler.PowerHeal.FullPowerOther:		Bara de mană a lui {0} este plină!
+SpellHandler.PowerHeal.RestorePowerSelf:	Restaurezi {0} puncte de mană.
+SpellHandler.PowerHeal.RestorePowerOther:	Îi restaurezi lui {1} {0} puncte de mană!
+SpellHandler.PowerHeal.PowerRestored:		Mana ta a fost restaurată de {0} cu {1} puncte.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	Nu poți transfera mană către tine însuți!
+SpellHandler.PowerTransfer.TransferSuccess:	Transferi {0} puncte de mană către {1}!
+SpellHandler.PowerTransfer.PowerReceived:	{0} îți transferă {1} puncte de mană!
+SpellHandler.PowerRegenBuff.NoEffect:		Această vrajă nu are efect asupra acestei clase!
+
+SpellHandler.Silence.AlreadyAffected:		Ținta ta este deja afectată de un efect de acest tip!
+SpellHandler.SpeedEnhancement.CombatRecent:	Ai fost recent în luptă; vraja nu are efect asupra ta!
+SpellHandler.WaterBreathing.StartEffect:	Te poți mișca liber și poți respira sub apă ca în aer!
+SpellHandler.WaterBreathing.EndEffect:		Înghiți apă și îți dai seama că nu mai poți respira sub apă!
+
+SpellHandler.GroundAreaEffect.AlreadyActive:	Ai deja un efect de sol activ și nu poți arunca încă unul!
+SpellHandler.PowerShield.EffectStart:		Magie străveche îți întărește esența vitală.
+SpellHandler.PowerShield.EffectStartOthers:	Magie străveche întărește esența vitală a lui {0}.
+SpellHandler.PowerShield.EffectExpires:		Scutul tău magic s-a disipat!
+SpellHandler.PowerShield.EffectExpiresOthers:	Scutul magic al lui {0} s-a disipat!
+SpellHandler.PowerShield.InsufficientMana:	Rezervele tale de mană sunt insuficiente pentru a activa efectul de vindecare al scutului.
+SpellHandler.DebuffImmunity.Refreshed:		Protecția ta împotriva vrăjilor de slăbire a fost reînnoită.
+SpellHandler.DebuffImmunity.Start:		Protecția ta împotriva vrăjilor de slăbire este mărită pe durata vrăjii!
+SpellHandler.DebuffImmunity.GainImmunity:	Câștigi imunitate la vrăji de slăbire și îți mărești șansa de rezistență cu {0}%.
+SpellHandler.DebuffImmunity.WornOff:		Imunitatea ta împotriva vrăjilor de slăbire scade.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	Șansa lui {0} de a rezista vrăjilor de slăbire a crescut.
+SpellHandler.DebuffImmunity.TargetWornOff:	Imunitatea lui {0} împotriva vrăjilor de slăbire s-a disipat.
+SpellHandler.GatewayPersonalBind.CantUseHere:	Nu poți folosi acest obiect aici!
+SpellHandler.GatewayPersonalBind.MustStandStill:	Trebuie să stai pe loc pentru a folosi acest obiect!
+SpellHandler.GatewayPersonalBind.RecentlyInCombat:	Ai fost recent în luptă și nu poți folosi acest obiect!
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:		Deja pregătești o vrajă la distanță.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Deja pregătești o vrajă neîntreruptibilă.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		Deja pregătești o vrajă fără cost de mană.
+SpellHandler.Warlock.MustFinishCastingRange:		Trebuie să termini de aruncat vraja la distanță înainte de a o relansa.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:	Trebuie să termini de aruncat vraja neîntreruptibilă înainte de a o relansa.
+SpellHandler.Warlock.MustFinishCastingPowerless:		Trebuie să termini de aruncat vraja fără cost de mană înainte de a o relansa.
+
+SpellHandler.Cleric.Ascendance.OnEnd:			Starea ta de Ascendență se încheie.
+SpellHandler.Cleric.Ascendance.OnStart:		Atingi Ascendența și îți mărești semnificativ eficiența.
+SpellHandler.Cleric.Ascendance.CanceledMoC:		Stăpânirea Concentrației se disipează când intri în Ascendență.
+SpellHandler.Cleric.Ascendance.CannotCast:		Ascendența împiedică aruncarea lui {0}.
+SpellHandler.Cleric.Ascendance.MocCanceledAscendance:	Ascendența ta se disipează în timp ce îți focalizezi concentrarea.
+SpellHandler.Cleric.DamageReturn.Active:		O aură reflectantă puternică te învăluie.
+SpellHandler.Cleric.DamageReturn.WornOff:		Bariera ta reflectantă s-a disipat.
+SpellHandler.Cleric.DamageReturn.VictimReflect:	Bariera ta reflectă {0} {1} către atacator.
+SpellHandler.Cleric.DamageReturn.AttackerHurt:	Suferi {0} {1} din cauza barierei magice reflectante a adversarului.
+SpellHandler.Cleric.OffProcShear.Removed:		Proc-urile ofensive ale țintei au fost îndepărtate!
+SpellHandler.Cleric.OffProcShear.YourProcRipped:	Proc-urile tale ofensive au fost îndepărtate!
+SpellHandler.Cleric.OffProcShear.AppliedCursedProc:	Un proc blestemat de înlocuire a fost aplicat țintei!
+SpellHandler.Cleric.OffProcShear.YouAreCursed:		Ești blestemat: loviturile tale îți vindecă dușmanii.
+SpellHandler.Cleric.OffProcShear.NoEnhancementFound:	Nu s-au găsit proc-uri ofensive pe țintă.
+
+SpellHandler.Occultist.CastCondition1:			Trebuie să fii în formă ctonică pentru a arunca această vrajă.
+SpellHandler.Occultist.CastCondition2:			Nu poți arunca această vrajă cât timp ești în formă ctonică.
+SpellHandler.Occultist.CastCondition3:			Nu poți arunca această vrajă cât timp ești în formă fragilă sau spirituală.
+SpellHandler.Occultist.CastCondition4:			Trebuie să părăsești forma actuală înainte de a arunca această vrajă.
+SpellHandler.Occultist.Self.AbsorbToPower:		Sifonezi {0} mană din atacul primit.
+
+SpellHandler.SummonMonster.Target.Resist:			{0} a fost adus din Limbus ca zombie și rămâne insensibil la această vrajă!
+SpellHandler.IllusionSpell.Target.Resist:			{0} a invocat o iluzie și nu poate fi afectat de această vrajă!
+SpellHandler.Morphed.Target.Resist:			{0} a suferit o metamorfoză și nu poate fi afectat de această vrajă!
+
+SpellHandler.DelveInfo.Sec:			sec

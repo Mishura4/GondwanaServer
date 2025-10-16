@@ -1,0 +1,69 @@
+Tasks.SystemDisabled: Hệ thống nhiệm vụ hiện đang bị tắt.
+Tasks.PvPRvRGvGTasks: ======= NHIỆM VỤ PvP/RvR/GvG =======
+Tasks.PvETasks: ======== NHIỆM VỤ PvE ========
+Tasks.CraftingTasks: == NHIỆM VỤ CHẾ TẠO (Cấp tối thiểu: {0}) ==
+Tasks.SpecialTasks: ======== NHIỆM VỤ ĐẶC BIỆT ========
+Tasks.TaskCompletionTokenInfo: Mỗi thẻ hoàn thành nhiệm vụ cho PvP, RvR, GvG, PvE hoặc chế tạo phải nộp lại cho Quản nhiệm Nhiệm vụ để nhận thưởng.
+Tasks.SpecialTaskCompletionTokenInfo: Thẻ hoàn thành nhiệm vụ đặc biệt là riêng cho từng nhiệm vụ. Những thẻ này mở khoá danh hiệu người chơi mới và cung cấp các phần thưởng đặc biệt đi kèm với các danh hiệu đó.
+Tasks.SnapshotTitle: NHIỆM VỤ
+Tasks.KillEnemyPlayersGroup: Tiêu diệt người chơi địch khi ở trong nhóm
+Tasks.KillEnemyPlayersAlone: Tiêu diệt người chơi địch khi đơn độc
+Tasks.KillKeepGuards: Tiêu diệt lính canh pháo đài
+Tasks.TakeKeeps: Chiếm pháo đài
+Tasks.RvRChampionOfTheDay: Trở thành Nhà vô địch RvR trong ngày
+Tasks.KillTerritoryGuards: Tiêu diệt lính canh lãnh thổ
+Tasks.KillTerritoryBoss: Chiếm lãnh thổ
+Tasks.TurnInPvPGvGTaskToken: Nộp thẻ hoàn thành nhiệm vụ PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: Tiêu diệt sinh vật trong ngục tối
+Tasks.KillOutdoorsCreatures: Tiêu diệt sinh vật ngoài trời
+Tasks.KillAnimalCreatures: Tiêu diệt động vật
+Tasks.KillDemonCreatures: Tiêu diệt quỷ dữ
+Tasks.KillDragonCreatures: Tiêu diệt rồng
+Tasks.KillElementalCreatures: Tiêu diệt nguyên tố
+Tasks.KillGiantCreatures: Tiêu diệt người khổng lồ
+Tasks.KillHumanoidCreatures: Tiêu diệt nhân hình
+Tasks.KillInsectCreatures: Tiêu diệt côn trùng
+Tasks.KillMagicalCreatures: Tiêu diệt sinh vật ma pháp
+Tasks.KillReptileCreatures: Tiêu diệt bò sát
+Tasks.KillPlantCreatures: Tiêu diệt thực vật
+Tasks.KillUndeadCreatures: Tiêu diệt xác sống
+Tasks.TurnInPvETaskToken: Nộp thẻ hoàn thành nhiệm vụ PvE
+Tasks.SuccessfulItemCombinations: Kết hợp vật phẩm thành công
+Tasks.MasteredCrafts: Thành thạo nghề
+Tasks.MasterpieceCrafted: Tác phẩm kiệt xuất đã chế tạo
+Tasks.TurnInCraftingTaskToken: Nộp thẻ hoàn thành nhiệm vụ chế tạo
+Tasks.EpicBossesSlaughtered: Tiêu diệt Trùm Sử thi
+Tasks.ItemsSoldToPlayers: Giao dịch chợ thành công
+Tasks.SuccessfulPvPThefts: Ăn trộm từ người chơi thành công
+Tasks.OutlawPlayersSentToJail: Tiêu diệt người chơi ngoài vòng pháp luật
+Tasks.EnemiesKilledInAdrenalineMode: Kẻ địch bị hạ trong trạng thái Hăng máu
+Tasks.EnemyKilledInDuel: Chiến thắng đấu tay đôi
+Tasks.QuestsCompleted: Nhiệm vụ đã hoàn thành
+Tasks.MaxLevelReached: Cấp tối đa
+Tasks.Level: Cấp {0}
+Tasks.KillEnemyPlayersGroupLog: Tiêu diệt người chơi địch khi ở trong nhóm: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Tiêu diệt người chơi địch khi đơn độc: {0}/{1}
+Tasks.KillKeepGuardsLog: Tiêu diệt lính canh pháo đài: {0}/{1}
+Tasks.TakeKeepsLog: Chiếm pháo đài: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Tiêu diệt lính canh lãnh thổ: {0}/{1}
+Tasks.KillTerritoryBossLog: Chiếm lãnh thổ: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Kết hợp vật phẩm thành công: {0}/{1}
+Tasks.MasteredCraftsLog: Thành thạo nghề: {0}/{1}
+Tasks.MasterpieceCraftedLog: Tác phẩm kiệt xuất đã chế tạo: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Tiêu diệt Trùm Sử thi: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Giao dịch chợ thành công: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Ăn trộm từ người chơi thành công: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Tiêu diệt người chơi ngoài vòng pháp luật: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Kẻ địch bị hạ trong trạng thái Hăng máu: {0}/{1}
+Tasks.EnemyKilledInDuelLog: Chiến thắng đấu tay đôi: {0}/{1}
+Tasks.QuestsCompletedLog: Nhiệm vụ đã hoàn thành: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Nhiệm vụ: Bạn nhận được thẻ hoàn thành nhiệm vụ PvP/RvR/GvG - cấp {0}
+Tasks.TurnInPvETaskTokenMessage: Nhiệm vụ: Bạn nhận được thẻ hoàn thành nhiệm vụ PvE - cấp {0}
+Tasks.TurnInCraftingTaskTokenMessage: Nhiệm vụ: Bạn nhận được thẻ hoàn thành nhiệm vụ chế tạo - cấp {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Nhiệm vụ: Bạn nhận được thẻ Đặc biệt 'Demon Slayer' - cấp {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Nhiệm vụ: Bạn nhận được thẻ Đặc biệt 'Trader' - cấp {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Nhiệm vụ: Bạn nhận được thẻ Đặc biệt 'Thief' - cấp {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Nhiệm vụ: Bạn nhận được thẻ Đặc biệt 'Bounty Hunter' - cấp {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Nhiệm vụ: Bạn nhận được thẻ Đặc biệt 'Wrath' - cấp {0}
+Tasks.EnemyKilledInDuelSpecialToken: Nhiệm vụ: Bạn nhận được Thẻ Đấu sĩ - cấp {0}
+Tasks.QuestsCompletedSpecialToken: Nhiệm vụ: Bạn nhận được thẻ Đặc biệt 'Adventurer' - cấp {0}

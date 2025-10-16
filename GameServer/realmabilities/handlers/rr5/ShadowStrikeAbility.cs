@@ -46,7 +46,7 @@ namespace DOL.GS.RealmAbilities
             if (target.IsAlive && _spell != null)
             {
                 dd = ScriptMgr.CreateSpellHandler(_player, _spell, _spellline) as ShadowStrikeSpellHandler;
-                dd.IgnoreDamageCap = true;
+                dd!.IgnoreDamageCap = true;
                 return dd.CastSpell(target);
             }
             return false;
@@ -61,7 +61,7 @@ namespace DOL.GS.RealmAbilities
             _player = living as GamePlayer;
 
             CreateSpell();
-            if (_player.TargetObject is GameLiving)
+            if (_player!.TargetObject is GameLiving)
             {
                 CastSpell(_player.TargetObject as GameLiving);
             }
@@ -79,10 +79,10 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("The Assassin takes 10 seconds to disappear in the shadows.");
-            list.Add("Once in the shadows the Assassin will automatically teleport to and perform perforate artery to any enemy they choose within 1000 radius.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "ShadowStrikeAbility.AddEffectsInfo.Info1"));
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "ShadowStrikeAbility.AddEffectsInfo.Info2"));
             list.Add("");
-            list.Add("This ability cannot be used to enter a locked keep or tower.");
+            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "ShadowStrikeAbility.AddEffectsInfo.Info3"));
         }
     }
 }

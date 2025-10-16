@@ -1,0 +1,5 @@
+# Relics/GameRelicPad (NL)
+GameRelicPad.MountRelic.Captured:			{0} heeft veroverd: {1}.
+GameRelicPad.MountRelic.Stored:				{0} van {1} heeft {2} opgeslagen bij {3}.
+GameRelicPad.OnPlayerEnter.EmptyRelicPad:		Je moet een lege {0}‑reliekvoetstuk vinden om deze reliek te plaatsen.
+GameRelicPad.RemoveRelic.Removed:			{0} van {1} heeft {2} verwijderd van {3}.

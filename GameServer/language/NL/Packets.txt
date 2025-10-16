@@ -1,0 +1,255 @@
+# /packets/Client/168 (NL)
+# /DetailDisplayHandler
+DetailDisplayHandler.HandlePacket.UniqueObject:	Uniek Object
+
+DetailDisplayHandler.GetShortItemInfo.CrafterName:		Ambachtsman: {0}
+DetailDisplayHandler.GetShortItemInfo.NoDrop:			Kan niet worden gedropt.
+
+DetailDisplayHandler.HandlePacket.Any:				Alle
+DetailDisplayHandler.HandlePacket.Back:				(Achterkant)
+DetailDisplayHandler.HandlePacket.BonusLevel:			Bonusniveau: {0}
+DetailDisplayHandler.HandlePacket.CannotDestroyed:		Kan niet worden vernietigd.
+DetailDisplayHandler.HandlePacket.CannotDropped:		Kan niet worden gedropt of in de kist gelegd.
+DetailDisplayHandler.HandlePacket.CannotSold:			Kan niet worden verkocht.
+DetailDisplayHandler.HandlePacket.CannotPick:			Kan niet worden opgepakt.
+DetailDisplayHandler.HandlePacket.CannotTraded:			Kan niet met spelers worden geruild.
+DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR:		Kan niet in RvR worden gebruikt.
+DetailDisplayHandler.HandlePacket.EffectWhenSitting:		Effecten gelden alleen wanneer je zit.
+DetailDisplayHandler.HandlePacket.ChampionLevel:			- Vereist: Kampioensniveau {0}
+DetailDisplayHandler.HandlePacket.ChatItem:				[Chat] {0}/Object: "{1}"
+DetailDisplayHandler.HandlePacket.CrafterName:			Ambachtsman: {0}
+DetailDisplayHandler.HandlePacket.Damage:				Schade:
+DetailDisplayHandler.HandlePacket.Defense:				Verdediging:
+DetailDisplayHandler.HandlePacket.Devastating:			Verwoestend
+DetailDisplayHandler.HandlePacket.DontBelongGuild:		Je behoort niet tot een gilde.
+DetailDisplayHandler.HandlePacket.FatigueCost:			Uithoudingskost:
+DetailDisplayHandler.HandlePacket.FollowupStyle:			Vervolgstijl: {0}
+DetailDisplayHandler.HandlePacket.Front:				(Voorkant)	
+DetailDisplayHandler.HandlePacket.GuildItem:				[Gilde] {0}/Object: "{1}"
+DetailDisplayHandler.HandlePacket.High:					Hoog
+DetailDisplayHandler.HandlePacket.HighBonus:				Hoge bonus
+DetailDisplayHandler.HandlePacket.HighPenalty:			Hoge straf
+DetailDisplayHandler.HandlePacket.Item:					{0}/object: "{1}
+DetailDisplayHandler.HandlePacket.LevName:				Niv   Naam
+DetailDisplayHandler.HandlePacket.Low:					Laag
+DetailDisplayHandler.HandlePacket.LowBonus:				Lage bonus
+DetailDisplayHandler.HandlePacket.LowPenalty:				Lage straf
+DetailDisplayHandler.HandlePacket.Medium:				Middel
+DetailDisplayHandler.HandlePacket.MediumBonus:			Gemiddelde bonus
+DetailDisplayHandler.HandlePacket.MediumPenalty:			Gemiddelde straf
+DetailDisplayHandler.HandlePacket.MustBeInChatGroup:		Je moet in een chatgroep zitten.
+DetailDisplayHandler.HandlePacket.MustBeInBattleGroup:		Je moet in een gevechtsgroep zitten.
+DetailDisplayHandler.HandlePacket.NoBonus:				Geen
+DetailDisplayHandler.HandlePacket.NoGroup:				Je zit niet in een groep.
+DetailDisplayHandler.HandlePacket.NoInformation:			Geen speciale informatie!
+DetailDisplayHandler.HandlePacket.None:					Geen
+DetailDisplayHandler.HandlePacket.NoPermissionToSpeak:		Je hebt geen toestemming om in het gildekanaal te praten.
+DetailDisplayHandler.HandlePacket.OnlyModerator:			Alleen moderators mogen in dit kanaal spreken.
+DetailDisplayHandler.HandlePacket.Opening:				Opening:
+DetailDisplayHandler.HandlePacket.OpeningStyle:			Openingsstijl:
+DetailDisplayHandler.HandlePacket.Or:					of {0}
+DetailDisplayHandler.HandlePacket.Positional:			Positioneel
+DetailDisplayHandler.HandlePacket.Side:					(zij)
+DetailDisplayHandler.HandlePacket.TargetBlocks:			Doel blokkeert
+DetailDisplayHandler.HandlePacket.TargetEffect:			Effect op doel:
+DetailDisplayHandler.HandlePacket.TargetEvades:			Doel ontwijkt
+DetailDisplayHandler.HandlePacket.TargetFumbles:			Doel stuntelt
+DetailDisplayHandler.HandlePacket.TargetHits:				Doel treft
+DetailDisplayHandler.HandlePacket.TargetMisses:			Doel mist
+DetailDisplayHandler.HandlePacket.TargetParrys:			Doel pareert
+DetailDisplayHandler.HandlePacket.TargetStyle:			Doel voert een stijl uit
+DetailDisplayHandler.HandlePacket.ToHit:					Trefferkans:
+DetailDisplayHandler.HandlePacket.VeryHigh:				Zeer hoog
+DetailDisplayHandler.HandlePacket.VeryHighBonus:			Zeer hoge bonus
+DetailDisplayHandler.HandlePacket.VeryHighPenalty:		Zeer hoge straf
+DetailDisplayHandler.HandlePacket.VeryLow:				Zeer laag
+DetailDisplayHandler.HandlePacket.VeryLowBonus:			Zeer lage bonus
+DetailDisplayHandler.HandlePacket.VeryLowPenalty:			Zeer lage straf
+DetailDisplayHandler.HandlePacket.VeryStrange:			Erg vreemd, ik herken dit type objecten niet.
+DetailDisplayHandler.HandlePacket.WeaponType:			Wapentype: {0}
+DetailDisplayHandler.HandlePacket.YouBlock:				Je blokkeert
+DetailDisplayHandler.HandlePacket.YouEvade:				Je ontwijkt
+DetailDisplayHandler.HandlePacket.YouFumble:				Je stuntelt
+DetailDisplayHandler.HandlePacket.YouHit:				Je treft
+DetailDisplayHandler.HandlePacket.YouMiss:				Je mist
+DetailDisplayHandler.HandlePacket.YouParry:				Je pareert
+DetailDisplayHandler.WriteBonusLine.Points:				ptn
+DetailDisplayHandler.WriteBonusLine.PowerPool:			% manareservoir.
+DetailDisplayHandler.WriteClassicArmorInfos.Absorption:	- {0}% Absorptie
+DetailDisplayHandler.WriteClassicArmorInfos.ArmorMod:		Pantsermodifier:
+DetailDisplayHandler.WriteClassicArmorInfos.BaseFactor:	- {0} Basispantser
+DetailDisplayHandler.WriteClassicArmorInfos.ClampFact:	- {0} Werkelijk pantser
+DetailDisplayHandler.WriteClassicArmorInfos.Condition:	- {0}% Conditie
+DetailDisplayHandler.WriteClassicArmorInfos.EffArmor:		Pantser:
+DetailDisplayHandler.WriteClassicArmorInfos.Factor:		- {0} Pantser
+DetailDisplayHandler.WriteClassicArmorInfos.Quality:		- {0}% Kwaliteit
+DetailDisplayHandler.WriteClassicShieldInfos.BaseDPS:		- {0} Basis DPS
+DetailDisplayHandler.WriteClassicShieldInfos.ClampDPS:		- {0} Werkelijke DPS
+DetailDisplayHandler.WriteClassicShieldInfos.DamageMod:		Schademodifier (bij gebruik met Schild‑stijlen):
+DetailDisplayHandler.WriteClassicShieldInfos.Large:		- Schildgrootte: Groot
+DetailDisplayHandler.WriteClassicShieldInfos.Medium:		- Schildgrootte: Middel
+DetailDisplayHandler.WriteClassicShieldInfos.Small:		- Schildgrootte: Klein
+DetailDisplayHandler.WriteClassicShieldInfos.SPD:			- {0} Schildsnelheid
+DetailDisplayHandler.WriteClassicWeaponInfos.BaseDPS:		- {0} Basis DPS
+DetailDisplayHandler.WriteClassicWeaponInfos.ClampDPS:		- {0} Werkelijke DPS
+DetailDisplayHandler.WriteClassicWeaponInfos.Condition:	- {0}% Conditie
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageMod:		Schademodifier:
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageType:	Schadetype: {0}
+DetailDisplayHandler.WriteClassicWeaponInfos.EffDamage:	Effectieve schade:
+DetailDisplayHandler.WriteClassicWeaponInfos.Quality:		- {0}% Kwaliteit
+DetailDisplayHandler.WriteClassicWeaponInfos.SPD:			- {0} Wapensnelheid
+DetailDisplayHandler.WriteHorseInfo.AdvancedHorse:		Dit is een geavanceerde rijdier.
+DetailDisplayHandler.WriteHorseInfo.Armor:				- Pantser: {0}
+DetailDisplayHandler.WriteHorseInfo.Barding:				- Tuigage: Geen
+DetailDisplayHandler.WriteHorseInfo.BasicHorse:			Dit is een klassiek rijdier.
+DetailDisplayHandler.WriteHorseInfo.Food:				- Favoriet voer: Hooi en af en toe een appel.
+DetailDisplayHandler.WriteHorseInfo.MountWindow:			Om dit rijdier actief te maken, verplaats je het pictogram naar de gereserveerde plek in het rijdier‑venster.
+DetailDisplayHandler.WriteHorseInfo.Name:				- Naam: {0}.
+DetailDisplayHandler.WriteHorseInfo.NameMount:			(Gebruik /namemount om je rijdier een naam te geven.)
+DetailDisplayHandler.WriteHorseInfo.Quickbar:			Om dit rijdier op te roepen, sleep je het pictogram vanuit het rijdier‑venster naar de snelbalk en druk je op maken.
+DetailDisplayHandler.WriteHorseInfo.RvRZzones:			Kan niet in RvR‑zones worden opgeroepen.
+DetailDisplayHandler.WriteHorseInfo.Speed1:				(+35% snelheid)
+DetailDisplayHandler.WriteHorseInfo.Speed2:				(+45% snelheid)
+DetailDisplayHandler.WriteHorseInfo.Summon:				Klik op dit pictogram in de actiebalk om het rijdier op te roepen (of te ontslaan).
+DetailDisplayHandler.WriteMagicalBonuses.ChargedMagic:	Opgeladen Magische Capaciteit:
+DetailDisplayHandler.WriteMagicalBonuses.Charges:		- {0} Ladingen
+DetailDisplayHandler.WriteMagicalBonuses.FocusBonus:		Focusbonus:
+DetailDisplayHandler.WriteMagicalBonuses.Level:			- {0} Niveau
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired:	Vereist niveau:
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired2:	Vereist niveau: {0} Niveau
+DetailDisplayHandler.WriteMagicalBonuses.MagicAbility:	Magische vaardigheid:
+DetailDisplayHandler.WriteMagicalBonuses.MagicBonus:		Magische bonussen:
+DetailDisplayHandler.WriteMagicalBonuses.MaxCharges:		- {0} Max
+DetailDisplayHandler.WriteMagicalBonuses.StrikeArmor:		- De spreuk kan worden geactiveerd wanneer een vijand dit pantser raakt.
+DetailDisplayHandler.WriteMagicalBonuses.StrikeEnemy:		- De spreuk kan worden geactiveerd wanneer dit wapen een vijand raakt.
+DetailDisplayHandler.WriteMagicalBonuses.UsedItem:		- De spreuk kan worden geactiveerd wanneer het object wordt gebruikt.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem1:		Kan elke {0} seconden worden gebruikt.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem2:		Kan elke {0}:{1} min. worden gebruikt.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem3:		Kan opnieuw worden gebruikt over: {0}.
+DetailDisplayHandler.WriteMagicalBonuses.Inactive:		(inactief)
+DetailDisplayHandler.WriteBonusConditions.Title:		Bonusvoorwaarden:
+DetailDisplayHandler.WriteBonusConditions.Renaissance:	Moet "Renaissance" zijn
+DetailDisplayHandler.WritePoisonInfo.Charges:			- {0} Ladingen
+DetailDisplayHandler.WritePoisonInfo.Level:				- {0} Niveau
+DetailDisplayHandler.WritePoisonInfo.LevelRequired:		Vereist niveau:
+DetailDisplayHandler.WritePoisonInfo.MaxCharges:			- {0} Max
+DetailDisplayHandler.WritePoisonInfo.ProcAbility:		Offensief effect:
+DetailDisplayHandler.WritePotionInfo.ChargedMagic:		Opgeladen magische capaciteit:
+DetailDisplayHandler.WritePotionInfo.Charges:			- {0} Ladingen
+DetailDisplayHandler.WritePotionInfo.Level:				- {0} Niveau
+DetailDisplayHandler.WritePotionInfo.LevelRequired:		Niveauvoorwaarde
+DetailDisplayHandler.WritePotionInfo.MaxCharges:			- {0} Max
+DetailDisplayHandler.WritePotionInfo.NoUseInCombat:		Kan niet in gevecht worden gebruikt.
+DetailDisplayHandler.WritePotionInfo.UseItem2:			Kan elke: 1:00 min worden gebruikt
+DetailDisplayHandler.WritePotionInfo.UseItem3:			Kan opnieuw worden gebruikt over: {0}
+DetailDisplayHandler.WritePotionInfo.Type:				Functie: {0}
+DetailDisplayHandler.WritePotionInfo.Value:				Waarde: {0}
+DetailDisplayHandler.WritePotionInfo.Target:				Doelwit: {0}
+DetailDisplayHandler.WritePotionInfo.Range:				Bereik: {0}
+DetailDisplayHandler.WriteUsableClasses.UsableBy:		Te gebruiken door:
+
+# /DoorRequestHandler.cs
+DoorRequestHandler.OnTick.TooFarAway:			Je bent te ver weg van {0}!
+
+# /PlayerBonusesListRequestHandler
+PlayerBonusesListRequestHandler.HandlePacket.Bonuses:	Huidige bonussen
+PlayerBonusesListRequestHandler.HandlePacket.Magic:		Magische bonus: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Melee:		Mêlee‑bonus: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Outpost:	Fort‑bonus
+PlayerBonusesListRequestHandler.HandlePacket.Realm:		Rijk‑bonussen:
+PlayerBonusesListRequestHandler.HandlePacket.Relic:		Reliek‑bonus:
+PlayerBonusesListRequestHandler.HandlePacket.Resist:		Weerstanden
+PlayerBonusesListRequestHandler.HandlePacket.Special:		Bonussen van speciale objecten
+PlayerBonusesListRequestHandler.HandlePacket.Specs:		+{0} alle vaardigheden
+
+# /PlayerInitRequestHandler
+PlayerInitRequestHandler.AllianceMessage:			Alliantiebericht: {0}
+PlayerInitRequestHandler.FreeLevel:				Je komt in aanmerking voor een gratis niveau! Klik op de trainer om het te ontvangen (of typ "/freelevel decline" om te weigeren).
+PlayerInitRequestHandler.GuildMessage:				Gildebericht:
+PlayerInitRequestHandler.LevelCap:					Je hebt de levelcap voor dit slagveld overschreden!
+PlayerInitRequestHandler.OfficerMessage:				Officierenbericht: {0}
+PlayerInitRequestHandler.SaferLocation:				Dit gebied is momenteel niet veilig en je wordt naar een veiligere locatie verplaatst.
+
+# /PlayerMoveItemRequestHandler
+PlayerMoveItemRequestHandler.InvalidTradeTarget:	Ongeldig ruildoelwit. ({0})
+PlayerMoveItemRequestHandler.CantTradeInactive:		Je kunt niet ruilen met inactieve spelers.
+PlayerMoveItemRequestHandler.CantTradeYourself:		Je kunt niet met jezelf ruilen, kom op!
+PlayerMoveItemRequestHandler.CantRemoveItem:			Je kunt dat object niet verwijderen!
+PlayerMoveItemRequestHandler.InvalidItem:				Ongeldig object (slot# {0}).
+PlayerMoveItemRequestHandler.CantDropItem:			Je kunt dat object niet op de grond droppen!
+PlayerMoveItemRequestHandler.YouDropItem:				Je laat {0} op de grond vallen.
+PlayerMoveItemRequestHandler.TooFarAway:				Je bent te ver weg om iets aan {0} te geven.
+
+# /PlayerPickUpRequestHandler
+PlayerPickUpRequestHandler.HandlePacket.InvalidTarget:	Je doelwit is ongeldig!
+PlayerPickUpRequestHandler.HandlePacket.Target:		Je moet een doelwit selecteren om iets te krijgen!
+
+# /PlayerPositionUpdateHandler
+PlayerPositionUpdateHandler.Endurance:				Je verliest uithoudingsvermogen!
+PlayerPositionUpdateHandler.Entered:					Je bent {0} binnengegaan.
+PlayerPositionUpdateHandler.FallingDamage:			Je loopt valschade op!
+PlayerPositionUpdateHandler.FallPercent:				Je verliest {0}% van je totale levenspunten.
+PlayerPositionUpdateHandler.SafeFall:				De schade is verminderd dankzij de vaardigheid Gecontroleerde Val!
+PlayerPositionUpdateHandler.CloudsongFall:			Je lichte gewicht heeft de impact sterk verminderd!
+PlayerPositionUpdateHandler.MythSafeFall:			De schade is verminderd dankzij je uitrusting!
+PlayerPositionUpdateHandler.UnknownZone:			Onbekend gebied! Je wordt teruggebracht naar de zielsteen.
+
+# /PlayerTrainRequestHandler
+PlayerTrainRequestHandler.MustSelectValidTrainer:	Je moet een geldige trainer voor je klasse selecteren.
+PlayerTrainRequestHandler.AlreadyHaveAbility:		Je hebt die vaardigheid al!
+PlayerTrainRequestHandler.DoNotMeetRequirements:		Je voldoet niet aan de vereisten voor die vaardigheid!
+PlayerTrainRequestHandler.NotEnoughChampionPoints:	Je hebt niet genoeg kampioensspecialisatiepunten voor die vaardigheid!
+PlayerTrainRequestHandler.CouldNotFindChampionSpec:	Kampioensspecialisatie niet gevonden!
+PlayerTrainRequestHandler.CantTrainSpecAgainThisLevel:	Je kunt je op dit niveau niet nogmaals in die specialisatie trainen!
+PlayerTrainRequestHandler.SpecializationCostsPoints:	Die specialisatie kost {0} specialisatiepunten!
+PlayerTrainRequestHandler.NotEnoughSpecPoints:		Je hebt niet genoeg specialisatiepunten meer voor dit niveau.
+PlayerTrainRequestHandler.RealmAbilityCostsPoints:	{0} kost {1} rijkvaardigheidspunten!
+PlayerTrainRequestHandler.NotEnoughRealmAbilityPoints:	Je hebt niet genoeg rijkvaardigheidspunten om dat te krijgen.
+PlayerTrainRequestHandler.NotExperiencedEnoughForAbility:	Je hebt niet genoeg ervaring om {0} nu te krijgen. Kom later terug.
+PlayerTrainRequestHandler.TrainingFailed:			Helaas is de training mislukt. Meld dit a.u.b. bij de admins of een gamemaster. Dank je.
+
+# /PlayerTargetHandler
+PlayerTargetHandler.Gravestone:					Je stopt met richten op je grafsteen. Je gebeden falen.
+
+# /DestroyItemRequestHandler
+DestroyItemRequestHandler.CantDestroyItem:		Je kunt {0} niet vernietigen!
+DestroyItemRequestHandler.CantDestroyRelic:		Je kunt een reliek niet vernietigen!
+DestroyItemRequestHandler.CantDestroyEquippedItem:	Je kunt een uitgerust object niet vernietigen!
+DestroyItemRequestHandler.ItemDestroyed:			Je vernietigt {0}.
+DestroyItemRequestHandler.CantDestroyPvPFlag:		De PvP‑vlag kan niet worden vernietigd!
+
+# /DialogResponseHandler
+DialogResponseHandler.SameRegionGuildLeaderToAccept:	Je moet in dezelfde regio zijn als de gildeleider om een uitnodiging te accepteren.
+DialogResponseHandler.StillInGuild:				Je zit nog in een gilde, je moet eerst vertrekken.
+DialogResponseHandler.GuildLeaderNotInGuild:		De uitnodigende speler zit niet in een gilde!
+DialogResponseHandler.GuildInviteDeclined:			{0} heeft je uitnodiging geweigerd.
+DialogResponseHandler.NotInGuild:					Je zit niet in een gilde.
+DialogResponseHandler.InviteExpired:				Deze uitnodiging is verlopen.
+DialogResponseHandler.GuildDeclineQuit:			Je weigert de gilde te verlaten.
+DialogResponseHandler.StillInGroup:				Je zit nog in een groep.
+DialogResponseHandler.CannotJoinGroupInCombat:		Je kunt niet bij een groep gaan tijdens gevecht!
+DialogResponseHandler.GroupFull:					De groep is vol.
+DialogResponseHandler.MustBeGuildMemberToUseCommands:	Je moet lid van een gilde zijn om deze commando's te gebruiken!
+DialogResponseHandler.NearKeepToClaim:			Je moet dicht bij de burcht zijn om deze op te eisen.
+DialogResponseHandler.DepositInLockbox:			Je stort {0} in de kluis.
+DialogResponseHandler.LockboxHasMoneyWeeklyPayment:	De kluis bevat nu {0}. De wekelijkse betaling is {1}.
+DialogResponseHandler.HousePrepaidForPayments:		Het huis is nu vooruitbetaald voor de komende {0} betalingen.
+
+# /InviteToGroupHandler
+InviteToGroupHandler.InvalidTarget:				Je moet een geldige speler als doelwit selecteren.
+InviteToGroupHandler.NotLeader:					Je bent niet de groepsleider.
+InviteToGroupHandler.GroupFull:					De groep is al vol.
+InviteToGroupHandler.TargetInGroup:				Die speler zit al in een groep.
+InviteToGroupHandler.Invited:					Je hebt {0} uitgenodigd om zich bij de groep aan te sluiten.
+InviteToGroupHandler.InvitePrompt1:				{0} heeft je uitgenodigd om zich bij zijn/haar groep aan te sluiten.
+InviteToGroupHandler.InvitePrompt2:				Accepteren?
+InviteToGroupHandler.InviteNotification:			{0} heeft je uitgenodigd om zich bij zijn/haar groep aan te sluiten.
+
+# /PlayerAttackRequestHandler
+PlayerAttackRequestHandler.CantEnterMelee:		Je kunt niet in mêlee vechten met een vuurwapen uitgerust!
+
+# /PlayerDismountRequestHandler
+PlayerDismountRequestHandler.NoRidingSteed:		Je zit niet op een rijdier!
+
+# /EmblemDialogReponseHandler
+EmblemDialogReponseHandler.EmblemAlreadyInUse:	Dit embleem is al in gebruik door een andere gilde, kies een ander!

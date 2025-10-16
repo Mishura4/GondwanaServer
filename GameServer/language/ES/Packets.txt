@@ -1,0 +1,255 @@
+# /packets/Client/168 (ES)
+# /DetailDisplayHandler
+DetailDisplayHandler.HandlePacket.UniqueObject:	Objeto Único
+
+DetailDisplayHandler.GetShortItemInfo.CrafterName:		Artesano: {0}
+DetailDisplayHandler.GetShortItemInfo.NoDrop:			No se puede soltar.
+
+DetailDisplayHandler.HandlePacket.Any:				Todos
+DetailDisplayHandler.HandlePacket.Back:				(Espalda)
+DetailDisplayHandler.HandlePacket.BonusLevel:			Nivel de bonificación: {0}
+DetailDisplayHandler.HandlePacket.CannotDestroyed:		No puede destruirse.
+DetailDisplayHandler.HandlePacket.CannotDropped:		No puede soltar ni poner en la caja.
+DetailDisplayHandler.HandlePacket.CannotSold:			No puede venderse.
+DetailDisplayHandler.HandlePacket.CannotPick:			No puede recogerse.
+DetailDisplayHandler.HandlePacket.CannotTraded:			No puede intercambiarse con jugadores.
+DetailDisplayHandler.HandlePacket.CannotBeUsedInRvR:		No puede usarse en RvR.
+DetailDisplayHandler.HandlePacket.EffectWhenSitting:		Efectos aplicados sólo cuando estás sentado.
+DetailDisplayHandler.HandlePacket.ChampionLevel:			- Requerido: Nivel de Campeón {0}
+DetailDisplayHandler.HandlePacket.ChatItem:				[Chat] {0}/Objeto: "{1}"
+DetailDisplayHandler.HandlePacket.CrafterName:			Artesano: {0}
+DetailDisplayHandler.HandlePacket.Damage:				Daño:
+DetailDisplayHandler.HandlePacket.Defense:				Defensa:
+DetailDisplayHandler.HandlePacket.Devastating:			Devastador
+DetailDisplayHandler.HandlePacket.DontBelongGuild:		No perteneces a un gremio.
+DetailDisplayHandler.HandlePacket.FatigueCost:			Coste de aguante:
+DetailDisplayHandler.HandlePacket.FollowupStyle:			Estilo encadenado: {0}
+DetailDisplayHandler.HandlePacket.Front:				(Frente)	
+DetailDisplayHandler.HandlePacket.GuildItem:				[Gremio] {0}/Objeto: "{1}"
+DetailDisplayHandler.HandlePacket.High:					Alto
+DetailDisplayHandler.HandlePacket.HighBonus:				Bonificación alta
+DetailDisplayHandler.HandlePacket.HighPenalty:			Penalización alta
+DetailDisplayHandler.HandlePacket.Item:					{0}/objeto: "{1}
+DetailDisplayHandler.HandlePacket.LevName:				Niv   Nombre
+DetailDisplayHandler.HandlePacket.Low:					Bajo
+DetailDisplayHandler.HandlePacket.LowBonus:				Bonificación baja
+DetailDisplayHandler.HandlePacket.LowPenalty:				Penalización baja
+DetailDisplayHandler.HandlePacket.Medium:				Medio
+DetailDisplayHandler.HandlePacket.MediumBonus:			Bonificación media
+DetailDisplayHandler.HandlePacket.MediumPenalty:			Penalización media
+DetailDisplayHandler.HandlePacket.MustBeInChatGroup:		Debes estar en un grupo de chat.
+DetailDisplayHandler.HandlePacket.MustBeInBattleGroup:		Debes estar en un grupo de batalla.
+DetailDisplayHandler.HandlePacket.NoBonus:				Ninguna
+DetailDisplayHandler.HandlePacket.NoGroup:				No estás en un grupo.
+DetailDisplayHandler.HandlePacket.NoInformation:			¡No hay información especial!
+DetailDisplayHandler.HandlePacket.None:					Ninguno
+DetailDisplayHandler.HandlePacket.NoPermissionToSpeak:		No tienes permiso para hablar en el canal del gremio.
+DetailDisplayHandler.HandlePacket.OnlyModerator:			Sólo los moderadores pueden hablar en este canal.
+DetailDisplayHandler.HandlePacket.Opening:				Apertura:
+DetailDisplayHandler.HandlePacket.OpeningStyle:			Estilo de apertura:
+DetailDisplayHandler.HandlePacket.Or:					o {0}
+DetailDisplayHandler.HandlePacket.Positional:			Posicional
+DetailDisplayHandler.HandlePacket.Side:					(lado)
+DetailDisplayHandler.HandlePacket.TargetBlocks:			El objetivo bloquea
+DetailDisplayHandler.HandlePacket.TargetEffect:			Efecto al objetivo:
+DetailDisplayHandler.HandlePacket.TargetEvades:			El objetivo evade
+DetailDisplayHandler.HandlePacket.TargetFumbles:			El objetivo hace un pifia
+DetailDisplayHandler.HandlePacket.TargetHits:				El objetivo golpea
+DetailDisplayHandler.HandlePacket.TargetMisses:			El objetivo falla
+DetailDisplayHandler.HandlePacket.TargetParrys:			El objetivo para
+DetailDisplayHandler.HandlePacket.TargetStyle:			El objetivo ejecuta un estilo
+DetailDisplayHandler.HandlePacket.ToHit:					Golpear:
+DetailDisplayHandler.HandlePacket.VeryHigh:				Muy alto
+DetailDisplayHandler.HandlePacket.VeryHighBonus:			Bonificación muy alta
+DetailDisplayHandler.HandlePacket.VeryHighPenalty:		Penalización muy alta
+DetailDisplayHandler.HandlePacket.VeryLow:				Muy bajo
+DetailDisplayHandler.HandlePacket.VeryLowBonus:			Bonificación muy baja
+DetailDisplayHandler.HandlePacket.VeryLowPenalty:			Penalización muy baja
+DetailDisplayHandler.HandlePacket.VeryStrange:			Es muy extraño, no reconozco este tipo de objetos.
+DetailDisplayHandler.HandlePacket.WeaponType:			Tipo de arma: {0}
+DetailDisplayHandler.HandlePacket.YouBlock:				Bloqueas
+DetailDisplayHandler.HandlePacket.YouEvade:				Evades
+DetailDisplayHandler.HandlePacket.YouFumble:				Haces un pifia
+DetailDisplayHandler.HandlePacket.YouHit:				Golpeas
+DetailDisplayHandler.HandlePacket.YouMiss:				Fallas
+DetailDisplayHandler.HandlePacket.YouParry:				Paras
+DetailDisplayHandler.WriteBonusLine.Points:				pts
+DetailDisplayHandler.WriteBonusLine.PowerPool:			% de maná.
+DetailDisplayHandler.WriteClassicArmorInfos.Absorption:	- {0}% Absorción
+DetailDisplayHandler.WriteClassicArmorInfos.ArmorMod:		Modificador de armadura:
+DetailDisplayHandler.WriteClassicArmorInfos.BaseFactor:	- {0} Armadura base
+DetailDisplayHandler.WriteClassicArmorInfos.ClampFact:	- {0} Armadura real
+DetailDisplayHandler.WriteClassicArmorInfos.Condition:	- {0}% Condición
+DetailDisplayHandler.WriteClassicArmorInfos.EffArmor:		Armadura:
+DetailDisplayHandler.WriteClassicArmorInfos.Factor:		- {0} Armadura
+DetailDisplayHandler.WriteClassicArmorInfos.Quality:		- {0}% Calidad
+DetailDisplayHandler.WriteClassicShieldInfos.BaseDPS:		- {0} DPS base
+DetailDisplayHandler.WriteClassicShieldInfos.ClampDPS:		- {0} DPS real
+DetailDisplayHandler.WriteClassicShieldInfos.DamageMod:		Modificador de daño (cuando se usa con estilos de Escudo):
+DetailDisplayHandler.WriteClassicShieldInfos.Large:		- Tamaño de escudo: Grande
+DetailDisplayHandler.WriteClassicShieldInfos.Medium:		- Tamaño de escudo: Mediano
+DetailDisplayHandler.WriteClassicShieldInfos.Small:		- Tamaño de escudo: Pequeño
+DetailDisplayHandler.WriteClassicShieldInfos.SPD:			- {0} Velocidad de escudo
+DetailDisplayHandler.WriteClassicWeaponInfos.BaseDPS:		- {0} DPS base
+DetailDisplayHandler.WriteClassicWeaponInfos.ClampDPS:		- {0} DPS real
+DetailDisplayHandler.WriteClassicWeaponInfos.Condition:	- {0}% Condición
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageMod:		Modificador de daño:
+DetailDisplayHandler.WriteClassicWeaponInfos.DamageType:	Tipo de daño: {0}
+DetailDisplayHandler.WriteClassicWeaponInfos.EffDamage:	Daño efectivo:
+DetailDisplayHandler.WriteClassicWeaponInfos.Quality:		- {0}% Calidad
+DetailDisplayHandler.WriteClassicWeaponInfos.SPD:			- {0} Velocidad de arma
+DetailDisplayHandler.WriteHorseInfo.AdvancedHorse:		Es una montura avanzada.
+DetailDisplayHandler.WriteHorseInfo.Armor:				- Armadura: {0}
+DetailDisplayHandler.WriteHorseInfo.Barding:				- Adorno: Ninguno
+DetailDisplayHandler.WriteHorseInfo.BasicHorse:			Es una montura clásica.
+DetailDisplayHandler.WriteHorseInfo.Food:				- Comida favorita: Heno y ocasionalmente una manzana.
+DetailDisplayHandler.WriteHorseInfo.MountWindow:			Para activar esta montura, mueve el icono a la ranura dedicada en la ventana de montura.
+DetailDisplayHandler.WriteHorseInfo.Name:				- Nombre: {0}.
+DetailDisplayHandler.WriteHorseInfo.NameMount:			(Usa /namemount para dar un nombre a la montura.)
+DetailDisplayHandler.WriteHorseInfo.Quickbar:			Para invocar esta montura, desde la ventana de montura mueve el icono a la barra rápida y pulsa el botón crear.
+DetailDisplayHandler.WriteHorseInfo.RvRZzones:			No puede invocarse en zonas RvR.
+DetailDisplayHandler.WriteHorseInfo.Speed1:				(+35% velocidad)
+DetailDisplayHandler.WriteHorseInfo.Speed2:				(+45% velocidad)
+DetailDisplayHandler.WriteHorseInfo.Summon:				Haz clic en este icono en la barra de lanzamiento para invocar (o despedir) la montura.
+DetailDisplayHandler.WriteMagicalBonuses.ChargedMagic:	Capacidad Mágica Cargada:
+DetailDisplayHandler.WriteMagicalBonuses.Charges:		- {0} Cargas
+DetailDisplayHandler.WriteMagicalBonuses.FocusBonus:		Bonificación de enfoque:
+DetailDisplayHandler.WriteMagicalBonuses.Level:			- {0} Nivel
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired:	Nivel requerido:
+DetailDisplayHandler.WriteMagicalBonuses.LevelRequired2:	Nivel requerido: {0} Nivel
+DetailDisplayHandler.WriteMagicalBonuses.MagicAbility:	Capacidad mágica:
+DetailDisplayHandler.WriteMagicalBonuses.MagicBonus:		Bonificaciones mágicas:
+DetailDisplayHandler.WriteMagicalBonuses.MaxCharges:		- {0} Máximo
+DetailDisplayHandler.WriteMagicalBonuses.StrikeArmor:		- El hechizo puede lanzarse cuando un enemigo golpea esta armadura.
+DetailDisplayHandler.WriteMagicalBonuses.StrikeEnemy:		- El hechizo puede lanzarse cuando esta arma golpea a un enemigo.
+DetailDisplayHandler.WriteMagicalBonuses.UsedItem:		- El hechizo puede lanzarse cuando el objeto se usa.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem1:		Puede usarse cada: {0} segundos.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem2:		Puede usarse cada: {0}:{1} min.
+DetailDisplayHandler.WriteMagicalBonuses.UseItem3:		Puede reutilizarse en: {0}.
+DetailDisplayHandler.WriteMagicalBonuses.Inactive:		(inactivo)
+DetailDisplayHandler.WriteBonusConditions.Title:		Condiciones de Bonificación:
+DetailDisplayHandler.WriteBonusConditions.Renaissance:	Debe ser "Renaissance"
+DetailDisplayHandler.WritePoisonInfo.Charges:			- {0} Cargas
+DetailDisplayHandler.WritePoisonInfo.Level:				- {0} Nivel
+DetailDisplayHandler.WritePoisonInfo.LevelRequired:		Nivel requerido:
+DetailDisplayHandler.WritePoisonInfo.MaxCharges:			- {0} Máximo
+DetailDisplayHandler.WritePoisonInfo.ProcAbility:		Efecto ofensivo:
+DetailDisplayHandler.WritePotionInfo.ChargedMagic:		Capacidad mágica cargada:
+DetailDisplayHandler.WritePotionInfo.Charges:			- {0} Cargas
+DetailDisplayHandler.WritePotionInfo.Level:				- {0} Nivel
+DetailDisplayHandler.WritePotionInfo.LevelRequired:		Condición de nivel
+DetailDisplayHandler.WritePotionInfo.MaxCharges:			- {0} Máximo
+DetailDisplayHandler.WritePotionInfo.NoUseInCombat:		No puede usarse en combate.
+DetailDisplayHandler.WritePotionInfo.UseItem2:			Puede usarse cada: 1:00 min
+DetailDisplayHandler.WritePotionInfo.UseItem3:			Puede reutilizarse en: {0}
+DetailDisplayHandler.WritePotionInfo.Type:				Función: {0}
+DetailDisplayHandler.WritePotionInfo.Value:				Valor: {0}
+DetailDisplayHandler.WritePotionInfo.Target:				Objetivo: {0}
+DetailDisplayHandler.WritePotionInfo.Range:				Alcance: {0}
+DetailDisplayHandler.WriteUsableClasses.UsableBy:		Usable por:
+
+# /DoorRequestHandler.cs
+DoorRequestHandler.OnTick.TooFarAway:			¡Estás demasiado lejos de {0}!
+
+# /PlayerBonusesListRequestHandler
+PlayerBonusesListRequestHandler.HandlePacket.Bonuses:	Bonificaciones actuales
+PlayerBonusesListRequestHandler.HandlePacket.Magic:		Bonificación mágica: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Melee:		Bonificación cuerpo a cuerpo: {0}%
+PlayerBonusesListRequestHandler.HandlePacket.Outpost:	Bonificación Fortaleza
+PlayerBonusesListRequestHandler.HandlePacket.Realm:		Bonificaciones de Reino:
+PlayerBonusesListRequestHandler.HandlePacket.Relic:		Bonificación Reliquia:
+PlayerBonusesListRequestHandler.HandlePacket.Resist:		Resistencias
+PlayerBonusesListRequestHandler.HandlePacket.Special:		Bonificaciones de objetos especiales
+PlayerBonusesListRequestHandler.HandlePacket.Specs:		+{0} todas las habilidades
+
+# /PlayerInitRequestHandler
+PlayerInitRequestHandler.AllianceMessage:			Mensaje de Alianza: {0}
+PlayerInitRequestHandler.FreeLevel:				¡Eres elegible para un nivel gratuito! Haz clic en el instructor para recibirlo (o escribe "/freelevel decline" para rechazarlo).
+PlayerInitRequestHandler.GuildMessage:				Mensaje de Gremio:
+PlayerInitRequestHandler.LevelCap:					¡Has superado el límite de nivel para este campo de batalla!
+PlayerInitRequestHandler.OfficerMessage:				Mensaje de Oficiales: {0}
+PlayerInitRequestHandler.SaferLocation:				Esta zona no es segura actualmente y eres transportado a un lugar más seguro.
+
+# /PlayerMoveItemRequestHandler
+PlayerMoveItemRequestHandler.InvalidTradeTarget:	Objetivo de intercambio inválido. ({0})
+PlayerMoveItemRequestHandler.CantTradeInactive:		No puedes intercambiar con jugadores inactivos.
+PlayerMoveItemRequestHandler.CantTradeYourself:		No puedes intercambiar contigo mismo, ¡vamos!
+PlayerMoveItemRequestHandler.CantRemoveItem:			¡No puedes retirar ese objeto!
+PlayerMoveItemRequestHandler.InvalidItem:				Objeto inválido (ranura# {0}).
+PlayerMoveItemRequestHandler.CantDropItem:			¡No puedes soltar ese objeto al suelo!
+PlayerMoveItemRequestHandler.YouDropItem:				Dejas {0} en el suelo.
+PlayerMoveItemRequestHandler.TooFarAway:				Estás demasiado lejos para dar algo a {0}.
+
+# /PlayerPickUpRequestHandler
+PlayerPickUpRequestHandler.HandlePacket.InvalidTarget:	¡Tu objetivo es inválido!
+PlayerPickUpRequestHandler.HandlePacket.Target:		¡Debes seleccionar un objetivo para obtener algo!
+
+# /PlayerPositionUpdateHandler
+PlayerPositionUpdateHandler.Endurance:				¡Pierdes aguante!
+PlayerPositionUpdateHandler.Entered:					Has entrado en {0}.
+PlayerPositionUpdateHandler.FallingDamage:			Recibes daño por caída.
+PlayerPositionUpdateHandler.FallPercent:				Pierdes {0}% de tus puntos de vida totales.
+PlayerPositionUpdateHandler.SafeFall:				El daño se redujo gracias a la habilidad de caída controlada.
+PlayerPositionUpdateHandler.CloudsongFall:			¡Tu ligereza mitigó fuertemente el impacto!
+PlayerPositionUpdateHandler.MythSafeFall:			El daño se redujo gracias a tu equipo.
+PlayerPositionUpdateHandler.UnknownZone:			¡Zona desconocida! Eres devuelto a la piedra del alma.
+
+# /PlayerTrainRequestHandler
+PlayerTrainRequestHandler.MustSelectValidTrainer:	Debes seleccionar un instructor válido para tu clase.
+PlayerTrainRequestHandler.AlreadyHaveAbility:		¡Ya tienes esa habilidad!
+PlayerTrainRequestHandler.DoNotMeetRequirements:		No cumples los requisitos para esa habilidad.
+PlayerTrainRequestHandler.NotEnoughChampionPoints:	No tienes suficientes puntos de especialización de campeón para esa habilidad.
+PlayerTrainRequestHandler.CouldNotFindChampionSpec:	No se pudo encontrar la especialización de campeón.
+PlayerTrainRequestHandler.CantTrainSpecAgainThisLevel:	No puedes entrenar más en esa especialización a este nivel.
+PlayerTrainRequestHandler.SpecializationCostsPoints:	Esa especialización cuesta {0} puntos de especialización.
+PlayerTrainRequestHandler.NotEnoughSpecPoints:		No te quedan suficientes puntos de especialización para este nivel.
+PlayerTrainRequestHandler.RealmAbilityCostsPoints:	{0} cuesta {1} puntos de habilidad de reino.
+PlayerTrainRequestHandler.NotEnoughRealmAbilityPoints:	No tienes suficientes puntos de habilidad de reino para obtener eso.
+PlayerTrainRequestHandler.NotExperiencedEnoughForAbility:	No tienes suficiente experiencia para obtener {0} ahora. Vuelve más tarde.
+PlayerTrainRequestHandler.TrainingFailed:			Por desgracia, el entrenamiento falló. Por favor repórtalo a los administradores o a un maestro de juego. Gracias.
+
+# /PlayerTargetHandler
+PlayerTargetHandler.Gravestone:					Dejas de apuntar a tu lápida. Tus rezos fallan.
+
+# /DestroyItemRequestHandler
+DestroyItemRequestHandler.CantDestroyItem:		¡No puedes destruir {0}!
+DestroyItemRequestHandler.CantDestroyRelic:		¡No puedes destruir una reliquia!
+DestroyItemRequestHandler.CantDestroyEquippedItem:	¡No puedes destruir un objeto equipado!
+DestroyItemRequestHandler.ItemDestroyed:			Destruyes {0}.
+DestroyItemRequestHandler.CantDestroyPvPFlag:		¡La bandera PvP no puede destruirse!
+
+# /DialogResponseHandler
+DialogResponseHandler.SameRegionGuildLeaderToAccept:	Debes estar en la misma región que el líder del gremio para aceptar una invitación.
+DialogResponseHandler.StillInGuild:				Todavía estás en un gremio, primero debes salir.
+DialogResponseHandler.GuildLeaderNotInGuild:		¡El jugador que invita no está en un gremio!
+DialogResponseHandler.GuildInviteDeclined:			{0} ha rechazado tu invitación.
+DialogResponseHandler.NotInGuild:					No estás en un gremio.
+DialogResponseHandler.InviteExpired:				Esta invitación ha expirado.
+DialogResponseHandler.GuildDeclineQuit:			Rechazas salir del gremio.
+DialogResponseHandler.StillInGroup:				Todavía estás en grupo.
+DialogResponseHandler.CannotJoinGroupInCombat:		No puedes unirte a un grupo durante el combate.
+DialogResponseHandler.GroupFull:					El grupo está lleno.
+DialogResponseHandler.MustBeGuildMemberToUseCommands:	Debes ser miembro de un gremio antes de poder usar esos comandos.
+DialogResponseHandler.NearKeepToClaim:			Debes estar cerca del fuerte para reclamarlo.
+DialogResponseHandler.DepositInLockbox:			Depositas {0} en la caja.
+DialogResponseHandler.LockboxHasMoneyWeeklyPayment:	La caja ahora contiene {0}. El pago semanal es {1}.
+DialogResponseHandler.HousePrepaidForPayments:		La casa está ahora prepagada para las próximas {0} cuotas.
+
+# /InviteToGroupHandler
+InviteToGroupHandler.InvalidTarget:				Debes seleccionar un jugador válido como objetivo.
+InviteToGroupHandler.NotLeader:					No eres el líder del grupo.
+InviteToGroupHandler.GroupFull:					El grupo ya está lleno.
+InviteToGroupHandler.TargetInGroup:				Ese jugador ya está en un grupo.
+InviteToGroupHandler.Invited:					Has invitado a {0} a unirse al grupo.
+InviteToGroupHandler.InvitePrompt1:				{0} te ha invitado a unirte a su grupo.
+InviteToGroupHandler.InvitePrompt2:				¿Aceptar?
+InviteToGroupHandler.InviteNotification:			{0} te invitó a unirte a su grupo.
+
+# /PlayerAttackRequestHandler
+PlayerAttackRequestHandler.CantEnterMelee:		¡No puedes luchar cuerpo a cuerpo con un arma de fuego equipada!
+
+# /PlayerDismountRequestHandler
+PlayerDismountRequestHandler.NoRidingSteed:		¡No estás montando una montura!
+
+# /EmblemDialogReponseHandler
+EmblemDialogReponseHandler.EmblemAlreadyInUse:	Ese emblema ya está en uso por otro gremio, ¡elige otro!

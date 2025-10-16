@@ -24,6 +24,7 @@ using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.GS.Styles;
 using System.Linq;
+using DOL.Language;
 
 namespace DOL.GS.ServerRules
 {
@@ -72,7 +73,7 @@ namespace DOL.GS.ServerRules
             //"You can't attack yourself!"
             if (attacker == defender)
             {
-                if (quiet == false) MessageToLiving(attacker, "You can't attack yourself!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.NormalServerRules.AttackSelf"));
                 return false;
             }
 
@@ -80,7 +81,7 @@ namespace DOL.GS.ServerRules
             if (attacker.Realm == defender.Realm && !(attacker is GamePlayer && ((GamePlayer)attacker).DuelTarget == defender))
             {
                 // allow confused mobs to attack same realm
-                if (attacker is GameNPC && (attacker as GameNPC).IsConfused)
+                if (attacker is GameNPC && (attacker as GameNPC)!.IsConfused)
                     return true;
 
                 if (attacker.Realm == 0)
@@ -88,7 +89,7 @@ namespace DOL.GS.ServerRules
                     return FactionMgr.CanLivingAttack(attacker, defender);
                 }
 
-                if (quiet == false) MessageToLiving(attacker, "You can't attack a member of your realm!");
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.NormalServerRules.AttackSameRealm"));
                 return false;
             }
 
@@ -134,7 +135,7 @@ namespace DOL.GS.ServerRules
 
             if (source.Realm != target.Realm)
             {
-                if (quiet == false) MessageToLiving(source, target.GetName(0, true) + " is not a member of your realm!");
+                if (quiet == false) MessageToLiving(source, LanguageMgr.GetTranslation((source as GamePlayer)?.Client, "ServerRules.NormalServerRules.TargetNotSameRealm", target.GetName(0, true)));
                 return false;
             }
             return true;
@@ -155,7 +156,7 @@ namespace DOL.GS.ServerRules
 
             if (source.Realm != target.Realm)
             {
-                if (quiet == false) MessageToLiving(source, "You can't invite a player of another realm.");
+                if (quiet == false) MessageToLiving(source, LanguageMgr.GetTranslation(source.Client, "ServerRules.NormalServerRules.InviteOtherRealm"));
                 return false;
             }
             return true;
@@ -182,7 +183,7 @@ namespace DOL.GS.ServerRules
             // clients with priv level > 1 are allowed to trade with anyone
             if (source is GamePlayer && target is GamePlayer)
             {
-                if ((source as GamePlayer).Client.Account.PrivLevel > 1 || (target as GamePlayer).Client.Account.PrivLevel > 1)
+                if ((source as GamePlayer)!.Client.Account.PrivLevel > 1 || (target as GamePlayer)!.Client.Account.PrivLevel > 1)
                     return true;
             }
 
@@ -197,7 +198,7 @@ namespace DOL.GS.ServerRules
 
             if (source.Realm != target.Realm)
             {
-                if (quiet == false) MessageToLiving(source, "You can't trade with enemy realm!");
+                if (quiet == false) MessageToLiving(source, LanguageMgr.GetTranslation((source as GamePlayer)?.Client, "ServerRules.NormalServerRules.TradeEnemyRealm"));
                 return false;
             }
             return base.IsAllowedToTrade(source, target, quiet);

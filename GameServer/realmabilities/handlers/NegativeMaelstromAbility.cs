@@ -7,6 +7,7 @@ using DOL.GS.Effects;
 using DOL.Events;
 using DOL.Database;
 using DOL.GS.Geometry;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -23,20 +24,20 @@ namespace DOL.GS.RealmAbilities
         {
             if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
             GamePlayer caster = living as GamePlayer;
-            if (caster.IsMoving)
+            if (caster!.IsMoving)
             {
-                caster.Out.SendMessage("You must be standing still to use this ability!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "NegativeMaelstromAbility.Require.StandingStill"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (caster.GroundTargetPosition == Position.Nowhere || !caster.IsWithinRadius(caster.GroundTargetPosition, 1500))
             {
-                caster.Out.SendMessage("You groundtarget is too far away to use this ability!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "NegativeMaelstromAbility.Require.GroundTargetInRange"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (caster.TempProperties.getProperty(IS_CASTING, false))
             {
-                caster.Out.SendMessage("You are already casting an ability.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "NegativeMaelstromAbility.AlreadyCasting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             this.player = caster;
@@ -74,11 +75,11 @@ namespace DOL.GS.RealmAbilities
             {
                 if (i_player == caster)
                 {
-                    i_player.MessageToSelf("You cast " + this.Name + "!", eChatType.CT_Spell);
+                    i_player.MessageToSelf(LanguageMgr.GetTranslation(i_player.Client, "NegativeMaelstromAbility.Self.Cast", this.Name), eChatType.CT_Spell);
                 }
                 else
                 {
-                    i_player.MessageFromArea(caster, i_player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    i_player.MessageFromArea(caster, LanguageMgr.GetTranslation(i_player.Client, "NegativeMaelstromAbility.Area.CastsSpell", i_player.GetPersonalizedName(caster)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
 
                 i_player.Out.SendSpellCastAnimation(caster, 7027, 20);

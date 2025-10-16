@@ -52,7 +52,7 @@ namespace DOL.GS.RealmAbilities
             ShieldOfImmunityEffect ra5l = caster.EffectList.GetOfType<ShieldOfImmunityEffect>();
             if (ra5l != null)
             {
-                caster.Out.SendMessage("You cannot currently use this ability", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "MasteryofConcentrationAbility.BlockedByShield"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -61,10 +61,7 @@ namespace DOL.GS.RealmAbilities
             if (ascEff != null && (ascEff.Spell?.AmnesiaChance ?? 0) <= 0)
             {
                 ascEff.Cancel(false);
-                caster.Out.SendMessage(
-                    LanguageMgr.GetTranslation(caster.Client, "RealmAbility.MasteryofConcentration.CanceledAscendance")
-                    ?? "Your Ascendance fades as you focus your concentration.",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.Cleric.Ascendance.MocCanceledAscendance"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
             SendCasterSpellEffectAndCastMessage(living, 7007, true);
@@ -75,13 +72,13 @@ namespace DOL.GS.RealmAbilities
                 {
                     if (player == caster)
                     {
-                        player.MessageToSelf("You cast " + this.Name + "!", eChatType.CT_Spell);
-                        player.MessageToSelf("You become steadier in your casting abilities!", eChatType.CT_Spell);
+                        player.MessageToSelf(LanguageMgr.GetTranslation(player.Client, "MasteryofConcentrationAbility.Self.Cast", this.Name), eChatType.CT_Spell);
+                        player.MessageToSelf(LanguageMgr.GetTranslation(player.Client, "MasteryofConcentrationAbility.Self.Steadier"), eChatType.CT_Spell);
                     }
                     else
                     {
-                        player.MessageFromArea(caster, player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                        player.Out.SendMessage(player.GetPersonalizedName(caster) + "'s castings have perfect poise!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.MessageFromArea(caster, LanguageMgr.GetTranslation(player.Client, "MasteryofConcentrationAbility.Area.CastsSpell", player.GetPersonalizedName(caster)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MasteryofConcentrationAbility.Area.Poise", player.GetPersonalizedName(caster)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
             }

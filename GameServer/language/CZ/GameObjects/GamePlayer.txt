@@ -1,0 +1,510 @@
+# GAMEPLAYER (CS)
+GameObjects.GamePlayer.AddAbility.YouLearn:            Naučíš se schopnost {0}.
+GameObjects.GamePlayer.AddSpecialisation.YouLearn:     Naučíš se specializaci {0}.
+GameObjects.GamePlayer.AddSpellLine.YouLearn:          Naučíš se linii kouzel {0}.
+
+GameObjects.GamePlayer.ApplyPoison.CantApplyRecentCombat:   Nedávno jsi byl v boji a teď nemůžeš použít jed.
+GameObjects.GamePlayer.ApplyPoison.CantPoisonWeapon:        Na tuto zbraň nelze použít jed.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoison:           Tento jed nemůžeš použít.
+GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Tyto jedy nemůžeš použít.
+GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Jedy lze aplikovat pouze na zbraně.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Na tuto zbraň nemůžeš jed znovu nanést.
+GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Nemůžeš otrávit svůj/svou {0}!
+
+GameObjects.GamePlayer.AblativeArmor.Target:        Tvá zbroj absorbuje díky tvému ablativnímu bonusu {0} dodatečného poškození!
+GameObjects.GamePlayer.AblativeArmor.Attacker:      Zbroj {0} absorbuje díky jeho/jejímu ablativnímu bonusu {1} dodatečného poškození!
+
+GameObjects.GamePlayer.Attack.AlreadyDead:          {0} je už mrtvý/mrtvá.
+GameObjects.GamePlayer.Attack.Blocked:              {0} zblokuje tvůj útok.
+GameObjects.GamePlayer.Attack.CantBeAttacked:       Na tohle nelze zaútočit.
+GameObjects.GamePlayer.Attack.CantCritical:         Na cíl nemůžeš zasadit kritický zásah; provádíš běžný úder.
+GameObjects.GamePlayer.Attack.CantSeeTarget:        Nevidíš svůj cíl.
+GameObjects.GamePlayer.Attack.CantUseQuiver:        Zvolenou munici nemůžeš s touto zbraní použít.
+GameObjects.GamePlayer.Attack.CouldRepair:          Tvůj/Tvoje {0} lze opravit.
+GameObjects.GamePlayer.Attack.Critical:             Zasazuješ {0} kritický zásah a způsobuješ {1} dodatečného poškození!
+GameObjects.GamePlayer.Attack.Evade:                {0} na tebe útočí, ale ty uhýbáš!
+GameObjects.GamePlayer.Attack.Evaded:               {0} uhnul/a tvému útoku!
+GameObjects.GamePlayer.Attack.Fumble:               Zakopneš a chvilku ti trvá, než se vzpamatuješ!
+GameObjects.GamePlayer.Attack.Fumbled:              {0} klopýtne!
+GameObjects.GamePlayer.Attack.HitsYour:             {0} zasahuje tvůj/tvou {1} za {2}{3} poškození!
+GameObjects.GamePlayer.Attack.HitsYou:              {0} tě zasahuje za {1}{2} poškození!
+GameObjects.GamePlayer.Attack.HitsYouCritical:      {0} tě kriticky zasahuje za {1} dodatečného poškození!
+GameObjects.GamePlayer.Attack.Intercepted:          {0} se postaví před {1} a útok zachytí!
+GameObjects.GamePlayer.Attack.InterceptedHit:       {0} {1}{2}, ale zasahuješ {3} za {4}{5} poškození!
+GameObjects.GamePlayer.Attack.InterceptHit:         {0} {1}{2} a zasahuješ za {3}{4} poškození!
+GameObjects.GamePlayer.Attack.Interrupted:          {0} na tebe útočí a tvůj/tvá {1} je přerušen/a!
+GameObjects.GamePlayer.Attack.InterruptedCrafting:  Přerušuješ výrobu předmětu.
+GameObjects.GamePlayer.Attack.Location.Arm:         Paže
+GameObjects.GamePlayer.Attack.Location.Foot:        Chodidlo
+GameObjects.GamePlayer.Attack.Location.Hand:        Ruka
+GameObjects.GamePlayer.Attack.Location.Head:        Hlava
+GameObjects.GamePlayer.Attack.Location.Leg:         Noha
+GameObjects.GamePlayer.Attack.Location.Torso:       Trup
+GameObjects.GamePlayer.Attack.Miss:                 Mineš.
+GameObjects.GamePlayer.Attack.Missed:               {0} na tebe útočí, ale mine.
+GameObjects.GamePlayer.Attack.MustSelectQuiver:     Musíš vybrat přihrádku ve svém toulci.
+GameObjects.GamePlayer.Attack.NeedRepair:           Tvůj/Tvoje {0} potřebuje opravu.
+GameObjects.GamePlayer.Attack.NeedRepairDire:       Tvůj/Tvoje {0} nutně potřebuje opravu.
+GameObjects.GamePlayer.Attack.NeedTarget:           Musíš vybrat cíl, na který zaútočíš.
+GameObjects.GamePlayer.Attack.NotInView:            {0} není v dohledu.
+GameObjects.GamePlayer.Attack.Parried:              {0} odráží tvůj útok.
+GameObjects.GamePlayer.Attack.Parry:                {0} na tebe útočí, ale ty ránu odrazíš!
+GameObjects.GamePlayer.Attack.ReadyToFire:          Jsi připraven vystřelit.
+GameObjects.GamePlayer.Attack.StrafMiss:            Tvůj pohyb do strany způsobil, že jsi minul.
+GameObjects.GamePlayer.Attack.TooFarAway:           {0} je příliš daleko na útok.
+GameObjects.GamePlayer.Attack.TooTired:             Jsi příliš unavený/unavená, abys držel výstřel déle.
+GameObjects.GamePlayer.Attack.Type.Shot:            Výstřel
+GameObjects.GamePlayer.Attack.Type.Throw:           Hod
+GameObjects.GamePlayer.Attack.WithYour:             se svým/svou
+GameObjects.GamePlayer.Attack.YouAttack:            Útočíš na
+GameObjects.GamePlayer.Attack.YouShot:              Střílíš na
+GameObjects.GamePlayer.Attack.CounterAttackSuccess: Používáš {0} k protiútoku.
+GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:   Styl protiútoku nelze s aktuální zbraní použít.
+GameObjects.GamePlayer.Attack.CounterAttackNoStyle:       Pro tvou třídu nebyl nalezen žádný styl protiútoku.
+GameObjects.GamePlayer.Attack.CounterAttackByEnemy:       {0} provádí protiútok!
+
+GameObjects.GamePlayer.Bind.Bound:          Tvůj duch je nyní svázán s tímto kamenem duší.
+GameObjects.GamePlayer.Bind.CantBindDead:   Smrt ti brání svázat svého ducha s kamenem duší.
+GameObjects.GamePlayer.Bind.CantHere:       V okolí není žádný kámen duší, ke kterému by ses mohl/a svázat.
+GameObjects.GamePlayer.Bind.LastBindPoint:  Poslední svázaný bod: {0}.
+GameObjects.GamePlayer.Bind.MustWait:       Před opětovným svázáním musíš počkat {0} sekund.
+
+GameObjects.GamePlayer.CastSpell.AlreadyCastFollow:     Už seslal/a kouzlo! Toto kouzlo bylo zařazeno do fronty.
+GameObjects.GamePlayer.CastSpell.AlreadyCastNoQueue:    Už sesíláš kouzlo. Pro aktivaci fronty kouzel použij „/noqueue“.
+GameObjects.GamePlayer.CastSpell.AlreadyChosenSpells:   Pro tuto komoru už máš kouzla vybraná.
+GameObjects.GamePlayer.CastSpell.AlreadyPlaySong:       Už hraješ skladbu.
+GameObjects.GamePlayer.CastSpell.CantCastMezzed:        Nemůžeš kouzlit, když jsi zhypnotizován/a.
+GameObjects.GamePlayer.CastSpell.CantCastStunned:       Nemůžeš kouzlit, když jsi omráčen/a.
+GameObjects.GamePlayer.CastSpell.CantCastFumblingWords: Tvé zaklínání selhává; kouzlo nemůžeš seslat!
+GameObjects.GamePlayer.CastSpell.CantSpellDirectly:     Toto kouzlo nemůžeš seslat přímo!
+GameObjects.GamePlayer.CastSpell.FollowSpell:           Připravil/a jsi {0} jako navazující kouzlo!
+GameObjects.GamePlayer.CastSpell.NotAFollowSpell:       Toto kouzlo nelze připravit jako navazující!
+GameObjects.GamePlayer.CastSpell.PrimarySpellFirst:     Nejprve musíš uložit hlavní kouzlo!
+GameObjects.GamePlayer.CastSpell.PrepareSecondarySpell: Připravuješ to jako sekundární kouzlo!
+GameObjects.GamePlayer.CastSpell.SelectSecondSpell:     Vyber druhé kouzlo pro svůj/svou {0}.
+GameObjects.GamePlayer.CastSpell.SpellInChamber:        Nabíjíš {0} do svého/své {1}.
+GameObjects.GamePlayer.CastSpell.SpellNotInChamber:     Toto kouzlo nelze v této komoře uložit.
+GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:   Za seslaným kouzlem může následovat pouze sekundární kouzlo!
+GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:   Už sesíláš kouzlo.
+GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast:    Před sesláním dalšího kouzla musíš počkat {0} sekund!
+
+GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:          Tvůj cíl je pro tvého společníka příliš daleko.
+GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:   Musíš vybrat cíl/destinaci pro svou bytost.
+GameObjects.GamePlayer.CommandNpcAttack.KillTarget:                Přikazuješ {0}, aby zabil tvůj cíl!
+GameObjects.GamePlayer.CommandNpcAttack.IsConfused:                Tvůj/Tvoje {0} je zmatený/á!
+GameObjects.GamePlayer.CommandNpcAttack.FollowYou:                 Přikazuješ {0}, aby tě následoval/a!
+GameObjects.GamePlayer.CommandNpcAttack.Stay:                      Přikazuješ {0}, aby zůstal/a!
+GameObjects.GamePlayer.CommandNpcAttack.ComeHere:                  Přikazuješ {0}, aby přišel/přišla k tobě.
+GameObjects.GamePlayer.CommandNpcAttack.GoToTarget:                Přikazuješ {0}, aby šel/šla k tvému cíli.
+GameObjects.GamePlayer.CommandNpcAttack.Passive:                   Přikazuješ {0}, aby se stáhl/a z boje!
+GameObjects.GamePlayer.CommandNpcAttack.Aggressive:                Přikazuješ {0}, aby útočil/a na všechny nepřátele!
+GameObjects.GamePlayer.CommandNpcAttack.Denfensive:                Přikazuješ {0}, aby tě bránil/a!
+
+GameObjects.GamePlayer.CraftItem.DontHaveAbilityMake:              Nemáš potřebnou dovednost k výrobě tohoto předmětu.
+GameObjects.GamePlayer.CurrentTitle.TitleCleared:                  Tvůj titul byl odebrán.
+
+GameObjects.GamePlayer.Die.CorpseLies:             {0} zemřel/a. Jeho/Její mrtvola leží na zemi.
+GameObjects.GamePlayer.Die.DeadRVR:                Padl/a jsi v boji za své království a neztrácíš zkušenosti.
+GameObjects.GamePlayer.Die.DeathN1:                Toto je tvá první smrt na této úrovni. Ztráty zkušeností a konstituce jsou výrazně sníženy.
+GameObjects.GamePlayer.Die.DeathN2:                Toto je tvá druhá smrt na této úrovni. Ztráty zkušeností a konstituce jsou sníženy.
+GameObjects.GamePlayer.Die.DuelDefeated:           {0} byl/a v duelu poražen/a {1}!
+GameObjects.GamePlayer.Die.DuelWinner:             {0} vyhrává duel!
+GameObjects.GamePlayer.Die.Killed:                 {0} byl/a právě zabit/a.
+GameObjects.GamePlayer.Die.KilledBy:               {0} byl/a právě zabit/a {1}.
+GameObjects.GamePlayer.Die.KilledByLocation:       {0} byl/a právě zabit/a {1} u {2}.
+GameObjects.GamePlayer.Die.KilledLocation:         {0} byl/a právě zabit/a u {1}.
+GameObjects.GamePlayer.Die.LoseExperience:         Přicházíš o zkušenosti.
+GameObjects.GamePlayer.Die.ReleaseToReturn:        Jsi mrtvý/mrtvá. Napiš „/release“ pro návrat ke svému kameni duší.
+GameObjects.GamePlayer.Die.YouKilled:              Zabil/a jsi {0}.
+
+GameObjects.GamePlayer.DrowningTimerCallback.CannotBreath:  Pod vodou nemůžeš dýchat a polykáš vodu!
+GameObjects.GamePlayer.DrowningTimerCallback.Take5%Damage:  Ztrácíš 5 % svých maximálních životů.
+
+GameObjects.GamePlayer.DuelStop.DuelEnds:                     Tvůj duel končí.
+
+GameObjects.GamePlayer.GainBountyPoints.YouGet:               Získáváš {0} bodů odměny.
+GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus:       Díky svým územím získáváš bonus {0} bodů odměny.
+
+GameObjects.GamePlayer.GainCraftingSkill.GainSkill:           Získáváš navýšení dovednosti v {0}. ({1})
+GameObjects.GamePlayer.GainCraftingSkill.ReachedSkill:        {0} dosáhl/a titulu „Legendární“ (1000 bodů dovednosti) v {1}.
+
+GameObjects.GamePlayer.GainExperience.CampBonus:              ({0} táborový bonus)
+GameObjects.GamePlayer.GainExperience.CannotRaise:            Nemůžeš dosáhnout úrovně 6, dokud si nevybereš specializaci.
+GameObjects.GamePlayer.GainExperience.GroupBonus:             ({0} skupinový bonus)
+GameObjects.GamePlayer.GainExperience.OutpostBonus:           ({0} bonus za opěrný bod)
+GameObjects.GamePlayer.GainExperience.RoyaumesouspeupleBonus: Získáváš bonus {0} za podpopulované říše!
+GameObjects.GamePlayer.GainExperience.TalkToTrainer:          Pro více informací promluv se svým trenérem.
+GameObjects.GamePlayer.GainExperience.YouGet:                 Získáváš {0} zkušenostních bodů.
+GameObjects.GamePlayer.GainExperience.BonusRenaissance:       z toho {0} bonusových bodů z Znovuzrození
+GameObjects.GamePlayer.GainExperience.BonusTerritory:         z toho {0} bonusových bodů z Území
+GameObjects.GamePlayer.GainExperience.BonusGameEvent:         z toho {0} bonusových bodů z Událostí
+
+GameObjects.GamePlayer.GainRealmPoints.Earned:                {0} získal/a 1 000 000 bodů říše v {1}.
+GameObjects.GamePlayer.GainRealmPoints.GainBonus:             Získáváš bonus +{0} ke všem svým specializacím!
+GameObjects.GamePlayer.GainRealmPoints.GainedLevel:           Získal/a jsi úroveň říše!
+GameObjects.GamePlayer.GainRealmPoints.GainedRank:            Získal/a jsi nový hodnostní titul říše!
+GameObjects.GamePlayer.GainRealmPoints.NewRealmTitle:         Tvůj nový titul říše je {0}.
+GameObjects.GamePlayer.GainRealmPoints.ReachedRank:           Dosáhl/a jsi hodnosti říše {0}L0!
+GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:       {0} dosáhl/a hodnosti říše {1:#L#} v {2}!
+GameObjects.GamePlayer.GainRealmPoints.YouGet:                Získáváš {0} bodů říše!
+GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:           Získáváš {0} bodů říše navíc díky oblastním bonusům!
+GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP:      Získáváš {0} bodů říše za obranu svého území!
+GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:     Získáváš {0} bodů říše za vyléčení člena své říše!
+
+GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:   Prohlížíš si {0}. {1} je členem nepřátelské říše!
+GameObjects.GamePlayer.GetExamineMessages.NeutralMember:      Prohlížíš si {0}. {1} nepatří do žádného cechu.
+GameObjects.GamePlayer.GetExamineMessages.OtherGuildMember:   Prohlížíš si {0}. {1} je členem cechu: {2}.
+GameObjects.GamePlayer.GetExamineMessages.RealmMember:        Prohlížíš si {0}. {1} je {2} z tvé říše.
+GameObjects.GamePlayer.GetExamineMessages.YouExamine:         Prohlížíš si {0}.
+GameObjects.GamePlayer.GetExamineMessages.YourGuildMember:    Prohlížíš si {0}. {1} je {2} z tvého cechu.
+
+GameObjects.GamePlayer.IsCloakHoodUp.NowWear:                 Nyní máš kapuci nahoře.
+GameObjects.GamePlayer.IsCloakHoodUp.NoLongerWear:            Nyní máš kapuci dole.
+
+GameObjects.GamePlayer.IsCloakInvisible.Invisible:            Nyní svůj plášť nevidíš.
+GameObjects.GamePlayer.IsCloakInvisible.Visible:              Svůj plášť opět vidíš.
+
+GameObjects.GamePlayer.IsHelmInvisible.Invisible:             Nyní svou přilbu nevidíš.
+GameObjects.GamePlayer.IsHelmInvisible.Visible:               Svou přilbu opět vidíš.
+
+GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Sesedáš ze svého jízdního zvířete.
+GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Nasedáš na své jízdní zvíře.
+GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Musíš mít vybaveného koně.
+GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Pro použití tohoto inventáře musíš sedět na koni.
+
+GameObjects.GamePlayer.ItemBonusName.Bonus1:    Síla
+GameObjects.GamePlayer.ItemBonusName.Bonus2:    Obratnost
+GameObjects.GamePlayer.ItemBonusName.Bonus3:    Konstituce
+GameObjects.GamePlayer.ItemBonusName.Bonus4:    Rychlost
+GameObjects.GamePlayer.ItemBonusName.Bonus5:    Inteligence
+GameObjects.GamePlayer.ItemBonusName.Bonus6:    Zbožnost
+GameObjects.GamePlayer.ItemBonusName.Bonus7:    Empatie
+GameObjects.GamePlayer.ItemBonusName.Bonus8:    Charisma
+GameObjects.GamePlayer.ItemBonusName.Bonus9:    Mana
+GameObjects.GamePlayer.ItemBonusName.Bonus10:   ŽB (Životní body)
+GameObjects.GamePlayer.ItemBonusName.Bonus11:   Odolnost Tělo
+GameObjects.GamePlayer.ItemBonusName.Bonus12:   Odolnost Chlad
+GameObjects.GamePlayer.ItemBonusName.Bonus13:   Odolnost Drtivá
+GameObjects.GamePlayer.ItemBonusName.Bonus14:   Odolnost Energie
+GameObjects.GamePlayer.ItemBonusName.Bonus15:   Odolnost Oheň
+GameObjects.GamePlayer.ItemBonusName.Bonus16:   Odolnost Hmota
+GameObjects.GamePlayer.ItemBonusName.Bonus17:   Odolnost Sečná
+GameObjects.GamePlayer.ItemBonusName.Bonus18:   Odolnost Duch
+GameObjects.GamePlayer.ItemBonusName.Bonus19:   Odolnost Bodná
+GameObjects.GamePlayer.ItemBonusName.Bonus119:  Rychlost nárůstu napětí
+GameObjects.GamePlayer.ItemBonusName.Bonus147:  maximální rychlost soustředění
+GameObjects.GamePlayer.ItemBonusName.Bonus148:  Bonus faktoru zbroje (FZ)
+GameObjects.GamePlayer.ItemBonusName.Bonus149:  Bonus absorpce (Abs)
+GameObjects.GamePlayer.ItemBonusName.Bonus150:  Rychlost regenerace ŽB
+GameObjects.GamePlayer.ItemBonusName.Bonus151:  Rychlost regenerace many
+GameObjects.GamePlayer.ItemBonusName.Bonus152:  Rychlost regenerace výdrže
+GameObjects.GamePlayer.ItemBonusName.Bonus153:  Dosah kouzel
+GameObjects.GamePlayer.ItemBonusName.Bonus154:  Dosah střelných zbraní
+GameObjects.GamePlayer.ItemBonusName.Bonus155:  Rychlost boje zblízka
+GameObjects.GamePlayer.ItemBonusName.Bonus156:  Vůle
+GameObjects.GamePlayer.ItemBonusName.Bonus169:  Šance na úhyb
+GameObjects.GamePlayer.ItemBonusName.Bonus170:  Šance na blok (Štíty)
+GameObjects.GamePlayer.ItemBonusName.Bonus171:  Šance na parírování
+GameObjects.GamePlayer.ItemBonusName.Bonus175:  Šance zásahu v boji
+GameObjects.GamePlayer.ItemBonusName.Bonus181:  Úspěšnost kouzel
+GameObjects.GamePlayer.ItemBonusName.Bonus197:  Odolnost proti bodným útokům
+GameObjects.GamePlayer.ItemBonusName.Bonus249:  Odolnost proti esenci
+
+GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Jsi v lávě a utrpíš poškození!
+GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Utrpíš poškození ve výši 34 % svých maximálních životů.
+
+GameObjects.GamePlayer.OnItemEquipped.Increased:      Tvůj/Tvoje {0} byl/a zvýšen/a.
+GameObjects.GamePlayer.OnItemEquipped.Magic:          Magie {0} proudí tvými žilami.
+GameObjects.GamePlayer.OnItemEquipped.WieldBothHands: Držíš svůj/svou {0} obouruč.
+GameObjects.GamePlayer.OnItemEquipped.WieldLeftHand:  Držíš svůj/svou {0} v levé ruce.
+GameObjects.GamePlayer.OnItemEquipped.WieldRightHand: Držíš svůj/svou {0} v pravé ruce.
+
+GameObjects.GamePlayer.OnItemUnequipped.Decreased:    Tvůj/Tvoje {0} byl/a snížen/a.
+GameObjects.GamePlayer.OnItemUnequipped.BothHandsFree: Schováváš {0}. Tvé ruce jsou nyní volné.
+GameObjects.GamePlayer.OnItemUnequipped.LeftHandFree:  Schováváš {0} z levé ruky.
+GameObjects.GamePlayer.OnItemUnequipped.RightHandFree: Schováváš {0} z pravé ruky.
+
+GameObjects.GamePlayer.OnLevelUp.AttainedRank:        Dosáhl/a jsi hodnosti {0}!
+GameObjects.GamePlayer.OnLevelUp.FreeLevelEligible:   Máš nárok na bezplatnou úroveň! Klikni na svého trenéra, abys ji získal/a (nebo napiš „/freelevel decline“ pro odmítnutí).
+GameObjects.GamePlayer.OnLevelUp.HitsRaise:           Tvé životy se zvýšily o {0}.
+GameObjects.GamePlayer.OnLevelUp.PowerRaise:          Tvá mana se zvýšila o {0}.
+GameObjects.GamePlayer.OnLevelUp.Reached:             {0} dosáhl/a úrovně {1} v {2}!
+GameObjects.GamePlayer.OnLevelUp.SecondStage:         Dosáhl/a jsi druhé fáze své úrovně {0}!
+GameObjects.GamePlayer.OnLevelUp.StatRaise:           Tvé atributy rostou!
+GameObjects.GamePlayer.OnLevelUp.YouAchieved:         Dokončil/a jsi úroveň {0}!
+GameObjects.GamePlayer.OnLevelUp.YouGetSpec:          Získáváš {0} bodů specializace, které můžeš na této úrovni utratit!
+GameObjects.GamePlayer.OnLevelUp.YouRaise:            Postoupil/a jsi na úroveň {0}!
+GameObjects.GamePlayer.OnRenaissance:                 Právě jsi dokončil/a své Znovuzrození!
+
+GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} byl/a odpojen/a od serveru!
+
+GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Pohybuješ se a nemůžeš přivolat své jízdní zvíře!
+GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Pohybuješ se a přerušuješ svou výrobu.
+
+GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} se cvičí v různých specializacích.
+GameObjects.GamePlayer.OnSkillTrained.YouHave:         Na této úrovni ti zbývá {0} bodů specializace.
+GameObjects.GamePlayer.OnSkillTrained.YouSpend:        Utrácíš {0} bodů a zvyšuješ svou specializaci v {1}.
+
+GameObjects.GamePlayer.OpenSelfCraft.AlreadySelfCrafting: Už něco očarováváš.
+GameObjects.GamePlayer.OpenSelfCraft.CanOnlyCraftBackpack: Kombinovat můžeš pouze předměty ve svém batohu.
+
+GameObjects.GamePlayer.PickupObject.Autosplit:             (Automatické dělení) {0} připadá {1}.
+GameObjects.GamePlayer.PickupObject.BackpackFull:          Tvůj inventář je plný; musíš uvolnit místo.
+GameObjects.GamePlayer.PickupObject.CantGetThat:           To nemůžeš sebrat.
+GameObjects.GamePlayer.PickupObject.GroupMemberPicksUp:    {0} zvedá {1}.
+GameObjects.GamePlayer.PickupObject.ItemBelowBGThreshold:  Tento předmět je pod úrovní tvé bojové skupiny.
+GameObjects.GamePlayer.PickupObject.LootDoesntBelongYou:   Tato kořist ti nepatří — nemůžeš ji vzít.
+GameObjects.GamePlayer.PickupObject.MustHaveTarget:        Pro sebrání něčeho potřebuješ cíl.
+GameObjects.GamePlayer.PickupObject.NoOneGroupWantsMoney:  Nikdo ve skupině nechce peníze.
+GameObjects.GamePlayer.PickupObject.NoOneWantsThis:        Nikdo ve skupině nechce {0}.
+GameObjects.GamePlayer.PickupObject.ObjectTooFarAway:      {0} je příliš daleko na sebrání.
+GameObjects.GamePlayer.PickupObject.TooFarFromBoat:        Jsi příliš daleko od lodi, abys nastoupil/a.
+GameObjects.GamePlayer.PickupObject.YouGet:                Zvedáš {0} a dáváš to do batohu.
+GameObjects.GamePlayer.PickupObject.YouPickUp:             Zvedáš {0}.
+GameObjects.GamePlayer.PickupObject.YourLootShare:         Tvůj podíl kořisti je {0}.
+GameObjects.GamePlayer.PickupObject.GuildDueTax:           Tvůj daňový odvod {0} putuje do cechovní banky.
+GameObjects.GamePlayer.PickupObject.CannotDepositHere:     {0} zde nelze uložit!
+GameObjects.GamePlayer.PickupObject.WaitToPickup:          Před sebráním {1} musíš počkat {0} sekund!
+GameObjects.GamePlayer.PickupObject.HeadPickedUp:          Získal/a jsi hlavu {0}.
+GameObjects.GamePlayer.PickupObject.HeadInventoryFull:     Hlavu {0} se nepodařilo získat; inventář je plný!
+
+GameObjects.GamePlayer.Pray.AlreadyPraying:            Už se modlíš.
+GameObjects.GamePlayer.Pray.Begin:                     Začínáš se modlit.
+GameObjects.GamePlayer.Pray.CantPrayNow:               Teď se nemůžeš modlit.
+GameObjects.GamePlayer.Pray.GainBack:                  Tvé modlitby byly vyslyšeny; získáváš zpět zkušenosti.
+GameObjects.GamePlayer.Pray.MustGetCloser:             Aby ses modlil/a, musíš se přiblížit ke svému hrobu.
+GameObjects.GamePlayer.Pray.MustStandingStill:         Pro modlitbu musíš stát v klidu.
+GameObjects.GamePlayer.Pray.NeedTarget:                Pro modlitbu musíš vybrat hrob.
+GameObjects.GamePlayer.Pray.SelectGrave:               Vyber svůj hrob pro modlitbu.
+GameObjects.GamePlayer.Pray.CantPrayRiding:            Nemůžeš se modlit v sedle!
+
+GameObjects.GamePlayer.Pronoun.Female.Objective:       ji
+GameObjects.GamePlayer.Pronoun.Female.Possessive:      její
+GameObjects.GamePlayer.Pronoun.Female.Subjective:      ona
+GameObjects.GamePlayer.Pronoun.Male.Objective:         jej
+GameObjects.GamePlayer.Pronoun.Male.Possessive:        jeho
+GameObjects.GamePlayer.Pronoun.Male.Subjective:        on
+
+GameObjects.GamePlayer.Quit.CantQuitCrafting:          Během výroby se nemůžeš odhlásit.
+GameObjects.GamePlayer.Quit.CantQuitDead:              Po náhlé smrti se nemůžeš odhlásit! Napiš „/release“ pro oživení.
+GameObjects.GamePlayer.Quit.CantQuitInInstance:        Nemůžeš se odhlásit, když jsi v instanci!
+GameObjects.GamePlayer.Quit.CantQuitMount:             Nemůžeš se odhlásit, když sedíš na koni.
+GameObjects.GamePlayer.Quit.RecentlyInCombat:          Nedávno jsi byl v boji; pro odhlášení musíš déle počkat.
+GameObjects.GamePlayer.Quit.CantQuitStanding:          Pro odhlášení musíš stát v klidu.
+GameObjects.GamePlayer.Quit.YouWillQuit1:              Hru opustíš za {0} sekund.
+GameObjects.GamePlayer.Quit.YouWillQuit2:              Hru opustíš za {0} sekund. Napiš „/stand“ nebo se pohni pro zrušení.
+GameObjects.GamePlayer.Quit.CanTQuitDamned:            Nemůžeš se odhlásit; jsi prokletý/prokletá.
+GameObjects.GamePlayer.Quit.CanTQuitWarlockSpeedDecrease: Nemůžeš se odhlásit, dokud jsi pod kouzlem „{0}“.
+GameObjects.GamePlayer.Quit.CanTQuitStunned:           Nemůžeš se odhlásit; jsi znehybněn/a kouzlem.
+GameObjects.GamePlayer.Quit.CanTQuitMezzed:            Nemůžeš se odhlásit; spíš.
+
+GameObjects.GamePlayer.RealmTitle.UnknownRealm:        Neznámá říše.
+
+GameObjects.GamePlayer.ReceiveItem.Receive:            Získáváš {0}.
+GameObjects.GamePlayer.ReceiveItem.ReceiveFrom:        Získáváš {0} od {1}.
+
+GameObjects.GamePlayer.ReceiveTradeItem.CantTrade:         Tento předmět nemůžeš obchodovat.
+GameObjects.GamePlayer.ReceiveTradeItem.StillSelfcrafting: Pořád očarováváš.
+
+GameObjects.GamePlayer.RefreshSpec.AfterBlocked:       Tento styl je nejlepší po zablokování tvého posledního útoku.
+GameObjects.GamePlayer.RefreshSpec.AfterEvaded:        Tento styl je nejlepší po uhnutí tvému poslednímu útoku.
+GameObjects.GamePlayer.RefreshSpec.AfterFumbles:       Tento styl je nejlepší po úplném selhání tvého posledního útoku.
+GameObjects.GamePlayer.RefreshSpec.AfterMissed:        Tento styl je nejlepší po minutí tvého posledního útoku.
+GameObjects.GamePlayer.RefreshSpec.AfterParried:       Tento styl je nejlepší po odražení tvého posledního útoku.
+GameObjects.GamePlayer.RefreshSpec.AfterStyle:         Tento styl lze použít jen po provedení stylu {0}.
+GameObjects.GamePlayer.RefreshSpec.TargetBlocked:      Tento styl je nejlepší po zablokování posledního útoku tvého cíle.
+GameObjects.GamePlayer.RefreshSpec.TargetEvaded:       Tento styl je nejlepší po uhnutí poslednímu útoku tvého cíle.
+GameObjects.GamePlayer.RefreshSpec.TargetFumbles:      Tento styl je nejlepší po úplném selhání posledního útoku tvého cíle.
+GameObjects.GamePlayer.RefreshSpec.TargetMisses:       Tento styl je nejlepší po minutí posledního útoku tvého cíle.
+GameObjects.GamePlayer.RefreshSpec.TargetHits:         Tento styl je nejlepší po zásahu posledního útoku tvého cíle.
+GameObjects.GamePlayer.RefreshSpec.TargetParried:      Tento styl je nejlepší po odražení posledního útoku tvého cíle.
+GameObjects.GamePlayer.RefreshSpec.TargetStyle:        Tento styl je nejlepší poté, co poslední útok tvého cíle byl styl.
+GameObjects.GamePlayer.RefreshSpec.YouLearn:           Naučíš se bojový styl {0}.
+
+GameObjects.GamePlayer.Release.CantReleaseDuel:        Nemůžeš změnit své oživení pro smrt v duelu!
+GameObjects.GamePlayer.Release.GraveErected:           Na místě tvé smrti se objevil hrob.
+GameObjects.GamePlayer.Release.LostConstitution:       Ztratil/a jsi body konstituce. Najdi léčitele pro jejich obnovení.
+GameObjects.GamePlayer.Release.NoLongerReleaseAuto:    Už nebudeš automaticky oživován/a ({0} sekund zbývá).
+GameObjects.GamePlayer.Release.NotDead:                Ještě nejsi mrtvý/mrtvá.
+GameObjects.GamePlayer.Release.NoValidBindpoint:       Nejsi svázán/a s platným kamenem duší a proto budeš oživen/a zde.
+GameObjects.GamePlayer.Release.ReturnToPray:           Vrať se ke svému hrobu (/pray), abys získal/a zpět zkušenosti.
+GameObjects.GamePlayer.Release.SurroundingChange:      Tvé okolí se náhle změní.
+GameObjects.GamePlayer.Release.WillReleaseAuto:        Budeš automaticky oživen/a za {0} sekund.
+GameObjects.GamePlayer.Release.WillReleaseAutoCity:    Budeš automaticky oživen/a ve městě za {0} sekund.
+GameObjects.GamePlayer.Release.WillReleaseIn:          Budeš oživen/a za {0} sekund.
+GameObjects.GamePlayer.Release.YouRelease:             Vracíš své tělo zpět k životu.
+GameObjects.GamePlayer.Release.ReleaseToPortalKeep:    Budeš oživen/a za {0} sekund ve svém nejbližším pohraničním pevnosti.
+GameObjects.GamePlayer.Release.ReleaseToHouse:         Budeš oživen/a ve svém domě za {0} sekund!
+
+GameObjects.GamePlayer.RemoveAbility.YouLose:          Ztrácíš schopnost {0}.
+GameObjects.GamePlayer.RemoveSpecialization.YouLose:   Ztrácíš specializaci {0}.
+GameObjects.GamePlayer.RemoveSpellLine.YouLose:        Ztrácíš linii kouzel {0}.
+
+GameObjects.GamePlayer.SaveIntoDatabase.CharacterSaved: Tvá postava byla uložena.
+
+GameObjects.GamePlayer.Say.YouSay:                     Říkáš: „{0}“
+GameObjects.GamePlayer.SayReceive.Says:                {0} říká: „{1}“
+GameObjects.GamePlayer.SayReceive.FalseLanguage:       {0} říká něco v jazyce, kterému nerozumíš.
+
+GameObjects.GamePlayer.SendReceive.Sends:              {0} posílá: „{1}“
+GameObjects.GamePlayer.SendReceive.FalseLanguage:      {0} posílá něco v jazyce, kterému nerozumíš.
+GameObjects.GamePlayer.SendReceive.Afk:                {0} je AFK.
+GameObjects.GamePlayer.SendReceive.AfkMessage:         <AFK> {0} posílá: „{1}“
+GameObjects.GamePlayer.Send.target.DontUnderstandYou:  {0} ti nerozumí.
+GameObjects.GamePlayer.Send.YouSendTo:                 Posíláš „{0}“ hráči {1}.
+
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget: Pouštíš kontrolu nad svým cílem.
+GameObjects.GamePlayer.SetControlledNpc.ReleaseTarget2: Ztrácíš kontrolu nad svým/svou {0}.
+
+GameObjects.GamePlayer.Shade.AlreadyShade:             Už jsi skrytý/skrytá!
+GameObjects.GamePlayer.Shade.NoLongerShade:            Už nejsi skrytý/skrytá!
+
+GameObjects.GamePlayer.Sit.AlreadySitting:             Už sedíš.
+GameObjects.GamePlayer.Sit.CantSitDead:                Nemůžeš si sednout, když jsi mrtvý/mrtvá.
+GameObjects.GamePlayer.Sit.CantSitMezzed:              Nemůžeš si sednout, když jsi zhypnotizován/a.
+GameObjects.GamePlayer.Sit.CantSitStunned:             Nemůžeš si sednout, když jsi omráčen/a.
+GameObjects.GamePlayer.Sit.InterruptCallMount:         Sedáš si a přestáváš přivolávat jízdní zvíře.
+GameObjects.GamePlayer.Sit.MustDismount:               Nejdřív musíš sesednout.
+GameObjects.GamePlayer.Sit.MustStandingStill:          Pro sezení musíš stát v klidu.
+GameObjects.GamePlayer.Sit.NoLongerWaitingQuit:        Už nečekáš na odhlášení.
+GameObjects.GamePlayer.Sit.NotSitting:                 Nesedíš.
+GameObjects.GamePlayer.Sit.YouSitDown:                 Sedáš si. Pro vstání napiš „/stand“ nebo se pohni.
+GameObjects.GamePlayer.Sit.YouStandUp:                 Vstáváš.
+
+GameObjects.GamePlayer.Spell.NotEnoughPowerful:        Nejsi dost mocný/mocná, abys použil/a kouzlo tohoto předmětu.
+GameObjects.GamePlayer.Spell.NotImplemented:           {0} ({1}) ještě není na tomto serveru implementováno.
+GameObjects.GamePlayer.Spell.Proc.NotImplemented:      Reaktivní efekt s ID {0} ještě není na tomto serveru implementován.
+GameObjects.GamePlayer.Spell.ResurrectionIllness:      Nemoc z oživení
+
+GameObjects.GamePlayer.Sprint.CantSprintDead:          Nemůžeš sprintovat; jsi mrtvý/mrtvá.
+GameObjects.GamePlayer.Sprint.CantSprintHidden:        Nemůžeš sprintovat, když jsi skrytý/skrytá.
+GameObjects.GamePlayer.Sprint.NoLongerReady:           Už nejsi připraven sprintovat.
+GameObjects.GamePlayer.Sprint.PrepareSprint:           Připravuješ se ke sprintu.
+GameObjects.GamePlayer.Sprint.TooFatigued:             Jsi příliš vyčerpaný/á na sprint.
+
+GameObjects.GamePlayer.StartAttack.CannotMelee:            Nemůžeš udeřit nástrojem.
+GameObjects.GamePlayer.StartAttack.CannotWithoutWeapon:    Bez zbraně nemůžeš zaútočit.
+GameObjects.GamePlayer.StartAttack.CantAttackmesmerized:   Nemůžeš útočit, když spíš.
+GameObjects.GamePlayer.StartAttack.CantAttackStunned:      Nemůžeš útočit, když jsi omráčen/a.
+GameObjects.GamePlayer.StartAttack.CantDisarmed:           Jsi odzbrojen/a a nemůžeš útočit!
+GameObjects.GamePlayer.StartAttack.CantDisarmed2:          Jsi odzbrojen/a a nemůžeš seslat toto kouzlo!
+GameObjects.GamePlayer.StartAttack.CantInShadeMode:        V režimu stínů nemůžeš začít boj!
+GameObjects.GamePlayer.StartAttack.CantUseQuiver:          Tento toulec s aktuální zbraní vybrat nemůžeš.
+GameObjects.GamePlayer.StartAttack.CombatNoTarget:         Vstupuješ do boje, ale nemáš cíl.
+GameObjects.GamePlayer.StartAttack.CombatTarget:           Vstupuješ do boje a zaměřuješ [{0}]
+GameObjects.GamePlayer.StartAttack.SelectQuiver:           Musíš vybrat toulec.
+GameObjects.GamePlayer.StartAttack.SpellCancelled:         Tvé kouzlo bylo zrušeno.
+GameObjects.GamePlayer.StartAttack.TargetInRange:          , cíl v dosahu
+GameObjects.GamePlayer.StartAttack.TargetOutOfRange:       , cíl mimo dosah
+GameObjects.GamePlayer.StartAttack.TiredShot:              Jsi příliš unavený/unavená na pokus o kritický výstřel.
+GameObjects.GamePlayer.StartAttack.TiredUse:               Jsi příliš unavený/unavená na použití svého/své {0}.
+GameObjects.GamePlayer.StartAttack.YouCantCombat:          Nemůžeš útočit, když jsi mrtvý/mrtvá.
+GameObjects.GamePlayer.StartAttack.YouMustWait:            Před pokusem o útok musíš počkat {0} sekund.
+GameObjects.GamePlayer.StartAttack.YouMustWaitAgain:       Před dalším pokusem o útok musíš počkat {0} sekund.
+GameObjects.GamePlayer.StartAttack.YouPrepare:             Připravuješ svůj/svou {0} ({1}.{2}s do výstřelu {3})
+
+GameObjects.GamePlayer.Stealth.NoLongerHidden:         Už nejsi skrytý/skrytá.
+GameObjects.GamePlayer.Stealth.NowHidden:              Nyní jsi skrytý/skrytá.
+
+GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        V toulci ti došla munice.
+GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Svůj toulec nebudeš používat.
+GameObjects.GamePlayer.SwitchQuiver.ShootWith:         Budeš útočit s: {0}.
+GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Tvé kouzlo bylo zrušeno.
+
+GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Nemůžeš obchodovat s tímto hráčem, protože jsi psanec.
+GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Nemůžeš obchodovat s psancem.
+
+GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Jsi přetížený/přetížená.
+GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Jsi přetížený/přetížená a pohybuješ se pomalu.
+
+GameObjects.GamePlayer.UpdateSpellLine.GainPower:      Získáváš moc v linii kouzel {0}.
+
+GameObjects.GamePlayer.UseSlot.AttemptToUse:           Pokoušíš se použít {0}.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShot:        Nyní budeš střílet automaticky.
+GameObjects.GamePlayer.UseSlot.AutoReleaseShotReload:  Nyní budeš automaticky střílet a přebíjet.
+GameObjects.GamePlayer.UseSlot.CantCallMountSeated:    Nemůžeš přivolat své jízdní zvíře při sezení.
+GameObjects.GamePlayer.UseSlot.CantFire:               Tento předmět nemůžeš hodit ani použít.
+GameObjects.GamePlayer.UseSlot.CantMountCombat:        Jsi v boji a nemůžeš přivolat jízdní zvíře.
+GameObjects.GamePlayer.UseSlot.CantMountHere:          Zde nemůžeš přivolat jízdní zvíře!
+GameObjects.GamePlayer.UseSlot.CantCallMountRVR:       Zde nemůžeš přivolat jízdní zvíře!
+GameObjects.GamePlayer.UseSlot.CantMountInDungeon:     V kobce nemůžeš přivolat jízdní zvíře!
+GameObjects.GamePlayer.UseSlot.CantMountMoving:        Nemůžeš nasednout při pohybu.
+GameObjects.GamePlayer.UseSlot.CantMountStealthed:     Nemůžeš nasednout, když jsi v utajení.
+GameObjects.GamePlayer.UseSlot.CantMountDamned:        Nemůžeš nasednout, když jsi prokletý/prokletá!
+GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Nemůžeš nasednout, když jsi zkamenělý/zkamenělá!
+GameObjects.GamePlayer.UseSlot.CantMountThisForm:      V této podobě nemůžeš nasednout!
+GameObjects.GamePlayer.UseSlot.CantMountMorph:         Nemůžeš nasednout, dokud na tobě trvá kouzlo „{0}“!
+GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Nemůžeš nasednout; jsi mrtvý/mrtvá.
+GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Toto jízdní zvíře nemůžeš použít, když neseš relikvii!
+GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Nevidíš svůj cíl.
+GameObjects.GamePlayer.UseSlot.CantSummonRvR:          V oblasti RvR nelze přivolat jízdní zvíře.
+GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:    Tento předmět nelze použít přímo v batohu. Nejprve si jej nasaď.
+GameObjects.GamePlayer.UseSlot.CantUseInCombat:        Tento předmět nelze použít v boji.
+GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:    Tento předmět nemůžeš použít vsedě!
+GameObjects.GamePlayer.UseSlot.CantUseHere:            To tady použít nemůžeš!
+GameObjects.GamePlayer.UseSlot.IllegalSourceObject:    Neplatný zdrojový předmět. {0} je připraven!
+GameObjects.GamePlayer.UseSlot.MustDismountBefore:     Nejdřív musíš sesednout.
+GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload: Už nebudeš automaticky střílet ani přebíjet.
+GameObjects.GamePlayer.UseSlot.NotEnouthPower:         Nejsi dost mocný/mocná, abys použil/a kouzlo tohoto předmětu.
+GameObjects.GamePlayer.UseSlot.OutOfCharges:           {0} nemá žádné náboje.
+GameObjects.GamePlayer.UseSlot.StopCallingMount:       Přestáváš přivolávat své jízdní zvíře.
+GameObjects.GamePlayer.UseSlot.SummonHorseLevel:       Abys přivolal/a tohoto koně, musíš být na úrovni {0}.
+GameObjects.GamePlayer.UseSlot.WhistleMount:           Pískáš na své jízdní zvíře.
+GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:      Před použitím tohoto předmětu musíš počkat {0} sekund.
+GameObjects.GamePlayer.UseSlot.CantUseState:           Ve svém současném stavu nemůžeš použít {0}.
+GameObjects.GamePlayer.UseSlot.Used:                   Používáš {0}.
+GameObjects.GamePlayer.UseSlot.CantUseCast:            Pro použití svého/své {0} musíš dokončit aktuální akci.
+GameObjects.GamePlayer.UseSlot.WrongTarget:            Pro použití této schopnosti potřebuješ cíl!
+GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:        Přihrádka {0} v toulci je prázdná!
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:   Efekt předmětu s ID {0} ještě není implementován.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:     Linie kouzel předmětu nebyla nalezena.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:    Kouzlo předmětu s ID {0} nebylo nalezeno.
+GameObjects.GamePlayer.UseSlot.CantDischargeInState:   Ve svém aktuálním stavu nemůžeš vybít žádný předmět.
+GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:    Před vybitím {1} musíš počkat {0} sekundu/y!
+GameObjects.GamePlayer.UseSlot.Cooldown:               Před použitím tohoto předmětu musíš počkat {0}!
+GameObjects.GamePlayer.UseSlot.Cooldown.Seconds:       zbývá {0} sekund
+GameObjects.GamePlayer.UseSlot.Cooldown.MinutesAndSeconds:  zbývá {0} minut a {1} sekund
+GameObjects.GamePlayer.UseSlot.NoMagicItemZone:        V této oblasti není dovoleno používat magické předměty.
+GameObjects.GamePlayer.UseSlot.CannotUseInState:       V tomto stavu nemůžeš nic použít.
+GameObjects.GamePlayer.UseSlot.NotPowerfulEnough:      Nejsi dost mocný/mocná, abys použil/a kouzlo tohoto předmětu.
+GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Tento inventář nemůžeš použít.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Nabíjecí efekt s ID {0} ještě není implementován.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Nabíjecí efekt s ID {0} nebyl nalezen.
+
+GameObjects.GamePlayer.Whisper.SelectTarget:           Vyber cíl, kterému budeš šeptat.
+GameObjects.GamePlayer.Murder:                         Ztratil/a jsi 1 bod pověsti za zabití {0}.
+GameObjects.GamePlayer.Multiplekills:                  Ztratil/a jsi 1 bod pověsti za vícenásobná zabití {0}.
+GameObjects.GamePlayer.GuardKill:                      Ztratil/a jsi 1 bod pověsti za zabití strážce.
+GameObjects.GamePlayer.Wanted:                         {0} je nyní hledaný/hledaná za své zločiny.
+GameObjects.GamePlayer.Jailed:                         {0} byl/a uvržen/a do vězení hráčem {1}.
+GameObjects.GamePlayer.Jailed.Unknown:                 {0} byl/a uvržen/a do vězení strážemi.
+GameObjects.GamePlayer.Released:                       {0} byl/a propuštěn/a z vězení.
+
+GameObjects.GamePlayer.RvR:                            – Celkem zabitých hráčů: {0} –
+GameObjects.GamePlayer.RvR.Champion:                   – Celkem zabitých hráčů: {0} – Šampión dne: {1} ({2} zabitých nepřátelských útočníků)
+GameObjects.GamePlayer.RvR.Control:                    RvR {1} je pod kontrolou {0}!
+GameObjects.GamePlayer.RvR.Open.Claimable:             Chceš [převzít kontrolu]?
+GameObjects.GamePlayer.RvR.Open.UnClaimble:            Před nárokováním kontroly musíš počkat {0} sekund.
+GameObjects.GamePlayer.RvR.Closed:                     Převzetí pevnosti je dočasně nedostupné.
+GameObjects.GamePlayer.RvR.In.Combat:                  V boji nemůžeš pevnost převzít.
+GameObjects.GamePlayer.RvR.Occupied:                   Teď jsem zaneprázdněn, vraťte se později.
+GameObjects.GamePlayer.RvR.Interrupt:                  Byl/a jsi přerušen/a.
+GameObjects.GamePlayer.RvR.Too.Far:                    Příliš ses vzdálil/a.
+GameObjects.GamePlayer.RvR.Capture.Timer:              Převzetí pevnosti
+GameObjects.GamePlayer.RvR.Capture.Start:              {0} začíná přebírat kontrolu nad pevností!
+GameObjects.GamePlayer.PvP.DieDropItem:                Tvá smrt rozprášila {0} tvých pokladů!
+
+GameObjects.GamePlayer.Champion.LevelUp:               Získal/a jsi dodatečnou úroveň Šampióna!
+GameObjects.GamePlayer.Champion.NeedToBeChampion:      Pro použití tohoto inventáře musíš být Šampión.
+
+GameObjects.GamePlayer.SaddleBag.CL2:                  Tato sedlová taška vyžaduje úroveň Šampióna 2!
+GameObjects.GamePlayer.SaddleBag.CL3:                  Tato sedlová taška vyžaduje úroveň Šampióna 3!
+GameObjects.GamePlayer.SaddleBag.CL4:                  Tato sedlová taška vyžaduje úroveň Šampióna 4!
+GameObjects.GamePlayer.SaddleBag.CL5:                  Tato sedlová taška vyžaduje úroveň Šampióna 5!
+GameObjects.GamePlayer.SaddleBag.Activated:            Aktivoval/a jsi sedlovou tašku!
+GameObjects.GamePlayer.SaddleBag.ActivateError:        Při aktivaci této sedlové tašky došlo k chybě!
+GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Tuto sedlovou tašku už máš aktivovanou!
+
+GameObjects.GamePlayer.Reputation.Zero:                Tvá pověst je nyní neutrální.
+
+GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Celkový počet tvých bodů specializace byl nesprávný. Nyní opraveno — prosím, trénuj znovu.

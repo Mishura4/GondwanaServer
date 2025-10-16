@@ -20,9 +20,9 @@ namespace DOL.GS.RealmAbilities
         {
             GamePlayer player = living as GamePlayer;
             if (CheckPreconditions(living, DEAD | SITTING | STEALTHED)) return;
-            if (player.EffectList.CountOfType<AdrenalineRushEffect>() > 0)
+            if (player!.EffectList.CountOfType<AdrenalineRushEffect>() > 0)
             {
-                player.Out.SendMessage("You already an effect of that type!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "DashingDefenseAbility.Execute.AlreadyEffect"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
             }
             SendCasterSpellEffectAndCastMessage(living, 7002, true);
             if (player != null)
@@ -59,7 +59,6 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            // TODO translate
             if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
             {
                 list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info1"));

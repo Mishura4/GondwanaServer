@@ -1,0 +1,96 @@
+# LANGUAGEMGR (NL)
+System.LanguagesName.EN:				Engels
+System.LanguagesName.FR:				Frans
+System.LanguagesName.DE:				Duits
+System.LanguagesName.ES:				Spaans
+System.LanguagesName.CZ:				Tsjechisch
+System.LanguagesName.IT:				Italiaans
+
+# Miscellaneous Language
+Language.Hours.Short:					{0}u
+Language.Minutes.Short:					{0}min
+Language.Seconds.Short:					{0}s
+Language.Hours.Long:						{0} uur
+Language.Minutes.Short:					{0} minuten
+Language.Seconds.Short:					{0} seconden
+Language.NotApplicable:					n.v.t.
+
+Language.Time.Long:						0 seconden
+Language.Time.LongH:						{0:%h} uur
+Language.Time.Longh:						{0:%h} uur
+Language.Time.LongHM:					{0:%h} uur en {0:%m} minuten
+Language.Time.LongHm:					{0:%h} uur en {0:%m} minuut
+Language.Time.LonghM:					{0:%h} uur en {0:%m} minuten
+Language.Time.Longhm:					{0:%h} uur en {0:%m} minuut
+Language.Time.LongHMS:					{0:%h} uur, {0:%m} minuten en {0:%s} seconden
+Language.Time.LongHMs:					{0:%h} uur, {0:%m} minuten en {0:%s} seconde
+Language.Time.LongHmS:					{0:%h} uur, {0:%m} minuut en {0:%s} seconden
+Language.Time.LongHms:					{0:%h} uur, {0:%m} minuut en {0:%s} seconde
+Language.Time.LonghMS:					{0:%h} uur, {0:%m} minuten en {0:%s} seconden
+Language.Time.LonghMs:					{0:%h} uur, {0:%m} minuten en {0:%s} seconde
+Language.Time.LonghmS:					{0:%h} uur, {0:%m} minuut en {0:%s} seconden
+Language.Time.Longhms:					{0:%h} uur, {0:%m} minuut en {0:%s} seconde
+Language.Time.LongM:						{0:%m} minuten
+Language.Time.Longm:						{0:%m} minuut
+Language.Time.LongMS:					{0:%m} minuten en {0:%s} seconden
+Language.Time.LongMs:					{0:%m} minuten en {0:%s} seconde
+Language.Time.LongmS:					{0:%m} minuut en {0:%s} seconden
+Language.Time.Longms:					{0:%m} minuut en {0:%s} seconde
+Language.Time.LongS:						{0:%s} seconden
+Language.Time.Longs:						{0:%s} seconde
+
+Language.Mithril.Amount:					{0} Mithril
+Language.Platinum.Amount:					{0} Platina
+Language.Gold.Amount:						{0} Goud
+Language.Silver.Amount:						{0} Zilver
+Language.Copper.Amount:						{0} Koper
+
+Language.Systems.Spell:					Spreuk
+
+# Stats
+Language.Resists:						Weerstanden
+Language.DamageType.Natural.Noun:			Natuurlijk
+Language.DamageType.Crush.Noun:				Verbrijzeling
+Language.DamageType.Slash.Noun:				Snede
+Language.DamageType.Thrust.Noun:			Steek
+Language.DamageType.Body.Noun:				Lichaam
+Language.DamageType.Cold.Noun:				Koude
+Language.DamageType.Energy.Noun:			Energie
+Language.DamageType.Heat.Noun:				Hitte
+Language.DamageType.Matter.Noun:			Materie
+Language.DamageType.Spirit.Noun:			Geest
+Language.DamageType.Falling.Noun:			Val
+Language.DamageType.GM.Noun:				Ruw
+
+Language.DamageType.Melee.Noun:				Alle mêlee‑schade
+Language.DamageType.Spell.Noun:				Alle spreukschade
+Language.DamageType.DoT.Noun:				Schade over tijd
+
+Language.DamageType.Natural.Damage:			natuurlijke schade
+Language.DamageType.Crush.Damage:			schade door verbrijzeling
+Language.DamageType.Slash.Damage:			snijdschade
+Language.DamageType.Thrust.Damage:			steekschade
+Language.DamageType.Body.Damage:			schade aan lichaam
+Language.DamageType.Cold.Damage:			schade door koude
+Language.DamageType.Energy.Damage:			schade door energie
+Language.DamageType.Heat.Damage:			schade door hitte
+Language.DamageType.Matter.Damage:			schade door materie
+Language.DamageType.Spirit.Damage:			schade door geest
+Language.DamageType.Falling.Damage:			valschade
+Language.DamageType.GM.Damage:				ruwe schade
+
+Language.DamageType.Melee.Damage:			mêlee‑schade
+Language.DamageType.Spell.Damage:			spreukschade
+Language.DamageType.DoT.Damage:				schade over tijd
+
+# Target
+Language.SpellTarget.Realm:					rijk
+Language.SpellTarget.Self:					zelf
+Language.SpellTarget.Enemy:					vijand
+Language.SpellTarget.Pet:						pet
+Language.SpellTarget.Group:					groep
+Language.SpellTarget.Area:					gebied
+Language.SpellTarget.Corpse:					lijk
+Language.SpellTarget.Unknown:					onbekend doelwit
+
+Language.InternalError:						Er is een serverfout opgetreden tijdens het uitvoeren van deze actie; neem contact op met het serverteam.

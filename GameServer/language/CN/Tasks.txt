@@ -1,0 +1,71 @@
+
+Tasks.SystemDisabled: 任务系统目前已停用。
+Tasks.PvPRvRGvGTasks: ======= PvP/RvR/GvG 任务 =======
+Tasks.PvETasks: ======== PvE 任务 ========
+Tasks.CraftingTasks: == 制作任务（最低等级：{0}） ==
+Tasks.SpecialTasks: ======== 特殊任务 ========
+Tasks.TaskCompletionTokenInfo: 完成 PvP、RvR、GvG、PvE 或制作任务后获得的完成令牌需交还给任务管理员以领取奖励。
+Tasks.SpecialTaskCompletionTokenInfo: 特殊任务完成令牌针对每个任务而定。这些令牌可解锁新的玩家称号，并提供与称号相关的特殊加成。
+Tasks.SnapshotTitle: 任务
+Tasks.KillEnemyPlayersGroup: 击杀敌方玩家（组队）
+Tasks.KillEnemyPlayersAlone: 击杀敌方玩家（单人）
+Tasks.KillKeepGuards: 击杀要塞守卫
+Tasks.TakeKeeps: 占领要塞
+Tasks.RvRChampionOfTheDay: 成为当日 RvR 冠军
+Tasks.KillTerritoryGuards: 击杀领地守卫
+Tasks.KillTerritoryBoss: 占领领地
+Tasks.TurnInPvPGvGTaskToken: 上交 PvP/RvR/GvG 任务完成令牌
+Tasks.KillCreaturesInDungeons: 在地城击杀生物
+Tasks.KillOutdoorsCreatures: 在野外击杀生物
+Tasks.KillAnimalCreatures: 击杀动物类
+Tasks.KillDemonCreatures: 击杀恶魔类
+Tasks.KillDragonCreatures: 击杀龙类
+Tasks.KillElementalCreatures: 击杀元素类
+Tasks.KillGiantCreatures: 击杀巨人类
+Tasks.KillHumanoidCreatures: 击杀类人生物
+Tasks.KillInsectCreatures: 击杀昆虫类
+Tasks.KillMagicalCreatures: 击杀魔法生物
+Tasks.KillReptileCreatures: 击杀爬行类
+Tasks.KillPlantCreatures: 击杀植物类
+Tasks.KillUndeadCreatures: 击杀不死族
+Tasks.TurnInPvETaskToken: 上交 PvE 任务完成令牌
+Tasks.SuccessfulItemCombinations: 物品合成成功
+Tasks.MasteredCrafts: 掌握的工艺
+Tasks.MasterpieceCrafted: 制作的杰作
+Tasks.TurnInCraftingTaskToken: 上交制作任务完成令牌
+Tasks.EpicBossesSlaughtered: 击杀史诗首领
+Tasks.ItemsSoldToPlayers: 成功市场交易
+Tasks.SuccessfulPvPThefts: 成功偷窃玩家
+Tasks.OutlawPlayersSentToJail: 击杀通缉玩家
+Tasks.EnemiesKilledInAdrenalineMode: 在肾上腺素状态击杀的敌人
+Tasks.EnemyKilledInDuel: 决斗胜利
+Tasks.QuestsCompleted: 完成的任务
+Tasks.MaxLevelReached: 最高等级
+Tasks.Level: 等级 {0}
+
+Tasks.KillEnemyPlayersGroupLog: 击杀敌方玩家（组队）：{0}/{1}
+Tasks.KillEnemyPlayersAloneLog: 击杀敌方玩家（单人）：{0}/{1}
+Tasks.KillKeepGuardsLog: 击杀要塞守卫：{0}/{1}
+Tasks.TakeKeepsLog: 占领要塞：{0}/{1}
+Tasks.KillTerritoryGuardsLog: 击杀领地守卫：{0}/{1}
+Tasks.KillTerritoryBossLog: 占领领地：{0}/{1}
+Tasks.SuccessfulItemCombinationsLog: 物品合成成功：{0}/{1}
+Tasks.MasteredCraftsLog: 掌握的工艺：{0}/{1}
+Tasks.MasterpieceCraftedLog: 制作的杰作：{0}/{1}
+Tasks.EpicBossesSlaughteredLog: 击杀史诗首领：{0}/{1}
+Tasks.ItemsSoldToPlayersLog: 成功市场交易：{0}/{1}
+Tasks.SuccessfulPvPTheftsLog: 成功偷窃玩家：{0}/{1}
+Tasks.OutlawPlayersSentToJailLog: 击杀通缉玩家：{0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: 在肾上腺素状态击杀的敌人：{0}/{1}
+Tasks.EnemyKilledInDuelLog: 决斗胜利：{0}/{1}
+Tasks.QuestsCompletedLog: 完成的任务：{0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: 任务：你获得一枚 PvP/RvR/GvG 任务完成令牌 — 等级 {0}
+Tasks.TurnInPvETaskTokenMessage: 任务：你获得一枚 PvE 任务完成令牌 — 等级 {0}
+Tasks.TurnInCraftingTaskTokenMessage: 任务：你获得一枚 制作任务 完成令牌 — 等级 {0}
+Tasks.EpicBossesSlaughteredSpecialToken: 任务：你获得一枚“Demon Slayer”特殊令牌 — 等级 {0}
+Tasks.ItemsSoldToPlayersSpecialToken: 任务：你获得一枚“Trader”特殊令牌 — 等级 {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: 任务：你获得一枚“Thief”特殊令牌 — 等级 {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: 任务：你获得一枚“Bounty Hunter”特殊令牌 — 等级 {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: 任务：你获得一枚“Wrath”特殊令牌 — 等级 {0}
+Tasks.EnemyKilledInDuelSpecialToken: 任务：你获得一枚 决斗者 令牌 — 等级 {0}
+Tasks.QuestsCompletedSpecialToken: 任务：你获得一枚“Adventurer”特殊令牌 — 等级 {0}

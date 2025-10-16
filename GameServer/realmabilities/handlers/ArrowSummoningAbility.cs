@@ -23,12 +23,13 @@ using DOL.Database;
 using System.Collections;
 using DOL.Events;
 using DOL.GS.SkillHandler;
+using DOL.Language;
 
 namespace DOL.GS.RealmAbilities
 {
     public class ArrowSummoningAbility : TimedRealmAbility
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public ArrowSummoningAbility(DBAbility dba, int level) : base(dba, level) { }
         public override void Execute(GameLiving living)
@@ -44,17 +45,17 @@ namespace DOL.GS.RealmAbilities
             WorldInventoryItem as2 = WorldInventoryItem.CreateFromTemplate(arrow_summoning_2);
             WorldInventoryItem as3 = WorldInventoryItem.CreateFromTemplate(arrow_summoning_3);
 
-            if (!player.Inventory.AddTemplate(GameInventoryItem.Create(arrow_summoning_1), 10, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
+            if (!player!.Inventory.AddTemplate(GameInventoryItem.Create(arrow_summoning_1), 10, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
             {
-                player.Out.SendMessage("You do not have enough inventory space to place this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "ArrowSummoningAbility.NoSpaceInventory"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
             else if (!player.Inventory.AddTemplate(GameInventoryItem.Create(arrow_summoning_2), 10, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
             {
-                player.Out.SendMessage("You do not have enough inventory space to place this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "ArrowSummoningAbility.NoSpaceInventory"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
             else if (!player.Inventory.AddTemplate(GameInventoryItem.Create(arrow_summoning_3), 10, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
             {
-                player.Out.SendMessage("You do not have enough inventory space to place this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "ArrowSummoningAbility.NoSpaceInventory"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
             GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, new DOLEventHandler(PlayerQuit));
