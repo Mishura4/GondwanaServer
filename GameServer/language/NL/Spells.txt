@@ -237,7 +237,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Opnieuw werpen tijdens h
 SpellDescription.BeFriend.MainDescriptionArea:			Betover tijdelijk (tot niveau {0}) nabije monsters zodat ze vriendelijk en bondgenoten worden.
 SpellDescription.BeFriend.MainDescriptionSingle:		Betover tijdelijk (tot niveau {0}) het geselecteerde monster zodat het vriendelijk en bondgenoot wordt.
 SpellDescription.VampiirStealthDetection.MainDescription:	Verhoogt detectie van sluipende vijanden met {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Verlaagt tijdelijk de vaardigheidsbonussen van het doelwit met {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Verlaagt tijdelijk de vaardigheidsbonussen van het doelwit gedurende {0} seconden.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Verhoogt weerstanden tegen melee‑schade met {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Verhoogt de kans om magische schade te weerstaan met {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Verlaagt tijdelijk de effectiviteit van het doelwit met {0}%.

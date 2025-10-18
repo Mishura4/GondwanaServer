@@ -236,7 +236,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Erneutes Wirken während
 SpellDescription.BeFriend.MainDescriptionArea:			Bezaubert Monster im Radius des Zaubernden vorübergehend (bis Stufe {0}), macht sie freundlich und lässt sie als Verbündete handeln.
 SpellDescription.BeFriend.MainDescriptionSingle:		Bezaubert das anvisierte Monster vorübergehend (bis Stufe {0}), macht es freundlich und lässt es als Verbündeten handeln.
 SpellDescription.VampiirStealthDetection.MainDescription:	Erhöht die Fähigkeit des Ziels, getarnte Feinde zu entdecken, um {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Schwächt die Fertigkeitsboni des Ziels vorübergehend um {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Verringert vorübergehend die Fähigkeitsboni des Ziels für {0} Sekunden.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Erhöht die Nahkampfresistenzen des Ziels um {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Erhöht die Widerstandschance des Ziels gegen magischen Schaden um {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Verringert die Effektivität des Ziels vorübergehend um {0}%.

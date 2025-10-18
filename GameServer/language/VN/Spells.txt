@@ -237,7 +237,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Tái niệm trong thời
 SpellDescription.BeFriend.MainDescriptionArea:			Tạm thời (tới cấp {0}) mê hoặc quái gần đó để thân thiện và thành đồng minh.
 SpellDescription.BeFriend.MainDescriptionSingle:		Tạm thời (tới cấp {0}) mê hoặc quái đã chọn để thân thiện và thành đồng minh.
 SpellDescription.VampiirStealthDetection.MainDescription:	Tăng phát hiện kẻ địch ẩn nấp {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Giảm tạm thời cộng kỹ năng của mục tiêu {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Giảm tạm thời các cộng thưởng kỹ năng của mục tiêu trong {0} giây.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Tăng kháng sát thương cận {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Tăng cơ hội kháng sát thương phép {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Giảm tạm thời hiệu quả của mục tiêu {0}%.

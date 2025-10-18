@@ -237,7 +237,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Relansarea în timpul ef
 SpellDescription.BeFriend.MainDescriptionArea:			Farmeacă temporar (până la nivelul {0}) monștrii apropiați pentru a deveni prietenoși și aliați.
 SpellDescription.BeFriend.MainDescriptionSingle:		Farmeacă temporar (până la nivelul {0}) monstrul selectat pentru a deveni prietenos și aliat.
 SpellDescription.VampiirStealthDetection.MainDescription:	Creste detectarea inamicilor furiși cu {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Reduce temporar bonusurile de abilități ale țintei cu {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Reduce temporar bonusurile de abilități ale țintei timp de {0} secunde.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Creste rezistențele la daune melee cu {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Creste șansa de a rezista daunelor magice cu {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Reduce temporar eficiența țintei cu {0}%.

@@ -237,7 +237,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Rilanciare durante l'eff
 SpellDescription.BeFriend.MainDescriptionArea:			Incanta temporaneamente (fino al livello {0}) i mostri vicini rendendoli amichevoli e alleati.
 SpellDescription.BeFriend.MainDescriptionSingle:		Incanta temporaneamente (fino al livello {0}) il mostro selezionato rendendolo amichevole e alleato.
 SpellDescription.VampiirStealthDetection.MainDescription:	Aumenta la rilevazione dei nemici furtivi del {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Riduce temporaneamente i bonus abilità del bersaglio del {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Riduce temporaneamente i bonus abilità del bersaglio per {0} secondi.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Aumenta le resistenze al danno in mischia del {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Aumenta la probabilità di resistere al danno magico del {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Riduce temporaneamente l'efficacia del bersaglio del {0}%.

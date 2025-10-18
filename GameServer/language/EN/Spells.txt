@@ -238,7 +238,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Casting the chant again 
 SpellDescription.BeFriend.MainDescriptionArea:			Temporarily charms all monsters within the spell's radius around the caster, as long as they are below level {0}, making them friendly and acting like allies.
 SpellDescription.BeFriend.MainDescriptionSingle:		Temporarily charms the targeted monster, as long as it is below level {0}, making it friendly and acting like an ally.
 SpellDescription.VampiirStealthDetection.MainDescription:	Increases the target's ability to detect stealthed enemies by {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Temporarily debuffs the target's skill bonuses by {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Temporarily debuffs the target's skill bonuses for {0} seconds.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Increases the target's melee resistances by {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Target's chance to resist magical damage is increased by {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Temporarily reduces the target's effectiveness by {0}%.

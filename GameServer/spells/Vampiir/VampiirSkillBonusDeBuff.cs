@@ -158,7 +158,7 @@ namespace DOL.GS.Spells
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
             int recastSeconds = Spell.RecastDelay / 1000;
 
-            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.VampiirSkillBonusDeBuff.MainDescription", Spell.Value);
+            string mainDesc = LanguageMgr.GetTranslation(language, "SpellDescription.VampiirSkillBonusDeBuff.MainDescription", Spell.Duration);
 
             if (Spell.RecastDelay > 0)
             {

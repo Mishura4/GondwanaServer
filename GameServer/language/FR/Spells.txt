@@ -238,7 +238,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Lancer à nouveau l'inca
 SpellDescription.BeFriend.MainDescriptionArea:			Charme temporairement les monstres présents dans le rayon du lanceur, tant qu'ils sont de niveau inférieur ou égal à {0}, les rendant amicaux et agissant comme des alliés.
 SpellDescription.BeFriend.MainDescriptionSingle:		Charme temporairement le monstre ciblé, tant qu'il est de niveau inférieur ou égal à {0}, le rendant amical et agissant comme un allié.
 SpellDescription.VampiirStealthDetection.MainDescription:	Augmente la capacité de la cible à détecter les ennemis camouflés de {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Affaiblit temporairement les bonus de compétence de la cible de {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Affaiblit temporairement les bonus de compétence de la cible pendant {0} secondes.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Augmente les résistances de mêlée de la cible de {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Augmente les chances de résistance aux dommages magiques de la cible de {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Réduit temporairement l'efficacité de la cible de {0}%.

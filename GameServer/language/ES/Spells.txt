@@ -237,7 +237,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Re‑lanzar durante su e
 SpellDescription.BeFriend.MainDescriptionArea:			Encanta temporalmente (hasta nivel {0}) a monstruos cercanos haciéndolos amistosos y aliados.
 SpellDescription.BeFriend.MainDescriptionSingle:		Encanta temporalmente (hasta nivel {0}) al monstruo seleccionado haciéndolo amistoso y aliado.
 SpellDescription.VampiirStealthDetection.MainDescription:	Aumenta la detección de enemigos en sigilo un {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Reduce temporalmente las bonificaciones de habilidad del objetivo un {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Reduce temporalmente las bonificaciones de habilidad del objetivo durante {0} segundos.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Aumenta las resistencias de daño cuerpo a cuerpo un {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Aumenta la probabilidad de resistir daño mágico un {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Reduce temporalmente la efectividad del objetivo un {0}%.

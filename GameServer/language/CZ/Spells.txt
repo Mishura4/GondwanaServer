@@ -237,7 +237,7 @@ SpellDescription.BainsheePulseDmg.SecondaryDescription:	Opětovné seslání bě
 SpellDescription.BeFriend.MainDescriptionArea:			Dočasně (až do úrovně {0}) očaruje blízké nestvůry, aby byly přátelské a spojenci.
 SpellDescription.BeFriend.MainDescriptionSingle:		Dočasně (až do úrovně {0}) očaruje vybranou nestvůru, aby byla přátelská a spojenec.
 SpellDescription.VampiirStealthDetection.MainDescription:	Zvyšuje odhalování nenápadných nepřátel o {0}%.
-SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Snižuje dočasně bonusy dovedností cíle o {0}%.
+SpellDescription.VampiirSkillBonusDeBuff.MainDescription:	Snižuje dočasně bonusy cíle po dobu {0} sekund.
 SpellDescription.VampiirMeleeResistance.MainDescription:	Zvyšuje odolnosti proti poškození na blízko o {0}%.
 SpellDescription.VampiirMagicResistance.MainDescription:	Zvyšuje šanci odolat magickému poškození o {0}%.
 SpellDescription.VampiirEffectivenessDeBuff.MainDescription:	Snižuje dočasně efektivitu cíle o {0}%.
