@@ -51,7 +51,10 @@ namespace DOL.GS.PropertyCalc
         {
             if (living.IsMezzed || living.IsStunned) return 0;
 
-            double speed = living.BuffBonusMultCategory1.Get((int)property);
+            double speed = 1.0;
+            double buffs = living.BuffBonusMultCategory1.Get((int)property);
+            speed *= buffs;
+
             int itemSpeedBonus = Math.Min(250, living.ItemBonus[(int)property]); // Cap item bonus at 250pts
 
             if (living is GamePlayer)
@@ -99,6 +102,7 @@ namespace DOL.GS.PropertyCalc
                         player.IsOverencumbered = false;
                     }
                 }
+
                 if (player.IsStealthed)
                 {
                     MasteryOfStealthAbility mos = player.GetAbility<MasteryOfStealthAbility>();

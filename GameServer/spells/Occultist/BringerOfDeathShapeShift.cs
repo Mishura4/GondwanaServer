@@ -44,11 +44,11 @@ namespace DOL.GS.Spells
             Priority = 11;
 
             // --- Max speed from Spell.Value ---
-            _movementSpeedBonus = Math.Max(1.00, 1.00 + (Spell.Value / 100));
-            
+            _movementSpeedBonus = 1.00 + Spell.Value / 100;
+
             // --- Magical-only potency: write NEGATIVE bonuses so calculators reduce output ---
             _spellDmgPct = PotencyToNegativeBonus();
-            
+
             // --- Regen multiplier (Decrepit-style) ---
             _regenMult = ((float)Spell.ResurrectMana / 100);
 
@@ -90,7 +90,7 @@ namespace DOL.GS.Spells
         {
             var mult = (sbyte)(apply ? 1 : -1);
 
-            if (_movementSpeedBonus > 0)
+            if (_movementSpeedBonus != 0)
             {
                 if (apply)
                     living.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, this, _movementSpeedBonus);
@@ -144,6 +144,7 @@ namespace DOL.GS.Spells
                 p.Out.SendUpdateWeaponAndArmorStats();
                 p.Out.SendCharStatsUpdate();
                 p.Out.SendCharResistsUpdate();
+                p.Out.SendUpdateMaxSpeed();
                 p.UpdatePlayerStatus();
                 p.Out.SendUpdatePlayer();
             }
