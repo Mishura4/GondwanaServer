@@ -276,6 +276,9 @@ SpellDescription.Occultist.DecrepitShapeShift2:			Absorbția armurii +{0}%.
 SpellDescription.Occultist.DecrepitShapeShift3:			Atacatorii melee au {0}% șansă să aplice Boală; trupul tău putrezit regenerează și regenerarea vieții +{1}.
 SpellDescription.Occultist.BringerOfDeath1:				Întrupezi Aducătorul Morții. Vrăjile tale nu pot fi întrerupte, dar funcționează la {0}% și primești cu {1}% mai puține daune magice și fizice.
 SpellDescription.Occultist.BringerOfDeath2:				Viteza de mișcare +{0}% și în speedwarps sau în luptă. Active și bonusurile de regen și Boala din forma Decrepită.
+SpellDescription.ArawnsLegion.MainDescription1:			Invocă-l pe Arawn pentru a-și chema armata malefică pe câmpul de luptă.
+SpellDescription.ArawnsLegion.MainDescription2:			Legiunea atacă toate țintele inamice aflate în rază (raza de {0}) timp de {1} secunde.
+SpellDescription.ArawnsLegion.MainDescription3:			Poți controla servitori doar în formă umană, în forma Decrepit sau în forma Spirit.
 SpellDescription.DamageReturn.MainDescription:			Ricosează {0}% din daunele directe magice (nu DoT), melee și de proiectil în {1} către atacator cât timp este activ.
 SpellDescription.OffProcShear.Main1:					Înlătură proc-urile ofensive active ale țintei.
 SpellDescription.OffProcShear.Main2:					Aplică un proc blestemat de înlocuire ale cărui sub-vrăji îi vindecă pe inamicii țintei când lovesc.

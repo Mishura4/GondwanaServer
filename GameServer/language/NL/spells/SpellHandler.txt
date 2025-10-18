@@ -320,6 +320,8 @@ SpellHandler.Occultist.CastCondition2:			Je kunt deze spreuk niet uitspreken ter
 SpellHandler.Occultist.CastCondition3:			Je kunt deze spreuk niet uitspreken terwijl je in broze vorm of geestvorm bent.
 SpellHandler.Occultist.CastCondition4:			Je moet je huidige vorm verlaten voordat je deze spreuk uitspreekt.
 SpellHandler.Occultist.Self.AbsorbToPower:		Je siphont {0} mana uit de ontvangen aanval.
+SpellHandler.Occultist.ArawnsLegion.PetAnswer:			{0} geeft gehoor aan je roep!
+SpellHandler.Occultist.ArawnsLegion.NoTemplateFound:	NPC-sjabloon {0} niet gevonden.
 
 SpellHandler.SummonMonster.Target.Resist:			{0} is uit de Limbus teruggehaald als zombie en blijft ongevoelig voor deze spreuk!
 SpellHandler.IllusionSpell.Target.Resist:			{0} heeft een illusie opgeroepen en kan niet door deze spreuk worden getroffen!

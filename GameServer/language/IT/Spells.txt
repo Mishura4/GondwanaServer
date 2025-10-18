@@ -276,6 +276,9 @@ SpellDescription.Occultist.DecrepitShapeShift2:			Assorbimento armatura +{0}%.
 SpellDescription.Occultist.DecrepitShapeShift3:			Gli assalitori in mischia hanno il {0}% di applicare Malattia; la tua carne marcia rigenera e la rigenerazione salute aumenta di {1}.
 SpellDescription.Occultist.BringerOfDeath1:				Incarnazione del Portatore di Morte. Le tue magie non possono essere interrotte ma funzionano al {0}%; subisci il {1}% di danni in meno, magici e fisici.
 SpellDescription.Occultist.BringerOfDeath2:				Velocità di movimento +{0}% anche in speedwarp o in combattimento. Attivi anche i bonus di rigenerazione e la Malattia della forma Decrepita.
+SpellDescription.ArawnsLegion.MainDescription1:			Invoca Arawn per evocare il suo esercito malvagio sul campo di battaglia.
+SpellDescription.ArawnsLegion.MainDescription2:			La legione attacca tutti i bersagli nemici nel raggio (raggio di {0}) per {1} secondi.
+SpellDescription.ArawnsLegion.MainDescription3:			Puoi controllare i servitori solo in forma umana, in Forma Decrepit o in Forma Spirit.
 SpellDescription.DamageReturn.MainDescription:			Restituisce il {0}% del danno diretto magico (no DoT), in mischia e da proiettili in {1} all'attaccante finché attivo.
 SpellDescription.OffProcShear.Main1:					Rimuove i proc offensivi attivi dal bersaglio.
 SpellDescription.OffProcShear.Main2:					Applica un proc maledetto di sostituzione i cui sotto-incantesimi curano i nemici del bersaglio quando colpiscono.

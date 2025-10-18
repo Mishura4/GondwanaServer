@@ -277,6 +277,9 @@ SpellDescription.Occultist.DecrepitShapeShift2:			Votre absorption d'armure est 
 SpellDescription.Occultist.DecrepitShapeShift3:			Les attaquants en mêlée ont {0}% de chance d'être affectés par une maladie lorsqu'ils vous frappent, et votre chair putréfiée se régénère, augmentant la régénération de santé de {1}.
 SpellDescription.Occultist.BringerOfDeath1:				Incarnez le Porteur de Mort. Vos sorts ne peuvent être interrompus mais n'atteignent que {0}% de leur puissance, et vous subissez {1}% de dégâts en moins qu'ils soient magiques ou physiques.
 SpellDescription.Occultist.BringerOfDeath2:				Votre vitesse de mouvement augmente de {0}%, même en speedwarps ou en combat. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.
+SpellDescription.ArawnsLegion.MainDescription1:			Invoquez Arawn pour qu'il fasse apparaître son armée maléfique sur le champ de bataille.
+SpellDescription.ArawnsLegion.MainDescription2:			La légion attaque toutes les cibles ennemies à portée (rayon de {0}) pendant {1} secondes.
+SpellDescription.ArawnsLegion.MainDescription3:			Vous ne pouvez contrôler des serviteurs qu'en forme humaine, décrépite ou spirituelle.
 SpellDescription.DamageReturn.MainDescription:			Renvoie {0}% des dégâts magiques directs (hors DoTs), de mêlée, et d'archerie vers l'attaquant en {1} tant que l'effet est actif.
 SpellDescription.OffProcShear.Main1:					Remove any active Offensive Proc(s) from the target.
 SpellDescription.OffProcShear.Main2:					Applies a cursed replacement proc whose subspell heals the target's enemies on their hits.

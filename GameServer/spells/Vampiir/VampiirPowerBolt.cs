@@ -1,4 +1,4 @@
-/*
+﻿/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
  * 
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("VampiirBolt")]
     public class VampiirBoltSpellHandler : SpellHandler
     {
+        private static readonly int[] VampiirBoltBreakpoints = { 1, 5, 10, 20, 30, 35, 40, 45, 50 };
         private const string MYTH_REFLECT_ABSORB_FLAG = "MYTH_REFLECT_ABSORB_PCT_THIS_HIT";
         private const string MYTH_REFLECT_ABSORB_TICK = "MYTH_REFLECT_ABSORB_TICK";
 
@@ -71,6 +72,38 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target, force);
         }
 
+        private static int ComputeAllowedMaxLevelForCaster(int casterLevel)
+        {
+            int nextBreak = 0;
+            int prevBreak = 1;
+
+            for (int i = 0; i < VampiirBoltBreakpoints.Length; i++)
+            {
+                int bp = VampiirBoltBreakpoints[i];
+                if (bp > casterLevel)
+                {
+                    nextBreak = bp;
+                    prevBreak = (i > 0) ? VampiirBoltBreakpoints[i - 1] : 1;
+                    break;
+                }
+            }
+
+            if (nextBreak == 0)
+            {
+                prevBreak = VampiirBoltBreakpoints[^1];
+                nextBreak = prevBreak + 5;
+            }
+
+            int baseCap = nextBreak;
+
+            if (prevBreak == 1 && nextBreak == 5)
+                return 5;
+
+            int dynamic = Math.Max(0, casterLevel - (nextBreak - 5));
+
+            return baseCap + dynamic;
+        }
+
         protected class BoltOnTargetAction : RegionAction
         {
             protected readonly GameLiving m_boltTarget;
@@ -94,7 +127,11 @@ namespace DOL.GS.Spells
                 if (target == null || target.CurrentRegionID != caster.CurrentRegionID || target.ObjectState != GameObject.eObjectState.Active || !target.IsAlive)
                     return;
 
-                if (m_handler.Spell.Value > 0 && target.Level > (m_handler.Spell.Value + 5))
+                int casterLevel = caster?.Level ?? 1;
+                int trenchCap = ComputeAllowedMaxLevelForCaster(casterLevel);
+                int allowedMaxLevel = Math.Max((int)m_handler.Spell.Value, trenchCap);
+
+                if (m_handler.Spell.Value > 0 && target.Level > allowedMaxLevel)
                 {
                     foreach (GamePlayer pl in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                         pl.Out.SendSpellEffectAnimation(caster, target, 13130, 0, false, 0);
@@ -145,7 +182,7 @@ namespace DOL.GS.Spells
                         }
                     }
 
-                    caster.Mana += power;
+                    caster!.Mana += power;
                     target.Mana -= power;
                 }
                 if (power > 0 && target is GamePlayer targetPlayer)
@@ -165,9 +202,9 @@ namespace DOL.GS.Spells
                 }
                 //Place the caster in combat
                 if (target is GamePlayer)
-                    caster.LastAttackTickPvP = caster.CurrentRegion.Time;
+                    caster!.LastAttackTickPvP = caster.CurrentRegion.Time;
                 else
-                    caster.LastAttackTickPvE = caster.CurrentRegion.Time;
+                    caster!.LastAttackTickPvE = caster.CurrentRegion.Time;
 
                 //create the attack data for the bolt
                 AttackData ad = new AttackData();
@@ -192,7 +229,9 @@ namespace DOL.GS.Spells
 
             if (Spell.Value > 0)
             {
-                string desc2 = LanguageMgr.GetTranslation(lang, "SpellDescription.VampiirBolt.MainDescription2", Spell.Value + 5);
+                int viewerLevel = delveClient?.Player?.Level ?? (int)Spell.Value;
+                int viewerCap = Math.Max((int)Spell.Value, ComputeAllowedMaxLevelForCaster(viewerLevel));
+                string desc2 = LanguageMgr.GetTranslation(lang, "SpellDescription.VampiirBolt.MainDescription2", viewerCap);
                 description += "\n\n" + desc2;
             }
 

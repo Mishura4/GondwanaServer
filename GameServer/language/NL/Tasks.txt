@@ -62,10 +62,10 @@ Tasks.QuestsCompletedLog: Voltooide quests: {0}/{1}
 Tasks.TurnInPvPGvGTaskTokenMessage: Taak: je ontvangt een PvP/RvR/GvG‑voltooiings­token — niveau {0}
 Tasks.TurnInPvETaskTokenMessage: Taak: je ontvangt een PvE‑voltooiings­token — niveau {0}
 Tasks.TurnInCraftingTaskTokenMessage: Taak: je ontvangt een vakmanschap‑voltooiings­token — niveau {0}
-Tasks.EpicBossesSlaughteredSpecialToken: Taak: je ontvangt een speciale token ‘Demon Slayer’ — niveau {0}
-Tasks.ItemsSoldToPlayersSpecialToken: Taak: je ontvangt een speciale token ‘Trader’ — niveau {0}
-Tasks.SuccessfulPvPTheftsSpecialToken: Taak: je ontvangt een speciale token ‘Thief’ — niveau {0}
-Tasks.OutlawPlayersSentToJailSpecialToken: Taak: je ontvangt een speciale token ‘Bounty Hunter’ — niveau {0}
-Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Taak: je ontvangt een speciale token ‘Wrath’ — niveau {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Taak: je ontvangt een speciale token "Demon Slayer" — niveau {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Taak: je ontvangt een speciale token "Trader" — niveau {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Taak: je ontvangt een speciale token "Thief" — niveau {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Taak: je ontvangt een speciale token "Bounty Hunter" — niveau {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Taak: je ontvangt een speciale token "Wrath" — niveau {0}
 Tasks.EnemyKilledInDuelSpecialToken: Taak: je hebt een Duelist‑token verdiend — niveau {0}
-Tasks.QuestsCompletedSpecialToken: Taak: je ontvangt een speciale token ‘Adventurer’ — niveau {0}
+Tasks.QuestsCompletedSpecialToken: Taak: je ontvangt een speciale token "Adventurer" — niveau {0}

@@ -320,6 +320,8 @@ SpellHandler.Occultist.CastCondition2:			Toto kouzlo nemůžete seslat, když js
 SpellHandler.Occultist.CastCondition3:			Toto kouzlo nemůžete seslat v křehké nebo duchovní formě.
 SpellHandler.Occultist.CastCondition4:			Před sesláním tohoto kouzla musíte opustit aktuální formu.
 SpellHandler.Occultist.Self.AbsorbToPower:		Sifonujete {0} many z přijatého útoku.
+SpellHandler.Occultist.ArawnsLegion.PetAnswer:			{0} odpovídá na tvé volání!
+SpellHandler.Occultist.ArawnsLegion.NoTemplateFound:	Šablona NPC {0} nebyla nalezena.
 
 SpellHandler.SummonMonster.Target.Resist:			{0} byl přiveden z Limbus jako zombie a zůstává vůči tomuto kouzlu necitlivý!
 SpellHandler.IllusionSpell.Target.Resist:			{0} vyvolal iluzi a nemůže být tímto kouzlem zasažen!

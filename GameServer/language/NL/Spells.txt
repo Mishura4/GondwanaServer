@@ -276,6 +276,9 @@ SpellDescription.Occultist.DecrepitShapeShift2:			Pansterabsorptie +{0}%.
 SpellDescription.Occultist.DecrepitShapeShift3:			Melee‑aanvallers hebben {0}% kans om Ziekte toe te passen; je rottend vlees regenereert en gezondheidsregeneratie +{1}.
 SpellDescription.Occultist.BringerOfDeath1:				Belichaamt de Brenger van de Dood. Je spreuken zijn niet te onderbreken maar werken op {0}% en je ontvangt {1}% minder magische en fysieke schade.
 SpellDescription.Occultist.BringerOfDeath2:				Bewegingssnelheid +{0}% ook in speedwarps of in gevecht. Ook de regen‑bonussen en Ziekte van de Kreupele vorm zijn actief.
+SpellDescription.ArawnsLegion.MainDescription1:			Roep Arawn aan om zijn duivelse leger op het slagveld op te roepen.
+SpellDescription.ArawnsLegion.MainDescription2:			Het legioen valt alle vijandelijke doelen binnen bereik aan (straal {0}) gedurende {1} seconden.
+SpellDescription.ArawnsLegion.MainDescription3:			Je kunt dienaren alleen besturen in menselijke vorm, in Decrepit-vorm of in Spirit-vorm.
 SpellDescription.DamageReturn.MainDescription:			Kaast {0}% van directe magische (geen DoT), melee‑ en projectielschade terug in {1} naar de aanvaller zolang actief.
 SpellDescription.OffProcShear.Main1:					Verwijdert actieve offensieve procs van het doelwit.
 SpellDescription.OffProcShear.Main2:					Brengt een vervloekte vervangende proc aan waarvan de subspreuken de vijanden van het doelwit healen wanneer zij raken.
@@ -349,8 +352,8 @@ SpellDescription.Warlord.PBAEHeal.ML8.MainDescription:			Heelt 1000 gezondheid o
 SpellDescription.Warlord.CoweringBellow.MainDescription:		Zaait angst bij door spelers bestuurde pets binnen {0} en verlaagt hun effectiviteit.
 SpellDescription.Warlord.Critical.MainDescription1:				Verhoogt de crit‑kans van bondgenoten in je {0} met {1}% voor hun volgende aanval.
 SpellDescription.Warlord.Critical.MainDescription2:				Verhoogt de crit‑kans van het doel met {0}% voor de volgende aanval.
-SpellDescription.Warlord.CleansingAura.MainDescription1:		Verlaagt effectiviteit van DoT’s op bondgenoten binnen {0} met {1}%. Als de schade nul wordt, eindigt het effect.
-SpellDescription.Warlord.CleansingAura.MainDescription2:		Verlaagt effectiviteit van DoT’s op het doel met {0}%. Eindigt bij nul schade.
+SpellDescription.Warlord.CleansingAura.MainDescription1:		Verlaagt effectiviteit van DoT's op bondgenoten binnen {0} met {1}%. Als de schade nul wordt, eindigt het effect.
+SpellDescription.Warlord.CleansingAura.MainDescription2:		Verlaagt effectiviteit van DoT's op het doel met {0}%. Eindigt bij nul schade.
 SpellDescription.Warlord.EffectivenessBuff.MainDescription1:	Verhoogt effectiviteit van bondgenoten binnen {0} met {1}% (spreuken en melee).
 SpellDescription.Warlord.EffectivenessBuff.MainDescription2:	Verhoogt effectiviteit van het doel met {1}% (spreuken en melee).
 SpellDescription.Warlord.MLABSBuff.MainDescription1:			Verhoogt pantserabsorptie van bondgenoten binnen {0} met {1}%.

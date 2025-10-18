@@ -1241,7 +1241,7 @@ namespace DOL.GS.ServerRules
             if (!killedNPC.IsWorthReward)
             {
                 //"This monster has been charmed recently and is worth no experience."
-                string message = "ServerRules.AbstractServerRules.NpcNoXPGeneric";
+                string message = "ServerRules.AbstractServerRules.NoXPKill";
                 if (killedNPC.CurrentRegion == null || killedNPC.CurrentRegion.Time - GameNPC.CHARMED_NOEXP_TIMEOUT < killedNPC.TempProperties.getProperty<long>(GameNPC.CHARMED_TICK_PROP))
                     message = "ServerRules.AbstractServerRules.NoXPKill";
 

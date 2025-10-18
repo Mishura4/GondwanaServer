@@ -320,6 +320,8 @@ SpellHandler.Occultist.CastCondition2:						This spell can't be cast while under
 SpellHandler.Occultist.CastCondition3:						This spell can't be cast while under Decrepit or Spirit form.
 SpellHandler.Occultist.CastCondition4:						You must end your current form first.
 SpellHandler.Occultist.Self.AbsorbToPower:					You siphon {0} power from the incoming blow.
+SpellHandler.Occultist.ArawnsLegion.PetAnswer:					{0} answers your call!
+SpellHandler.Occultist.ArawnsLegion.NoTemplateFound:				NPC template {0} not found.
 
 SpellHandler.SummonMonster.Target.Resist:					{0} has been resurrected from the limbs as a zombie and can't be effected by this spell!
 SpellHandler.IllusionSpell.Target.Resist:					{0} has created an illusion and can't be effected by this spell!

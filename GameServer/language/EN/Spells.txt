@@ -277,6 +277,9 @@ SpellDescription.Occultist.DecrepitShapeShift2:			Your armor absorption is incre
 SpellDescription.Occultist.DecrepitShapeShift3:			Melee attackers have a {0}% chance to become diseased when they strike you, and your rotted flesh regenerates, increasing health regeneration by {1}.
 SpellDescription.Occultist.BringerOfDeath1:				Become the Bringer of Death. Your spell casts ignore interruption but reach only {0}% of their potency and you take {1}% less damage from all sources.
 SpellDescription.Occultist.BringerOfDeath2:				Your movement speed increases by {0}%, even in speedwarps and while in combat. Additionally, all regeneration bonuses & disease proc of Decrepit Form are active.
+SpellDescription.ArawnsLegion.MainDescription1:			Call upon Arawn to conjure his evil army upon the battlefield.
+SpellDescription.ArawnsLegion.MainDescription2:			The legion attacks all enemy targets in range (radius of {0}) for {1} seconds.
+SpellDescription.ArawnsLegion.MainDescription3:			You can only control servants while in human form, Decrepit form, or Spirit form.
 SpellDescription.DamageReturn.MainDescription:			Reflects {0}% of incoming melee, ranged, and direct spell damage (excluding DoTs) back to the attacker as {1} while active.
 SpellDescription.OffProcShear.Main1:					Retire tout proc offensif actif de la cible.
 SpellDescription.OffProcShear.Main2:					Applique un proc de remplacement maudit dont le sous-sort soigne les ennemis de la cible lorsqu'elle frappe.

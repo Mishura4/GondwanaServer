@@ -69,7 +69,7 @@ JuggernautAbility.AddEffectsInfo.Info3:			Niveau 3: Durée: 1:00 Minute
 JuggernautAbility.AddEffectsInfo.Info4:			Cible: Familier sous contrôle
 JuggernautAbility.AddEffectsInfo.Info5:			Temps d'Incantation: Instantané
 JuggernautAbility.CannotUse.Dead:				Vous ne pouvez pas utiliser cette capacité en étant mort·e !
-JuggernautAbility.CannotUse.Mez:				Vous ne pouvez pas utiliser cette capacité sous l’effet d’un mezz !
+JuggernautAbility.CannotUse.Mez:				Vous ne pouvez pas utiliser cette capacité sous l'effet d'un mezz !
 JuggernautAbility.CannotUse.Stunned:			Vous ne pouvez pas utiliser cette capacité lorsque vous êtes étourdi !
 JuggernautAbility.CannotUse.Sitting:			Vous ne pouvez pas utiliser cette capacité en étant assis !
 JuggernautAbility.Require.PetControlled:		Vous devez contrôler un familier pour utiliser cette capacité !
@@ -86,7 +86,7 @@ MasteryofConcentrationAbility.BlockedByShield:			Vous ne pouvez pas utiliser cet
 MasteryofConcentrationAbility.Self.Cast:				Vous lancez {0} !
 MasteryofConcentrationAbility.Self.Steadier:			Vous gagnez en stabilité dans vos incantations !
 MasteryofConcentrationAbility.Area.CastsSpell:			{0} lance un sort !
-MasteryofConcentrationAbility.Area.Poise:				Les incantations de {0} sont d’un calme parfait !
+MasteryofConcentrationAbility.Area.Poise:				Les incantations de {0} sont d'un calme parfait !
 
 # /MysticCrystalLoreAbility
 MysticCrystalLoreAbility.AddEffectsInfo.NoScaleInfo1:	Niveau 1: Valeur: 25%

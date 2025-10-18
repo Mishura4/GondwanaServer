@@ -275,6 +275,9 @@ SpellDescription.Occultist.DecrepitShapeShift2:			Eure Rüstungsabsorption ist u
 SpellDescription.Occultist.DecrepitShapeShift3:			Nahkampfangreifer haben {0}% Chance, bei einem Treffer mit Krankheit belegt zu werden, und euer verrottendes Fleisch regeneriert sich, wodurch die Lebensregeneration um {1} steigt.
 SpellDescription.Occultist.BringerOfDeath1:				Verkörpert den Todesbringer. Eure Zauber können nicht unterbrochen werden, erreichen jedoch nur {0}% ihrer Stärke, und ihr erleidet {1}% weniger Schaden, egal ob magisch oder physisch.
 SpellDescription.Occultist.BringerOfDeath2:				Eure Bewegungsgeschwindigkeit erhöht sich um {0}%, auch in Speedwarps oder im Kampf. Zusätzlich sind alle Regenerationsboni und der Krankheits‑Effekt der Verfallenen Form aktiv.
+SpellDescription.ArawnsLegion.MainDescription1:			Ruft Arawn an, damit er sein böses Heer auf dem Schlachtfeld beschwört.
+SpellDescription.ArawnsLegion.MainDescription2:			Die Legion greift alle feindlichen Ziele im Wirkbereich an (Radius {0}) und das {1} Sekunden lang.
+SpellDescription.ArawnsLegion.MainDescription3:			Ihr könnt Diener nur in menschlicher Gestalt, in Decrepit-Form oder in Spirit-Form kontrollieren.
 SpellDescription.DamageReturn.MainDescription:			Leitet {0}% direkten Magieschaden (außer DoTs), Nahkampf‑ und Bogenschadens in {1} auf den Angreifer zurück, solange der Effekt aktiv ist.
 SpellDescription.OffProcShear.Main1:					Entfernt aktive Offensiv‑Procs vom Ziel.
 SpellDescription.OffProcShear.Main2:					Wendet einen verfluchten Ersatz‑Proc an, dessen Unterzauber die Feinde des Ziels bei deren Treffern heilt.

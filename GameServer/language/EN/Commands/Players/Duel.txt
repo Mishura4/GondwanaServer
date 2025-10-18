@@ -47,7 +47,7 @@ Commands.Players.Duel.StunnedSelf:				You cannot start a duel while stunned.
 Commands.Players.Duel.StunnedTarget:			{0} is stunned and can't start a duel.
 Commands.Players.Duel.CantThisFormSelf:			You cannot start a duel while under this form.
 Commands.Players.Duel.CantThisFormTarget:		{0} can't start a duel under this form.
-Commands.Players.Duel.DeadSelf:					You can’t duel while you're dead!
+Commands.Players.Duel.DeadSelf:					You can't duel while you're dead!
 Commands.Players.Duel.DeadTarget:				{0} is dead and unable to duel!
 Commands.Players.Duel.Linkdead:					You cannot start a duel while you or your target is disconnecting or linkdead.
 Commands.Players.Duel.AFKSelf:					You cannot start a duel while AFK.

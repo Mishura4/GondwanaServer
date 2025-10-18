@@ -320,6 +320,8 @@ SpellHandler.Occultist.CastCondition2:			Nu poți arunca această vrajă cât ti
 SpellHandler.Occultist.CastCondition3:			Nu poți arunca această vrajă cât timp ești în formă fragilă sau spirituală.
 SpellHandler.Occultist.CastCondition4:			Trebuie să părăsești forma actuală înainte de a arunca această vrajă.
 SpellHandler.Occultist.Self.AbsorbToPower:		Sifonezi {0} mană din atacul primit.
+SpellHandler.Occultist.ArawnsLegion.PetAnswer:			{0} răspunde chemării tale!
+SpellHandler.Occultist.ArawnsLegion.NoTemplateFound:	Șablonul NPC {0} nu a fost găsit.
 
 SpellHandler.SummonMonster.Target.Resist:			{0} a fost adus din Limbus ca zombie și rămâne insensibil la această vrajă!
 SpellHandler.IllusionSpell.Target.Resist:			{0} a invocat o iluzie și nu poate fi afectat de această vrajă!

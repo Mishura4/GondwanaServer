@@ -320,6 +320,8 @@ SpellHandler.Occultist.CastCondition2:			Sie können diesen Zauber nicht wirken,
 SpellHandler.Occultist.CastCondition3:			Sie können diesen Zauber nicht wirken, während Sie in gebrechlicher Form oder Geisterform sind.
 SpellHandler.Occultist.CastCondition4:			Sie müssen Ihre aktuelle Form verlassen, bevor Sie diesen Zauber wirken.
 SpellHandler.Occultist.Self.AbsorbToPower:		Sie siphonen {0} Mana aus dem erhaltenen Angriff.
+SpellHandler.Occultist.ArawnsLegion.PetAnswer:			{0} antwortet Eurem Ruf!
+SpellHandler.Occultist.ArawnsLegion.NoTemplateFound:	NSC-Vorlage {0} wurde nicht gefunden.
 
 SpellHandler.SummonMonster.Target.Resist:			{0} wurde aus den Limbus als Zombie zurückgeholt und bleibt gegen diesen Zauber unempfindlich!
 SpellHandler.IllusionSpell.Target.Resist:			{0} hat eine Illusion beschworen und kann von diesem Zauber nicht betroffen werden!
