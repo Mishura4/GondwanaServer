@@ -111,8 +111,11 @@ namespace DOL.GS.Spells
             }
 
             // Chtonic bonuses:
+            var hpBonus = mult * _hpFlat;
             target.BuffBonusCategory4[(int)eProperty.ArmorFactor] += mult * _afFlat;
-            target.BaseBuffBonusCategory[(int)eProperty.MaxHealth] += mult * _hpFlat;
+            target.BaseBuffBonusCategory[(int)eProperty.MaxHealth] += hpBonus;
+            if (hpBonus != 0 && apply)
+                target.Health += hpBonus;
             target.SpecBuffBonusCategory[(int)eProperty.WeaponSkill] += mult * _wsPct;
             target.SpecBuffBonusCategory[(int)eProperty.Resist_Heat] += mult * _secResPct;
             target.SpecBuffBonusCategory[(int)eProperty.Resist_Cold] += mult * _secResPct;
