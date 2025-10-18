@@ -3341,6 +3341,7 @@ namespace DOL.GS.Spells
                     // Prevent Adding.
                     return false;
                 }
+
                 if (effect.SpellHandler.IsOverwritable(neweffect))
                 {
                     // If we can cancel spell effect we don't need to overwrite it
@@ -3357,7 +3358,14 @@ namespace DOL.GS.Spells
                         // Check for Overwriting.
                         if (ShouldOverwriteOldEffect(effect, neweffect))
                         {
-                            // New Spell is overwriting this one.
+                            if (overwriteEffect != null)
+                            {
+                                // We are already overwriting. But is this newest effect better than the new one?
+                                if (ShouldOverwriteOldEffect(overwriteEffect, neweffect))
+                                {
+                                    removingEffects.Add(overwriteEffect);
+                                }
+                            }
                             overwriteEffect = effect;
                         }
                         else
@@ -3369,7 +3377,7 @@ namespace DOL.GS.Spells
                         }
                     }
                 }
-                else if (!effect.ImmunityState && PreventsApplication(effect, effect))
+                else if (!effect.ImmunityState && PreventsApplication(effect, neweffect))
                 {
                     removingEffects.Add(effect);
                 }

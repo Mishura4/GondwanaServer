@@ -46,6 +46,7 @@ namespace DOL.GS.Spells
 
         public IllusionSpell(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
+            OverwritesMorphs = false;
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -94,15 +95,8 @@ namespace DOL.GS.Spells
 
         public override bool IsOverwritable(GameSpellEffect compare)
         {
-            if (compare.SpellHandler is IllusionSpell otherIllu && otherIllu.Priority >= this.Priority)
-                return true;
-
-            if (compare.SpellHandler is AbstractMorphSpellHandler otherMorph)
-            {
-                // For illusions, we actually want to be replaced by any not-lower morph
-                if (otherMorph.Priority >= Priority)
-                    return true;
-            }
+            if (compare.SpellHandler is not IllusionSpell)
+                return false;
 
             return base.IsOverwritable(compare);
         }

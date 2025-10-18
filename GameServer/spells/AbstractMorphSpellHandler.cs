@@ -56,9 +56,7 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override bool IsOverwritable(GameSpellEffect compare)
         {
-            if (compare.SpellHandler is AbstractMorphSpellHandler otherMorph
-                && (OverwritesMorphs || otherMorph.OverwritesMorphs)
-                && compare.SpellHandler is not IllusionSpell)
+            if (compare.SpellHandler is AbstractMorphSpellHandler { OverwritesMorphs: true })
                 return true;
 
             return base.IsOverwritable(compare);
