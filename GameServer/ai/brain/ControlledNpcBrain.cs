@@ -910,7 +910,7 @@ namespace DOL.AI.Brain
                     if (Body.IsMoving)
                         Body.StopFollowing();
 
-                    if (Body.TargetObject != Body)
+                    if (Body.TargetObject != Body && spell.Target != "self")
                         Body.TurnTo(Body.TargetObject);
                 }
             }

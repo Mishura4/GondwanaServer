@@ -1823,6 +1823,7 @@ namespace DOL.AI.Brain
             foreach (IGameEffect effect in target.EffectList)
             {
                 if (effect is not GameSpellEffect speffect) continue;
+                if (speffect.IsDisabled || speffect is GameSpellAndImmunityEffect { ImmunityState: true }) continue;
                 if (spellTypes.Contains(speffect.Spell.SpellType))
                     return true;
             }
