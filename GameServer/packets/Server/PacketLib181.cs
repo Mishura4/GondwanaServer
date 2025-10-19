@@ -150,23 +150,28 @@ namespace DOL.GS.PacketHandler
 
                 if (pet != null)
                 {
+                    ArrayList icons = new ArrayList();
                     lock (pet.EffectList)
                     {
-                        ArrayList icons = new ArrayList();
                         foreach (IGameEffect effect in pet.EffectList)
                         {
                             if (icons.Count >= 8)
                                 break;
+
                             if (effect.Icon == 0)
                                 continue;
+
+                            if (effect is GameSpellEffect { IsDisabled: true } or GameSpellAndImmunityEffect { ImmunityState: true })
+                                continue;
+
                             icons.Add(effect.Icon);
                         }
-                        pak.WriteByte((byte)icons.Count); // effect count
-                                                          // 0x08 - null terminated - (byte) list of shorts - spell icons on pet
-                        foreach (ushort icon in icons)
-                        {
-                            pak.WriteShort(icon);
-                        }
+                    }
+                    pak.WriteByte((byte)(icons.Count)); // effect count
+                    // 0x08 - null terminated - (byte) list of shorts - spell icons on pet
+                    foreach (ushort icon in icons)
+                    {
+                        pak.WriteShort(icon);
                     }
                 }
                 else
