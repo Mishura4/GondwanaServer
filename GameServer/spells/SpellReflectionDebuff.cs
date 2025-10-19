@@ -1,4 +1,4 @@
-﻿using DOL.GS;
+using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
@@ -15,7 +15,7 @@ namespace DOL.GS.Spells
     {
         public SpellReflectionDebuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
-            m_spellTypesToRemove = new List<string> { "SpellReflection" };
+            SpellTypesToRemove = new List<string> { "SpellReflection" };
         }
 
         /// <inheritdoc />

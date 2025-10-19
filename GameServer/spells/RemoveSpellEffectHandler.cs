@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using DOL.GS.Effects;
+using System.Linq;
 
 namespace DOL.GS.Spells
 {
@@ -27,19 +28,15 @@ namespace DOL.GS.Spells
     /// </summary>
     public abstract class RemoveSpellEffectHandler : SpellHandler
     {
-        /// <summary>
-        /// Stores spell effect type that will be removed
-        /// RR4: now its a list of effects to remove
-        /// </summary>
-        protected List<string> m_spellTypesToRemove = null;
 
         /// <summary>
         /// Spell effect type that will be removed
         /// RR4: now its a list of effects to remove
         /// </summary>
-        public virtual List<string> SpellTypesToRemove
+        public IEnumerable<string> SpellTypesToRemove
         {
-            get { return m_spellTypesToRemove; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -69,11 +66,9 @@ namespace DOL.GS.Spells
             if (!base.OnDirectEffect(target, effectiveness)) return false;
 
             // RR4: we remove all the effects
-            foreach (string toRemove in SpellTypesToRemove)
+            foreach (var effect in target.FindEffectsOnTarget(s => SpellTypesToRemove.Contains(s.Spell.SpellType)))
             {
-                GameSpellEffect effect = target.FindEffectOnTarget(toRemove);
-                if (effect != null)
-                    effect.Cancel(false);
+                effect.Cancel(false);
             }
             SendEffectAnimation(target, 0, false, 1);
             return true;

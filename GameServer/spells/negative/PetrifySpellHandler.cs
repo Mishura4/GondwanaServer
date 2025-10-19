@@ -1,4 +1,4 @@
-﻿using DOL.AI.Brain;
+using DOL.AI.Brain;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
@@ -257,7 +257,7 @@ namespace DOL.GS.Spells
         {
             int baseChance = base.CalculateSpellResistChance(target);
 
-            if (FindEffectOnTarget(target, "CallOfShadows") != null)
+            if (FindEffectOnTarget<CallOfShadowsSpellHandler>(target) != null)
                 return Math.Max(50, baseChance);
 
             return baseChance;

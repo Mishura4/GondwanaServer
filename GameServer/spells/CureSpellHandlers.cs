@@ -8,22 +8,22 @@ namespace DOL.GS.Spells
 {
     public static class CureSpellConstants
     {
-        public static readonly List<string> CureDiseaseSpellTypes = new List<string> { "Disease" };
-        public static readonly List<string> CurePoisonSpellTypes = new List<string> { "DamageOverTime", "StyleBleeding" };
-        public static readonly List<string> CureNearsightSpellTypes = new List<string> { "Nearsight", "Silence" };
-        public static readonly List<string> CureMezzSpellTypes = new List<string> { "Mesmerize" };
-        public static readonly List<string> CurePetrifySpellTypes = new List<string> { "Petrify" };
-        public static readonly List<string> MaidenKissSpellTypes = new List<string> { "WarlockSpeedDecrease" };
-        public static readonly List<string> ArawnCureSpellTypes = new List<string>
-        {
+        public static readonly IEnumerable<string> CureDiseaseSpellTypes = ["Disease"];
+        public static readonly IEnumerable<string> CurePoisonSpellTypes = ["DamageOverTime", "StyleBleeding"];
+        public static readonly IEnumerable<string> CureNearsightSpellTypes = ["Nearsight", "Silence"];
+        public static readonly IEnumerable<string> CureMezzSpellTypes = ["Mesmerize"];
+        public static readonly IEnumerable<string> CurePetrifySpellTypes = ["Petrify"];
+        public static readonly IEnumerable<string> MaidenKissSpellTypes = ["WarlockSpeedDecrease"];
+        public static readonly IEnumerable<string> ArawnCureSpellTypes =
+        [
             "DamageOverTime",
             "Disease",
             "RvrResurrectionIllness",
             "PveResurrectionIllness",
             "StyleBleeding"
-        };
-        public static readonly List<string> CureAllSpellTypes = new List<string>
-        {
+        ];
+        public static readonly IEnumerable<string> CureAllSpellTypes =
+        [
             "DamageOverTime",
             "Nearsight",
             "Silence",
@@ -32,7 +32,7 @@ namespace DOL.GS.Spells
             "Mesmerize",
             "Petrify",
             "WarlockSpeedDecrease"
-        };
+        ];
     }
 
     [SpellHandler("CureAll")]
@@ -41,7 +41,7 @@ namespace DOL.GS.Spells
         public CureAllSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            m_spellTypesToRemove = CureSpellConstants.CureAllSpellTypes;
+            SpellTypesToRemove = CureSpellConstants.CureAllSpellTypes;
         }
     }
 
@@ -51,7 +51,7 @@ namespace DOL.GS.Spells
         public CureMezzSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            m_spellTypesToRemove = CureSpellConstants.CureMezzSpellTypes;
+            SpellTypesToRemove = CureSpellConstants.CureMezzSpellTypes;
         }
 
         public override string GetDelveDescription(GameClient delveClient)
@@ -66,7 +66,7 @@ namespace DOL.GS.Spells
         public CureDiseaseSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            m_spellTypesToRemove = CureSpellConstants.CureDiseaseSpellTypes;
+            SpellTypesToRemove = CureSpellConstants.CureDiseaseSpellTypes;
         }
 
         public override string GetDelveDescription(GameClient delveClient)
@@ -81,7 +81,7 @@ namespace DOL.GS.Spells
         public CurePoisonSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            m_spellTypesToRemove = CureSpellConstants.CurePoisonSpellTypes;
+            SpellTypesToRemove = CureSpellConstants.CurePoisonSpellTypes;
         }
 
         public override string GetDelveDescription(GameClient delveClient)
@@ -96,7 +96,7 @@ namespace DOL.GS.Spells
         public CureNearsightSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            m_spellTypesToRemove = CureSpellConstants.CureNearsightSpellTypes;
+            SpellTypesToRemove = CureSpellConstants.CureNearsightSpellTypes;
         }
 
         /// <inheritdoc />
@@ -112,7 +112,7 @@ namespace DOL.GS.Spells
         public ArawnCureSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            m_spellTypesToRemove = CureSpellConstants.ArawnCureSpellTypes;
+            SpellTypesToRemove = CureSpellConstants.ArawnCureSpellTypes;
         }
 
         public override string GetDelveDescription(GameClient delveClient)
@@ -126,7 +126,7 @@ namespace DOL.GS.Spells
     {
         public MaidenKissSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
-            m_spellTypesToRemove = CureSpellConstants.MaidenKissSpellTypes;
+            SpellTypesToRemove = CureSpellConstants.MaidenKissSpellTypes;
         }
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
@@ -159,7 +159,7 @@ namespace DOL.GS.Spells
     {
         public UnpetrifySpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
-            m_spellTypesToRemove = CureSpellConstants.CurePetrifySpellTypes;
+            SpellTypesToRemove = CureSpellConstants.CurePetrifySpellTypes;
         }
 
         public override string GetDelveDescription(GameClient delveClient)

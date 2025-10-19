@@ -246,9 +246,10 @@ namespace DOL.GS.Spells
         public SickHealSpellHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            m_spellTypesToRemove = new List<string>();
-            m_spellTypesToRemove.Add("PveResurrectionIllness");
-            m_spellTypesToRemove.Add("RvrResurrectionIllness");
+            var types = new List<string>();
+            types.Add("PveResurrectionIllness");
+            types.Add("RvrResurrectionIllness");
+            SpellTypesToRemove = types;
         }
 
         public override string GetDelveDescription(GameClient delveClient)

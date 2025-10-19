@@ -1,4 +1,4 @@
-﻿/*
+/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
  * 
  * This program is free software; you can redistribute it and/or
@@ -39,13 +39,7 @@ namespace DOL.GS.Spells
         /// <returns>First occurence GameSpellEffect build from spell in target's effect list or null</returns>
         public static GameSpellEffect FindEffectOnTarget(this GameLiving target, Spell spell)
         {
-            GameSpellEffect effect = null;
-            lock (target.EffectList)
-            {
-                effect = target.EffectsOnTarget(spell).FirstOrDefault();
-            }
-
-            return effect;
+            return target.FindEffectsOnTarget(s => s.Spell == spell).FirstOrDefault();
         }
 
         /// <summary>
@@ -54,17 +48,10 @@ namespace DOL.GS.Spells
         /// <param name="target">Living to find effect on</param>
         /// <param name="spell">Spell Object to Find (Spell.ID Match)</param>
         /// <returns>All GameSpellEffect build from spell in target's effect list or null</returns>
-        public static List<GameSpellEffect> FindEffectsOnTarget(this GameLiving target, Spell spell)
+        public static IEnumerable<GameSpellEffect> FindEffectsOnTarget(this GameLiving target, Spell spell)
         {
-            List<GameSpellEffect> effects = null;
-            lock (target.EffectList)
-            {
-                effects = target.EffectsOnTarget(spell).ToList();
-            }
-
-            return effects;
+            return target.FindEffectsOnTarget(s => s.Spell == spell).ToList();
         }
-
 
         /// <summary>
         /// Find Game Spell Effects by spell object
@@ -73,10 +60,19 @@ namespace DOL.GS.Spells
         /// <param name="target">Living to find effect on</param>
         /// <param name="spell">Spell Object to Find (Spell.ID Match)</param>
         /// <returns>All GameSpellEffect build from spell in target's effect list or null</returns>
-        private static IEnumerable<GameSpellEffect> EffectsOnTarget(this GameLiving target, Spell spell)
+        public static IEnumerable<GameSpellEffect> FindEffectsOnTarget(this GameLiving target, Func<GameSpellEffect, bool> predicate)
         {
-            return target.EffectList.OfType<GameSpellEffect>().Where(fx => !(fx is GameSpellAndImmunityEffect && ((GameSpellAndImmunityEffect)fx).ImmunityState)
-                                                                     && fx.Spell.ID == spell.ID);
+            lock (target.EffectList)
+            {
+                foreach (var effect in target.EffectList.OfType<GameSpellEffect>())
+                {
+                    if (effect is GameSpellAndImmunityEffect { ImmunityState: true })
+                        continue;
+
+                    if (predicate(effect))
+                        yield return effect;
+                }
+            }
         }
         #endregion
 
@@ -173,8 +169,10 @@ namespace DOL.GS.Spells
         /// <returns>All GameSpellEffect according to Type and Name in target's effect list or null</returns>
         private static IEnumerable<GameSpellEffect> EffectsOnTarget(this GameLiving target, string spellType)
         {
-            return target.EffectList.OfType<GameSpellEffect>().Where(fx => !(fx is GameSpellAndImmunityEffect && ((GameSpellAndImmunityEffect)fx).ImmunityState)
-                                                                     && fx.Spell != null && fx.Spell.SpellType.Equals(spellType));
+            return target.EffectList.OfType<GameSpellEffect>().Where(
+                fx => fx is not GameSpellAndImmunityEffect { ImmunityState: true }
+                      && fx.Spell != null && fx.Spell.SpellType.Equals(spellType)
+                );
         }
 
 

@@ -72,16 +72,17 @@ namespace DOL.GS.Spells
             : base(caster, spell, line)
         {
             // RR4: now it's a list
-            m_spellTypesToRemove = new List<string>();
-            m_spellTypesToRemove.Add("Mesmerize");
-            m_spellTypesToRemove.Add("SpeedDecrease");
-            m_spellTypesToRemove.Add("StyleSpeedDecrease");
-            m_spellTypesToRemove.Add("DamageSpeedDecrease");
-            m_spellTypesToRemove.Add("HereticSpeedDecrease");
-            m_spellTypesToRemove.Add("HereticDamageSpeedDecreaseLOP");
-            m_spellTypesToRemove.Add("VampiirSpeedDecrease");
-            m_spellTypesToRemove.Add("ValkyrieSpeedDecrease");
-            m_spellTypesToRemove.Add("WarlockSpeedDecrease");
+            var types = new List<string>();
+            types.Add("Mesmerize");
+            types.Add("SpeedDecrease");
+            types.Add("StyleSpeedDecrease");
+            types.Add("DamageSpeedDecrease");
+            types.Add("HereticSpeedDecrease");
+            types.Add("HereticDamageSpeedDecreaseLOP");
+            types.Add("VampiirSpeedDecrease");
+            types.Add("ValkyrieSpeedDecrease");
+            types.Add("WarlockSpeedDecrease");
+            SpellTypesToRemove = types;
         }
     }
 }
