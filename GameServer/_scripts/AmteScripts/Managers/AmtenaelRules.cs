@@ -277,6 +277,7 @@ namespace DOL.GS.ServerRules
                 attackerNpc = attackerOwner as GameNPC;
                 quiet = true;
             }
+
             if (defenderNpc?.GetLivingOwner() is {} defenderOwner)
             {
                 // Peaceful pets can't be attacked

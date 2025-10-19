@@ -406,18 +406,17 @@ namespace DOL.AI.Brain
                 CheckSpells(eCheckSpellType.Defensive);
 
             // Stop hunting player entering in steath
-            if (Body.TargetObject != null && Body.TargetObject is GamePlayer)
+            if (Body.TargetObject is GamePlayer targetPlayer)
             {
-                GamePlayer player = Body.TargetObject as GamePlayer;
-                if (Body.IsAttacking && player!.IsStealthed && !previousIsStealthed)
+                if (Body.IsAttacking && targetPlayer!.IsStealthed && !previousIsStealthed)
                 {
                     Body.StopAttack();
                     Body.StopCurrentSpellcast();
-                    RemoveFromAggroList(player);
+                    RemoveFromAggroList(targetPlayer);
                     Body.TargetObject = null;
                     FollowOwner();
                 }
-                previousIsStealthed = player!.IsStealthed;
+                previousIsStealthed = targetPlayer!.IsStealthed;
             }
 
             // Always check offensive spells, or pets in melee will keep blindly melee attacking,
@@ -485,7 +484,7 @@ namespace DOL.AI.Brain
         /// <returns>True if we are begin to cast or are already casting</returns>
         public override bool CheckSpells(eCheckSpellType type)
         {
-            if (Body == null || Body.Spells == null || Body.Spells.Count < 1) return false;
+            if (Body is not { Spells.Count: >= 1 }) return false;
 
             bool casted = false;
             if (type == eCheckSpellType.Defensive)

@@ -1009,7 +1009,8 @@ namespace DOL.AI.Brain
                     AddToAggroList(ad.Attacker, 1);
                 }
 
-                Body.StartAttack(ad.Attacker);
+                if (GameServer.ServerRules.IsAllowedToAttack(ad.Attacker, Body, true))
+                    Body.StartAttack(ad.Attacker);
             }
         }
 

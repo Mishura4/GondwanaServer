@@ -1119,7 +1119,11 @@ namespace DOL.GS
         /// <summary>
         /// Gets the attack-state of this living
         /// </summary>
-        public virtual bool AttackState { get; set; }
+        public virtual bool AttackState
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets the living calling the shots for this GameLiving, which is the owner if there is one, or this Living
