@@ -558,7 +558,7 @@ namespace AmteScripts.Managers
             {
                 pick = _MasterMaps[_rng.Next(_MasterMaps.Length)];
             }
-            while (avoidSame && old != null && _MasterMaps.Length > 1);
+            while (_MasterMaps.Length > 1 && (avoidSame && old == pick));
 
             _currentMasterMap = pick;
             log.Info($"RvRManager: Selected Master map: {_currentMasterMap}");
