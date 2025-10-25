@@ -2049,7 +2049,7 @@ namespace DOL.GS
                 case Specs.Mauler_Staff: return 0x94;
                 case Specs.SpectralGuard: return 0x95;
                 case Specs.Archery: return 0x9B;
-                case Specs.Tormentshaper: return GetSpecToInternalIndex(Specs.Two_Handed); // Custom; we do this for now
+                case Specs.Tormentshaper: return GetSpecToInternalIndex(Specs.Painworking); // Custom; we do this for now
                 case Specs.Wraithsight: return 0x9D;
                 case Specs.Void_Acolyte: return 0x9E;
                 default: return 0;

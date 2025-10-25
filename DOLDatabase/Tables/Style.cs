@@ -101,6 +101,10 @@ namespace DOL.Database
         /// See "eObjectType" for values
         /// </summary>
         private int m_WeaponTypeRequirement;
+        /// <summary>
+        /// Type of SpellHandler required to be present as an effect on the user
+        /// </summary>
+        private string m_SpellRequirement;
         //		/// <summary>
         //		/// The damage addition factor of this style
         //		/// </summary>
@@ -277,6 +281,16 @@ namespace DOL.Database
         {
             get { return m_WeaponTypeRequirement; }
             set { m_WeaponTypeRequirement = value; Dirty = true; }
+        }
+
+        /// <summary>
+        /// Type of SpellHandler required to be present as an effect on the user
+        /// </summary>
+        [DataElement(AllowDbNull = false, Varchar = 255)]
+        public string SpellRequirement
+        {
+            get { return m_SpellRequirement; }
+            set { m_SpellRequirement = value; Dirty = true; }
         }
 
         /// <summary>

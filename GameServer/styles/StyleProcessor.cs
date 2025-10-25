@@ -30,6 +30,7 @@ using DOL.GS.Spells;
 using DOL.GS.Effects;
 using DOL.GS.ServerProperties;
 using log4net;
+using System.Linq;
 
 namespace DOL.GS.Styles
 {
@@ -59,7 +60,7 @@ namespace DOL.GS.Styles
             //several different threads at the same time!
             lock (living)
             {
-                if (style.StealthRequirement && living is GamePlayer && ((GamePlayer)living).StayStealth)
+                if (style.StealthRequirement && living is GamePlayer { StayStealth: true })
                 {
                     return true;
                 }
@@ -84,7 +85,6 @@ namespace DOL.GS.Styles
 
                 switch (style.OpeningRequirementType)
                 {
-
                     case Style.eOpening.Offensive:
                         //Style required before this one?
                         if (style.OpeningRequirementValue != 0
@@ -173,6 +173,9 @@ namespace DOL.GS.Styles
                 if (!CheckWeaponType(style, living, weapon))
                     return false;
 
+                if (!CheckSpellRequirements(style, living, target))
+                    return false;
+
                 //				if(player.Endurance < CalculateEnduranceCost(style, weapon.SPD_ABS))
                 //					return false;
 
@@ -241,6 +244,13 @@ namespace DOL.GS.Styles
                         else
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StyleProcessor.TryToUseStyle.StyleRequires", style.GetRequiredWeaponName()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
+                    return;
+                }
+
+                if (!CheckSpellRequirements(style, living, target))
+                {
+                    if (player != null)
+                        player.Out.SendMessage(style.GetRequiredSpellMessage(player.Client), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 
@@ -575,8 +585,8 @@ namespace DOL.GS.Styles
         {
             if (living is GameNPC)
                 return true;
-            GamePlayer player = living as GamePlayer;
-            if (player == null) return false;
+
+            if (living is not GamePlayer player) return false;
 
             switch (style.WeaponTypeRequirement)
             {
@@ -617,6 +627,17 @@ namespace DOL.GS.Styles
                             (eObjectType)style.WeaponTypeRequirement,
                             (eObjectType)weapon.Object_Type);
             }
+        }
+
+        protected static bool CheckSpellRequirements(Style style, GameLiving attacker, GameObject target)
+        {
+            if (style.SpellRequirement.Count > 0)
+            {
+                // Return false if none of the requirements are active
+                if (!attacker.FindEffectsOnTarget((e) => style.SpellRequirement.Contains(e.SpellHandler.Spell.SpellType)).Any())
+                    return false;
+            }
+            return true;
         }
 
         /// <summary>

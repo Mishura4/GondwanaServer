@@ -16,12 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using DOL.Database.Attributes;
 using DOL.GS;
 using DOL.Database;
+using DOL.Language;
 using log4net;
+using System.Linq;
 
 namespace DOL.GS.Styles
 {
@@ -134,6 +137,11 @@ namespace DOL.GS.Styles
         protected DBStyle baseStyle = null;
 
         /// <summary>
+        /// If non-empty, at least one of these SpellHandler types needs to be present on the caster as a spell effect
+        /// </summary>
+        protected List<string> spellRequirement = new();
+
+        /// <summary>
         /// Constructs a new Style object based on a database Style object
         /// </summary>
         /// <param name="style">The database style object this object is based on</param>
@@ -145,6 +153,7 @@ namespace DOL.GS.Styles
             {
                 log.Error($"Style {style.Name} (ID {style.ID}) has invalid positional requirement {OpeningRequirementValue}. It will probably crash the client");
             }
+            spellRequirement = new List<string>(style.SpellRequirement.Split('|'));
         }
 
         public int ClassID
@@ -234,6 +243,15 @@ namespace DOL.GS.Styles
         public int WeaponTypeRequirement
         {
             get { return baseStyle.WeaponTypeRequirement; }
+        }
+
+        /// <summary>
+        /// (readonly) If non-empty, at least one of these SpellHandler types
+        /// needs to be present on the caster as a spell effect
+        /// </summary>
+        public IReadOnlyList<string> SpellRequirement
+        {
+            get => spellRequirement;
         }
 
         /// <summary>
@@ -328,6 +346,18 @@ namespace DOL.GS.Styles
         public override Skill Clone()
         {
             return (Style)MemberwiseClone();
+        }
+
+        public virtual string GetRequiredSpellMessage(GameClient client)
+        {
+            var spell = SpellRequirement.FirstOrDefault();
+            if (!string.IsNullOrEmpty(spell))
+            {
+                if (LanguageMgr.TryGetTranslation(out string translation, client, "StyleProcessor.TryToUseStyle.RequiredSpell." + spell))
+                    return translation;
+            }
+
+            return LanguageMgr.GetTranslation(client, "StyleProcessor.TryToUseStyle.RequiredSpell");
         }
     }
 }

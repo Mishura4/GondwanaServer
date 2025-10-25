@@ -21,6 +21,6 @@ StyleProcessor.TryToUseStyle.NoLongerPreparing:		You are no longer preparing to 
 StyleProcessor.TryToUseStyle.PerformStyleBefore:	You must perform the {0} style before this one!
 StyleProcessor.TryToUseStyle.PreparePerform:		You prepare to perform a {0}!
 StyleProcessor.TryToUseStyle.StyleRequires:		This style requires a {0} weapon!
- 
 
-
+StyleProcessor.TryToUseStyle.RequiredSpell:                        You do not satify all conditions to perform this style!
+StyleProcessor.TryToUseStyle.RequiredSpell.ChtonicShapeShift:      You must be in chtonic form to perform this style!
