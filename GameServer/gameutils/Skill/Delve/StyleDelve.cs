@@ -1,4 +1,4 @@
-﻿/*
+/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
  * 
  * This program is free software; you can redistribute it and/or
@@ -35,15 +35,15 @@ namespace DOL.GS.Delve
         public StyleDelve(GameClient clt, int id)
         {
             this.clt = clt;
-            var sk = clt.Player.GetAllUsableSkills().Where(e => e.Item1.InternalID == id && e.Item1 is Style).FirstOrDefault();
+            var sk = clt.Player.GetAllUsableSkills().FirstOrDefault(e => e.Item1.InternalID == id && e.Item1 is Style);
 
-            if (sk == null || sk.Item1 == null)
+            if (sk?.Item1 == null)
             {
                 style = SkillBase.GetStyleByInternalID(id);
             }
-            else if (sk.Item1 is Style)
+            else if (sk.Item1 is Style delveStyle)
             {
-                style = (Style)sk.Item1;
+                style = delveStyle;
             }
 
             DelveType = "Style";
@@ -81,6 +81,7 @@ namespace DOL.GS.Delve
             clientDelve.AddElement("OpeningDamage", LevelZeroDamage + style.Level * DamageIncreasePerLevel);
             clientDelve.AddElement("LevelBonus", DamageIncreasePerLevel);
             clientDelve.AddElement("OpeningType", (int)style.OpeningRequirementType);
+
             if (style.OpeningRequirementType == Style.eOpening.Positional)
                 clientDelve.AddElement("OpeningNumber", style.OpeningRequirementValue);
             if (style.WeaponTypeRequirement > 0)
@@ -95,7 +96,7 @@ namespace DOL.GS.Delve
                     clientDelve.AddElement("SpecialType", "1");
                 }
             }
-
+            
             return clientDelve;
         }
 
