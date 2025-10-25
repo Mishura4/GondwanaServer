@@ -10,6 +10,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Je kunt deze giffen 
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Giffen kunnen alleen op wapens worden aangebracht.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Je kunt geen gif opnieuw aanbrengen op dit wapen.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Je kunt je {0} niet vergiftigen!
+GameObjects.GamePlayer.ApplyPoison.Success:					Je brengt {0} aan op {1}.
 
 GameObjects.GamePlayer.AblativeArmor.Target:        Je pantser absorbeert {0} extra schade dankzij je ablatieve bonus!
 GameObjects.GamePlayer.AblativeArmor.Attacker:      Het pantser van {0} absorbeert {1} extra schade dankzij zijn/haar ablatieve bonus!
@@ -171,6 +172,7 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Je stapt van je ri
 GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Je stijgt op je rijdier.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Je moet met een paard zijn uitgerust.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Je moet op je paard zitten om deze inventaris te gebruiken.
+GameObjects.GamePlayer.Steed.SwitchSeat:					Je wisselt naar stoel {0}.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:    Kracht
 GameObjects.GamePlayer.ItemBonusName.Bonus2:    Handigheid
@@ -209,6 +211,7 @@ GameObjects.GamePlayer.ItemBonusName.Bonus175:  Trefferskans in gevecht
 GameObjects.GamePlayer.ItemBonusName.Bonus181:  Succesratio spreuken
 GameObjects.GamePlayer.ItemBonusName.Bonus197:  Weerstand tegen doorborende aanvallen
 GameObjects.GamePlayer.ItemBonusName.Bonus249:  Weerstand tegen essentie
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:		Je hebt niet een hoog genoeg level om te profiteren van de bonussen van {0}. (Level {1} vereist)
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Je staat in lava en je loopt schade op!
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Je loopt schade op gelijk aan 34% van je maximale levenpunten.
@@ -237,9 +240,12 @@ GameObjects.GamePlayer.OnLevelUp.YouRaise:            Je bent gestegen naar nive
 GameObjects.GamePlayer.OnRenaissance:                 Je hebt zojuist je Wedergeboorte voltooid!
 
 GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} is van de server losgekoppeld!
+GameObjects.GamePlayer.GroundTarget.Set:					Je zet een gronddoel op {0},{1},{2}
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:			Je hebt {0} verdienpunten voor je gilde behaald!
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Je bent in beweging en kunt je rijdier niet roepen!
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Je beweegt en onderbreekt je vervaardiging.
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	Je beweegt en onderbreekt je {0}!
 
 GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} traint in verschillende specialisaties.
 GameObjects.GamePlayer.OnSkillTrained.YouHave:         Je hebt nog {0} specialisatiepunt(en) op dit niveau.
@@ -405,6 +411,8 @@ GameObjects.GamePlayer.StartAttack.YouPrepare:             Je bereidt je {0} voo
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:         Je bent niet langer verborgen.
 GameObjects.GamePlayer.Stealth.NowHidden:              Je bent nu verborgen.
+GameObjects.GamePlayer.Stealth.CantWhileCraft:				Je kunt niet sluipen terwijl je aan het craften bent!
+GameObjects.GamePlayer.Stealth.Uncover:						{0} onthult je!
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Je hebt geen munitie meer in je pijlkoker.
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Je zult je pijlkoker niet gebruiken.
@@ -413,6 +421,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Je spreuk is geannuleerd.
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Je kunt niet met deze speler handelen omdat je vogelvrij bent.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Je kunt niet met een/een vogelvrije handelen.
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:		{0} is nog steeds aan het handelen met {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:			Je bent nog steeds aan het handelen met {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:			Er is een fout opgetreden tijdens het handelen met {0}.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:			{0} is nog steeds zelf aan het craften.
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Je bent overbelast.
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Je bent overbelast en beweegt langzaam.
@@ -434,6 +446,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:        Je kunt niet opstijgen te
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Je kunt niet opstijgen terwijl je versteend bent!
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Je kunt in deze gedaante niet opstijgen!
 GameObjects.GamePlayer.UseSlot.CantMountMorph:         Je kunt niet opstijgen zolang de spreuk “{0}” op je ligt!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:				Je kunt niet opstijgen terwijl je betoverd (mezzed) bent!
+GameObjects.GamePlayer.UseSlot.CantMountStunned:			Je kunt niet opstijgen terwijl je verdoofd bent!
+GameObjects.GamePlayer.UseSlot.CantMountDuel:				Je kunt niet opstijgen tijdens een duel!
+GameObjects.GamePlayer.UseSlot.CantMountStealing:			Je kunt niet opstijgen terwijl je een andere speler bestelt!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Je kunt niet op je paard stappen; je bent dood.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Je kunt dit rijdier niet gebruiken terwijl je een relikwie draagt!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Je kunt je doel niet zien.
@@ -471,6 +487,12 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Je kunt deze inventaris n
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Laad-effect met ID {0} is nog niet geïmplementeerd.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Laad-effect met ID {0} niet gevonden.
 
+GameObjects.GamePlayer.YellReceive.Yells:					{0} roept: "{1}"
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} roept iets in een taal die je niet begrijpt.
+GameObjects.GamePlayer.Yell.YouYell:						Je roept: "{0}"
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} fluistert je toe: "{1}"
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} fluistert iets in een taal die je niet begrijpt.
+GameObjects.GamePlayer.Whisper.YouWhisper:					Je fluistert: "{0}" naar {1}
 GameObjects.GamePlayer.Whisper.SelectTarget:           Selecteer een doel om te fluisteren.
 GameObjects.GamePlayer.Murder:                         Je hebt 1 reputatiepunt verloren omdat je {0} hebt gedood.
 GameObjects.GamePlayer.Multiplekills:                  Je hebt 1 reputatiepunt verloren wegens meerdere moorden op {0}.
@@ -507,4 +529,8 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Je hebt deze zadeltas al 
 
 GameObjects.GamePlayer.Reputation.Zero:                Je reputatie is nu neutraal.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:					AFK XP: start over {0}s (gevecht & token vereist).
+GameObjects.GamePlayer.AfkXp.GainedXp:						Je AFK-XP-token geeft je {0} xp uit je training terwijl je AFK was!
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Het totaal van je specialisatiepunten was onjuist. Nu gecorrigeerd — train alsjeblieft opnieuw.
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Onbekend bindpunt, je account is geblokkeerd, neem contact op met een GM.

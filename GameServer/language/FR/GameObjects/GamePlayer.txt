@@ -11,6 +11,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:		    Vous ne pouvez pas utili
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Les poisons ne peuvent être appliqués que sur des armes.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:		Vous ne pouvez pas réappliquer du poison sur cette arme.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:			Vous ne pouvez pas empoisonner votre {0} !
+GameObjects.GamePlayer.ApplyPoison.Success:					Vous enduisez {1} avec {0}.
 
 GameObjects.GamePlayer.AblativeArmor.Target:		Votre armure absorbe {0} dommage(s) additionnels grâce à votre bonus ablatif !
 GameObjects.GamePlayer.AblativeArmor.Attacker:		L'armure de {0} absorbe {1} dommage(s) additionnels grâce à son bonus ablatif !
@@ -172,44 +173,46 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:			            Vous descendez de 
 GameObjects.GamePlayer.IsOnHorse.MountSteed:			            Vous montez sur votre monture.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:					Vous devez être équipé d'un cheval.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:					Vous devez être sur votre cheval pour utiliser cet inventaire.
+GameObjects.GamePlayer.Steed.SwitchSeat:							Vous vous déplacez vers le siège {0}.
 
-GameObjects.GamePlayer.ItemBonusName.Bonus1:    Force
-GameObjects.GamePlayer.ItemBonusName.Bonus2:    Dextérité
-GameObjects.GamePlayer.ItemBonusName.Bonus3:    Constitution
-GameObjects.GamePlayer.ItemBonusName.Bonus4:    Vivacité
-GameObjects.GamePlayer.ItemBonusName.Bonus5:    Intelligence
-GameObjects.GamePlayer.ItemBonusName.Bonus6:    Piété
-GameObjects.GamePlayer.ItemBonusName.Bonus7:    Empathie
-GameObjects.GamePlayer.ItemBonusName.Bonus8:    Charisme
-GameObjects.GamePlayer.ItemBonusName.Bonus9:    Mana
-GameObjects.GamePlayer.ItemBonusName.Bonus10:   PdV (points de vie)
-GameObjects.GamePlayer.ItemBonusName.Bonus11:   résistance Corps
-GameObjects.GamePlayer.ItemBonusName.Bonus12:   résistance Froid
-GameObjects.GamePlayer.ItemBonusName.Bonus13:   résistance Contondant
-GameObjects.GamePlayer.ItemBonusName.Bonus14:   résistance Énergie
-GameObjects.GamePlayer.ItemBonusName.Bonus15:   résistance Chaleur
-GameObjects.GamePlayer.ItemBonusName.Bonus16:   résistance Matière
-GameObjects.GamePlayer.ItemBonusName.Bonus17:   résistance Tranchant
-GameObjects.GamePlayer.ItemBonusName.Bonus18:   résistance Esprit
-GameObjects.GamePlayer.ItemBonusName.Bonus19:   résistance Estoc
-GameObjects.GamePlayer.ItemBonusName.Bonus119:	taux d'accumulation de tension
-GameObjects.GamePlayer.ItemBonusName.Bonus147:	taux de concentration maximum
-GameObjects.GamePlayer.ItemBonusName.Bonus148:	bonus au facteur d'armure (AF)
-GameObjects.GamePlayer.ItemBonusName.Bonus149:	bonus d'Absorption (Abs)
-GameObjects.GamePlayer.ItemBonusName.Bonus150:	taux de régénération des PdV (points de vie)
-GameObjects.GamePlayer.ItemBonusName.Bonus151:	taux de régénération de mana
-GameObjects.GamePlayer.ItemBonusName.Bonus152:	taux de régénération de l'endurance
-GameObjects.GamePlayer.ItemBonusName.Bonus153:	portée de sort
-GameObjects.GamePlayer.ItemBonusName.Bonus154:	portée des armes à distance
-GameObjects.GamePlayer.ItemBonusName.Bonus155:	vitesse de combaten mêlée
-GameObjects.GamePlayer.ItemBonusName.Bonus156:	Acuité
-GameObjects.GamePlayer.ItemBonusName.Bonus169:	taux d'esquive
-GameObjects.GamePlayer.ItemBonusName.Bonus170:	taux de blocage (boucliers)
-GameObjects.GamePlayer.ItemBonusName.Bonus171:	taux de parade
-GameObjects.GamePlayer.ItemBonusName.Bonus175:	taux de chance de ne pas rater votre cible en combat
-GameObjects.GamePlayer.ItemBonusName.Bonus181:	taux chance de réussite aux sorts
-GameObjects.GamePlayer.ItemBonusName.Bonus197:	résistance aux attaques perforantes
-GameObjects.GamePlayer.ItemBonusName.Bonus249:	résistance à l'Essence
+GameObjects.GamePlayer.ItemBonusName.Bonus1:			Force
+GameObjects.GamePlayer.ItemBonusName.Bonus2:			Dextérité
+GameObjects.GamePlayer.ItemBonusName.Bonus3:			Constitution
+GameObjects.GamePlayer.ItemBonusName.Bonus4:			Vivacité
+GameObjects.GamePlayer.ItemBonusName.Bonus5:			Intelligence
+GameObjects.GamePlayer.ItemBonusName.Bonus6:			Piété
+GameObjects.GamePlayer.ItemBonusName.Bonus7:			Empathie
+GameObjects.GamePlayer.ItemBonusName.Bonus8:			Charisme
+GameObjects.GamePlayer.ItemBonusName.Bonus9:			Mana
+GameObjects.GamePlayer.ItemBonusName.Bonus10:			PdV (points de vie)
+GameObjects.GamePlayer.ItemBonusName.Bonus11:			résistance Corps
+GameObjects.GamePlayer.ItemBonusName.Bonus12:			résistance Froid
+GameObjects.GamePlayer.ItemBonusName.Bonus13:			résistance Contondant
+GameObjects.GamePlayer.ItemBonusName.Bonus14:			résistance Énergie
+GameObjects.GamePlayer.ItemBonusName.Bonus15:			résistance Chaleur
+GameObjects.GamePlayer.ItemBonusName.Bonus16:			résistance Matière
+GameObjects.GamePlayer.ItemBonusName.Bonus17:			résistance Tranchant
+GameObjects.GamePlayer.ItemBonusName.Bonus18:			résistance Esprit
+GameObjects.GamePlayer.ItemBonusName.Bonus19:			résistance Estoc
+GameObjects.GamePlayer.ItemBonusName.Bonus119:			taux d'accumulation de tension
+GameObjects.GamePlayer.ItemBonusName.Bonus147:			taux de concentration maximum
+GameObjects.GamePlayer.ItemBonusName.Bonus148:			bonus au facteur d'armure (AF)
+GameObjects.GamePlayer.ItemBonusName.Bonus149:			bonus d'Absorption (Abs)
+GameObjects.GamePlayer.ItemBonusName.Bonus150:			taux de régénération des PdV (points de vie)
+GameObjects.GamePlayer.ItemBonusName.Bonus151:			taux de régénération de mana
+GameObjects.GamePlayer.ItemBonusName.Bonus152:			taux de régénération de l'endurance
+GameObjects.GamePlayer.ItemBonusName.Bonus153:			portée de sort
+GameObjects.GamePlayer.ItemBonusName.Bonus154:			portée des armes à distance
+GameObjects.GamePlayer.ItemBonusName.Bonus155:			vitesse de combaten mêlée
+GameObjects.GamePlayer.ItemBonusName.Bonus156:			Acuité
+GameObjects.GamePlayer.ItemBonusName.Bonus169:			taux d'esquive
+GameObjects.GamePlayer.ItemBonusName.Bonus170:			taux de blocage (boucliers)
+GameObjects.GamePlayer.ItemBonusName.Bonus171:			taux de parade
+GameObjects.GamePlayer.ItemBonusName.Bonus175:			taux de chance de ne pas rater votre cible en combat
+GameObjects.GamePlayer.ItemBonusName.Bonus181:			taux chance de réussite aux sorts
+GameObjects.GamePlayer.ItemBonusName.Bonus197:			résistance aux attaques perforantes
+GameObjects.GamePlayer.ItemBonusName.Bonus249:			résistance à l'Essence
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:	Votre niveau n'est pas assez élevé pour pouvoir bénéficier des bonus de {0} (niveau {1} requis)
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:	Vous êtes dans la Lave et subissez des dégâts !			
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:	Vous subissez 34 % de vos coups maximum en dégâts.
@@ -238,13 +241,16 @@ GameObjects.GamePlayer.OnLevelUp.YouRaise:				Vous avez atteint le niveau {0} !
 GameObjects.GamePlayer.OnRenaissance:				    Vous venez d'accomplir votre renaissance ! 
 
 GameObjects.GamePlayer.OnLinkdeath.Linkdead:			{0} a été deconnecté·e par le serveur !
+GameObjects.GamePlayer.GroundTarget.Set:				Votre cible au sol est {0},{1},{2}.
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:		Vous avez gagné {0} points de mérite pour votre guilde !
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:	Vous bougez et ne pouvez pas appeler votre monture !
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting:	Vous bougez, et interrompez votre fabrication.
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	Vous bougez et interrompez votre {0} !
 
-GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious:	{0} s'entraîne dans différentes spécialisations.
-GameObjects.GamePlayer.OnSkillTrained.YouHave:			Il vous reste {0} points de spécialisation pour ce niveau.
-GameObjects.GamePlayer.OnSkillTrained.YouSpend:			Vous dépensez {0} points et vous augmentez votre specialisation dans {1}.
+GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious:		{0} s'entraîne dans différentes spécialisations.
+GameObjects.GamePlayer.OnSkillTrained.YouHave:				Il vous reste {0} points de spécialisation pour ce niveau.
+GameObjects.GamePlayer.OnSkillTrained.YouSpend:				Vous dépensez {0} points et vous augmentez votre specialisation dans {1}.
 
 GameObjects.GamePlayer.OpenSelfCraft.AlreadySelfCrafting:	Vous êtes déjà en train d'enchanter quelque chose.
 GameObjects.GamePlayer.OpenSelfCraft.CanOnlyCraftBackpack:	Vous ne pouvez combiner que des objets dans votre sac.
@@ -406,6 +412,8 @@ GameObjects.GamePlayer.StartAttack.YouPrepare:			    Vous préparez votre {0} ({
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:			Vous n'êtes plus caché·e.
 GameObjects.GamePlayer.Stealth.NowHidden:				Vous êtes caché·e.
+GameObjects.GamePlayer.Stealth.CantWhileCraft:			Vous ne pouvez pas vous camoufler alors que vous fabriquez un objet !
+GameObjects.GamePlayer.Stealth.Uncover:					{0} vous démasque !
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:			Vous n'avez plus de munitions dans votre carquois.
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:		Vous n'utiliserez pas votre carquois.
@@ -414,6 +422,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:		Votre sort est annulé.
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:		Vous ne pouvez pas échanger avec ce joueur car vous êtes hors-la-loi.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:		Vous ne pouvez pas échanger avec un·e hors-la-loi.
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:	{0} est encore en train d'échanger avec {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:		Vous êtes encore en train d'échanger avec {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:		Une erreur s'est produite pendant l'échange avec {0}.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:		{0} est toujours en train de fabriquer pour lui-même.
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:				Vous êtes encombré·e.
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:		Vous êtes encombré·e, et bougez lentement.
@@ -435,6 +447,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:			Vous ne pouvez pas monter à c
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:		Vous ne pouvez pas monter à cheval en étant pétrifié·e !
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:		Vous ne pouvez pas monter à cheval sous cette forme !
 GameObjects.GamePlayer.UseSlot.CantMountMorph:			Vous ne pouvez pas monter à cheval en étant sous l'effet d'un enchantement "{0}"!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:			Vous ne pouvez pas monter à cheval tant que vous êtes hypnotisé !
+GameObjects.GamePlayer.UseSlot.CantMountStunned:		Vous ne pouvez pas monter à cheval tant que vous êtes étourdi !
+GameObjects.GamePlayer.UseSlot.CantMountDuel:			Vous ne pouvez pas monter à cheval durant un combat en duel !
+GameObjects.GamePlayer.UseSlot.CantMountStealing:		Vous ne pouvez pas monter à cheval tout en volant un joueur !
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:		Vous ne pouvez pas monter sur votre cheval, vous êtes mort·e.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:	Vous ne pouvez pas utiliser cette monture en portant une Relique !
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:			Vous ne voyez pas votre cible.
@@ -472,10 +488,16 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:			Vous ne pouvez pas utiliser
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:	L'effet de charge ID {0} n'est pas encore implémenté.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:		L'effet de charge ID {0} non trouvé.
 
-GameObjects.GamePlayer.Whisper.SelectTarget:			Sélectionnez une cible à qui chuchoter.
-GameObjects.GamePlayer.Murder:							Vous avez perdu 1 point de réputation pour avoir tué {0}.
-GameObjects.GamePlayer.Multiplekills:					Vous avez perdu 1 point de réputation pour cause d'assassinats multiples envers {0}.
-GameObjects.GamePlayer.GuardKill:						Vous avez perdu 1 point de réputation pour cause d'assassinat de garde.
+GameObjects.GamePlayer.YellReceive.Yells:					{0} hurle : « {1} »
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} hurle dans une langue qui vous est inconnue.
+GameObjects.GamePlayer.Yell.YouYell:						Vous hurlez : « {0} »
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} vous murmure : « {1} »
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} murmure dans une langue qui vous est inconnue.
+GameObjects.GamePlayer.Whisper.YouWhisper:					Vous murmurez à {1} : « {0} ».
+GameObjects.GamePlayer.Whisper.SelectTarget:				Sélectionnez une cible à qui chuchoter.
+GameObjects.GamePlayer.Murder:								Vous avez perdu 1 point de réputation pour avoir tué {0}.
+GameObjects.GamePlayer.Multiplekills:						Vous avez perdu 1 point de réputation pour cause d'assassinats multiples envers {0}.
+GameObjects.GamePlayer.GuardKill:							Vous avez perdu 1 point de réputation pour cause d'assassinat de garde.
 GameObjects.GamePlayer.Wanted:                              {0} est maintenant recherché pour ses crimes.
 GameObjects.GamePlayer.Jailed:                              {0} a été mis en prison par {1}.
 GameObjects.GamePlayer.Jailed.Unknown:                      {0} a été mis en prison par les gardes.
@@ -508,4 +530,8 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:	Vous avez déjà activé cett
 
 GameObjects.GamePlayer.Reputation.Zero:					Votre réputation est désormais neutre.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:				XP AFK : démarrage dans {0}s (combat et jeton requis).
+GameObjects.GamePlayer.AfkXp.GainedXp:					Le jeton d'XP AFK vous accorde {0} xp durant votre entraînement en AFK.
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:		Votre total de points de Spécialisation était incorrect. Désormais corrigé, veuillez vous entraîner à nouveau.
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Pierre d'âme inconnue, votre compte est banni. Contactez un MJ.

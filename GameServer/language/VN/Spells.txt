@@ -279,6 +279,7 @@ SpellDescription.Occultist.BringerOfDeath2:				Tốc độ di chuyển +{0}% k�
 SpellDescription.ArawnsLegion.MainDescription1:			Hãy cầu khẩn Arawn để triệu hồi đội quân tà ác của hắn trên chiến trường.
 SpellDescription.ArawnsLegion.MainDescription2:			Đội quân tấn công mọi mục tiêu địch trong phạm vi (bán kính {0}) trong {1} giây.
 SpellDescription.ArawnsLegion.MainDescription3:			Bạn chỉ có thể điều khiển đầy tớ khi ở hình dạng con người, dạng Decrepit hoặc dạng Spirit.
+SpellDescription.SummonMultiTemplatePets.MainDescription1:		Triệu hồi một đoàn đầy tớ để hỗ trợ bạn trên chiến trường.
 SpellDescription.DamageReturn.MainDescription:			Phản trả {0}% sát thương trực tiếp phép (không DoT), cận và đạn vào {1} kẻ tấn công trong thời gian hiệu lực.
 SpellDescription.OffProcShear.Main1:					Gỡ các proc tấn công đang hoạt động của mục tiêu.
 SpellDescription.OffProcShear.Main2:					Áp proc thay thế bị nguyền; các tiểu phép của nó sẽ hồi máu cho kẻ địch của mục tiêu khi họ đánh trúng.

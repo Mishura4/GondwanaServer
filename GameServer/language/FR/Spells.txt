@@ -265,8 +265,8 @@ SpellDescription.Occultist.Summon.UmbralHulk1:			Faites apparaître un Fiélon C
 SpellDescription.Occultist.Summon.UmbralHulk2:			Forme Esprit : le Colosse Cuirassé obtient une charge de 5 secondes, une attaque d'étourdissement arrière de 3 secondes et une probabilité augmentée de frapper avec l'arme secondaire.
 SpellDescription.Occultist.Summon.ImageOfArawn1:		Invoquez un Prêtre d'Arawn dévoué à votre service. Ce serviteur passif aide le groupe de son maître avec des soins individuels de 12 %.
 SpellDescription.Occultist.Summon.ImageOfArawn2:		Forme Esprit : l'Image d'Arawn obtient des sorts supplémentaires pour guérir le poison, les maladies, la maladie de résurrection, et peut dissiper la myopie.  
-SpellDescription.Occultist.Summon.SuccubusArchDemon1:	Invoquez une Succube démoniaque à votre service. La Succube hypnotise sa cible.
-SpellDescription.Occultist.Summon.SuccubusArchDemon2:	Forme Esprit : le Démon Archi gagne un puissant affaiblissement de Dex/Qui et peut dissiper la myopie.
+SpellDescription.Occultist.Summon.SuccubusArchDemon1:		Invoquez une Succube démoniaque à votre service. La Succube hypnotise sa cible.
+SpellDescription.Occultist.Summon.SuccubusArchDemon2:		Forme Esprit : le Démon Archi gagne un puissant affaiblissement de Dex/Qui et peut dissiper la myopie.
 SpellDescription.Occultist.SpiritShapeShift1:			Prenez la forme d'un Esprit fantomatique. {0}% des dégâts reçus sont absorbés puis convertis en mana.
 SpellDescription.Occultist.SpiritShapeShift2:			Votre régénération de mana est accrue de {0} par niveau, tandis que votre détection des ennemis furtifs augmente de {1}%.
 SpellDescription.Occultist.SpiritShapeShift3:			Vos serviteurs bénéficient également d'une meilleure robustesse et obtiennent des capacités supplémentaires.
@@ -275,15 +275,16 @@ SpellDescription.Occultist.ChtonicShapeShift2:			Vous gagnez également la capac
 SpellDescription.Occultist.DecrepitShapeShift1:			Incarnez un Mage Décrépit. Vos dégâts magiques sont augmentés de {0}%.
 SpellDescription.Occultist.DecrepitShapeShift2:			Votre absorption d'armure est augmentée de {0}%.
 SpellDescription.Occultist.DecrepitShapeShift3:			Les attaquants en mêlée ont {0}% de chance d'être affectés par une maladie lorsqu'ils vous frappent, et votre chair putréfiée se régénère, augmentant la régénération de santé de {1}.
-SpellDescription.Occultist.BringerOfDeath1:				Incarnez le Porteur de Mort. Vos sorts ne peuvent être interrompus mais n'atteignent que {0}% de leur puissance, et vous subissez {1}% de dégâts en moins qu'ils soient magiques ou physiques.
-SpellDescription.Occultist.BringerOfDeath2:				Votre vitesse de mouvement augmente de {0}%, même en speedwarps ou en combat. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.
+SpellDescription.Occultist.BringerOfDeath1:			Incarnez le Porteur de Mort. Vos sorts ne peuvent être interrompus mais n'atteignent que {0}% de leur puissance, et vous subissez {1}% de dégâts en moins qu'ils soient magiques ou physiques.
+SpellDescription.Occultist.BringerOfDeath2:			Votre vitesse de mouvement augmente de {0}%, même en speedwarps ou en combat. De plus, tous les bonus de régénération et l'effet de maladie de la forme Décrépit sont actifs.
 SpellDescription.ArawnsLegion.MainDescription1:			Invoquez Arawn pour qu'il fasse apparaître son armée maléfique sur le champ de bataille.
 SpellDescription.ArawnsLegion.MainDescription2:			La légion attaque toutes les cibles ennemies à portée (rayon de {0}) pendant {1} secondes.
-SpellDescription.ArawnsLegion.MainDescription3:			Vous ne pouvez contrôler des serviteurs qu'en forme humaine, décrépite ou spirituelle.
+SpellDescription.ArawnsLegion.MainDescription3:			Vous ne pouvez contrôler des serviteurs qu'en forme humaine, décrépite ou esprit.
+SpellDescription.SummonMultiTemplatePets.MainDescription1:	Invoque une armée de serviteurs afin de vous aider sur le champ de bataille.
 SpellDescription.DamageReturn.MainDescription:			Renvoie {0}% des dégâts magiques directs (hors DoTs), de mêlée, et d'archerie vers l'attaquant en {1} tant que l'effet est actif.
-SpellDescription.OffProcShear.Main1:					Remove any active Offensive Proc(s) from the target.
-SpellDescription.OffProcShear.Main2:					Applies a cursed replacement proc whose subspell heals the target's enemies on their hits.
-SpellDescription.OffProcShear.ReplacementHeader:		Replacement proc:
+SpellDescription.OffProcShear.Main1:				Retire tout proc offensif actif de la cible.
+SpellDescription.OffProcShear.Main2:				Applique un proc de remplacement maudit dont le sous-sort soigne les ennemis de la cible lorsqu'elle frappe.
+SpellDescription.OffProcShear.ReplacementHeader:		Proc de remplacement :
 
 
 # ML Spells ShortDescriptions
@@ -303,7 +304,7 @@ SpellDescription.Convoker.BrittleGuard.MainDescription2:		Le Gardien Fragile n'a
 SpellDescription.Convoker.SummonMastery.MainDescription:		Augmente le niveau effectif de vos familiers, améliorant leurs dégâts de mêlée et leur absorption d'armure.
 SpellDescription.Convoker.SummonTitan.MainDescription1:			Invoque un Titan qui grandit en taille et en puissance, frappant les ennemis avec une force colossale.
 SpellDescription.Convoker.SummonTitan.MainDescription2:			Le Titan reste immobile et attaque uniquement les ennemis à portée de mêlée.
-SpellDescription.Spymaster.Decoy.MainDescription:				Invoque un allié portant une tenue épique avec un seul point de vie et aucune capacité offensive pour distraire les ennemis.
+SpellDescription.Spymaster.Decoy.MainDescription:			Invoque un allié portant une tenue épique avec un seul point de vie et aucune capacité offensive pour distraire les ennemis.
 SpellDescription.Spymaster.Sabotage.MainDescription:			Sabote une cible, qu'il s'agisse d'une rune ou d'un équipement de siège, la rendant inutilisable.
 SpellDescription.Spymaster.TangleSnare.MainDescription:			Déploie une rune qui ralentit les ennemis de {0}% dans son rayon lors de la détonation. Annule la furtivité en cas d'utilisation.
 SpellDescription.Spymaster.PoisonSpike.MainDescription:			Déploie une rune empoisonnée qui inflige {0} {1} aux ennemis proches lors de la détonation. Annule la furtivité.

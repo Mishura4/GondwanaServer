@@ -1,7 +1,19 @@
-Commands.Players.Afk.Description:	Toggles your status to AFK. It is possible to display a message.
-Commands.Players.Afk.Off:			You are no longer considered to be AFK.
-Commands.Players.Afk.On:			You are now considered as AFK.
-Commands.Players.Afk.Usage:			Usage : '/afk <text>'
-Commands.Players.Afk.Message:		You are now AFK with the message: {0}
-Commands.Players.Afk.Mode:			You are in AFK mode, move again to disable it.
-Commands.Players.Afk.Wait:			You must wait before going AFK again.
+Commands.Players.Afk.Description:			Toggles your status to AFK. It is possible to display a message.
+Commands.Players.Afk.Off:					You are no longer considered to be AFK.
+Commands.Players.Afk.On:					You are now considered as AFK.
+Commands.Players.Afk.Usage:					Usage : '/afk <text>'
+Commands.Players.Afk.Message:				You are now AFK with the message: {0}
+Commands.Players.Afk.Mode:					You are in AFK mode, move again to disable it.
+Commands.Players.Afk.Wait:					You must wait before going AFK again.
+
+Commands.Players.Afk.CannotWhileDuel:		You can't be AFK while you're in a duel!
+Commands.Players.Afk.CannotWhileCombat:		You can't be AFK while you're in combat!
+Commands.Players.Afk.CannotWhileStealing:	You can't be AFK while while you're stealing another player!
+Commands.Players.Afk.CannotWhileRiding:		You can't be AFK while while you're riding a horse!
+Commands.Players.Afk.CannotWhileMoving:		You can't be AFK while while you're moving!
+Commands.Players.Afk.CannotWhileJailed:		You can't be AFK while while you're in jail!
+Commands.Players.Afk.CannotWhileStunned:	You can't be AFK while while you're stunned.
+Commands.Players.Afk.CannotWhileMezzed:		You can't be AFK while while you're mezzed.
+Commands.Players.Afk.CannotWhileDamned:		You can't be AFK while while you're damned.
+Commands.Players.Afk.CannotWhileCrafting:	You can't be AFK while while you're crafting!
+Commands.Players.Afk.CannotWhilekMorphed:	You can't be AFK while you're under a "{0}" enchantment!

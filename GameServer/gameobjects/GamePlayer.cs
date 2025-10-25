@@ -75,13 +75,16 @@ namespace DOL.GS
 
         private readonly object m_LockObject = new object();
 
-        private Timer afkXpTimer;
-
         private Timer kickoutTimer;
 
         private Timer reputationRecoveryTimer;
 
-        private Timer afkDelayTimer;
+        private RegionTimer _afkDelayTimer;
+        private RegionTimer _afkKickoutTimer;
+        private RegionTimer _afkXpBufferTimer;
+        private RegionTimer _afkXpTickTimer;
+
+        private bool _isAfkDelayElapsed;
 
         private bool stayStealth = false;
 
@@ -184,14 +187,9 @@ namespace DOL.GS
             set { m_targetInView = value; }
         }
 
-        public Timer AfkXpTimer
+        public RegionTimer AfkDelayTimer
         {
-            get => this.afkXpTimer ?? (this.afkXpTimer = new Timer());
-        }
-
-        public Timer AfkDelayTimer
-        {
-            get => this.afkDelayTimer ?? (this.afkDelayTimer = new Timer());
+            get => _afkDelayTimer ?? (_afkDelayTimer = new RegionTimer(this));
         }
 
         public Timer KickoutTimer
@@ -201,8 +199,8 @@ namespace DOL.GS
 
         public bool IsAfkDelayElapsed
         {
-            get;
-            private set;
+            get => _isAfkDelayElapsed;
+            private set => _isAfkDelayElapsed = value;
         }
 
         /// <summary>
@@ -1308,7 +1306,12 @@ namespace DOL.GS
                 bool wasInCombat = InCombat;
                 base.LastAttackedByEnemyTickPvE = value;
                 if (!wasInCombat && InCombat)
+                {
+                    if (IsAfkActive())
+                        ClearAFK(showMessage: true);
+
                     Out.SendUpdateMaxSpeed();
+                }
 
                 ResetInCombatTimer();
             }
@@ -1324,7 +1327,12 @@ namespace DOL.GS
                 bool wasInCombat = InCombat;
                 base.LastAttackTickPvE = value;
                 if (!wasInCombat && InCombat)
+                {
+                    if (IsAfkActive())
+                        ClearAFK(showMessage: true);
+
                     Out.SendUpdateMaxSpeed();
+                }
 
                 ResetInCombatTimer();
             }
@@ -6575,9 +6583,16 @@ namespace DOL.GS
                 return;
             }
 
-            if (this.PlayerAfkMessage != null)
+            if (IsAfkActive())
             {
-                this.ResetAFK(false);
+                if (attackTarget is GameTrainingDummy)
+                {
+                    MaybeStartAfkXp();
+                }
+                else
+                {
+                    ClearAFK(showMessage: false);
+                }
             }
 
             if (IsStunned)
@@ -6726,7 +6741,9 @@ namespace DOL.GS
                 if (DreamweaverRR5 != null)
                     DreamweaverRR5.Cancel(false);
             }
+
             base.StartAttack(attackTarget);
+            MaybeStartAfkXp();
 
             if (IsCasting && !m_runningSpellHandler.Spell.Uninterruptible && m_runningSpellHandler is not StyleHandler)
             {
@@ -6773,12 +6790,12 @@ namespace DOL.GS
             NextCombatStyle = null;
             NextCombatBackupStyle = null;
             base.StopAttack(forced);
+            StopAfkXp();
             if (IsAlive)
             {
                 Out.SendAttackMode(AttackState);
             }
         }
-
 
         /// <summary>
         /// Switches the active quiver slot to another one
@@ -9591,7 +9608,7 @@ namespace DOL.GS
                 StopCrafting();
             }
 
-            if (spell.SpellType == "BodyguardHandler")
+            if (spell!.SpellType == "BodyguardHandler")
             {
                 Ability ab = SkillBase.GetAbility("Bodyguard");
                 IAbilityActionHandler handler = SkillBase.GetAbilityActionHandler(ab.KeyName);
@@ -10098,7 +10115,7 @@ namespace DOL.GS
                         }
                         else
                         {
-                            source.Out.SendMessage("You are still trading with " + source.GetPersonalizedName(sourceTradePartner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.Trade.YouStillTradingWith", source.GetPersonalizedName(sourceTradePartner)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         return false;
                     }
@@ -10107,7 +10124,7 @@ namespace DOL.GS
                     {
                         if (!OpenTrade(source))
                         {
-                            source.Out.SendMessage("An error occured while trading with " + source.GetPersonalizedName(this), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.Trade.ErrorWhileTradingWith", source.GetPersonalizedName(this)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return false;
                         }
                         if (!source.TradeWindow!.AddItemToTrade(item))
@@ -10124,11 +10141,11 @@ namespace DOL.GS
                         GamePlayer partner = TradeWindow.Partner;
                         if (partner == null)
                         {
-                            source.Out.SendMessage(source.GetPersonalizedName(this) + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.Trade.TargetSelfcrafting", source.GetPersonalizedName(this)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         else
                         {
-                            source.Out.SendMessage(source.GetPersonalizedName(this) + " is still trading with " + source.GetPersonalizedName(partner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.Trade.PlayerStillTradingWith", source.GetPersonalizedName(this), source.GetPersonalizedName(partner)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         return false;
                     }
@@ -10165,11 +10182,11 @@ namespace DOL.GS
                             GamePlayer partner = TradeWindow.Partner;
                             if (partner == null)
                             {
-                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.Trade.TargetSelfcrafting", source.GetPersonalizedName(this)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still trading with " + source.GetPersonalizedName(partner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.Trade.PlayerStillTradingWith", source.GetPersonalizedName(this), source.GetPersonalizedName(partner)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
                         else if (source.TradeWindow != null)
@@ -10181,7 +10198,7 @@ namespace DOL.GS
                             }
                             else
                             {
-                                source.Out.SendMessage("You are still trading with " + source.GetPersonalizedName(sourceTradePartner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.Trade.YouStillTradingWith", source.GetPersonalizedName(sourceTradePartner)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
                         return false;
@@ -11106,7 +11123,7 @@ namespace DOL.GS
             }
             Inventory.RemoveCountFromStack(poisonPotion, 1);
             InventoryLogging.LogInventoryAction(this, "", "(poison)", eInventoryActionType.Other, poisonPotion.Template, 1);
-            Out.SendMessage(string.Format("You apply {0} to {1}.", poisonPotion.GetName(0, false), toItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ApplyPoison.Success", poisonPotion.GetName(0, false), toItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return true;
         }
 
@@ -11295,10 +11312,9 @@ namespace DOL.GS
             if (IsIgnoring(source))
                 return true;
             if (GameServer.ServerRules.IsAllowedToUnderstand(source, this))
-                Out.SendMessage(GetPersonalizedName(source) + " yells, \"" + str + "\"", eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.YellReceive.Yells", GetPersonalizedName(source), str), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
             else
-                Out.SendMessage(GetPersonalizedName(source) + " yells something in a language you don't understand.", eChatType.CT_Say,
-                                eChatLoc.CL_ChatWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.YellReceive.FalseLanguage", GetPersonalizedName(source)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
             return true;
         }
 
@@ -11313,7 +11329,7 @@ namespace DOL.GS
                 return false;
             if (!base.Yell(str))
                 return false;
-            Out.SendMessage("You yell, \"" + str + "\"", eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Yell.YouYell", str), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
             return true;
         }
 
@@ -11331,11 +11347,9 @@ namespace DOL.GS
             if (IsIgnoring(source))
                 return true;
             if (GameServer.ServerRules.IsAllowedToUnderstand(source, this))
-                Out.SendMessage(GetPersonalizedName(source) + " whispers to you, \"" + str + "\"", eChatType.CT_Say,
-                                eChatLoc.CL_ChatWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.WhisperReceive.Whispers", GetPersonalizedName(source), str), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
             else
-                Out.SendMessage(GetPersonalizedName(source) + " whispers something in a language you don't understand.",
-                                eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.WhisperReceive.FalseLanguage", GetPersonalizedName(source)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
             return true;
         }
 
@@ -11358,7 +11372,7 @@ namespace DOL.GS
             if (!base.Whisper(target, str))
                 return false;
             if (target is GamePlayer)
-                Out.SendMessage("You whisper, \"" + str + "\" to " + GetPersonalizedName(target), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Whisper.YouWhisper", str, GetPersonalizedName(target)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
             return true;
         }
 
@@ -11526,7 +11540,7 @@ namespace DOL.GS
                 return;
 
             if (this is GamePlayer asPlayer)
-                asPlayer.Out.SendMessage("You switch to seat " + slot + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                asPlayer.Out.SendMessage(LanguageMgr.GetTranslation(asPlayer.Client.Account.Language, "GameObjects.GamePlayer.Steed.SwitchSeat", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             GameNPC steed = Steed;
             steed.RiderDismount(true, this);
@@ -11911,7 +11925,7 @@ namespace DOL.GS
                     b.Reason = "X/Y/RegionID : " + Position.X + "/" + Position.Y + "/" + Position.RegionID;
                     GameServer.Database.AddObject(b);
                     GameServer.Database.SaveObject(b);
-                    string message = "Unknown bind point, your account is banned, contact a GM.";
+                    string message = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind");
                     Client.Out.SendMessage(message, eChatType.CT_Help, eChatLoc.CL_SystemWindow);
                     Client.Out.SendMessage(message, eChatType.CT_Help, eChatLoc.CL_ChatWindow);
                 }
@@ -12456,7 +12470,7 @@ namespace DOL.GS
                         string attackTypeMsg = "shot";
                         if (AttackWeapon.Object_Type == (int)eObjectType.Thrown)
                             attackTypeMsg = "throw";
-                        Out.SendMessage("You move and interrupt your " + attackTypeMsg + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack", attackTypeMsg), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         StopAttack();
                     }
                 }
@@ -12575,6 +12589,9 @@ namespace DOL.GS
 
         public virtual void OnPlayerMove()
         {
+            if (IsAfkActive())
+                ClearAFK(showMessage: true);
+
             if (IsSitting)
             {
                 Sit(false);
@@ -12605,7 +12622,7 @@ namespace DOL.GS
                 if (ActiveWeaponSlot == eActiveWeaponSlot.Distance)
                 {
                     string attackTypeMsg = (AttackWeapon.Object_Type == (int)eObjectType.Thrown ? "throw" : "shot");
-                    Out.SendMessage("You move and interrupt your " + attackTypeMsg + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack", attackTypeMsg), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     StopAttack();
                 }
                 else
@@ -12719,7 +12736,7 @@ namespace DOL.GS
             set
             {
                 base.GroundTargetPosition = value;
-                Out.SendMessage(String.Format("You ground-target {0},{1},{2}", value.X, value.Y, value.Z), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GroundTarget.Set", value.X, value.Y, value.Z), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 if (SiegeWeapon != null) SiegeWeapon.GroundTargetPosition = value;
             }
         }
@@ -12952,9 +12969,7 @@ namespace DOL.GS
 
             if (this.Level < item.BonusLevel)
             {
-                Out.SendMessage(
-                    $"You are not high enough level to benefit from {item.Name}'s bonuses. (Need level {item.BonusLevel})",
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough", item.Name, item.BonusLevel), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -14520,51 +14535,30 @@ namespace DOL.GS
         /// <returns>pronoun of this object</returns>
         public override string GetPronoun(int form, bool firstLetterUppercase)
         {
-            if (Gender == eGender.Male) // male
-                switch (form)
+            var lang = this?.Client?.Account?.Language ?? LanguageMgr.DefaultLanguage;
+
+            string key;
+            if (Gender == eGender.Male)
+            {
+                key = form switch
                 {
-                    default:
-                        // Subjective
-                        if (firstLetterUppercase)
-                            return "He";
-                        else
-                            return "he";
-                    case 1:
-                        // Possessive
-                        if (firstLetterUppercase)
-                            return "His";
-                        else
-                            return "his";
-                    case 2:
-                        // Objective
-                        if (firstLetterUppercase)
-                            return "Him";
-                        else
-                            return "him";
-                }
+                    1 => "GameObjects.GamePlayer.Pronoun.Male.Possessive",
+                    2 => "GameObjects.GamePlayer.Pronoun.Male.Objective",
+                    _ => "GameObjects.GamePlayer.Pronoun.Male.Subjective",
+                };
+            }
             else
-                // female
-                switch (form)
+            {
+                key = form switch
                 {
-                    default:
-                        // Subjective
-                        if (firstLetterUppercase)
-                            return "She";
-                        else
-                            return "she";
-                    case 1:
-                        // Possessive
-                        if (firstLetterUppercase)
-                            return "Her";
-                        else
-                            return "her";
-                    case 2:
-                        // Objective
-                        if (firstLetterUppercase)
-                            return "Her";
-                        else
-                            return "her";
-                }
+                    1 => "GameObjects.GamePlayer.Pronoun.Female.Possessive",
+                    2 => "GameObjects.GamePlayer.Pronoun.Female.Objective",
+                    _ => "GameObjects.GamePlayer.Pronoun.Female.Subjective",
+                };
+            }
+
+            var text = LanguageMgr.GetTranslation(lang, key);
+            return Capitalize(firstLetterUppercase, text);
         }
 
         public string GetPronoun(GameClient Client, int form, bool capitalize)
@@ -14722,7 +14716,7 @@ namespace DOL.GS
 
             if (goStealth && IsCrafting)
             {
-                Out.SendMessage("You can't stealth while crafting!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Stealth.CantWhileCraft"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -14901,7 +14895,7 @@ namespace DOL.GS
                             }
                             else
                             {
-                                player.Out.SendMessage(npc.GetName(0, true) + " uncovers you!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Stealth.Uncover", npc.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 player.Stealth(false);
                                 break;
                             }
@@ -14925,7 +14919,7 @@ namespace DOL.GS
 
             if ((response & 0x100) == 0x100)
             {
-                player.Out.SendMessage(player.GetPersonalizedName(target) + " uncovers you!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Stealth.Uncover", player.GetPersonalizedName(target)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Stealth(false);
             }
         }
@@ -15437,7 +15431,7 @@ namespace DOL.GS
             }
             if (!quiet)
             {
-                Out.SendMessage("You have earned " + amount + " merit points for your guild!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Guild.MeritPoints.Earned", amount), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
         }
 
@@ -15906,7 +15900,7 @@ namespace DOL.GS
                     }
                     else
                     {
-                        Out.SendMessage("You are still trading with " + sourceTradePartner.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Trade.StillTradingWith", GetPersonalizedName(sourceTradePartner)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     return false;
                 }
@@ -15924,75 +15918,207 @@ namespace DOL.GS
             }
         }
 
-        /// <summary>
-        /// Internal Method use ResetAFK Instead
-        /// </summary>
-        private void ResetAfkTimers()
+        #endregion
+
+        #region AFK and AFK XP methods
+
+        public bool IsAfkActive()
         {
-            AfkXpTimer.Stop();
-            AfkXpTimer.Elapsed -= (object sender, ElapsedEventArgs e) => this.OnAfkXpTick();
-            AfkXpTimer.Close();
-            KickoutTimer.Elapsed -= (object sender, ElapsedEventArgs e) => this.OnAfkTimerTimeout();
-            KickoutTimer.Close();
+            return PlayerAfkMessage != null || TempProperties.getProperty<string>(AFK_MESSAGE, null) != null;
+        }
+
+        /// <summary>
+        /// Set AFK consistently (canonical + legacy mirror) and optionally show feedback.
+        /// </summary>
+        public void SetAFK(string message, bool showMessage = true)
+        {
+            PlayerAfkMessage = message;
+            TempProperties.setProperty(AFK_MESSAGE, message);
+            InitAfkTimers();
+            MaybeStartAfkXp();
+
+            if (showMessage)
+            {
+                if (!string.IsNullOrWhiteSpace(message) && !string.Equals(message, "AFK", StringComparison.Ordinal))
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client, "Commands.Players.Afk.Message", message), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                else
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client, "Commands.Players.Afk.Mode"), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+            }
+        }
+
+        /// <summary>
+        /// Clear AFK (canonical + legacy), re-arm AFK system, and optionally say "Off".
+        /// </summary>
+        public void ClearAFK(bool showMessage = true)
+        {
+            if (PlayerAfkMessage == null && TempProperties.getProperty<string>(AFK_MESSAGE, null) == null)
+                return;
+
+            PlayerAfkMessage = null;
+            TempProperties.removeProperty(AFK_MESSAGE);
+            StopAfkXp();
+            ResetAFK(true);
+
+            if (showMessage)
+            {
+                Out.SendMessage(LanguageMgr.GetTranslation(Client, "Commands.Players.Afk.Off"), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+            }
+        }
+
+        private bool IsFightingTrainingDummyInRange()
+        {
+            var target = this.TargetObject as GameTrainingDummy;
+            if (target == null) return false;
+            if (!this.AttackState) return false;
+            return this.IsWithinRadius(target, WorldMgr.INTERACT_DISTANCE);
+        }
+
+        private AfkXpToken GetActiveAfkToken() => AfkXpToken.FindOn(this);
+
+        public void MaybeStartAfkXp()
+        {
+            if (!_isAfkDelayElapsed) return;
+            if (!IsAfkActive()) return;
+            if (!IsFightingTrainingDummyInRange()) { StopAfkXp(); return; }
+
+            var token = GetActiveAfkToken();
+            if (token == null) { StopAfkXp(); return; }
+
+            // Start buffer timer if not running, else leave it alone.
+            if (_afkXpBufferTimer == null)
+            {
+                int bufferMs = Math.Max(0, Properties.AFK_XP_TIMERBEFORE_TICKS) * 1000;
+                if (bufferMs == 0)
+                {
+                    StartAfkXpTicks();
+                    return;
+                }
+
+                if (Client.Account.PrivLevel > 1)
+                {
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.AfkXp.StartingIn", bufferMs / 1000), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+
+                _afkXpBufferTimer = new RegionTimer(this, _ =>
+                {
+                    if (!IsFightingTrainingDummyInRange() || GetActiveAfkToken() == null || !IsAfkActive())
+                    {
+                        _afkXpBufferTimer = null;
+                        return 0;
+                    }
+
+                    StartAfkXpTicks();
+                    _afkXpBufferTimer = null;
+                    return 0;
+                });
+                _afkXpBufferTimer.Start(bufferMs);
+            }
+        }
+
+        private void StartAfkXpTicks()
+        {
+            _afkXpTickTimer?.Stop();
+
+            int tickMs = Properties.AFK_XP_INTERVAL * 1000;
+            if (tickMs < 0) tickMs = int.MaxValue;
+            if (tickMs == 0) tickMs = 1000;
+
+            _afkXpTickTimer = new RegionTimer(this, _ =>
+            {
+                if (!IsAfkActive() || !IsFightingTrainingDummyInRange())
+                {
+                    StopAfkXp();
+                    return 0;
+                }
+
+                var token = GetActiveAfkToken();
+                if (token == null)
+                {
+                    StopAfkXp();
+                    return 0;
+                }
+
+                long perLevel = (ExperienceForNextLevel - ExperienceForCurrentLevel);
+                double pct = token.PercentOfLevelPerTick;
+                long gain = (long)Math.Floor(perLevel * (pct / 100.0));
+
+                if (gain > 0)
+                {
+                    GainExperience(GameLiving.eXPSource.Other, gain, 0, 0, 0, false, 1);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.AfkXp.GainedXp", gain), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                }
+
+                if (!token.ConsumeOneCondition(this))
+                {
+                    StopAfkXp();
+                    return 0;
+                }
+                return tickMs;
+            });
+            _afkXpTickTimer.Start(tickMs);
+        }
+
+        private void StopAfkXp()
+        {
+            _afkXpTickTimer?.Stop(); _afkXpTickTimer = null;
+            _afkXpBufferTimer?.Stop(); _afkXpBufferTimer = null;
         }
 
         public void ResetAFK(bool isSilent)
         {
-            this.PlayerAfkMessage = null;
-            this.ResetAfkTimers();
+            PlayerAfkMessage = null;
+
+            _afkDelayTimer?.Stop(); _afkDelayTimer = null;
+            _afkKickoutTimer?.Stop(); _afkKickoutTimer = null;
+            _afkXpBufferTimer?.Stop(); _afkXpBufferTimer = null;
+            _afkXpTickTimer?.Stop(); _afkXpTickTimer = null;
+
+            StartAfkCooldown(30_000);
 
             if (!isSilent)
-                this.Out.SendMessage("Vous n'etes désormais plus afk", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            {
+                ClearAFK(showMessage: true);
+            }
         }
 
         public void InitAfkTimers()
         {
-            //Delay Timer
-            this.AfkDelayTimer.AutoReset = true;
-            this.AfkDelayTimer.Interval = 30 * 1000; //30s
-            this.AfkDelayTimer.Stop();
-            this.AfkDelayTimer.Elapsed += (object send, ElapsedEventArgs e) => this.IsAfkDelayElapsed = true;
-            this.AfkDelayTimer.Start();
-            this.IsAfkDelayElapsed = false;
-
-            //Kickout timer
-            int kickoutMilliseconds = Properties.AFK_TIMEOUT * 60 * 1000;
-
-            if (kickoutMilliseconds < 0)
+            // 1) small “become AFK” debounce (30s)
+            _afkDelayTimer?.Stop();
+            _afkDelayTimer = new RegionTimer(this, _ =>
             {
-                kickoutMilliseconds = int.MaxValue;
-            }
+                _isAfkDelayElapsed = true;
+                MaybeStartAfkXp();
+                return 0;
+            });
+            _isAfkDelayElapsed = false;
+            _afkDelayTimer.Start(30_000);
 
-            KickoutTimer.AutoReset = false;
-            kickoutTimer.Stop();
-            KickoutTimer.Interval = kickoutMilliseconds;
-            KickoutTimer.Elapsed += (object sender, ElapsedEventArgs e) => this.OnAfkTimerTimeout();
-            KickoutTimer.Start();
+            // 2) kickout
+            int kickoutMs = Properties.AFK_TIMEOUT * 60 * 1000;
+            if (kickoutMs < 0) kickoutMs = int.MaxValue;
 
-            //xp timer
-            int experienceMilliseconds = Properties.AFK_XP_INTERVAL * 60 * 1000;
-
-            if (experienceMilliseconds < 0)
+            _afkKickoutTimer?.Stop();
+            _afkKickoutTimer = new RegionTimer(this, _ =>
             {
-                experienceMilliseconds = int.MaxValue;
-            }
-            AfkXpTimer.Stop();
-            AfkXpTimer.Interval = experienceMilliseconds;
-            AfkXpTimer.Elapsed += (object sender, ElapsedEventArgs e) => OnAfkXpTick();
-            AfkXpTimer.Start();
+                OnAfkTimerTimeout();
+                return 0;
+            });
+            _afkKickoutTimer.Start(kickoutMs);
         }
 
-        public void OnAfkXpTick()
+        private void StartAfkCooldown(int ms = 30_000)
         {
-            long bonusXP = Experience * Properties.AFK_XP_PERCENTAGE / 100;
-            GainExperience(GameLiving.eXPSource.Other, bonusXP, 0, 0, 0, false, 1);
-
-            if (bonusXP > 0)
+            _afkDelayTimer?.Stop();
+            _afkDelayTimer = new RegionTimer(this, _ =>
             {
-                Out.SendMessage("Vous gagnez " + bonusXP + " points d'experiences grâce à votre statut AFK!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-            }
+                _isAfkDelayElapsed = true;
+                MaybeStartAfkXp();
+                return 0;
+            });
+            _isAfkDelayElapsed = false;
+            _afkDelayTimer.Start(ms);
         }
-
 
         private void OnAfkTimerTimeout()
         {

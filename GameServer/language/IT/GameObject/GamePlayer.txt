@@ -10,6 +10,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Non puoi usare quest
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   I veleni possono essere applicati solo alle armi.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Non puoi riapplicare il veleno su quest'arma.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Non puoi avvelenare il tuo/la tua {0}!
+GameObjects.GamePlayer.ApplyPoison.Success:					Applichi {0} a {1}.
 
 GameObjects.GamePlayer.AblativeArmor.Target:        La tua armatura assorbe {0} danni aggiuntivi grazie al tuo bonus ablativo!
 GameObjects.GamePlayer.AblativeArmor.Attacker:      L'armatura di {0} assorbe {1} danni aggiuntivi grazie al suo bonus ablativo!
@@ -171,6 +172,7 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Smetti di cavalcar
 GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Sali in sella.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Devi essere equipaggiato con un cavallo.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Devi essere a cavallo per usare questo inventario.
+GameObjects.GamePlayer.Steed.SwitchSeat:					Passi al sedile {0}.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:    Forza
 GameObjects.GamePlayer.ItemBonusName.Bonus2:    Destrezza
@@ -209,6 +211,7 @@ GameObjects.GamePlayer.ItemBonusName.Bonus175:  Probabilità di colpire in comba
 GameObjects.GamePlayer.ItemBonusName.Bonus181:  Tasso successo incantesimi
 GameObjects.GamePlayer.ItemBonusName.Bonus197:  Resistenza agli attacchi perforanti
 GameObjects.GamePlayer.ItemBonusName.Bonus249:  Resistenza Essenza
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:		Non hai un livello abbastanza alto per beneficiare dei bonus di {0}. (Richiesto livello {1})
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Sei nella lava e subisci danni!
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Subisci danni pari al 34% dei tuoi punti vita massimi.
@@ -237,9 +240,12 @@ GameObjects.GamePlayer.OnLevelUp.YouRaise:            Sei salito al livello {0}!
 GameObjects.GamePlayer.OnRenaissance:                 Hai appena completato la tua Rinascita!
 
 GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} è stato disconnesso dal server!
+GameObjects.GamePlayer.GroundTarget.Set:					Imposti il bersaglio a terra su {0},{1},{2}
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:			Hai guadagnato {0} punti merito per la tua gilda!
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Ti stai muovendo e non puoi richiamare la tua cavalcatura!
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Ti muovi e interrompi la tua creazione.
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	Ti muovi e interrompi il tuo {0}!
 
 GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} si allena in varie specializzazioni.
 GameObjects.GamePlayer.OnSkillTrained.YouHave:         Ti restano {0} punti specializzazione a questo livello.
@@ -405,6 +411,8 @@ GameObjects.GamePlayer.StartAttack.YouPrepare:             Prepari il/la tuo/a {
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:         Non sei più nascosto.
 GameObjects.GamePlayer.Stealth.NowHidden:              Ora sei nascosto.
+GameObjects.GamePlayer.Stealth.CantWhileCraft:				Non puoi entrare in furtività mentre stai creando oggetti!
+GameObjects.GamePlayer.Stealth.Uncover:						{0} ti smaschera!
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Non hai più munizioni nella faretra.
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Non userai la tua faretra.
@@ -413,6 +421,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Il tuo incantesimo è sta
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Non puoi commerciare con questo giocatore perché sei fuorilegge.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Non puoi commerciare con un/una fuorilegge.
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:		{0} sta ancora commerciando con {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:			Stai ancora commerciando con {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:			Si è verificato un errore durante lo scambio con {0}.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:			{0} sta ancora creando per conto proprio.
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Sei sovraccarico.
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Sei sovraccarico e ti muovi lentamente.
@@ -434,6 +446,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:        Non puoi montare mentre s
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Non puoi montare mentre sei pietrificato!
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Non puoi montare in questa forma!
 GameObjects.GamePlayer.UseSlot.CantMountMorph:         Non puoi montare mentre l'incantesimo “{0}” è attivo su di te!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:				Non puoi montare mentre sei ammaliato!
+GameObjects.GamePlayer.UseSlot.CantMountStunned:			Non puoi montare mentre sei stordito!
+GameObjects.GamePlayer.UseSlot.CantMountDuel:				Non puoi montare durante un duello!
+GameObjects.GamePlayer.UseSlot.CantMountStealing:			Non puoi montare mentre stai derubando un altro giocatore!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Non puoi montare; sei morto.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Non puoi usare questa cavalcatura mentre porti una reliquia!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Non puoi vedere il tuo bersaglio.
@@ -471,6 +487,12 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Non puoi usare questo inv
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Effetto di carica con ID {0} non ancora implementato.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Effetto di carica con ID {0} non trovato.
 
+GameObjects.GamePlayer.YellReceive.Yells:					{0} urla: "{1}"
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} urla qualcosa in una lingua che non capisci.
+GameObjects.GamePlayer.Yell.YouYell:						Urli: "{0}"
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} ti sussurra: "{1}"
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} sussurra qualcosa in una lingua che non capisci.
+GameObjects.GamePlayer.Whisper.YouWhisper:					Sussurri: "{0}" a {1}
 GameObjects.GamePlayer.Whisper.SelectTarget:           Seleziona un bersaglio a cui sussurrare.
 GameObjects.GamePlayer.Murder:                         Hai perso 1 punto reputazione per aver ucciso {0}.
 GameObjects.GamePlayer.Multiplekills:                  Hai perso 1 punto reputazione per uccisioni multiple di {0}.
@@ -507,4 +529,8 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Hai già attivato questa 
 
 GameObjects.GamePlayer.Reputation.Zero:                La tua reputazione è ora neutrale.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:					AFK XP: avvio tra {0}s (richiesti combattimento e gettone).
+GameObjects.GamePlayer.AfkXp.GainedXp:						Il tuo gettone AFK XP ti concede {0} xp dal tuo allenamento mentre eri AFK!
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Il totale dei tuoi punti specializzazione era errato. Ora è stato corretto — per favore, allena di nuovo.
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Punto di legame sconosciuto, il tuo account è bannato, contatta un GM.

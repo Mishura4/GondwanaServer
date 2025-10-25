@@ -2616,14 +2616,12 @@ namespace DOL.GS.ServerProperties
         /// <summary>
         /// Define XP Interval Minutes
         /// </summary>
-        [ServerProperty("system", "afk_xp_interval", "Define XP Interval Minutes", 5)]
+        [ServerProperty("system", "afk_xp_interval", "Define AFK XP interval in seconds.", 20)]
         public static int AFK_XP_INTERVAL;
 
-        /// <summary>
-        /// Define XP Percentage a player gets every AFK_XP_INTERVAL
-        /// </summary>
-        [ServerProperty("system", "afk_xp_percentage", "Define XP Percentage a player gets every AFK_XP_INTERVAL", 5)]
-        public static int AFK_XP_PERCENTAGE;
+        /// <summary>AFK XP: seconds to wait after entering combat before ticks start</summary>
+        [ServerProperty("system", "afk_xp_timerbefore_ticks", "Seconds to wait (buffer) after combat with a TrainingDummy begins before AFK XP starts ticking.", 60)]
+        public static int AFK_XP_TIMERBEFORE_TICKS;
 
         /// <summary>
         /// The number of players needed to form a guild

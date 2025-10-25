@@ -212,10 +212,21 @@ namespace DOL.GS.Spells
         public override string GetDelveDescription(GameClient delveClient)
         {
             string language = delveClient?.Account?.Language ?? Properties.SERV_LANGUAGE;
-            string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.ArawnsLegion.MainDescription1");
-            string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.ArawnsLegion.MainDescription2", Spell.Radius, Spell.Duration / 1000);
-            string mainDesc3 = LanguageMgr.GetTranslation(language, "SpellDescription.ArawnsLegion.MainDescription3");
-            string description = mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + mainDesc3;
+            string description;
+
+            if (string.Equals(Spell.PackageID, "Occultist", StringComparison.OrdinalIgnoreCase))
+            {
+                string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.ArawnsLegion.MainDescription1");
+                string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.ArawnsLegion.MainDescription2", Spell.Radius, Spell.Duration / 1000);
+                string mainDesc3 = LanguageMgr.GetTranslation(language, "SpellDescription.ArawnsLegion.MainDescription3");
+                description = mainDesc1 + "\n\n" + mainDesc2 + "\n\n" + mainDesc3;
+            }
+            else
+            {
+                string mainDesc1 = LanguageMgr.GetTranslation(language, "SpellDescription.SummonMultiTemplatePets.MainDescription1");
+                string mainDesc2 = LanguageMgr.GetTranslation(language, "SpellDescription.ArawnsLegion.MainDescription2", Spell.Radius, Spell.Duration / 1000);
+                description = mainDesc1 + "\n\n" + mainDesc2;
+            }
 
             if (Spell.RecastDelay > 0)
             {

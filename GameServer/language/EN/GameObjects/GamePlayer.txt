@@ -11,6 +11,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:			You can't use poisons.
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:	Poisons can be applied only to weapons.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:		Poisons can't be re-applied on this weapon.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:			You can't poison your {0}!
+GameObjects.GamePlayer.ApplyPoison.Success:					You apply {0} to {1}.
 
 GameObjects.GamePlayer.AblativeArmor.Target:		Your armor absorbs {0} extra damage(s) due to your ablative bonus!
 GameObjects.GamePlayer.AblativeArmor.Attacker:		{0}'s armor absorbs {1} extra damage(s) of your attack due to its ablative bonus!
@@ -172,6 +173,7 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:			You dismount your steed.
 GameObjects.GamePlayer.IsOnHorse.MountSteed:			You mount your steed.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:		You must be equipped with a horse.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:		You must be on your steed to use this inventory.
+GameObjects.GamePlayer.Steed.SwitchSeat:				You switch to seat {0}.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:			Strength
 GameObjects.GamePlayer.ItemBonusName.Bonus2:			Dexterity
@@ -210,6 +212,7 @@ GameObjects.GamePlayer.ItemBonusName.Bonus175:			chance to not fumble in melee
 GameObjects.GamePlayer.ItemBonusName.Bonus181:			chance to not fumble spells
 GameObjects.GamePlayer.ItemBonusName.Bonus197:			Piercing resistance
 GameObjects.GamePlayer.ItemBonusName.Bonus249:			Essence resistance
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:	You are not high enough level to benefit from {0}'s bonuses. (Need level {1})
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:	You are in Lava and take damage!			
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:	You take 34% of your max hits in damage.
@@ -237,10 +240,13 @@ GameObjects.GamePlayer.OnLevelUp.YouGetSpec:			You get {0} more Specialization P
 GameObjects.GamePlayer.OnLevelUp.YouRaise:				You raise to level {0}!
 GameObjects.GamePlayer.OnRenaissance:				    You have just achieved your rebirth! 
 
-GameObjects.GamePlayer.OnLinkdeath.Linkdead:			{0} went linkdead!		
+GameObjects.GamePlayer.OnLinkdeath.Linkdead:			{0} went linkdead!
+GameObjects.GamePlayer.GroundTarget.Set:				You ground-target {0},{1},{2}
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:		You have earned {0} merit points for your guild!
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:		You are moving and cannot call your mount.			
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting:		You move and interrupt your crafting.			
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	You move and interrupt your {0}!
 
 GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious:		{0} trains in various specializations.			
 GameObjects.GamePlayer.OnSkillTrained.YouHave:				You have {0} specialization points left this level.		
@@ -405,7 +411,9 @@ GameObjects.GamePlayer.StartAttack.YouMustWaitAgain:		You must wait {0} more sec
 GameObjects.GamePlayer.StartAttack.YouPrepare:				You prepare your {0} ({1}.{2}s to fire {3})		
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:				You are no longer hidden!		
-GameObjects.GamePlayer.Stealth.NowHidden:					You are now hidden!	
+GameObjects.GamePlayer.Stealth.NowHidden:					You are now hidden!
+GameObjects.GamePlayer.Stealth.CantWhileCraft:				You can't stealth while crafting!
+GameObjects.GamePlayer.Stealth.Uncover:						{0} uncovers you!
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:				You have no more ammo in your quiver!		
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:			You will not use your quiver.		
@@ -414,6 +422,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:			Your spell is cancelled!
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:			You cannot trade with this player because you are an outlaw.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:			You cannot trade with this player because they are an outlaw.
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:		{0} is still trading with {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:			You are still trading with {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:			An error occurred while trading with {0}.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:			{0} is still selfcrafting.
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:		You are encumbered!			
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:	You are encumbered and move more slowly.				
@@ -435,6 +447,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:				You can't mount while you're 
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:			You can't mount while you're petrified!
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:			You can't mount while you're under this form!
 GameObjects.GamePlayer.UseSlot.CantMountMorph:				You can't mount while you're under a "{0}" enchantment!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:				You can't mount while you're mesmerized!
+GameObjects.GamePlayer.UseSlot.CantMountStunned:			You can't mount while you're stunned!
+GameObjects.GamePlayer.UseSlot.CantMountDuel:				You can't mount while you're in a duel!
+GameObjects.GamePlayer.UseSlot.CantMountStealing:			You can't mount while you're stealing another player!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:			You can't mount while you're dead.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:		You can't mount while carrying a Relic!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:				You can't see your target!
@@ -472,6 +488,12 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:			You can't use this inventor
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:	Charge effect ID {0} is not implemented yet.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:		Charge effect ID {0} not found.
 
+GameObjects.GamePlayer.YellReceive.Yells:					{0} yells, "{1}"
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} yells something in a language you don't understand.
+GameObjects.GamePlayer.Yell.YouYell:						You yell, "{0}"
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} whispers to you, "{1}"
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} whispers something in a language you don't understand.
+GameObjects.GamePlayer.Whisper.YouWhisper:					You whisper, "{0}" to {1}
 GameObjects.GamePlayer.Whisper.SelectTarget:				Select a target to whisper to!
 GameObjects.GamePlayer.Murder:								You have lost 1 reputation point due to killing {0}.
 GameObjects.GamePlayer.Multiplekills:						You have lost 1 reputation point due to killing {0} multiple times.
@@ -508,4 +530,8 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:	You've already activated this
 
 GameObjects.GamePlayer.Reputation.Zero:					Your reputation is now neutral.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:				AFK XP: starting in {0}s (combat & token required).
+GameObjects.GamePlayer.AfkXp.GainedXp:					Your AFK XP token grants you {0} xp from your training while AFK!
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:		Your Specs points total was incorrect. Now corrected, please train again.
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Unknown bind point, your account is banned, contact a GM.

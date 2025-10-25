@@ -280,10 +280,11 @@ SpellDescription.Occultist.BringerOfDeath2:				Your movement speed increases by 
 SpellDescription.ArawnsLegion.MainDescription1:			Call upon Arawn to conjure his evil army upon the battlefield.
 SpellDescription.ArawnsLegion.MainDescription2:			The legion attacks all enemy targets in range (radius of {0}) for {1} seconds.
 SpellDescription.ArawnsLegion.MainDescription3:			You can only control servants while in human form, Decrepit form, or Spirit form.
+SpellDescription.SummonMultiTemplatePets.MainDescription1:	Summons a legion of servants to help you in the battlefield.
 SpellDescription.DamageReturn.MainDescription:			Reflects {0}% of incoming melee, ranged, and direct spell damage (excluding DoTs) back to the attacker as {1} while active.
-SpellDescription.OffProcShear.Main1:					Retire tout proc offensif actif de la cible.
-SpellDescription.OffProcShear.Main2:					Applique un proc de remplacement maudit dont le sous-sort soigne les ennemis de la cible lorsqu'elle frappe.
-SpellDescription.OffProcShear.ReplacementHeader:		Proc de remplacement :
+SpellDescription.OffProcShear.Main1:				Remove any active Offensive Proc(s) from the target.
+SpellDescription.OffProcShear.Main2:				Applies a cursed replacement proc whose subspell heals the target's enemies on their hits.
+SpellDescription.OffProcShear.ReplacementHeader:		Replacement proc:
 
 
 # ML Spells ShortDescriptions

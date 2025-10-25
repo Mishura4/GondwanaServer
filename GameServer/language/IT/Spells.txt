@@ -279,6 +279,7 @@ SpellDescription.Occultist.BringerOfDeath2:				Velocità di movimento +{0}% anch
 SpellDescription.ArawnsLegion.MainDescription1:			Invoca Arawn per evocare il suo esercito malvagio sul campo di battaglia.
 SpellDescription.ArawnsLegion.MainDescription2:			La legione attacca tutti i bersagli nemici nel raggio (raggio di {0}) per {1} secondi.
 SpellDescription.ArawnsLegion.MainDescription3:			Puoi controllare i servitori solo in forma umana, in Forma Decrepit o in Forma Spirit.
+SpellDescription.SummonMultiTemplatePets.MainDescription1:		Evoca una legione di servitori per aiutarti sul campo di battaglia.
 SpellDescription.DamageReturn.MainDescription:			Restituisce il {0}% del danno diretto magico (no DoT), in mischia e da proiettili in {1} all'attaccante finché attivo.
 SpellDescription.OffProcShear.Main1:					Rimuove i proc offensivi attivi dal bersaglio.
 SpellDescription.OffProcShear.Main2:					Applica un proc maledetto di sostituzione i cui sotto-incantesimi curano i nemici del bersaglio quando colpiscono.

@@ -49,6 +49,10 @@ Commands.Players.Duel.CantThisFormSelf:			Vous ne pouvez pas commencer un duel s
 Commands.Players.Duel.CantThisFormTarget:		{0} ne peut pas commencer un duel pour le moment.
 Commands.Players.Duel.DeadSelf:					Vous ne pouvez pas commencer un duel en étant mort·e.
 Commands.Players.Duel.DeadTarget:				{0} est mort·e et incapable de participer à un duel.
+Commands.Players.Duel.CraftingSelf:				Vous ne pouvez pas défier en duel alors que fabriquez un objet !
+Commands.Players.Duel.CraftingTarget:			{0} est en train de fabriquer un objet et ne peut pas participer à un duel maintenant !
+Commands.Players.Duel.StealingSelf:				Vous ne pouvez pas défier en duel tout en volant un joueur !
+Commands.Players.Duel.StealingTarget:			{0} est affairé à voler quelqu'un et ne peut pas participer à un duel maintenant !
 Commands.Players.Duel.Linkdead:					Vous ne pouvez pas défier en duel si vous ou votre cible êtes en linkdead ou en train de quitter.
 Commands.Players.Duel.AFKSelf:					Vous ne pouvez pas défier en duel pendant que vous êtes AFK.
 Commands.Players.Duel.AFKTarget:				{0} est AFK et incapable de participer à un duel maintenant.

@@ -1,7 +1,19 @@
-Commands.Players.Afk.Description:	Bascule votre statut en AFK. Il est possible d'y ajouter un message.
-Commands.Players.Afk.Off:			Vous n'êtes plus considéré·e comme étant AFK.
-Commands.Players.Afk.On:			Vous êtes maintenant considéré·e comme étant AFK.
-Commands.Players.Afk.Usage:			Usage : '/afk <text>'
-Commands.Players.Afk.Message:		Vous êtes désormais AFK avec le message : {0}
-Commands.Players.Afk.Mode:			Vous êtes en mode AFK, déplacez-vous à nouveau pour le désactiver.
-Commands.Players.Afk.Wait:			Vous devez attendre avant de pouvoir être AFK de nouveau.
+Commands.Players.Afk.Description:			Bascule votre statut en AFK. Il est possible d'y ajouter un message.
+Commands.Players.Afk.Off:					Vous n'êtes plus considéré·e comme étant AFK.
+Commands.Players.Afk.On:					Vous êtes maintenant considéré·e comme étant AFK.
+Commands.Players.Afk.Usage:					Usage : '/afk <text>'
+Commands.Players.Afk.Message:				Vous êtes désormais AFK avec le message : {0}
+Commands.Players.Afk.Mode:					Vous êtes en mode AFK, déplacez-vous à nouveau pour le désactiver.
+Commands.Players.Afk.Wait:					Vous devez attendre avant de pouvoir être AFK de nouveau.
+
+Commands.Players.Afk.CannotWhileDuel:		Vous ne pouvez pas utiliser le mode AFK durant un combat en duel !
+Commands.Players.Afk.CannotWhileCombat:		Vous ne pouvez pas utiliser le mode AFK en combat !
+Commands.Players.Afk.CannotWhileStealing:	Vous ne pouvez pas utiliser le mode AFK tout en volant un joueur !
+Commands.Players.Afk.CannotWhileRiding:		Vous ne pouvez pas utiliser le mode AFK en étant à cheval !
+Commands.Players.Afk.CannotWhileMoving:		Vous ne pouvez pas utiliser le mode AFK lorsque vous vous déplacez !
+Commands.Players.Afk.CannotWhileJailed:		Vous ne pouvez pas utiliser le mode AFK en prison !
+Commands.Players.Afk.CannotWhileStunned:	Vous ne pouvez pas utiliser le mode AFK en étant étourdi.
+Commands.Players.Afk.CannotWhileMezzed:		Vous ne pouvez pas utiliser le mode AFK en étant hypnotisé.
+Commands.Players.Afk.CannotWhileDamned:		Vous ne pouvez pas utiliser le mode AFK en étant damné.
+Commands.Players.Afk.CannotWhileCrafting:	Vous ne pouvez pas utiliser le mode AFK alors que fabriquez un objet !
+Commands.Players.Afk.CannotWhilekMorphed:	Vous ne pouvez pas utiliser le mode AFK en étant sous l'effet d'un enchantement "{0}"!

@@ -279,6 +279,7 @@ SpellDescription.Occultist.BringerOfDeath2:				Viteza de mișcare +{0}% și în 
 SpellDescription.ArawnsLegion.MainDescription1:			Invocă-l pe Arawn pentru a-și chema armata malefică pe câmpul de luptă.
 SpellDescription.ArawnsLegion.MainDescription2:			Legiunea atacă toate țintele inamice aflate în rază (raza de {0}) timp de {1} secunde.
 SpellDescription.ArawnsLegion.MainDescription3:			Poți controla servitori doar în formă umană, în forma Decrepit sau în forma Spirit.
+SpellDescription.SummonMultiTemplatePets.MainDescription1:		Cheme o legiune de servitori să te ajute pe câmpul de luptă.
 SpellDescription.DamageReturn.MainDescription:			Ricosează {0}% din daunele directe magice (nu DoT), melee și de proiectil în {1} către atacator cât timp este activ.
 SpellDescription.OffProcShear.Main1:					Înlătură proc-urile ofensive active ale țintei.
 SpellDescription.OffProcShear.Main2:					Aplică un proc blestemat de înlocuire ale cărui sub-vrăji îi vindecă pe inamicii țintei când lovesc.

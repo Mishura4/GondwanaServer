@@ -279,6 +279,7 @@ SpellDescription.Occultist.BringerOfDeath2:				Bewegingssnelheid +{0}% ook in sp
 SpellDescription.ArawnsLegion.MainDescription1:			Roep Arawn aan om zijn duivelse leger op het slagveld op te roepen.
 SpellDescription.ArawnsLegion.MainDescription2:			Het legioen valt alle vijandelijke doelen binnen bereik aan (straal {0}) gedurende {1} seconden.
 SpellDescription.ArawnsLegion.MainDescription3:			Je kunt dienaren alleen besturen in menselijke vorm, in Decrepit-vorm of in Spirit-vorm.
+SpellDescription.SummonMultiTemplatePets.MainDescription1:		Roept een legioen dienaren op om je op het slagveld te helpen.
 SpellDescription.DamageReturn.MainDescription:			Kaast {0}% van directe magische (geen DoT), melee‑ en projectielschade terug in {1} naar de aanvaller zolang actief.
 SpellDescription.OffProcShear.Main1:					Verwijdert actieve offensieve procs van het doelwit.
 SpellDescription.OffProcShear.Main2:					Brengt een vervloekte vervangende proc aan waarvan de subspreuken de vijanden van het doelwit healen wanneer zij raken.

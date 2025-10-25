@@ -10,6 +10,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Bạn không thể d
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Chỉ có thể tẩm độc lên vũ khí.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Bạn không thể tẩm lại độc lên vũ khí này.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Bạn không thể tẩm độc cho {0}!
+GameObjects.GamePlayer.ApplyPoison.Success:					Bạn bôi {0} lên {1}.
 
 GameObjects.GamePlayer.AblativeArmor.Target:        Giáp của bạn hấp thụ thêm {0} sát thương nhờ hiệu ứng giáp tiêu hao!
 GameObjects.GamePlayer.AblativeArmor.Attacker:      Giáp của {0} hấp thụ thêm {1} sát thương nhờ hiệu ứng giáp tiêu hao!
@@ -171,6 +172,7 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Bạn xuống ng�
 GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Bạn lên ngựa.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Bạn cần trang bị một con ngựa.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Bạn phải đang cưỡi ngựa để dùng kho đồ này.
+GameObjects.GamePlayer.Steed.SwitchSeat:					Bạn chuyển sang chỗ ngồi {0}.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:    Sức mạnh
 GameObjects.GamePlayer.ItemBonusName.Bonus2:    Khéo léo
@@ -209,6 +211,7 @@ GameObjects.GamePlayer.ItemBonusName.Bonus175:  Tỉ lệ đánh trúng trong gi
 GameObjects.GamePlayer.ItemBonusName.Bonus181:  Tỉ lệ thành công phép
 GameObjects.GamePlayer.ItemBonusName.Bonus197:  Kháng đòn xuyên
 GameObjects.GamePlayer.ItemBonusName.Bonus249:  Kháng Bản chất
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:		Bạn không đủ cấp để nhận lợi ích từ các thưởng của {0}. (Cần cấp {1})
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Bạn đang đứng trong dung nham và nhận sát thương!
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Bạn nhận sát thương bằng 34% HP tối đa.
@@ -237,9 +240,12 @@ GameObjects.GamePlayer.OnLevelUp.YouRaise:            Bạn đã lên cấp {0}!
 GameObjects.GamePlayer.OnRenaissance:                 Bạn vừa hoàn tất Tái Sinh!
 
 GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} đã bị ngắt kết nối khỏi máy chủ!
+GameObjects.GamePlayer.GroundTarget.Set:					Bạn đặt mục tiêu mặt đất tại {0},{1},{2}
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:			Bạn đã kiếm được {0} điểm công trạng cho bang hội của mình!
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Bạn đang di chuyển và không thể gọi thú cưỡi!
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Bạn di chuyển và làm gián đoạn chế tác.
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	Bạn di chuyển và làm gián đoạn {0} của mình!
 
 GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} đang huấn luyện trong nhiều chuyên môn.
 GameObjects.GamePlayer.OnSkillTrained.YouHave:         Bạn còn {0} điểm chuyên môn ở cấp này.
@@ -405,6 +411,8 @@ GameObjects.GamePlayer.StartAttack.YouPrepare:             Bạn chuẩn bị {0
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:         Bạn không còn ẩn nữa.
 GameObjects.GamePlayer.Stealth.NowHidden:              Bạn đã ẩn mình.
+GameObjects.GamePlayer.Stealth.CantWhileCraft:				Bạn không thể tàng hình khi đang chế tạo!
+GameObjects.GamePlayer.Stealth.Uncover:						{0} phát hiện bạn!
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Bạn đã hết đạn trong ống tên.
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Bạn sẽ không dùng ống tên.
@@ -413,6 +421,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Phép của bạn đã b�
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Bạn không thể giao dịch với người chơi này vì bạn là kẻ ngoài vòng pháp luật.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Bạn không thể giao dịch với kẻ ngoài vòng pháp luật.
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:		{0} vẫn đang giao dịch với {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:			Bạn vẫn đang giao dịch với {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:			Đã xảy ra lỗi khi giao dịch với {0}.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:			{0} vẫn đang tự chế tạo.
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Bạn đang quá tải.
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Bạn đang quá tải và di chuyển chậm.
@@ -434,6 +446,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:        Không thể lên ngựa 
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Không thể lên ngựa khi đang hóa đá!
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Không thể lên ngựa ở hình dạng này!
 GameObjects.GamePlayer.UseSlot.CantMountMorph:         Không thể lên ngựa khi đang chịu phép “{0}”!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:				Bạn không thể cưỡi khi đang bị mê hoặc (mezz)!
+GameObjects.GamePlayer.UseSlot.CantMountStunned:			Bạn không thể cưỡi khi đang bị choáng!
+GameObjects.GamePlayer.UseSlot.CantMountDuel:				Bạn không thể cưỡi trong khi đấu tay đôi!
+GameObjects.GamePlayer.UseSlot.CantMountStealing:			Bạn không thể cưỡi khi đang trộm từ người chơi khác!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Bạn không thể lên ngựa; bạn đã chết.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Bạn không thể dùng thú cưỡi khi đang mang báu vật!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Bạn không nhìn thấy mục tiêu.
@@ -471,6 +487,12 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Bạn không thể dùng 
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Hiệu ứng kích hoạt với ID {0} chưa được triển khai.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Không tìm thấy hiệu ứng kích hoạt với ID {0}.
 
+GameObjects.GamePlayer.YellReceive.Yells:					{0} hét: "{1}"
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} hét điều gì đó bằng ngôn ngữ bạn không hiểu.
+GameObjects.GamePlayer.Yell.YouYell:						Bạn hét: "{0}"
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} thì thầm với bạn: "{1}"
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} thì thầm điều gì đó bằng ngôn ngữ bạn không hiểu.
+GameObjects.GamePlayer.Whisper.YouWhisper:					Bạn thì thầm: "{0}" với {1}
 GameObjects.GamePlayer.Whisper.SelectTarget:           Hãy chọn mục tiêu để thì thầm.
 GameObjects.GamePlayer.Murder:                         Bạn mất 1 điểm danh tiếng vì đã giết {0}.
 GameObjects.GamePlayer.Multiplekills:                  Bạn mất 1 điểm danh tiếng vì nhiều lần giết {0}.
@@ -507,4 +529,8 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Bạn đã kích hoạt t
 
 GameObjects.GamePlayer.Reputation.Zero:                Danh tiếng của bạn hiện là trung lập.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:					AFK XP: bắt đầu sau {0}s (cần giao chiến & có token).
+GameObjects.GamePlayer.AfkXp.GainedXp:						Token AFK XP của bạn ban cho {0} xp từ quá trình luyện tập khi bạn AFK!
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Tổng điểm chuyên môn của bạn không chính xác. Đã được sửa — vui lòng huấn luyện lại.
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Điểm liên kết không rõ, tài khoản của bạn đã bị cấm, hãy liên hệ GM.

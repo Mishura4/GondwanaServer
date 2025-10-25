@@ -24,6 +24,10 @@ Items.Specialitems.GuarkRingUsagePetrified:			You can't use celestial magic whil
 Items.Specialitems.GuarkRingUsageDamned:			You can't use celestial magic while you're damned!
 Items.Specialitems.GuarkRingUsageCantThisForm:		You can't use celestial magic while you're under this form!
 Items.Specialitems.GuarkRingUsageMorphed:			You can't use celestial magic while you're under a "{0}" enchantment!
+Items.Specialitems.GuarkRingUsageCrafting:			You can't use celestial magic while you're crafting!
+Items.Specialitems.GuarkRingUsageDuel:				You can't use celestial magic while you're in a duel!
+Items.Specialitems.GuarkRingUsageStealing:			You can't use celestial magic while you're stealing another player!
+Items.Specialitems.GuarkRingUsageAFK:				You can't use celestial magic while you're AFK!
 Items.Specialitems.GuarkRingCannotUseHere:			You can't use this item here.
 Items.Specialitems.GuarkRingDoNotMove:				You must remain at the same place to use this item.
 Items.Specialitems.GuarkRingWaitBeforeUse:			You've been in combat recently, so you have to wait to be able to use this item again.
@@ -38,3 +42,5 @@ Items.Specialitems.StorageBag.BadItem:				You cannot put this item in this bag!
 
 Items.Specialitems.DieTriggerSpell.Destroyed:		Your {0} shatters after triggering on death!
 Items.Specialitems.DieTriggerSpell.FailDestroy:		Failed to destroy item for some reason!
+
+Items.Specialitems.AfkXpToken.DepletedRemoved:		Your {0} is depleted and has been removed from your inventory.

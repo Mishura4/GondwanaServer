@@ -10,6 +10,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Nu poți folosi aces
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Otrăvurile pot fi aplicate doar pe arme.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Nu poți reaplica otrava pe această armă.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Nu îți poți otrăvi {0}!
+GameObjects.GamePlayer.ApplyPoison.Success:					Aplici {0} pe {1}.
 
 GameObjects.GamePlayer.AblativeArmor.Target:        Armura ta absoarbe {0} daune suplimentare datorită bonusului ablațiv!
 GameObjects.GamePlayer.AblativeArmor.Attacker:      Armura lui/ei {0} absoarbe {1} daune suplimentare datorită bonusului ablațiv!
@@ -171,6 +172,7 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Te dai jos de pe a
 GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Te urci în șa.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Trebuie să fii echipat cu un cal.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Trebuie să fii călare pentru a folosi acest inventar.
+GameObjects.GamePlayer.Steed.SwitchSeat:					Te muți pe locul {0}.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:    Forță
 GameObjects.GamePlayer.ItemBonusName.Bonus2:    Dexteritate
@@ -209,6 +211,7 @@ GameObjects.GamePlayer.ItemBonusName.Bonus175:  Șansă de lovire în luptă
 GameObjects.GamePlayer.ItemBonusName.Bonus181:  Rată de reușită a vrăjilor
 GameObjects.GamePlayer.ItemBonusName.Bonus197:  Rezistență la atacuri perforante
 GameObjects.GamePlayer.ItemBonusName.Bonus249:  Rezistență la esență
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:		Nu ai nivel suficient pentru a beneficia de bonusurile lui/ale lui {0}. (Necesită nivel {1})
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Ești în lavă și primești daune!
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Primești daune egale cu 34% din punctele tale de viață maxime.
@@ -237,9 +240,12 @@ GameObjects.GamePlayer.OnLevelUp.YouRaise:            Ai urcat la nivelul {0}!
 GameObjects.GamePlayer.OnRenaissance:                 Tocmai ți-ai încheiat Renașterea!
 
 GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} a fost deconectat(ă) de la server!
+GameObjects.GamePlayer.GroundTarget.Set:					Setezi ținta pe sol la {0},{1},{2}
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:			Ai câștigat {0} puncte de merit pentru breasla ta!
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Te miști și nu îți poți chema montura!
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Te miști și îți întrerupi fabricarea.
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	Te-ai mișcat și ți-ai întrerupt {0}!
 
 GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} se antrenează în diverse specializări.
 GameObjects.GamePlayer.OnSkillTrained.YouHave:         Îți mai rămân {0} puncte de specializare la acest nivel.
@@ -405,6 +411,8 @@ GameObjects.GamePlayer.StartAttack.YouPrepare:             Îți pregătești {0
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:         Nu mai ești ascuns.
 GameObjects.GamePlayer.Stealth.NowHidden:              Acum ești ascuns.
+GameObjects.GamePlayer.Stealth.CantWhileCraft:				Nu te poți furișa în timp ce confecționezi!
+GameObjects.GamePlayer.Stealth.Uncover:						{0} te descoperă!
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        Nu mai ai muniție în tolbă.
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Nu îți vei folosi tolba.
@@ -413,6 +421,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Vraja ta a fost anulată.
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Nu poți face comerț cu acest jucător deoarece ești proscris.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Nu poți face comerț cu un/ o proscris(ă).
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:		{0} încă face schimb cu {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:			Încă faci schimb cu {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:			A apărut o eroare în timpul schimbului cu {0}.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:			{0} încă confecționează singur.
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Ești supraîncărcat.
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Ești supraîncărcat și te miști încet.
@@ -434,6 +446,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:        Nu poți încăleca cât 
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Nu poți încăleca cât timp ești împietrit!
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:      Nu poți încăleca în această formă!
 GameObjects.GamePlayer.UseSlot.CantMountMorph:         Nu poți încăleca cât timp vraja „{0}” este asupra ta!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:				Nu poți încăleca atunci când ești amețit (mezz)!
+GameObjects.GamePlayer.UseSlot.CantMountStunned:			Nu poți încăleca atunci când ești lovit cu stunn!
+GameObjects.GamePlayer.UseSlot.CantMountDuel:				Nu poți încăleca în timpul unui duel!
+GameObjects.GamePlayer.UseSlot.CantMountStealing:			Nu poți încăleca în timp ce jefuiești un alt jucător!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Nu poți încăleca; ești mort.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Nu poți folosi această montură cât timp porți o relicvă!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Nu îți poți vedea ținta.
@@ -471,6 +487,12 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Nu poți folosi acest inv
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Efectul de încărcare cu ID {0} nu este încă implementat.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Efectul de încărcare cu ID {0} nu a fost găsit.
 
+GameObjects.GamePlayer.YellReceive.Yells:					{0} strigă: "{1}"
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} strigă ceva într-o limbă pe care nu o înțelegi.
+GameObjects.GamePlayer.Yell.YouYell:						Strigi: "{0}"
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} îți șoptește: "{1}"
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} șoptește ceva într-o limbă pe care nu o înțelegi.
+GameObjects.GamePlayer.Whisper.YouWhisper:					Șoptești: "{0}" către {1}
 GameObjects.GamePlayer.Whisper.SelectTarget:           Selectează o țintă pentru a șopti.
 GameObjects.GamePlayer.Murder:                         Ai pierdut 1 punct de reputație pentru că l-ai/ai ucis-o pe {0}.
 GameObjects.GamePlayer.Multiplekills:                  Ai pierdut 1 punct de reputație pentru multiple ucideri ale lui/ei {0}.
@@ -507,4 +529,8 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Ai activat deja această 
 
 GameObjects.GamePlayer.Reputation.Zero:                Reputația ta este acum neutră.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:					AFK XP: pornire în {0}s (necesită luptă și jeton).
+GameObjects.GamePlayer.AfkXp.GainedXp:						Jetonul tău AFK XP îți oferă {0} xp din antrenamentul făcut în AFK!
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Totalul punctelor tale de specializare era incorect. Acum a fost corectat — te rugăm să te antrenezi din nou.
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Punct de legare necunoscut, contul tău este banat, contactează un GM.

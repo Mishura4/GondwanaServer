@@ -10,6 +10,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:          Tyto jedy nemůžeš
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Jedy lze aplikovat pouze na zbraně.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:       Na tuto zbraň nemůžeš jed znovu nanést.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:            Nemůžeš otrávit svůj/svou {0}!
+GameObjects.GamePlayer.ApplyPoison.Success:					Aplikuješ {0} na {1}.
 
 GameObjects.GamePlayer.AblativeArmor.Target:        Tvá zbroj absorbuje díky tvému ablativnímu bonusu {0} dodatečného poškození!
 GameObjects.GamePlayer.AblativeArmor.Attacker:      Zbroj {0} absorbuje díky jeho/jejímu ablativnímu bonusu {1} dodatečného poškození!
@@ -171,6 +172,7 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:               Sesedáš ze svéh
 GameObjects.GamePlayer.IsOnHorse.MountSteed:                  Nasedáš na své jízdní zvíře.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:           Musíš mít vybaveného koně.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:             Pro použití tohoto inventáře musíš sedět na koni.
+GameObjects.GamePlayer.Steed.SwitchSeat:					Přesedáš na sedadlo {0}.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:    Síla
 GameObjects.GamePlayer.ItemBonusName.Bonus2:    Obratnost
@@ -209,6 +211,7 @@ GameObjects.GamePlayer.ItemBonusName.Bonus175:  Šance zásahu v boji
 GameObjects.GamePlayer.ItemBonusName.Bonus181:  Úspěšnost kouzel
 GameObjects.GamePlayer.ItemBonusName.Bonus197:  Odolnost proti bodným útokům
 GameObjects.GamePlayer.ItemBonusName.Bonus249:  Odolnost proti esenci
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:		Nemáš dostatečnou úroveň, abys využil bonusy {0}. (Je potřeba úroveň {1})
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:     Jsi v lávě a utrpíš poškození!
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:  Utrpíš poškození ve výši 34 % svých maximálních životů.
@@ -237,9 +240,12 @@ GameObjects.GamePlayer.OnLevelUp.YouRaise:            Postoupil/a jsi na úrove�
 GameObjects.GamePlayer.OnRenaissance:                 Právě jsi dokončil/a své Znovuzrození!
 
 GameObjects.GamePlayer.OnLinkdeath.Linkdead:          {0} byl/a odpojen/a od serveru!
+GameObjects.GamePlayer.GroundTarget.Set:					Nastavuješ pozemní cíl na {0},{1},{2}
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:			Získal jsi {0} zásluh pro svou guildu!
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:  Pohybuješ se a nemůžeš přivolat své jízdní zvíře!
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting: Pohybuješ se a přerušuješ svou výrobu.
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	Pohneš se a přerušíš svůj {0}!
 
 GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious: {0} se cvičí v různých specializacích.
 GameObjects.GamePlayer.OnSkillTrained.YouHave:         Na této úrovni ti zbývá {0} bodů specializace.
@@ -405,6 +411,8 @@ GameObjects.GamePlayer.StartAttack.YouPrepare:             Připravuješ svůj/s
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:         Už nejsi skrytý/skrytá.
 GameObjects.GamePlayer.Stealth.NowHidden:              Nyní jsi skrytý/skrytá.
+GameObjects.GamePlayer.Stealth.CantWhileCraft:				Nemůžeš se skrýt, když vyrábíš!
+GameObjects.GamePlayer.Stealth.Uncover:						{0} tě odhaluje!
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:        V toulci ti došla munice.
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:      Svůj toulec nebudeš používat.
@@ -413,6 +421,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:    Tvé kouzlo bylo zrušeno
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:     Nemůžeš obchodovat s tímto hráčem, protože jsi psanec.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:      Nemůžeš obchodovat s psancem.
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:		{0} stále obchoduje s {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:			Stále obchoduješ s {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:			Při obchodování s {0} došlo k chybě.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:			{0} stále vyrábí sám pro sebe.
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:              Jsi přetížený/přetížená.
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:    Jsi přetížený/přetížená a pohybuješ se pomalu.
@@ -434,6 +446,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:        Nemůžeš nasednout, kdy
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:     Nemůžeš nasednout, když jsi zkamenělý/zkamenělá!
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:      V této podobě nemůžeš nasednout!
 GameObjects.GamePlayer.UseSlot.CantMountMorph:         Nemůžeš nasednout, dokud na tobě trvá kouzlo „{0}“!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:				Nemůžeš nasednout, když jsi omámen (mezz)!
+GameObjects.GamePlayer.UseSlot.CantMountStunned:			Nemůžeš nasednout, když jsi omráčen!
+GameObjects.GamePlayer.UseSlot.CantMountDuel:				Nemůžeš nasednout během souboje!
+GameObjects.GamePlayer.UseSlot.CantMountStealing:			Nemůžeš nasednout, když okrádáš jiného hráče!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:     Nemůžeš nasednout; jsi mrtvý/mrtvá.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:  Toto jízdní zvíře nemůžeš použít, když neseš relikvii!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:          Nevidíš svůj cíl.
@@ -471,6 +487,12 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:     Tento inventář nemůže
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:  Nabíjecí efekt s ID {0} ještě není implementován.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:   Nabíjecí efekt s ID {0} nebyl nalezen.
 
+GameObjects.GamePlayer.YellReceive.Yells:					{0} křičí: "{1}"
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} křičí něco v jazyce, kterému nerozumíš.
+GameObjects.GamePlayer.Yell.YouYell:						Křičíš: "{0}"
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} ti šeptá: "{1}"
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} šeptá něco v jazyce, kterému nerozumíš.
+GameObjects.GamePlayer.Whisper.YouWhisper:					Šeptáš: "{0}" hráči {1}
 GameObjects.GamePlayer.Whisper.SelectTarget:           Vyber cíl, kterému budeš šeptat.
 GameObjects.GamePlayer.Murder:                         Ztratil/a jsi 1 bod pověsti za zabití {0}.
 GameObjects.GamePlayer.Multiplekills:                  Ztratil/a jsi 1 bod pověsti za vícenásobná zabití {0}.
@@ -507,4 +529,8 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:     Tuto sedlovou tašku už 
 
 GameObjects.GamePlayer.Reputation.Zero:                Tvá pověst je nyní neutrální.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:					AFK XP: start za {0}s (vyžaduje boj a žeton).
+GameObjects.GamePlayer.AfkXp.GainedXp:						TVŮJ AFK XP žeton ti uděluje {0} xp z tréninku během AFK!
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect: Celkový počet tvých bodů specializace byl nesprávný. Nyní opraveno — prosím, trénuj znovu.
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Neznámý bind point, tvůj účet je zabanován, kontaktuj GM.

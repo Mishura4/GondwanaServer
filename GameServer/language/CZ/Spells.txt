@@ -279,6 +279,7 @@ SpellDescription.Occultist.BringerOfDeath2:				Rychlost pohybu +{0}% i ve speedw
 SpellDescription.ArawnsLegion.MainDescription1:			Přivolej Arawna, aby na bojišti vyvolal své zlé vojsko.
 SpellDescription.ArawnsLegion.MainDescription2:			Legie útočí na všechny nepřátelské cíle v dosahu (poloměr {0}) po dobu {1} sekund.
 SpellDescription.ArawnsLegion.MainDescription3:			Služebníky můžeš ovládat pouze v lidské podobě, v Decrepit formě nebo ve Spirit formě.
+SpellDescription.SummonMultiTemplatePets.MainDescription1:		Přivolá legii služebníků, aby ti pomohli na bojišti.
 SpellDescription.DamageReturn.MainDescription:			Vrací {0}% přímého magického (ne DoT), melee i projektilového poškození v {1} útočníkovi po dobu trvání.
 SpellDescription.OffProcShear.Main1:					Odstraní aktivní ofenzivní proky z cíle.
 SpellDescription.OffProcShear.Main2:					Ap likuje prok prokletí náhrady, jehož podkouzla léčí nepřátele cíle, když zasáhnou.

@@ -69,6 +69,7 @@ namespace DOL.GS
         protected readonly bool m_uninterruptible = false;
         protected readonly bool m_isfocus = false;
         protected readonly bool m_minotaurspell = false;
+        protected readonly string m_packageID = string.Empty;
         // warlocks
         protected readonly bool m_isprimary = false;
         protected readonly bool m_issecondary = false;
@@ -351,6 +352,11 @@ namespace DOL.GS
             get { return m_isfocus; }
         }
 
+        public string PackageID
+        {
+            get { return m_packageID; }
+        }
+
         /// <summary>
         /// This spell can be sheared even if cast by self
         /// </summary>
@@ -484,6 +490,7 @@ namespace DOL.GS
             m_moveCast = dbspell.MoveCast;
             m_uninterruptible = dbspell.Uninterruptible;
             m_isfocus = dbspell.IsFocus;
+            m_packageID = dbspell.PackageID ?? string.Empty;
             // warlocks
             m_isprimary = dbspell.IsPrimary;
             m_issecondary = dbspell.IsSecondary;
@@ -545,6 +552,7 @@ namespace DOL.GS
             m_allowbolt = spell.AllowBolt;
             m_sharedtimergroup = spell.SharedTimerGroup;
             m_minotaurspell = spell.m_minotaurspell;
+            m_packageID = spell.PackageID;
             // Params
             m_paramCache = new Dictionary<string, List<string>>(spell.m_paramCache);
         }

@@ -11,6 +11,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:	Ihr könnt kein Gifte anwende
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:	Gifte können nur auf Waffen aufgetragen werden.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:	Du kannst auf diese Waffe kein Gift erneut auftragen.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:	Du kannst deine/n {0} nicht vergiften!
+GameObjects.GamePlayer.ApplyPoison.Success:					Ihr tragt {0} auf {1} auf.
 
 GameObjects.GamePlayer.AblativeArmor.Target:	Deine Rüstung absorbiert dank deines Abalativ‑Bonus {0} zusätzlichen Schaden!
 GameObjects.GamePlayer.AblativeArmor.Attacker:	{0}s Rüstung absorbiert dank ihres/seines Abalativ‑Bonus {1} zusätzlichen Schaden!
@@ -172,6 +173,7 @@ GameObjects.GamePlayer.IsOnHorse.DismountSteed:	Ihr steigt von Eurem Pferd ab.
 GameObjects.GamePlayer.IsOnHorse.MountSteed:	Ihr besteigt Euer Pferd.
 GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:	Du musst mit einem Pferd ausgerüstet sein.
 GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:	Du musst auf deinem Pferd sitzen, um dieses Inventar zu verwenden.
+GameObjects.GamePlayer.Steed.SwitchSeat:					Ihr wechselt auf Sitz {0}.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:	Stärke
 GameObjects.GamePlayer.ItemBonusName.Bonus2:	Geschicklichkeit
@@ -210,6 +212,7 @@ GameObjects.GamePlayer.ItemBonusName.Bonus175:	Trefferchance im Kampf
 GameObjects.GamePlayer.ItemBonusName.Bonus181:	Zaubererfolgsrate
 GameObjects.GamePlayer.ItemBonusName.Bonus197:	Resistenz gegen durchbohrende Angriffe
 GameObjects.GamePlayer.ItemBonusName.Bonus249:	Resistenz gegen Essenz
+GameObjects.GamePlayer.ItemBonusLevel.NotHighEnough:		Ihr seid nicht hoch genugstufig, um von den Boni von {0} zu profitieren. (Benötigt Stufe {1})
 
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:	Ihr erleidet Schaden durch die Lava!
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:	Ihr erleidet 34% Eurer maximalen Trefferpunkte als Schaden.
@@ -238,9 +241,12 @@ GameObjects.GamePlayer.OnLevelUp.YouRaise:	Ihr steigt zur {0}. Erfahrungsstufe a
 GameObjects.GamePlayer.OnRenaissance:	Du hast soeben deine Wiedergeburt vollendet!
 
 GameObjects.GamePlayer.OnLinkdeath.Linkdead:	Die Verbindung zu {0} wurde unterbrochen!
+GameObjects.GamePlayer.GroundTarget.Set:					Ihr setzt das Bodenziel auf {0},{1},{2}
+GameObjects.GamePlayer.Guild.MeritPoints.Earned:			Ihr habt {0} Verdienstpunkte für Eure Gilde erhalten!
 
 GameObjects.GamePlayer.OnPlayerMove.CannotCallMount:	Ihr bewegt Euch und könnt deshalb Euer Pferd nicht rufen.
 GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting:	Ihr bewegt Euch und unterbrecht damit Eure Arbeit.
+GameObjects.GamePlayer.OnPlayerMove.InterruptRangedAttack:	Ihr bewegt Euch und unterbrecht Eure {0}!
 
 GameObjects.GamePlayer.OnSkillTrained.TrainsInVarious:	{0} trainiert verschiedene Spezialisierungen.
 GameObjects.GamePlayer.OnSkillTrained.YouHave:	Ihr habt {0} Punkte übrig.
@@ -406,6 +412,8 @@ GameObjects.GamePlayer.StartAttack.YouPrepare:	Ihr bereitet Euren {0} vor und k�
 
 GameObjects.GamePlayer.Stealth.NoLongerHidden:	Ihr seid nicht mehr länger getarnt!
 GameObjects.GamePlayer.Stealth.NowHidden:	Ihr seid nun getarnt!
+GameObjects.GamePlayer.Stealth.CantWhileCraft:				Ihr könnt Euch nicht verstecken, während Ihr herstellt!
+GameObjects.GamePlayer.Stealth.Uncover:						{0} deckt Euch auf!
 
 GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:	Ihr habt keine Pfeile mehr in Eurem Köcher!
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:	Ihr werdet Euren Köcher nicht benutzen können.
@@ -414,6 +422,10 @@ GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:	Euer Zauberspruch wurde abge
 
 GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:	Du kannst mit diesem Spieler nicht handeln, da du vogelfrei bist.
 GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:	Du kannst nicht mit einem/einer Vogelfreien handeln.
+GameObjects.GamePlayer.Trade.PlayerStillTradingWith:		{0} handelt weiterhin mit {1}.
+GameObjects.GamePlayer.Trade.YouStillTradingWith:			Ihr handelt weiterhin mit {0}.
+GameObjects.GamePlayer.Trade.ErrorWhileTradingWith:			Beim Handel mit {0} ist ein Fehler aufgetreten.
+GameObjects.GamePlayer.Trade.TargetSelfcrafting:			{0} arbeitet weiterhin eigenständig (Crafting).
 
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:	Ihr seid überlastet!
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:	Ihr seid überlastet und bewegt Euch deshalb langsamer.
@@ -435,6 +447,10 @@ GameObjects.GamePlayer.UseSlot.CantMountDamned:	Du kannst nicht aufsitzen, währ
 GameObjects.GamePlayer.UseSlot.CantMountPetrified:	Du kannst nicht aufsitzen, während du versteinert bist!
 GameObjects.GamePlayer.UseSlot.CantMountThisForm:	Du kannst in dieser Gestalt nicht aufsitzen!
 GameObjects.GamePlayer.UseSlot.CantMountMorph:	Du kannst nicht aufsitzen, während der Zauber „{0}“ auf dir liegt!
+GameObjects.GamePlayer.UseSlot.CantMountMezzed:				Ihr könnt nicht aufsitzen, während Ihr bezaubert (mezzed) seid!
+GameObjects.GamePlayer.UseSlot.CantMountStunned:			Ihr könnt nicht aufsitzen, während Ihr betäubt seid!
+GameObjects.GamePlayer.UseSlot.CantMountDuel:				Ihr könnt während eines Duells nicht aufsitzen!
+GameObjects.GamePlayer.UseSlot.CantMountStealing:			Ihr könnt nicht aufsitzen, während Ihr einen anderen Spieler bestehlt!
 GameObjects.GamePlayer.UseSlot.CantMountWhileDead:	Ihr könnt nicht aufsteigen, weil Ihr tot seid.
 GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:	Ihr könnt nicht auf Euer Reittier steigen, während Ihr ein Relikt tragt!
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:	Ihr könnt Euer Ziel nicht sehen!
@@ -472,6 +488,12 @@ GameObjects.GamePlayer.UseSlot.CannotUseInventory:	Du kannst dieses Inventar nic
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:	Lade‑Effekt mit ID {0} ist noch nicht implementiert.
 GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:	Lade‑Effekt mit ID {0} nicht gefunden.
 
+GameObjects.GamePlayer.YellReceive.Yells:					{0} ruft: "{1}"
+GameObjects.GamePlayer.YellReceive.FalseLanguage:			{0} ruft etwas in einer Sprache, die Ihr nicht versteht.
+GameObjects.GamePlayer.Yell.YouYell:						Ihr ruft: "{0}"
+GameObjects.GamePlayer.WhisperReceive.Whispers:				{0} flüstert Euch zu: "{1}"
+GameObjects.GamePlayer.WhisperReceive.FalseLanguage:		{0} flüstert etwas in einer Sprache, die Ihr nicht versteht.
+GameObjects.GamePlayer.Whisper.YouWhisper:					Ihr flüstert: "{0}" an {1}
 GameObjects.GamePlayer.Whisper.SelectTarget:	Wählt jemanden aus, dem Ihr etwas zuflüstern wollt!
 GameObjects.GamePlayer.Murder:	Du hast 1 Rufpunkt verloren, weil du {0} getötet hast.
 GameObjects.GamePlayer.Multiplekills:	Du hast 1 Rufpunkt verloren wegen mehrfacher Tötungen an {0}.
@@ -508,4 +530,9 @@ GameObjects.GamePlayer.SaddleBag.AlreadyActivated:	Du hast diese Satteltasche be
 
 GameObjects.GamePlayer.Reputation.Zero:	Dein Ruf ist nun neutral.
 
+GameObjects.GamePlayer.AfkXp.StartingIn:					AFK-XP: startet in {0}s (Kampf & Token erforderlich).
+GameObjects.GamePlayer.AfkXp.GainedXp:						Euer AFK-XP-Token gewährt Euch {0} XP aus Eurem Training während der AFK-Zeit!
+
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:	Die Summe Eurer Spezialisierungspunkte war falsch und wurden korrigiert. Bitte meldet Euch bei Eurem Ausbilder für ein neues Trainig.
+
+GameObjects.GamePlayer.MoveToBind.AccountBannedUnknownBind:	Unbekannter Bindepunkt, Euer Konto ist gesperrt. Kontaktiert einen GM.

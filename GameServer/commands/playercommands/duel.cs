@@ -375,6 +375,30 @@ namespace DOL.GS.Commands
                 return false;
             }
 
+            // Crafting
+            if (actionSource.IsCrafting)
+            {
+                actionSource.Out.SendMessage(LanguageMgr.GetTranslation(actionSource.Client, "Commands.Players.Duel.CraftingSelf"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (actionTarget.IsCrafting)
+            {
+                actionSource.Out.SendMessage(LanguageMgr.GetTranslation(actionSource.Client, "Commands.Players.Duel.CraftingTarget", actionSource.GetPersonalizedName(actionTarget)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            // Stealing
+            if (actionSource.TempProperties.getProperty<object>(StealCommandHandlerBase.PLAYER_VOL_TIMER, null) != null)
+            {
+                actionSource.Out.SendMessage(LanguageMgr.GetTranslation(actionSource.Client, "Commands.Players.Duel.StealingSelf"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (actionTarget.TempProperties.getProperty<object>(StealCommandHandlerBase.PLAYER_VOL_TIMER, null) != null)
+            {
+                actionSource.Out.SendMessage(LanguageMgr.GetTranslation(actionSource.Client, "Commands.Players.Duel.StealingTarget", actionSource.GetPersonalizedName(actionTarget)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
             // Linkdead / not fully in world
             if (actionSource.Client == null || actionTarget.Client == null || actionSource.Client.ClientState != GameClient.eClientState.Playing || actionTarget.Client.ClientState != GameClient.eClientState.Playing)
             {

@@ -27,6 +27,7 @@ using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
 using DOL.gameobjects.CustomNPC;
+using DOL.GS.Commands;
 using DOL.GS.Finance;
 using DOL.GS.Geometry;
 using DOL.GS.Housing;
@@ -731,6 +732,8 @@ namespace DOL.GS.ServerRules
 
             // player restrictions
             if (living.IsMoving) return "GameObjects.GamePlayer.UseSlot.CantMountMoving";
+            if (living.IsMezzed) return "GameObjects.GamePlayer.UseSlot.CantMountMezzed";
+            if (living.IsStunned) return "GameObjects.GamePlayer.UseSlot.CantMountStunned";
             if (living.InCombat) return "GameObjects.GamePlayer.UseSlot.CantMountCombat";
             if (living.IsSitting) return "GameObjects.GamePlayer.UseSlot.CantCallMountSeated";
             if (living.IsStealthed) return "GameObjects.GamePlayer.UseSlot.CantMountStealthed";
@@ -749,6 +752,12 @@ namespace DOL.GS.ServerRules
                 return LanguageMgr.GetTranslation("GameObjects.GamePlayer.UseSlot.CantMountMorph", appearancetype);
             }
 
+            if (player != null)
+            {
+                if (player.DuelTarget != null) return "GameObjects.GamePlayer.UseSlot.CantMountDuel";
+                if (player.TempProperties.getProperty<object>(StealCommandHandlerBase.PLAYER_VOL_TIMER, null) != null) return "GameObjects.GamePlayer.UseSlot.CantMountStealing";
+            }
+
             // You are carrying a relic ? You can't use a mount !
             if (player != null && GameRelic.IsPlayerCarryingRelic(player))
                 return "GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier";
@@ -756,9 +765,9 @@ namespace DOL.GS.ServerRules
             // zones checks:
             // white list: always allows
             string currentRegion = living.CurrentRegion.ID.ToString();
-            if (ServerProperties.Properties.ALLOW_PERSONNAL_MOUNT_IN_REGIONS.Contains(currentRegion))
+            if (Properties.ALLOW_PERSONNAL_MOUNT_IN_REGIONS.Contains(currentRegion))
             {
-                var regions = ServerProperties.Properties.ALLOW_PERSONNAL_MOUNT_IN_REGIONS.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                var regions = Properties.ALLOW_PERSONNAL_MOUNT_IN_REGIONS.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var region in regions)
                     if (region == currentRegion)
                         return string.Empty;

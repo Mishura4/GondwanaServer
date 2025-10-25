@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using AmteScripts.Managers;
 using DOL.Events;
+using DOL.GS.Commands;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
@@ -340,6 +341,26 @@ namespace DOL.GS.Scripts
             if (player.IsDamned)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (player.IsCrafting)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (player.DuelTarget != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageDuel"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (player.TempProperties.getProperty<object>(StealCommandHandlerBase.PLAYER_VOL_TIMER, null) != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.GuarkRingUsageStealing"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            if (player.PlayerAfkMessage != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Items.Specialitems.GuarkRingUsageAFK"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
             if (SpellHandler.FindEffectOnTarget(player, "SummonMonster") != null || SpellHandler.FindEffectOnTarget(player, "CallOfShadows") != null || SpellHandler.FindEffectOnTarget(player, "BringerOfDeath") != null)

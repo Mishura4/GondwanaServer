@@ -49,6 +49,10 @@ Commands.Players.Duel.CantThisFormSelf:			You cannot start a duel while under th
 Commands.Players.Duel.CantThisFormTarget:		{0} can't start a duel under this form.
 Commands.Players.Duel.DeadSelf:					You can't duel while you're dead!
 Commands.Players.Duel.DeadTarget:				{0} is dead and unable to duel!
+Commands.Players.Duel.CraftingSelf:				You can't duel while you're crafting!
+Commands.Players.Duel.CraftingTarget:			{0} is crafting and can't start a duel now!
+Commands.Players.Duel.StealingSelf:				You can't duel while you're stealing another player!
+Commands.Players.Duel.StealingTarget:			{0} is busy stealing another player and can't start a duel now!
 Commands.Players.Duel.Linkdead:					You cannot start a duel while you or your target is disconnecting or linkdead.
 Commands.Players.Duel.AFKSelf:					You cannot start a duel while AFK.
 Commands.Players.Duel.AFKTarget:				{0} is AFK and can't start a duel yet.
