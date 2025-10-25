@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using DOL.Database.Attributes;
 using DOL.GS;
 using DOL.Database;
+using log4net;
 
 namespace DOL.GS.Styles
 {
@@ -31,6 +32,8 @@ namespace DOL.GS.Styles
     /// </summary>
     public class Style : Skill
     {
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
+
         /// <summary>
         /// The opening type of a style
         /// </summary>
@@ -138,6 +141,10 @@ namespace DOL.GS.Styles
             : base(style.Name, style.ID, (ushort)style.Icon, style.SpecLevelRequirement, style.StyleID)
         {
             baseStyle = style;
+            if (OpeningRequirementType is eOpening.Positional && !Enum.IsDefined((eOpeningPosition)OpeningRequirementValue))
+            {
+                log.Error($"Style {style.Name} (ID {style.ID}) has invalid positional requirement {OpeningRequirementValue}. It will probably crash the client");
+            }
         }
 
         public int ClassID
