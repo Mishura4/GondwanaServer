@@ -166,6 +166,8 @@ namespace DOL.Database
         protected int m_salvageYieldID;
         private string m_bonusConditions;
         private bool m_canUseInRvR;
+        private bool m_isSummoned;
+
         #endregion
 
         #region constructors
@@ -842,6 +844,16 @@ namespace DOL.Database
         {
             get { return m_isTradable; }
             set { Dirty = true; m_isTradable = value; }
+        }
+
+        /// <summary>
+        /// Deleted on AddToWorld
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public bool IsSummoned
+        {
+            get { return m_isSummoned; }
+            set { Dirty = true; m_isSummoned = value; }
         }
 
         [DataElement(AllowDbNull = false)]

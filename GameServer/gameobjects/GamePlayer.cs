@@ -11576,6 +11576,14 @@ namespace DOL.GS
                 BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
             }
 
+            foreach (var item in Inventory.AllItems)
+            {
+                if (item.IsSummoned)
+                {
+                    Inventory.RemoveItem(item);
+                }
+            }
+
             IsJumping = false;
             m_invulnerabilityTick = 0;
             m_pve_invulnerabilityTick = 0;

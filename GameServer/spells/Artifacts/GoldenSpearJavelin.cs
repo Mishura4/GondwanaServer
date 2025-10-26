@@ -62,6 +62,7 @@ namespace DOL.GS.Spells
                 _artefJavelin.IsDropable = false;
                 _artefJavelin.CanDropAsLoot = false;
                 _artefJavelin.IsTradable = false;
+                _artefJavelin.IsSummoned = true;
                 _artefJavelin.MaxCount = 1;
                 _artefJavelin.PackSize = 1;
                 _artefJavelin.Charges = 5;
@@ -78,15 +79,7 @@ namespace DOL.GS.Spells
 
             if (Caster is GamePlayer player)
             {
-                GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-                GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-                GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-
-                if (log.IsDebugEnabled)
-                    log.Debug($"Event handlers added for player {player.Name}");
-
                 SendEffectAnimation(player);
-                player.TempProperties.setProperty("GoldenSpearJavelinHandler", this);
             }
             return true;
         }
@@ -97,31 +90,6 @@ namespace DOL.GS.Spells
             {
                 nearbyPlayer.Out.SendSpellEffectAnimation(player, player, Spell.ClientEffect, 0, false, 1);
             }
-        }
-
-        private void OnPlayerLeft(DOLEvent e, object sender, EventArgs arguments)
-        {
-            if (!(sender is GamePlayer player))
-                return;
-
-            if (log.IsDebugEnabled)
-                log.Debug($"OnPlayerLeft called for player {player.Name}");
-
-            var items = player.Inventory.AllItems;
-            foreach (InventoryItem invItem in items.ToList())
-            {
-                if (invItem.Id_nb.Equals("Artef_Javelin", StringComparison.OrdinalIgnoreCase))
-                {
-                    player.Inventory.RemoveItem(invItem);
-                    if (log.IsDebugEnabled)
-                        log.Debug($"Removed Artef_Javelin from {player.Name}'s inventory.");
-                }
-            }
-
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-            player.TempProperties.removeProperty("GoldenSpearJavelinHandler");
         }
 
         public override string GetDelveDescription(GameClient delveClient)

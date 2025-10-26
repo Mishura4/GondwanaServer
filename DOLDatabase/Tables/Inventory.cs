@@ -521,6 +521,11 @@ namespace DOL.Database
             get { return Template.IsNotLosingDur; }
             set { Template.IsNotLosingDur = value; }
         }
+        public virtual bool IsSummoned
+        {
+            get { return Template.IsSummoned; }
+            set { Template.IsSummoned = value; }
+        }
 
         // stack
         public virtual int MaxCount

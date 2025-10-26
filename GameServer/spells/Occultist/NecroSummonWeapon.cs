@@ -73,6 +73,7 @@ namespace DOL.GS.Spells
                 IsDropable = false,
                 CanDropAsLoot = false,
                 IsTradable = false,
+                IsSummoned = true,
                 MaxCount = 1,
                 PackSize = 1,
                 Charges = 0,
@@ -100,13 +101,6 @@ namespace DOL.GS.Spells
             {
                 return false;
             }
-            
-            GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-            GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-            GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-
-            if (log.IsDebugEnabled)
-                log.Debug($"Event handlers added for player {player.Name}");
 
             MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Spells.NecroSumonWeap.Nethersbane.You"), eChatType.CT_Spell);
             SendEffectAnimation(player);
@@ -119,7 +113,6 @@ namespace DOL.GS.Spells
                 }
             }
 
-            player.TempProperties.setProperty("SummonNethersbaneHandler", this);
             return true;
         }
 
@@ -129,31 +122,6 @@ namespace DOL.GS.Spells
             {
                 nearbyPlayer.Out.SendSpellEffectAnimation(player, player, Spell.ClientEffect, 0, false, 1);
             }
-        }
-
-        private void OnPlayerLeft(DOLEvent e, object sender, EventArgs arguments)
-        {
-            if (sender is not GamePlayer player)
-                return;
-
-            if (log.IsDebugEnabled)
-                log.Debug($"OnPlayerLeft called for player {player.Name}");
-
-            var items = player.Inventory.AllItems;
-            foreach (InventoryItem invItem in items.ToList())
-            {
-                if (invItem.Id_nb.Equals("Necro_Nethersbane", StringComparison.OrdinalIgnoreCase))
-                {
-                    player.Inventory.RemoveItem(invItem);
-                    if (log.IsDebugEnabled)
-                        log.Debug($"Removed Necro_Nethersbane from {player.Name}'s inventory.");
-                }
-            }
-
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-            player.TempProperties.removeProperty("SummonNethersbaneHandler");
         }
 
         public override string GetDelveDescription(GameClient delveClient)
@@ -207,8 +175,8 @@ namespace DOL.GS.Spells
                 SPD_ABS = 57,
                 Hand = 1,
                 Type_Damage = 11,
-                Object_Type = 6, // Assuming 6 corresponds to the correct object type
-                Item_Type = 12,
+                Object_Type = (int)eObjectType.TwoHandedWeapon,
+                Item_Type = (int)eInventorySlot.TwoHandWeapon,
                 Color = 79,
                 Effect = 27,
                 Weight = 42,
@@ -217,6 +185,7 @@ namespace DOL.GS.Spells
                 IsDropable = false,
                 CanDropAsLoot = false,
                 IsTradable = false,
+                IsSummoned = true,
                 MaxCount = 1,
                 PackSize = 1,
                 Charges = 10,
@@ -242,13 +211,6 @@ namespace DOL.GS.Spells
             {
                 return false;
             }
-            
-            GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-            GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-            GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-
-            if (log.IsDebugEnabled)
-                log.Debug($"Event handlers added for player {player.Name}");
 
             MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Spells.NecroSumonWeap.Icebrand.You"), eChatType.CT_Spell);
             SendEffectAnimation(player);
@@ -271,31 +233,6 @@ namespace DOL.GS.Spells
             {
                 nearbyPlayer.Out.SendSpellEffectAnimation(player, player, Spell.ClientEffect, 0, false, 1);
             }
-        }
-
-        private void OnPlayerLeft(DOLEvent e, object sender, EventArgs arguments)
-        {
-            if (sender is not GamePlayer player)
-                return;
-
-            if (log.IsDebugEnabled)
-                log.Debug($"OnPlayerLeft called for player {player.Name}");
-
-            var items = player.Inventory.AllItems;
-            foreach (InventoryItem invItem in items.ToList())
-            {
-                if (invItem.Id_nb.Equals("Necro_Icebrand", StringComparison.OrdinalIgnoreCase))
-                {
-                    player.Inventory.RemoveItem(invItem);
-                    if (log.IsDebugEnabled)
-                        log.Debug($"Removed Necro_Icebrand from {player.Name}'s inventory.");
-                }
-            }
-
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-            GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-            player.TempProperties.removeProperty("SummonIcebrandHandler");
         }
 
         public override string GetDelveDescription(GameClient delveClient)
