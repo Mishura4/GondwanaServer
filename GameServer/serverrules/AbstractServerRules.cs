@@ -855,6 +855,9 @@ namespace DOL.GS.ServerRules
             if (living == null || item == null)
                 return false;
 
+            if (item.IsSummoned)
+                return true; // Summoned item can always be used
+
             GamePlayer player = living as GamePlayer;
 
             // GMs can equip everything
@@ -862,7 +865,7 @@ namespace DOL.GS.ServerRules
                 return true;
 
             // allow usage of all house items
-            if ((item.Object_Type == 0 || item.Object_Type >= (int)eObjectType._FirstHouse) && item.Object_Type <= (int)eObjectType._LastHouse)
+            if (item.Object_Type is (0 or >= (int)eObjectType._FirstHouse) and <= (int)eObjectType._LastHouse)
                 return true;
 
             // on some servers we may wish for dropped items to be used by all realms regardless of what is set in the db
@@ -880,7 +883,7 @@ namespace DOL.GS.ServerRules
             }
 
             //armor
-            if (item.Object_Type >= (int)eObjectType._FirstArmor && item.Object_Type <= (int)eObjectType._LastArmor)
+            if (item.Object_Type is >= (int)eObjectType._FirstArmor and <= (int)eObjectType._LastArmor)
             {
                 int armorAbility = -1;
 

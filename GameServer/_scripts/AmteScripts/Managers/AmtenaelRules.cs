@@ -594,6 +594,9 @@ namespace DOL.GS.ServerRules
             if (living == null || item == null)
                 return false;
 
+            if (item.IsSummoned)
+                return true; // Summoned item can always be used
+
             GamePlayer player = living as GamePlayer;
 
             // GMs can equip everything

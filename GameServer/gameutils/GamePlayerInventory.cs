@@ -690,17 +690,19 @@ namespace DOL.GS
                 //Andraste - Vico / fixing a bugexploit : when player switch from his char slot to an inventory slot, allowedclasses were not checked
                 if (valid && fromItem!.AllowedClasses != "0")
                 {
-
                     if (toSlot >= eInventorySlot.MaxEquipable)
                         noactiveslot = true;
 
-                    if (!(toSlot >= eInventorySlot.FirstBackpack && toSlot <= eInventorySlot.LastBackpack) && !noactiveslot)
+                    if (!(toSlot >= eInventorySlot.FirstBackpack && toSlot <= eInventorySlot.LastBackpack) && !noactiveslot && m_player.Client.Account.PrivLevel <= 1)
                     // but we allow the player to switch the item inside his inventory (check only char slots)
                     {
                         valid = false;
                         foreach (string allowed in Util.SplitCSV(fromItem.AllowedClasses, true))
                         {
-                            if (m_player.CharacterClass.ID.ToString() == allowed || m_player.Client.Account.PrivLevel > 1)
+                            if (!int.TryParse(allowed, out int classId))
+                                continue;
+
+                            if (m_player.CharacterClass.ID == classId)
                             {
                                 valid = true;
                                 break;
