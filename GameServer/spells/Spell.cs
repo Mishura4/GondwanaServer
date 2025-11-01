@@ -24,6 +24,7 @@ using System.Linq;
 using DOL.Database;
 using DOL.AI.Brain;
 using DOL.Language;
+using MySqlConnector.Logging;
 
 namespace DOL.GS
 {
@@ -67,6 +68,7 @@ namespace DOL.GS
         protected readonly int m_sharedtimergroup = 0;
         protected readonly bool m_moveCast = false;
         protected readonly bool m_uninterruptible = false;
+        protected readonly bool? m_fixedCastTime = null;
         protected readonly bool m_isfocus = false;
         protected readonly bool m_minotaurspell = false;
         protected readonly string m_packageID = string.Empty;
@@ -347,6 +349,20 @@ namespace DOL.GS
             get { return m_uninterruptible; }
         }
 
+        public bool IsCastTimeFixed
+        {
+            get
+            {
+                if (m_fixedCastTime.HasValue)
+                    return m_fixedCastTime.Value;
+
+                if (InstrumentRequirement != 0)
+                    return true;
+
+                return false;
+            }
+        }
+
         public virtual bool IsFocus
         {
             get { return m_isfocus; }
@@ -490,6 +506,7 @@ namespace DOL.GS
             m_moveCast = dbspell.MoveCast;
             m_uninterruptible = dbspell.Uninterruptible;
             m_isfocus = dbspell.IsFocus;
+            m_fixedCastTime = dbspell.IsFixedCastTime;
             m_packageID = dbspell.PackageID ?? string.Empty;
             // warlocks
             m_isprimary = dbspell.IsPrimary;
@@ -547,6 +564,7 @@ namespace DOL.GS
             m_moveCast = spell.MoveCast;
             m_uninterruptible = spell.Uninterruptible;
             m_isfocus = spell.IsFocus;
+            m_fixedCastTime = spell.m_fixedCastTime;
             m_isprimary = spell.IsPrimary;
             m_issecondary = spell.IsSecondary;
             m_allowbolt = spell.AllowBolt;

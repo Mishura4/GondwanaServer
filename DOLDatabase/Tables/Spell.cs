@@ -66,6 +66,7 @@ namespace DOL.Database
         protected bool m_moveCast = false;
         protected bool m_uninterruptible = false;
         protected bool m_isfocus = false;
+        protected bool? m_isFixedCastTime;
         protected int m_sharedtimergroup;
         protected string m_packageID = string.Empty;
         protected ushort m_hardTargetCap = 0;
@@ -605,6 +606,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_isfocus = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool? IsFixedCastTime
+        {
+            get => this.m_isFixedCastTime;
+            set
+            {
+                m_isFixedCastTime = value;
+                Dirty = true;
             }
         }
 
