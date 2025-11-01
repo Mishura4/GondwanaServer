@@ -521,6 +521,9 @@ namespace DOL.GS
         {
             int ticks = spell.CastTime;
 
+            if (spell.IsCastTimeFixed)
+                return ticks;
+
             double percent = DexterityCastTimeReduction;
             percent -= GetModified(eProperty.CastingSpeed) * .01;
 

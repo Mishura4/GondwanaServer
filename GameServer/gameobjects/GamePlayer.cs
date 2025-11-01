@@ -10000,7 +10000,7 @@ namespace DOL.GS
         {
             int ticks = spell.CastTime;
 
-            if (spell.InstrumentRequirement != 0 ||
+            if (spell.IsCastTimeFixed ||
                 line.KeyName == GlobalSpellsLines.Item_Spells ||
                 line.KeyName.StartsWith(GlobalSpellsLines.Champion_Lines_StartWith))
             {
