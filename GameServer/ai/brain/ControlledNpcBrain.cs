@@ -430,6 +430,18 @@ namespace DOL.AI.Brain
             CheckStealth();
         }
 
+        public override bool IsHostileTo(GameLiving living)
+        {
+            // For pets, we're like an AOE...
+            if (!GameServer.ServerRules.ShouldAOEHitTarget(null, Body, living))
+                return false;
+
+            if (living is GameTaxi)
+                return false;
+
+            return true;
+        }
+
         /// <summary>
         /// Checks the Abilities
         /// </summary>

@@ -335,21 +335,37 @@ namespace DOL.AI.Brain
         }
 
         /// <summary>
+        /// Is this a target we would want to attack before they do?
+        /// </summary>
+        /// <param name="living"></param>
+        /// <returns></returns>
+        public virtual bool IsHostileTo(GameLiving living)
+        {
+            if (!GameServer.ServerRules.IsAllowedToAttack(Body, living, true))
+                return false;
+
+            if (living is GameTaxi)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
         /// Try aggroing an NPC
         /// </summary>
         /// <param name="npc"></param>
         protected virtual bool TryAggro(GameNPC npc)
         {
-            if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
+            if (!IsHostileTo(npc))
                 return false;
 
-            if (m_aggroTable.ContainsKey(npc))
-                return false;
+            lock ((m_aggroTable as ICollection).SyncRoot)
+            {
+                if (m_aggroTable.ContainsKey(npc))
+                    return false;
+            }
 
             if (!npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active)
-                return false;
-
-            if (npc is GameTaxi)
                 return false;
 
             if (CalculateAggroLevelToTarget(npc) > 0)
@@ -369,8 +385,7 @@ namespace DOL.AI.Brain
         /// <param name="npc"></param>
         protected virtual bool TryAggro(GamePlayer player)
         {
-            // Don't aggro on immune players.
-            if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true))
+            if (!IsHostileTo(player))
                 return false;
 
             if (Body.GetDistanceTo(player) > (ushort)AggroRange * GetGroupMobRangeMultiplier(player))
@@ -833,7 +848,6 @@ namespace DOL.AI.Brain
             // Withdraw if can't attack.
             if (!GameServer.ServerRules.IsAllowedToAttack(Body, realTarget, true))
                 return 0;
-
 
             // only attack if green+ to target
             if (realTarget.IsObjectGreyCon(Body))

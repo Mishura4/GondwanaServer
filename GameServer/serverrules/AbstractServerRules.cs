@@ -531,18 +531,17 @@ namespace DOL.GS.ServerRules
             
             bool ShouldEngage()
             {
-                if (realDefender is GameNPC)
+                if (realDefender is GameNPC defenderNpc)
                 {
-                    GameNPC defenderNpc = realDefender as GameNPC;
-
                     if (defenderNpc!.Brain is GuardNPCBrain defenderGuardBrain)
                     {
-                        if (realAttacker is GamePlayer)
+                        if (realAttacker is GamePlayer playerAttacker)
                         {
                             // Player vs Guard: guard only selected if the guard is in combat with the player or if the guard would normally range aggro the player
-                            var playerAttacker = realAttacker as GamePlayer;
 
-                            return defenderGuardBrain.AggroTable.ContainsKey(attacker) || defenderGuardBrain.AggroTable.ContainsKey(realAttacker) || defenderGuardBrain.CalculateAggroLevelToTarget(playerAttacker) > 0;
+                            return defenderGuardBrain.AggroTable.ContainsKey(attacker)
+                                || defenderGuardBrain.AggroTable.ContainsKey(playerAttacker)
+                                || defenderGuardBrain.CalculateAggroLevelToTarget(playerAttacker) > 0;
                         }
                         else
                         {
@@ -551,6 +550,7 @@ namespace DOL.GS.ServerRules
                         }
                     }
                 }
+
                 if (attackerPlayer?.BattleGroup != null && attackerPlayer.BattleGroup == defenderPlayer?.BattleGroup)
                 {
                     return true;

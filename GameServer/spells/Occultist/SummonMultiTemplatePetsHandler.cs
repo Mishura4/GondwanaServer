@@ -164,13 +164,13 @@ namespace DOL.GS.Spells
 
                 foreach (var (player, distance) in pet.GetPlayersInRadius(false, (ushort)aggroRadius, true, true).Cast<PlayerDistEntry>())
                 {
-                    if (GameServer.ServerRules.IsAllowedToAttack(pet, player, true))
+                    if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, pet, player))
                         pool.Add(new(player, Math.Min(aggroRadius, distance)));
                 }
 
                 foreach (var (npc, distance) in pet.GetNPCsInRadius(false, (ushort)aggroRadius, true, true).Cast<NPCDistEntry>())
                 {
-                    if (GameServer.ServerRules.IsAllowedToAttack(pet, npc, true))
+                    if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, pet, npc))
                         pool.Add(new(npc, Math.Min(aggroRadius, distance)));
                 }
 
