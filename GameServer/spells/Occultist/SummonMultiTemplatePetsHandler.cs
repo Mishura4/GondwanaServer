@@ -107,15 +107,14 @@ namespace DOL.GS.Spells
             var tpl = NpcTemplateMgr.GetTemplate(templateId);
             if (tpl == null)
             {
-                var lang = (Caster as GamePlayer)?.Client?.Account?.Language ?? Properties.SERV_LANGUAGE;
-                MessageToCaster(LanguageMgr.GetTranslation(lang, "SpellHandler.Occultist.ArawnsLegion.NoTemplateFound", templateId), eChatType.CT_System);
+                MessageTranslationToCaster("SpellHandler.Occultist.ArawnsLegion.NoTemplateFound", eChatType.CT_System, templateId);
                 return null;
             }
 
             var pet = new GamePet(tpl);
 
             var brain = new ControlledNpcBrain(Caster) { IsMainPet = false };
-            pet.SetOwnBrain(brain as DOL.AI.ABrain);
+            pet.SetOwnBrain(brain);
 
             pet.Owner = Caster;
             pet.Realm = Caster.Realm;
@@ -157,34 +156,49 @@ namespace DOL.GS.Spells
             brain.WalkState = eWalkState.Follow;               // still follow owner when idle
 
             if (attackTarget != null && GameServer.ServerRules.IsAllowedToAttack(pet as GameLiving, attackTarget as GameLiving, true))
-                (pet.Brain as IOldAggressiveBrain)?.AddToAggroList(attackTarget, 1);
+                brain.AddToAggroList(attackTarget, 1);
 
             try
             {
-                var pool = new List<GameLiving>();
+                var pool = new List<KeyValuePair<GameLiving, float>>();
 
-                foreach (var obj in pet.GetPlayersInRadius((ushort)aggroRadius))
+                foreach (var (player, distance) in pet.GetPlayersInRadius(false, (ushort)aggroRadius, true, true).Cast<PlayerDistEntry>())
                 {
-                    if (obj is GamePlayer gp && GameServer.ServerRules.IsAllowedToAttack(pet as GameLiving, gp as GameLiving, true))
-                        pool.Add(gp);
+                    if (GameServer.ServerRules.IsAllowedToAttack(pet, player, true))
+                        pool.Add(new(player, Math.Min(aggroRadius, distance)));
                 }
 
-                foreach (var obj in pet.GetNPCsInRadius((ushort)aggroRadius))
+                foreach (var (npc, distance) in pet.GetNPCsInRadius(false, (ushort)aggroRadius, true, true).Cast<NPCDistEntry>())
                 {
-                    if (obj is GameLiving gl && GameServer.ServerRules.IsAllowedToAttack(pet as GameLiving, gl, true))
-                        pool.Add(gl);
+                    if (GameServer.ServerRules.IsAllowedToAttack(pet, npc, true))
+                        pool.Add(new(npc, Math.Min(aggroRadius, distance)));
                 }
 
                 if (pool.Count > 0)
                 {
-                    Util.Shuffle(pool);
-                    int seedCount = Math.Min(3, pool.Count);
-                    for (int i = 0; i < seedCount; i++)
-                        (pet.Brain as IOldAggressiveBrain)?.AddToAggroList(pool[i], Util.Random(1, 5));
+                    foreach (var (living, distance) in pool)
+                    {
+                        // Each mob will basically get an aggro value randomly chosen between
+                        // 1 and the % of how close they are to the player.
+                        //
+                        // FOR EXAMPLE. We have an aggro radius of 1000.
+                        // - A mob at distance 900 will get an aggro between 1 and 10
+                        //   (because it's 10% of the way to the player.)
+                        // - A mob at distance 100 will get an aggro between 1 and 90
+                        //   (because it's 90% of the way to the player.)
+                        //
+                        // So basically: a pet is more likely to immediately go to a closer mob,
+                        //               but NOT NECESSARILY.
+                        //
+                        // See also: https://youtu.be/dZ-rsEK0FI4?t=2566
+                        var invDist = Math.Max(1, aggroRadius - distance);
+                        float ratio = invDist / aggroRadius;
+                        var aggro = GS.Util.Random(1, (int)Math.Ceiling(ratio * 100));
+                        brain.AddToAggroList(living, aggro, Caster is GamePlayer);
+                    }
                 }
 
-            (pet.Brain as ControlledNpcBrain)?.Think();
-
+                brain.Think();
             }
             catch { }
 
@@ -194,12 +208,7 @@ namespace DOL.GS.Spells
                 eff.Start(pet);
             }
 
-            var casterplayer = Caster as GamePlayer;
-            if (casterplayer != null)
-            {
-                var lang = casterplayer.Client?.Account?.Language ?? Properties.SERV_LANGUAGE;
-                casterplayer.Out.SendMessage( LanguageMgr.GetTranslation(lang, "SpellHandler.Occultist.ArawnsLegion.PetAnswer", pet.Name), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-            }
+            MessageTranslationToCaster("SpellHandler.Occultist.ArawnsLegion.PetAnswer", eChatType.CT_Spell, eChatLoc.CL_SystemWindow, pet.Name);
 
             return pet;
         }
