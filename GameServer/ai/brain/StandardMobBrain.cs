@@ -784,7 +784,7 @@ namespace DOL.AI.Brain
                     && GameServer.ServerRules.IsAllowedToAttack(Body, living, true))
                 {
                     float distance = Body.GetDistanceTo(living.Position, 0);
-                    int maxAggroDistance = (this is IControlledBrain) ? MAX_PET_AGGRO_DISTANCE : MAX_AGGRO_DISTANCE;
+                    int maxAggroDistance = (this is IControlledBrain) ? AggroRange : MAX_AGGRO_DISTANCE;
 
                     if (distance <= maxAggroDistance)
                     {
@@ -802,12 +802,6 @@ namespace DOL.AI.Brain
             {
                 RemoveFromAggroList(l);
                 Body.RemoveAttacker(l);
-            }
-
-            if (maxAggroObject == null)
-            {
-                lock ((m_aggroTable as ICollection).SyncRoot)
-                    m_aggroTable.Clear();
             }
 
             return maxAggroObject;
