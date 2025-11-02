@@ -72,17 +72,18 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             m_owner.EffectList.Remove(this);
             //base.Cancel(playerCancel);
-            if (m_owner is GamePlayer)
+            if (m_owner is GamePlayer player)
             {
                 if (playerCancel)
-                    (m_owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_owner as GamePlayer).Client, "Effects.EngageEffect.YouNoConcOnBlock"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Effects.EngageEffect.YouNoConcOnBlock"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 else
-                    (m_owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_owner as GamePlayer).Client, "Effects.EngageEffect.YouNoAttemptToEngageT"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Effects.EngageEffect.YouNoAttemptToEngageT"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
+            return true;
         }
 
         public override void Stop()

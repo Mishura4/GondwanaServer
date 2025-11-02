@@ -71,14 +71,14 @@ namespace DOL.GS.Effects
         /// Called when effect is to be cancelled
         /// </summary>
         /// <param name="playerCancel">Whether or not effect is player cancelled</param>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
-
             StopTimers();
             m_player.AbilityBonus[(int)eProperty.ArmorAbsorption] -= m_value;
             m_player.EffectList.Remove(this);
             GameEventMgr.RemoveHandler(m_player, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
             m_player.TempProperties.removeProperty(RealmAbilities.BarrierOfFortitudeAbility.BofBaSb);
+            return true;
         }
 
         /// <summary>

@@ -20,6 +20,7 @@ using System;
 using System.Reflection;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Effects;
 using DOL.Language;
 using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
@@ -74,7 +75,6 @@ namespace DOL.GS
 
             lock (player.Inventory)
             {
-
                 if (player.CopperBalance < totalCost.Amount)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.YouNeed", totalCost.ToText()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -121,138 +121,140 @@ namespace DOL.GS
         /// <returns>true if the item was successfully received</returns>
         public override bool ReceiveItem(GameLiving source, InventoryItem item)
         {
-            if (source == null || item == null) return false;
+            if (item == null) return false;
 
-            if (source is GamePlayer)
+            if (source is not GamePlayer player)
+                return false;
+
+            if (player.Reputation < 0)
             {
-                GamePlayer player = (GamePlayer)source;
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Outlaw"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                return false;
+            }
 
-                if (player.Reputation < 0)
+            if (player.IsShade)
+                player.Shade(false);
+
+            var morph = player.FindMorph(cancel: true);
+            if (morph != null)
+            {
+                switch (morph.SpellHandler)
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Outlaw"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                    return false;
-                }
-
-                var wsd = SpellHandler.FindEffectOnTarget(player, "WarlockSpeedDecrease");
-                if (wsd != null)
-                {
-                    int rm = wsd.Spell?.ResurrectMana ?? 0;
-                    string appearancetype = LanguageMgr.GetWarlockMorphAppearance(player.Client.Account.Language, rm);
-
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Morphed", appearancetype), eChatType.CT_System, eChatLoc.CL_ChatWindow);
-
-                    return false;
-                }
-
-                if (SpellHandler.FindEffectOnTarget(player, "Petrify") != null || SpellHandler.FindEffectOnTarget(player, "SummonMonster") != null || SpellHandler.FindEffectOnTarget(player, "CallOfShadows") != null || SpellHandler.FindEffectOnTarget(player, "BringerOfDeath") != null)
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.CantThisForm"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                    return false;
-                }
-
-                if (player.IsDamned)
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerInteract.Damned"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                    return false;
-                }
-
-                if (item.Item_Type == 40 && isItemInMerchantList(item))
-                {
-                    PathPoint path = MovementMgr.LoadPath(item.Id_nb);
-
-                    if ((path != null) && ((Math.Abs(path.Coordinate.X - Coordinate.X)) < 500) && ((Math.Abs(path.Coordinate.Y - Coordinate.Y)) < 500))
-                    {
-                        player.Inventory.RemoveCountFromStack(item, 1);
-                        InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, item, 1);
-
-                        GameTaxi mount;
-
-                        // item.Color of ticket is used for npctemplate. defaults to standard horse if item.color is 0
-                        if (item.Color > 0)
+                    case WarlockSpeedDecreaseSpellHandler wsd:
                         {
-                            mount = new GameTaxi(NpcTemplateMgr.GetTemplate(item.Color));
-                        }
-                        else
-                        {
-                            mount = new GameTaxi();
-
-                            foreach (GameNPC npc in GetNPCsInRadius(400))
-                            {
-                                if (npc.Name == LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "GameStableMaster.ReceiveItem.HorseName"))
-                                {
-                                    mount.Model = npc.Model;
-                                    mount.Name = npc.Name;
-                                    break;
-                                }
-                            }
+                            int rm = wsd.Spell?.ResurrectMana ?? 0;
+                            string appearanceType = LanguageMgr.GetWarlockMorphAppearance(player.Client.Account.Language, rm);
+                            player.SendTranslatedMessage("GameMerchant.OnPlayerInteract.Morphed", eChatType.CT_System, eChatLoc.CL_ChatWindow, appearanceType);
+                            return false;
                         }
 
-                        switch ((eRace)player.Race)
+                    case DamnationSpellHandler:
                         {
-                            case eRace.Lurikeen:
-                                mount.Size = 31;
-                                break;
-                            case eRace.Kobold:
-                                mount.Size = 38;
-                                break;
-                            case eRace.Dwarf:
-                                mount.Size = 42;
-                                break;
-                            case eRace.Inconnu:
-                                mount.Size = 45;
-                                break;
-                            case eRace.Frostalf:
-                            case eRace.Shar:
-                                mount.Size = 48;
-                                break;
-                            case eRace.Briton:
-                            case eRace.Saracen:
-                            case eRace.Celt:
-                                mount.Size = 50;
-                                break;
-                            case eRace.Valkyn:
-                                mount.Size = 52;
-                                break;
-                            case eRace.Avalonian:
-                            case eRace.Highlander:
-                            case eRace.Norseman:
-                            case eRace.Elf:
-                            case eRace.Sylvan:
-                                mount.Size = 55;
-                                break;
-                            case eRace.Firbolg:
-                                mount.Size = 62;
-                                break;
-                            case eRace.HalfOgre:
-                            case eRace.AlbionMinotaur:
-                            case eRace.MidgardMinotaur:
-                            case eRace.HiberniaMinotaur:
-                                mount.Size = 65;
-                                break;
-                            case eRace.Troll:
-                                mount.Size = 67;
-                                break;
-                            default:
-                                mount.Size = 55;
-                                break;
+                            player.SendTranslatedMessage("GameMerchant.OnPlayerInteract.Damned", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                            return false;
                         }
 
-                        mount.Realm = source.Realm;
-                        mount.Position = Position.Create(CurrentRegion.ID, path.Coordinate, path.AngleToNextPathPoint);
-                        mount.AddToWorld();
-                        mount.CurrentWayPoint = path;
-                        GameEventMgr.AddHandler(mount, GameNPCEvent.PathMoveEnds, new DOLEventHandler(OnHorseAtPathEnd));
-                        new MountHorseAction(player, mount).Start(400);
-                        new HorseRideAction(mount).Start(4000);
-                        return true;
-                    }
-                }
-                else
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameStableMaster.ReceiveItem.UnknownWay"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    default: // Generic
+                        {
+                            player.SendTranslatedMessage("GameMerchant.OnPlayerInteract.CantThisForm", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                            return false;
+                        }
                 }
             }
-            return false;
+
+            if (item.Item_Type != 40 || !isItemInMerchantList(item))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameStableMaster.ReceiveItem.UnknownWay"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            PathPoint path = MovementMgr.LoadPath(item.Id_nb);
+            if ((path == null) || ((Math.Abs(path.Coordinate.X - Coordinate.X)) >= 500) || ((Math.Abs(path.Coordinate.Y - Coordinate.Y)) >= 500))
+                return false;
+
+            player.Inventory.RemoveCountFromStack(item, 1);
+            InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, item, 1);
+
+            GameTaxi mount;
+
+            // item.Color of ticket is used for npctemplate. defaults to standard horse if item.color is 0
+            if (item.Color > 0)
+            {
+                mount = new GameTaxi(NpcTemplateMgr.GetTemplate(item.Color));
+            }
+            else
+            {
+                mount = new GameTaxi();
+
+                foreach (GameNPC npc in GetNPCsInRadius(400))
+                {
+                    if (npc.Name == LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "GameStableMaster.ReceiveItem.HorseName"))
+                    {
+                        mount.Model = npc.Model;
+                        mount.Name = npc.Name;
+                        break;
+                    }
+                }
+            }
+
+            switch ((eRace)player.Race)
+            {
+                case eRace.Lurikeen:
+                    mount.Size = 31;
+                    break;
+                case eRace.Kobold:
+                    mount.Size = 38;
+                    break;
+                case eRace.Dwarf:
+                    mount.Size = 42;
+                    break;
+                case eRace.Inconnu:
+                    mount.Size = 45;
+                    break;
+                case eRace.Frostalf:
+                case eRace.Shar:
+                    mount.Size = 48;
+                    break;
+                case eRace.Briton:
+                case eRace.Saracen:
+                case eRace.Celt:
+                    mount.Size = 50;
+                    break;
+                case eRace.Valkyn:
+                    mount.Size = 52;
+                    break;
+                case eRace.Avalonian:
+                case eRace.Highlander:
+                case eRace.Norseman:
+                case eRace.Elf:
+                case eRace.Sylvan:
+                    mount.Size = 55;
+                    break;
+                case eRace.Firbolg:
+                    mount.Size = 62;
+                    break;
+                case eRace.HalfOgre:
+                case eRace.AlbionMinotaur:
+                case eRace.MidgardMinotaur:
+                case eRace.HiberniaMinotaur:
+                    mount.Size = 65;
+                    break;
+                case eRace.Troll:
+                    mount.Size = 67;
+                    break;
+                default:
+                    mount.Size = 55;
+                    break;
+            }
+
+            mount.Realm = player.Realm;
+            mount.Position = Position.Create(CurrentRegion.ID, path.Coordinate, path.AngleToNextPathPoint);
+            mount.AddToWorld();
+            mount.CurrentWayPoint = path;
+            GameEventMgr.AddHandler(mount, GameNPCEvent.PathMoveEnds, new DOLEventHandler(OnHorseAtPathEnd));
+            new MountHorseAction(player, mount).Start(400);
+            new HorseRideAction(mount).Start(4000);
+            return true;
         }
 
         private bool isItemInMerchantList(InventoryItem item)

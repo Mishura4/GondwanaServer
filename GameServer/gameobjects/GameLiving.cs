@@ -5921,6 +5921,73 @@ namespace DOL.GS
             toRemove.ForEach(e => e.Cancel(false));
         }
 
+        /// <summary>
+        /// Find an AbstractMorphSpellHandler effect on the target, optionally cancelling ones we can cancel.
+        /// </summary>
+        /// <param name="cancel">Whether to cancel effects the player would normally be able to cancel (right-click)</param>
+        /// <returns>A morph effect present on the player</returns>
+        public GameSpellEffect? FindMorph(bool cancel = false)
+        {
+            // If morphed, we iterate through the current morphs, cancel the ones that we can.
+            // If after that we're still morphed, return the morph
+            GameSpellEffect preventingEffect = null;
+            var cancelling = new List<GameSpellEffect>();
+            var allMorphs = this
+                .FindEffectsOnTarget(e => !e.ImmunityState && e.SpellHandler is AbstractMorphSpellHandler)
+                .ToList();
+            foreach (var listEffect in allMorphs)
+            {
+                if (cancel)
+                {
+                    // Only cancel effects we can actually cancel (unless force)
+                    // And also that aren't important
+                    // TODO Maybe check for negative priority?
+                    if (listEffect.SpellHandler.CanBeRightClicked && listEffect.Spell.RecastDelay < 30000)
+                    {
+                        cancelling.Add(listEffect);
+                        continue;
+                    }
+                }
+
+                if (preventingEffect != null)
+                {
+                    var relevantMorph = (AbstractMorphSpellHandler)preventingEffect.SpellHandler;
+                    var listMorph = (AbstractMorphSpellHandler)listEffect.SpellHandler;
+                    if (listMorph.Priority < relevantMorph.Priority)
+                        continue;
+
+                    if (listMorph.Priority == relevantMorph.Priority)
+                    {
+                        if (listEffect.RemainingTime < preventingEffect.RemainingTime)
+                        {
+                            continue;
+                        }
+                    }
+                }
+                preventingEffect = listEffect;
+            }
+
+            if (preventingEffect != null)
+                return preventingEffect;
+
+            if (cancel && cancelling.Count > 0)
+            {
+                cancelling.Sort((e1, e2) => ((AbstractMorphSpellHandler)e2.SpellHandler).Priority - ((AbstractMorphSpellHandler)e1.SpellHandler).Priority);
+                EffectList.BeginChanges();
+                try
+                {
+                    // Recheck IsExpired each time here because some morphs chain cancel others
+                    cancelling.RemoveAll(e => e.IsExpired || e.Cancel(true));
+                }
+                finally
+                {
+                    EffectList.CommitChanges();
+                }
+                return cancelling.FirstOrDefault(); // If any failed to cancel, this will return the first
+            }
+            return null;
+        }
+
         public void CancelEffects() => CancelEffects(_ => true);
 
         public void CancelEffects<T>(Func<GameSpellEffect, bool> p) where T : SpellHandler

@@ -20,13 +20,19 @@ namespace DOL.GS.Scripts
         public override ushort Icon { get { return 14800; } }
         //public override bool IsSpellIcon { get { return true; } }
 
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
-            if (playerCancel && Owner is GamePlayer)
-                ((GamePlayer)Owner).Out.SendMessage("Ne restez pas assis près d'un feu de camp pour retirer cet effet.",
-                                                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            if (playerCancel && Owner is GamePlayer player)
+            {
+                player.Out.SendMessage("Ne restez pas assis près d'un feu de camp pour retirer cet effet.",
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
             else
+            {
                 Stop();
+                return true;
+            }
         }
 
         public override IList<string> DelveInfo

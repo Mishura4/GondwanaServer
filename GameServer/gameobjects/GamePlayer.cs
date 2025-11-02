@@ -14491,7 +14491,6 @@ namespace DOL.GS
                     cachedCharacter = DBCharacter;
                 }
 
-
                 if (m_mlSteps != null)
                     GameServer.Database.SaveObject(m_mlSteps.OfType<DBCharacterXMasterLevel>());
 
@@ -16549,9 +16548,9 @@ namespace DOL.GS
         /// Changes shade state of the player.
         /// </summary>
         /// <param name="state">The new state.</param>
-        public virtual void Shade(bool state)
+        public virtual bool Shade(bool state)
         {
-            CharacterClass.Shade(state);
+            return CharacterClass.Shade(state);
         }
         #endregion
 

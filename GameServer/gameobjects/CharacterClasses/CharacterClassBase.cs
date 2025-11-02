@@ -579,13 +579,13 @@ namespace DOL.GS
         /// Changes shade state of the player.
         /// </summary>
         /// <param name="state">The new state.</param>
-        public virtual void Shade(bool makeShade)
+        public virtual bool Shade(bool makeShade)
         {
             if (Player.IsShade == makeShade)
             {
                 if (makeShade && (Player.ObjectState == GameObject.eObjectState.Active))
                     Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "GameObjects.GamePlayerShade.AlreadyShade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
+                return false;
             }
 
             if (makeShade)
@@ -607,6 +607,7 @@ namespace DOL.GS
                 Player.Model = Player.CreationModel;
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "GameObjects.GamePlayer.Shade.NoLongerShade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
+            return true;
         }
 
         /// <summary>

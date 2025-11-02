@@ -23,13 +23,13 @@ namespace DOL.GS.Effects
         /// Called when effect is to be cancelled
         /// </summary>
         /// <param name="playerCancel">Whether or not effect is player cancelled</param>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             //uncancable by player
             if (playerCancel)
-                return;
+                return false;
 
-            base.Cancel(playerCancel, force);
+            return base.Cancel(playerCancel, force);
         }
 
         /// <summary>

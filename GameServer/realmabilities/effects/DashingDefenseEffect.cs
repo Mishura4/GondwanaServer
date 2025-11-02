@@ -122,7 +122,7 @@ namespace DOL.GS.Effects
         // <summary>
         // Called when effect must be canceled
         // <//summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             //Stop Timers
             StopTimers();
@@ -135,6 +135,7 @@ namespace DOL.GS.Effects
             m_guardTarget.Out.SendMessage(string.Format("{0} is no longer guarding you.", m_guardSource.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             m_playerGroup = null;
+            return true;
         }
 
         // <summary>

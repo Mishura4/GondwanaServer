@@ -525,7 +525,7 @@ namespace DOL.GS.Effects
         /// </summary>
         /// <param name="playerCanceled">true if canceled by the player</param>
         /// <param name="force">true to also remove immunity states</param>
-        public virtual void Cancel(bool playerCanceled, bool force = false)
+        public virtual bool Cancel(bool playerCanceled, bool force = false)
         {
             bool wasImmunity = false;
             lock (m_LockObject)
@@ -538,12 +538,12 @@ namespace DOL.GS.Effects
                         GamePlayer player = Owner as GamePlayer;
                         if (player != null)
                             player.Out.SendMessage(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client, "Effects.GameSpellEffect.CantRemoveEffect"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        return;
+                        return false;
                     }
 
                     // Can't Cancel Immunity Effect from Alive Living
                     if (ImmunityState && Owner is { IsAlive: true })
-                        return;
+                        return false;
                 }
 
                 wasImmunity = ImmunityState;
@@ -565,7 +565,7 @@ namespace DOL.GS.Effects
                         m_duration = m_immunityDuration;
                         StartDurationTimer();
                         UpdateEffect();
-                        return;
+                        return true;
                     }
                 }
 
@@ -575,6 +575,7 @@ namespace DOL.GS.Effects
             {
                 Owner.EffectList.CommitChanges();
             }
+            return true;
         }
 
         /// <summary>

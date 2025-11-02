@@ -1,4 +1,4 @@
-﻿using DOL.Database;
+using DOL.Database;
 using DOL.GS;
 using DOL.GS.Effects;
 using NUnit.Framework;
@@ -234,7 +234,11 @@ namespace DOL.UnitTests.Gameserver
             public ushort Icon => throw new System.NotImplementedException();
             public ushort InternalID { get => throw new System.NotImplementedException(); set { } }
             public IList<string> DelveInfo => throw new System.NotImplementedException();
-            public void Cancel(bool playerCanceled, bool force) { receivedCancel = true; }
+            public bool Cancel(bool playerCanceled, bool force)
+            {
+                receivedCancel = true;
+                return true;
+            }
             public PlayerXEffect getSavedEffect() { throw new System.NotImplementedException(); }
         }
     }

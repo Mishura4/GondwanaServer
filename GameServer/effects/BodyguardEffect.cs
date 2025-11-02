@@ -124,7 +124,7 @@ namespace DOL.GS.Effects
         /// Called when effect must be canceled
         /// </summary>
 		/// <param name="playerCancel"></param>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             GameEventMgr.RemoveHandler(m_playerGroup, GroupEvent.MemberDisbanded, new DOLEventHandler(GroupDisbandCallback1));
             m_guardSource.EffectList.Remove(this);
@@ -134,6 +134,7 @@ namespace DOL.GS.Effects
             m_guardTarget.Out.SendMessage(LanguageMgr.GetTranslation(m_guardTarget.Client, "Effects.BodyguardEffect.XIsNoLongerBGYou", m_guardSource.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             m_playerGroup = null;
+            return true;
         }
 
         /// <summary>

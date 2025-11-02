@@ -107,11 +107,14 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
-            base.Cancel(playerCancel, force);
-            if (m_owner is GamePlayer)
-                (m_owner as GamePlayer).Sprint(false);
+            if (!base.Cancel(playerCancel, force))
+                return false;
+
+            if (m_owner is GamePlayer player)
+                player.Sprint(false);
+            return true;
         }
 
         /// <summary>

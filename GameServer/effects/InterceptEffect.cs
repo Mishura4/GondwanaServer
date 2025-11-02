@@ -112,7 +112,7 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             if (InterceptSource is GamePlayer && InterceptTarget is GamePlayer)
             {
@@ -123,11 +123,12 @@ namespace DOL.GS.Effects
             InterceptTarget.EffectList.Remove(this);
             if (playerCancel)
             {
-                if (InterceptSource is GamePlayer)
-                    ((GamePlayer)InterceptSource).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)InterceptSource).Client, "Effects.InterceptEffect.YouNoAttemtInterceptY", InterceptTarget.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                if (InterceptTarget is GamePlayer && InterceptSource is GamePlayer)
-                    ((GamePlayer)InterceptTarget).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)InterceptTarget).Client, "Effects.InterceptEffect.XNoAttemptInterceptYou", InterceptSource.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                if (InterceptSource is GamePlayer playerSource)
+                    playerSource.SendTranslatedMessage("Effects.InterceptEffect.YouNoAttemtInterceptY", eChatType.CT_System, eChatLoc.CL_SystemWindow, InterceptTarget.GetName(0, false));
+                if (InterceptTarget is GamePlayer playerTarget)
+                    playerTarget.SendTranslatedMessage("Effects.InterceptEffect.XNoAttemptInterceptYou", eChatType.CT_System, eChatLoc.CL_SystemWindow, InterceptSource.GetName(0, true));
             }
+            return true;
         }
 
         /// <summary>

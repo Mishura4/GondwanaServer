@@ -1,4 +1,4 @@
-﻿/*
+/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
  *
  * This program is free software; you can redistribute it and/or
@@ -53,15 +53,18 @@ namespace DOL.GS.Spells
             }
 
             /// <inheritdoc />
-            public override void Cancel(bool playerCanceled, bool force = false)
+            public override bool Cancel(bool playerCanceled, bool force = false)
             {
-                m_linkedEffect?.RealCancel(playerCanceled, force);
-                RealCancel(playerCanceled, force);
+                bool other = m_linkedEffect?.RealCancel(playerCanceled, force) ?? true;
+                if (!other && !force)
+                    return false;
+
+                return other && RealCancel(playerCanceled, force);
             }
 
-            private void RealCancel(bool playerCancelled, bool force)
+            private bool RealCancel(bool playerCancelled, bool force)
             {
-                base.Cancel(playerCancelled, force);
+                return base.Cancel(playerCancelled, force);
             }
         }
 

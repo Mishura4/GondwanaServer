@@ -222,10 +222,11 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             if (playerCancel) // not cancelable by teh player
-                return;
+                return false;
+
             //  Log.Debug("Effect Canceled from DT Detrimental effect on "+ m_player.Name);
             StopTimers();
             m_player.EffectList.Remove(this);
@@ -233,6 +234,7 @@ namespace DOL.GS.Effects
             GamePlayer player = m_player as GamePlayer;
             if (player != null)
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.DirtyTricks.EffectCancel"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
         /// <summary>

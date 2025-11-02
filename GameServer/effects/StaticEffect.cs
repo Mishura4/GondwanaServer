@@ -18,15 +18,16 @@ namespace DOL.GS.Effects
         /// Cancel effect
         /// </summary>
         /// <param name="playerCanceled"></param>
-        public virtual void Cancel(bool playerCanceled, bool force = false)
+        public virtual bool Cancel(bool playerCanceled, bool force = false)
         {
             if (!force && playerCanceled && HasNegativeEffect)
             {
-                if (Owner is GamePlayer)
-                    ((GamePlayer)Owner).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.StaticEffect.YouCantRemoveThisEffect"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
+                if (Owner is GamePlayer player)
+                    player.SendTranslatedMessage("Effects.StaticEffect.YouCantRemoveThisEffect", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
             }
             Stop();
+            return true;
         }
 
         /// <summary>

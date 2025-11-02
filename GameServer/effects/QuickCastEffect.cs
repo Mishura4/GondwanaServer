@@ -43,12 +43,15 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
-            base.Cancel(playerCancel, force);
+            if (!base.Cancel(playerCancel, force))
+                return false;
+
             m_owner.canQuickCast = false;
-            if (m_owner is GamePlayer)
-                (m_owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_owner as GamePlayer).Client, "Effects.QuickCastEffect.YourNextSpellNoQCed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            if (m_owner is GamePlayer player)
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Effects.QuickCastEffect.YourNextSpellNoQCed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
         /// <summary>

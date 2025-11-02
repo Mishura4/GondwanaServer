@@ -101,7 +101,7 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             if (m_playerGroup != null)
                 GameEventMgr.RemoveHandler(m_playerGroup, GroupEvent.MemberDisbanded, new DOLEventHandler(GroupDisbandCallback));
@@ -113,6 +113,7 @@ namespace DOL.GS.Effects
                 playerSource.Out.SendMessage(LanguageMgr.GetTranslation(playerSource.Client, "Effects.ProtectEffect.YouNoProtectY", ProtectTarget.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             if (ProtectTarget is GamePlayer playerTarget)
                 playerTarget.Out.SendMessage(LanguageMgr.GetTranslation(playerTarget.Client, "Effects.ProtectEffect.XNoProtectYou", ProtectSource.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
         /// <summary>

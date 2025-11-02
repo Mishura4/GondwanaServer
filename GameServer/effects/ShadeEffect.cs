@@ -64,10 +64,9 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Cancel the effect.
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
-            if (m_player != null)
-                m_player.Shade(false);
+            return m_player?.Shade(false) == true;
         }
 
         /// <summary>

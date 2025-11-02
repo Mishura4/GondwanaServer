@@ -56,12 +56,13 @@ namespace DOL.GS.Effects
         /// Called when effect is to be cancelled
         /// </summary>
         /// <param name="playerCancel">Whether or not effect is player cancelled</param>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             StopTimers();
             m_living.Size -= (byte)m_growSize;
             m_living.Level -= m_value;
             m_living.EffectList.Remove(this);
+            return true;
         }
 
         /// <summary>

@@ -128,7 +128,7 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             if (m_guardSource is GamePlayer && m_guardTarget is GamePlayer)
             {
@@ -138,10 +138,11 @@ namespace DOL.GS.Effects
             m_guardSource.EffectList.Remove(this);
             m_guardTarget.EffectList.Remove(this);
 
-            if (m_guardSource is GamePlayer)
-                ((GamePlayer)m_guardSource).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)m_guardSource).Client, "Effects.GuardEffect.YourNoLongerGuardingY", m_guardTarget.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            if (m_guardSource is GamePlayer && m_guardTarget is GamePlayer)
-                ((GamePlayer)m_guardTarget).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)m_guardTarget).Client, "Effects.GuardEffect.XNoLongerGuardingYoy", m_guardSource.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            if (m_guardSource is GamePlayer playerSource)
+                playerSource.Out.SendMessage(LanguageMgr.GetTranslation(playerSource.Client, "Effects.GuardEffect.YourNoLongerGuardingY", m_guardTarget.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            if (m_guardTarget is GamePlayer targetPlayer)
+                targetPlayer.Out.SendMessage(LanguageMgr.GetTranslation(targetPlayer.Client, "Effects.GuardEffect.XNoLongerGuardingYoy", m_guardSource.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
         /// <summary>

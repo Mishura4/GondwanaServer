@@ -58,7 +58,7 @@ namespace DOL.GS.Effects
             m_living.EffectList.Add(this);
         }
 
-        public override void Cancel(bool playerCancel, bool force = false)
+        public override bool Cancel(bool playerCancel, bool force = false)
         {
             m_living.TempProperties.removeProperty("Charging");
             m_living.EffectList.Remove(this);
@@ -74,6 +74,7 @@ namespace DOL.GS.Effects
                 owner.Out.SendMessage("The " + m_living.Name + " ceases its charge!", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
             }
             StopTimers();
+            return true;
         }
 
         protected virtual void StartTimers()

@@ -83,7 +83,7 @@ namespace DOL.GS.Effects
         }
 
         /// <inheritdoc />
-        public void Cancel(bool playerCanceled, bool force = false)
+        public bool Cancel(bool playerCanceled, bool force = false)
         {
             lock (m_LockObject)
             {
@@ -94,6 +94,7 @@ namespace DOL.GS.Effects
                 }
                 m_spellHandler.Caster.ConcentrationEffects.Remove(this);
             }
+            return true;
         }
 
         /// <summary>
