@@ -447,14 +447,13 @@ namespace DOL.GS.ServerRules
             }
 
             // PEACE NPCs can't be attacked/attack
-            if (attacker is GameNPC)
-                if (((GameNPC)attacker).IsPeaceful)
-                    return false;
-            if (defender is GameNPC)
-                if (((GameNPC)defender).IsPeaceful)
-                    return false;
+            if (attacker is GameNPC { IsPeaceful: true })
+                return false;
+            if (defender is GameNPC { IsPeaceful: true })
+                return false;
+
             // Players can't attack mobs while they have immunity
-            if (playerAttacker != null && defender != null)
+            if (playerAttacker != null)
             {
                 if ((defender is GameNPC) && (playerAttacker.IsInvulnerableToAttack))
                 {
@@ -472,7 +471,7 @@ namespace DOL.GS.ServerRules
                 return false;
 
             // Safe area support for defender
-            foreach (AbstractArea area in defender.CurrentAreas)
+            foreach (AbstractArea area in defender.CurrentAreas.OfType<AbstractArea>())
             {
                 if (!area.IsSafeArea)
                     continue;
@@ -485,7 +484,7 @@ namespace DOL.GS.ServerRules
             }
 
             //safe area support for attacker
-            foreach (AbstractArea area in attacker.CurrentAreas)
+            foreach (AbstractArea area in attacker.CurrentAreas.OfType<AbstractArea>())
             {
                 if ((area.IsSafeArea) && (defender is GamePlayer) && (attacker is GamePlayer))
                 {
@@ -499,13 +498,11 @@ namespace DOL.GS.ServerRules
                 return false;
 
             //Checking for shadowed necromancer, can't be attacked.
-            if (defender.ControlledBrain != null)
-                if (defender.ControlledBrain.Body != null)
-                    if (defender.ControlledBrain.Body is NecromancerPet)
-                    {
-                        if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.CannotAttackShadowedNecro"));
-                        return false;
-                    }
+            if (defender.ControlledBrain?.Body is NecromancerPet)
+            {
+                if (quiet == false) MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "ServerRules.AbstractServerRules.CannotAttackShadowedNecro"));
+                return false;
+            }
 
             return true;
         }

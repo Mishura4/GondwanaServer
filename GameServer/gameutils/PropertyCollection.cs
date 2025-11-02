@@ -54,17 +54,17 @@ namespace DOL.GS
         {
             return getProperty<T>(key, default(T));
         }
+        
         public T getProperty<T>(object key, T def)
         {
             return getProperty<T>(key, def, false);
         }
-        public T getProperty<T>(object key, T def, bool loggued)
+
+        public T getProperty<T>(object key, T def, bool log)
         {
-            object val;
+            bool exists = _props.TryGetValue(key, out object val);
 
-            bool exists = _props.TryGetValue(key, out val);
-
-            if (loggued)
+            if (log)
             {
                 if (!exists)
                 {
@@ -75,8 +75,8 @@ namespace DOL.GS
                 }
             }
 
-            if (val is T)
-                return (T)val;
+            if (val is T asT)
+                return asT;
 
             var typeConverter = val == null ? null : TypeDescriptor.GetConverter(val);
             if (typeConverter?.CanConvertFrom(typeof(T)) == true)
