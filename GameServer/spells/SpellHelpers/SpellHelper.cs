@@ -74,6 +74,20 @@ namespace DOL.GS.Spells
                 }
             }
         }
+
+        public static IEnumerable<IGameEffect> FindEffectsOnTarget(this GameLiving target)
+        {
+            lock (target.EffectList)
+            {
+                foreach (var effect in target.EffectList)
+                {
+                    if (effect is GameSpellAndImmunityEffect { ImmunityState: true })
+                        continue;
+
+                    yield return effect;
+                }
+            }
+        }
         #endregion
 
         #region Find Effect by Spell Type + Spell Name

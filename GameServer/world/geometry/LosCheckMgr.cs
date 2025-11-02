@@ -1,4 +1,4 @@
-﻿/*
+/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
  * 
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Globalization;
 using DOL.GS.Geometry;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Numerics;
 using System.Threading;
 using System.Diagnostics;
@@ -126,7 +127,16 @@ namespace DOL.GS
 
         public static bool HasDataFor(Region region)
         {
-            return _regionTriangles.ContainsKey(region.ID);
+            return _regionTriangles.TryGetValue(region.ID, out var triangles) && triangles.Any(tree => tree != null);
+        }
+
+        public static bool HasDataFor(Zone zone)
+        {
+            if (!_regionTriangles.TryGetValue(zone.ZoneRegion.ID, out var triangles))
+                return false;
+
+            int index = zone.ZoneRegion.Zones.IndexOf(zone);
+            return index >= 0 && triangles[index] != null;
         }
 
         private static LosTreeType _LoadZone(Region region, Zone zone, string filename)

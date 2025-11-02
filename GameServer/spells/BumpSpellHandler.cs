@@ -66,7 +66,12 @@ namespace DOL.GS.Spells
                     Coordinate nextPoint = CalculateCoordinateAfter(timeElapsed + msIncrement);
                     if (nextPoint.Equals(currentPoint))
                         continue;
+                    
                     float collisionDist = LosCheckMgr.GetCollisionDistance(Start.Region, currentPoint, nextPoint, ref stats);
+                    if (log.IsDebugEnabled)
+                    {
+                        log.DebugFormat("BumpSpellHandler[{0}] {1}ms: {2} to {3}: collision is {4}", i, timeElapsed, currentPoint, nextPoint, collisionDist);
+                    }
                     if (!float.IsInfinity(collisionDist))
                     {
                         var vector = (nextPoint - currentPoint);
@@ -356,7 +361,7 @@ namespace DOL.GS.Spells
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            if (target == Caster || !target.IsAlive || target is ShadowNPC || target.EffectList.GetOfType<NecromancerShadeEffect>() != null)
+            if (!target.IsAlive || target is ShadowNPC)
                 return false;
 
             if (IsSwimming(target) || IsPeaceful(target))
@@ -367,21 +372,34 @@ namespace DOL.GS.Spells
                 (m_caster as GamePlayer)?.SendTranslatedMessage("SpellHandler.DamageImmunity", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 return true;
             }
-            if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
+
+            foreach (var effect in target.FindEffectsOnTarget())
             {
-                (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
-                (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return true;
-            }
-            if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
-            {
-                (m_caster as GamePlayer)?.SendTranslatedMessage("SpellHandler.Target.TooFast", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
-                return true;
+                switch (effect)
+                {
+                    case AdrenalineSpellEffect:
+                        {
+                            (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                            (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                            return true;
+                        }
+
+                    case ChargeEffect:
+                        {
+                            (m_caster as GamePlayer)?.SendTranslatedMessage("SpellHandler.Target.TooFast", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                            return true;
+                        }
+
+                    case NecromancerShadeEffect:
+                        {
+                            return false;
+                        }
+                }
             }
 
-            if (!LosCheckMgr.HasDataFor(target.CurrentRegion))
+            if (!LosCheckMgr.HasDataFor(target.CurrentZone))
             {
-                log.Warn($"BumpSpellHandler: LOSCheckManager has no data for region {target.CurrentRegion}, falling back to simple technique of teleporting the target");
+                log.Warn($"BumpSpellHandler: LOSCheckManager has no data for zone { target.CurrentZone.ID }, falling back to simple technique of teleporting the target");
                 DoBumpWithoutServerLos(target, effectiveness);
             }
             else
