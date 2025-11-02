@@ -16,21 +16,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Reflection;
-using System.Text;
-using System.Linq;
-using System.Threading;
-
 using DOL.Database;
 using DOL.GS.RealmAbilities;
 using DOL.GS.Styles;
 using DOL.Language;
-using log4net;
 using DOL.Territories;
+using log4net;
+using log4net.Core;
+using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading;
 
 namespace DOL.GS
 {
@@ -2425,7 +2425,7 @@ namespace DOL.GS
                 m_syncLockUpdates.ExitReadLock();
             }
 
-            return ras.Select(e => GetNewAbilityInstance(e)).Where(ab => ab is RealmAbility).Cast<RealmAbility>().OrderByDescending(el => el.MaxLevel).ThenBy(el => el.KeyName).ToList();
+            return ras.Select(GetNewAbilityInstance).OfType<RealmAbility>().OrderByDescending(el => el.MaxLevel).ThenBy(el => el.KeyName).ToList();
         }
 
         /// <summary>
@@ -2435,7 +2435,7 @@ namespace DOL.GS
         /// <returns></returns>
         public static Ability GetClassRR5Ability(int charclass)
         {
-            return GetClassRealmAbilities(charclass).Where(ab => ab is RR5RealmAbility).FirstOrDefault();
+            return GetClassRealmAbilities(charclass).OfType<RR5RealmAbility>().FirstOrDefault();
         }
 
         /// <summary>
@@ -2446,18 +2446,22 @@ namespace DOL.GS
         public static Ability GetAbilityByInternalID(int internalID)
         {
             m_syncLockUpdates.EnterReadLock();
-            string ability = null;
+            DBAbility? dbab = null;
             try
             {
-                ability = m_abilityIndex.Where(it => it.Value.InternalID == internalID).FirstOrDefault().Value.KeyName;
+                dbab = m_abilityIndex.FirstOrDefault(it => it.Value.InternalID == internalID).Value;
             }
             finally
             {
                 m_syncLockUpdates.ExitReadLock();
             }
 
-            if (!Util.IsEmpty(ability, true))
-                return GetAbility(ability, 1);
+            if (dbab != null)
+            {
+                Ability dba = GetNewAbilityInstance(dbab);
+                dba.Level = 1;
+                return dba;
+            }
 
             return GetAbility(string.Format("INTERNALID:{0}", internalID), 1);
         }
@@ -2480,18 +2484,22 @@ namespace DOL.GS
         public static Ability GetAbility(int databaseID)
         {
             m_syncLockUpdates.EnterReadLock();
-            string ability = null;
+            DBAbility? dbab = null;
             try
             {
-                ability = m_abilityIndex.Where(it => it.Value.AbilityID == databaseID).FirstOrDefault().Value.KeyName;
+                dbab = m_abilityIndex.FirstOrDefault(it => it.Value.AbilityID == databaseID).Value;
             }
             finally
             {
                 m_syncLockUpdates.ExitReadLock();
             }
 
-            if (!Util.IsEmpty(ability, true))
-                return GetAbility(ability, 1);
+            if (dbab != null)
+            {
+                Ability dba = GetNewAbilityInstance(dbab);
+                dba.Level = 1;
+                return dba;
+            }
 
             return GetAbility(string.Format("DBID:{0}", databaseID), 1);
         }
@@ -2508,9 +2516,9 @@ namespace DOL.GS
             DBAbility dbab = null;
             try
             {
-                if (m_abilityIndex.ContainsKey(keyname))
+                if (m_abilityIndex.TryGetValue(keyname, out DBAbility value))
                 {
-                    dbab = m_abilityIndex[keyname];
+                    dbab = value;
                 }
             }
             finally
@@ -2543,9 +2551,9 @@ namespace DOL.GS
             m_syncLockUpdates.EnterReadLock();
             try
             {
-                if (m_lineSpells.ContainsKey(spellLineID))
+                if (m_lineSpells.TryGetValue(spellLineID, out List<Spell> spells))
                 {
-                    foreach (var element in m_lineSpells[spellLineID])
+                    foreach (var element in spells)
                         spellList.Add((Spell)element.Clone());
                 }
             }

@@ -14242,8 +14242,8 @@ namespace DOL.GS
         {
             foreach (var ab in m_usableSkills)
             {
-                if (ab.Item1 is Ability && !HasAbility(ab.Item1.Name))
-                    AddAbility(SkillBase.GetAbility(ab.Item1.Name), true);
+                if (ab.Item1 is Ability abi && !HasAbility(abi))
+                    AddAbility(abi, true);
             }
         }
         /// <summary>

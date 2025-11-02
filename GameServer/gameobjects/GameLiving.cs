@@ -6577,6 +6577,11 @@ namespace DOL.GS
             return hasit;
         }
 
+        public bool HasAbility(Ability abi)
+        {
+            return HasAbility(abi.KeyName);
+        }
+
         /// <summary>
         /// Add a new ability to a living
         /// </summary>
@@ -6613,9 +6618,9 @@ namespace DOL.GS
                     isNewAbility |= oldAbility.Level > oldLevel;
                 }
 
-                if (sendUpdates && (isNewAbility && (this is GamePlayer)))
+                if (sendUpdates && (isNewAbility && (this is GamePlayer player)))
                 {
-                    (this as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer)?.Client.Account.Language, "GameObjects.GamePlayer.AddAbility.YouLearn", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.AddAbility.YouLearn", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
         }
