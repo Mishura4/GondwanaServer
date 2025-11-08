@@ -3062,7 +3062,7 @@ namespace DOL.GS
                 return false;
 
             int slot = RiderArrayLocation(player);
-            if (slot < 0)
+            if (slot < 0 || Riders[slot] != player)
             {
                 return false;
             }

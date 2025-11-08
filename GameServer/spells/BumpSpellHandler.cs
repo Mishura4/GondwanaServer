@@ -27,7 +27,7 @@ namespace DOL.GS.Spells
         public class BumpTrajectory
         {
             public record Point(Coordinate Coordinate, int Milliseconds);
-            
+
             public double Gravity => -750.0f;
 
             public int NumSegments => 9;
@@ -35,7 +35,7 @@ namespace DOL.GS.Spells
             public int MaxSegments => NumSegments * 2;
 
             public List<Point> Points { get; } = new List<Point>();
-            
+
             public int HorizontalSpeed { get; set; }
 
             public double InitialVerticalVelocity { get; set; }
@@ -67,7 +67,7 @@ namespace DOL.GS.Spells
                     Coordinate nextPoint = CalculateCoordinateAfter(timeElapsed + msIncrement);
                     if (nextPoint.Equals(currentPoint))
                         continue;
-                    
+
                     float collisionDist = LosCheckMgr.GetCollisionDistance(Start.Region, currentPoint, nextPoint, ref stats);
                     if (log.IsDebugEnabled)
                     {
@@ -98,7 +98,7 @@ namespace DOL.GS.Spells
 
             public double GetVerticalSpeedAt(int milliseconds)
             {
-                double elapsedSeconds =milliseconds / 1000.0;
+                double elapsedSeconds = milliseconds / 1000.0;
                 return InitialVerticalVelocity + Gravity * elapsedSeconds;
             }
 
@@ -119,17 +119,19 @@ namespace DOL.GS.Spells
         {
             public GameNPC Npc { get; init; }
 
+            public GameSpellEffect Effect { get; init; }
+
             public BumpTrajectory Trajectory { get; init; }
-            
+
             public int CurrentPoint { get; set; }
-            
+
             public bool IsBumpNpc { get; init; }
-            
+
             public BumpSpellHandler SpellHandler { get; init; }
 
             public RegionTimer Timer { get; init; }
 
-            public Victim(BumpSpellHandler spellHandler, GameNPC npc, BumpTrajectory trajectory)
+            public Victim(BumpSpellHandler spellHandler, GameNPC npc, BumpTrajectory trajectory, GameSpellEffect? effect)
             {
                 SpellHandler = spellHandler;
                 Npc = npc;
@@ -137,8 +139,9 @@ namespace DOL.GS.Spells
                 CurrentPoint = 0;
                 IsBumpNpc = npc is BumpNPC;
                 Timer = new RegionTimer(npc, TimerCallback);
+                Effect = effect;
             }
-            
+
             private int TimerCallback(RegionTimer callingtimer)
             {
                 if (Npc.ObjectState != GameObject.eObjectState.Active)
@@ -158,12 +161,18 @@ namespace DOL.GS.Spells
 
             public void Start()
             {
+                if (Timer is not { IsAlive: false })
+                    return;
+                
                 if (CurrentPoint + 1 >= Trajectory.Points.Count)
                     return;
 
                 int delay = Trajectory.Points[CurrentPoint + 1].Milliseconds - Trajectory.Points[CurrentPoint].Milliseconds;
                 if (!MoveToNext())
+                {
+                    SpellHandler.Finish(this, Trajectory.GetVerticalSpeedAt(Trajectory.Points.Last().Milliseconds));
                     return;
+                }
 
                 Timer.Start(delay);
             }
@@ -185,36 +194,19 @@ namespace DOL.GS.Spells
 
         class BumpNPC : GameNPC
         {
-            public List<GamePlayer> Victims { get; init; } = new List<GamePlayer>();
-
-            public IEnumerable<GamePlayer> ActiveVictims => Victims.Where(o => o.ObjectState is eObjectState.Active && o.Steed == this);
+            public record Entry(GameLiving Living, GameSpellEffect Effect);
             
+            public List<Entry> Victims { get; init; } = new List<Entry>();
+
+            public IEnumerable<Entry> ActiveVictims =>
+                Victims.Where(e => e.Living.ObjectState is eObjectState.Active
+                                  && (e.Living is not GamePlayer player || player.Steed == this));
+
             public BumpSpellHandler SpellHandler { get; init; }
 
             public BumpNPC(BumpSpellHandler spellHandler)
             {
                 SpellHandler = spellHandler;
-            }
-
-            public void Grab(GamePlayer victim)
-            {
-                victim.MountSteed(this, true);
-            }
-
-            /// <inheritdoc />
-            public override bool RiderMount(GamePlayer rider, bool forced)
-            {
-                if (!base.RiderMount(rider, forced))
-                    return false;
-                
-                Victims.Add(rider);
-                rider.StopAttack();
-                rider.StopCurrentSpellcast();
-                rider.Emote(eEmote.Stagger);
-                rider.IsStunned = true;
-                rider.DebuffCategory[(int)eProperty.SpellFumbleChance] += 100;
-                SpellHandler.BroadcastMessage(rider, "is hurled into the air!");
-                return true;
             }
 
             /// <inheritdoc />
@@ -223,9 +215,23 @@ namespace DOL.GS.Spells
                 if (!base.RiderDismount(forced, player))
                     return false;
 
-                player.IsStunned = false;
-                player.DebuffCategory[(int)eProperty.SpellFumbleChance] -= 100;
+                var entry = Victims.Find(e => e.Living == player);
+                entry.Effect?.Cancel(false);
                 return true;
+            }
+
+            /// <inheritdoc />
+            public override bool RemoveFromWorld()
+            {
+                foreach (var (living, effect) in Victims)
+                {
+                    if (living is GamePlayer player && player.Steed == this)
+                        player.DismountSteed(true);
+                    else if (!effect.IsExpired)
+                        effect.Cancel(false);
+                }
+                
+                return base.RemoveFromWorld();
             }
         }
 
@@ -270,7 +276,7 @@ namespace DOL.GS.Spells
 
             if (bumpDistance <= 0 && height <= 0)
                 return;
-            
+
             GamePlayer losPlayer = target as GamePlayer ?? Caster as GamePlayer;
             if (losPlayer is null)
             {
@@ -278,13 +284,19 @@ namespace DOL.GS.Spells
                 return;
             }
 
+            GameSpellEffect effect = CreateSpellEffect(target, effectiveness);
+            if (!OnDurationEffectApply(target, effect, effectiveness))
+                return;
+
             BumpNPC npc = CreateBumpNPC(target);
+            npc.Victims.Add(new(target, effect));
             npc.AddToWorld();
             int maxTries = 4;
             int tries = 1;
             Vector v = Vector.Create(Caster.Position.Orientation, bumpDistance) + Vector.Create(0, 0, height);
             npc.Position = target.Position + v;
-            losPlayer.Out.SendCheckLOS(target, npc, Callback);
+            losPlayer.Out.SendCheckLOS(target, npc, Callback); // TODO: Timeout?
+
             void Callback(GamePlayer gamePlayer, ushort response, ushort sourceoid, ushort targetoid)
             {
                 if ((response & 0x100) != 0x100)
@@ -292,6 +304,7 @@ namespace DOL.GS.Spells
                     // LOS failed
                     if (tries >= maxTries)
                     {
+                        effect.Cancel(false);
                         npc.RemoveFromWorld();
                         npc.Delete();
                         return;
@@ -302,12 +315,13 @@ namespace DOL.GS.Spells
                     losPlayer.Out.SendCheckLOS(target, npc, Callback);
                     return;
                 }
-                
                 foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
                 {
                     p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
                 }
+
                 target.MoveTo(npc.Position);
+                effect.Cancel(false);
                 npc.RemoveFromWorld();
                 npc.Delete();
             }
@@ -322,54 +336,127 @@ namespace DOL.GS.Spells
             if (bumpDistance <= 0 && height <= 0)
                 return;
 
-            BumpTrajectory trajectory;
+            BumpTrajectory trajectory = null;
             if (target is GamePlayer player)
             {
                 BumpNPC npc = (BumpNPC)_npcVictims.FirstOrDefault(n => n.IsBumpNpc && n.Npc.IsWithinRadius2D(target, 8.0f))?.Npc;
                 if (npc == null)
                 {
                     trajectory = _npcVictims.Find(t => GameMath.IsWithinRadius2D(t.Trajectory.Start.Coordinate, target.Coordinate, 8.0f))?.Trajectory;
-                    if (trajectory == null || trajectory.Points.Count <= 1)
+                    if (trajectory is not { Points.Count: > 0 })
                     {
                         trajectory = new BumpTrajectory(target.Position.With(Caster.Orientation), (short)height, bumpDistance);
                         if (trajectory.Points.Count <= 1)
                             return;
                     }
+                }
+
+                GameSpellEffect effect = CreateSpellEffect(target, effectiveness);
+                if (!OnDurationEffectApply(target, effect, effectiveness))
+                    return;
+
+                if (npc == null)
+                {
                     npc = CreateBumpNPC(target);
-                    var victim = new Victim(this, npc, trajectory);
+                    var victim = new Victim(this, npc, trajectory!, null);
                     npc.AddToWorld();
                     _npcVictims.Add(victim);
                     victim.Start();
                 }
-                npc.Grab(player);
+                
+                npc.Victims.Add(new(player, effect));
+                player.MountSteed(npc, true);
             }
             else if (target is GameNPC npc)
             {
                 trajectory = _npcVictims.Find(t => GameMath.IsWithinRadius2D(t.Trajectory.Start.Coordinate, target.Coordinate, 8.0f))?.Trajectory;
-                if (trajectory == null || trajectory.Points.Count <= 1)
+                if (trajectory is not { Points.Count: > 0 })
                 {
                     trajectory = new BumpTrajectory(target.Position.With(Caster.Orientation), (short)height, bumpDistance);
                     if (trajectory.Points.Count <= 1)
                         return;
                 }
-                var victim = new Victim(this, npc, trajectory);
-                _npcVictims.Add(victim);
-                npc.StopMoving();
-                npc.Brain.Stop();
-                npc.Flags |= GameNPC.eFlags.FLYING;
-                npc.IsFrozen = true;
-                npc.DebuffCategory[(int)eProperty.SpellFumbleChance] += 100;
-                npc.StopAttack();
-                npc.StopCurrentSpellcast();
-                npc.Emote(eEmote.Stagger);
-                victim.Start();
+                
+                GameSpellEffect effect = CreateSpellEffect(target, effectiveness);
+                if (!OnDurationEffectApply(target, effect, effectiveness))
+                    return;
 
-                BroadcastMessage(npc, "is hurled into the air!");
+                var victim = new Victim(this, npc, trajectory, effect);
+                _npcVictims.Add(victim);
+                victim.Start();
             }
+
             foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
             {
                 p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
             }
+        }
+
+        /// <inheritdoc />
+        public override void OnEffectRemove(GameSpellEffect effect, bool overwrite)
+        {
+            base.OnEffectRemove(effect, overwrite);
+
+            if (effect.SpellHandler != this)
+                return;
+
+            if (effect.Owner is GamePlayer { Steed: BumpNPC bump } player && bump.SpellHandler == this)
+            {
+                player.DismountSteed(true);
+            }
+        }
+
+        private void ApplyStatusEffects(GameLiving living, bool apply)
+        {
+            if (living is GamePlayer)
+            {
+                living.IsStunned = apply;
+            }
+            else
+            {
+                if (living is GameNPC npc)
+                {
+                    if (apply)
+                    {
+                        npc.Brain.Stop();
+                        npc.Flags |= GameNPC.eFlags.FLYING;
+                    }
+                    else
+                    {
+                        npc.Brain.Start();
+                        npc.Flags &= ~(GameNPC.eFlags.FLYING) | ((GameNPC.eFlags)npc.FlagsDb & GameNPC.eFlags.FLYING);
+                    }
+                }
+                living.IsFrozen = apply;
+            }
+            living.DebuffCategory[(int)eProperty.SpellFumbleChance] += 100 * (apply ? 1 : -1);
+        }
+
+        /// <inheritdoc />
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            var owner = effect.Owner;
+            owner.StopAttack();
+            owner.StopCurrentSpellcast();
+            owner.Emote(eEmote.Stagger);
+
+            BroadcastMessage(effect.Owner, "is hurled into the air!");
+
+            ApplyStatusEffects(effect.Owner, true);
+        }
+
+        /// <inheritdoc />
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            ApplyStatusEffects(effect.Owner, false);
+            base.OnEffectExpires(effect, noMessages);
+            return Spell.Duration;
+        }
+
+        /// <inheritdoc />
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            return 0; // Infinite duration, handled by the Victim timer
         }
 
         private void BroadcastMessage(GameLiving target, string message)
@@ -467,10 +554,15 @@ namespace DOL.GS.Spells
             if (victim.IsBumpNpc)
             {
                 var bumpNpc = ((BumpNPC)victim.Npc);
-                foreach (GamePlayer player in bumpNpc.ActiveVictims)
+                foreach (GameLiving living in bumpNpc.ActiveVictims.Select(e => e.Living))
                 {
-                    player.DismountSteed(true);
-                    DoFinalEffects(player, speed);
+                    if (living is GamePlayer player)
+                    {
+                        if (player.DismountSteed(true))
+                            DoFinalEffects(player, speed);
+                    }
+                    else
+                        DoFinalEffects(living, speed);
                 }
                 victim.Npc.RemoveFromWorld();
                 victim.Npc.Delete();
@@ -481,6 +573,7 @@ namespace DOL.GS.Spells
                 victim.Npc.IsFrozen = false;
                 DoFinalEffects(victim.Npc, speed);
             }
+            victim.Effect?.Cancel(false);
             Cleanup(victim);
         }
 

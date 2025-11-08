@@ -3325,6 +3325,16 @@ namespace DOL.GS.Spells
                 return false;
 
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
+            return OnDurationEffectApply(target, neweffect, effectiveness);
+        }
+        
+        public virtual bool OnDurationEffectApply(GameLiving target, GameSpellEffect? neweffect, double effectiveness)
+        {
+            if (!target.IsAlive || target.EffectList == null)
+                return false;
+
+            if (neweffect == null)
+                return false;
 
             // Store Overwritable or Cancellable
             var enable = true;
