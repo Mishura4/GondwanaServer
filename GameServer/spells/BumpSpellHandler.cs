@@ -1,20 +1,21 @@
-using System;
-using System.Collections.Generic;
-using DOL.GS;
-using DOL.GS.Spells;
-using DOL.GS.PacketHandler;
 using DOL.Database;
 using DOL.Events;
 using DOL.GameEvents;
-using DOL.GS.Geometry;
 using DOL.gameobjects.CustomNPC;
+using DOL.GS;
 using DOL.GS.Effects;
-using System.Collections;
-using System.Linq;
-using log4net;
-using DOL.Language;
+using DOL.GS.Geometry;
+using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
+using DOL.GS.Spells;
+using DOL.Language;
+using log4net;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using static DOL.GS.Spells.BumpSpellHandler;
 
 namespace DOL.GS.Spells
 {
@@ -142,7 +143,7 @@ namespace DOL.GS.Spells
             {
                 if (Npc.ObjectState != GameObject.eObjectState.Active)
                 {
-                    SpellHandler.Cleanup(this);
+                    SpellHandler.Finish(this, 0);
                     return 0;
                 }
                 int timeNow = Trajectory.Points[CurrentPoint].Milliseconds;
@@ -185,6 +186,8 @@ namespace DOL.GS.Spells
         class BumpNPC : GameNPC
         {
             public List<GamePlayer> Victims { get; init; } = new List<GamePlayer>();
+
+            public IEnumerable<GamePlayer> ActiveVictims => Victims.Where(o => o.ObjectState is eObjectState.Active && o.Steed == this);
             
             public BumpSpellHandler SpellHandler { get; init; }
 
@@ -195,16 +198,34 @@ namespace DOL.GS.Spells
 
             public void Grab(GamePlayer victim)
             {
-                Victims.Add(victim);
-                
-                victim.IsStunned = true;
-                victim.DebuffCategory[(int)eProperty.SpellFumbleChance] += 100;
-                victim.StopAttack();
-                victim.StopCurrentSpellcast();
                 victim.MountSteed(this, true);
-                victim.Emote(eEmote.Stagger);
+            }
 
-                SpellHandler.BroadcastMessage(victim, "is hurled into the air!");
+            /// <inheritdoc />
+            public override bool RiderMount(GamePlayer rider, bool forced)
+            {
+                if (!base.RiderMount(rider, forced))
+                    return false;
+                
+                Victims.Add(rider);
+                rider.StopAttack();
+                rider.StopCurrentSpellcast();
+                rider.Emote(eEmote.Stagger);
+                rider.IsStunned = true;
+                rider.DebuffCategory[(int)eProperty.SpellFumbleChance] += 100;
+                SpellHandler.BroadcastMessage(rider, "is hurled into the air!");
+                return true;
+            }
+
+            /// <inheritdoc />
+            public override bool RiderDismount(bool forced, GamePlayer player)
+            {
+                if (!base.RiderDismount(forced, player))
+                    return false;
+
+                player.IsStunned = false;
+                player.DebuffCategory[(int)eProperty.SpellFumbleChance] -= 100;
+                return true;
             }
         }
 
@@ -409,24 +430,35 @@ namespace DOL.GS.Spells
             return true;
         }
 
+        /// <summary>
+        /// Do final effects when the living hits the ground after the full duration of the bump.
+        /// </summary>
+        /// <param name="living">Entity to apply the effects to</param>
+        /// <param name="speed">Vertical speed at this point</param>
         private void DoFinalEffects(GameLiving living, double speed)
         {
-            living.DebuffCategory[(int)eProperty.SpellFumbleChance] -= 100;
-            
-            int safeFallLevel = living.GetAbilityLevel(Abilities.SafeFall);
-            
-            var fallSpeed = -speed - (100 * safeFallLevel);
-
-            int fallDivide = 15;
-            int fallMinSpeed = 500;
-
-            var fallPercent = (int)Math.Min(99, (fallSpeed - (fallMinSpeed + 1)) / fallDivide);
-
-            if (fallSpeed > fallMinSpeed)
+            if (living.IsAlive)
             {
-                fallPercent = Math.Max(0, fallPercent - safeFallLevel);
-                fallPercent /= 2;
-                living.TakeFallDamage(fallPercent);
+                // If hitting the ceiling we also take damage maybe
+                var velocity = Math.Abs(speed);
+                if (velocity > 0.01)
+                {
+                    int safeFallLevel = living.GetAbilityLevel(Abilities.SafeFall);
+            
+                    var fallSpeed = velocity - (100 * safeFallLevel);
+
+                    int fallDivide = 15;
+                    int fallMinSpeed = 500;
+
+                    var fallPercent = (int)Math.Min(99, (fallSpeed - (fallMinSpeed + 1)) / fallDivide);
+
+                    if (fallSpeed > fallMinSpeed)
+                    {
+                        fallPercent = Math.Max(0, fallPercent - safeFallLevel);
+                        fallPercent /= 2;
+                        living.TakeFallDamage(fallPercent);
+                    }
+                }
             }
         }
 
@@ -434,9 +466,9 @@ namespace DOL.GS.Spells
         {
             if (victim.IsBumpNpc)
             {
-                foreach (GamePlayer player in ((BumpNPC)victim.Npc).Victims.Where(p => p.ObjectState == GameObject.eObjectState.Active && p.IsAlive))
+                var bumpNpc = ((BumpNPC)victim.Npc);
+                foreach (GamePlayer player in bumpNpc.ActiveVictims)
                 {
-                    player.IsStunned = false;
                     player.DismountSteed(true);
                     DoFinalEffects(player, speed);
                 }

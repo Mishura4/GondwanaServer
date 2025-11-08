@@ -455,14 +455,14 @@ namespace DOL.GS
         /// <summary>
         /// say if player is stunned or not
         /// </summary>
-        protected bool m_stunned;
+        protected int m_stunnedCount;
         /// <summary>
         /// Gets the stunned flag of this living
         /// </summary>
         public bool IsStunned
         {
-            get { return m_stunned; }
-            set { m_stunned = value; }
+            get { return m_stunnedCount > 0; }
+            set { m_stunnedCount = Math.Max(0, m_stunnedCount + (value ? 1 : -1)); }
         }
 
         /// <summary>
