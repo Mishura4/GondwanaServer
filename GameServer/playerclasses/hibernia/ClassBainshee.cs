@@ -133,15 +133,28 @@ namespace DOL.GS.PlayerClass
             }
             else
             {
-                switch (Player.Race)
+                ushort model = Player.Race switch
                 {
-                    case 11: Player.Model = 1885; break; //Elf
-                    case 12: Player.Model = 1884; break; //Lurikeen
-                    case 9:
-                    default: Player.Model = 1883; break; //Celt
-                }
+                    11 => 1885, // Elf
+                    12 => 1884, // Lurikeen
+                    9 or _ => 1883, // Celt
+                };
 
+                Player.Model = model;
                 GameEventMgr.AddHandler(Player, GamePlayerEvent.RemoveFromWorld, m_WraithTriggerEvent);
+
+                foreach (var effect in Player.FindEffectsOnTarget(e => e is { SpellHandler: IllusionSpell }).ToList())
+                {
+                    var illu = ((IllusionSpell)effect.SpellHandler);
+
+                    if (illu.GetModelFor(Player) != 0)
+                    {
+                        effect.Cancel(false);
+                        continue;
+                    }
+                    
+                    illu.Illusions.ForEach(p => p.Model = model);
+                }
             }
 
             m_WraithTimerAction.Start(WRAITH_FORM_RESET_DELAY);
@@ -177,6 +190,18 @@ namespace DOL.GS.PlayerClass
             GameEventMgr.RemoveHandler(Player, GamePlayerEvent.RemoveFromWorld, m_WraithTriggerEvent);
 
             Player.Model = Player.CreationModel;
+            foreach (var effect in Player.FindEffectsOnTarget(e => e is { SpellHandler: IllusionSpell }).ToList())
+            {
+                var illu = ((IllusionSpell)effect.SpellHandler);
+
+                if (illu.GetModelFor(Player) != 0)
+                {
+                    effect.Cancel(false);
+                    continue;
+                }
+                    
+                illu.Illusions.ForEach(p => p.Model = p.ModelDb);
+            }
         }
     }
     #endregion

@@ -44,7 +44,7 @@ namespace DOL.GS.Spells
                     ErrorTranslationToCaster("SpellHandler.TargetIsStealthed");
                 return false;
             }
-            
+
             return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
@@ -124,12 +124,15 @@ namespace DOL.GS.Spells
 
             if (model != 0)
             {
+                if (effect.Owner is GamePlayer playerOwner)
+                {
+                    playerOwner.CharacterClass.CancelClassStates();
+                }
                 effect.Owner.Model = model;
             }
         }
 
-        /// <inheritdoc />
-        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        protected virtual void Unmorph(GameSpellEffect effect)
         {
             GameSpellEffect bestEffect = null;
             ushort bestModel = 0;
@@ -143,7 +146,7 @@ namespace DOL.GS.Spells
             {
                 if (otherEffect == effect)
                     continue;
-                
+
                 var morph = otherEffect.SpellHandler as AbstractMorphSpellHandler;
                 var model = morph.GetModelFor(effect.Owner);
                 if (bestEffect == null)
@@ -175,6 +178,15 @@ namespace DOL.GS.Spells
             if (bestModel != 0 && bestModel != effect.Owner.Model)
             {
                 effect.Owner.Model = bestModel;
+            }
+        }
+
+        /// <inheritdoc />
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            if (GetModelFor(effect.Owner) != 0)
+            {
+                Unmorph(effect);
             }
             return base.OnEffectExpires(effect, noMessages);
         }
