@@ -51,7 +51,8 @@ namespace DOL.GS.Spells
             m_caster.Mana -= PowerCost(target);
             base.FinishSpellCast(target, force);
         }
-        public override bool CancelPulsingSpell(GameLiving living, string spellType)
+
+        public override PulsingSpellEffect? CancelPulsingSpell(GameLiving living, string spellType)
         {
             lock (living.ConcentrationEffects)
             {
@@ -65,18 +66,18 @@ namespace DOL.GS.Spells
                         effect.Cancel(false);
                         GameEventMgr.RemoveHandler(Caster, GamePlayerEvent.Moving, new DOLEventHandler(EventAction));
                         GameEventMgr.RemoveHandler(Caster, GamePlayerEvent.Dying, new DOLEventHandler(EventAction));
-                        return true;
+                        return effect;
                     }
                 }
             }
-            return false;
+            return null;
         }
         public void EventAction(DOLEvent e, object sender, EventArgs args)
         {
             GameLiving player = sender as GameLiving;
 
             if (player == null) return;
-            if (Spell.Pulse != 0 && CancelPulsingSpell(Caster, Spell.SpellType))
+            if (Spell.Pulse != 0 && CancelPulsingSpell(Caster, Spell.SpellType) != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.CancelEffect"), eChatType.CT_Spell);
                 return;

@@ -557,7 +557,7 @@ namespace DOL.GS.Spells
         /// <param name="living">owner of pulsing spell</param>
         /// <param name="spellType">type of spell to cancel</param>
         /// <returns>true if any spells were canceled</returns>
-        public virtual bool CancelPulsingSpell(GameLiving living, string spellType)
+        public virtual PulsingSpellEffect? CancelPulsingSpell(GameLiving living, string spellType)
         {
             lock (living.ConcentrationEffects)
             {
@@ -566,16 +566,17 @@ namespace DOL.GS.Spells
                     PulsingSpellEffect effect = living.ConcentrationEffects[i] as PulsingSpellEffect;
                     if (effect == null)
                         continue;
+
                     if (effect.SpellHandler.Spell.SpellType == spellType)
                     {
                         if (Caster is GamePlayer player)
                             player.PulseSpell = null;
                         effect.Cancel(false);
-                        return true;
+                        return effect;
                     }
                 }
             }
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -682,8 +683,6 @@ namespace DOL.GS.Spells
 
             m_spellTarget = targetObject;
 
-            Caster.Notify(GameLivingEvent.CastStarting, m_caster, new CastingEventArgs(this));
-
             //[Stryve]: Do not break stealth if spell can be cast without breaking stealth.
             if (UnstealthCasterOnStart)
                 Caster.Stealth(false);
@@ -724,63 +723,81 @@ namespace DOL.GS.Spells
                     m_spellTarget = null;
             }
 
-            if (Spell.Pulse != 0 && !Spell.IsFocus && CancelPulsingSpell(Caster, Spell.SpellType))
-            {
-                if (Spell.InstrumentRequirement == 0)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.CancelEffect"), eChatType.CT_Spell);
-                else
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.StopPlayingSong"), eChatType.CT_Spell);
-                Status = eStatus.Pass;
-            }
-            else if (GameServer.ServerRules.IsAllowedToCastSpell(Caster, m_spellTarget, Spell, m_spellLine))
-            {
-                if (CheckBeginCast(m_spellTarget))
-                {
-                    if (m_caster is GamePlayer && (m_caster as GamePlayer)!.IsOnHorse && !HasPositiveEffect)
-                    {
-                        (m_caster as GamePlayer)!.IsOnHorse = false;
-                    }
-
-                    if (m_caster is GamePlayer && (m_caster as GamePlayer)!.IsSummoningMount)
-                    {
-                        (m_caster as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer)!.Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        (m_caster as GamePlayer)!.IsOnHorse = false;
-                    }
-
-                    if (Spell.Pulse != 0 && m_caster is GamePlayer player)
-                    {
-                        player.PulseSpell = this;
-                    }
-
-                    if (!Spell.IsInstantCast)
-                    {
-                        StartCastTimer(m_spellTarget);
-
-                        if ((Caster is GamePlayer && (Caster as GamePlayer)!.IsStrafing) || Caster.IsMoving)
-                            CasterMoves();
-                    }
-                    else
-                    {
-                        if (Caster.ControlledBrain == null || Caster.ControlledBrain.Body == null || !(Caster.ControlledBrain.Body is NecromancerPet))
-                        {
-                            SendCastAnimation(0);
-                        }
-
-                        FinishSpellCast(m_spellTarget);
-                    }
-                }
-                else
-                {
-                    Status = eStatus.Failure;
-                    success = false;
-                }
-            }
+            success = DoCastSpell(targetObject);
 
             // This is critical to restore the casters state and allow them to cast another spell
             if (!IsCasting)
                 OnAfterSpellCastSequence();
 
             return success;
+        }
+
+        private bool DoCastSpell(GameLiving targetObject)
+        {
+            if (Spell.Pulse != 0 && !Spell.IsFocus)
+            {
+                var pulsing = CancelPulsingSpell(Caster, Spell.SpellType);
+                if (pulsing != null)
+                {
+                    if (Spell.InstrumentRequirement == 0)
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.CancelEffect"), eChatType.CT_Spell);
+                    else
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.StopPlayingSong"), eChatType.CT_Spell);
+                    Status = eStatus.Pass;
+                    return true;
+                }
+            }
+
+            if (!GameServer.ServerRules.IsAllowedToCastSpell(Caster, m_spellTarget, Spell, m_spellLine))
+            {
+                Status = eStatus.Failure;
+                return false;
+            }
+            
+            if (!CheckBeginCast(m_spellTarget))
+            {
+                Status = eStatus.Failure;
+                return false;
+            }
+
+            if (m_caster is GamePlayer casterPlayer)
+            {
+                if (casterPlayer.IsOnHorse && !HasPositiveEffect)
+                {
+                    casterPlayer.IsOnHorse = false;
+                }
+
+                if (casterPlayer.IsSummoningMount)
+                {
+                    casterPlayer.SendTranslatedMessage("GameObjects.GamePlayer.UseSlot.CantMountSpell");
+                    casterPlayer.IsOnHorse = false;
+                }
+            }
+
+            if (Spell.Pulse != 0 && m_caster is GamePlayer player)
+            {
+                player.PulseSpell = this;
+            }
+
+            if (!Spell.IsInstantCast)
+            {
+                StartCastTimer(m_spellTarget);
+
+                if ((Caster is GamePlayer && (Caster as GamePlayer)!.IsStrafing) || Caster.IsMoving)
+                    CasterMoves();
+            }
+            else
+            {
+                if (Caster.ControlledBrain == null || Caster.ControlledBrain.Body == null || !(Caster.ControlledBrain.Body is NecromancerPet))
+                {
+                    SendCastAnimation(0);
+                }
+
+                Caster.Notify(GameLivingEvent.CastStarting, m_caster, new CastingEventArgs(this));
+
+                FinishSpellCast(m_spellTarget);
+            }
+            return true;
         }
 
 
@@ -807,15 +824,17 @@ namespace DOL.GS.Spells
             if (step2 < 1)
                 step2 = 1;
 
-            if (Caster is GamePlayer && ServerProperties.Properties.ENABLE_DEBUG)
+            if (Caster is GamePlayer casterPlayer && ServerProperties.Properties.ENABLE_DEBUG)
             {
-                (Caster as GamePlayer)!.Out.SendMessage($"[DEBUG] spell time = {time}, step1 = {step1}, step2 = {step2}, step3 = {step3}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                casterPlayer.Out.SendMessage($"[DEBUG] spell time = {time}, step1 = {step1}, step2 = {step2}, step3 = {step3}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
             m_castTimer = new DelayedCastTimer(Caster, this, target, step2, step3, step2_substeps);
             m_castTimer.Start(step1);
             m_started = Caster.CurrentRegion.Time;
             SendCastAnimation();
+
+            Caster.Notify(GameLivingEvent.CastStarting, m_caster, new CastingEventArgs(this));
 
             if (m_caster.IsMoving || m_caster.IsStrafing)
             {

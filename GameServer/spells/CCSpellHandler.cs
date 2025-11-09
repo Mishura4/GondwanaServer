@@ -315,7 +315,7 @@ namespace DOL.GS.Spells
                     return false;
                 }
 
-                if (target != null && (!target.IsAlive))
+                if (target is { IsAlive: false })
                 {
                     GameSpellEffect effect = SpellHandler.FindEffectOnTarget(target, this);
                     if (effect != null)

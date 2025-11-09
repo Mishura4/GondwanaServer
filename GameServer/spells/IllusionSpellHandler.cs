@@ -44,6 +44,8 @@ namespace DOL.GS.Spells
     {
         private List<IllusionPet> illusionPets = new List<IllusionPet>();
 
+        public IEnumerable<IllusionPet> Illusions => illusionPets;
+
         public IllusionSpell(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
             OverwritesMorphs = false;

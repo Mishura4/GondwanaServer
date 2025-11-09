@@ -17,10 +17,12 @@
  *
  */
 using DOL.AI.Brain;
+using DOL.Database;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Geometry;
 using DOL.GS.ServerRules;
+using DOL.GS.Spells;
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
@@ -57,6 +59,7 @@ namespace DOL.AI.Brain
             
             GameEventMgr.AddHandler(Owner, GameLivingEvent.Moving, OnOwnerMove);
             GameEventMgr.AddHandler(Owner, GameLivingEvent.CastStarting, OnOwnerCast);
+            GameEventMgr.AddHandler(Owner, GameLivingEvent.PulseEnded, OnOwnerPulseEnded);
             GameEventMgr.AddHandler(Owner, GameLivingEvent.StyleExecute, OnOwnerStyle);
             GameEventMgr.AddHandler(Body, GameLivingEvent.CastFailed, OnActionEnd);
             GameEventMgr.AddHandler(Body, GameLivingEvent.CastFinished, OnActionEnd);
@@ -83,12 +86,19 @@ namespace DOL.AI.Brain
             Follow();
         }
 
+        private void OnOwnerPulseEnded(DOLEvent e, object sender, EventArgs arguments)
+        {
+            CastingEventArgs args = (CastingEventArgs)arguments;
+            Body.FindPulsingSpellOnTarget(args.SpellHandler.Spell)?.Cancel(false);
+        }
+
         private void OnOwnerCast(DOLEvent e, object sender, EventArgs arguments)
         {
             if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } || Body.IsIncapacitated || Body.IsCasting)
                 return;
 
             CastingEventArgs args = (CastingEventArgs)arguments;
+            
             var spellTarget = (args.SpellHandler.Target == Owner ? Body : args.SpellHandler.Target);
             var previousTarget = Body.TargetObject;
             Body.StopMoving();

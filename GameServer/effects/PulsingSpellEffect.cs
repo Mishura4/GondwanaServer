@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Events;
 using System;
 using System.Text;
 using DOL.GS;
@@ -92,6 +93,7 @@ namespace DOL.GS.Effects
                     m_spellPulseAction.Stop();
                     m_spellPulseAction = null;
                 }
+                m_spellHandler.Caster.Notify(GameLivingEvent.PulseEnded, m_spellHandler.Caster, new CastingEventArgs(m_spellHandler));
                 m_spellHandler.Caster.ConcentrationEffects.Remove(this);
             }
             return true;

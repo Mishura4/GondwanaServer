@@ -284,7 +284,7 @@ namespace DOL.GS.Spells
 
         protected override bool ExecuteSpell(GameLiving target, bool force)
         {
-            if (Spell.Pulse != 0 && !Spell.IsFocus && CancelPulsingSpell(Caster, Spell.SpellType))
+            if (Spell.Pulse != 0 && !Spell.IsFocus && CancelPulsingSpell(Caster, Spell.SpellType) != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellCancelled"), eChatType.CT_SpellExpires);
             }
