@@ -579,35 +579,57 @@ namespace DOL.GS
         /// Changes shade state of the player.
         /// </summary>
         /// <param name="state">The new state.</param>
-        public virtual bool Shade(bool makeShade)
+        public bool Shade(bool makeShade)
         {
-            if (Player.IsShade == makeShade)
-            {
-                if (makeShade && (Player.ObjectState == GameObject.eObjectState.Active))
-                    Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "GameObjects.GamePlayerShade.AlreadyShade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return false;
-            }
-
             if (makeShade)
             {
-                // Turn into a shade.
-                Player.Model = Player.ShadeModel;
-                Player.ShadeEffect = CreateShadeEffect();
-                Player.ShadeEffect.Start(Player);
+                return EnterShade();
             }
             else
             {
-                if (Player.ShadeEffect != null)
-                {
-                    // Drop shade form.
-                    Player.ShadeEffect.Stop();
-                    Player.ShadeEffect = null;
-                }
+                return CancelClassStates();
+            }
+        }
+
+        public virtual bool EnterShade(bool quiet = false)
+        {
+            if (Player.IsShade)
+            {
+                if (!quiet && Player.ObjectState == GameObject.eObjectState.Active)
+                    Player.SendTranslatedMessage("GameObjects.GamePlayerShade.AlreadyShade", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            // Turn into a shade.
+            Player.Model = Player.ShadeModel;
+            Player.ShadeEffect = CreateShadeEffect();
+            Player.ShadeEffect.Start(Player);
+            return true;
+        }
+
+        public virtual bool LeaveShade()
+        {
+            bool wasShade = Player.IsShade;
+            if (Player.ShadeEffect != null)
+            {
+                // Drop shade form.
+                Player.ShadeEffect.Stop();
+                Player.ShadeEffect = null;
+            }
+
+            if (wasShade)
+            {
                 // Drop shade form.
                 Player.Model = Player.CreationModel;
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "GameObjects.GamePlayer.Shade.NoLongerShade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
-            return true;
+            return wasShade;
+        }
+
+        /// <inheritdoc />
+        public virtual bool CancelClassStates()
+        {
+            return LeaveShade();
         }
 
         /// <summary>

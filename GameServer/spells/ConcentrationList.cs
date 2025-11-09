@@ -153,13 +153,13 @@ namespace DOL.GS.Spells
         /// </summary>
         public void CancelAll()
         {
-            CancelAll(false);
+            CancelAll(true, true);
         }
 
         /// <summary>
         /// Cancels all list effects
         /// </summary>
-        public void CancelAll(bool leaveself)
+        public void CancelAll(bool fromSelf, bool fromOthers, bool cancelledByPlayer = false)
         {
             if (m_concSpells != null)
             {
@@ -170,9 +170,21 @@ namespace DOL.GS.Spells
                 }
 
                 BeginChanges();
-                foreach (IConcentrationEffect fx in concEffect.Where(eff => !leaveself || leaveself && eff.OwnerName != m_owner.Name))
+                IEnumerable<IConcentrationEffect> effects = concEffect;
+                if (fromSelf && fromOthers)
                 {
-                    fx.Cancel(false);
+                    effects = concEffect;
+                }
+                else
+                {
+                    if (fromSelf)
+                        effects = effects.Where(e => e.OwnerName == m_owner.Name);
+                    if (fromOthers)
+                        effects = effects.Where(e => e.OwnerName != m_owner.Name);
+                }
+                foreach (IConcentrationEffect fx in effects)
+                {
+                    fx.Cancel(cancelledByPlayer);
                 }
                 CommitChanges();
             }

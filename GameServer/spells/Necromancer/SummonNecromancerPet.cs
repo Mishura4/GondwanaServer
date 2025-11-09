@@ -81,8 +81,8 @@ namespace DOL.GS.Spells
             if (!base.ApplyEffectOnTarget(target, effectiveness))
                 return false;
 
-            if (Caster is GamePlayer)
-                (Caster as GamePlayer)!.Shade(true);
+            if (Caster is GamePlayer player)
+                player.CharacterClass.EnterShade();
 
             // Cancel RR5 Call of Darkness if on caster.
 

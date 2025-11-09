@@ -21,6 +21,7 @@ using DOL.GS.Effects;
 using DOL.Database;
 using DOL.Events;
 using DOL.AI.Brain;
+using DOL.GS.PlayerClass;
 
 namespace DOL.GS.Spells
 {
@@ -31,7 +32,7 @@ namespace DOL.GS.Spells
         {
             if (effect.Owner is GamePlayer player)
             {
-                player.Shade(true);
+                player.CharacterClass.EnterShade();
             }
             base.OnEffectStart(effect);
         }
@@ -40,7 +41,7 @@ namespace DOL.GS.Spells
         {
             if (effect.Owner is GamePlayer player)
             {
-                player.Shade(false);
+                player.CharacterClass.LeaveShade();
             }
             return base.OnEffectExpires(effect, noMessages);
         }

@@ -147,26 +147,25 @@ namespace DOL.GS.PlayerClass
             m_WraithTimerAction.Start(WRAITH_FORM_RESET_DELAY);
         }
 
-        /// <summary>
-        /// Turn out of Wraith.
-        /// Stop Timer and Remove Event Handlers.
-        /// </summary>
-        public void TurnOutOfWraith()
+        /// <inheritdoc />
+        public override bool CancelClassStates()
         {
-            TurnOutOfWraith(false);
+            bool baseForms = base.CancelClassStates();
+            TurnOutOfWraith(true);
+            return baseForms;
         }
 
         /// <summary>
         /// Turn out of Wraith.
         /// Stop Timer and Remove Event Handlers.
         /// </summary>
-        public virtual void TurnOutOfWraith(bool forced)
+        public virtual void TurnOutOfWraith(bool forced = false)
         {
             if (Player == null)
                 return;
 
             // Keep Wraith Form if Pulsing Offensive Spell Running
-            if (!forced && Player.ConcentrationEffects.OfType<PulsingSpellEffect>().Any(pfx => pfx.SpellHandler != null && !pfx.SpellHandler.HasPositiveEffect))
+            if (!forced && Player.ConcentrationEffects.OfType<PulsingSpellEffect>().Any(pfx => pfx.SpellHandler is { HasPositiveEffect: false }))
             {
                 TurnInWraith();
                 return;
@@ -177,8 +176,7 @@ namespace DOL.GS.PlayerClass
 
             GameEventMgr.RemoveHandler(Player, GamePlayerEvent.RemoveFromWorld, m_WraithTriggerEvent);
 
-            Player.Model = (ushort)Player.Client.Account.Characters[Player.Client.ActiveCharIndex].CreationModel;
-
+            Player.Model = Player.CreationModel;
         }
     }
     #endregion

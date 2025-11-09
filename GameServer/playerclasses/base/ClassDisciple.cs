@@ -16,9 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System.Collections.Generic;
+using DOL.GS.PacketHandler;
 using DOL.GS.Realm;
 using DOL.GS.Spells;
+using DOL.Language;
+using System.Collections.Generic;
 
 namespace DOL.GS.PlayerClass
 {

@@ -569,8 +569,6 @@ namespace DOL.GS.Spells
             }
             else
             {
-                victim.Npc.Flags &= ~GameNPC.eFlags.FLYING;
-                victim.Npc.IsFrozen = false;
                 DoFinalEffects(victim.Npc, speed);
             }
             victim.Effect?.Cancel(false);

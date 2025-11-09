@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.PlayerClass;
 using System;
 using System.Collections.Generic;
 using DOL.Language;
@@ -66,7 +67,8 @@ namespace DOL.GS.Effects
         /// </summary>
         public override bool Cancel(bool playerCancel, bool force = false)
         {
-            return m_player?.Shade(false) == true;
+            m_player.CharacterClass.LeaveShade();
+            return true;
         }
 
         /// <summary>

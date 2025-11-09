@@ -5879,35 +5879,31 @@ namespace DOL.GS
         /// <summary>
         /// Cancels all concentration effects by this living and on this living
         /// </summary>
-        public void CancelAllConcentrationEffects()
-        {
-            CancelAllConcentrationEffects(false);
-        }
-
-        /// <summary>
-        /// Cancels all concentration effects by this living and on this living
-        /// </summary>
-        public void CancelAllConcentrationEffects(bool leaveSelf)
+        public void CancelAllConcentrationEffects(bool fromSelf = true, bool fromOthers = true, bool cancelledByPlayer = false)
         {
             // cancel conc spells
-            ConcentrationEffects.CancelAll(leaveSelf);
+            ConcentrationEffects.CancelAll(fromSelf, fromOthers);
 
-            // cancel all active conc spell effects from other casters
-            ArrayList concEffects = new ArrayList();
-            lock (EffectList)
+            List<GameSpellEffect> effects;
+            if (fromSelf && fromOthers)
+                effects = SpellHelper.FindEffectsOnTarget(this, e => e is GameSpellEffect { Spell.Concentration: > 0 }).ToList();
+            else
             {
-                foreach (IGameEffect effect in EffectList)
-                {
-                    if (effect is GameSpellEffect && ((GameSpellEffect)effect).Spell.Concentration > 0)
-                    {
-                        if (!leaveSelf || leaveSelf && ((GameSpellEffect)effect).SpellHandler.Caster != this)
-                            concEffects.Add(effect);
-                    }
-                }
+                effects = SpellHelper.FindEffectsOnTarget(this).OfType<GameSpellEffect>()
+                    .Where(e => (e.SpellHandler.Caster == this && fromSelf) || (e.SpellHandler.Caster != this && fromOthers)).ToList();
             }
-            foreach (GameSpellEffect effect in concEffects)
+
+            if (effects.Count > 0)
             {
-                effect.Cancel(false);
+                EffectList.BeginChanges();
+                try
+                {
+                    effects.ForEach(e => e.Cancel(cancelledByPlayer));
+                }
+                finally
+                {
+                    EffectList.CommitChanges();
+                }
             }
         }
 
@@ -5997,7 +5993,15 @@ namespace DOL.GS
             {
                 toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is T && p(e)));
             }
-            toRemove.ForEach(e => e.Cancel(false));
+            EffectList.BeginChanges();
+            try
+            {
+                toRemove.ForEach(e => e.Cancel(false));
+            }
+            finally
+            {
+                EffectList.CommitChanges();
+            }
         }
 
         public void CancelEffects<T>() where T : SpellHandler => CancelEffects<T>((_) => true);
@@ -6009,7 +6013,10 @@ namespace DOL.GS
 
         public void CancelAllSpeedOrPulseEffects()
         {
-            CancelEffects(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0));
+            EffectList.BeginChanges();
+            var pulseEffects = SpellHelper.FindEffectsOnTarget(this, (e => e.SpellHandler.HasPositiveEffect && e.SpellHandler.Spell.Pulse > 0)).ToList();
+            pulseEffects.ForEach(e => e.Cancel(false));
+            EffectList.CommitChanges();
         }
         
         public void CancelMorphSpellEffects()

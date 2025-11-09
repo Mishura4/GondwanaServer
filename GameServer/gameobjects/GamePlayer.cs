@@ -17,31 +17,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-
+using AmteScripts.Managers;
+using AmteScripts.PvP.CTF;
+using Discord;
 using DOL.AI;
 using DOL.AI.Brain;
-using System.Timers;
-using AmteScripts.Managers;
 using DOL.Database;
 using DOL.events.gameobjects;
 using DOL.Events;
+using DOL.GameEvents;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS.Effects;
 using DOL.GS.Finance;
+using DOL.GS.GameEvents;
+using DOL.GS.Geometry;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.GS.PacketHandler.Client.v168;
+using DOL.GS.PlayerClass;
 using DOL.GS.PlayerTitles;
 using DOL.GS.PropertyCalc;
 using DOL.GS.Quests;
+using DOL.GS.Realm;
 using DOL.GS.RealmAbilities;
+using DOL.GS.Scripts;
 using DOL.GS.ServerProperties;
 using DOL.GS.SkillHandler;
 using DOL.GS.Spells;
@@ -49,16 +49,16 @@ using DOL.GS.Styles;
 using DOL.GS.Utils;
 using DOL.Language;
 using DOL.Territories;
-using DOL.GameEvents;
-using DOL.GS.GameEvents;
-using DOL.GS.Realm;
-using DOL.GS.Scripts;
 using log4net;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
-using DOL.GS.Geometry;
-using AmteScripts.PvP.CTF;
-using Discord;
 using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Timers;
 using static DOL.GS.Spells.SpellHandler;
 
 namespace DOL.GS
@@ -933,10 +933,7 @@ namespace DOL.GS
                 log.InfoFormat("Player {0}({1}) went linkdead!", Name, Client.Account.Name);
 
             // LD Necros need to be "Unshaded"
-            if (Client.Player.CharacterClass.Player.IsShade)
-            {
-                Client.Player.CharacterClass.Player.Shade(false);
-            }
+            Client.Player.CharacterClass.LeaveShade();
 
             // Dead link-dead players release on live servers
             if (!IsAlive)
@@ -11457,8 +11454,8 @@ namespace DOL.GS
                 if (!DismountSteed(forced))
                     return false;
 
-            if (this is GamePlayer { IsOnHorse: true } asPlayer)
-                asPlayer.IsOnHorse = false;
+            if (IsOnHorse)
+                IsOnHorse = false;
 
             if (!steed.RiderMount(this, forced) && !forced)
                 return false;
@@ -11756,7 +11753,7 @@ namespace DOL.GS
                     CurrentRegion.Notify(RegionEvent.PlayerLeave, CurrentRegion, new RegionPlayerEventArgs(this));
                 }
 
-                CancelAllConcentrationEffects(true);
+                CancelAllConcentrationEffects(fromSelf: false, fromOthers: true);
                 if (ControlledBrain != null)
                     CommandNpcRelease();
             }
@@ -16542,15 +16539,6 @@ namespace DOL.GS
                     default: return Model;
                 }
             }
-        }
-
-        /// <summary>
-        /// Changes shade state of the player.
-        /// </summary>
-        /// <param name="state">The new state.</param>
-        public virtual bool Shade(bool state)
-        {
-            return CharacterClass.Shade(state);
         }
         #endregion
 

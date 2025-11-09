@@ -16,47 +16,46 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
+using AmteScripts.Managers;
 using DOL.AI;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
+using DOL.GameEvents;
 using DOL.GS;
+using DOL.GS.Commands;
 using DOL.GS.Effects;
+using DOL.GS.Finance;
+using DOL.GS.Geometry;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
 using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
+using DOL.GS.Scripts;
+using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
 using DOL.GS.Styles;
 using DOL.GS.Utils;
 using DOL.Language;
-using DOL.GS.ServerProperties;
-using System.Threading;
-using System.Threading.Tasks;
-using DOL.GameEvents;
 using DOL.MobGroups;
 using DOL.Territories;
-using static DOL.GS.ScriptMgr;
-using DOL.GS.Finance;
-using DOL.GS.Geometry;
 using DOLDatabase.Tables;
-using DOL.GS.Scripts;
-using System.Timers;
-using System.Text.RegularExpressions;
 using log4net;
-using Vector3 = System.Numerics.Vector3;
-using AmteScripts.Managers;
-using DOL.GS.Commands;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using static DOL.Database.ArtifactBonus;
+using static DOL.GS.ScriptMgr;
 
 namespace DOL.GS
 {
@@ -3011,10 +3010,18 @@ namespace DOL.GS
             if (exists != -1)
                 return false;
 
-            rider.MoveTo(Position);
-
-            Notify(GameNPCEvent.RiderMount, this, new RiderMountEventArgs(rider, this));
             int slot = GetFreeArrayLocation();
+            if (slot == -1)
+                return false;
+            
+            Notify(GameNPCEvent.RiderMount, this, new RiderMountEventArgs(rider, this));
+            var morph = rider.FindMorph(cancel: true);
+            if (morph != null)
+                return false;
+
+            rider.CancelAllConcentrationEffects();
+            rider.CharacterClass.CancelClassStates();
+            rider.MoveTo(Position);
             Riders[slot] = rider;
             rider.Steed = this;
             return true;
@@ -3042,6 +3049,7 @@ namespace DOL.GS
             //rider.MoveTo(CurrentRegionID, X, Y, Z, Heading);
 
             Notify(GameNPCEvent.RiderMount, this, new RiderMountEventArgs(rider, this));
+            rider.CancelAllConcentrationEffects();
             Riders[slot] = rider;
             rider.Steed = this;
             return true;

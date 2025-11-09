@@ -132,9 +132,6 @@ namespace DOL.GS
                 return false;
             }
 
-            if (player.IsShade)
-                player.Shade(false);
-
             var morph = player.FindMorph(cancel: true);
             if (morph != null)
             {
