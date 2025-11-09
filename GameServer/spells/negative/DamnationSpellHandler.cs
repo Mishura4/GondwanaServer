@@ -137,14 +137,12 @@ namespace DOL.GS.Spells
         public override bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
         {
             var spellHandler = other.SpellHandler as SpellHandler;
-
-            if (spellHandler != null)
+            if (spellHandler is { HasPositiveEffect: true } or DiseaseSpellHandler or HealDebuffSpellHandler or { Spell.Pulse: > 0 })
             {
-                if (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.Pulse > 0)
-                    return true;
+                return true;
             }
             
-            if (spellHandler!.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)
+            if (spellHandler!.HasPositiveOrSpeedEffect())
                 return true;
             
             return base.PreventsApplication(self, other);

@@ -3360,32 +3360,42 @@ namespace DOL.GS.Spells
             var cancellableEffects = new List<GameSpellEffect>(1);
             GameSpellEffect overwriteEffect = null;
             List<GameSpellEffect> removingEffects = new List<GameSpellEffect>(1);
-
-            foreach (var effect in target.EffectList.OfType<GameSpellEffect>().Where(effect => effect.SpellHandler != null))
+            
+            var newSpell = ((SpellHandler)neweffect.SpellHandler);
+            foreach (var oldEffect in target.EffectList.OfType<GameSpellEffect>().Where(effect => effect.SpellHandler != null))
             {
-                if (effect.SpellHandler.PreventsApplication(effect, neweffect))
+                var oldSpell = ((SpellHandler)oldEffect.SpellHandler);
+                if (oldSpell.PreventsApplication(oldEffect, neweffect))
                 {
                     // Old Spell is Better than new one
-                    ((SpellHandler)effect.SpellHandler).OnBetterThan(target, effect, neweffect);
+                    oldSpell.OnBetterThan(target, oldEffect, neweffect);
                     // Prevent Adding.
                     return false;
                 }
 
-                if (effect.SpellHandler.IsOverwritable(neweffect))
+                if (!oldSpell.IsOverwritable(neweffect))
+                {
+                    // Old spell cannot be overwritten, but is it removed by this spell?
+                    if (!oldEffect.ImmunityState && PreventsApplication(neweffect, oldEffect))
+                    {
+                        removingEffects.Add(oldEffect);
+                    }
+                }
+                else
                 {
                     // If we can cancel spell effect we don't need to overwrite it
-                    if (effect.SpellHandler.IsCancellable(neweffect))
+                    if (oldSpell.IsCancellable(neweffect))
                     {
                         // Spell is better than existing "Cancellable" or it should start disabled
-                        if (ShouldCancelOldEffect(effect, neweffect))
-                            cancellableEffects.Add(effect);
+                        if (ShouldCancelOldEffect(oldEffect, neweffect))
+                            cancellableEffects.Add(oldEffect);
                         else
                             enable = false;
                     }
                     else
                     {
                         // Check for Overwriting.
-                        if (ShouldOverwriteOldEffect(effect, neweffect))
+                        if (ShouldOverwriteOldEffect(oldEffect, neweffect))
                         {
                             if (overwriteEffect != null)
                             {
@@ -3395,20 +3405,16 @@ namespace DOL.GS.Spells
                                     removingEffects.Add(overwriteEffect);
                                 }
                             }
-                            overwriteEffect = effect;
+                            overwriteEffect = oldEffect;
                         }
                         else
                         {
                             // Old Spell is Better than new one
-                            ((SpellHandler)effect.SpellHandler).OnBetterThan(target, effect, neweffect);
+                            ((SpellHandler)oldEffect.SpellHandler).OnBetterThan(target, oldEffect, neweffect);
                             // Prevent Adding.
                             return false;
                         }
                     }
-                }
-                else if (!effect.ImmunityState && PreventsApplication(effect, neweffect))
-                {
-                    removingEffects.Add(effect);
                 }
             }
 
