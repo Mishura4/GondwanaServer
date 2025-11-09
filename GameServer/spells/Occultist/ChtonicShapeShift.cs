@@ -83,7 +83,7 @@ namespace DOL.GS.Spells
         /// <summary>Model is driven by Spell.LifeDrainReturn (0 -> no model change).</summary>
         public override ushort GetModelFor(GameLiving living)
         {
-            return 258;
+            return (ushort)Spell.LifeDrainReturn;
         }
 
         public override bool CheckBeginCast(GameLiving target, bool quiet)
