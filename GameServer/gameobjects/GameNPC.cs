@@ -3012,14 +3012,15 @@ namespace DOL.GS
             int slot = GetFreeArrayLocation();
             if (slot == -1)
                 return false;
-            
+
             Notify(GameNPCEvent.RiderMount, this, new RiderMountEventArgs(rider, this));
             var morph = rider.FindMorph(cancel: true);
             if (morph != null)
                 return false;
 
-            rider.CancelAllConcentrationEffects();
-            rider.CharacterClass.CancelClassStates();
+            // Cancel all negative pulsing concentration effects cast by the caster (whew)
+            rider.ConcentrationEffects.CancelAll(e => e is PulsingSpellEffect { SpellHandler: { HasPositiveEffect: false, Spell.IsPulsing: true, Spell.Radius: >0 } spell } && spell.Caster == rider);
+            rider.CharacterClass.CancelClassStates(); // Cancel bainshee, shade, etc
             rider.MoveTo(Position);
             Riders[slot] = rider;
             rider.Steed = this;

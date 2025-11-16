@@ -11753,7 +11753,7 @@ namespace DOL.GS
                     CurrentRegion.Notify(RegionEvent.PlayerLeave, CurrentRegion, new RegionPlayerEventArgs(this));
                 }
 
-                CancelAllConcentrationEffects(fromSelf: false, fromOthers: true);
+                CancelAllConcentrationEffects(true);
                 if (ControlledBrain != null)
                     CommandNpcRelease();
             }

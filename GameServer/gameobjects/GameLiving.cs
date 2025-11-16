@@ -5879,18 +5879,17 @@ namespace DOL.GS
         /// <summary>
         /// Cancels all concentration effects by this living and on this living
         /// </summary>
-        public void CancelAllConcentrationEffects(bool fromSelf = true, bool fromOthers = true, bool cancelledByPlayer = false)
+        public void CancelAllConcentrationEffects(bool leaveSelf = false, bool cancelledByPlayer = false)
         {
             // cancel conc spells
-            ConcentrationEffects.CancelAll(fromSelf, fromOthers);
+            ConcentrationEffects.CancelAll(leaveSelf, cancelledByPlayer);
 
             List<GameSpellEffect> effects;
-            if (fromSelf && fromOthers)
+            if (!leaveSelf)
                 effects = SpellHelper.FindEffectsOnTarget(this, e => e is GameSpellEffect { Spell.Concentration: > 0 }).ToList();
             else
             {
-                effects = SpellHelper.FindEffectsOnTarget(this).OfType<GameSpellEffect>()
-                    .Where(e => (e.SpellHandler.Caster == this && fromSelf) || (e.SpellHandler.Caster != this && fromOthers)).ToList();
+                effects = SpellHelper.FindEffectsOnTarget(this, e => e is GameSpellEffect { Spell.Concentration: > 0 } && e.SpellHandler.Caster != this).ToList();
             }
 
             if (effects.Count > 0)

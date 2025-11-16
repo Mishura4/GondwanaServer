@@ -148,18 +148,36 @@ namespace DOL.GS.Spells
             }
         }
 
-        /// <summary>
-        /// Cancels all list effects
-        /// </summary>
-        public void CancelAll()
+        public void CancelAll(Func<IConcentrationEffect, bool> pred, bool cancelledByPlayer = false)
         {
-            CancelAll(true, true);
+            if (m_concSpells != null)
+            {
+                IConcentrationEffect[] concEffect = null;
+                lock (m_lockObject)
+                {
+                    concEffect = m_concSpells.ToArray();
+                }
+
+                BeginChanges();
+                try
+                {
+                    IEnumerable<IConcentrationEffect> effects = concEffect;
+                    foreach (IConcentrationEffect fx in effects.Where(pred))
+                    {
+                        fx.Cancel(cancelledByPlayer);
+                    }
+                }
+                finally
+                {
+                    CommitChanges();
+                }
+            }
         }
 
         /// <summary>
         /// Cancels all list effects
         /// </summary>
-        public void CancelAll(bool fromSelf, bool fromOthers, bool cancelledByPlayer = false)
+        public void CancelAll(bool leaveSelf = false, bool cancelledByPlayer = false)
         {
             if (m_concSpells != null)
             {
@@ -171,17 +189,8 @@ namespace DOL.GS.Spells
 
                 BeginChanges();
                 IEnumerable<IConcentrationEffect> effects = concEffect;
-                if (fromSelf && fromOthers)
-                {
-                    effects = concEffect;
-                }
-                else
-                {
-                    if (fromSelf)
-                        effects = effects.Where(e => e.OwnerName == m_owner.Name);
-                    if (fromOthers)
-                        effects = effects.Where(e => e.OwnerName != m_owner.Name);
-                }
+                if (leaveSelf)
+                    effects = effects.Where(e => e.OwnerName != m_owner.Name);
                 foreach (IConcentrationEffect fx in effects)
                 {
                     fx.Cancel(cancelledByPlayer);
