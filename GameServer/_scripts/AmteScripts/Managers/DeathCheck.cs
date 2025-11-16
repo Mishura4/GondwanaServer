@@ -92,10 +92,11 @@ namespace GameServerScripts.Amtescripts.Managers
                 return false;
             }
 
-            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(killer.InternalID)
-                .And(DB.Column("KilledId").IsEqualTo(killed.InternalID)
-                .And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '0:20:0')"))));
-
+            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(e => e.KillerId == killer.InternalID && e.KilledId == killed.InternalID && e.DeathDate < DateTime.Now - new TimeSpan(0, 20, 0));
+            if (killer.Client.Account.PrivLevel > 1)
+            {
+                killer.SendMessage($"[DEBUG] Kill count ({killer.Name} -> {killed.Name}): {deaths?.Count ?? 0}");
+            }
             return deaths != null && deaths.Count >= DOL.GS.ServerProperties.Properties.REPUTATION_CHAIN_KILL_COUNT;
         }
     }

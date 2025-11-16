@@ -65,7 +65,7 @@ namespace DOL.GS.GameEvents
                         // Unless
                         if (ServerProperties.Properties.ENABLE_DEBUG)
                         {
-                            playerKiller.SendMessage("The server is in DEBUG mode so you will be counted as a player killer!");
+                            playerKiller.SendMessage("The server is in DEBUG mode so you will be counted as a player killer!", eChatType.CT_Important);
                         }
                         else
                         {
