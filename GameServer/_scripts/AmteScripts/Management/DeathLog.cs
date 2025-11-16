@@ -47,33 +47,41 @@ namespace DOL.GS.GameEvents
             {
                 if (killer is GamePlayer playerKiller)
                 {
+                    // Ignore kills on Duels
                     if (IsDuelKill(playerKiller, playerVictim))
                     {
-                        // Ignore kills on Duels
                         return;
                     }
 
+                    // Ignore kills on Outlaws
                     if (playerVictim.Reputation < 0)
                     {
-                        // Ignore kills on Outlaws
                         return;
                     }
                     
+                    // If killer is GM, let go
                     if (playerKiller.Client.Account.PrivLevel > 1)
                     {
-                        // If killer is GM, let go
-                        return;
+                        // Unless
+                        if (ServerProperties.Properties.ENABLE_DEBUG)
+                        {
+                            playerKiller.SendMessage("The server is in DEBUG mode so you will be counted as a player killer!");
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
 
+                    // Damned players are allowed to kill players
                     if (playerKiller.IsDamned)
                     {
-                        // Damned players are allowed to kill players
                         return;
                     }
 
+                    // PvP area
                     if (GameServer.ServerRules.IsInPvPArea(playerVictim))
                     {
-                        // PvP area
                         return;
                     }
                     
