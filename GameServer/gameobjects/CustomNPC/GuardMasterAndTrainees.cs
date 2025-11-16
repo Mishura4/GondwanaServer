@@ -256,6 +256,7 @@ namespace DOL.GS
             {
                 attacker = _spawned[_rnd.Next(_spawned.Count)];
                 defender = _master;
+                attacker.TargetObject = _master;
                 _master.TargetObject = attacker;
                 _master.TurnTo(attacker);
             }
@@ -274,10 +275,12 @@ namespace DOL.GS
             GameLiving.eAttackResult result = GameLiving.eAttackResult.Any;
             if (masterAttacks)
                 result = GameLiving.eAttackResult.HitStyle; // Master always hits, with style!
-            else if (_spec.ShieldAnim == null)
+            else
             {
                 if (_rnd.Next(2) == 0)
                     result = GameLiving.eAttackResult.HitStyle;
+                else if (_spec.ShieldAnim != null)
+                    resultByte = (byte)_spec.ShieldAnim.Value;
                 else
                 {
                     GameLiving.eAttackResult[] possibleResults =
@@ -420,6 +423,9 @@ namespace DOL.GS
                         if (_spec.Follow) npc.Follow(_master, 100, 1200);
                         _spawned.Add(npc);
                     }
+                    
+                    // set active weapon
+                    npc.SwitchToMelee(null);
                 }
             }
         }
