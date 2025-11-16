@@ -40,8 +40,8 @@ namespace DOL.GS
         public bool Follow = false;
         public bool DespawnOnDeath = true;
 
-        public ushort WeaponAnim = 0x13;
-        public ushort ShieldAnim = 0x00;
+        public ushort? WeaponAnim = null;
+        public ushort? ShieldAnim = null;
 
         public static bool TryParse(string package, out TraineePackage spec)
         {
@@ -243,7 +243,7 @@ namespace DOL.GS
             if (_spawned.Count == 0 || _master?.IsAlive != true) return;
 
             bool masterAttacks = _rnd.Next(8) > 4;
-            GameObject attacker, defender;
+            GameNPC attacker, defender;
 
             if (masterAttacks)
             {
@@ -260,13 +260,64 @@ namespace DOL.GS
                 _master.TurnTo(attacker);
             }
 
-            ushort weapon = _spec.WeaponAnim;
-            ushort shield = _spec.ShieldAnim;
-            int attackValue = _rnd.Next(45);
-            int defenseValue = masterAttacks ? 11 : (_rnd.Next(2) == 0 ? 11 : _rnd.Next(11));
+            var attackerWeapon = (ushort)(attacker.AttackWeapon?.Model ?? 0);
+            var defenderWeapon = (ushort)0;
+            var resultByte = (byte)0;
+            var attackAnim = (byte)0;
 
+            if (_spec.WeaponAnim == null)
+                attackAnim = (byte)_rnd.Next(45);
+            else
+                attackAnim = (byte)_spec.WeaponAnim.Value;
+
+            
+            GameLiving.eAttackResult result = GameLiving.eAttackResult.Any;
+            if (masterAttacks)
+                result = GameLiving.eAttackResult.HitStyle; // Master always hits, with style!
+            else if (_spec.ShieldAnim == null)
+            {
+                if (_rnd.Next(2) == 0)
+                    result = GameLiving.eAttackResult.HitStyle;
+                else
+                {
+                    GameLiving.eAttackResult[] possibleResults =
+                    [
+                        GameLiving.eAttackResult.Missed,
+                        GameLiving.eAttackResult.Evaded,
+                        GameLiving.eAttackResult.Blocked,
+                        GameLiving.eAttackResult.Parried,
+                    ];
+                    result = possibleResults[_rnd.Next(possibleResults.Length)];
+                }
+            }
+
+            switch (result)
+            {
+                case GameLiving.eAttackResult.Any: /* nothing, leave on default */ break;
+                case GameLiving.eAttackResult.Missed: resultByte = 0; break;
+                case GameLiving.eAttackResult.Evaded: resultByte = 3; break;
+                case GameLiving.eAttackResult.Fumbled: resultByte = 4; break;
+                case GameLiving.eAttackResult.HitUnstyled: resultByte = 10; break;
+                case GameLiving.eAttackResult.HitStyle: resultByte = 11; break;
+
+                case GameLiving.eAttackResult.Parried when defender.AttackWeapon != null:
+                    resultByte = 1;
+                    defenderWeapon = (ushort)defender.AttackWeapon.Model;
+                    break;
+
+                case GameLiving.eAttackResult.Blocked when defender.Inventory.GetItem(eInventorySlot.LeftHandWeapon) is { Object_Type: (int)eObjectType.Shield } shield:
+                    resultByte = 2;
+                    defenderWeapon = (ushort)shield.Model;
+                    break;
+            }
+
+            attacker.AttackState = true;
             foreach (GamePlayer player in _master.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                player.Out.SendCombatAnimation(attacker, defender, weapon, shield, attackValue, 0, (byte)defenseValue, 100);
+            {
+                player.Out.SendObjectUpdate(attacker);
+                player.Out.SendCombatAnimation(attacker, defender, attackerWeapon, defenderWeapon, attackAnim, 0, resultByte, 100);
+            }
+            attacker.AttackState = false;
         }
 
         private void OnMasterReset(DOLEvent e, object sender, EventArgs args)
