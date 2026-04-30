@@ -20,6 +20,7 @@ namespace DOL.UnitTests.Gameserver
         public int modifiedSpellDamage = 0;
         public int baseStat;
         private int totalConLostOnDeath;
+        private GameClient m_client;
         public int LastDamageDealt { get; private set; } = -1;
         public FakeRegion fakeRegion = new FakeRegion();
 
@@ -29,12 +30,13 @@ namespace DOL.UnitTests.Gameserver
             this.ObjectState = eObjectState.Active;
             this.m_invulnerabilityTick = -1;
             this.m_name = name;
+            this.m_client = new FakeGameClient(GameServer.Instance) { Account = new Account(), Player = this };
         }
 
         public override ICharacterClass CharacterClass { get { return fakeCharacterClass; } }
         public override byte Level { get; set; }
         public override Region CurrentRegion { get { return fakeRegion; } set { } }
-        public override GameClient Client => new FakeGameClient(GameServer.Instance) { Account = new Account(), Player = this };
+        public override GameClient Client => m_client;
         public override IPacketLib Out => Client.Out;
         public override int GetBaseStat(eStat stat) => baseStat;
         public override int GetModifiedSpecLevel(string keyName) => modifiedSpecLevel;

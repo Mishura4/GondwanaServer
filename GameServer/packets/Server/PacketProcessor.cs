@@ -80,11 +80,15 @@ namespace DOL.GS.PacketHandler
         /// </summary>
         protected PacketPreprocessing m_packetPreprocessor;
 
+        protected PacketProcessor()
+        {
+        }
+
         /// <summary>
         /// Constructs a new PacketProcessor
         /// </summary>
         /// <param name="client">The processor client</param>
-        public PacketProcessor(GameClient client)
+        public PacketProcessor(GameClient client) : this()
         {
             if (client == null)
                 throw new ArgumentNullException("client");
@@ -101,7 +105,7 @@ namespace DOL.GS.PacketHandler
                 m_encoding = new PacketEncoding1110();
 
             m_asyncUdpCallback = new AsyncCallback(AsyncUdpSendCallback);
-            m_tcpSendBuffer = client.Server.AcquirePacketBuffer();
+            m_tcpSendBuffer = client.Server?.AcquirePacketBuffer();
             m_udpSendBuffer = new byte[512]; // we want a smaller maximum size packet for UDP
         }
 

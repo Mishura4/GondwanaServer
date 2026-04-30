@@ -49,9 +49,9 @@ namespace AmteScripts.PvP
 
         public abstract IEnumerable<GamePlayer> GetPlayers();
 
-        public void SendMessage(string task, eChatType type, eChatLoc loc) => SendMessage(Task.FromResult(task), type, loc);
+        public void SendMessage(string task, eChatType type = eChatType.CT_System, eChatLoc loc = eChatLoc.CL_SystemWindow) => SendMessage(Task.FromResult(task), type, loc);
 
-        public IEnumerable<Task> SendMessages(IEnumerable<Task<string>> tasks, eChatType type, eChatLoc loc)
+        public IList<Task> SendMessages(IEnumerable<Task<string>> tasks, eChatType type = eChatType.CT_System, eChatLoc loc = eChatLoc.CL_SystemWindow)
         {
             return GetPlayers().Select(async p =>
             {
@@ -59,10 +59,10 @@ namespace AmteScripts.PvP
                 {
                     await task;
                 }
-            });
+            }).ToList();
         }
 
-        public IEnumerable<Task> SendTranslations(IEnumerable<string> keys, eChatType type, eChatLoc loc, params object[] args)
+        public IList<Task> SendTranslations(IEnumerable<string> keys, eChatType type, eChatLoc loc, params object[] args)
         {
             return GetPlayers().Select(async p =>
             {
@@ -70,17 +70,17 @@ namespace AmteScripts.PvP
                 {
                     await p.SendTranslatedMessage(key, type, loc, args);
                 }
-            });
+            }).ToList();
         }
 
-        public IEnumerable<Task> SendMessage(Task<string> task, eChatType type, eChatLoc loc)
+        public IList<Task> SendMessage(Task<string> task, eChatType type, eChatLoc loc)
         {
-            return GetPlayers().Select(async p => p.SendMessage(task, type, loc));
+            return GetPlayers().Select(async p => p.SendMessage(task, type, loc)).ToList();
         }
 
-        public IEnumerable<Task> SendTranslation(string key, eChatType type, eChatLoc loc, params object[] args)
+        public IList<Task> SendTranslation(string key, eChatType type, eChatLoc loc, params object[] args)
         {
-            return GetPlayers().Select(async p => p.SendTranslatedMessage(key, type, loc, args));
+            return GetPlayers().Select(p => p.SendTranslatedMessage(key, type, loc, args)).ToList();
         }
     }
 

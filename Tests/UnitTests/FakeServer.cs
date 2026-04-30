@@ -15,11 +15,20 @@ namespace DOL.UnitTests.Gameserver
         public FakeGameClient(BaseServer srvr) : base(srvr)
         {
             Out = new FakePacketLib(this);
+            PacketProcessor = new FakePacketProcessor(this);
         }
 
         public override void OnConnect() { }
         public override void OnDisconnect() { }
         protected override void OnReceive(int numBytes) { }
+    }
+
+    public class FakePacketProcessor : PacketProcessor
+    {
+        public FakePacketProcessor(GameClient client) : base(client)
+        {
+            m_tcpSendBuffer = null;
+        }
     }
 
     public class FakePacketLib : PacketLib1124

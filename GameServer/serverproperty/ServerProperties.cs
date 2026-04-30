@@ -1817,10 +1817,16 @@ namespace DOL.GS.ServerProperties
         public static bool PVPSESSION_GROUPKILLS_SOLOSCORES;
 
         /// <summary>
-        /// In PVP, do we count group kills in solo scores?
+        /// In PVP, how long does a predator session last?
         /// </summary>
         [ServerProperty("pvp", "pvpsession_predator_round_seconds", "How long should a predator round last for, in seconds", 300)]
         public static int PVPSESSION_PREDATOR_ROUND_SECONDS;
+
+        /// <summary>
+        /// In PVP, how long does a predator session last?
+        /// </summary>
+        [ServerProperty("pvp", "pvpsession_predator_cooldown_seconds", "How long should we wait between predator sessions in PvP?", 300)]
+        public static int PVPSESSION_PREDATOR_COOLDOWN_SECONDS;
 
         /// <summary>
         /// Allow task points for kills in PvP mode
@@ -3173,14 +3179,14 @@ namespace DOL.GS.ServerProperties
                 {
                     foreach (Type type in asm.GetTypes())
                     {
-                        foreach (FieldInfo field in type.GetFields())
+                        foreach (FieldInfo f in type.GetFields())
                         {
                             // Properties are Static
-                            if (!field.IsStatic)
+                            if (!f.IsStatic)
                                 continue;
 
                             // Properties shoud contain a property attribute
-                            object[] attribs = field.GetCustomAttributes(typeof(ServerPropertyAttribute), false);
+                            object[] attribs = f.GetCustomAttributes(typeof(ServerPropertyAttribute), false);
                             if (attribs.Length == 0)
                                 continue;
 
@@ -3208,7 +3214,7 @@ namespace DOL.GS.ServerProperties
                                 serverProp.Value = serverProp.DefaultValue;
                             }
 
-                            result[att.Key] = new Tuple<ServerPropertyAttribute, FieldInfo, ServerProperty>(att, field, serverProp);
+                            result[att.Key] = new Tuple<ServerPropertyAttribute, FieldInfo, ServerProperty>(att, f, serverProp);
                         }
                     }
                 }

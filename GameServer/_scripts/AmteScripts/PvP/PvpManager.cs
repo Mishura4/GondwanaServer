@@ -150,7 +150,7 @@ namespace AmteScripts.Managers
         private const int CORE_RUN_STORM_SIZE = 80;
         private const int CORE_RUN_EFFECT_VARIANCE = 20;
 
-        private const int PREDATOR_CHECK_START_INTERVAL = 60 * 1000;
+        private const int PREDATOR_CHECK_START_INTERVAL = 30 * 1000;
 
         // Biohazard Variables
         private RegionTimer _biohazardTimer;
@@ -761,16 +761,16 @@ namespace AmteScripts.Managers
         {
             if (!IsOpen)
                 return;
-            
+
             if (player.Guild == null) // No guild; likely we came here through RemoveFromGuildGroup calling group.RemovePlayer
                 return;
 
             if (!_groupGuilds.TryGetValue(group, out var guild))
                 return;
-            
+
             if (!guild.RemovePlayer(string.Empty, player))
                 return;
-            
+
             _cleanupGuild(guild);
 
             PlayerGroupToSolo(player);
@@ -1105,6 +1105,7 @@ namespace AmteScripts.Managers
         private PvpManager()
         {
             _isOpen = false;
+            _predatorManager.OnPreyKilled = OnPreyKilled;
         }
 
         #region Timer Check
@@ -1971,6 +1972,13 @@ namespace AmteScripts.Managers
             }
             return true;
         }
+
+        private bool OnPreyKilled(GamePlayer prey, PredatorPair bounty, DyingEventArgs dyingArgs)
+        {
+            prey.SendMessage("You've been killed");
+            bounty.Predator.SendMessage("You've killed");
+            return true;
+        }
         
         public void AwardCTFCarrierKill(GamePlayer killerPlayer, GamePlayer carrier)
         {
@@ -2306,7 +2314,7 @@ namespace AmteScripts.Managers
             }
             if (log.IsDebugEnabled)
             {
-                log.Debug("[PVP] Starting predator: " + string.Join(", ", pvpEntities.Select(e => e.Name)));
+                log.Debug("[PVP] Starting predator for " + predatorRoundSeconds + " seconds : " + string.Join(", ", pvpEntities.Select(e => e.Name)));
             }
             _predatorManager.Start(pvpEntities);
             return predatorRoundMilliseconds;
@@ -2314,8 +2322,20 @@ namespace AmteScripts.Managers
 
         private int EndPredator()
         {
-            log.Info("predator tick");
-            return PREDATOR_CHECK_START_INTERVAL;
+            log.Debug("[PvP] Stopping predator.");
+            var bounties = _predatorManager.GetBounties();
+            var predatorCooldownSeconds = Properties.PVPSESSION_PREDATOR_ROUND_SECONDS;
+            var predatorCooldownMilliseconds = predatorCooldownSeconds * 1000;
+            foreach (var bounty in bounties)
+            {
+                if (bounty.Prey != null)
+                {
+                    bounty.Predator.SendMessage("You lose your prey");
+                }
+            }
+            _predatorManager.Stop();
+            log.DebugFormat("[PvP] Predator will start again in {0} seconds.", predatorCooldownSeconds);
+            return predatorCooldownMilliseconds;
         }
 
         #region Add Player/Group (with Guild + Bind Logic)

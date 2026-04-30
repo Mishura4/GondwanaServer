@@ -9606,7 +9606,7 @@ namespace DOL.GS
             if (CurrentAreas.Count > 0 && (CurrentAreas[0] is Area.BindArea) == false)
                 location = (CurrentAreas[0] as AbstractArea)!.Description;
             else
-                location = CurrentZone.Description;
+                location = CurrentZone?.Description;
 
             if (killer == null)
             {
