@@ -6,6 +6,7 @@ using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using log4net;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualBasic;
@@ -112,6 +113,7 @@ namespace AmteScripts.PvP
         private readonly Lock m_predatorsLock = new();
         private readonly List<PredatorPair> m_currentPredators = new();
         private readonly ReaderWriterDictionary<GamePlayer, PredatorPair> m_preyLookup = new();
+        private readonly ReaderWriterDictionary<string, long> m_playerAbandons = new();
 
         private readonly Lock m_queueLock = new();
         private readonly List<PvPEntity> m_queue = new();
@@ -141,21 +143,23 @@ namespace AmteScripts.PvP
                 m_currentPredators.AddRange(pairs);
                 foreach (var pair in pairs)
                 {
-                    if (pair.Prey != null)
-                    {
-                        foreach (GamePlayer player in pair.Prey.GetPlayers())
-                        {
-                            if (!m_preyLookup.TryAdd(player, pair))
-                            {
-                                log.ErrorFormat("Predator {0} has a prey {1} that is already being hunted by {2} ; there is an error in the implementation. Removing prey from {0}", pair.Predator, player, m_preyLookup[player]);
-                                pair.Prey = null;
-                                continue;
-                            }
-
-                            GameEventMgr.AddHandler(player, GamePlayerEvent.Dying, PreyKilledHandler);
-                        }
-                    }
+                    RegisterBounty(pair);
                     pair.NotifyNewPrey();
+                }
+            }
+        }
+
+        protected virtual void RegisterBounty(PredatorPair bounty)
+        {
+            if (bounty.Prey != null)
+            {
+                foreach (GamePlayer player in bounty.Prey.GetPlayers())
+                {
+                    if (!m_preyLookup.TryAdd(player, bounty))
+                    {
+                        log.ErrorFormat("Predator {0} has a prey {1} that is already being hunted by {2} ; there is an error in the implementation. Removing prey from {0}", bounty.Predator, player, m_preyLookup[player]);
+                        bounty.Prey = null;
+                    }
                 }
             }
         }
@@ -205,45 +209,143 @@ namespace AmteScripts.PvP
             }
         }
 
-        protected void PreyKilledHandler(DOLEvent e, object sender, EventArgs arguments)
+        public PredatorPair? GetBountyForPredator(GamePlayer player)
         {
-            if (arguments is not DyingEventArgs { Killer: GamePlayer playerKiller } args || sender is not GamePlayer playerVictim)
-                return;
-
-            if (!m_preyLookup.TryRemove(playerVictim, out PredatorPair bounty))
+            lock (m_predatorsLock)
             {
-                log.ErrorFormat("Could not find predator for dying prey {0}", playerVictim);
-                return;
+                return m_currentPredators.FirstOrDefault(p => p.IsPredator(player));
+            }
+        }
+
+        public PredatorPair? GetBountyForPrey(GamePlayer player)
+        {
+            lock (m_predatorsLock)
+            {
+                return m_preyLookup.GetValueOrDefault(player);
+            }
+        }
+
+        public void RemoveFromQueue(GamePlayer player)
+        {
+            lock (m_queueLock)
+            {
+                var index = m_queue.FindIndex(p => p.AsPlayer == player);
+                if (index != -1)
+                    m_queue.RemoveAt(index);
+            }
+        }
+
+        public virtual bool CanQueue(GamePlayer player, bool quiet = false)
+        {
+            var deserterDuration = Properties.PREDATOR_DESERTER_SECONDS;
+            if (deserterDuration > 0 && m_playerAbandons.TryGetValue(player.InternalID, out long abandonTick))
+            {
+                if (GameServer.Instance.TickCount < (abandonTick + deserterDuration))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool CanQueue(PvPEntity entity, bool quiet = false)
+        {
+            return entity.GetPlayers().Any(p => !CanQueue(p));
+        }
+
+        public virtual void Abandon(GamePlayer player)
+        {
+            bool isActive = false;
+            lock (m_predatorsLock)
+            {
+                var index = m_currentPredators.FindIndex(p => p.IsPredator(player));
+                if (index != -1)
+                {
+                    if (OnPredatorAbandon?.Invoke(player, m_currentPredators[index]) is not false)
+                    {
+                        isActive = true;
+                        m_currentPredators.RemoveAt(index);
+                    }
+                }
+
+                if (m_preyLookup.TryRemove(player, out PredatorPair preyBounty))
+                {
+                    bool reinsert = false;
+                    try
+                    {
+                        if (OnPreyAbandon?.Invoke(player, preyBounty) is false)
+                            reinsert = true;
+                    }
+                    finally
+                    {
+                        if (reinsert)
+                        {
+                            m_preyLookup.Add(player, preyBounty);
+                        }
+                        else
+                        {
+                            isActive = true;
+                            CleanupPrey(player, preyBounty);
+                        }
+                    }
+                }
+
+                if (isActive)
+                    m_playerAbandons[player.InternalID] = GameServer.Instance.TickCount;
+            }
+
+            RemoveFromQueue(player);
+        }
+
+        /// <summary>
+        /// Attempt to find a bounty associated with a predator and a prey.
+        /// Calls OnPreyStolen if the killer isn't the predator for the prey,
+        /// or calls OnPreyKilled if they are.
+        /// </summary>
+        /// <param name="killer"></param>
+        /// <param name="victim"></param>
+        /// <param name="killers"></param>
+        /// <returns></returns>
+        public virtual bool? CompleteBounty(GamePlayer? killer, GamePlayer victim, IList<GamePlayer>? killers = null)
+        {
+            if (killers is null)
+                killers = killer == null ? [] : [killer]; // Maybe we'll handle this eventually
+
+            if (!m_preyLookup.TryRemove(victim, out PredatorPair bounty))
+            {
+                log.ErrorFormat("Could not find predator for dying prey {0}", victim);
+                return null;
             }
             
             bool reinsert = true;
             try
             {
-                if (!bounty.IsPredator(playerKiller) && OnPreyStolen?.Invoke(playerVictim, bounty, args) is false or null)
+                if (!bounty.IsPredator(killer) && OnPreyStolen?.Invoke(victim, bounty, killers) is true)
                 {
-                    log.DebugFormat("Prey {0} was stolen from predator {1} by {2}", playerVictim, bounty.Predator, playerKiller);
-                    return;
+                    log.DebugFormat("Prey {0} was stolen from predator {1} by {2}", victim, bounty.Predator, killer);
+                    reinsert = false;
+                    return false;
                 }
 
-                log.DebugFormat("Prey {0} was killed by predator {1}", playerVictim, bounty.Predator);
-                if (OnPreyKilled?.Invoke(playerVictim, bounty, args) is false)
+                log.DebugFormat("Prey {0} was killed by predator {1}", victim, bounty.Predator);
+                if (OnPreyKilled?.Invoke(victim, bounty, killers) is true or null)
                 {
-                    return;
+                    reinsert = false;
+                    return true;
                 }
-
-                reinsert = false;
+                return null;
             }
             finally
             {
                 if (reinsert)
                 {
-                    log.DebugFormat("Re-linking prey {0} with predator {1}", playerVictim, bounty.Predator);
-                    m_preyLookup.TryAdd(playerVictim, bounty);
+                    log.DebugFormat("Re-linking prey {0} with predator {1}", victim, bounty.Predator);
+                    m_preyLookup.TryAdd(victim, bounty);
                 }
                 else
                 {
-                    log.DebugFormat("Cleaning up prey {0} with predator {1}", playerVictim, bounty.Predator);
-                    CleanupPrey(playerVictim, bounty);
+                    log.DebugFormat("Cleaning up prey {0} with predator {1}", victim, bounty.Predator);
+                    CleanupPrey(victim, bounty);
                 }
             }
         }
@@ -252,17 +354,22 @@ namespace AmteScripts.PvP
         {
             lock (m_predatorsLock)
             {
-                GameEventMgr.RemoveHandler(prey, GamePlayerEvent.Dying, PreyKilledHandler);
                 m_preyLookup.Remove(prey);
                 bounty.Prey = null;
             }
         }
 
-        public delegate bool OnPreyKilledHandler(GamePlayer prey, PredatorPair predator, DyingEventArgs dyingArgs);
+        public delegate bool PreyKilledHandler(GamePlayer prey, PredatorPair predator, IList<GamePlayer> killers);
 
-        public OnPreyKilledHandler? OnPreyStolen { get; set; }
+        public delegate bool PlayerEventHandler(GamePlayer player, PredatorPair bounty);
 
-        public OnPreyKilledHandler? OnPreyKilled { get; set; }
+        public PreyKilledHandler? OnPreyStolen { get; set; }
+
+        public PreyKilledHandler? OnPreyKilled { get; set; }
+
+        public PlayerEventHandler? OnPreyAbandon { get; set; }
+
+        public PlayerEventHandler? OnPredatorAbandon { get; set; }
 
         protected List<PredatorPair> AssignPairs(IEnumerable<PvPEntity> entities, PvPEntity? prey)
         {
@@ -449,25 +556,20 @@ namespace AmteScripts.PvP
             return values;
         }
 
-        public void Queue(PvPEntity entity)
+        public void Queue(PvPEntity entity, bool quiet = true, bool force = false)
         {
             lock (m_queueLock)
             {
+                if (!force && !CanQueue(entity, quiet))
+                    return;
+
                 m_queue.Add(entity);
             }
         }
 
-        public void Queue(IEnumerable<PvPEntity> entities)
+        public void Queue(GamePlayer player, bool quiet = false, bool force = false)
         {
-            lock (m_queueLock)
-            {
-                m_queue.AddRange(entities);
-            }
-        }
-
-        public void Queue(GamePlayer player)
-        {
-            Queue(new PvPPlayerEntity(player));
+            Queue(new PvPPlayerEntity(player), quiet, force);
         }
 
         protected bool Remove(PvPEntity entity)
@@ -488,6 +590,11 @@ namespace AmteScripts.PvP
             }
             OnAssignNewPreys(changed);
             return removed;
+        }
+
+        public bool IsPlayerActive(GamePlayer player)
+        {
+            return GetBountyForPrey(player) != null || GetBountyForPredator(player) != null;
         }
 
         public virtual bool IsActive => m_currentPredators.Count > 0;

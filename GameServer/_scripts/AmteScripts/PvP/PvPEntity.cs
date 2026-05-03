@@ -73,14 +73,19 @@ namespace AmteScripts.PvP
             }).ToList();
         }
 
-        public IList<Task> SendMessage(Task<string> task, eChatType type, eChatLoc loc)
+        public IList<Task> SendMessage(Task<string> task, eChatType type = eChatType.CT_System, eChatLoc loc = eChatLoc.CL_SystemWindow)
         {
             return GetPlayers().Select(async p => p.SendMessage(task, type, loc)).ToList();
         }
 
-        public IList<Task> SendTranslation(string key, eChatType type, eChatLoc loc, params object[] args)
+        public IList<Task> SendTranslation(string key, eChatType type = eChatType.CT_System, eChatLoc loc = eChatLoc.CL_SystemWindow, params object[] args)
         {
             return GetPlayers().Select(p => p.SendTranslatedMessage(key, type, loc, args)).ToList();
+        }
+
+        public virtual string GetPersonalizedName(GamePlayer player)
+        {
+            return Name;
         }
     }
 
@@ -92,7 +97,7 @@ namespace AmteScripts.PvP
 
         public override GamePlayer? AsPlayer => m_player;
 
-        public override string Name => AsPlayer?.Name;
+        public override string Name => AsPlayer?.Name ?? string.Empty;
 
         public override Guild? AssociatedGuild => AsPlayer?.Guild;
 
@@ -108,6 +113,11 @@ namespace AmteScripts.PvP
         public override IEnumerable<GamePlayer> GetPlayers()
         {
             return m_player == null ? [] : [m_player];
+        }
+
+        public override string GetPersonalizedName(GamePlayer player)
+        {
+            return AsPlayer?.GetPersonalizedName(player) ?? string.Empty;
         }
     }
 

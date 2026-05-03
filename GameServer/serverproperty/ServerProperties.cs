@@ -1825,8 +1825,14 @@ namespace DOL.GS.ServerProperties
         /// <summary>
         /// In PVP, how long does a predator session last?
         /// </summary>
-        [ServerProperty("pvp", "pvpsession_predator_cooldown_seconds", "How long should we wait between predator sessions in PvP?", 300)]
+        [ServerProperty("pvp", "pvpsession_predator_cooldown_seconds", "How long should we wait between predator sessions in PvP?", 600)]
         public static int PVPSESSION_PREDATOR_COOLDOWN_SECONDS;
+
+        /// <summary>
+        /// How long to disqualify players from the predator system if they leave?
+        /// </summary>
+        [ServerProperty("predator", "predator_deserter_seconds", "How long to disqualify players from the predator system for if they leave?", 1600)]
+        public static int PREDATOR_DESERTER_SECONDS;
 
         /// <summary>
         /// Allow task points for kills in PvP mode

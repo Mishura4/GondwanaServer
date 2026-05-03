@@ -34,11 +34,13 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using System.Security.Policy;
+using System.Threading;
 using System.Threading.Tasks;
 using static AmteScripts.Managers.PvpManager;
 using static DOL.GameEvents.GameEvent;
 using static DOL.GS.Area;
 using static System.Formats.Asn1.AsnWriter;
+using static System.Threading.Lock;
 using Region = DOL.GS.Region;
 using Zone = DOL.GS.Zone;
 
@@ -150,7 +152,7 @@ namespace AmteScripts.Managers
         private const int CORE_RUN_STORM_SIZE = 80;
         private const int CORE_RUN_EFFECT_VARIANCE = 20;
 
-        private const int PREDATOR_CHECK_START_INTERVAL = 30 * 1000;
+        private const int PREDATOR_CHECK_INTERVAL = 30 * 1000;
 
         // Biohazard Variables
         private RegionTimer _biohazardTimer;
@@ -213,7 +215,7 @@ namespace AmteScripts.Managers
 
         /// <summary>The chosen session from DB for the day</summary>
         private PvpSession? _activeSession;
-        [NotNull] private readonly object _sessionLock = new object();
+        [NotNull] private readonly Lock _sessionLock = new Lock();
 
         // Scoreboard
         // Total score for each player. DO NOT USE THIS FOR ANYTHING, only for stat display.
@@ -251,12 +253,13 @@ namespace AmteScripts.Managers
         // Keep track of last guild of each player for scores to protect from griefing
         [NotNull] private readonly Dictionary<string, Guild> _playerLastGuilds = new();
         private static readonly Dictionary<string, long> _bossDamageAccumulator = new Dictionary<string, long>();
-        private static readonly Dictionary<string, PvPEntity> _allParticipants = new();
+        private static readonly ReaderWriterDictionary<string, PvPEntity> _allParticipants = new();
 
         private int _flagCounter = 0;
         private RegionTimer _territoryOwnershipTimer = null;
 
         private PvPPredatorManager _predatorManager = new();
+        private long _predatorTimeLeft = 0;
 
         #region Singleton
         [NotNull] public static PvpManager Instance { get; } = new PvpManager();
@@ -286,7 +289,6 @@ namespace AmteScripts.Managers
                 PvpManager.Instance.KickPlayer(player);
             else
                 PvpManager.Instance.CleanupPlayer(player);
-            
             return 0;
         }
 
@@ -464,6 +466,9 @@ namespace AmteScripts.Managers
             if (player?.IsInPvP != true)
                 return;
 
+            if (IsPredatorEnabled)
+                _predatorManager.Abandon(player);
+
             bool ignore = false;
             _graceTimers.FreezeWhile((d) =>
             {
@@ -505,6 +510,9 @@ namespace AmteScripts.Managers
         {
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
+                if (IsPredatorEnabled)
+                    _predatorManager.Abandon(player);
+
                 AddToGuildGroup(guild, player);
                 SaveScores();
                 UpdatePredator();
@@ -518,6 +526,9 @@ namespace AmteScripts.Managers
             
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
+                if (IsPredatorEnabled)
+                    _predatorManager.Abandon(player);
+
                 RemoveFromGuildGroup(guild, player);
                 SaveScores();
                 UpdatePredator();
@@ -547,6 +558,9 @@ namespace AmteScripts.Managers
                 {
                     flagItem.OnLeaveGroup(player, group);
                 }
+
+                if (IsPredatorEnabled)
+                    _predatorManager.Abandon(player);
                 
                 RemoveFromGroupGuild(group, player);
                 SaveScores();
@@ -564,7 +578,6 @@ namespace AmteScripts.Managers
                         UpdateAllTerritoryMarkers(player);
 
                     SendPvPRules(player);
-
                     return 0;
                 }).Start(2000);
             }
@@ -1106,6 +1119,7 @@ namespace AmteScripts.Managers
         {
             _isOpen = false;
             _predatorManager.OnPreyKilled = OnPreyKilled;
+            _predatorManager.OnPreyAbandon = OnPreyAbandon;
         }
 
         #region Timer Check
@@ -1973,10 +1987,41 @@ namespace AmteScripts.Managers
             return true;
         }
 
-        private bool OnPreyKilled(GamePlayer prey, PredatorPair bounty, DyingEventArgs dyingArgs)
+        private bool OnPreyKilled(GamePlayer prey, PredatorPair bounty, IList<GamePlayer> killers)
         {
-            prey.SendMessage("You've been killed");
-            bounty.Predator.SendMessage("You've killed");
+            var bp = prey.BountyPointsValue;
+            foreach (var predatorPlayer in bounty.Predator.GetPlayers())
+            {
+                predatorPlayer.GainBountyPoints(bp, false);
+                predatorPlayer.SendTranslatedMessage(
+                    "PvP.Predator.KilledPrey", eChatType.CT_System, eChatLoc.CL_SystemWindow,
+                    bounty.Prey.GetPersonalizedName(predatorPlayer)
+                );
+            }
+
+            foreach (var player in prey.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
+            {
+                if (!bounty.IsPredator(player))
+                {
+                    player.SendTranslatedMessage(
+                        "PvP.Predator.KillBroadcast", eChatType.CT_System, eChatLoc.CL_SystemWindow,
+                        bounty.Predator.GetPersonalizedName(player),
+                        bounty.Prey.GetPersonalizedName(player)
+                    );
+                }
+            }
+            return true;
+        }
+
+        private bool OnPreyAbandon(GamePlayer prey, PredatorPair bounty)
+        {
+            foreach (var predatorPlayer in bounty.Predator.GetPlayers())
+            {
+                predatorPlayer.SendTranslatedMessage(
+                    "PvP.Predator.LostPrey", eChatType.CT_System, eChatLoc.CL_SystemWindow,
+                    bounty.Prey.GetPersonalizedName(predatorPlayer)
+                );
+            }
             return true;
         }
         
@@ -2025,6 +2070,12 @@ namespace AmteScripts.Managers
                     points = isSolo ? 20 : 10;
                     if (rr5bonus) points = (int)(points * 1.30);
                     break;
+            }
+
+            if (_predatorManager.CompleteBounty(killer, victim) == true)
+            {
+                // Award triple points for killing a prey
+                points *= 3;
             }
 
             PvPScore score;
@@ -2238,8 +2289,8 @@ namespace AmteScripts.Managers
                             var interval = CheckPredator();
                             return interval;
                         };
-                        log.DebugFormat("[PVP] Starting predator check timer ({0:.##} seconds).", PREDATOR_CHECK_START_INTERVAL / 1000.0f);
-                        _predatorTimer.Start(PREDATOR_CHECK_START_INTERVAL);
+                        log.DebugFormat("[PVP] Starting predator check timer ({0:.##} seconds).", PREDATOR_CHECK_INTERVAL / 1000.0f);
+                        _predatorTimer.Start(PREDATOR_CHECK_INTERVAL);
                     }
                 }
             }
@@ -2250,74 +2301,107 @@ namespace AmteScripts.Managers
             if (!IsPredatorEnabled)
                 return 0;
 
-            lock (_predatorManager)
+            lock (_sessionLock)
             {
                 if (!_predatorManager.IsActive)
                     return TryStartPredator();
                 else
-                    return EndPredator();
+                    return PredatorHeartbeat();
             }
         }
 
-        private int TryStartPredator()
+        private List<PvPEntity> GetPredatorEligiblePlayers(out int numTeams)
         {
-            log.Debug("[PVP] Checking predator.");
-            List<HighScore> scores;
             Dictionary<string, PvPEntity> participants;
-            var predatorRoundSeconds = Properties.PVPSESSION_PREDATOR_ROUND_SECONDS;
-            var predatorRoundMilliseconds = predatorRoundSeconds * 1000;
+            List<HighScore> scores;
+
             lock (_sessionLock)
             {
-                if (!IsOpen || !IsPredatorEnabled)
-                {
-                    log.Debug("[PVP] Not starting predator, session is closed / predator is disabled.");
-                    return 0;
-                }
-
-                TimeSpan sessionTimeLeft = _endTime - DateTime.Now.TimeOfDay;
-                TimeSpan requiredTimeLeft = new TimeSpan(0, 0, Properties.PVPSESSION_PREDATOR_ROUND_SECONDS);
-                if (sessionTimeLeft < requiredTimeLeft)
-                {
-                    log.DebugFormat("[PVP] Not starting predator because there is not enough time left in the session. ({0} < {1})", sessionTimeLeft, requiredTimeLeft);
-                    return 0;
-                }
-
                 participants = new(_allParticipants);
                 scores = GetHighScores().SelectMany(g => g).Reverse().ToList();
             }
 
             List<PvPEntity> pvpEntities = new(scores.Count * 2);
-            int numTeams = 0;
+
+            numTeams = 0;
             foreach (var score in scores)
             {
                 if (score.IsGroup)
                 {
                     var range = score.Children
-                        .Select(s => participants.TryGetValue(s.OwnerId, out PvPEntity entity) ? entity : null)
+                        .Select(s => participants.GetValueOrDefault(s.OwnerId))
                         .Where(e => e is not null)
+                        .Cast<PvPEntity>()
                         .ToList();
+
+                    if (range.Any(p => !_predatorManager.CanQueue(p, true)))
+                        continue;
+
                     if (range.Count > 0)
                         ++numTeams;
+
                     pvpEntities.AddRange(range);
                 }
                 else if (participants.TryGetValue(score.OwnerId, out PvPEntity entity))
                 {
+                    if (!_predatorManager.CanQueue(entity, true))
+                        continue;
+
                     ++numTeams;
                     pvpEntities.Add(entity);
                 }
             }
             pvpEntities.RemoveAll(p => p.AsPlayer == null);
+            pvpEntities.RemoveAll(p => _predatorManager.IsPlayerActive(p.AsPlayer!));
+            return pvpEntities;
+        }
+
+        private int TryStartPredator()
+        {
+            log.Debug("[PVP] Checking predator.");
+            var predatorRoundSeconds = Properties.PVPSESSION_PREDATOR_ROUND_SECONDS;
+            var predatorRoundMilliseconds = predatorRoundSeconds * 1000;
+            if (!IsOpen || !IsPredatorEnabled)
+            {
+                log.Debug("[PVP] Not starting predator, session is closed / predator is disabled.");
+                return 0;
+            }
+
+            TimeSpan sessionTimeLeft = _endTime - DateTime.Now.TimeOfDay;
+            TimeSpan requiredTimeLeft = new TimeSpan(0, 0, Properties.PVPSESSION_PREDATOR_ROUND_SECONDS);
+            if (sessionTimeLeft < requiredTimeLeft)
+            {
+                log.DebugFormat("[PVP] Not starting predator because there is not enough time left in the session. ({0} < {1})", sessionTimeLeft, requiredTimeLeft);
+                return 0;
+            }
+
+            var pvpEntities = GetPredatorEligiblePlayers(out int numTeams);
+
             if (numTeams < CurrentSession!.MinTeamsForPredator)
             {
                 log.DebugFormat("[PVP] Not starting predator because there are not enough teams. ({0} < {1})", numTeams, CurrentSession.MinTeamsForPredator);
-                return PREDATOR_CHECK_START_INTERVAL;
+                return PREDATOR_CHECK_INTERVAL;
             }
+
             if (log.IsDebugEnabled)
             {
                 log.Debug("[PVP] Starting predator for " + predatorRoundSeconds + " seconds : " + string.Join(", ", pvpEntities.Select(e => e.Name)));
             }
+
+            _predatorTimeLeft = predatorRoundMilliseconds;
             _predatorManager.Start(pvpEntities);
-            return predatorRoundMilliseconds;
+            return (int)Math.Min(PREDATOR_CHECK_INTERVAL, _predatorTimeLeft);
+        }
+
+        private int PredatorHeartbeat()
+        {
+            _predatorTimeLeft -= PREDATOR_CHECK_INTERVAL;
+            if (_predatorTimeLeft <= 0)
+            {
+                return EndPredator();
+            }
+
+            return (int)Math.Min(PREDATOR_CHECK_INTERVAL, _predatorTimeLeft);
         }
 
         private int EndPredator()

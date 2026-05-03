@@ -171,4 +171,3 @@ PvP.Score.BioInfections.Short:						Infected
 PvP.Score.BioZombieKills.Short:						ZombieKills
 PvP.Score.BioZombieDeaths.Short:					ZombieDeaths
 PvP.Score.Total.Short:                              Total
-

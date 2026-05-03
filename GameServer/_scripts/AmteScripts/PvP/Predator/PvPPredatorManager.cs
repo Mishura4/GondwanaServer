@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using DOL.Events;
 using DOL.GS;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,15 @@ namespace AmteScripts.PvP
     {
     }
 
-    public class WorldPredatorManager
+    public class WorldPredatorManager : AbstractPredatorManager
     {
+
+        protected void OnPreyKilledHandler(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (arguments is not DyingEventArgs { Killer: GamePlayer playerKiller } args || sender is not GamePlayer playerVictim)
+                return;
+
+            CompleteBounty(playerKiller, playerVictim, args.PlayerKillers);
+        }
     }
 }
