@@ -330,5 +330,38 @@ namespace DOL.UnitTests.Gameserver
             // First solo player should be antoinette
             Assert.AreEqual(player1, predators.FirstOrDefault(p => p.Predator.AssociatedGuild == null)?.Predator);
         }
+
+        [Test]
+        public void RecombobulateGaps()
+        {
+            var player0 = new PvPPlayerEntity(new FakePlayer("Jean"));
+            var player1 = new PvPPlayerEntity(new FakePlayer("Antoinette"));
+            var player2 = new PvPPlayerEntity(new FakePlayer("François"));
+            var player3 = new PvPPlayerEntity(new FakePlayer("Marie-Antoinette"));
+            var player4 = new PvPPlayerEntity(new FakePlayer("Jean-François"));
+            var player5 = new PvPPlayerEntity(new FakePlayer("Laure-Antoinette"));
+            var player6 = new PvPPlayerEntity(new FakePlayer("Jean-Marie"));
+            PvPPlayerEntity[] players = [player0, player1, player2, player3, player4, player5, player6];
+            var predators = new List<PredatorPair>(players.Select(p => new PredatorPair(p)));
+            var recombobulated = Recombobulate(predators, players);
+            foreach (var p in (PvPPlayerEntity[])[player0, player2, player4, player6])
+            {
+                var bounty = recombobulated.First(bounty => bounty.Predator == p);
+                bounty.Prey = null;
+            }
+
+            var predatorLessPreys = predators
+                .Select(b => b.Predator)
+                .Where(p => !predators.Select(b => b.Prey).Contains(p))
+                .ToList();
+            Assert.That(predatorLessPreys.SequenceEqual([player0, player1, player3, player5]));
+
+            var preylessPredators = predators.Where(b => b.Prey == null);
+            Assert.That(preylessPredators.Select(p => p.Predator).SequenceEqual([player0, player2, player4, player6]));
+
+            recombobulated = Recombobulate(preylessPredators, predatorLessPreys);
+            Assert.That(preylessPredators.All(p => recombobulated.Contains(p)));
+            Assert.That(predators.All(p => p.Prey != null));
+        }
     }
 }

@@ -4,6 +4,7 @@ using AmteScripts.PvP.CoreRun;
 using AmteScripts.PvP.CTF;
 using AmteScripts.PvP.KotH;
 using Discord;
+using Discord.Rest;
 using Discord.Webhook;
 using DOL.Database;
 using DOL.Events;
@@ -152,7 +153,8 @@ namespace AmteScripts.Managers
         private const int CORE_RUN_STORM_SIZE = 80;
         private const int CORE_RUN_EFFECT_VARIANCE = 20;
 
-        private const int PREDATOR_CHECK_INTERVAL = 30 * 1000;
+        private const int PREDATOR_CHECK_INTERVAL = 60 * 1000;
+        private const int PREDATOR_MINIMUM_SESSION_SECONDS_LEFT = 300;
 
         // Biohazard Variables
         private RegionTimer _biohazardTimer;
@@ -467,7 +469,7 @@ namespace AmteScripts.Managers
                 return;
 
             if (IsPredatorEnabled)
-                _predatorManager.Abandon(player);
+                _predatorManager.Abandon(player, Properties.PVPSESSION_PREDATOR_DESERTER_SECONDS);
 
             bool ignore = false;
             _graceTimers.FreezeWhile((d) =>
@@ -511,7 +513,7 @@ namespace AmteScripts.Managers
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
                 if (IsPredatorEnabled)
-                    _predatorManager.Abandon(player);
+                    _predatorManager.Abandon(player, Properties.PVPSESSION_PREDATOR_DESERTER_SECONDS);
 
                 AddToGuildGroup(guild, player);
                 SaveScores();
@@ -527,7 +529,7 @@ namespace AmteScripts.Managers
             lock (_sessionLock) // lock this to make sure we don't close the pvp while we're adding the player, this would be bad...
             {
                 if (IsPredatorEnabled)
-                    _predatorManager.Abandon(player);
+                    _predatorManager.Abandon(player, Properties.PVPSESSION_PREDATOR_DESERTER_SECONDS);
 
                 RemoveFromGuildGroup(guild, player);
                 SaveScores();
@@ -560,7 +562,7 @@ namespace AmteScripts.Managers
                 }
 
                 if (IsPredatorEnabled)
-                    _predatorManager.Abandon(player);
+                    _predatorManager.Abandon(player, Properties.PVPSESSION_PREDATOR_DESERTER_SECONDS);
                 
                 RemoveFromGroupGuild(group, player);
                 SaveScores();
@@ -726,7 +728,6 @@ namespace AmteScripts.Managers
                 }
 
                 _allParticipants.Remove(player.InternalID);
-
                 if (!_groupScores.TryGetValue(guild, out PvPGroupScore groupScore))
                 {
                     groupScore = new PvPGroupScore(guild);
@@ -834,8 +835,7 @@ namespace AmteScripts.Managers
             }
             else
             {
-                // Guild needs to be created
-
+                // Group needs to be created
                 // There is a race condition here maybe?
                 // If two players log in at the same time, TryGetValue up there can maybe return false in both cases, and this can run twice...
                 GamePlayer leader = player;
@@ -852,7 +852,6 @@ namespace AmteScripts.Managers
                 }
 
                 _allParticipants.TryAdd(guild.GuildID, new PvPGuildGroupEntity(guild));
-
                 if (guild.MemberOnlineCount > 1)
                 {
                     group = new Group(player);
@@ -878,6 +877,7 @@ namespace AmteScripts.Managers
                         group.MakeLeader(leader);
                 }
             }
+            _playerLastGuilds[player.InternalID] = guild;
         }
 
         /// <summary>
@@ -971,7 +971,7 @@ namespace AmteScripts.Managers
                 }
                 else
                 {
-                    log.Warn($"Player {player.Name} ({player.InternalID}) logged into PvP with non-PvP guild {player.Guild.Name} ({player.Guild.GuildID})");
+                    log.Error($"Player {player.Name} ({player.InternalID}) logged into PvP with non-PvP guild {player.Guild.Name} ({player.Guild.GuildID})");
                     // So, we have a RvrRecord in DB, but this player has a non-pvp guild?
                     // Regardless, do nothing, just kick from PvP because something is very wrong
 
@@ -996,6 +996,8 @@ namespace AmteScripts.Managers
                     if (CreateAreas)
                         CreateSafeAreaForGroup(player, spawn.Position, _activeSession.TempAreaRadius);
                 }
+
+                _groupScores.AddIfNotExists(player.Guild, () => new PvPGroupScore(player.Guild, [player]));
             }
             else
             {
@@ -1020,6 +1022,7 @@ namespace AmteScripts.Managers
                         CreateSafeAreaForSolo(player, spawn.Position, _activeSession.TempAreaRadius);
                 }
 
+                _soloScores.AddIfNotExists(player.InternalID, () => new PvPScore(player, true));
                 _allParticipants[player.InternalID] = new PvPPlayerEntity(player);
             }
 
@@ -1119,7 +1122,7 @@ namespace AmteScripts.Managers
         {
             _isOpen = false;
             _predatorManager.OnPreyKilled = OnPreyKilled;
-            _predatorManager.OnPreyAbandon = OnPreyAbandon;
+            _predatorManager.OnBountyAssigned = OnBountyAssigned;
         }
 
         #region Timer Check
@@ -1703,7 +1706,6 @@ namespace AmteScripts.Managers
                 }
                 _groupAreas.Clear();
 
-                ResetScores();
                 try
                 {
                     File.Delete("temp/PvPScore.dat");
@@ -1712,16 +1714,21 @@ namespace AmteScripts.Managers
                 {
                     // fine
                 }
-                _activeSession = null;
-                _soloQueue.Clear();
-                _groupQueue.Clear();
 
                 foreach (var value in _allGuilds)
                 {
                     GuildMgr.DeleteGuild(value);
                 }
+                _allGuilds.Clear();
+                
+                ResetScores();
+                _activeSession = null;
+                _soloQueue.Clear();
+                _groupQueue.Clear();
                 _groupGuilds.Clear();
                 _guildGroups.Clear();
+                _playerLastGuilds.Clear();
+                _allParticipants.Clear();
                 return true;
             }
         }
@@ -1994,8 +2001,8 @@ namespace AmteScripts.Managers
             {
                 predatorPlayer.GainBountyPoints(bp, false);
                 predatorPlayer.SendTranslatedMessage(
-                    "PvP.Predator.KilledPrey", eChatType.CT_System, eChatLoc.CL_SystemWindow,
-                    bounty.Prey.GetPersonalizedName(predatorPlayer)
+                    "PvP.Predator.KilledPrey", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow,
+                    bounty.Prey.GetPersonalizedNameFor(predatorPlayer)
                 );
             }
 
@@ -2004,24 +2011,35 @@ namespace AmteScripts.Managers
                 if (!bounty.IsPredator(player))
                 {
                     player.SendTranslatedMessage(
-                        "PvP.Predator.KillBroadcast", eChatType.CT_System, eChatLoc.CL_SystemWindow,
-                        bounty.Predator.GetPersonalizedName(player),
-                        bounty.Prey.GetPersonalizedName(player)
+                        "PvP.Predator.KillBroadcast", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow,
+                        bounty.Predator.GetPersonalizedNameFor(player),
+                        bounty.Prey.GetPersonalizedNameFor(player)
                     );
                 }
             }
             return true;
         }
 
-        private bool OnPreyAbandon(GamePlayer prey, PredatorPair bounty)
+        private bool OnBountyAssigned(GamePlayer predator, PredatorPair bounty)
         {
-            foreach (var predatorPlayer in bounty.Predator.GetPlayers())
+            string? name = bounty.Prey?.GetPersonalizedNameFor(predator);
+            Task.Run(async () =>
             {
-                predatorPlayer.SendTranslatedMessage(
-                    "PvP.Predator.LostPrey", eChatType.CT_System, eChatLoc.CL_SystemWindow,
-                    bounty.Prey.GetPersonalizedName(predatorPlayer)
-                );
-            }
+                Task centerTask;
+                Task messageTask;
+                if (name is null)
+                {
+                    centerTask = predator.SendTranslatedMessage("PvP.Predator.PreyRemoved", eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow, name);
+                    messageTask = predator.SendTranslatedMessage("PvP.Predator.LostPrey", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                else
+                {
+                    centerTask = predator.SendTranslatedMessage("PvP.Predator.PreyAssigned", eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow, name);
+                    messageTask = predator.SendTranslatedMessage("PvP.Predator.NewPrey", eChatType.CT_System, eChatLoc.CL_SystemWindow, name);
+                }
+                await centerTask;
+                await messageTask;
+            });
             return true;
         }
         
@@ -2044,6 +2062,7 @@ namespace AmteScripts.Managers
             bool rr5bonus = (victim.RealmLevel >= 40);
             bool isSolo = killer.Group is not { MemberCount: > 1 };
             int points = 0;
+            int basePoints = 0;
 
             // GM Testing Multiplier (x10 kills if PrivLevel > 1)
             int killCountToAdd = killer.Client.Account.PrivLevel > 1 ? 10 : 1;
@@ -2054,7 +2073,8 @@ namespace AmteScripts.Managers
                 case eSessionTypes.KingOfTheHill:
                 case eSessionTypes.CoreRun:
                 case eSessionTypes.Biohazard:
-                    points = isSolo ? 10 : 5;
+                    basePoints = 5;
+                    points = isSolo ? 2 * basePoints : basePoints;
                     if (rr5bonus) points = (int)(points * 1.30);
                     break;
                 
@@ -2063,22 +2083,32 @@ namespace AmteScripts.Managers
                 case eSessionTypes.BringAFriend:
                 case eSessionTypes.TerritoryCapture:
                 default:
-                    points = isSolo ? 4 : 2;
+                    basePoints = 2;
+                    points = isSolo ? 2 * basePoints : basePoints;
                     break;
                     
                 case eSessionTypes.BossHunt:
-                    points = isSolo ? 20 : 10;
+                    basePoints = 10;
+                    points = isSolo ? 2 * basePoints : basePoints;
                     if (rr5bonus) points = (int)(points * 1.30);
                     break;
             }
 
             if (_predatorManager.CompleteBounty(killer, victim) == true)
             {
-                // Award triple points for killing a prey
-                points *= 3;
+                // Award bonus points for killing a prey based on score disparity
+                // The lower score the killer has compared to the prey, the more points they get
+                // We do cap because we don't want someone who just joined to get x20 bonus with 20 / 1...
+                var killerScore = (double)Math.Max(basePoints * 2, GetPlayerPoints(killer));
+                var victimScore = (double)Math.Max(basePoints * 4, GetPlayerPoints(victim));
+                var ratio = victimScore / killerScore;
+                points = (int)Math.Round(points * Math.Clamp(ratio, 1.5, 4.0)); // Min x1.5, max x4 points
+
+                // Ensure that the predator is locked out of the next selection - giving them some buffer time
+                _predatorManager.SetPlayerTimeout(killer, Properties.PVPSESSION_PREDATOR_KILL_COOLDOWN_SECONDS);
             }
 
-            PvPScore score;
+            points *= killCountToAdd;
             if (!isSolo)
             {
                 int previousKills = 0;
@@ -2281,7 +2311,7 @@ namespace AmteScripts.Managers
             {
                 if (_playersInPvP >= CurrentSession?.MinTeamsForPredator)
                 {
-                    if (!_predatorManager.IsActive && _predatorTimer?.IsAlive != true)
+                    if (!_predatorManager.Active && _predatorTimer?.IsAlive != true)
                     {
                         _predatorTimer = new RegionTimer(CurrentRegion.TimeManager);
                         _predatorTimer.Callback = (time) =>
@@ -2303,7 +2333,7 @@ namespace AmteScripts.Managers
 
             lock (_sessionLock)
             {
-                if (!_predatorManager.IsActive)
+                if (!_predatorManager.Active)
                     return TryStartPredator();
                 else
                     return PredatorHeartbeat();
@@ -2329,13 +2359,11 @@ namespace AmteScripts.Managers
                 if (score.IsGroup)
                 {
                     var range = score.Children
-                        .Select(s => participants.GetValueOrDefault(s.OwnerId))
-                        .Where(e => e is not null)
-                        .Cast<PvPEntity>()
+                        .Select(s => WorldMgr.GetClientByPlayerID(s.OwnerId, true, true)?.Player)
+                        .Where(e => e is { IsInPvP: true } && _predatorManager.CanQueue(e, true))
+                        .Cast<GamePlayer>()
+                        .Select(p => new PvPPlayerEntity(p))
                         .ToList();
-
-                    if (range.Any(p => !_predatorManager.CanQueue(p, true)))
-                        continue;
 
                     if (range.Count > 0)
                         ++numTeams;
@@ -2351,8 +2379,6 @@ namespace AmteScripts.Managers
                     pvpEntities.Add(entity);
                 }
             }
-            pvpEntities.RemoveAll(p => p.AsPlayer == null);
-            pvpEntities.RemoveAll(p => _predatorManager.IsPlayerActive(p.AsPlayer!));
             return pvpEntities;
         }
 
@@ -2368,7 +2394,7 @@ namespace AmteScripts.Managers
             }
 
             TimeSpan sessionTimeLeft = _endTime - DateTime.Now.TimeOfDay;
-            TimeSpan requiredTimeLeft = new TimeSpan(0, 0, Properties.PVPSESSION_PREDATOR_ROUND_SECONDS);
+            TimeSpan requiredTimeLeft = new TimeSpan(0, 0, Math.Min(PREDATOR_MINIMUM_SESSION_SECONDS_LEFT, Properties.PVPSESSION_PREDATOR_ROUND_SECONDS));
             if (sessionTimeLeft < requiredTimeLeft)
             {
                 log.DebugFormat("[PVP] Not starting predator because there is not enough time left in the session. ({0} < {1})", sessionTimeLeft, requiredTimeLeft);
@@ -2376,7 +2402,6 @@ namespace AmteScripts.Managers
             }
 
             var pvpEntities = GetPredatorEligiblePlayers(out int numTeams);
-
             if (numTeams < CurrentSession!.MinTeamsForPredator)
             {
                 log.DebugFormat("[PVP] Not starting predator because there are not enough teams. ({0} < {1})", numTeams, CurrentSession.MinTeamsForPredator);
@@ -2385,7 +2410,10 @@ namespace AmteScripts.Managers
 
             if (log.IsDebugEnabled)
             {
-                log.Debug("[PVP] Starting predator for " + predatorRoundSeconds + " seconds : " + string.Join(", ", pvpEntities.Select(e => e.Name)));
+                if (predatorRoundSeconds > 0)
+                    log.DebugFormat("[PVP] Starting predator for {0} seconds : {1}", predatorRoundSeconds, string.Join(", ", pvpEntities.Select(e => e.Name)));
+                else
+                    log.DebugFormat("[PVP] Starting predator : {0}", string.Join(", ", pvpEntities.Select(e => e.Name)));
             }
 
             _predatorTimeLeft = predatorRoundMilliseconds;
@@ -2395,12 +2423,17 @@ namespace AmteScripts.Managers
 
         private int PredatorHeartbeat()
         {
+            if (!_predatorManager.Active)
+                return 0;
+
             _predatorTimeLeft -= PREDATOR_CHECK_INTERVAL;
             if (_predatorTimeLeft <= 0)
             {
                 return EndPredator();
             }
 
+            var players = GetPredatorEligiblePlayers(out int _);
+            _predatorManager.FillInPlayers(players);
             return (int)Math.Min(PREDATOR_CHECK_INTERVAL, _predatorTimeLeft);
         }
 
@@ -2408,13 +2441,13 @@ namespace AmteScripts.Managers
         {
             log.Debug("[PvP] Stopping predator.");
             var bounties = _predatorManager.GetBounties();
-            var predatorCooldownSeconds = Properties.PVPSESSION_PREDATOR_ROUND_SECONDS;
+            var predatorCooldownSeconds = Properties.PVPSESSION_PREDATOR_COOLDOWN_SECONDS;
             var predatorCooldownMilliseconds = predatorCooldownSeconds * 1000;
             foreach (var bounty in bounties)
             {
                 if (bounty.Prey != null)
                 {
-                    bounty.Predator.SendMessage("You lose your prey");
+                    bounty.Predator.SendTranslation("PvP.Predator.Timeout");
                 }
             }
             _predatorManager.Stop();
@@ -4966,12 +4999,72 @@ namespace AmteScripts.Managers
             }
         }
 
-        record class HighScore(string OwnerId, bool IsGroup, int TotalPoints, PvPScore Score)
+        private record class HighScore(string OwnerId, bool IsGroup, int TotalPoints, PvPScore Score)
         {
             public List<HighScore> Children
             {
                 get;
             } = new();
+        }
+
+        private HighScore GetHighScore(PvPScore soloScore, Func<Guild, HighScore>? guildScoreSupplier = null)
+        {
+            PvPScore highest = null;
+            var playerId = soloScore.PlayerID;
+            int total = soloScore.GetTotalPoints(CurrentSessionType);
+            var highScore = new HighScore(playerId, false, total, soloScore);
+            if (guildScoreSupplier == null)
+                return highScore;
+
+            // Check if the player was recently in a guild
+            Guild? guild = _playerLastGuilds.GetValueOrDefault(playerId);
+            if (guild == null)
+                return highScore;
+            
+            // We want to protect players against griefing by kicking at the last second,
+            // by taking the highest of guild score or solo score.
+            // But if the player is in the guild, we just force that score.
+            HighScore? guildScore = guildScoreSupplier.Invoke(guild);
+            if (guildScore == null)
+                return highScore;
+
+            if (guildScore.TotalPoints > total)
+            {
+                guildScore.Children.Add(highScore);
+                return guildScore;
+            }
+
+            // Guild score is lower than solo score, check if the player is still in the guild
+            string? currentGuild;
+            GameClient? client = WorldMgr.GetClientByPlayerID(playerId, true, false);
+            if (client?.Player != null)
+            {
+                currentGuild = client.Player.GuildID;
+            }
+            else
+            {
+                // If client is offline, we get the guild from DB. This should be very rare...
+                DOLCharacters character = GameServer.Database.SelectObject<DOLCharacters>(c => c.ObjectId == playerId);
+                currentGuild = character?.GuildID;
+            }
+
+            if (currentGuild == guild.GuildID)
+            {
+                // Player is still in that guild, force using the guild score
+                guildScore.Children.Add(highScore);
+                return guildScore;
+            }
+            // Else, player left AND has a better solo score, fallback to using solo score.
+            return highScore;
+        }
+
+        private int GetPlayerPoints(GamePlayer player, bool checkPreviousGuild = true)
+        {
+            var soloPoints = _soloScores.GetValueOrDefault(player.InternalID)?.GetTotalPoints(CurrentSessionType) ?? 0;
+            var guild = player.Guild ?? (checkPreviousGuild ? _playerLastGuilds.GetValueOrDefault(player.InternalID) : null);
+            if (guild != null)
+                return Math.Max(_groupScores.GetValueOrDefault(guild)?.GetTotalPoints(CurrentSessionType) ?? 0, soloPoints);
+            return soloPoints;
         }
 
         private IOrderedEnumerable<IGrouping<int, HighScore>> GetHighScores()
@@ -4984,48 +5077,9 @@ namespace AmteScripts.Managers
 
             foreach (var (playerId, score) in _soloScores)
             {
-                PvPScore highest = null;
-                int total = score.GetTotalPoints(CurrentSessionType);
-                var highScore = new HighScore(playerId, false, total, score);
-
-                // Check if the player was recently in a guild
-                Guild? guild = _playerLastGuilds.GetValueOrDefault(playerId);
-                if (guild != null)
-                {
-                    // We want to protect players against griefing by kicking at the last second,
-                    // by taking the highest of guild score or solo score.
-                    // But if the player is in the guild, we just force that score.
-                    HighScore? guildScore = scores.GetValueOrDefault(guild.GuildID);
-                    if (guildScore.TotalPoints > total)
-                    {
-                        guildScore.Children.Add(highScore);
-                        continue; 
-                    }
-
-                    // Guild score is lower than solo score, check if the player is still in the guild
-                    string? currentGuild;
-                    GameClient? client = WorldMgr.GetClientByPlayerID(playerId, true, false);
-                    if (client?.Player != null)
-                    {
-                        currentGuild = client.Player.GuildID;
-                    }
-                    else
-                    {
-                        // If client is offline, we get the guild from DB. This should be very rare...
-                        DOLCharacters character = GameServer.Database.SelectObject<DOLCharacters>(c => c.ObjectId == playerId);
-                        currentGuild = character?.GuildID;
-                    }
-
-                    if (currentGuild == guild.GuildID)
-                    {
-                        // Player is still in that guild, force using the guild score
-                        guildScore.Children.Add(highScore);
-                        continue; 
-                    }
-                    // Else, player left AND has a better solo score, fallback to using solo score.
-                }
-
-                scores[playerId] = highScore;
+                var highScore = GetHighScore(score, (guild) => scores.GetValueOrDefault(guild.GuildID));
+                if (!highScore.IsGroup)
+                    scores[playerId] = highScore;
             }
             return scores.Values.GroupBy(s => s.TotalPoints).OrderByDescending(s => s.Key);
         }

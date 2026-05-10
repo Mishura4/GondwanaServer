@@ -1,0 +1,9 @@
+PvP.Predator.PreyAssigned:							L'appel de la Chasse: {0}
+PvP.Predator.PreyRemoved:							Vous perdez votre proie...
+PvP.Predator.NewPrey:								Vos instincts primordiaux vous saisissent alors que votre soif de sang s'éveille pour {0}.
+PvP.Predator.LostPrey:								Votre rage se calme car vous n'arrivez plus à détecter votre proie.
+PvP.Predator.Abandon:								L'appel de la chasse vous quitte. Vous avez quitté la chasse.
+PvP.Predator.Timeout:								Votre rage se calme car vous n'avez pas pu saisir votre proie.
+PvP.Predator.KilledPrey:							Vous déchaînez un rugissement primordial en jouissant du sang de {0}. Vous avez été(e) récompensé(e) avec des points supplémentaires.
+PvP.Predator.KillBroadcast:							Un rugissement primordial s'emporte du champ de bataille... {0} a clamé {1} en tant que proie!
+PvP.Predator.YouArePrey:							Vous ressentz des frissons dans votre dos alors que vous sentez que vous êtes chassé(e)...

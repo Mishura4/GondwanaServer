@@ -783,13 +783,13 @@ namespace DOL.GS
             }
         }
 
-        public uint GuildPortalAvailableTick
+        public long GuildPortalAvailableTick
         {
             get;
             set;
         }
 
-        public uint GuildCombatZoneAvailableTick
+        public long GuildCombatZoneAvailableTick
         {
             get;
             set;

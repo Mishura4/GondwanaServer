@@ -1819,14 +1819,26 @@ namespace DOL.GS.ServerProperties
         /// <summary>
         /// In PVP, how long does a predator session last?
         /// </summary>
-        [ServerProperty("pvp", "pvpsession_predator_round_seconds", "How long should a predator round last for, in seconds", 300)]
+        [ServerProperty("pvp", "pvpsession_predator_round_seconds", "How long should a predator round last for, in seconds", 600)]
         public static int PVPSESSION_PREDATOR_ROUND_SECONDS;
 
         /// <summary>
         /// In PVP, how long does a predator session last?
         /// </summary>
-        [ServerProperty("pvp", "pvpsession_predator_cooldown_seconds", "How long should we wait between predator sessions in PvP?", 600)]
+        [ServerProperty("pvp", "pvpsession_predator_cooldown_seconds", "How long should we wait between predator sessions in PvP?", 300)]
         public static int PVPSESSION_PREDATOR_COOLDOWN_SECONDS;
+
+        /// <summary>
+        /// In PVP, how long does a predator session last?
+        /// </summary>
+        [ServerProperty("pvp", "pvpsession_predator_kill_cooldown_seconds", "How long should a player wait before getting assigned a new prey in PvP?", 60)]
+        public static int PVPSESSION_PREDATOR_KILL_COOLDOWN_SECONDS;
+
+        /// <summary>
+        /// How long to disqualify players from the predator system if they leave?
+        /// </summary>
+        [ServerProperty("predator", "predator_deserter_seconds", "How long to disqualify players from the predator system for if they leave, in PvP?", 300)]
+        public static int PVPSESSION_PREDATOR_DESERTER_SECONDS;
 
         /// <summary>
         /// How long to disqualify players from the predator system if they leave?

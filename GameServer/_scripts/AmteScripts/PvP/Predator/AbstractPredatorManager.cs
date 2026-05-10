@@ -81,28 +81,6 @@ namespace AmteScripts.PvP
             return added;
         }
 
-        public void NotifyNewPrey()
-        {
-            string? name = Prey?.Name;
-            Task.Run(async () =>
-            {
-                IEnumerable<Task> centerTasks;
-                IEnumerable<Task> messageTasks;
-                if (name is null)
-                {
-                    centerTasks = Enumerable.Empty<Task>();
-                    messageTasks = Predator.SendTranslation("PvP.Predator.PreyLost", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                }
-                else
-                {
-                    centerTasks = Predator.SendTranslation("PvP.Predator.Prey", eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow, name);
-                    messageTasks = Predator.SendTranslation("PvP.Predator.PreyAssigned", eChatType.CT_System, eChatLoc.CL_SystemWindow, name);
-                }
-                await Task.WhenAll(centerTasks);
-                await Task.WhenAll(messageTasks);
-            });
-        }
-
         private readonly ConcurrentDictionary<string, List<KillRecord>> m_killRecords = new();
     }
 
@@ -113,7 +91,7 @@ namespace AmteScripts.PvP
         private readonly Lock m_predatorsLock = new();
         private readonly List<PredatorPair> m_currentPredators = new();
         private readonly ReaderWriterDictionary<GamePlayer, PredatorPair> m_preyLookup = new();
-        private readonly ReaderWriterDictionary<string, long> m_playerAbandons = new();
+        private readonly ReaderWriterDictionary<string, long> m_playerTimeouts = new();
 
         private readonly Lock m_queueLock = new();
         private readonly List<PvPEntity> m_queue = new();
@@ -133,7 +111,7 @@ namespace AmteScripts.PvP
 
             if (log.IsDebugEnabled)
             {
-                log.Debug("Predator starting: " + string.Join(", ", pairs));
+                log.Debug("Predator starting:\n\t" + string.Join("\n\t", pairs));
             }
 
             lock (m_predatorsLock)
@@ -144,8 +122,40 @@ namespace AmteScripts.PvP
                 foreach (var pair in pairs)
                 {
                     RegisterBounty(pair);
-                    pair.NotifyNewPrey();
                 }
+                OnAssignNewPreys(pairs.Where(p => p.Prey != null));
+            }
+        }
+
+        public void FillInPlayers(bool dequeue = true, bool reassignPreylessPredators = true)
+        {
+            FillInPlayers([], dequeue, reassignPreylessPredators);
+        }
+
+        public void FillInPlayers(IEnumerable<PvPEntity> toFill, bool dequeue = true, bool reassignPreylessPredators = true)
+        {
+            if (dequeue)
+                toFill = Dequeue().Concat(toFill);
+
+            lock (m_predatorsLock)
+            {
+                var newPlayers = toFill.Where(p => !m_currentPredators.Select(b => b.Predator).Contains(p)).ToList();
+                var predators = newPlayers.Select(p => new PredatorPair(p)).ToList();
+                var preys = m_currentPredators
+                    .Select(b => b.Predator)
+                    .Where(p => !m_currentPredators.Select(b => b.Prey).Contains(p))
+                    .Concat(newPlayers)
+                    .ToList();
+                m_currentPredators.AddRange(predators);
+                if (reassignPreylessPredators)
+                {
+                    var now = GameServer.Instance.TickCount;
+                    predators = m_currentPredators.Where(b => b.Prey == null && m_playerTimeouts.GetValueOrDefault(b.Predator.InternalID) <= now).ToList();
+                }
+
+                log.DebugFormat("[Predator] Filling in {0} predators against {1} preys. ({2} new players)", predators.Count, preys.Count, newPlayers.Count);
+                var updated = Recombobulate(predators, preys);
+                OnAssignNewPreys(updated);
             }
         }
 
@@ -237,23 +247,37 @@ namespace AmteScripts.PvP
 
         public virtual bool CanQueue(GamePlayer player, bool quiet = false)
         {
-            var deserterDuration = Properties.PREDATOR_DESERTER_SECONDS;
-            if (deserterDuration > 0 && m_playerAbandons.TryGetValue(player.InternalID, out long abandonTick))
+            if (m_playerTimeouts.TryGetValue(player.InternalID, out long abandonTick))
             {
-                if (GameServer.Instance.TickCount < (abandonTick + deserterDuration))
+                if (GameServer.Instance.TickCount < abandonTick)
                 {
                     return false;
                 }
             }
+
+            if (IsActive(player))
+                return false;
+
             return true;
         }
 
         public bool CanQueue(PvPEntity entity, bool quiet = false)
         {
-            return entity.GetPlayers().Any(p => !CanQueue(p));
+            return entity.GetPlayers().All(p => CanQueue(p));
         }
 
-        public virtual void Abandon(GamePlayer player)
+        public void Abandon(GamePlayer player)
+        {
+            Abandon(player, Properties.PREDATOR_DESERTER_SECONDS);
+        }
+
+        public void SetPlayerTimeout(GamePlayer player, long timeoutSeconds)
+        {
+            if (timeoutSeconds > 0)
+                m_playerTimeouts[player.InternalID] = GameServer.Instance.TickCount + timeoutSeconds * 1000;
+        }
+
+        public virtual void Abandon(GamePlayer player, long timeoutSeconds)
         {
             bool isActive = false;
             lock (m_predatorsLock)
@@ -286,12 +310,13 @@ namespace AmteScripts.PvP
                         {
                             isActive = true;
                             CleanupPrey(player, preyBounty);
+                            OnAssignNewPreys([preyBounty]);
                         }
                     }
                 }
 
                 if (isActive)
-                    m_playerAbandons[player.InternalID] = GameServer.Instance.TickCount;
+                    SetPlayerTimeout(player, timeoutSeconds);
             }
 
             RemoveFromQueue(player);
@@ -311,9 +336,19 @@ namespace AmteScripts.PvP
             if (killers is null)
                 killers = killer == null ? [] : [killer]; // Maybe we'll handle this eventually
 
-            if (!m_preyLookup.TryRemove(victim, out PredatorPair bounty))
+            if (!m_preyLookup.TryRemove(victim, out PredatorPair? bounty))
             {
-                log.ErrorFormat("Could not find predator for dying prey {0}", victim);
+                if (log.IsDebugEnabled)
+                {
+                    log.DebugFormat("[Predator] Dying player {0} was not found to be a prey", victim);
+                    lock (m_currentPredators)
+                    {
+                        // Double check to be sure, when debug log is enabled...
+                        bounty = m_currentPredators.FirstOrDefault(p => p.Prey?.GetPlayers().Contains(victim) == true);
+                        if (bounty != null)
+                            log.ErrorFormat("[Predator] Dying player {0} is a prey for {1}, but not part of prey lookup dictionary", bounty.Prey, bounty.Predator);
+                    }
+                }
                 return null;
             }
             
@@ -322,12 +357,12 @@ namespace AmteScripts.PvP
             {
                 if (!bounty.IsPredator(killer) && OnPreyStolen?.Invoke(victim, bounty, killers) is true)
                 {
-                    log.DebugFormat("Prey {0} was stolen from predator {1} by {2}", victim, bounty.Predator, killer);
+                    log.DebugFormat("[Predator] Prey {0} was stolen from predator {1} by {2}", victim, bounty.Predator, killer);
                     reinsert = false;
                     return false;
                 }
 
-                log.DebugFormat("Prey {0} was killed by predator {1}", victim, bounty.Predator);
+                log.DebugFormat("[Predator] Prey {0} was killed by predator {1}", victim, bounty.Predator);
                 if (OnPreyKilled?.Invoke(victim, bounty, killers) is true or null)
                 {
                     reinsert = false;
@@ -339,7 +374,7 @@ namespace AmteScripts.PvP
             {
                 if (reinsert)
                 {
-                    log.DebugFormat("Re-linking prey {0} with predator {1}", victim, bounty.Predator);
+                    log.DebugFormat("[Predator] Re-linking prey {0} with predator {1}", victim, bounty.Predator);
                     m_preyLookup.TryAdd(victim, bounty);
                 }
                 else
@@ -366,6 +401,8 @@ namespace AmteScripts.PvP
         public PreyKilledHandler? OnPreyStolen { get; set; }
 
         public PreyKilledHandler? OnPreyKilled { get; set; }
+
+        public PlayerEventHandler? OnBountyAssigned { get; set; }
 
         public PlayerEventHandler? OnPreyAbandon { get; set; }
 
@@ -438,9 +475,17 @@ namespace AmteScripts.PvP
             public Queue<PvPEntity>? Preys { get; set; }
         }
 
-        protected virtual List<PredatorPair> Recombobulate(ICollection<PredatorPair> preylessPredators, IEnumerable<PvPEntity> predatorlessPreys)
+        /// <summary>
+        /// Re-assigns preys to predators.
+        /// </summary>
+        /// <param name="preylessPredators">Predators without a prey</param>
+        /// <param name="predatorlessPreys">Preys without a predator</param>
+        /// <returns>A list of predators who actually had their prey reassigned.</returns>
+        protected virtual List<PredatorPair> Recombobulate(IEnumerable<PredatorPair> preylessPredators, IEnumerable<PvPEntity> predatorlessPreys)
         {
-            List<Bucket> buckets = new(preylessPredators.Count);
+            List<Bucket> buckets = new();
+            if (preylessPredators is ICollection coll)
+                buckets.Capacity = coll.Count;
             Bucket GetOrCreateBucket(object key)
             {
                 Bucket? b = buckets.Find(b => b.Key == key);
@@ -462,7 +507,7 @@ namespace AmteScripts.PvP
                 GetOrCreateBucket(group.Key).Preys = new Queue<PvPEntity>(group);
             }
             
-            List<PredatorPair> ret = new(preylessPredators.Count);
+            List<PredatorPair> ret = new(buckets.Count);
             PredatorPair? pair = null;
             bool ComputeNext()
             {
@@ -476,11 +521,11 @@ namespace AmteScripts.PvP
                     .Where(e => e.Key != predator.Predator && e.Key != predator.Predator.AssociatedGuild)
                     .Where(b => b.Preys is { Count: >0 })
                     .MaxBy(b => b.Preys!.Count - b.SelectedCount);
-
+                
+                pair = predator;
                 if (preyBucket is null)
                     return false;
 
-                pair = predator;
                 pair.Prey = preyBucket.Preys!.Dequeue();
                 return true;
             }
@@ -522,7 +567,11 @@ namespace AmteScripts.PvP
 
         protected virtual void OnAssignNewPreys(IEnumerable<PredatorPair> changes)
         {
-            changes.Foreach(p => p.NotifyNewPrey());
+            var handler = OnBountyAssigned;
+            if (handler == null)
+                return;
+
+            changes.Foreach(p => p.Predator.GetPlayers().ForEach(pl => handler.Invoke(pl, p)));
         }
 
         protected static IEnumerable<KeyValuePair<string, Queue<PvPEntity>>> SortGuilds(IEnumerable<PvPEntity> entities)
@@ -592,11 +641,22 @@ namespace AmteScripts.PvP
             return removed;
         }
 
-        public bool IsPlayerActive(GamePlayer player)
+        public bool IsActive(GamePlayer player)
         {
             return GetBountyForPrey(player) != null || GetBountyForPredator(player) != null;
         }
 
-        public virtual bool IsActive => m_currentPredators.Count > 0;
+        public bool IsActive(PvPEntity player)
+        {
+            if (player is not PvPPlayerEntity)
+            {
+                log.Error("[Predator] Guild/group pvp entities are not implemented");
+                return false;
+            }
+            var asPlayer = player.AsPlayer;
+            return asPlayer != null && IsActive(asPlayer);
+        }
+
+        public virtual bool Active => m_currentPredators.Count > 0;
     }
 }

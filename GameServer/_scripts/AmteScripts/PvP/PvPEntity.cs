@@ -83,7 +83,13 @@ namespace AmteScripts.PvP
             return GetPlayers().Select(p => p.SendTranslatedMessage(key, type, loc, args)).ToList();
         }
 
-        public virtual string GetPersonalizedName(GamePlayer player)
+        /// <summary>
+        /// Get the personalized name OF THIS ENTITY for ANOTHER PLAYER.
+        /// This is the OTHER WAY AROUND from GamePlayer.GetPersonalizedName.
+        /// </summary>
+        /// <param name="player">Player that will know our name</param>
+        /// <returns>The name that `player` should see for this entity</returns>
+        public virtual string GetPersonalizedNameFor(GamePlayer player)
         {
             return Name;
         }
@@ -115,14 +121,19 @@ namespace AmteScripts.PvP
             return m_player == null ? [] : [m_player];
         }
 
-        public override string GetPersonalizedName(GamePlayer player)
+        public override string GetPersonalizedNameFor(GamePlayer player)
         {
-            return AsPlayer?.GetPersonalizedName(player) ?? string.Empty;
+            return AsPlayer == null ? string.Empty : player.GetPersonalizedName(AsPlayer);
+        }
+
+        public override string ToString()
+        {
+            return AsPlayer?.ToString() ?? $"Unknown Player ({InternalID})";
         }
     }
 
     public sealed class PvPGuildGroupEntity : PvPEntity
-    {
+    { 
         private Group? m_group;
         private Guild? m_guild;
 
@@ -149,6 +160,11 @@ namespace AmteScripts.PvP
         public override IEnumerable<GamePlayer> GetPlayers()
         {
             return m_group?.GetMembers().OfType<GamePlayer>() ?? Enumerable.Empty<GamePlayer>();
+        }
+
+        public override string ToString()
+        {
+            return AsGuild?.ToString() ?? $"Unknown Guild ({InternalID})";
         }
     }
 }

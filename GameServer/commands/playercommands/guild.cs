@@ -2107,7 +2107,7 @@ namespace DOL.GS.Commands
                                         player.Guild.RemoveMeritPoints(Properties.GUILD_PORTAL_MERIT_PRICE);
                                         if (Properties.GUILD_COMBAT_ZONE_COOLDOWN > 0)
                                         {
-                                            player.Guild.GuildPortalAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_PORTAL_COOLDOWN) * 60 * 1000;
+                                            player.Guild.GuildPortalAvailableTick = GameServer.Instance.TickCount + (Properties.GUILD_PORTAL_COOLDOWN) * 60 * 1000;
                                         }
                                     }
                                     territory.SpawnPortalNpc(player);
@@ -2359,10 +2359,10 @@ namespace DOL.GS.Commands
                                 var availableTick = guild.GuildCombatZoneAvailableTick;
                                 if (availableTick > GameServer.Instance.TickCount)
                                 {
-                                    uint totalSeconds = (availableTick - GameServer.Instance.TickCount) / 1000;
-                                    uint diffHours = totalSeconds / 3600;
-                                    uint diffMinutes = (totalSeconds % (3600)) / 60;
-                                    uint diffSeconds = totalSeconds % (60);
+                                    var totalSeconds = (availableTick - GameServer.Instance.TickCount) / 1000;
+                                    var diffHours = totalSeconds / 3600;
+                                    var diffMinutes = (totalSeconds % (3600)) / 60;
+                                    var diffSeconds = totalSeconds % (60);
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.Cooldown", diffHours, diffMinutes, diffSeconds), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     break;
                                 }
@@ -2396,7 +2396,7 @@ namespace DOL.GS.Commands
                                         player.Guild.RemoveMeritPoints(Properties.GUILD_COMBAT_ZONE_MERIT_PRICE);
                                         if (Properties.GUILD_COMBAT_ZONE_COOLDOWN > 0)
                                         {
-                                            player.Guild.GuildCombatZoneAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_COMBAT_ZONE_COOLDOWN) * 60 * 1000;
+                                            player.Guild.GuildCombatZoneAvailableTick = GameServer.Instance.TickCount + (Properties.GUILD_COMBAT_ZONE_COOLDOWN) * 60 * 1000;
                                         }
                                         region.CreateCombatZone(guild, player.Position);
                                         player.Out.SendSoundEffect(9217, player.Position, 0);

@@ -107,7 +107,7 @@ namespace DOL.GS
         /// <summary>
         /// Holds the startSystemTick when server is up.
         /// </summary>
-        protected uint m_startTick;
+        protected long m_startTick;
 
         /// <summary>
         /// Game server status variable
@@ -220,9 +220,9 @@ namespace DOL.GS
         /// <summary>
         /// Gets the number of milliseconds elapsed since the GameServer started.
         /// </summary>
-        public uint TickCount
+        public long TickCount
         {
-            get { return GameTimer.GetTickCount() - m_startTick; }
+            get { return GameTimer.GetTickCountLong() - m_startTick; }
         }
 
         #endregion
@@ -736,7 +736,7 @@ namespace DOL.GS
 
                 //---------------------------------------------------------------
                 //Set the GameServer StartTick
-                m_startTick = GameTimer.GetTickCount();
+                m_startTick = GameTimer.GetTickCountLong();
 
                 //---------------------------------------------------------------
                 //Notify everyone that the server is now started!
